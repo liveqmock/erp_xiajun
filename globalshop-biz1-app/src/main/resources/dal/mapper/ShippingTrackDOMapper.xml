@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="waybill_no" jdbcType="VARCHAR" property="waybillNo" />
+    <result column="logistic_no" jdbcType="VARCHAR" property="logisticNo" />
+    <result column="logistics_status" jdbcType="INTEGER" property="logisticsStatus" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="volume" jdbcType="VARCHAR" property="volume" />
+    <result column="totalfee" jdbcType="DOUBLE" property="totalfee" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="oversea_in_time" jdbcType="TIMESTAMP" property="overseaInTime" />
+    <result column="oversea_out_time" jdbcType="TIMESTAMP" property="overseaOutTime" />
+    <result column="oversea_on_transfer_time" jdbcType="TIMESTAMP" property="overseaOnTransferTime" />
+    <result column="inland_in_time" jdbcType="TIMESTAMP" property="inlandInTime" />
+    <result column="inland_out_time" jdbcType="TIMESTAMP" property="inlandOutTime" />
+    <result column="inland_express_company_code" jdbcType="VARCHAR" property="inlandExpressCompanyCode" />
+    <result column="inland_express_num" jdbcType="VARCHAR" property="inlandExpressNum" />
+    <result column="buyer_sign_time" jdbcType="TIMESTAMP" property="buyerSignTime" />
+    <result column="air_take_off" jdbcType="VARCHAR" property="airTakeOff" />
+    <result column="airlines" jdbcType="VARCHAR" property="airlines" />
+    <result column="flight" jdbcType="VARCHAR" property="flight" />
+    <result column="track_info" jdbcType="VARCHAR" property="trackInfo" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_no, waybill_no, logistic_no, logistics_status, weight, volume, totalfee, 
+    receive_time, oversea_in_time, oversea_out_time, oversea_on_transfer_time, inland_in_time, 
+    inland_out_time, inland_express_company_code, inland_express_num, buyer_sign_time, 
+    air_take_off, airlines, flight, track_info, gmt_create, gmt_modify, is_del, creator, 
+    modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_track
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shipping_track
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    insert into shipping_track (id, order_no, waybill_no, 
+      logistic_no, logistics_status, weight, 
+      volume, totalfee, receive_time, 
+      oversea_in_time, oversea_out_time, oversea_on_transfer_time, 
+      inland_in_time, inland_out_time, inland_express_company_code, 
+      inland_express_num, buyer_sign_time, air_take_off, 
+      airlines, flight, track_info, 
+      gmt_create, gmt_modify, is_del, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{waybillNo,jdbcType=VARCHAR}, 
+      #{logisticNo,jdbcType=VARCHAR}, #{logisticsStatus,jdbcType=INTEGER}, #{weight,jdbcType=DOUBLE}, 
+      #{volume,jdbcType=VARCHAR}, #{totalfee,jdbcType=DOUBLE}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{overseaInTime,jdbcType=TIMESTAMP}, #{overseaOutTime,jdbcType=TIMESTAMP}, #{overseaOnTransferTime,jdbcType=TIMESTAMP}, 
+      #{inlandInTime,jdbcType=TIMESTAMP}, #{inlandOutTime,jdbcType=TIMESTAMP}, #{inlandExpressCompanyCode,jdbcType=VARCHAR}, 
+      #{inlandExpressNum,jdbcType=VARCHAR}, #{buyerSignTime,jdbcType=TIMESTAMP}, #{airTakeOff,jdbcType=VARCHAR}, 
+      #{airlines,jdbcType=VARCHAR}, #{flight,jdbcType=VARCHAR}, #{trackInfo,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    insert into shipping_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="waybillNo != null">
+        waybill_no,
+      </if>
+      <if test="logisticNo != null">
+        logistic_no,
+      </if>
+      <if test="logisticsStatus != null">
+        logistics_status,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="volume != null">
+        volume,
+      </if>
+      <if test="totalfee != null">
+        totalfee,
+      </if>
+      <if test="receiveTime != null">
+        receive_time,
+      </if>
+      <if test="overseaInTime != null">
+        oversea_in_time,
+      </if>
+      <if test="overseaOutTime != null">
+        oversea_out_time,
+      </if>
+      <if test="overseaOnTransferTime != null">
+        oversea_on_transfer_time,
+      </if>
+      <if test="inlandInTime != null">
+        inland_in_time,
+      </if>
+      <if test="inlandOutTime != null">
+        inland_out_time,
+      </if>
+      <if test="inlandExpressCompanyCode != null">
+        inland_express_company_code,
+      </if>
+      <if test="inlandExpressNum != null">
+        inland_express_num,
+      </if>
+      <if test="buyerSignTime != null">
+        buyer_sign_time,
+      </if>
+      <if test="airTakeOff != null">
+        air_take_off,
+      </if>
+      <if test="airlines != null">
+        airlines,
+      </if>
+      <if test="flight != null">
+        flight,
+      </if>
+      <if test="trackInfo != null">
+        track_info,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillNo != null">
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null">
+        #{logisticNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsStatus != null">
+        #{logisticsStatus,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="volume != null">
+        #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfee != null">
+        #{totalfee,jdbcType=DOUBLE},
+      </if>
+      <if test="receiveTime != null">
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaInTime != null">
+        #{overseaInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOutTime != null">
+        #{overseaOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOnTransferTime != null">
+        #{overseaOnTransferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandInTime != null">
+        #{inlandInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandOutTime != null">
+        #{inlandOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandExpressCompanyCode != null">
+        #{inlandExpressCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandExpressNum != null">
+        #{inlandExpressNum,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerSignTime != null">
+        #{buyerSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airTakeOff != null">
+        #{airTakeOff,jdbcType=VARCHAR},
+      </if>
+      <if test="airlines != null">
+        #{airlines,jdbcType=VARCHAR},
+      </if>
+      <if test="flight != null">
+        #{flight,jdbcType=VARCHAR},
+      </if>
+      <if test="trackInfo != null">
+        #{trackInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    update shipping_track
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillNo != null">
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null">
+        logistic_no = #{logisticNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsStatus != null">
+        logistics_status = #{logisticsStatus,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="volume != null">
+        volume = #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfee != null">
+        totalfee = #{totalfee,jdbcType=DOUBLE},
+      </if>
+      <if test="receiveTime != null">
+        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaInTime != null">
+        oversea_in_time = #{overseaInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOutTime != null">
+        oversea_out_time = #{overseaOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOnTransferTime != null">
+        oversea_on_transfer_time = #{overseaOnTransferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandInTime != null">
+        inland_in_time = #{inlandInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandOutTime != null">
+        inland_out_time = #{inlandOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandExpressCompanyCode != null">
+        inland_express_company_code = #{inlandExpressCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandExpressNum != null">
+        inland_express_num = #{inlandExpressNum,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerSignTime != null">
+        buyer_sign_time = #{buyerSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airTakeOff != null">
+        air_take_off = #{airTakeOff,jdbcType=VARCHAR},
+      </if>
+      <if test="airlines != null">
+        airlines = #{airlines,jdbcType=VARCHAR},
+      </if>
+      <if test="flight != null">
+        flight = #{flight,jdbcType=VARCHAR},
+      </if>
+      <if test="trackInfo != null">
+        track_info = #{trackInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    update shipping_track
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      logistic_no = #{logisticNo,jdbcType=VARCHAR},
+      logistics_status = #{logisticsStatus,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=DOUBLE},
+      volume = #{volume,jdbcType=VARCHAR},
+      totalfee = #{totalfee,jdbcType=DOUBLE},
+      receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      oversea_in_time = #{overseaInTime,jdbcType=TIMESTAMP},
+      oversea_out_time = #{overseaOutTime,jdbcType=TIMESTAMP},
+      oversea_on_transfer_time = #{overseaOnTransferTime,jdbcType=TIMESTAMP},
+      inland_in_time = #{inlandInTime,jdbcType=TIMESTAMP},
+      inland_out_time = #{inlandOutTime,jdbcType=TIMESTAMP},
+      inland_express_company_code = #{inlandExpressCompanyCode,jdbcType=VARCHAR},
+      inland_express_num = #{inlandExpressNum,jdbcType=VARCHAR},
+      buyer_sign_time = #{buyerSignTime,jdbcType=TIMESTAMP},
+      air_take_off = #{airTakeOff,jdbcType=VARCHAR},
+      airlines = #{airlines,jdbcType=VARCHAR},
+      flight = #{flight,jdbcType=VARCHAR},
+      track_info = #{trackInfo,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="waybill_no" jdbcType="VARCHAR" property="waybillNo" />
+    <result column="logistic_no" jdbcType="VARCHAR" property="logisticNo" />
+    <result column="logistics_status" jdbcType="INTEGER" property="logisticsStatus" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="volume" jdbcType="VARCHAR" property="volume" />
+    <result column="totalfee" jdbcType="DOUBLE" property="totalfee" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="oversea_in_time" jdbcType="TIMESTAMP" property="overseaInTime" />
+    <result column="oversea_out_time" jdbcType="TIMESTAMP" property="overseaOutTime" />
+    <result column="oversea_on_transfer_time" jdbcType="TIMESTAMP" property="overseaOnTransferTime" />
+    <result column="inland_in_time" jdbcType="TIMESTAMP" property="inlandInTime" />
+    <result column="inland_out_time" jdbcType="TIMESTAMP" property="inlandOutTime" />
+    <result column="inland_express_company_code" jdbcType="VARCHAR" property="inlandExpressCompanyCode" />
+    <result column="inland_express_num" jdbcType="VARCHAR" property="inlandExpressNum" />
+    <result column="buyer_sign_time" jdbcType="TIMESTAMP" property="buyerSignTime" />
+    <result column="air_take_off" jdbcType="VARCHAR" property="airTakeOff" />
+    <result column="airlines" jdbcType="VARCHAR" property="airlines" />
+    <result column="flight" jdbcType="VARCHAR" property="flight" />
+    <result column="track_info" jdbcType="VARCHAR" property="trackInfo" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_no, waybill_no, logistic_no, logistics_status, weight, volume, totalfee, 
+    receive_time, oversea_in_time, oversea_out_time, oversea_on_transfer_time, inland_in_time, 
+    inland_out_time, inland_express_company_code, inland_express_num, buyer_sign_time, 
+    air_take_off, airlines, flight, track_info, gmt_create, gmt_modify, is_del, creator, 
+    modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_track
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shipping_track
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    insert into shipping_track (id, order_no, waybill_no, 
+      logistic_no, logistics_status, weight, 
+      volume, totalfee, receive_time, 
+      oversea_in_time, oversea_out_time, oversea_on_transfer_time, 
+      inland_in_time, inland_out_time, inland_express_company_code, 
+      inland_express_num, buyer_sign_time, air_take_off, 
+      airlines, flight, track_info, 
+      gmt_create, gmt_modify, is_del, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{waybillNo,jdbcType=VARCHAR}, 
+      #{logisticNo,jdbcType=VARCHAR}, #{logisticsStatus,jdbcType=INTEGER}, #{weight,jdbcType=DOUBLE}, 
+      #{volume,jdbcType=VARCHAR}, #{totalfee,jdbcType=DOUBLE}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{overseaInTime,jdbcType=TIMESTAMP}, #{overseaOutTime,jdbcType=TIMESTAMP}, #{overseaOnTransferTime,jdbcType=TIMESTAMP}, 
+      #{inlandInTime,jdbcType=TIMESTAMP}, #{inlandOutTime,jdbcType=TIMESTAMP}, #{inlandExpressCompanyCode,jdbcType=VARCHAR}, 
+      #{inlandExpressNum,jdbcType=VARCHAR}, #{buyerSignTime,jdbcType=TIMESTAMP}, #{airTakeOff,jdbcType=VARCHAR}, 
+      #{airlines,jdbcType=VARCHAR}, #{flight,jdbcType=VARCHAR}, #{trackInfo,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    insert into shipping_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="waybillNo != null">
+        waybill_no,
+      </if>
+      <if test="logisticNo != null">
+        logistic_no,
+      </if>
+      <if test="logisticsStatus != null">
+        logistics_status,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="volume != null">
+        volume,
+      </if>
+      <if test="totalfee != null">
+        totalfee,
+      </if>
+      <if test="receiveTime != null">
+        receive_time,
+      </if>
+      <if test="overseaInTime != null">
+        oversea_in_time,
+      </if>
+      <if test="overseaOutTime != null">
+        oversea_out_time,
+      </if>
+      <if test="overseaOnTransferTime != null">
+        oversea_on_transfer_time,
+      </if>
+      <if test="inlandInTime != null">
+        inland_in_time,
+      </if>
+      <if test="inlandOutTime != null">
+        inland_out_time,
+      </if>
+      <if test="inlandExpressCompanyCode != null">
+        inland_express_company_code,
+      </if>
+      <if test="inlandExpressNum != null">
+        inland_express_num,
+      </if>
+      <if test="buyerSignTime != null">
+        buyer_sign_time,
+      </if>
+      <if test="airTakeOff != null">
+        air_take_off,
+      </if>
+      <if test="airlines != null">
+        airlines,
+      </if>
+      <if test="flight != null">
+        flight,
+      </if>
+      <if test="trackInfo != null">
+        track_info,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillNo != null">
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null">
+        #{logisticNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsStatus != null">
+        #{logisticsStatus,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="volume != null">
+        #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfee != null">
+        #{totalfee,jdbcType=DOUBLE},
+      </if>
+      <if test="receiveTime != null">
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaInTime != null">
+        #{overseaInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOutTime != null">
+        #{overseaOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOnTransferTime != null">
+        #{overseaOnTransferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandInTime != null">
+        #{inlandInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandOutTime != null">
+        #{inlandOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandExpressCompanyCode != null">
+        #{inlandExpressCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandExpressNum != null">
+        #{inlandExpressNum,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerSignTime != null">
+        #{buyerSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airTakeOff != null">
+        #{airTakeOff,jdbcType=VARCHAR},
+      </if>
+      <if test="airlines != null">
+        #{airlines,jdbcType=VARCHAR},
+      </if>
+      <if test="flight != null">
+        #{flight,jdbcType=VARCHAR},
+      </if>
+      <if test="trackInfo != null">
+        #{trackInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    update shipping_track
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillNo != null">
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null">
+        logistic_no = #{logisticNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsStatus != null">
+        logistics_status = #{logisticsStatus,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="volume != null">
+        volume = #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="totalfee != null">
+        totalfee = #{totalfee,jdbcType=DOUBLE},
+      </if>
+      <if test="receiveTime != null">
+        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaInTime != null">
+        oversea_in_time = #{overseaInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOutTime != null">
+        oversea_out_time = #{overseaOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overseaOnTransferTime != null">
+        oversea_on_transfer_time = #{overseaOnTransferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandInTime != null">
+        inland_in_time = #{inlandInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandOutTime != null">
+        inland_out_time = #{inlandOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inlandExpressCompanyCode != null">
+        inland_express_company_code = #{inlandExpressCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandExpressNum != null">
+        inland_express_num = #{inlandExpressNum,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerSignTime != null">
+        buyer_sign_time = #{buyerSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airTakeOff != null">
+        air_take_off = #{airTakeOff,jdbcType=VARCHAR},
+      </if>
+      <if test="airlines != null">
+        airlines = #{airlines,jdbcType=VARCHAR},
+      </if>
+      <if test="flight != null">
+        flight = #{flight,jdbcType=VARCHAR},
+      </if>
+      <if test="trackInfo != null">
+        track_info = #{trackInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO">
+    update shipping_track
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      logistic_no = #{logisticNo,jdbcType=VARCHAR},
+      logistics_status = #{logisticsStatus,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=DOUBLE},
+      volume = #{volume,jdbcType=VARCHAR},
+      totalfee = #{totalfee,jdbcType=DOUBLE},
+      receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      oversea_in_time = #{overseaInTime,jdbcType=TIMESTAMP},
+      oversea_out_time = #{overseaOutTime,jdbcType=TIMESTAMP},
+      oversea_on_transfer_time = #{overseaOnTransferTime,jdbcType=TIMESTAMP},
+      inland_in_time = #{inlandInTime,jdbcType=TIMESTAMP},
+      inland_out_time = #{inlandOutTime,jdbcType=TIMESTAMP},
+      inland_express_company_code = #{inlandExpressCompanyCode,jdbcType=VARCHAR},
+      inland_express_num = #{inlandExpressNum,jdbcType=VARCHAR},
+      buyer_sign_time = #{buyerSignTime,jdbcType=TIMESTAMP},
+      air_take_off = #{airTakeOff,jdbcType=VARCHAR},
+      airlines = #{airlines,jdbcType=VARCHAR},
+      flight = #{flight,jdbcType=VARCHAR},
+      track_info = #{trackInfo,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

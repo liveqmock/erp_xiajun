@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallWxCustomerTrackDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="query" jdbcType="VARCHAR" property="query" />
+    <result column="scene" jdbcType="VARCHAR" property="scene" />
+    <result column="share_open_id" jdbcType="VARCHAR" property="shareOpenId" />
+    <result column="owner_open_id" jdbcType="VARCHAR" property="ownerOpenId" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, company_no, path, query, scene, share_open_id, owner_open_id, gmt_create, gmt_modify, 
+    is_del, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mall_wx_customer_track
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_wx_customer_track
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    insert into mall_wx_customer_track (id, company_no, path, 
+      query, scene, share_open_id, 
+      owner_open_id, gmt_create, gmt_modify, 
+      is_del, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{query,jdbcType=VARCHAR}, #{scene,jdbcType=VARCHAR}, #{shareOpenId,jdbcType=VARCHAR}, 
+      #{ownerOpenId,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    insert into mall_wx_customer_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="companyNo != null">
+        company_no,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="query != null">
+        query,
+      </if>
+      <if test="scene != null">
+        scene,
+      </if>
+      <if test="shareOpenId != null">
+        share_open_id,
+      </if>
+      <if test="ownerOpenId != null">
+        owner_open_id,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="query != null">
+        #{query,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null">
+        #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="shareOpenId != null">
+        #{shareOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerOpenId != null">
+        #{ownerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    update mall_wx_customer_track
+    <set>
+      <if test="companyNo != null">
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="query != null">
+        query = #{query,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null">
+        scene = #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="shareOpenId != null">
+        share_open_id = #{shareOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerOpenId != null">
+        owner_open_id = #{ownerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    update mall_wx_customer_track
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      query = #{query,jdbcType=VARCHAR},
+      scene = #{scene,jdbcType=VARCHAR},
+      share_open_id = #{shareOpenId,jdbcType=VARCHAR},
+      owner_open_id = #{ownerOpenId,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="query" jdbcType="VARCHAR" property="query" />
+    <result column="scene" jdbcType="VARCHAR" property="scene" />
+    <result column="share_open_id" jdbcType="VARCHAR" property="shareOpenId" />
+    <result column="owner_open_id" jdbcType="VARCHAR" property="ownerOpenId" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, company_no, path, query, scene, share_open_id, owner_open_id, gmt_create, gmt_modify, 
+    is_del, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mall_wx_customer_track
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_wx_customer_track
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    insert into mall_wx_customer_track (id, company_no, path, 
+      query, scene, share_open_id, 
+      owner_open_id, gmt_create, gmt_modify, 
+      is_del, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{query,jdbcType=VARCHAR}, #{scene,jdbcType=VARCHAR}, #{shareOpenId,jdbcType=VARCHAR}, 
+      #{ownerOpenId,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    insert into mall_wx_customer_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="companyNo != null">
+        company_no,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="query != null">
+        query,
+      </if>
+      <if test="scene != null">
+        scene,
+      </if>
+      <if test="shareOpenId != null">
+        share_open_id,
+      </if>
+      <if test="ownerOpenId != null">
+        owner_open_id,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="query != null">
+        #{query,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null">
+        #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="shareOpenId != null">
+        #{shareOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerOpenId != null">
+        #{ownerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    update mall_wx_customer_track
+    <set>
+      <if test="companyNo != null">
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="query != null">
+        query = #{query,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null">
+        scene = #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="shareOpenId != null">
+        share_open_id = #{shareOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerOpenId != null">
+        owner_open_id = #{ownerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO">
+    update mall_wx_customer_track
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      query = #{query,jdbcType=VARCHAR},
+      scene = #{scene,jdbcType=VARCHAR},
+      share_open_id = #{shareOpenId,jdbcType=VARCHAR},
+      owner_open_id = #{ownerOpenId,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

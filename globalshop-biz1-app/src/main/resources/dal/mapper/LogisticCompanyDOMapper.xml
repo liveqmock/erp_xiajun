@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.LogisticCompanyDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name_in_jd" jdbcType="VARCHAR" property="nameInJd" />
+    <result column="code_in_jd" jdbcType="VARCHAR" property="codeInJd" />
+    <result column="name_in_youzan" jdbcType="VARCHAR" property="nameInYouzan" />
+    <result column="code_in_youzan" jdbcType="VARCHAR" property="codeInYouzan" />
+    <result column="name_in_pdd" jdbcType="VARCHAR" property="nameInPdd" />
+    <result column="code_in_pdd" jdbcType="VARCHAR" property="codeInPdd" />
+    <result column="name_in_taobao" jdbcType="VARCHAR" property="nameInTaobao" />
+    <result column="code_in_taobao" jdbcType="VARCHAR" property="codeInTaobao" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_pdd, 
+    code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, 
+    modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from logistic_company
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from logistic_company
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    insert into logistic_company (id, name, code, 
+      name_in_jd, code_in_jd, name_in_youzan, 
+      code_in_youzan, name_in_pdd, code_in_pdd, 
+      name_in_taobao, code_in_taobao, is_del, 
+      gmt_create, gmt_modify, creator, 
+      modifier)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{nameInJd,jdbcType=VARCHAR}, #{codeInJd,jdbcType=VARCHAR}, #{nameInYouzan,jdbcType=VARCHAR}, 
+      #{codeInYouzan,jdbcType=VARCHAR}, #{nameInPdd,jdbcType=VARCHAR}, #{codeInPdd,jdbcType=VARCHAR}, 
+      #{nameInTaobao,jdbcType=VARCHAR}, #{codeInTaobao,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    insert into logistic_company
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="nameInJd != null">
+        name_in_jd,
+      </if>
+      <if test="codeInJd != null">
+        code_in_jd,
+      </if>
+      <if test="nameInYouzan != null">
+        name_in_youzan,
+      </if>
+      <if test="codeInYouzan != null">
+        code_in_youzan,
+      </if>
+      <if test="nameInPdd != null">
+        name_in_pdd,
+      </if>
+      <if test="codeInPdd != null">
+        code_in_pdd,
+      </if>
+      <if test="nameInTaobao != null">
+        name_in_taobao,
+      </if>
+      <if test="codeInTaobao != null">
+        code_in_taobao,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInJd != null">
+        #{nameInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInJd != null">
+        #{codeInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInYouzan != null">
+        #{nameInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInYouzan != null">
+        #{codeInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInPdd != null">
+        #{nameInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInPdd != null">
+        #{codeInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInTaobao != null">
+        #{nameInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInTaobao != null">
+        #{codeInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    update logistic_company
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInJd != null">
+        name_in_jd = #{nameInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInJd != null">
+        code_in_jd = #{codeInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInYouzan != null">
+        name_in_youzan = #{nameInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInYouzan != null">
+        code_in_youzan = #{codeInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInPdd != null">
+        name_in_pdd = #{nameInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInPdd != null">
+        code_in_pdd = #{codeInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInTaobao != null">
+        name_in_taobao = #{nameInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInTaobao != null">
+        code_in_taobao = #{codeInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    update logistic_company
+    set name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name_in_jd = #{nameInJd,jdbcType=VARCHAR},
+      code_in_jd = #{codeInJd,jdbcType=VARCHAR},
+      name_in_youzan = #{nameInYouzan,jdbcType=VARCHAR},
+      code_in_youzan = #{codeInYouzan,jdbcType=VARCHAR},
+      name_in_pdd = #{nameInPdd,jdbcType=VARCHAR},
+      code_in_pdd = #{codeInPdd,jdbcType=VARCHAR},
+      name_in_taobao = #{nameInTaobao,jdbcType=VARCHAR},
+      code_in_taobao = #{codeInTaobao,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name_in_jd" jdbcType="VARCHAR" property="nameInJd" />
+    <result column="code_in_jd" jdbcType="VARCHAR" property="codeInJd" />
+    <result column="name_in_youzan" jdbcType="VARCHAR" property="nameInYouzan" />
+    <result column="code_in_youzan" jdbcType="VARCHAR" property="codeInYouzan" />
+    <result column="name_in_pdd" jdbcType="VARCHAR" property="nameInPdd" />
+    <result column="code_in_pdd" jdbcType="VARCHAR" property="codeInPdd" />
+    <result column="name_in_taobao" jdbcType="VARCHAR" property="nameInTaobao" />
+    <result column="code_in_taobao" jdbcType="VARCHAR" property="codeInTaobao" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_pdd, 
+    code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, 
+    modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from logistic_company
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from logistic_company
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    insert into logistic_company (id, name, code, 
+      name_in_jd, code_in_jd, name_in_youzan, 
+      code_in_youzan, name_in_pdd, code_in_pdd, 
+      name_in_taobao, code_in_taobao, is_del, 
+      gmt_create, gmt_modify, creator, 
+      modifier)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{nameInJd,jdbcType=VARCHAR}, #{codeInJd,jdbcType=VARCHAR}, #{nameInYouzan,jdbcType=VARCHAR}, 
+      #{codeInYouzan,jdbcType=VARCHAR}, #{nameInPdd,jdbcType=VARCHAR}, #{codeInPdd,jdbcType=VARCHAR}, 
+      #{nameInTaobao,jdbcType=VARCHAR}, #{codeInTaobao,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    insert into logistic_company
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="nameInJd != null">
+        name_in_jd,
+      </if>
+      <if test="codeInJd != null">
+        code_in_jd,
+      </if>
+      <if test="nameInYouzan != null">
+        name_in_youzan,
+      </if>
+      <if test="codeInYouzan != null">
+        code_in_youzan,
+      </if>
+      <if test="nameInPdd != null">
+        name_in_pdd,
+      </if>
+      <if test="codeInPdd != null">
+        code_in_pdd,
+      </if>
+      <if test="nameInTaobao != null">
+        name_in_taobao,
+      </if>
+      <if test="codeInTaobao != null">
+        code_in_taobao,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInJd != null">
+        #{nameInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInJd != null">
+        #{codeInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInYouzan != null">
+        #{nameInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInYouzan != null">
+        #{codeInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInPdd != null">
+        #{nameInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInPdd != null">
+        #{codeInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInTaobao != null">
+        #{nameInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInTaobao != null">
+        #{codeInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    update logistic_company
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInJd != null">
+        name_in_jd = #{nameInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInJd != null">
+        code_in_jd = #{codeInJd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInYouzan != null">
+        name_in_youzan = #{nameInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInYouzan != null">
+        code_in_youzan = #{codeInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInPdd != null">
+        name_in_pdd = #{nameInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInPdd != null">
+        code_in_pdd = #{codeInPdd,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInTaobao != null">
+        name_in_taobao = #{nameInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInTaobao != null">
+        code_in_taobao = #{codeInTaobao,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO">
+    update logistic_company
+    set name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name_in_jd = #{nameInJd,jdbcType=VARCHAR},
+      code_in_jd = #{codeInJd,jdbcType=VARCHAR},
+      name_in_youzan = #{nameInYouzan,jdbcType=VARCHAR},
+      code_in_youzan = #{codeInYouzan,jdbcType=VARCHAR},
+      name_in_pdd = #{nameInPdd,jdbcType=VARCHAR},
+      code_in_pdd = #{codeInPdd,jdbcType=VARCHAR},
+      name_in_taobao = #{nameInTaobao,jdbcType=VARCHAR},
+      code_in_taobao = #{codeInTaobao,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

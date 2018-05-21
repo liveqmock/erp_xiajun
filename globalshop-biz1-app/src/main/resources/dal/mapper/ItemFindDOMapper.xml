@@ -1,0 +1,1006 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ItemFindDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="item_find_no" jdbcType="VARCHAR" property="itemFindNo" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="is_new" jdbcType="TINYINT" property="isNew" />
+    <result column="sale_type" jdbcType="TINYINT" property="saleType" />
+    <result column="currency" jdbcType="TINYINT" property="currency" />
+    <result column="buy_site" jdbcType="VARCHAR" property="buySite" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="logistic_type" jdbcType="TINYINT" property="logisticType" />
+    <result column="contact_person" jdbcType="VARCHAR" property="contactPerson" />
+    <result column="contact_tel" jdbcType="VARCHAR" property="contactTel" />
+    <result column="id_card" jdbcType="TINYINT" property="idCard" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="booking_date" jdbcType="TIMESTAMP" property="bookingDate" />
+    <result column="is_sale" jdbcType="TINYINT" property="isSale" />
+    <result column="wxis_sale" jdbcType="TINYINT" property="wxisSale" />
+    <result column="is_find" jdbcType="TINYINT" property="isFind" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="desc" jdbcType="VARCHAR" property="desc" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="buyer_open_id" jdbcType="VARCHAR" property="buyerOpenId" />
+    <result column="buyer_name" jdbcType="VARCHAR" property="buyerName" />
+    <result column="purchase_status" jdbcType="TINYINT" property="purchaseStatus" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="find_address" jdbcType="VARCHAR" property="findAddress" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, item_find_no, item_name, item_code, sku_code, is_new, sale_type, currency, buy_site, 
+    origin, logistic_type, contact_person, contact_tel, id_card, start_date, end_date, 
+    booking_date, is_sale, wxis_sale, is_find, status, desc, spec, model, buyer_open_id, 
+    buyer_name, purchase_status, reason, find_address, refuse_reason, creator, modifier, 
+    gmt_create, gmt_modify, is_del
+  </sql>
+  <sql id="Blob_Column_List">
+    detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item_find
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from item_find
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    insert into item_find (id, item_find_no, item_name, 
+      item_code, sku_code, is_new, 
+      sale_type, currency, buy_site, 
+      origin, logistic_type, contact_person, 
+      contact_tel, id_card, start_date, 
+      end_date, booking_date, is_sale, 
+      wxis_sale, is_find, status, 
+      desc, spec, model, 
+      buyer_open_id, buyer_name, purchase_status, 
+      reason, find_address, refuse_reason, 
+      creator, modifier, gmt_create, 
+      gmt_modify, is_del, detail
+      )
+    values (#{id,jdbcType=BIGINT}, #{itemFindNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{isNew,jdbcType=TINYINT}, 
+      #{saleType,jdbcType=TINYINT}, #{currency,jdbcType=TINYINT}, #{buySite,jdbcType=VARCHAR}, 
+      #{origin,jdbcType=VARCHAR}, #{logisticType,jdbcType=TINYINT}, #{contactPerson,jdbcType=VARCHAR}, 
+      #{contactTel,jdbcType=VARCHAR}, #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, 
+      #{wxisSale,jdbcType=TINYINT}, #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{desc,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{buyerOpenId,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=TINYINT}, 
+      #{reason,jdbcType=VARCHAR}, #{findAddress,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{detail,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    insert into item_find
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemFindNo != null">
+        item_find_no,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="isNew != null">
+        is_new,
+      </if>
+      <if test="saleType != null">
+        sale_type,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="buySite != null">
+        buy_site,
+      </if>
+      <if test="origin != null">
+        origin,
+      </if>
+      <if test="logisticType != null">
+        logistic_type,
+      </if>
+      <if test="contactPerson != null">
+        contact_person,
+      </if>
+      <if test="contactTel != null">
+        contact_tel,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="bookingDate != null">
+        booking_date,
+      </if>
+      <if test="isSale != null">
+        is_sale,
+      </if>
+      <if test="wxisSale != null">
+        wxis_sale,
+      </if>
+      <if test="isFind != null">
+        is_find,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="desc != null">
+        desc,
+      </if>
+      <if test="spec != null">
+        spec,
+      </if>
+      <if test="model != null">
+        model,
+      </if>
+      <if test="buyerOpenId != null">
+        buyer_open_id,
+      </if>
+      <if test="buyerName != null">
+        buyer_name,
+      </if>
+      <if test="purchaseStatus != null">
+        purchase_status,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="findAddress != null">
+        find_address,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="itemFindNo != null">
+        #{itemFindNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isNew != null">
+        #{isNew,jdbcType=TINYINT},
+      </if>
+      <if test="saleType != null">
+        #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="buySite != null">
+        #{buySite,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null">
+        #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticType != null">
+        #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="contactPerson != null">
+        #{contactPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null">
+        #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null">
+        #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null">
+        #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null">
+        #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null">
+        #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="desc != null">
+        #{desc,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerOpenId != null">
+        #{buyerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null">
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseStatus != null">
+        #{purchaseStatus,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="findAddress != null">
+        #{findAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    update item_find
+    <set>
+      <if test="itemFindNo != null">
+        item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isNew != null">
+        is_new = #{isNew,jdbcType=TINYINT},
+      </if>
+      <if test="saleType != null">
+        sale_type = #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="buySite != null">
+        buy_site = #{buySite,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticType != null">
+        logistic_type = #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="contactPerson != null">
+        contact_person = #{contactPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null">
+        contact_tel = #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null">
+        booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null">
+        is_sale = #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null">
+        wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null">
+        is_find = #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="desc != null">
+        desc = #{desc,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        spec = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerOpenId != null">
+        buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null">
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseStatus != null">
+        purchase_status = #{purchaseStatus,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="findAddress != null">
+        find_address = #{findAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    update item_find
+    set item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      is_new = #{isNew,jdbcType=TINYINT},
+      sale_type = #{saleType,jdbcType=TINYINT},
+      currency = #{currency,jdbcType=TINYINT},
+      buy_site = #{buySite,jdbcType=VARCHAR},
+      origin = #{origin,jdbcType=VARCHAR},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      contact_person = #{contactPerson,jdbcType=VARCHAR},
+      contact_tel = #{contactTel,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=TINYINT},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      is_sale = #{isSale,jdbcType=TINYINT},
+      wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      is_find = #{isFind,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      desc = #{desc,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      purchase_status = #{purchaseStatus,jdbcType=TINYINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      find_address = #{findAddress,jdbcType=VARCHAR},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      detail = #{detail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    update item_find
+    set item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      is_new = #{isNew,jdbcType=TINYINT},
+      sale_type = #{saleType,jdbcType=TINYINT},
+      currency = #{currency,jdbcType=TINYINT},
+      buy_site = #{buySite,jdbcType=VARCHAR},
+      origin = #{origin,jdbcType=VARCHAR},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      contact_person = #{contactPerson,jdbcType=VARCHAR},
+      contact_tel = #{contactTel,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=TINYINT},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      is_sale = #{isSale,jdbcType=TINYINT},
+      wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      is_find = #{isFind,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      desc = #{desc,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      purchase_status = #{purchaseStatus,jdbcType=TINYINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      find_address = #{findAddress,jdbcType=VARCHAR},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="item_find_no" jdbcType="VARCHAR" property="itemFindNo" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="is_new" jdbcType="TINYINT" property="isNew" />
+    <result column="sale_type" jdbcType="TINYINT" property="saleType" />
+    <result column="currency" jdbcType="TINYINT" property="currency" />
+    <result column="buy_site" jdbcType="VARCHAR" property="buySite" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="logistic_type" jdbcType="TINYINT" property="logisticType" />
+    <result column="contact_person" jdbcType="VARCHAR" property="contactPerson" />
+    <result column="contact_tel" jdbcType="VARCHAR" property="contactTel" />
+    <result column="id_card" jdbcType="TINYINT" property="idCard" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="booking_date" jdbcType="TIMESTAMP" property="bookingDate" />
+    <result column="is_sale" jdbcType="TINYINT" property="isSale" />
+    <result column="wxis_sale" jdbcType="TINYINT" property="wxisSale" />
+    <result column="is_find" jdbcType="TINYINT" property="isFind" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="desc" jdbcType="VARCHAR" property="desc" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="buyer_open_id" jdbcType="VARCHAR" property="buyerOpenId" />
+    <result column="buyer_name" jdbcType="VARCHAR" property="buyerName" />
+    <result column="purchase_status" jdbcType="TINYINT" property="purchaseStatus" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="find_address" jdbcType="VARCHAR" property="findAddress" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, item_find_no, item_name, item_code, sku_code, is_new, sale_type, currency, buy_site, 
+    origin, logistic_type, contact_person, contact_tel, id_card, start_date, end_date, 
+    booking_date, is_sale, wxis_sale, is_find, status, desc, spec, model, buyer_open_id, 
+    buyer_name, purchase_status, reason, find_address, refuse_reason, creator, modifier, 
+    gmt_create, gmt_modify, is_del
+  </sql>
+  <sql id="Blob_Column_List">
+    detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item_find
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from item_find
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    insert into item_find (id, item_find_no, item_name, 
+      item_code, sku_code, is_new, 
+      sale_type, currency, buy_site, 
+      origin, logistic_type, contact_person, 
+      contact_tel, id_card, start_date, 
+      end_date, booking_date, is_sale, 
+      wxis_sale, is_find, status, 
+      desc, spec, model, 
+      buyer_open_id, buyer_name, purchase_status, 
+      reason, find_address, refuse_reason, 
+      creator, modifier, gmt_create, 
+      gmt_modify, is_del, detail
+      )
+    values (#{id,jdbcType=BIGINT}, #{itemFindNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{isNew,jdbcType=TINYINT}, 
+      #{saleType,jdbcType=TINYINT}, #{currency,jdbcType=TINYINT}, #{buySite,jdbcType=VARCHAR}, 
+      #{origin,jdbcType=VARCHAR}, #{logisticType,jdbcType=TINYINT}, #{contactPerson,jdbcType=VARCHAR}, 
+      #{contactTel,jdbcType=VARCHAR}, #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, 
+      #{wxisSale,jdbcType=TINYINT}, #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{desc,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{buyerOpenId,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=TINYINT}, 
+      #{reason,jdbcType=VARCHAR}, #{findAddress,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{detail,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    insert into item_find
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemFindNo != null">
+        item_find_no,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="isNew != null">
+        is_new,
+      </if>
+      <if test="saleType != null">
+        sale_type,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="buySite != null">
+        buy_site,
+      </if>
+      <if test="origin != null">
+        origin,
+      </if>
+      <if test="logisticType != null">
+        logistic_type,
+      </if>
+      <if test="contactPerson != null">
+        contact_person,
+      </if>
+      <if test="contactTel != null">
+        contact_tel,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="bookingDate != null">
+        booking_date,
+      </if>
+      <if test="isSale != null">
+        is_sale,
+      </if>
+      <if test="wxisSale != null">
+        wxis_sale,
+      </if>
+      <if test="isFind != null">
+        is_find,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="desc != null">
+        desc,
+      </if>
+      <if test="spec != null">
+        spec,
+      </if>
+      <if test="model != null">
+        model,
+      </if>
+      <if test="buyerOpenId != null">
+        buyer_open_id,
+      </if>
+      <if test="buyerName != null">
+        buyer_name,
+      </if>
+      <if test="purchaseStatus != null">
+        purchase_status,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="findAddress != null">
+        find_address,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="itemFindNo != null">
+        #{itemFindNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isNew != null">
+        #{isNew,jdbcType=TINYINT},
+      </if>
+      <if test="saleType != null">
+        #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="buySite != null">
+        #{buySite,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null">
+        #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticType != null">
+        #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="contactPerson != null">
+        #{contactPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null">
+        #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null">
+        #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null">
+        #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null">
+        #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null">
+        #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="desc != null">
+        #{desc,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerOpenId != null">
+        #{buyerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null">
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseStatus != null">
+        #{purchaseStatus,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="findAddress != null">
+        #{findAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    update item_find
+    <set>
+      <if test="itemFindNo != null">
+        item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isNew != null">
+        is_new = #{isNew,jdbcType=TINYINT},
+      </if>
+      <if test="saleType != null">
+        sale_type = #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="buySite != null">
+        buy_site = #{buySite,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticType != null">
+        logistic_type = #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="contactPerson != null">
+        contact_person = #{contactPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null">
+        contact_tel = #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null">
+        booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null">
+        is_sale = #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null">
+        wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null">
+        is_find = #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="desc != null">
+        desc = #{desc,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        spec = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerOpenId != null">
+        buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null">
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseStatus != null">
+        purchase_status = #{purchaseStatus,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="findAddress != null">
+        find_address = #{findAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    update item_find
+    set item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      is_new = #{isNew,jdbcType=TINYINT},
+      sale_type = #{saleType,jdbcType=TINYINT},
+      currency = #{currency,jdbcType=TINYINT},
+      buy_site = #{buySite,jdbcType=VARCHAR},
+      origin = #{origin,jdbcType=VARCHAR},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      contact_person = #{contactPerson,jdbcType=VARCHAR},
+      contact_tel = #{contactTel,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=TINYINT},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      is_sale = #{isSale,jdbcType=TINYINT},
+      wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      is_find = #{isFind,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      desc = #{desc,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      purchase_status = #{purchaseStatus,jdbcType=TINYINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      find_address = #{findAddress,jdbcType=VARCHAR},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      detail = #{detail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO">
+    update item_find
+    set item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      is_new = #{isNew,jdbcType=TINYINT},
+      sale_type = #{saleType,jdbcType=TINYINT},
+      currency = #{currency,jdbcType=TINYINT},
+      buy_site = #{buySite,jdbcType=VARCHAR},
+      origin = #{origin,jdbcType=VARCHAR},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      contact_person = #{contactPerson,jdbcType=VARCHAR},
+      contact_tel = #{contactTel,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=TINYINT},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      is_sale = #{isSale,jdbcType=TINYINT},
+      wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      is_find = #{isFind,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      desc = #{desc,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      purchase_status = #{purchaseStatus,jdbcType=TINYINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      find_address = #{findAddress,jdbcType=VARCHAR},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingPackingPatternDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pattern_no" jdbcType="VARCHAR" property="patternNo" />
+    <result column="pattern_name" jdbcType="VARCHAR" property="patternName" />
+    <result column="packaging_scale_no" jdbcType="VARCHAR" property="packagingScaleNo" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pattern_no, pattern_name, packaging_scale_no, name, name_en, is_del, gmt_create, 
+    gmt_modify, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_packaging_pattern
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shipping_packaging_pattern
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    insert into shipping_packaging_pattern (id, pattern_no, pattern_name, 
+      packaging_scale_no, name, name_en, 
+      is_del, gmt_create, gmt_modify, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{patternNo,jdbcType=VARCHAR}, #{patternName,jdbcType=VARCHAR}, 
+      #{packagingScaleNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{nameEn,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    insert into shipping_packaging_pattern
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="patternNo != null">
+        pattern_no,
+      </if>
+      <if test="patternName != null">
+        pattern_name,
+      </if>
+      <if test="packagingScaleNo != null">
+        packaging_scale_no,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="nameEn != null">
+        name_en,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="patternNo != null">
+        #{patternNo,jdbcType=VARCHAR},
+      </if>
+      <if test="patternName != null">
+        #{patternName,jdbcType=VARCHAR},
+      </if>
+      <if test="packagingScaleNo != null">
+        #{packagingScaleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    update shipping_packaging_pattern
+    <set>
+      <if test="patternNo != null">
+        pattern_no = #{patternNo,jdbcType=VARCHAR},
+      </if>
+      <if test="patternName != null">
+        pattern_name = #{patternName,jdbcType=VARCHAR},
+      </if>
+      <if test="packagingScaleNo != null">
+        packaging_scale_no = #{packagingScaleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        name_en = #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    update shipping_packaging_pattern
+    set pattern_no = #{patternNo,jdbcType=VARCHAR},
+      pattern_name = #{patternName,jdbcType=VARCHAR},
+      packaging_scale_no = #{packagingScaleNo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      name_en = #{nameEn,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pattern_no" jdbcType="VARCHAR" property="patternNo" />
+    <result column="pattern_name" jdbcType="VARCHAR" property="patternName" />
+    <result column="packaging_scale_no" jdbcType="VARCHAR" property="packagingScaleNo" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pattern_no, pattern_name, packaging_scale_no, name, name_en, is_del, gmt_create, 
+    gmt_modify, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_packaging_pattern
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shipping_packaging_pattern
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    insert into shipping_packaging_pattern (id, pattern_no, pattern_name, 
+      packaging_scale_no, name, name_en, 
+      is_del, gmt_create, gmt_modify, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{patternNo,jdbcType=VARCHAR}, #{patternName,jdbcType=VARCHAR}, 
+      #{packagingScaleNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{nameEn,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    insert into shipping_packaging_pattern
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="patternNo != null">
+        pattern_no,
+      </if>
+      <if test="patternName != null">
+        pattern_name,
+      </if>
+      <if test="packagingScaleNo != null">
+        packaging_scale_no,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="nameEn != null">
+        name_en,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="patternNo != null">
+        #{patternNo,jdbcType=VARCHAR},
+      </if>
+      <if test="patternName != null">
+        #{patternName,jdbcType=VARCHAR},
+      </if>
+      <if test="packagingScaleNo != null">
+        #{packagingScaleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    update shipping_packaging_pattern
+    <set>
+      <if test="patternNo != null">
+        pattern_no = #{patternNo,jdbcType=VARCHAR},
+      </if>
+      <if test="patternName != null">
+        pattern_name = #{patternName,jdbcType=VARCHAR},
+      </if>
+      <if test="packagingScaleNo != null">
+        packaging_scale_no = #{packagingScaleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        name_en = #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO">
+    update shipping_packaging_pattern
+    set pattern_no = #{patternNo,jdbcType=VARCHAR},
+      pattern_name = #{patternName,jdbcType=VARCHAR},
+      packaging_scale_no = #{packagingScaleNo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      name_en = #{nameEn,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

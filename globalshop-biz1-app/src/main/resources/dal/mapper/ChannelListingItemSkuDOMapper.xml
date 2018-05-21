@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelListingItemSkuDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="platform_type" jdbcType="TINYINT" property="platformType" />
+    <result column="channel_item_sku_code" jdbcType="VARCHAR" property="channelItemSkuCode" />
+    <result column="channel_item_code" jdbcType="VARCHAR" property="channelItemCode" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, item_code, sku_code, platform_type, channel_item_sku_code, channel_item_code, 
+    is_del, gmt_create, gmt_modify, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from channel_listing_item_sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from channel_listing_item_sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    insert into channel_listing_item_sku (id, item_code, sku_code, 
+      platform_type, channel_item_sku_code, channel_item_code, 
+      is_del, gmt_create, gmt_modify, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{platformType,jdbcType=TINYINT}, #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    insert into channel_listing_item_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="platformType != null">
+        platform_type,
+      </if>
+      <if test="channelItemSkuCode != null">
+        channel_item_sku_code,
+      </if>
+      <if test="channelItemCode != null">
+        channel_item_code,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="platformType != null">
+        #{platformType,jdbcType=TINYINT},
+      </if>
+      <if test="channelItemSkuCode != null">
+        #{channelItemSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelItemCode != null">
+        #{channelItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    update channel_listing_item_sku
+    <set>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="platformType != null">
+        platform_type = #{platformType,jdbcType=TINYINT},
+      </if>
+      <if test="channelItemSkuCode != null">
+        channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelItemCode != null">
+        channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    update channel_listing_item_sku
+    set item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      platform_type = #{platformType,jdbcType=TINYINT},
+      channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
+      channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="platform_type" jdbcType="TINYINT" property="platformType" />
+    <result column="channel_item_sku_code" jdbcType="VARCHAR" property="channelItemSkuCode" />
+    <result column="channel_item_code" jdbcType="VARCHAR" property="channelItemCode" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, item_code, sku_code, platform_type, channel_item_sku_code, channel_item_code, 
+    is_del, gmt_create, gmt_modify, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from channel_listing_item_sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from channel_listing_item_sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    insert into channel_listing_item_sku (id, item_code, sku_code, 
+      platform_type, channel_item_sku_code, channel_item_code, 
+      is_del, gmt_create, gmt_modify, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{platformType,jdbcType=TINYINT}, #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    insert into channel_listing_item_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="platformType != null">
+        platform_type,
+      </if>
+      <if test="channelItemSkuCode != null">
+        channel_item_sku_code,
+      </if>
+      <if test="channelItemCode != null">
+        channel_item_code,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="platformType != null">
+        #{platformType,jdbcType=TINYINT},
+      </if>
+      <if test="channelItemSkuCode != null">
+        #{channelItemSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelItemCode != null">
+        #{channelItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    update channel_listing_item_sku
+    <set>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="platformType != null">
+        platform_type = #{platformType,jdbcType=TINYINT},
+      </if>
+      <if test="channelItemSkuCode != null">
+        channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelItemCode != null">
+        channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO">
+    update channel_listing_item_sku
+    set item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      platform_type = #{platformType,jdbcType=TINYINT},
+      channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
+      channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
