@@ -48,6 +48,9 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into mall_order (id, customer_no, order_no, 
       company_no, channel_no, channel_name, 
       channel_order_no, channel_customer_no, channel_type, 
@@ -70,11 +73,12 @@
       #{creator,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into mall_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+      id,
       <if test="customerNo != null" >
         customer_no,
       </if>
@@ -158,9 +162,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
+      #{id,jdbcType=BIGINT},
       <if test="customerNo != null" >
         #{customerNo,jdbcType=VARCHAR},
       </if>

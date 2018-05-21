@@ -29,6 +29,9 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into shipping_track_polling_yuntong (id, waybill_no, inland_trans_code, 
       inland_trans_company_name, current_status, 
       status_time, gmt_create, gmt_modify, 
@@ -41,11 +44,12 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into shipping_track_polling_yuntong
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+      id,
       <if test="waybillNo != null" >
         waybill_no,
       </if>
@@ -78,9 +82,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
+      #{id,jdbcType=BIGINT},
       <if test="waybillNo != null" >
         #{waybillNo,jdbcType=VARCHAR},
       </if>

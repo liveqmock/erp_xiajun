@@ -41,9 +41,9 @@ public class ChannelAccountDO {
 
     private String refreshToken;
 
-    private String tokenurl;
+    private String tokenUrl;
 
-    private String serverurl;
+    private String serverUrl;
 
     private Date gmtCreate;
 
@@ -209,20 +209,20 @@ public class ChannelAccountDO {
         this.refreshToken = refreshToken == null ? null : refreshToken.trim();
     }
 
-    public String getTokenurl() {
-        return tokenurl;
+    public String getTokenUrl() {
+        return tokenUrl;
     }
 
-    public void setTokenurl(String tokenurl) {
-        this.tokenurl = tokenurl == null ? null : tokenurl.trim();
+    public void setTokenUrl(String tokenUrl) {
+        this.tokenUrl = tokenUrl == null ? null : tokenUrl.trim();
     }
 
-    public String getServerurl() {
-        return serverurl;
+    public String getServerUrl() {
+        return serverUrl;
     }
 
-    public void setServerurl(String serverurl) {
-        this.serverurl = serverurl == null ? null : serverurl.trim();
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl == null ? null : serverUrl.trim();
     }
 
     public Date getGmtCreate() {

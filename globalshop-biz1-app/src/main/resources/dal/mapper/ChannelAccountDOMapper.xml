@@ -21,8 +21,8 @@
     <result column="value3_desc" property="value3Desc" jdbcType="VARCHAR" />
     <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
     <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR" />
-    <result column="tokenUrl" property="tokenurl" jdbcType="VARCHAR" />
-    <result column="serverUrl" property="serverurl" jdbcType="VARCHAR" />
+    <result column="token_url" property="tokenUrl" jdbcType="VARCHAR" />
+    <result column="server_url" property="serverUrl" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
@@ -33,7 +33,7 @@
   <sql id="Base_Column_List" >
     id, channel_no, type, channel_name, channel_id, status, shop_name, shop_code, company_no, 
     app_key, app_secret, app_value1, value1_desc, app_value2, value2_desc, app_value3, 
-    value3_desc, access_token, refresh_token, tokenUrl, serverUrl, gmt_create, gmt_modified, 
+    value3_desc, access_token, refresh_token, token_url, server_url, gmt_create, gmt_modified, 
     is_del, gmt_modify, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -47,13 +47,16 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into channel_account (id, channel_no, type, 
       channel_name, channel_id, status, 
       shop_name, shop_code, company_no, 
       app_key, app_secret, app_value1, 
       value1_desc, app_value2, value2_desc, 
       app_value3, value3_desc, access_token, 
-      refresh_token, tokenUrl, serverUrl, 
+      refresh_token, token_url, server_url, 
       gmt_create, gmt_modified, is_del, 
       gmt_modify, creator, modifier
       )
@@ -63,17 +66,18 @@
       #{appKey,jdbcType=VARCHAR}, #{appSecret,jdbcType=VARCHAR}, #{appValue1,jdbcType=VARCHAR}, 
       #{value1Desc,jdbcType=VARCHAR}, #{appValue2,jdbcType=VARCHAR}, #{value2Desc,jdbcType=VARCHAR}, 
       #{appValue3,jdbcType=VARCHAR}, #{value3Desc,jdbcType=VARCHAR}, #{accessToken,jdbcType=VARCHAR}, 
-      #{refreshToken,jdbcType=VARCHAR}, #{tokenurl,jdbcType=VARCHAR}, #{serverurl,jdbcType=VARCHAR}, 
+      #{refreshToken,jdbcType=VARCHAR}, #{tokenUrl,jdbcType=VARCHAR}, #{serverUrl,jdbcType=VARCHAR}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
       #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into channel_account
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+      id,
       <if test="channelNo != null" >
         channel_no,
       </if>
@@ -128,11 +132,11 @@
       <if test="refreshToken != null" >
         refresh_token,
       </if>
-      <if test="tokenurl != null" >
-        tokenUrl,
+      <if test="tokenUrl != null" >
+        token_url,
       </if>
-      <if test="serverurl != null" >
-        serverUrl,
+      <if test="serverUrl != null" >
+        server_url,
       </if>
       <if test="gmtCreate != null" >
         gmt_create,
@@ -154,9 +158,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
+      #{id,jdbcType=BIGINT},
       <if test="channelNo != null" >
         #{channelNo,jdbcType=VARCHAR},
       </if>
@@ -211,11 +213,11 @@
       <if test="refreshToken != null" >
         #{refreshToken,jdbcType=VARCHAR},
       </if>
-      <if test="tokenurl != null" >
-        #{tokenurl,jdbcType=VARCHAR},
+      <if test="tokenUrl != null" >
+        #{tokenUrl,jdbcType=VARCHAR},
       </if>
-      <if test="serverurl != null" >
-        #{serverurl,jdbcType=VARCHAR},
+      <if test="serverUrl != null" >
+        #{serverUrl,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -294,11 +296,11 @@
       <if test="refreshToken != null" >
         refresh_token = #{refreshToken,jdbcType=VARCHAR},
       </if>
-      <if test="tokenurl != null" >
-        tokenUrl = #{tokenurl,jdbcType=VARCHAR},
+      <if test="tokenUrl != null" >
+        token_url = #{tokenUrl,jdbcType=VARCHAR},
       </if>
-      <if test="serverurl != null" >
-        serverUrl = #{serverurl,jdbcType=VARCHAR},
+      <if test="serverUrl != null" >
+        server_url = #{serverUrl,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -341,8 +343,8 @@
       value3_desc = #{value3Desc,jdbcType=VARCHAR},
       access_token = #{accessToken,jdbcType=VARCHAR},
       refresh_token = #{refreshToken,jdbcType=VARCHAR},
-      tokenUrl = #{tokenurl,jdbcType=VARCHAR},
-      serverUrl = #{serverurl,jdbcType=VARCHAR},
+      token_url = #{tokenUrl,jdbcType=VARCHAR},
+      server_url = #{serverUrl,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},

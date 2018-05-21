@@ -38,6 +38,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into mall_shipping_address (id, channel_no, customer_no, 
       open_id, receiver, receiver_state, 
       receiver_city, receiver_district, address_detail, 
@@ -54,11 +57,12 @@
       #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into mall_shipping_address
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+      id,
       <if test="channelNo != null" >
         channel_no,
       </if>
@@ -115,9 +119,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
+      #{id,jdbcType=INTEGER},
       <if test="channelNo != null" >
         #{channelNo,jdbcType=VARCHAR},
       </if>

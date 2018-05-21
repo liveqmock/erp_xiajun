@@ -34,6 +34,9 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into inventory_out_manifest_detail (id, inventory_out_no, item_id, 
       quantity, item_name, scale, 
       upc, sku_code, sku_pic, 
@@ -48,11 +51,12 @@
       #{companyNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into inventory_out_manifest_detail
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+      id,
       <if test="inventoryOutNo != null" >
         inventory_out_no,
       </if>
@@ -100,9 +104,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
+      #{id,jdbcType=BIGINT},
       <if test="inventoryOutNo != null" >
         #{inventoryOutNo,jdbcType=VARCHAR},
       </if>

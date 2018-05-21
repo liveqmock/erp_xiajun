@@ -32,6 +32,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into mall_wx_special_page (id, special_page_id, company_no, 
       status, start_time, end_time, 
       item_ids, picture, intro, 
@@ -44,11 +47,12 @@
       #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into mall_wx_special_page
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+      id,
       <if test="specialPageId != null" >
         special_page_id,
       </if>
@@ -90,9 +94,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
+      #{id,jdbcType=INTEGER},
       <if test="specialPageId != null" >
         #{specialPageId,jdbcType=INTEGER},
       </if>

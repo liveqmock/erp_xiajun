@@ -28,6 +28,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPolling4pxDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into shipping_track_polling_4px (id, delivery_no, shipping_no, 
       is_normal, track_info, gmt_create, 
       gmt_modify, creator, modifier, 
@@ -38,11 +41,12 @@
       #{isDel,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPolling4pxDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into shipping_track_polling_4px
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
+      id,
       <if test="deliveryNo != null" >
         delivery_no,
       </if>
@@ -72,9 +76,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
+      #{id,jdbcType=INTEGER},
       <if test="deliveryNo != null" >
         #{deliveryNo,jdbcType=VARCHAR},
       </if>
