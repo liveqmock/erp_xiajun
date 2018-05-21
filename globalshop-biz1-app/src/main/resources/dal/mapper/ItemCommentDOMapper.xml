@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ItemCommentDOMapper">
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="score" jdbcType="INTEGER" property="score" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
-    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
-    <result column="mall_order_no" jdbcType="BIGINT" property="mallOrderNo" />
-    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
-    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
-    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
-    <result column="comment_pic" jdbcType="VARCHAR" property="commentPic" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ItemCommentDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="mall_order_no" property="mallOrderNo" jdbcType="BIGINT" />
+    <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="comment_pic" property="commentPic" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, score, company_no, shop_code, channel_no, mall_order_no, customer_no, item_code, 
     sku_code, comment_pic, content, status, gmt_modify, gmt_create, is_del, creator, 
     modifier
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from item_comment
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from item_comment
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO" >
     insert into item_comment (id, score, company_no, 
       shop_code, channel_no, mall_order_no, 
       customer_no, item_code, sku_code, 
@@ -49,401 +49,170 @@
       #{gmtModify,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO" >
     insert into item_comment
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="score != null">
+      <if test="score != null" >
         score,
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code,
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         channel_no,
       </if>
-      <if test="mallOrderNo != null">
+      <if test="mallOrderNo != null" >
         mall_order_no,
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         customer_no,
       </if>
-      <if test="itemCode != null">
+      <if test="itemCode != null" >
         item_code,
       </if>
-      <if test="skuCode != null">
+      <if test="skuCode != null" >
         sku_code,
       </if>
-      <if test="commentPic != null">
+      <if test="commentPic != null" >
         comment_pic,
       </if>
-      <if test="content != null">
+      <if test="content != null" >
         content,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify,
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create,
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del,
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="score != null">
+      <if test="score != null" >
         #{score,jdbcType=INTEGER},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         #{channelNo,jdbcType=VARCHAR},
       </if>
-      <if test="mallOrderNo != null">
+      <if test="mallOrderNo != null" >
         #{mallOrderNo,jdbcType=BIGINT},
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="itemCode != null">
+      <if test="itemCode != null" >
         #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="skuCode != null">
+      <if test="skuCode != null" >
         #{skuCode,jdbcType=VARCHAR},
       </if>
-      <if test="commentPic != null">
+      <if test="commentPic != null" >
         #{commentPic,jdbcType=VARCHAR},
       </if>
-      <if test="content != null">
+      <if test="content != null" >
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO" >
     update item_comment
-    <set>
-      <if test="score != null">
+    <set >
+      <if test="score != null" >
         score = #{score,jdbcType=INTEGER},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code = #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         channel_no = #{channelNo,jdbcType=VARCHAR},
       </if>
-      <if test="mallOrderNo != null">
+      <if test="mallOrderNo != null" >
         mall_order_no = #{mallOrderNo,jdbcType=BIGINT},
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         customer_no = #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="itemCode != null">
+      <if test="itemCode != null" >
         item_code = #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="skuCode != null">
+      <if test="skuCode != null" >
         sku_code = #{skuCode,jdbcType=VARCHAR},
       </if>
-      <if test="commentPic != null">
+      <if test="commentPic != null" >
         comment_pic = #{commentPic,jdbcType=VARCHAR},
       </if>
-      <if test="content != null">
+      <if test="content != null" >
         content = #{content,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
-    update item_comment
-    set score = #{score,jdbcType=INTEGER},
-      company_no = #{companyNo,jdbcType=VARCHAR},
-      shop_code = #{shopCode,jdbcType=VARCHAR},
-      channel_no = #{channelNo,jdbcType=VARCHAR},
-      mall_order_no = #{mallOrderNo,jdbcType=BIGINT},
-      customer_no = #{customerNo,jdbcType=VARCHAR},
-      item_code = #{itemCode,jdbcType=VARCHAR},
-      sku_code = #{skuCode,jdbcType=VARCHAR},
-      comment_pic = #{commentPic,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="score" jdbcType="INTEGER" property="score" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
-    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
-    <result column="mall_order_no" jdbcType="BIGINT" property="mallOrderNo" />
-    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
-    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
-    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
-    <result column="comment_pic" jdbcType="VARCHAR" property="commentPic" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, score, company_no, shop_code, channel_no, mall_order_no, customer_no, item_code, 
-    sku_code, comment_pic, content, status, gmt_modify, gmt_create, is_del, creator, 
-    modifier
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from item_comment
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from item_comment
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
-    insert into item_comment (id, score, company_no, 
-      shop_code, channel_no, mall_order_no, 
-      customer_no, item_code, sku_code, 
-      comment_pic, content, status, 
-      gmt_modify, gmt_create, is_del, 
-      creator, modifier)
-    values (#{id,jdbcType=INTEGER}, #{score,jdbcType=INTEGER}, #{companyNo,jdbcType=VARCHAR}, 
-      #{shopCode,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{mallOrderNo,jdbcType=BIGINT}, 
-      #{customerNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{commentPic,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
-    insert into item_comment
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-      <if test="companyNo != null">
-        company_no,
-      </if>
-      <if test="shopCode != null">
-        shop_code,
-      </if>
-      <if test="channelNo != null">
-        channel_no,
-      </if>
-      <if test="mallOrderNo != null">
-        mall_order_no,
-      </if>
-      <if test="customerNo != null">
-        customer_no,
-      </if>
-      <if test="itemCode != null">
-        item_code,
-      </if>
-      <if test="skuCode != null">
-        sku_code,
-      </if>
-      <if test="commentPic != null">
-        comment_pic,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="isDel != null">
-        is_del,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=INTEGER},
-      </if>
-      <if test="companyNo != null">
-        #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        #{shopCode,jdbcType=VARCHAR},
-      </if>
-      <if test="channelNo != null">
-        #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="mallOrderNo != null">
-        #{mallOrderNo,jdbcType=BIGINT},
-      </if>
-      <if test="customerNo != null">
-        #{customerNo,jdbcType=VARCHAR},
-      </if>
-      <if test="itemCode != null">
-        #{itemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="skuCode != null">
-        #{skuCode,jdbcType=VARCHAR},
-      </if>
-      <if test="commentPic != null">
-        #{commentPic,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="gmtModify != null">
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null">
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
-    update item_comment
-    <set>
-      <if test="score != null">
-        score = #{score,jdbcType=INTEGER},
-      </if>
-      <if test="companyNo != null">
-        company_no = #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        shop_code = #{shopCode,jdbcType=VARCHAR},
-      </if>
-      <if test="channelNo != null">
-        channel_no = #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="mallOrderNo != null">
-        mall_order_no = #{mallOrderNo,jdbcType=BIGINT},
-      </if>
-      <if test="customerNo != null">
-        customer_no = #{customerNo,jdbcType=VARCHAR},
-      </if>
-      <if test="itemCode != null">
-        item_code = #{itemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="skuCode != null">
-        sku_code = #{skuCode,jdbcType=VARCHAR},
-      </if>
-      <if test="commentPic != null">
-        comment_pic = #{commentPic,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null">
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCommentDO" >
     update item_comment
     set score = #{score,jdbcType=INTEGER},
       company_no = #{companyNo,jdbcType=VARCHAR},

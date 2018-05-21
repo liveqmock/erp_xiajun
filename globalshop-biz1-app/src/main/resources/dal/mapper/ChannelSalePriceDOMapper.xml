@@ -1,36 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelSalePriceDOMapper">
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="channal_no" jdbcType="VARCHAR" property="channalNo" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="shop_code" jdbcType="BIGINT" property="shopCode" />
-    <result column="sale_price" jdbcType="REAL" property="salePrice" />
-    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
-    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
-    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelSalePriceDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="channal_no" property="channalNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="BIGINT" />
+    <result column="sale_price" property="salePrice" jdbcType="REAL" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, channal_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no, 
     gmt_create, gmt_modify, creator, modifier, is_del
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from channel_sale_price
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from channel_sale_price
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     insert into channel_sale_price (id, channal_no, company_no, 
       shop_code, sale_price, sku_code, 
       item_code, batch_no, gmt_create, 
@@ -42,318 +42,134 @@
       #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{isDel,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     insert into channel_sale_price
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="channalNo != null">
+      <if test="channalNo != null" >
         channal_no,
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code,
       </if>
-      <if test="salePrice != null">
+      <if test="salePrice != null" >
         sale_price,
       </if>
-      <if test="skuCode != null">
+      <if test="skuCode != null" >
         sku_code,
       </if>
-      <if test="itemCode != null">
+      <if test="itemCode != null" >
         item_code,
       </if>
-      <if test="batchNo != null">
+      <if test="batchNo != null" >
         batch_no,
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create,
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify,
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="channalNo != null">
+      <if test="channalNo != null" >
         #{channalNo,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         #{shopCode,jdbcType=BIGINT},
       </if>
-      <if test="salePrice != null">
+      <if test="salePrice != null" >
         #{salePrice,jdbcType=REAL},
       </if>
-      <if test="skuCode != null">
+      <if test="skuCode != null" >
         #{skuCode,jdbcType=VARCHAR},
       </if>
-      <if test="itemCode != null">
+      <if test="itemCode != null" >
         #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="batchNo != null">
+      <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     update channel_sale_price
-    <set>
-      <if test="channalNo != null">
+    <set >
+      <if test="channalNo != null" >
         channal_no = #{channalNo,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code = #{shopCode,jdbcType=BIGINT},
       </if>
-      <if test="salePrice != null">
+      <if test="salePrice != null" >
         sale_price = #{salePrice,jdbcType=REAL},
       </if>
-      <if test="skuCode != null">
+      <if test="skuCode != null" >
         sku_code = #{skuCode,jdbcType=VARCHAR},
       </if>
-      <if test="itemCode != null">
+      <if test="itemCode != null" >
         item_code = #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="batchNo != null">
+      <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
-    update channel_sale_price
-    set channal_no = #{channalNo,jdbcType=VARCHAR},
-      company_no = #{companyNo,jdbcType=VARCHAR},
-      shop_code = #{shopCode,jdbcType=BIGINT},
-      sale_price = #{salePrice,jdbcType=REAL},
-      sku_code = #{skuCode,jdbcType=VARCHAR},
-      item_code = #{itemCode,jdbcType=VARCHAR},
-      batch_no = #{batchNo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="channal_no" jdbcType="VARCHAR" property="channalNo" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="shop_code" jdbcType="BIGINT" property="shopCode" />
-    <result column="sale_price" jdbcType="REAL" property="salePrice" />
-    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
-    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
-    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, channal_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no, 
-    gmt_create, gmt_modify, creator, modifier, is_del
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from channel_sale_price
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from channel_sale_price
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
-    insert into channel_sale_price (id, channal_no, company_no, 
-      shop_code, sale_price, sku_code, 
-      item_code, batch_no, gmt_create, 
-      gmt_modify, creator, modifier, 
-      is_del)
-    values (#{id,jdbcType=BIGINT}, #{channalNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
-      #{shopCode,jdbcType=BIGINT}, #{salePrice,jdbcType=REAL}, #{skuCode,jdbcType=VARCHAR}, 
-      #{itemCode,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
-    insert into channel_sale_price
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="channalNo != null">
-        channal_no,
-      </if>
-      <if test="companyNo != null">
-        company_no,
-      </if>
-      <if test="shopCode != null">
-        shop_code,
-      </if>
-      <if test="salePrice != null">
-        sale_price,
-      </if>
-      <if test="skuCode != null">
-        sku_code,
-      </if>
-      <if test="itemCode != null">
-        item_code,
-      </if>
-      <if test="batchNo != null">
-        batch_no,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
-      <if test="isDel != null">
-        is_del,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="channalNo != null">
-        #{channalNo,jdbcType=VARCHAR},
-      </if>
-      <if test="companyNo != null">
-        #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        #{shopCode,jdbcType=BIGINT},
-      </if>
-      <if test="salePrice != null">
-        #{salePrice,jdbcType=REAL},
-      </if>
-      <if test="skuCode != null">
-        #{skuCode,jdbcType=VARCHAR},
-      </if>
-      <if test="itemCode != null">
-        #{itemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="batchNo != null">
-        #{batchNo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null">
-        #{isDel,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
-    update channel_sale_price
-    <set>
-      <if test="channalNo != null">
-        channal_no = #{channalNo,jdbcType=VARCHAR},
-      </if>
-      <if test="companyNo != null">
-        company_no = #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        shop_code = #{shopCode,jdbcType=BIGINT},
-      </if>
-      <if test="salePrice != null">
-        sale_price = #{salePrice,jdbcType=REAL},
-      </if>
-      <if test="skuCode != null">
-        sku_code = #{skuCode,jdbcType=VARCHAR},
-      </if>
-      <if test="itemCode != null">
-        item_code = #{itemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="batchNo != null">
-        batch_no = #{batchNo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null">
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     update channel_sale_price
     set channal_no = #{channalNo,jdbcType=VARCHAR},
       company_no = #{companyNo,jdbcType=VARCHAR},

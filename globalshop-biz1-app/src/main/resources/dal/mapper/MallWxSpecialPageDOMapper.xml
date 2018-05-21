@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallWxSpecialPageDOMapper">
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="special_page_id" jdbcType="INTEGER" property="specialPageId" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="status" jdbcType="BIT" property="status" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="item_ids" jdbcType="VARCHAR" property="itemIds" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="intro" jdbcType="VARCHAR" property="intro" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallWxSpecialPageDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="special_page_id" property="specialPageId" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="item_ids" property="itemIds" jdbcType="VARCHAR" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="intro" property="intro" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, special_page_id, company_no, status, start_time, end_time, item_ids, picture, 
     intro, gmt_create, gmt_modify, creator, modifier, is_del
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from mall_wx_special_page
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from mall_wx_special_page
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO" >
     insert into mall_wx_special_page (id, special_page_id, company_no, 
       status, start_time, end_time, 
       item_ids, picture, intro, 
@@ -43,338 +43,143 @@
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO" >
     insert into mall_wx_special_page
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="specialPageId != null">
+      <if test="specialPageId != null" >
         special_page_id,
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
-      <if test="startTime != null">
+      <if test="startTime != null" >
         start_time,
       </if>
-      <if test="endTime != null">
+      <if test="endTime != null" >
         end_time,
       </if>
-      <if test="itemIds != null">
+      <if test="itemIds != null" >
         item_ids,
       </if>
-      <if test="picture != null">
+      <if test="picture != null" >
         picture,
       </if>
-      <if test="intro != null">
+      <if test="intro != null" >
         intro,
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create,
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify,
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="specialPageId != null">
+      <if test="specialPageId != null" >
         #{specialPageId,jdbcType=INTEGER},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=BIT},
       </if>
-      <if test="startTime != null">
+      <if test="startTime != null" >
         #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null">
+      <if test="endTime != null" >
         #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="itemIds != null">
+      <if test="itemIds != null" >
         #{itemIds,jdbcType=VARCHAR},
       </if>
-      <if test="picture != null">
+      <if test="picture != null" >
         #{picture,jdbcType=VARCHAR},
       </if>
-      <if test="intro != null">
+      <if test="intro != null" >
         #{intro,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO" >
     update mall_wx_special_page
-    <set>
-      <if test="specialPageId != null">
+    <set >
+      <if test="specialPageId != null" >
         special_page_id = #{specialPageId,jdbcType=INTEGER},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status = #{status,jdbcType=BIT},
       </if>
-      <if test="startTime != null">
+      <if test="startTime != null" >
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null">
+      <if test="endTime != null" >
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="itemIds != null">
+      <if test="itemIds != null" >
         item_ids = #{itemIds,jdbcType=VARCHAR},
       </if>
-      <if test="picture != null">
+      <if test="picture != null" >
         picture = #{picture,jdbcType=VARCHAR},
       </if>
-      <if test="intro != null">
+      <if test="intro != null" >
         intro = #{intro,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
-    update mall_wx_special_page
-    set special_page_id = #{specialPageId,jdbcType=INTEGER},
-      company_no = #{companyNo,jdbcType=VARCHAR},
-      status = #{status,jdbcType=BIT},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      item_ids = #{itemIds,jdbcType=VARCHAR},
-      picture = #{picture,jdbcType=VARCHAR},
-      intro = #{intro,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="special_page_id" jdbcType="INTEGER" property="specialPageId" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="status" jdbcType="BIT" property="status" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="item_ids" jdbcType="VARCHAR" property="itemIds" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="intro" jdbcType="VARCHAR" property="intro" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, special_page_id, company_no, status, start_time, end_time, item_ids, picture, 
-    intro, gmt_create, gmt_modify, creator, modifier, is_del
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from mall_wx_special_page
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from mall_wx_special_page
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
-    insert into mall_wx_special_page (id, special_page_id, company_no, 
-      status, start_time, end_time, 
-      item_ids, picture, intro, 
-      gmt_create, gmt_modify, creator, 
-      modifier, is_del)
-    values (#{id,jdbcType=INTEGER}, #{specialPageId,jdbcType=INTEGER}, #{companyNo,jdbcType=VARCHAR}, 
-      #{status,jdbcType=BIT}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{itemIds,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
-    insert into mall_wx_special_page
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="specialPageId != null">
-        special_page_id,
-      </if>
-      <if test="companyNo != null">
-        company_no,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="startTime != null">
-        start_time,
-      </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-      <if test="itemIds != null">
-        item_ids,
-      </if>
-      <if test="picture != null">
-        picture,
-      </if>
-      <if test="intro != null">
-        intro,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
-      <if test="isDel != null">
-        is_del,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="specialPageId != null">
-        #{specialPageId,jdbcType=INTEGER},
-      </if>
-      <if test="companyNo != null">
-        #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=BIT},
-      </if>
-      <if test="startTime != null">
-        #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="itemIds != null">
-        #{itemIds,jdbcType=VARCHAR},
-      </if>
-      <if test="picture != null">
-        #{picture,jdbcType=VARCHAR},
-      </if>
-      <if test="intro != null">
-        #{intro,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null">
-        #{isDel,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
-    update mall_wx_special_page
-    <set>
-      <if test="specialPageId != null">
-        special_page_id = #{specialPageId,jdbcType=INTEGER},
-      </if>
-      <if test="companyNo != null">
-        company_no = #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=BIT},
-      </if>
-      <if test="startTime != null">
-        start_time = #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="itemIds != null">
-        item_ids = #{itemIds,jdbcType=VARCHAR},
-      </if>
-      <if test="picture != null">
-        picture = #{picture,jdbcType=VARCHAR},
-      </if>
-      <if test="intro != null">
-        intro = #{intro,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null">
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO" >
     update mall_wx_special_page
     set special_page_id = #{specialPageId,jdbcType=INTEGER},
       company_no = #{companyNo,jdbcType=VARCHAR},

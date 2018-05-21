@@ -1,38 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallWxPayBillDOMapper">
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
-    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
-    <result column="wx_pay_trade_no" jdbcType="VARCHAR" property="wxPayTradeNo" />
-    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
-    <result column="order_info" jdbcType="VARCHAR" property="orderInfo" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
-    <result column="wx_open_id" jdbcType="VARCHAR" property="wxOpenId" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallWxPayBillDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="wx_pay_trade_no" property="wxPayTradeNo" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="order_info" property="orderInfo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+    <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, company_no, channel_no, shop_code, wx_pay_trade_no, pay_type, order_info, status, 
     customer_no, wx_open_id, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from mall_wx_pay_bill
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from mall_wx_pay_bill
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO" >
     insert into mall_wx_pay_bill (id, company_no, channel_no, 
       shop_code, wx_pay_trade_no, pay_type, 
       order_info, status, customer_no, 
@@ -46,360 +46,152 @@
       #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO" >
     insert into mall_wx_pay_bill
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         channel_no,
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code,
       </if>
-      <if test="wxPayTradeNo != null">
+      <if test="wxPayTradeNo != null" >
         wx_pay_trade_no,
       </if>
-      <if test="payType != null">
+      <if test="payType != null" >
         pay_type,
       </if>
-      <if test="orderInfo != null">
+      <if test="orderInfo != null" >
         order_info,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         customer_no,
       </if>
-      <if test="wxOpenId != null">
+      <if test="wxOpenId != null" >
         wx_open_id,
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create,
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify,
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del,
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         #{channelNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="wxPayTradeNo != null">
+      <if test="wxPayTradeNo != null" >
         #{wxPayTradeNo,jdbcType=VARCHAR},
       </if>
-      <if test="payType != null">
+      <if test="payType != null" >
         #{payType,jdbcType=VARCHAR},
       </if>
-      <if test="orderInfo != null">
+      <if test="orderInfo != null" >
         #{orderInfo,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="wxOpenId != null">
+      <if test="wxOpenId != null" >
         #{wxOpenId,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO" >
     update mall_wx_pay_bill
-    <set>
-      <if test="companyNo != null">
+    <set >
+      <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         channel_no = #{channelNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code = #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="wxPayTradeNo != null">
+      <if test="wxPayTradeNo != null" >
         wx_pay_trade_no = #{wxPayTradeNo,jdbcType=VARCHAR},
       </if>
-      <if test="payType != null">
+      <if test="payType != null" >
         pay_type = #{payType,jdbcType=VARCHAR},
       </if>
-      <if test="orderInfo != null">
+      <if test="orderInfo != null" >
         order_info = #{orderInfo,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         customer_no = #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="wxOpenId != null">
+      <if test="wxOpenId != null" >
         wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
-    update mall_wx_pay_bill
-    set company_no = #{companyNo,jdbcType=VARCHAR},
-      channel_no = #{channelNo,jdbcType=VARCHAR},
-      shop_code = #{shopCode,jdbcType=VARCHAR},
-      wx_pay_trade_no = #{wxPayTradeNo,jdbcType=VARCHAR},
-      pay_type = #{payType,jdbcType=VARCHAR},
-      order_info = #{orderInfo,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
-      customer_no = #{customerNo,jdbcType=VARCHAR},
-      wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
-    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
-    <result column="wx_pay_trade_no" jdbcType="VARCHAR" property="wxPayTradeNo" />
-    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
-    <result column="order_info" jdbcType="VARCHAR" property="orderInfo" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
-    <result column="wx_open_id" jdbcType="VARCHAR" property="wxOpenId" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, company_no, channel_no, shop_code, wx_pay_trade_no, pay_type, order_info, status, 
-    customer_no, wx_open_id, gmt_create, gmt_modify, is_del, creator, modifier
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from mall_wx_pay_bill
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from mall_wx_pay_bill
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
-    insert into mall_wx_pay_bill (id, company_no, channel_no, 
-      shop_code, wx_pay_trade_no, pay_type, 
-      order_info, status, customer_no, 
-      wx_open_id, gmt_create, gmt_modify, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, 
-      #{shopCode,jdbcType=VARCHAR}, #{wxPayTradeNo,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, 
-      #{orderInfo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{customerNo,jdbcType=VARCHAR}, 
-      #{wxOpenId,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
-    insert into mall_wx_pay_bill
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="companyNo != null">
-        company_no,
-      </if>
-      <if test="channelNo != null">
-        channel_no,
-      </if>
-      <if test="shopCode != null">
-        shop_code,
-      </if>
-      <if test="wxPayTradeNo != null">
-        wx_pay_trade_no,
-      </if>
-      <if test="payType != null">
-        pay_type,
-      </if>
-      <if test="orderInfo != null">
-        order_info,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="customerNo != null">
-        customer_no,
-      </if>
-      <if test="wxOpenId != null">
-        wx_open_id,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify,
-      </if>
-      <if test="isDel != null">
-        is_del,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="companyNo != null">
-        #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="channelNo != null">
-        #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        #{shopCode,jdbcType=VARCHAR},
-      </if>
-      <if test="wxPayTradeNo != null">
-        #{wxPayTradeNo,jdbcType=VARCHAR},
-      </if>
-      <if test="payType != null">
-        #{payType,jdbcType=VARCHAR},
-      </if>
-      <if test="orderInfo != null">
-        #{orderInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="customerNo != null">
-        #{customerNo,jdbcType=VARCHAR},
-      </if>
-      <if test="wxOpenId != null">
-        #{wxOpenId,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null">
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
-    update mall_wx_pay_bill
-    <set>
-      <if test="companyNo != null">
-        company_no = #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="channelNo != null">
-        channel_no = #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        shop_code = #{shopCode,jdbcType=VARCHAR},
-      </if>
-      <if test="wxPayTradeNo != null">
-        wx_pay_trade_no = #{wxPayTradeNo,jdbcType=VARCHAR},
-      </if>
-      <if test="payType != null">
-        pay_type = #{payType,jdbcType=VARCHAR},
-      </if>
-      <if test="orderInfo != null">
-        order_info = #{orderInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="customerNo != null">
-        customer_no = #{customerNo,jdbcType=VARCHAR},
-      </if>
-      <if test="wxOpenId != null">
-        wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null">
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO" >
     update mall_wx_pay_bill
     set company_no = #{companyNo,jdbcType=VARCHAR},
       channel_no = #{channelNo,jdbcType=VARCHAR},

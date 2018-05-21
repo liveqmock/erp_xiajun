@@ -1,48 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallCustomerDOMapper">
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
-    <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="union_id" jdbcType="VARCHAR" property="unionId" />
-    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
-    <result column="gender" jdbcType="INTEGER" property="gender" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="portrait_url" jdbcType="VARCHAR" property="portraitUrl" />
-    <result column="refer" jdbcType="BIGINT" property="refer" />
-    <result column="role" jdbcType="INTEGER" property="role" />
-    <result column="first_login_time" jdbcType="TIMESTAMP" property="firstLoginTime" />
-    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
-    <result column="first_login_device" jdbcType="BIGINT" property="firstLoginDevice" />
-    <result column="last_login_device" jdbcType="BIGINT" property="lastLoginDevice" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
-    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallCustomerDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="union_id" property="unionId" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="portrait_url" property="portraitUrl" jdbcType="VARCHAR" />
+    <result column="refer" property="refer" jdbcType="BIGINT" />
+    <result column="role" property="role" jdbcType="INTEGER" />
+    <result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="first_login_device" property="firstLoginDevice" jdbcType="BIGINT" />
+    <result column="last_login_device" property="lastLoginDevice" jdbcType="BIGINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, customer_no, open_id, union_id, nick_name, gender, city, province, country, portrait_url, 
     refer, role, first_login_time, last_login_time, first_login_device, last_login_device, 
     gmt_create, gmt_modify, is_del, creator, modifier, company_no, channel_no, shop_code
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from mall_customer
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from mall_customer
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO" >
     insert into mall_customer (id, customer_no, open_id, 
       union_id, nick_name, gender, 
       city, province, country, 
@@ -62,547 +62,233 @@
       #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO" >
     insert into mall_customer
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         customer_no,
       </if>
-      <if test="openId != null">
+      <if test="openId != null" >
         open_id,
       </if>
-      <if test="unionId != null">
+      <if test="unionId != null" >
         union_id,
       </if>
-      <if test="nickName != null">
+      <if test="nickName != null" >
         nick_name,
       </if>
-      <if test="gender != null">
+      <if test="gender != null" >
         gender,
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         city,
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         province,
       </if>
-      <if test="country != null">
+      <if test="country != null" >
         country,
       </if>
-      <if test="portraitUrl != null">
+      <if test="portraitUrl != null" >
         portrait_url,
       </if>
-      <if test="refer != null">
+      <if test="refer != null" >
         refer,
       </if>
-      <if test="role != null">
+      <if test="role != null" >
         role,
       </if>
-      <if test="firstLoginTime != null">
+      <if test="firstLoginTime != null" >
         first_login_time,
       </if>
-      <if test="lastLoginTime != null">
+      <if test="lastLoginTime != null" >
         last_login_time,
       </if>
-      <if test="firstLoginDevice != null">
+      <if test="firstLoginDevice != null" >
         first_login_device,
       </if>
-      <if test="lastLoginDevice != null">
+      <if test="lastLoginDevice != null" >
         last_login_device,
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create,
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify,
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del,
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier,
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         channel_no,
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="customerNo != null">
+      <if test="customerNo != null" >
         #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="openId != null">
+      <if test="openId != null" >
         #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="unionId != null">
+      <if test="unionId != null" >
         #{unionId,jdbcType=VARCHAR},
       </if>
-      <if test="nickName != null">
+      <if test="nickName != null" >
         #{nickName,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
+      <if test="gender != null" >
         #{gender,jdbcType=INTEGER},
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         #{city,jdbcType=VARCHAR},
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         #{province,jdbcType=VARCHAR},
       </if>
-      <if test="country != null">
+      <if test="country != null" >
         #{country,jdbcType=VARCHAR},
       </if>
-      <if test="portraitUrl != null">
+      <if test="portraitUrl != null" >
         #{portraitUrl,jdbcType=VARCHAR},
       </if>
-      <if test="refer != null">
+      <if test="refer != null" >
         #{refer,jdbcType=BIGINT},
       </if>
-      <if test="role != null">
+      <if test="role != null" >
         #{role,jdbcType=INTEGER},
       </if>
-      <if test="firstLoginTime != null">
+      <if test="firstLoginTime != null" >
         #{firstLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastLoginTime != null">
+      <if test="lastLoginTime != null" >
         #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="firstLoginDevice != null">
+      <if test="firstLoginDevice != null" >
         #{firstLoginDevice,jdbcType=BIGINT},
       </if>
-      <if test="lastLoginDevice != null">
+      <if test="lastLoginDevice != null" >
         #{lastLoginDevice,jdbcType=BIGINT},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         #{channelNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         #{shopCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO" >
     update mall_customer
-    <set>
-      <if test="customerNo != null">
+    <set >
+      <if test="customerNo != null" >
         customer_no = #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="openId != null">
+      <if test="openId != null" >
         open_id = #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="unionId != null">
+      <if test="unionId != null" >
         union_id = #{unionId,jdbcType=VARCHAR},
       </if>
-      <if test="nickName != null">
+      <if test="nickName != null" >
         nick_name = #{nickName,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
+      <if test="gender != null" >
         gender = #{gender,jdbcType=INTEGER},
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         city = #{city,jdbcType=VARCHAR},
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         province = #{province,jdbcType=VARCHAR},
       </if>
-      <if test="country != null">
+      <if test="country != null" >
         country = #{country,jdbcType=VARCHAR},
       </if>
-      <if test="portraitUrl != null">
+      <if test="portraitUrl != null" >
         portrait_url = #{portraitUrl,jdbcType=VARCHAR},
       </if>
-      <if test="refer != null">
+      <if test="refer != null" >
         refer = #{refer,jdbcType=BIGINT},
       </if>
-      <if test="role != null">
+      <if test="role != null" >
         role = #{role,jdbcType=INTEGER},
       </if>
-      <if test="firstLoginTime != null">
+      <if test="firstLoginTime != null" >
         first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastLoginTime != null">
+      <if test="lastLoginTime != null" >
         last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="firstLoginDevice != null">
+      <if test="firstLoginDevice != null" >
         first_login_device = #{firstLoginDevice,jdbcType=BIGINT},
       </if>
-      <if test="lastLoginDevice != null">
+      <if test="lastLoginDevice != null" >
         last_login_device = #{lastLoginDevice,jdbcType=BIGINT},
       </if>
-      <if test="gmtCreate != null">
+      <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null">
+      <if test="gmtModify != null" >
         gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null">
+      <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null">
+      <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="channelNo != null">
+      <if test="channelNo != null" >
         channel_no = #{channelNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null">
+      <if test="shopCode != null" >
         shop_code = #{shopCode,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
-    update mall_customer
-    set customer_no = #{customerNo,jdbcType=VARCHAR},
-      open_id = #{openId,jdbcType=VARCHAR},
-      union_id = #{unionId,jdbcType=VARCHAR},
-      nick_name = #{nickName,jdbcType=VARCHAR},
-      gender = #{gender,jdbcType=INTEGER},
-      city = #{city,jdbcType=VARCHAR},
-      province = #{province,jdbcType=VARCHAR},
-      country = #{country,jdbcType=VARCHAR},
-      portrait_url = #{portraitUrl,jdbcType=VARCHAR},
-      refer = #{refer,jdbcType=BIGINT},
-      role = #{role,jdbcType=INTEGER},
-      first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
-      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
-      first_login_device = #{firstLoginDevice,jdbcType=BIGINT},
-      last_login_device = #{lastLoginDevice,jdbcType=BIGINT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      company_no = #{companyNo,jdbcType=VARCHAR},
-      channel_no = #{channelNo,jdbcType=VARCHAR},
-      shop_code = #{shopCode,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
-    <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="union_id" jdbcType="VARCHAR" property="unionId" />
-    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
-    <result column="gender" jdbcType="INTEGER" property="gender" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="portrait_url" jdbcType="VARCHAR" property="portraitUrl" />
-    <result column="refer" jdbcType="BIGINT" property="refer" />
-    <result column="role" jdbcType="INTEGER" property="role" />
-    <result column="first_login_time" jdbcType="TIMESTAMP" property="firstLoginTime" />
-    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
-    <result column="first_login_device" jdbcType="BIGINT" property="firstLoginDevice" />
-    <result column="last_login_device" jdbcType="BIGINT" property="lastLoginDevice" />
-    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
-    <result column="is_del" jdbcType="BIT" property="isDel" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
-    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, customer_no, open_id, union_id, nick_name, gender, city, province, country, portrait_url, 
-    refer, role, first_login_time, last_login_time, first_login_device, last_login_device, 
-    gmt_create, gmt_modify, is_del, creator, modifier, company_no, channel_no, shop_code
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from mall_customer
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from mall_customer
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
-    insert into mall_customer (id, customer_no, open_id, 
-      union_id, nick_name, gender, 
-      city, province, country, 
-      portrait_url, refer, role, 
-      first_login_time, last_login_time, first_login_device, 
-      last_login_device, gmt_create, gmt_modify, 
-      is_del, creator, modifier, 
-      company_no, channel_no, shop_code
-      )
-    values (#{id,jdbcType=BIGINT}, #{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
-      #{unionId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
-      #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
-      #{portraitUrl,jdbcType=VARCHAR}, #{refer,jdbcType=BIGINT}, #{role,jdbcType=INTEGER}, 
-      #{firstLoginTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{firstLoginDevice,jdbcType=BIGINT}, 
-      #{lastLoginDevice,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
-    insert into mall_customer
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="customerNo != null">
-        customer_no,
-      </if>
-      <if test="openId != null">
-        open_id,
-      </if>
-      <if test="unionId != null">
-        union_id,
-      </if>
-      <if test="nickName != null">
-        nick_name,
-      </if>
-      <if test="gender != null">
-        gender,
-      </if>
-      <if test="city != null">
-        city,
-      </if>
-      <if test="province != null">
-        province,
-      </if>
-      <if test="country != null">
-        country,
-      </if>
-      <if test="portraitUrl != null">
-        portrait_url,
-      </if>
-      <if test="refer != null">
-        refer,
-      </if>
-      <if test="role != null">
-        role,
-      </if>
-      <if test="firstLoginTime != null">
-        first_login_time,
-      </if>
-      <if test="lastLoginTime != null">
-        last_login_time,
-      </if>
-      <if test="firstLoginDevice != null">
-        first_login_device,
-      </if>
-      <if test="lastLoginDevice != null">
-        last_login_device,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify,
-      </if>
-      <if test="isDel != null">
-        is_del,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="modifier != null">
-        modifier,
-      </if>
-      <if test="companyNo != null">
-        company_no,
-      </if>
-      <if test="channelNo != null">
-        channel_no,
-      </if>
-      <if test="shopCode != null">
-        shop_code,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="customerNo != null">
-        #{customerNo,jdbcType=VARCHAR},
-      </if>
-      <if test="openId != null">
-        #{openId,jdbcType=VARCHAR},
-      </if>
-      <if test="unionId != null">
-        #{unionId,jdbcType=VARCHAR},
-      </if>
-      <if test="nickName != null">
-        #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        #{gender,jdbcType=INTEGER},
-      </if>
-      <if test="city != null">
-        #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="province != null">
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="country != null">
-        #{country,jdbcType=VARCHAR},
-      </if>
-      <if test="portraitUrl != null">
-        #{portraitUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="refer != null">
-        #{refer,jdbcType=BIGINT},
-      </if>
-      <if test="role != null">
-        #{role,jdbcType=INTEGER},
-      </if>
-      <if test="firstLoginTime != null">
-        #{firstLoginTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastLoginTime != null">
-        #{lastLoginTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="firstLoginDevice != null">
-        #{firstLoginDevice,jdbcType=BIGINT},
-      </if>
-      <if test="lastLoginDevice != null">
-        #{lastLoginDevice,jdbcType=BIGINT},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null">
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="companyNo != null">
-        #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="channelNo != null">
-        #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        #{shopCode,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
-    update mall_customer
-    <set>
-      <if test="customerNo != null">
-        customer_no = #{customerNo,jdbcType=VARCHAR},
-      </if>
-      <if test="openId != null">
-        open_id = #{openId,jdbcType=VARCHAR},
-      </if>
-      <if test="unionId != null">
-        union_id = #{unionId,jdbcType=VARCHAR},
-      </if>
-      <if test="nickName != null">
-        nick_name = #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        gender = #{gender,jdbcType=INTEGER},
-      </if>
-      <if test="city != null">
-        city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="province != null">
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="country != null">
-        country = #{country,jdbcType=VARCHAR},
-      </if>
-      <if test="portraitUrl != null">
-        portrait_url = #{portraitUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="refer != null">
-        refer = #{refer,jdbcType=BIGINT},
-      </if>
-      <if test="role != null">
-        role = #{role,jdbcType=INTEGER},
-      </if>
-      <if test="firstLoginTime != null">
-        first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastLoginTime != null">
-        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="firstLoginDevice != null">
-        first_login_device = #{firstLoginDevice,jdbcType=BIGINT},
-      </if>
-      <if test="lastLoginDevice != null">
-        last_login_device = #{lastLoginDevice,jdbcType=BIGINT},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null">
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null">
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="companyNo != null">
-        company_no = #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="channelNo != null">
-        channel_no = #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="shopCode != null">
-        shop_code = #{shopCode,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO" >
     update mall_customer
     set customer_no = #{customerNo,jdbcType=VARCHAR},
       open_id = #{openId,jdbcType=VARCHAR},
