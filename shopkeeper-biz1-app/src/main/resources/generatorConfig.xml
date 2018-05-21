@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <classPathEntry
-            location="/Users/user/IT/OpenSource/apache-maven-3.3.3/MavenLocalRepository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar"/>
+            location="/Users/jieyingxiong/.m2/repository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
 
@@ -43,8 +43,183 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-       <table tableName="auth_organization" domainObjectName="AuthOrganizationDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="false"
-              enableSelectByExample="true" selectByExampleQueryId="false" />
+        <table tableName="auth_organization" domainObjectName="AuthOrganizationDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="auth_resource" domainObjectName="AuthResourceDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="auth_role" domainObjectName="AuthRoleDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="auth_role_resource" domainObjectName="AuthRoleResourceDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="auth_user_role" domainObjectName="AuthUserRoleDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer" domainObjectName="BuyerDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer_entry_manifest" domainObjectName="BuyerEntryManifestDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer_receipt" domainObjectName="BuyerReceiptDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer_receipt_detail" domainObjectName="BuyerReceiptDetailDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer_storage" domainObjectName="BuyerStorageDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer_storage_detail" domainObjectName="BuyerStorageDetailDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer_task" domainObjectName="BuyerTaskDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="buyer_task_detail" domainObjectName="BuyerTaskDetailDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="channel" domainObjectName="ChannelDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="channel_account" domainObjectName="ChannelAccountDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="channel_listing_item" domainObjectName="ChannelListingItemDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="channel_listing_item_sku" domainObjectName="ChannelListingItemSkuDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="channel_sale_price" domainObjectName="ChannelSalePriceDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="channel_session" domainObjectName="ChannelSessionDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="company" domainObjectName="CompanyDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="country" domainObjectName="CountryDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="dealer" domainObjectName="DealerDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="dealer_type" domainObjectName="DealerTypeDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="inventory" domainObjectName="InventoryDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="inventory_booking_record" domainObjectName="InventoryBookingRecordDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="inventory_inout" domainObjectName="InventoryInoutDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="inventory_on_warehouse" domainObjectName="InventoryOnWareHouseDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="inventory_out_manifest" domainObjectName="InventoryOutManifestDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="inventory_out_manifest_detail" domainObjectName="InventoryOutManifestDetailDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+
+        <table tableName="item" domainObjectName="ItemDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="item_brand" domainObjectName="ItemBrandDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="item_category" domainObjectName="ItemCategoryDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="item_category_scale" domainObjectName="ItemCategoryScaleDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="item_comment" domainObjectName="ItemCommentDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="item_find" domainObjectName="ItemFindDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="item_sku" domainObjectName="ItemSkuDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="item_sku_scale" domainObjectName="ItemSkuScaleDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="logistic_category_mapping" domainObjectName="LogisticCategoryMappingDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="logistic_company" domainObjectName="LogisticCompanyDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_customer" domainObjectName="MallCustomerDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_order" domainObjectName="MallOrderDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_return_order" domainObjectName="MallReturnOrderDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_shipping_address" domainObjectName="MallShippingAddressDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_shopping_cart" domainObjectName="MallShippingCartDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_sub_order" domainObjectName="MallSubOrderDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_wx_banner" domainObjectName="MallWxBannerDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_wx_customer_track" domainObjectName="MallWxCustomerTrackDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_wx_item_snapshot" domainObjectName="MallWxItemSnapshotDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_wx_pay_bill" domainObjectName="MallWxPayBillDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="mall_wx_special_page" domainObjectName="MallWxSpecialPageDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="react_version" domainObjectName="ReactVersionDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="sequence" domainObjectName="SequenceDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="shipping_order" domainObjectName="ShippingOrderDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="shipping_packaging_pattern" domainObjectName="ShippingPackingPatternDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="shipping_packaging_scale" domainObjectName="ShippingPackingScaleDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="shipping_track" domainObjectName="ShippingTrackDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="shipping_track_polling_4px" domainObjectName="ShippingTrackPolling4pxDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
+
+        <table tableName="shipping_track_polling_yuntong" domainObjectName="ShippingTrackPollingYuntongDO"  enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true" />
 
     </context>
 </generatorConfiguration>  

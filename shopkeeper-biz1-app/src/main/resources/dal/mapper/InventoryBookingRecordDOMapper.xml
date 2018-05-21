@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.shopkeeper.biz1.app.dal.mapper.InventoryBookingRecordDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
+    <result column="booked_quantity" property="bookedQuantity" jdbcType="BIGINT" />
+    <result column="inventory" property="inventory" jdbcType="BIGINT" />
+    <result column="inventory_type" property="inventoryType" jdbcType="VARCHAR" />
+    <result column="operator_type" property="operatorType" jdbcType="VARCHAR" />
+    <result column="inventory_area_id" property="inventoryAreaId" jdbcType="BIGINT" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+    <result column="position_no" property="positionNo" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, company_no, order_no, sub_order_no, item_code, sku_code, quantity, booked_quantity, 
+    inventory, inventory_type, operator_type, inventory_area_id, warehouse_id, position_no, 
+    gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from inventory_booking_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from inventory_booking_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from inventory_booking_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDOExample" >
+    delete from inventory_booking_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDO" >
+    insert into inventory_booking_record (id, company_no, order_no, 
+      sub_order_no, item_code, sku_code, 
+      quantity, booked_quantity, inventory, 
+      inventory_type, operator_type, inventory_area_id, 
+      warehouse_id, position_no, gmt_create, 
+      gmt_modify, is_del, creator, 
+      modifier)
+    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{subOrderNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{quantity,jdbcType=BIGINT}, #{bookedQuantity,jdbcType=BIGINT}, #{inventory,jdbcType=BIGINT}, 
+      #{inventoryType,jdbcType=VARCHAR}, #{operatorType,jdbcType=VARCHAR}, #{inventoryAreaId,jdbcType=BIGINT}, 
+      #{warehouseId,jdbcType=BIGINT}, #{positionNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDO" >
+    insert into inventory_booking_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="skuCode != null" >
+        sku_code,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="bookedQuantity != null" >
+        booked_quantity,
+      </if>
+      <if test="inventory != null" >
+        inventory,
+      </if>
+      <if test="inventoryType != null" >
+        inventory_type,
+      </if>
+      <if test="operatorType != null" >
+        operator_type,
+      </if>
+      <if test="inventoryAreaId != null" >
+        inventory_area_id,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+      <if test="positionNo != null" >
+        position_no,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null" >
+        #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null" >
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="bookedQuantity != null" >
+        #{bookedQuantity,jdbcType=BIGINT},
+      </if>
+      <if test="inventory != null" >
+        #{inventory,jdbcType=BIGINT},
+      </if>
+      <if test="inventoryType != null" >
+        #{inventoryType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null" >
+        #{operatorType,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryAreaId != null" >
+        #{inventoryAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="positionNo != null" >
+        #{positionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDOExample" resultType="java.lang.Integer" >
+    select count(*) from inventory_booking_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update inventory_booking_record
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.companyNo != null" >
+        company_no = #{record.companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subOrderNo != null" >
+        sub_order_no = #{record.subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemCode != null" >
+        item_code = #{record.itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuCode != null" >
+        sku_code = #{record.skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null" >
+        quantity = #{record.quantity,jdbcType=BIGINT},
+      </if>
+      <if test="record.bookedQuantity != null" >
+        booked_quantity = #{record.bookedQuantity,jdbcType=BIGINT},
+      </if>
+      <if test="record.inventory != null" >
+        inventory = #{record.inventory,jdbcType=BIGINT},
+      </if>
+      <if test="record.inventoryType != null" >
+        inventory_type = #{record.inventoryType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatorType != null" >
+        operator_type = #{record.operatorType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inventoryAreaId != null" >
+        inventory_area_id = #{record.inventoryAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="record.warehouseId != null" >
+        warehouse_id = #{record.warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="record.positionNo != null" >
+        position_no = #{record.positionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModify != null" >
+        gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDel != null" >
+        is_del = #{record.isDel,jdbcType=BIT},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null" >
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update inventory_booking_record
+    set id = #{record.id,jdbcType=BIGINT},
+      company_no = #{record.companyNo,jdbcType=VARCHAR},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      sub_order_no = #{record.subOrderNo,jdbcType=VARCHAR},
+      item_code = #{record.itemCode,jdbcType=VARCHAR},
+      sku_code = #{record.skuCode,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=BIGINT},
+      booked_quantity = #{record.bookedQuantity,jdbcType=BIGINT},
+      inventory = #{record.inventory,jdbcType=BIGINT},
+      inventory_type = #{record.inventoryType,jdbcType=VARCHAR},
+      operator_type = #{record.operatorType,jdbcType=VARCHAR},
+      inventory_area_id = #{record.inventoryAreaId,jdbcType=BIGINT},
+      warehouse_id = #{record.warehouseId,jdbcType=BIGINT},
+      position_no = #{record.positionNo,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{record.isDel,jdbcType=BIT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDO" >
+    update inventory_booking_record
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null" >
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="bookedQuantity != null" >
+        booked_quantity = #{bookedQuantity,jdbcType=BIGINT},
+      </if>
+      <if test="inventory != null" >
+        inventory = #{inventory,jdbcType=BIGINT},
+      </if>
+      <if test="inventoryType != null" >
+        inventory_type = #{inventoryType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null" >
+        operator_type = #{operatorType,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryAreaId != null" >
+        inventory_area_id = #{inventoryAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="positionNo != null" >
+        position_no = #{positionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.InventoryBookingRecordDO" >
+    update inventory_booking_record
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=BIGINT},
+      booked_quantity = #{bookedQuantity,jdbcType=BIGINT},
+      inventory = #{inventory,jdbcType=BIGINT},
+      inventory_type = #{inventoryType,jdbcType=VARCHAR},
+      operator_type = #{operatorType,jdbcType=VARCHAR},
+      inventory_area_id = #{inventoryAreaId,jdbcType=BIGINT},
+      warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      position_no = #{positionNo,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
