@@ -47,6 +47,582 @@
     <result column="desc" jdbcType="LONGVARCHAR" property="desc" />
     <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, item_code, company_no, category_code, qr_code_url, video, subtitle, item_name, 
+    en_name, item_short, category_name, sale_type, main_pic, brand_no, brand_name, country, 
+    currency, origin, freight, weight, logistic_type, price_range, unit, source, promotion, 
+    id_card, start_date, end_date, booking_date, is_sale, wxis_sale, is_find, status, 
+    spec, model, gmt_modify, gmt_create, is_del, creator, modifier
+  </sql>
+  <sql id="Blob_Column_List">
+    desc, detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from item
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+    insert into item (id, item_code, company_no, 
+      category_code, qr_code_url, video, 
+      subtitle, item_name, en_name, 
+      item_short, category_name, sale_type, 
+      main_pic, brand_no, brand_name, 
+      country, currency, origin, 
+      freight, weight, logistic_type, 
+      price_range, unit, source, 
+      promotion, id_card, start_date, 
+      end_date, booking_date, is_sale, 
+      wxis_sale, is_find, status, 
+      spec, model, gmt_modify, 
+      gmt_create, is_del, creator, 
+      modifier, desc, detail
+      )
+    values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+      #{categoryCode,jdbcType=VARCHAR}, #{qrCodeUrl,jdbcType=VARCHAR}, #{video,jdbcType=VARCHAR}, 
+      #{subtitle,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{enName,jdbcType=VARCHAR}, 
+      #{itemShort,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, #{saleType,jdbcType=TINYINT}, 
+      #{mainPic,jdbcType=VARCHAR}, #{brandNo,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{country,jdbcType=TINYINT}, #{currency,jdbcType=TINYINT}, #{origin,jdbcType=VARCHAR}, 
+      #{freight,jdbcType=DOUBLE}, #{weight,jdbcType=DOUBLE}, #{logisticType,jdbcType=TINYINT}, 
+      #{priceRange,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
+      #{promotion,jdbcType=VARCHAR}, #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, 
+      #{wxisSale,jdbcType=TINYINT}, #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{desc,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+    insert into item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="companyNo != null">
+        company_no,
+      </if>
+      <if test="categoryCode != null">
+        category_code,
+      </if>
+      <if test="qrCodeUrl != null">
+        qr_code_url,
+      </if>
+      <if test="video != null">
+        video,
+      </if>
+      <if test="subtitle != null">
+        subtitle,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="enName != null">
+        en_name,
+      </if>
+      <if test="itemShort != null">
+        item_short,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="saleType != null">
+        sale_type,
+      </if>
+      <if test="mainPic != null">
+        main_pic,
+      </if>
+      <if test="brandNo != null">
+        brand_no,
+      </if>
+      <if test="brandName != null">
+        brand_name,
+      </if>
+      <if test="country != null">
+        country,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="origin != null">
+        origin,
+      </if>
+      <if test="freight != null">
+        freight,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="logisticType != null">
+        logistic_type,
+      </if>
+      <if test="priceRange != null">
+        price_range,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="promotion != null">
+        promotion,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="bookingDate != null">
+        booking_date,
+      </if>
+      <if test="isSale != null">
+        is_sale,
+      </if>
+      <if test="wxisSale != null">
+        wxis_sale,
+      </if>
+      <if test="isFind != null">
+        is_find,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="spec != null">
+        spec,
+      </if>
+      <if test="model != null">
+        model,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="desc != null">
+        desc,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null">
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeUrl != null">
+        #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null">
+        #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null">
+        #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null">
+        #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemShort != null">
+        #{itemShort,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleType != null">
+        #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="mainPic != null">
+        #{mainPic,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null">
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="origin != null">
+        #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null">
+        #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="logisticType != null">
+        #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="priceRange != null">
+        #{priceRange,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="promotion != null">
+        #{promotion,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null">
+        #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null">
+        #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null">
+        #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null">
+        #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="spec != null">
+        #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="desc != null">
+        #{desc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+    update item
+    <set>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null">
+        category_code = #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeUrl != null">
+        qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null">
+        video = #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null">
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null">
+        en_name = #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemShort != null">
+        item_short = #{itemShort,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleType != null">
+        sale_type = #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="mainPic != null">
+        main_pic = #{mainPic,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null">
+        brand_no = #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        country = #{country,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null">
+        freight = #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="logisticType != null">
+        logistic_type = #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="priceRange != null">
+        price_range = #{priceRange,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="promotion != null">
+        promotion = #{promotion,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null">
+        booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null">
+        is_sale = #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null">
+        wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null">
+        is_find = #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="spec != null">
+        spec = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="desc != null">
+        desc = #{desc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+    update item
+    set item_code = #{itemCode,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      category_code = #{categoryCode,jdbcType=VARCHAR},
+      qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      video = #{video,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      en_name = #{enName,jdbcType=VARCHAR},
+      item_short = #{itemShort,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      sale_type = #{saleType,jdbcType=TINYINT},
+      main_pic = #{mainPic,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      country = #{country,jdbcType=TINYINT},
+      currency = #{currency,jdbcType=TINYINT},
+      origin = #{origin,jdbcType=VARCHAR},
+      freight = #{freight,jdbcType=DOUBLE},
+      weight = #{weight,jdbcType=DOUBLE},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      price_range = #{priceRange,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      promotion = #{promotion,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=TINYINT},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      is_sale = #{isSale,jdbcType=TINYINT},
+      wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      is_find = #{isFind,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      spec = #{spec,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      desc = #{desc,jdbcType=LONGVARCHAR},
+      detail = #{detail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+    update item
+    set item_code = #{itemCode,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      category_code = #{categoryCode,jdbcType=VARCHAR},
+      qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      video = #{video,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      en_name = #{enName,jdbcType=VARCHAR},
+      item_short = #{itemShort,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      sale_type = #{saleType,jdbcType=TINYINT},
+      main_pic = #{mainPic,jdbcType=VARCHAR},
+      brand_no = #{brandNo,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      country = #{country,jdbcType=TINYINT},
+      currency = #{currency,jdbcType=TINYINT},
+      origin = #{origin,jdbcType=VARCHAR},
+      freight = #{freight,jdbcType=DOUBLE},
+      weight = #{weight,jdbcType=DOUBLE},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      price_range = #{priceRange,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      promotion = #{promotion,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=TINYINT},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      is_sale = #{isSale,jdbcType=TINYINT},
+      wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      is_find = #{isFind,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      spec = #{spec,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    <result column="category_code" jdbcType="VARCHAR" property="categoryCode" />
+    <result column="qr_code_url" jdbcType="VARCHAR" property="qrCodeUrl" />
+    <result column="video" jdbcType="VARCHAR" property="video" />
+    <result column="subtitle" jdbcType="VARCHAR" property="subtitle" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="en_name" jdbcType="VARCHAR" property="enName" />
+    <result column="item_short" jdbcType="VARCHAR" property="itemShort" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="sale_type" jdbcType="TINYINT" property="saleType" />
+    <result column="main_pic" jdbcType="VARCHAR" property="mainPic" />
+    <result column="brand_no" jdbcType="VARCHAR" property="brandNo" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="country" jdbcType="TINYINT" property="country" />
+    <result column="currency" jdbcType="TINYINT" property="currency" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="freight" jdbcType="DOUBLE" property="freight" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="logistic_type" jdbcType="TINYINT" property="logisticType" />
+    <result column="price_range" jdbcType="VARCHAR" property="priceRange" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="promotion" jdbcType="VARCHAR" property="promotion" />
+    <result column="id_card" jdbcType="TINYINT" property="idCard" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="booking_date" jdbcType="TIMESTAMP" property="bookingDate" />
+    <result column="is_sale" jdbcType="TINYINT" property="isSale" />
+    <result column="wxis_sale" jdbcType="TINYINT" property="wxisSale" />
+    <result column="is_find" jdbcType="TINYINT" property="isFind" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+    <result column="desc" jdbcType="LONGVARCHAR" property="desc" />
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

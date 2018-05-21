@@ -30,6 +30,356 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, channel_no, type, channel_name, channel_id, status, shop_name, shop_code, company_no, 
+    app_key, app_secret, app_value1, value1_desc, app_value2, value2_desc, app_value3, 
+    value3_desc, access_token, refresh_token, tokenUrl, serverUrl, gmt_create, gmt_modified, 
+    is_del, gmt_modify, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from channel_account
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from channel_account
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO">
+    insert into channel_account (id, channel_no, type, 
+      channel_name, channel_id, status, 
+      shop_name, shop_code, company_no, 
+      app_key, app_secret, app_value1, 
+      value1_desc, app_value2, value2_desc, 
+      app_value3, value3_desc, access_token, 
+      refresh_token, tokenUrl, serverUrl, 
+      gmt_create, gmt_modified, is_del, 
+      gmt_modify, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{channelNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{channelName,jdbcType=VARCHAR}, #{channelId,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, 
+      #{shopName,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{companyNo,jdbcType=BIGINT}, 
+      #{appKey,jdbcType=VARCHAR}, #{appSecret,jdbcType=VARCHAR}, #{appValue1,jdbcType=VARCHAR}, 
+      #{value1Desc,jdbcType=VARCHAR}, #{appValue2,jdbcType=VARCHAR}, #{value2Desc,jdbcType=VARCHAR}, 
+      #{appValue3,jdbcType=VARCHAR}, #{value3Desc,jdbcType=VARCHAR}, #{accessToken,jdbcType=VARCHAR}, 
+      #{refreshToken,jdbcType=VARCHAR}, #{tokenurl,jdbcType=VARCHAR}, #{serverurl,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO">
+    insert into channel_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="channelNo != null">
+        channel_no,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="channelName != null">
+        channel_name,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="companyNo != null">
+        company_no,
+      </if>
+      <if test="appKey != null">
+        app_key,
+      </if>
+      <if test="appSecret != null">
+        app_secret,
+      </if>
+      <if test="appValue1 != null">
+        app_value1,
+      </if>
+      <if test="value1Desc != null">
+        value1_desc,
+      </if>
+      <if test="appValue2 != null">
+        app_value2,
+      </if>
+      <if test="value2Desc != null">
+        value2_desc,
+      </if>
+      <if test="appValue3 != null">
+        app_value3,
+      </if>
+      <if test="value3Desc != null">
+        value3_desc,
+      </if>
+      <if test="accessToken != null">
+        access_token,
+      </if>
+      <if test="refreshToken != null">
+        refresh_token,
+      </if>
+      <if test="tokenurl != null">
+        tokenUrl,
+      </if>
+      <if test="serverurl != null">
+        serverUrl,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="channelNo != null">
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="channelName != null">
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+        #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=BIGINT},
+      </if>
+      <if test="appKey != null">
+        #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appSecret != null">
+        #{appSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="appValue1 != null">
+        #{appValue1,jdbcType=VARCHAR},
+      </if>
+      <if test="value1Desc != null">
+        #{value1Desc,jdbcType=VARCHAR},
+      </if>
+      <if test="appValue2 != null">
+        #{appValue2,jdbcType=VARCHAR},
+      </if>
+      <if test="value2Desc != null">
+        #{value2Desc,jdbcType=VARCHAR},
+      </if>
+      <if test="appValue3 != null">
+        #{appValue3,jdbcType=VARCHAR},
+      </if>
+      <if test="value3Desc != null">
+        #{value3Desc,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null">
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshToken != null">
+        #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenurl != null">
+        #{tokenurl,jdbcType=VARCHAR},
+      </if>
+      <if test="serverurl != null">
+        #{serverurl,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO">
+    update channel_account
+    <set>
+      <if test="channelNo != null">
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="channelName != null">
+        channel_name = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+        channel_id = #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        company_no = #{companyNo,jdbcType=BIGINT},
+      </if>
+      <if test="appKey != null">
+        app_key = #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appSecret != null">
+        app_secret = #{appSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="appValue1 != null">
+        app_value1 = #{appValue1,jdbcType=VARCHAR},
+      </if>
+      <if test="value1Desc != null">
+        value1_desc = #{value1Desc,jdbcType=VARCHAR},
+      </if>
+      <if test="appValue2 != null">
+        app_value2 = #{appValue2,jdbcType=VARCHAR},
+      </if>
+      <if test="value2Desc != null">
+        value2_desc = #{value2Desc,jdbcType=VARCHAR},
+      </if>
+      <if test="appValue3 != null">
+        app_value3 = #{appValue3,jdbcType=VARCHAR},
+      </if>
+      <if test="value3Desc != null">
+        value3_desc = #{value3Desc,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null">
+        access_token = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshToken != null">
+        refresh_token = #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenurl != null">
+        tokenUrl = #{tokenurl,jdbcType=VARCHAR},
+      </if>
+      <if test="serverurl != null">
+        serverUrl = #{serverurl,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO">
+    update channel_account
+    set channel_no = #{channelNo,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      channel_name = #{channelName,jdbcType=VARCHAR},
+      channel_id = #{channelId,jdbcType=BIGINT},
+      status = #{status,jdbcType=TINYINT},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=BIGINT},
+      app_key = #{appKey,jdbcType=VARCHAR},
+      app_secret = #{appSecret,jdbcType=VARCHAR},
+      app_value1 = #{appValue1,jdbcType=VARCHAR},
+      value1_desc = #{value1Desc,jdbcType=VARCHAR},
+      app_value2 = #{appValue2,jdbcType=VARCHAR},
+      value2_desc = #{value2Desc,jdbcType=VARCHAR},
+      app_value3 = #{appValue3,jdbcType=VARCHAR},
+      value3_desc = #{value3Desc,jdbcType=VARCHAR},
+      access_token = #{accessToken,jdbcType=VARCHAR},
+      refresh_token = #{refreshToken,jdbcType=VARCHAR},
+      tokenUrl = #{tokenurl,jdbcType=VARCHAR},
+      serverUrl = #{serverurl,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="channel_name" jdbcType="VARCHAR" property="channelName" />
+    <result column="channel_id" jdbcType="BIGINT" property="channelId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="company_no" jdbcType="BIGINT" property="companyNo" />
+    <result column="app_key" jdbcType="VARCHAR" property="appKey" />
+    <result column="app_secret" jdbcType="VARCHAR" property="appSecret" />
+    <result column="app_value1" jdbcType="VARCHAR" property="appValue1" />
+    <result column="value1_desc" jdbcType="VARCHAR" property="value1Desc" />
+    <result column="app_value2" jdbcType="VARCHAR" property="appValue2" />
+    <result column="value2_desc" jdbcType="VARCHAR" property="value2Desc" />
+    <result column="app_value3" jdbcType="VARCHAR" property="appValue3" />
+    <result column="value3_desc" jdbcType="VARCHAR" property="value3Desc" />
+    <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
+    <result column="refresh_token" jdbcType="VARCHAR" property="refreshToken" />
+    <result column="tokenUrl" jdbcType="VARCHAR" property="tokenurl" />
+    <result column="serverUrl" jdbcType="VARCHAR" property="serverurl" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

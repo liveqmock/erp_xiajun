@@ -17,6 +17,201 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, company_no, item_code, sku_code, inventory_on_warehouse_no, warehouse_no, shelf_no, 
+    quantity, operator_type, gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from inventory_inout
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from inventory_inout
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO">
+    insert into inventory_inout (id, company_no, item_code, 
+      sku_code, inventory_on_warehouse_no, warehouse_no, 
+      shelf_no, quantity, operator_type, 
+      gmt_create, gmt_modify, is_del, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{skuCode,jdbcType=VARCHAR}, #{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
+      #{shelfNo,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, #{operatorType,jdbcType=TINYINT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO">
+    insert into inventory_inout
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="companyNo != null">
+        company_no,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="inventoryOnWarehouseNo != null">
+        inventory_on_warehouse_no,
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no,
+      </if>
+      <if test="shelfNo != null">
+        shelf_no,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="operatorType != null">
+        operator_type,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryOnWarehouseNo != null">
+        #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shelfNo != null">
+        #{shelfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="operatorType != null">
+        #{operatorType,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO">
+    update inventory_inout
+    <set>
+      <if test="companyNo != null">
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryOnWarehouseNo != null">
+        inventory_on_warehouse_no = #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shelfNo != null">
+        shelf_no = #{shelfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="operatorType != null">
+        operator_type = #{operatorType,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO">
+    update inventory_inout
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      inventory_on_warehouse_no = #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
+      warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      shelf_no = #{shelfNo,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=BIGINT},
+      operator_type = #{operatorType,jdbcType=TINYINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="inventory_on_warehouse_no" jdbcType="VARCHAR" property="inventoryOnWarehouseNo" />
+    <result column="warehouse_no" jdbcType="VARCHAR" property="warehouseNo" />
+    <result column="shelf_no" jdbcType="VARCHAR" property="shelfNo" />
+    <result column="quantity" jdbcType="BIGINT" property="quantity" />
+    <result column="operator_type" jdbcType="TINYINT" property="operatorType" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

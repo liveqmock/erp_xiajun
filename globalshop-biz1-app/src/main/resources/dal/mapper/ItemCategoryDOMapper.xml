@@ -17,6 +17,201 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, category_code, name, p_code, root_code, seq, level, all_path, status, gmt_create, 
+    gmt_modify, is_del, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item_category
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from item_category
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO">
+    insert into item_category (id, category_code, name, 
+      p_code, root_code, seq, 
+      level, all_path, status, 
+      gmt_create, gmt_modify, is_del, 
+      creator, modifier)
+    values (#{id,jdbcType=BIGINT}, #{categoryCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{pCode,jdbcType=VARCHAR}, #{rootCode,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, 
+      #{level,jdbcType=TINYINT}, #{allPath,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO">
+    insert into item_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="categoryCode != null">
+        category_code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="pCode != null">
+        p_code,
+      </if>
+      <if test="rootCode != null">
+        root_code,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="allPath != null">
+        all_path,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="categoryCode != null">
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null">
+        #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rootCode != null">
+        #{rootCode,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="allPath != null">
+        #{allPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO">
+    update item_category
+    <set>
+      <if test="categoryCode != null">
+        category_code = #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null">
+        p_code = #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rootCode != null">
+        root_code = #{rootCode,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="allPath != null">
+        all_path = #{allPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO">
+    update item_category
+    set category_code = #{categoryCode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      p_code = #{pCode,jdbcType=VARCHAR},
+      root_code = #{rootCode,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=TINYINT},
+      level = #{level,jdbcType=TINYINT},
+      all_path = #{allPath,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="category_code" jdbcType="VARCHAR" property="categoryCode" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="p_code" jdbcType="VARCHAR" property="pCode" />
+    <result column="root_code" jdbcType="VARCHAR" property="rootCode" />
+    <result column="seq" jdbcType="TINYINT" property="seq" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="all_path" jdbcType="VARCHAR" property="allPath" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

@@ -21,6 +21,250 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_no, open_id, company_no, channel_no, shop_code, sku_name, sku_code, 
+    item_code, item_name, scale, quantity, status, gmt_create, gmt_modify, is_del, creator, 
+    modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mall_shopping_cart
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_shopping_cart
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO">
+    insert into mall_shopping_cart (id, customer_no, open_id, 
+      company_no, channel_no, shop_code, 
+      sku_name, sku_code, item_code, 
+      item_name, scale, quantity, 
+      status, gmt_create, gmt_modify, 
+      is_del, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
+      #{skuName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
+      #{status,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO">
+    insert into mall_shopping_cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerNo != null">
+        customer_no,
+      </if>
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="companyNo != null">
+        company_no,
+      </if>
+      <if test="channelNo != null">
+        channel_no,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="skuName != null">
+        sku_name,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="scale != null">
+        scale,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customerNo != null">
+        #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null">
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null">
+        #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO">
+    update mall_shopping_cart
+    <set>
+      <if test="customerNo != null">
+        customer_no = #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null">
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null">
+        scale = #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO">
+    update mall_shopping_cart
+    set customer_no = #{customerNo,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      sku_name = #{skuName,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    <result column="channel_no" jdbcType="VARCHAR" property="channelNo" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="scale" jdbcType="VARCHAR" property="scale" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

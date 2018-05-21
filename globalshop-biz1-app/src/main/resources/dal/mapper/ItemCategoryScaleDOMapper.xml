@@ -13,6 +13,95 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     <result column="is_del" jdbcType="BIT" property="isDel" />
   </resultMap>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryScaleDO">
+    insert into item_category_scale (id, category_code, category_name, 
+      scale_code, scale_name, gmt_create, 
+      gmt_modify, creator, modifier, 
+      is_del)
+    values (#{id,jdbcType=BIGINT}, #{categoryCode,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{scaleCode,jdbcType=VARCHAR}, #{scaleName,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryScaleDO">
+    insert into item_category_scale
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="categoryCode != null">
+        category_code,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="scaleCode != null">
+        scale_code,
+      </if>
+      <if test="scaleName != null">
+        scale_name,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="categoryCode != null">
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="scaleCode != null">
+        #{scaleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="scaleName != null">
+        #{scaleName,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryScaleDO">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="category_code" jdbcType="VARCHAR" property="categoryCode" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="scale_code" jdbcType="VARCHAR" property="scaleCode" />
+    <result column="scale_name" jdbcType="VARCHAR" property="scaleName" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

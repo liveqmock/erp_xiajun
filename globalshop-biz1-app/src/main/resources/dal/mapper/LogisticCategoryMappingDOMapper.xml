@@ -14,6 +14,168 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     <result column="is_del" jdbcType="BIT" property="isDel" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, category_code, category_name, logistics_company_code, logistics_company_name, 
+    logistics_company_category_code, gmt_create, gmt_modify, creator, modifier, is_del
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from logistic_category_mapping
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from logistic_category_mapping
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCategoryMappingDO">
+    insert into logistic_category_mapping (id, category_code, category_name, 
+      logistics_company_code, logistics_company_name, 
+      logistics_company_category_code, gmt_create, 
+      gmt_modify, creator, modifier, 
+      is_del)
+    values (#{id,jdbcType=BIGINT}, #{categoryCode,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
+      #{logisticsCompanyCode,jdbcType=BIGINT}, #{logisticsCompanyName,jdbcType=VARCHAR}, 
+      #{logisticsCompanyCategoryCode,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCategoryMappingDO">
+    insert into logistic_category_mapping
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="categoryCode != null">
+        category_code,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="logisticsCompanyCode != null">
+        logistics_company_code,
+      </if>
+      <if test="logisticsCompanyName != null">
+        logistics_company_name,
+      </if>
+      <if test="logisticsCompanyCategoryCode != null">
+        logistics_company_category_code,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="categoryCode != null">
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompanyCode != null">
+        #{logisticsCompanyCode,jdbcType=BIGINT},
+      </if>
+      <if test="logisticsCompanyName != null">
+        #{logisticsCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompanyCategoryCode != null">
+        #{logisticsCompanyCategoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCategoryMappingDO">
+    update logistic_category_mapping
+    <set>
+      <if test="categoryCode != null">
+        category_code = #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompanyCode != null">
+        logistics_company_code = #{logisticsCompanyCode,jdbcType=BIGINT},
+      </if>
+      <if test="logisticsCompanyName != null">
+        logistics_company_name = #{logisticsCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompanyCategoryCode != null">
+        logistics_company_category_code = #{logisticsCompanyCategoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCategoryMappingDO">
+    update logistic_category_mapping
+    set category_code = #{categoryCode,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      logistics_company_code = #{logisticsCompanyCode,jdbcType=BIGINT},
+      logistics_company_name = #{logisticsCompanyName,jdbcType=VARCHAR},
+      logistics_company_category_code = #{logisticsCompanyCategoryCode,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCategoryMappingDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="category_code" jdbcType="VARCHAR" property="categoryCode" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="logistics_company_code" jdbcType="BIGINT" property="logisticsCompanyCode" />
+    <result column="logistics_company_name" jdbcType="VARCHAR" property="logisticsCompanyName" />
+    <result column="logistics_company_category_code" jdbcType="VARCHAR" property="logisticsCompanyCategoryCode" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

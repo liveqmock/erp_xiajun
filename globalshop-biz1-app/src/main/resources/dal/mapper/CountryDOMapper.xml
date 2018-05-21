@@ -15,6 +15,179 @@
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     <result column="is_del" jdbcType="BIT" property="isDel" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, name, country_code, length_unit, volume_unit, weight_unit, money_unit, gmt_create, 
+    gmt_modify, creator, modifier, is_del
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from country
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from country
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO">
+    insert into country (id, name, country_code, 
+      length_unit, volume_unit, weight_unit, 
+      money_unit, gmt_create, gmt_modify, 
+      creator, modifier, is_del
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{countryCode,jdbcType=VARCHAR}, 
+      #{lengthUnit,jdbcType=VARCHAR}, #{volumeUnit,jdbcType=VARCHAR}, #{weightUnit,jdbcType=VARCHAR}, 
+      #{moneyUnit,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO">
+    insert into country
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="countryCode != null">
+        country_code,
+      </if>
+      <if test="lengthUnit != null">
+        length_unit,
+      </if>
+      <if test="volumeUnit != null">
+        volume_unit,
+      </if>
+      <if test="weightUnit != null">
+        weight_unit,
+      </if>
+      <if test="moneyUnit != null">
+        money_unit,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null">
+        #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lengthUnit != null">
+        #{lengthUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeUnit != null">
+        #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="weightUnit != null">
+        #{weightUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyUnit != null">
+        #{moneyUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO">
+    update country
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null">
+        country_code = #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lengthUnit != null">
+        length_unit = #{lengthUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeUnit != null">
+        volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="weightUnit != null">
+        weight_unit = #{weightUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyUnit != null">
+        money_unit = #{moneyUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO">
+    update country
+    set name = #{name,jdbcType=VARCHAR},
+      country_code = #{countryCode,jdbcType=VARCHAR},
+      length_unit = #{lengthUnit,jdbcType=VARCHAR},
+      volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+      weight_unit = #{weightUnit,jdbcType=VARCHAR},
+      money_unit = #{moneyUnit,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="country_code" jdbcType="VARCHAR" property="countryCode" />
+    <result column="length_unit" jdbcType="VARCHAR" property="lengthUnit" />
+    <result column="volume_unit" jdbcType="VARCHAR" property="volumeUnit" />
+    <result column="weight_unit" jdbcType="VARCHAR" property="weightUnit" />
+    <result column="money_unit" jdbcType="VARCHAR" property="moneyUnit" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

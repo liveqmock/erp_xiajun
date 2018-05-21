@@ -24,6 +24,285 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price, 
+    currency, upc, quantity, trans_quantity, gmt_modify, purchase_storage_no, gmt_create, 
+    buyer_task_detail_no, item_code, sku_buysite, is_del, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from buyer_storage_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from buyer_storage_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO">
+    insert into buyer_storage_detail (id, storage_no, warehouse_no, 
+      warehouse_name, shelf_no, sku_code, 
+      price, total_price, currency, 
+      upc, quantity, trans_quantity, 
+      gmt_modify, purchase_storage_no, gmt_create, 
+      buyer_task_detail_no, item_code, sku_buysite, 
+      is_del, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DOUBLE}, #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=TINYINT}, 
+      #{upc,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{transQuantity,jdbcType=INTEGER}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{purchaseStorageNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{buyerTaskDetailNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=BIGINT}, #{skuBuysite,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO">
+    insert into buyer_storage_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="storageNo != null">
+        storage_no,
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no,
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name,
+      </if>
+      <if test="shelfNo != null">
+        shelf_no,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="upc != null">
+        upc,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="transQuantity != null">
+        trans_quantity,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="purchaseStorageNo != null">
+        purchase_storage_no,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="buyerTaskDetailNo != null">
+        buyer_task_detail_no,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="skuBuysite != null">
+        sku_buysite,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="storageNo != null">
+        #{storageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null">
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="shelfNo != null">
+        #{shelfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="upc != null">
+        #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="transQuantity != null">
+        #{transQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="purchaseStorageNo != null">
+        #{purchaseStorageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buyerTaskDetailNo != null">
+        #{buyerTaskDetailNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=BIGINT},
+      </if>
+      <if test="skuBuysite != null">
+        #{skuBuysite,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO">
+    update buyer_storage_detail
+    <set>
+      <if test="storageNo != null">
+        storage_no = #{storageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="shelfNo != null">
+        shelf_no = #{shelfNo,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="upc != null">
+        upc = #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="transQuantity != null">
+        trans_quantity = #{transQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="purchaseStorageNo != null">
+        purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buyerTaskDetailNo != null">
+        buyer_task_detail_no = #{buyerTaskDetailNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=BIGINT},
+      </if>
+      <if test="skuBuysite != null">
+        sku_buysite = #{skuBuysite,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO">
+    update buyer_storage_detail
+    set storage_no = #{storageNo,jdbcType=VARCHAR},
+      warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      shelf_no = #{shelfNo,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      total_price = #{totalPrice,jdbcType=DOUBLE},
+      currency = #{currency,jdbcType=TINYINT},
+      upc = #{upc,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      trans_quantity = #{transQuantity,jdbcType=INTEGER},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      buyer_task_detail_no = #{buyerTaskDetailNo,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=BIGINT},
+      sku_buysite = #{skuBuysite,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="storage_no" jdbcType="VARCHAR" property="storageNo" />
+    <result column="warehouse_no" jdbcType="VARCHAR" property="warehouseNo" />
+    <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="shelf_no" jdbcType="VARCHAR" property="shelfNo" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
+    <result column="currency" jdbcType="TINYINT" property="currency" />
+    <result column="upc" jdbcType="VARCHAR" property="upc" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="trans_quantity" jdbcType="INTEGER" property="transQuantity" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="purchase_storage_no" jdbcType="VARCHAR" property="purchaseStorageNo" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="buyer_task_detail_no" jdbcType="VARCHAR" property="buyerTaskDetailNo" />
+    <result column="item_code" jdbcType="BIGINT" property="itemCode" />
+    <result column="sku_buysite" jdbcType="VARCHAR" property="skuBuysite" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
