@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackPollingYuntongDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="waybill_no" jdbcType="VARCHAR" property="waybillNo" />
+    <result column="inland_trans_code" jdbcType="VARCHAR" property="inlandTransCode" />
+    <result column="inland_trans_company_name" jdbcType="VARCHAR" property="inlandTransCompanyName" />
+    <result column="current_status" jdbcType="VARCHAR" property="currentStatus" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, waybill_no, inland_trans_code, inland_trans_company_name, current_status, status_time, 
+    gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  <select id="selectByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_track_polling_yuntong
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shipping_track_polling_yuntong
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample">
+    delete from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    insert into shipping_track_polling_yuntong (id, waybill_no, inland_trans_code, 
+      inland_trans_company_name, current_status, 
+      status_time, gmt_create, gmt_modify, 
+      is_del, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{waybillNo,jdbcType=VARCHAR}, #{inlandTransCode,jdbcType=VARCHAR}, 
+      #{inlandTransCompanyName,jdbcType=VARCHAR}, #{currentStatus,jdbcType=VARCHAR}, 
+      #{statusTime,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    insert into shipping_track_polling_yuntong
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="waybillNo != null">
+        waybill_no,
+      </if>
+      <if test="inlandTransCode != null">
+        inland_trans_code,
+      </if>
+      <if test="inlandTransCompanyName != null">
+        inland_trans_company_name,
+      </if>
+      <if test="currentStatus != null">
+        current_status,
+      </if>
+      <if test="statusTime != null">
+        status_time,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="waybillNo != null">
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCode != null">
+        #{inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCompanyName != null">
+        #{inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currentStatus != null">
+        #{currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="statusTime != null">
+        #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample" resultType="java.lang.Integer">
+    select count(*) from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shipping_track_polling_yuntong
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.waybillNo != null">
+        waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inlandTransCode != null">
+        inland_trans_code = #{record.inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inlandTransCompanyName != null">
+        inland_trans_company_name = #{record.inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentStatus != null">
+        current_status = #{record.currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.statusTime != null">
+        status_time = #{record.statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModify != null">
+        gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDel != null">
+        is_del = #{record.isDel,jdbcType=BIT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shipping_track_polling_yuntong
+    set id = #{record.id,jdbcType=BIGINT},
+      waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      inland_trans_code = #{record.inlandTransCode,jdbcType=VARCHAR},
+      inland_trans_company_name = #{record.inlandTransCompanyName,jdbcType=VARCHAR},
+      current_status = #{record.currentStatus,jdbcType=VARCHAR},
+      status_time = #{record.statusTime,jdbcType=TIMESTAMP},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{record.isDel,jdbcType=BIT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    update shipping_track_polling_yuntong
+    <set>
+      <if test="waybillNo != null">
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCode != null">
+        inland_trans_code = #{inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCompanyName != null">
+        inland_trans_company_name = #{inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currentStatus != null">
+        current_status = #{currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    update shipping_track_polling_yuntong
+    set waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      inland_trans_code = #{inlandTransCode,jdbcType=VARCHAR},
+      inland_trans_company_name = #{inlandTransCompanyName,jdbcType=VARCHAR},
+      current_status = #{currentStatus,jdbcType=VARCHAR},
+      status_time = #{statusTime,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="waybill_no" jdbcType="VARCHAR" property="waybillNo" />
+    <result column="inland_trans_code" jdbcType="VARCHAR" property="inlandTransCode" />
+    <result column="inland_trans_company_name" jdbcType="VARCHAR" property="inlandTransCompanyName" />
+    <result column="current_status" jdbcType="VARCHAR" property="currentStatus" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, waybill_no, inland_trans_code, inland_trans_company_name, current_status, status_time, 
+    gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  <select id="selectByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_track_polling_yuntong
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shipping_track_polling_yuntong
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample">
+    delete from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    insert into shipping_track_polling_yuntong (id, waybill_no, inland_trans_code, 
+      inland_trans_company_name, current_status, 
+      status_time, gmt_create, gmt_modify, 
+      is_del, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{waybillNo,jdbcType=VARCHAR}, #{inlandTransCode,jdbcType=VARCHAR}, 
+      #{inlandTransCompanyName,jdbcType=VARCHAR}, #{currentStatus,jdbcType=VARCHAR}, 
+      #{statusTime,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    insert into shipping_track_polling_yuntong
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="waybillNo != null">
+        waybill_no,
+      </if>
+      <if test="inlandTransCode != null">
+        inland_trans_code,
+      </if>
+      <if test="inlandTransCompanyName != null">
+        inland_trans_company_name,
+      </if>
+      <if test="currentStatus != null">
+        current_status,
+      </if>
+      <if test="statusTime != null">
+        status_time,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="waybillNo != null">
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCode != null">
+        #{inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCompanyName != null">
+        #{inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currentStatus != null">
+        #{currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="statusTime != null">
+        #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample" resultType="java.lang.Integer">
+    select count(*) from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shipping_track_polling_yuntong
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.waybillNo != null">
+        waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inlandTransCode != null">
+        inland_trans_code = #{record.inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inlandTransCompanyName != null">
+        inland_trans_company_name = #{record.inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentStatus != null">
+        current_status = #{record.currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.statusTime != null">
+        status_time = #{record.statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModify != null">
+        gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDel != null">
+        is_del = #{record.isDel,jdbcType=BIT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shipping_track_polling_yuntong
+    set id = #{record.id,jdbcType=BIGINT},
+      waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      inland_trans_code = #{record.inlandTransCode,jdbcType=VARCHAR},
+      inland_trans_company_name = #{record.inlandTransCompanyName,jdbcType=VARCHAR},
+      current_status = #{record.currentStatus,jdbcType=VARCHAR},
+      status_time = #{record.statusTime,jdbcType=TIMESTAMP},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{record.isDel,jdbcType=BIT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    update shipping_track_polling_yuntong
+    <set>
+      <if test="waybillNo != null">
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCode != null">
+        inland_trans_code = #{inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCompanyName != null">
+        inland_trans_company_name = #{inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currentStatus != null">
+        current_status = #{currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    update shipping_track_polling_yuntong
+    set waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      inland_trans_code = #{inlandTransCode,jdbcType=VARCHAR},
+      inland_trans_company_name = #{inlandTransCompanyName,jdbcType=VARCHAR},
+      current_status = #{currentStatus,jdbcType=VARCHAR},
+      status_time = #{statusTime,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="waybill_no" jdbcType="VARCHAR" property="waybillNo" />
+    <result column="inland_trans_code" jdbcType="VARCHAR" property="inlandTransCode" />
+    <result column="inland_trans_company_name" jdbcType="VARCHAR" property="inlandTransCompanyName" />
+    <result column="current_status" jdbcType="VARCHAR" property="currentStatus" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="is_del" jdbcType="BIT" property="isDel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, waybill_no, inland_trans_code, inland_trans_company_name, current_status, status_time, 
+    gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  <select id="selectByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_track_polling_yuntong
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shipping_track_polling_yuntong
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample">
+    delete from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    insert into shipping_track_polling_yuntong (id, waybill_no, inland_trans_code, 
+      inland_trans_company_name, current_status, 
+      status_time, gmt_create, gmt_modify, 
+      is_del, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{waybillNo,jdbcType=VARCHAR}, #{inlandTransCode,jdbcType=VARCHAR}, 
+      #{inlandTransCompanyName,jdbcType=VARCHAR}, #{currentStatus,jdbcType=VARCHAR}, 
+      #{statusTime,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    insert into shipping_track_polling_yuntong
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="waybillNo != null">
+        waybill_no,
+      </if>
+      <if test="inlandTransCode != null">
+        inland_trans_code,
+      </if>
+      <if test="inlandTransCompanyName != null">
+        inland_trans_company_name,
+      </if>
+      <if test="currentStatus != null">
+        current_status,
+      </if>
+      <if test="statusTime != null">
+        status_time,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="waybillNo != null">
+        #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCode != null">
+        #{inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCompanyName != null">
+        #{inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currentStatus != null">
+        #{currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="statusTime != null">
+        #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDOExample" resultType="java.lang.Integer">
+    select count(*) from shipping_track_polling_yuntong
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shipping_track_polling_yuntong
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.waybillNo != null">
+        waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inlandTransCode != null">
+        inland_trans_code = #{record.inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inlandTransCompanyName != null">
+        inland_trans_company_name = #{record.inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentStatus != null">
+        current_status = #{record.currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.statusTime != null">
+        status_time = #{record.statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModify != null">
+        gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDel != null">
+        is_del = #{record.isDel,jdbcType=BIT},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shipping_track_polling_yuntong
+    set id = #{record.id,jdbcType=BIGINT},
+      waybill_no = #{record.waybillNo,jdbcType=VARCHAR},
+      inland_trans_code = #{record.inlandTransCode,jdbcType=VARCHAR},
+      inland_trans_company_name = #{record.inlandTransCompanyName,jdbcType=VARCHAR},
+      current_status = #{record.currentStatus,jdbcType=VARCHAR},
+      status_time = #{record.statusTime,jdbcType=TIMESTAMP},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{record.isDel,jdbcType=BIT},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      modifier = #{record.modifier,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    update shipping_track_polling_yuntong
+    <set>
+      <if test="waybillNo != null">
+        waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCode != null">
+        inland_trans_code = #{inlandTransCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inlandTransCompanyName != null">
+        inland_trans_company_name = #{inlandTransCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currentStatus != null">
+        current_status = #{currentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO">
+    update shipping_track_polling_yuntong
+    set waybill_no = #{waybillNo,jdbcType=VARCHAR},
+      inland_trans_code = #{inlandTransCode,jdbcType=VARCHAR},
+      inland_trans_company_name = #{inlandTransCompanyName,jdbcType=VARCHAR},
+      current_status = #{currentStatus,jdbcType=VARCHAR},
+      status_time = #{statusTime,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
