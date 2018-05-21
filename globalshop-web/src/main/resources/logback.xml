@@ -63,7 +63,7 @@
     <logger name="org.springframework" additivity="true" level="info">
         <appender-ref ref="ERROR_LOGS"/>
     </logger>
-    <logger name="com.intellijcloud" additivity="true">
+    <logger name="com.wangqin" additivity="true">
         <appender-ref ref="ERROR_LOGS"/>
     </logger>
 

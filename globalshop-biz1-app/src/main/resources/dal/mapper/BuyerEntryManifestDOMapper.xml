@@ -1028,7 +1028,7 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDO">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="purchase_storage_no" jdbcType="VARCHAR" property="purchaseStorageNo" />
     <result column="warehouse_no" jdbcType="VARCHAR" property="warehouseNo" />
@@ -1110,7 +1110,7 @@
     currency, purchase_price, batch_num, upc, quantity, gmt_create, gmt_modify, is_del, 
     creator, modifier
   </sql>
-  <select id="selectByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -1135,13 +1135,13 @@
     delete from buyer_entry_manifest
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDOExample">
+  <delete id="deleteByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDOExample">
     delete from buyer_entry_manifest
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO">
     insert into buyer_entry_manifest (id, purchase_storage_no, warehouse_no, 
       warehouse_name, shelf_no, sku_code, 
       item_code, currency, purchase_price, 
@@ -1155,7 +1155,7 @@
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDO">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO">
     insert into buyer_entry_manifest
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -1264,7 +1264,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDOExample" resultType="java.lang.Integer">
+  <select id="countByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDOExample" resultType="java.lang.Integer">
     select count(*) from buyer_entry_manifest
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -1352,7 +1352,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO">
     update buyer_entry_manifest
     <set>
       <if test="purchaseStorageNo != null">
@@ -1406,7 +1406,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.BuyerEntryManifestDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO">
     update buyer_entry_manifest
     set purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       warehouse_no = #{warehouseNo,jdbcType=VARCHAR},

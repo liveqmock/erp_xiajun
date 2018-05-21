@@ -814,7 +814,7 @@
       is_del = #{isDel,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.shopkeeper.biz1.app.dal.dataObject.CountryDO">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="country_code" jdbcType="VARCHAR" property="countryCode" />

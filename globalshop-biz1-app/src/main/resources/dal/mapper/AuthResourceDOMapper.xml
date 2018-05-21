@@ -984,7 +984,7 @@
       is_del = #{isDel,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <resultMap id="BaseResultMap" type="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDO">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="resource_id" jdbcType="VARCHAR" property="resourceId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -1064,7 +1064,7 @@
     id, resource_id, name, url, open_mode, description, icon, pid, seq, status, resource_type, 
     gmt_create, gmt_modify, creator, modifier, is_del
   </sql>
-  <select id="selectByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -1089,13 +1089,13 @@
     delete from auth_resource
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDOExample">
+  <delete id="deleteByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDOExample">
     delete from auth_resource
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO">
     insert into auth_resource (id, resource_id, name, 
       url, open_mode, description, 
       icon, pid, seq, status, 
@@ -1109,7 +1109,7 @@
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDO">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO">
     insert into auth_resource
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -1212,7 +1212,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDOExample" resultType="java.lang.Integer">
+  <select id="countByExample" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDOExample" resultType="java.lang.Integer">
     select count(*) from auth_resource
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -1296,7 +1296,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO">
     update auth_resource
     <set>
       <if test="resourceId != null">
@@ -1347,7 +1347,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.shopkeeper.biz1.app.dal.dataObject.AuthResourceDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO">
     update auth_resource
     set resource_id = #{resourceId,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
