@@ -1,10 +1,10 @@
 package com.wangqin.shopkeeper.web.mock;
 
-import com.intellijcloud.standard.biz1.api.AppApi;
-import com.intellijcloud.standard.biz1.api.dto.ConfigDTO;
-import com.intellijcloud.standard.biz1.api.dto.request.AppRequest;
-import com.intellijcloud.standard.biz1.api.dto.response.BaseResp;
-import com.intellijcloud.standard.biz1.app.remote.RemoteMock;
+import com.wangqin.shopkeeper.biz1.api.AppApi;
+import com.wangqin.shopkeeper.biz1.api.dto.ConfigDTO;
+import com.wangqin.shopkeeper.biz1.api.dto.request.AppRequest;
+import com.wangqin.shopkeeper.biz1.api.dto.response.BaseResp;
+import com.wangqin.shopkeeper.biz1.app.remote.RemoteMock;
 import com.wangqin.shopkeeper.common.utils.LogWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

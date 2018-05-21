@@ -1,7 +1,7 @@
 package com.wangqin.shopkeeper.web.dal.mapper;
 
-import com.intellijcloud.standard.biz1.app.dal.dataObject.ConfigDO;
-import com.intellijcloud.standard.biz1.app.dal.mapperExt.ConfigDOMapperExt;
+import com.wangqin.shopkeeper.biz1.app.dal.dataObject.ConfigDO;
+import com.wangqin.shopkeeper.biz1.app.dal.mapperExt.ConfigDOMapperExt;
 import com.wangqin.shopkeeper.web.TST;
 import com.wangqin.shopkeeper.common.utils.LogWorker;
 import com.wangqin.shopkeeper.common.utils.StringHelper;
