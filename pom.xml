@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wangqin.shopkeeper</groupId>
-    <artifactId>shopkeeper-parent</artifactId>
+    <groupId>com.wangqin.globalshop</groupId>
+    <artifactId>globalshop-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>shopkeeper-parent</name>
+    <name>globalshop-parent</name>
 
     <packaging>pom</packaging>
 
@@ -216,7 +216,7 @@
     </dependencies>
 
     <build>
-        <finalName>shopkeeper-parent</finalName>
+        <finalName>standard-parent</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -240,10 +240,10 @@
     </build>
 
     <modules>
-        <module>shopkeeper-biz1-api</module>
-        <module>shopkeeper-biz1-app</module>
-        <module>shopkeeper-common</module>
-        <module>shopkeeper-web</module>
+        <module>globalshop-biz1-api</module>
+        <module>globalshop-biz1-app</module>
+        <module>globalshop-common</module>
+        <module>globalshop-web</module>
     </modules>
 
 
