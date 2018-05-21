@@ -16,7 +16,7 @@ import java.util.Arrays;
 @Component
 @Slf4j
 public class LogAspect {
-    @Pointcut("execution(* com.intellijcloud.standard.biz1.app.service.*.*(..))")
+    @Pointcut("execution(* com.wangqin.globalshop.biz1.app.service.*.*(..))")
     public void pointcutExpression() {
 
     }
