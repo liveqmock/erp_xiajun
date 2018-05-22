@@ -32,7 +32,8 @@ public class AppApiImpl implements AppApi {
             ValidateUtils.fail4Null(request, "request");
             ValidateUtils.fail4Null(request.getId(), "request ID");
             ConfigDO configDO = configDOMapperExt.selectByPrimaryKey(Long.valueOf(request.getId()));
-            ConfigDTO configDTO = BeanUtils.copy(configDO, new ConfigDTO());
+            ConfigDTO configDTO = BeanUtils.copies(configDO, new ConfigDTO());
+           
             baseResp = BaseResp.createSuccess(configDTO);
 
         }catch (Exception e){

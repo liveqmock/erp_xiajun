@@ -185,6 +185,7 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2.2</version>
         </dependency>
+        <!--  
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -200,6 +201,7 @@
             <artifactId>logback-ext-spring</artifactId>
             <version>0.1.4</version>
         </dependency>
+        -->
         <!-- Test -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -213,6 +215,7 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        
     </dependencies>
 
     <build>
