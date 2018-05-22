@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.service.IItemBrandService;
 import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.utils.JsonResult;
 
 
 
@@ -25,6 +26,7 @@ public class ItemBrandController extends BaseController{
 	@ResponseBody
     public Object addBrand(ItemBrandDO itemBrandDO){
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
+		/******for test******/
         itemBrandDO.setBrandNo("12");
         itemBrandDO.setCreator("xiajun");
         itemBrandDO.setModifier("xiaJun");
@@ -36,24 +38,13 @@ public class ItemBrandController extends BaseController{
         itemBrandDO.setSeq(null);
         itemBrandDO.setGmtModify(new Date());
         itemBrandService.add(itemBrandDO);
-        
-       
-		if (brand.getId() != null) {
-			return result.buildMsg("新增品牌ID有值").buildIsSuccess(false);
-		}
-		if(StringUtil.isBlank(brand.getName())) {
-			return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
-		}
-		/**
-		 * @author XiaJun，禁止重复品牌提交，英文名重复即视为重复
-		 */
-		if(brandService.selectByName(brand.getName()) != null) {
-			return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
-		}
-		brandService.addBrand(brand);
-		return result.buildIsSuccess(true);
-	}
         System.out.println("添加品牌成功");
+		/******for test******/
+	    return result.buildMsg("添加品牌成功").buildIsSuccess(true);
+		
+
+
+        
     }
 	
 }
