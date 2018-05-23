@@ -36,11 +36,11 @@
       name_china, name_alias, seq, 
       gmt_create, gmt_modify, is_del, 
       creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{brandNo,jdbcType=VARCHAR},  #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{brandNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{nameChina,jdbcType=VARCHAR}, #{nameAlias,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
-  </insert>s
+  </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
