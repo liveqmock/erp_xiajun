@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.mapper.WxPurchaseUserMapper">
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        T1.id,T1.open_id as openId,T1.union_id as unionId,T1.nick_name as nickName,T1.gender,T1.city,T1.province,T1.country,T1.avatar_url as avatarUrl,T1.refer,
+        T1.role,T1.level,T1.power_code as powerCode,T1.purchase_commission_mode as
+        purchaseCommissionMode,T1.purchase_commission_str as purchaseCommissionStr,T1.warehouse_id as
+        warehouseId,T1.warehouse_name as warehouseName,T1.first_login_time as firstLoginTime,
+        T1.last_login_time as lastLoginTime,T1.first_login_device as firstLoginDevice,T1.last_login_device as lastLoginDevice,T1.gmt_create as gmtCreate,
+        T1.gmt_modify as gmtModify
+    </sql>
+
+	<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="com.wangqin.vo.WxPurchaseUserVO">
+	    SELECT COUNT(*) FROM wx_purchase_user T1 WHERE T1.power_code !=0
+	</select>
+	
+	<select id="queryWxPurchaseUser" resultType="com.wangqin.model.WxPurchaseUser">
+	    SELECT <include refid="Base_Column_List" /> FROM wx_purchase_user T1 WHERE T1.power_code !=0 
+	     <if test="companyId != null ">
+            		and T1.company_id = #{companyId}
+         </if>
+	</select>
+</mapper>

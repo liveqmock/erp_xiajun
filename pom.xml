@@ -245,7 +245,11 @@
     <modules>
         <module>globalshop-biz1-api</module>
         <module>globalshop-biz1-app</module>
+<<<<<<< HEAD
         <module>globalshop-item-app</module>
+=======
+        <module>globalshop-usercenter-app</module>
+>>>>>>> 6e241ab7ac64bf8e35b3295ebc7e1a8fde158966
         <module>globalshop-common</module>
         <module>globalshop-web</module>
     </modules>

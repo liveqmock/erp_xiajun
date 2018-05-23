@@ -5,25 +5,39 @@ import java.util.Date;
 public class ChannelAccountDO {
     private Long id;
 
+    private Long channelId;
+
     private String channelNo;
 
-    private Byte type;
+    private Integer type;
 
     private String channelName;
 
-    private Long channelId;
-
-    private Byte status;
-
-    private String shopName;
+    private String companyNo;
 
     private String shopCode;
 
-    private Long companyNo;
+    private String shopName;
+
+    private Integer status;
 
     private String appKey;
 
     private String appSecret;
+
+    private String accessToken;
+
+    private String refreshToken;
+
+    private String serverUrl;
+
+    private String tokenUrl;
+
+    private String accessKey;
+
+    private String secreteKey;
+
+    private String cookie;
 
     private String appValue1;
 
@@ -37,25 +51,15 @@ public class ChannelAccountDO {
 
     private String value3Desc;
 
-    private String accessToken;
-
-    private String refreshToken;
-
-    private String tokenUrl;
-
-    private String serverUrl;
-
-    private Date gmtCreate;
-
-    private Date gmtModified;
-
-    private Boolean isDel;
-
-    private Date gmtModify;
-
     private String creator;
 
     private String modifier;
+
+    private Date gmtCreate;
+
+    private Date gmtModify;
+
+    private Boolean isDel;
 
     public Long getId() {
         return id;
@@ -63,6 +67,14 @@ public class ChannelAccountDO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
     }
 
     public String getChannelNo() {
@@ -73,11 +85,11 @@ public class ChannelAccountDO {
         this.channelNo = channelNo == null ? null : channelNo.trim();
     }
 
-    public Byte getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -89,28 +101,12 @@ public class ChannelAccountDO {
         this.channelName = channelName == null ? null : channelName.trim();
     }
 
-    public Long getChannelId() {
-        return channelId;
+    public String getCompanyNo() {
+        return companyNo;
     }
 
-    public void setChannelId(Long channelId) {
-        this.channelId = channelId;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName == null ? null : shopName.trim();
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getShopCode() {
@@ -121,12 +117,20 @@ public class ChannelAccountDO {
         this.shopCode = shopCode == null ? null : shopCode.trim();
     }
 
-    public Long getCompanyNo() {
-        return companyNo;
+    public String getShopName() {
+        return shopName;
     }
 
-    public void setCompanyNo(Long companyNo) {
-        this.companyNo = companyNo;
+    public void setShopName(String shopName) {
+        this.shopName = shopName == null ? null : shopName.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getAppKey() {
@@ -143,6 +147,62 @@ public class ChannelAccountDO {
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret == null ? null : appSecret.trim();
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken == null ? null : accessToken.trim();
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken == null ? null : refreshToken.trim();
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl == null ? null : serverUrl.trim();
+    }
+
+    public String getTokenUrl() {
+        return tokenUrl;
+    }
+
+    public void setTokenUrl(String tokenUrl) {
+        this.tokenUrl = tokenUrl == null ? null : tokenUrl.trim();
+    }
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey == null ? null : accessKey.trim();
+    }
+
+    public String getSecreteKey() {
+        return secreteKey;
+    }
+
+    public void setSecreteKey(String secreteKey) {
+        this.secreteKey = secreteKey == null ? null : secreteKey.trim();
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie == null ? null : cookie.trim();
     }
 
     public String getAppValue1() {
@@ -193,70 +253,6 @@ public class ChannelAccountDO {
         this.value3Desc = value3Desc == null ? null : value3Desc.trim();
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken == null ? null : accessToken.trim();
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken == null ? null : refreshToken.trim();
-    }
-
-    public String getTokenUrl() {
-        return tokenUrl;
-    }
-
-    public void setTokenUrl(String tokenUrl) {
-        this.tokenUrl = tokenUrl == null ? null : tokenUrl.trim();
-    }
-
-    public String getServerUrl() {
-        return serverUrl;
-    }
-
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl == null ? null : serverUrl.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public String getCreator() {
         return creator;
     }
@@ -271,5 +267,29 @@ public class ChannelAccountDO {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModify() {
+        return gmtModify;
+    }
+
+    public void setGmtModify(Date gmtModify) {
+        this.gmtModify = gmtModify;
+    }
+
+    public Boolean getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
     }
 }

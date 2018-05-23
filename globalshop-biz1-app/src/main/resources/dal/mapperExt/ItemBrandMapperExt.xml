@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.mapper.BrandMapper">
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		T1.id,T1.name,T1.name_china AS nameChina,T1.name_alias AS nameAlias,
+		T1.seq,T1.user_create AS userCreate,T1.user_modify AS userModify,T1.gmt_create AS gmtCreate, T1.gmt_modify AS gmtModify
+	</sql>
+
+	<!--查询总条数 -->
+	<select id="queryBrandCount" resultType="java.lang.Integer" parameterType="com.wangqin.vo.BrandQueryVO">
+		SELECT COUNT(*) 
+		FROM brand T1 
+		WHERE 1=1 
+		<if test=" name != null and name != '' ">
+			and T1.name LIKE concat('%',#{name},'%')
+        </if>
+        <if test=" nameChina != null and nameChina != '' ">
+			and T1.name_china LIKE concat('%',#{nameChina},'%')
+        </if>
+	</select>
+
+	<!--分页查询 -->
+	<select id="queryBrands" resultType="com.wangqin.model.Brand" parameterType="com.wangqin.vo.BrandQueryVO">
+		SELECT <include refid="Base_Column_List" /> 
+		FROM brand T1 
+		WHERE 1=1 
+		<if test=" name != null and name != '' ">
+			and T1.name LIKE concat('%',#{name},'%')
+        </if>
+        <if test=" nameChina != null and nameChina != '' ">
+			and T1.name_china LIKE concat('%',#{nameChina},'%')
+        </if>
+        ORDER BY T1.name asc,<!--按name字段升序 -->
+        T1.id desc
+		<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+	</select>
+	
+	<!--总查询 -->
+	<select id="queryAllBrand" resultType="com.wangqin.model.Brand" >
+		SELECT 
+		concat(name,"->",IFNULL(name_china, "")) as name 
+		FROM brand
+		WHERE 1=1
+	</select>
+
+	<select id="selectByName" resultType="com.wangqin.model.Brand" parameterType="java.lang.String">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM brand T1 
+		WHERE name = #{name}
+	</select>
+</mapper>

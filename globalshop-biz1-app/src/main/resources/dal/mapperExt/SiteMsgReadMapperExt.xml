@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.mapper.SiteMsgReadMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		T1.id, T1.site_msg_id AS siteMsgId, T1.receiver_id AS receiverId, T1.read_status AS readStatus, T1.gmt_create AS gmtCreate, T1.gmt_modified AS gmtModified, T1.is_del AS isDel,T1.sender_id AS senderId
+	</sql>
+
+
+<!-- 查找当前用户指定状态的所有未删除站内信,XiaJun -->
+	<select id="queryUserMsg" resultType="com.wangqin.model.SiteMsgRead" parameterType="com.wangqin.vo.SiteMsgQueryVO">
+		SELECT 
+		<include refid="Base_Column_List" />,T2.status AS status,T2.content AS content,
+		T2.title AS title,T2.send_time AS sendTime
+		FROM site_msg_read T1 LEFT JOIN site_msg T2 ON T2.id=T1.site_msg_id
+		WHERE 
+     			T1.receiver_id = #{userId}
+     			<if test = "readStatus != -1">
+     			AND T1.read_status = #{readStatus}
+     			</if>
+     			<if test = "isDel != -1">
+     			AND T1.is_del = #{isDel}
+     			</if>
+     			<if test = "senderId != -1">
+     			AND T1.sender_id = #{senderId}
+     			</if>
+     		  ORDER BY T1.id desc
+     	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+	</select>
+	
+	<!-- XiaJun，更新当前用户的站内信阅读状态 -->
+	<update id="updateUserMsgStatus" >
+	    UPDATE site_msg_read T1
+	    	SET T1.read_status=#{readStatus}
+	    WHERE T1.receiver_id = #{receiverId} 
+		AND T1.is_del = 0
+	</update>
+</mapper>
