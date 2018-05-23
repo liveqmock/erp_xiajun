@@ -245,6 +245,7 @@
     <modules>
         <module>globalshop-biz1-api</module>
         <module>globalshop-biz1-app</module>
+        <module>globalshop-item-app</module>
         <module>globalshop-usercenter-app</module>
         <module>globalshop-common</module>
         <module>globalshop-web</module>

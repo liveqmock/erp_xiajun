@@ -1,18 +1,15 @@
 package com.wangqin.globalshop.common.base;
 
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.wangqin.globalshop.common.result.Result;
-import com.wangqin.globalshop.common.shiro.ShiroUser;
 import com.wangqin.globalshop.common.utils.StringTrimEditor;
 
 
@@ -44,30 +41,6 @@ public abstract class BaseController {
         
         //去除参数头尾空格
         binder.registerCustomEditor(String.class, new StringTrimEditor());
-    }
-
-    /**
-     * 获取当前登录用户对象
-     * @return {ShiroUser}
-     */
-    public ShiroUser getShiroUser() {
-        return (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-    }
-
-    /**
-     * 获取当前登录用户id
-     * @return {Long}
-     */
-    public Long getUserId() {
-        return this.getShiroUser().getId();
-    }
-
-    /**
-     * 获取当前登录用户名
-     * @return {String}
-     */
-    public String getStaffName() {
-        return this.getShiroUser().getName();
     }
 
     /**
