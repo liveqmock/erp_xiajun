@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.mapper.FindItemMapper">
+
+   <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        T1.id,name,T1.status,remark,spec,model,category_id AS categoryId,category_name AS categoryName,item_code AS itemCode,is_new AS isNew,sale_type AS saleType,main_pic AS mainPic,dimensioncode_pic AS dimensionCodePic,item_short AS itemShort,en_name AS enName,brand,country,currency,buy_site AS buySite,origin,weight,price_range as priceRange,unit,source,promotion,contact_person AS contactPerson,contact_tel AS contactTel,id_card AS idCard,start_date AS startDate,end_date AS endDate,is_sale AS isSale,purchase_status AS purchaseStatus,logistic_type as logisticType,gmt_create AS gmtCreate,gmt_modify AS gmtModify,user_create AS userCreate,user_modify AS userModify 
+    </sql>
+
+	<select id="queryItemsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.vo.ItemQueryVO">
+        SELECT
+        	count(1)
+        FROM
+            find_item T1 LEFT JOIN outer_item T2 ON T1.id=T2.item_id 
+        where
+     		   1=1 
+            <if test=" name != null and name != '' ">
+                and T1.name LIKE concat('%',#{name},'%')
+            </if>
+            <if test=" itemCode != null and itemCode != '' ">
+               and T1.item_code = #{itemCode}
+            </if>
+             <if test=" enName != null and enName != '' ">
+              and  T1.en_name LIKE concat('%',#{enName},'%')
+            </if>
+            <if test=" categoryId != null">
+              and  T1.category_id = #{categoryId}
+            </if>
+            <if test=" brand != null and brand != ''">
+              and  T1.brand = #{brand}
+            </if>
+            <if test=" buySite != null and buySite != ''">
+              and  T1.buy_site = #{buySite}
+            </if>
+            <if test=" startGmt!= null ">
+             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
+            </if>
+            <if test=" endGmt != null ">
+            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
+            </if>
+            <if test=" startDate!= null ">
+             and   <![CDATA[  T1.start_date = #{startDate} ]]>
+            </if>
+            <if test=" endDate!= null ">
+             and   <![CDATA[  T1.end_date = #{endDate} ]]>
+            </if>
+            
+    </select>
+    
+    <select id="queryFindItems" resultType="com.wangqin.model.FindItem" parameterType="com.wangqin.vo.ItemQueryVO">
+        SELECT
+        	 <include refid="Base_Column_List" />,T2.outer_alias as outerAlias 
+        FROM
+            find_item T1 LEFT JOIN outer_item T2 ON T1.id=T2.item_id 
+        where
+           1=1 
+              <if test=" name != null and name != '' ">
+                and T1.name LIKE concat('%',#{name},'%')
+            </if>
+            <if test=" itemCode != null and itemCode != '' ">
+               and T1.item_code = #{itemCode}
+            </if>
+             <if test=" enName != null and enName != '' ">
+              and  T1.en_name LIKE concat('%',#{enName},'%')
+            </if>
+            <if test=" categoryId != null">
+                and  T1.category_id = #{categoryId}
+            </if>
+            <if test=" brand != null and brand != ''">
+             and   T1.brand = #{brand}
+            </if>
+            <if test=" buySite != null and buySite != ''">
+              and  T1.buy_site = #{buySite}
+            </if>
+            <if test=" purchaseStatus != null">
+              and  T1.purchase_status = #{purchaseStatus}
+            </if>
+            <if test=" startGmt!= null ">
+             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
+            </if>
+            <if test=" endGmt != null ">
+              and  <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
+            </if>
+            <if test=" startDate!= null ">
+             and   <![CDATA[  T1.start_date = #{startDate} ]]>
+            </if>
+            <if test=" endDate!= null ">
+             and   <![CDATA[  T1.end_date = #{endDate} ]]>
+            </if>
+          order by T1.id desc
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+            
+    </select>
+
+</mapper>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.mapper.OuterOrderMapper">
+
+	<!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		 id,target_no AS targetNo,order_no AS orderNo,sales_id AS salesId,sales_name AS salesName,order_time AS orderTime,`status`,receiver,telephone,postcode,remark,gmt_create AS gmtCreate,gmt_modify AS gmtModify,user_create AS userCreate,user_modify AS userModify ,address_detail AS addressDetail,
+		 receiver_state AS receiverState,receiver_city As receiverCity,receiver_district as receiverDistrict,platform_type AS platformType,pay_type AS payType,id_card as idCard,wx_pay_trade_no as wxPayTradeNo
+	</sql>
+
+	<select id="queryOuterOrdersCount" resultType="java.lang.Integer"  parameterType="com.wangqin.vo.OuterOrderQueryVO">
+        SELECT
+        	count(1)
+        FROM
+            `outer_order` T1
+        where
+     		   1=1
+     		 <if test="companyId != null ">
+            		and T1.company_id = #{companyId}
+            </if>
+     		<if test=" orderNo != null and orderNo != '' ">
+                and T1.order_no LIKE concat('%',#{orderNo},'%')
+            </if>
+            <if test=" targetNo != null and targetNo != '' ">
+                and T1.target_No = #{targetNo}
+            </if>
+            
+            <if test=" salesName != null and salesName != '' ">
+               and T1.sales_name = #{salesName}
+            </if>
+            <if test=" receiver != null and receiver != '' ">
+               and T1.receiver LIKE concat('%',#{receiver},'%') 
+            </if>
+            <if test=" telephone != null and telephone != '' ">
+               and T1.telephone = #{telephone}
+            </if>
+            <if test=" status != null">
+               and T1.status = #{status}
+            </if>
+            <if test=" salesId != null">
+               <if test = "openId == null" >
+               		and T1.sales_id = #{salesId} 
+               	</if>
+            	<if test = "openId != null" >
+               		and (T1.sales_id = #{salesId} || T1.open_id=#{openId})
+               	</if>
+            </if>
+            
+            <if test="(upc!=null and upc!='') or (skuCode!=null and skuCode!='') or (itemName!=null and itemName!='')">
+               and T1.id IN (
+               	SELECT outer_order_id FROM outer_order_detail WHERE 1=1 
+               	<if test="(upc!=null and upc!='')">
+               		and upc=#{upc}
+               	</if>
+               	<if test="(skuCode!=null and skuCode!='')">
+               		and sku_code=#{skuCode}
+               	</if>
+               	<if test="(itemName!=null and itemName!='')">
+               		and item_name LIKE concat('%',#{itemName},'%')
+               	</if>
+               )
+            </if>
+            
+            <if test=" startGmtCreate!= null ">
+             and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
+            </if>
+            <if test=" endGmtCreate != null ">
+            and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
+            </if>
+            
+    </select>
+    
+    <select id="queryOuterOrders" resultType="com.wangqin.model.sale.OuterOrder" parameterType="com.wangqin.vo.OuterOrderQueryVO">
+        SELECT
+        	 <include refid="Base_Column_List" />
+        FROM
+            `outer_order` T1
+        where
+             1=1
+             <if test="companyId != null ">
+            		and T1.company_id = #{companyId}
+            </if>
+            <if test=" orderNo != null and orderNo != '' ">
+                and T1.order_no LIKE concat('%',#{orderNo},'%')
+            </if>
+            <if test=" targetNo != null and targetNo != '' ">
+                and T1.target_No = #{targetNo}
+            </if>
+            <if test=" salesName != null and salesName != '' ">
+               and T1.sales_name = #{salesName}
+            </if>
+            <if test=" receiver != null and receiver != '' ">
+               and T1.receiver LIKE concat('%',#{receiver},'%') 
+            </if>
+            <if test=" telephone != null and telephone != '' ">
+               and T1.telephone = #{telephone}
+            </if>
+            <if test=" status != null">
+               and T1.status = #{status}
+            </if>
+            <if test=" salesId != null">
+            	<if test = "openId == null" >
+               		and T1.sales_id = #{salesId} 
+               	</if>
+            	<if test = "openId != null" >
+               		and (T1.sales_id = #{salesId} || T1.open_id=#{openId})
+               	</if>
+            </if>
+            
+            <if test="(upc!=null and upc!='') or (skuCode!=null and skuCode!='') or (itemName!=null and itemName!='')">
+               and T1.id IN (
+               	SELECT outer_order_id FROM outer_order_detail WHERE 1=1 
+               	<if test="(upc!=null and upc!='')">
+               		and upc=#{upc}
+               	</if>
+               	<if test="(skuCode!=null and skuCode!='')">
+               		and sku_code=#{skuCode}
+               	</if>
+               	<if test="(itemName!=null and itemName!='')">
+               		and item_name LIKE concat('%',#{itemName},'%')
+               	</if>
+               )
+            </if>
+            
+             <if test=" startGmtCreate!= null ">
+             and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
+            </if>
+            <if test=" endGmtCreate != null ">
+            and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
+            </if>
+          order by T1.order_time desc 
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+    
+    <select id="queryOuterOrderForExcel" resultType="com.wangqin.model.sale.OuterOrder" parameterType="com.wangqin.vo.OuterOrderQueryVO">
+    	SELECT a.order_no AS orderNo,a.sales_name AS salesName,sum(b.`sale_price`*b.`quantity`) AS totalSalePrice,a.gmt_create AS gmtCreate,a.status,a.receiver,a.telephone,a.receiver_state AS receiverState,a.receiver_city AS receiverCity,a.receiver_district AS receiverDistrict,a.address_detail AS addressDetail 
+		FROM outer_order a 
+		LEFT JOIN outer_order_detail b on a.id=b.`outer_order_id` 
+		WHERE 1=1 
+		<if test="companyId != null ">
+            and T1.company_id = #{companyId}
+        </if>
+		<if test=" startGmtCreate!= null ">
+          and   <![CDATA[ a.gmt_create >= #{startGmtCreate} ]]>
+         </if>
+         <if test=" endGmtCreate != null ">
+         and    <![CDATA[ a.gmt_create <= #{endGmtCreate} ]]>
+         </if>
+		GROUP BY a.order_no,a.sales_name,a.gmt_create,a.status,a.receiver,a.telephone,a.receiver_state,a.receiver_city,a.receiver_district,a.address_detail
+    </select>
+    
+    <!-- 今日订单数,XiaJun -->
+    <select id="countTodayOrders" resultType="java.lang.Integer" >
+        SELECT
+        	IFNULL(count(1),0)
+        FROM
+            `outer_order` T1
+        where
+     		   1=1
+        and   <![CDATA[ T1.gmt_create >= #{today} ]]>
+	</select>
+	
+	<!-- 统计待分配的订单,XiaJun -->
+	<select id="waitAllocateOrderNum" resultType="java.lang.Long">
+	SELECT (IFNULL(T3.inventory,0) - IFNULL(T2.quantity,0))
+	FROM outer_order T1 LEFT JOIN outer_order_detail T2 ON T1.id=T2.outer_order_id
+	LEFT JOIN inventory T3 ON T2.sku_id=T3.sku_id
+	<where>
+	AND T1.id=#{id}
+	</where>
+	</select>
+	
+	<!-- 按状态起始时间搜索订单,XiaJun -->
+	<select id="queryOuterOrderByStatus" resultType="java.lang.Long">
+	SELECT T1.id
+	FROM outer_order T1 
+	<where>
+	1=1
+	<if test=" date!= null ">
+		AND	<![CDATA[ T1.gmt_create >= #{date} ]]>
+	</if>
+	AND 
+	T1.status IN
+		<foreach item="status" index="index" collection="statusList" open="(" separator="," close=")">  
+				#{status}
+		</foreach> 
+	</where>
+	</select>
+	
+	<!-- 按照天统计销售量,XiaJun -->
+	<select id="sumSalesQuantityByDate" resultType="java.lang.Integer">
+	SELECT IFNULL(sum(IFNULL(T2.quantity,0)),0)
+	FROM outer_order T1 LEFT JOIN outer_order_detail T2 ON T1.id=T2.outer_order_id
+	<where>
+	1=1 
+	
+		AND	<![CDATA[ (TO_DAYS(NOW())-TO_DAYS(T1.order_time))=#{days} ]]>
+	AND
+	T1.status IN
+		<foreach item="status" index="index" collection="statusList" open="(" separator="," close=")">  
+				#{status}
+		</foreach> 
+	</where>
+	</select>
+	
+	<!-- 按照天统计销售额,XiaJun -->
+	<select id="sumSalesMoneyByDate" resultType="java.lang.Float">
+	SELECT IFNULL(sum(IFNULL(T1.payment,0)),0)
+	FROM outer_order T1
+	<where>
+	1=1 
+	AND	<![CDATA[ (TO_DAYS(NOW())-TO_DAYS(T1.order_time))=#{days} ]]>
+	AND
+	T1.status IN
+		<foreach item="status" index="index" collection="statusList" open="(" separator="," close=")">  
+				#{status}
+		</foreach> 
+	</where>
+	</select>
+	
+	
+	<!-- 按照月统计销售量,XiaJun -->
+	<select id="sumSalesQuantityByMonth" resultType="java.lang.Integer">
+	SELECT IFNULL(sum(IFNULL(T2.quantity,0)),0)
+	FROM outer_order T1 LEFT JOIN outer_order_detail T2 ON T1.id=T2.outer_order_id
+	<where>
+	1=1 
+	
+		AND	<![CDATA[PERIOD_DIFF(DATE_FORMAT(NOW( ),'%Y%m'),DATE_FORMAT(T1.order_time,'%Y%m')) =#{months}]]>
+	AND
+	T1.status IN
+		<foreach item="status" index="index" collection="statusList" open="(" separator="," close=")">  
+				#{status}
+		</foreach> 
+	</where>
+	</select>
+	
+	<!-- 按照月统计销售额,XiaJun -->
+	<select id="sumSalesMoneyByMonth" resultType="java.lang.Float">
+	SELECT IFNULL(sum(IFNULL(T1.payment,0)),0)
+	FROM outer_order T1
+	<where>
+	1=1 
+		AND	<![CDATA[PERIOD_DIFF(DATE_FORMAT(NOW( ),'%Y%m'),DATE_FORMAT(T1.order_time,'%Y%m')) =#{months}]]>
+	AND
+	T1.status IN
+		<foreach item="status" index="index" collection="statusList" open="(" separator="," close=")">  
+				#{status}
+		</foreach> 
+	</where>
+	</select>
+
+</mapper>

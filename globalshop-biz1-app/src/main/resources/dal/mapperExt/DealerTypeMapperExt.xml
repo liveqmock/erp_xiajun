@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.mapper.SellerTypeMapper">
+
+	<!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		 id,name,code,remark,gmt_create AS gmtCreate,gmt_modify AS gmtModify
+	</sql>
+
+	<select id="querySellerTypesCount" resultType="java.lang.Integer"  parameterType="com.wangqin.vo.SellerTypeQueryVO">
+        SELECT
+        	count(1)
+        FROM
+            `seller_type` T1
+        where
+     		   1=1
+            <if test=" name != null and name != '' ">
+                and T1.name = #{name}
+            </if>
+            <if test=" code != null and code != '' ">
+            	and T1.code = #{code}
+            </if>
+                       
+            <if test=" startGmt != null ">
+             and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+            </if>
+            <if test=" endGmt != null ">
+            and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+            </if>
+            
+    </select>
+    
+    <select id="querySellerTypes" resultType="com.wangqin.model.SellerType" parameterType="com.wangqin.vo.SellerTypeQueryVO">
+        SELECT
+        	 <include refid="Base_Column_List" />
+        FROM
+            `seller_type` T1
+        where
+             1=1
+            <if test=" name != null and name != '' ">
+                and T1.name = #{name}
+            </if>
+            <if test=" code != null and code != '' ">
+            	and T1.code = #{code}
+            </if>
+                       
+            <if test=" startGmt != null ">
+             and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+            </if>
+            <if test=" endGmt != null ">
+            and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+            </if>
+          order by T1.id 
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+
+</mapper>
