@@ -14,14 +14,12 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.model.SysLog;
-import com.wangqin.globalshop.service.ISysLogService;
 
 
 /**

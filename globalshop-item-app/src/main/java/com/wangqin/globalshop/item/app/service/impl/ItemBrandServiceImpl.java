@@ -19,6 +19,6 @@ public class ItemBrandServiceImpl implements IItemBrandService {
 	@Override
 	public void add(ItemBrandDO itemBrand) {
 		
-		itemBrandDOMapperExt.insert(itemBrand);
+		//itemBrandDOMapperExt.insert(itemBrand);
 	}
 }

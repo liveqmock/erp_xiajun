@@ -5,8 +5,8 @@ import java.util.Set;
 
 import com.baomidou.framework.service.ISuperService;
 import com.wangqin.globalshop.common.result.Tree;
-import com.wangqin.globalshop.common.shiro.ShiroUser;
 import com.wangqin.globalshop.usercenter.model.Resource;
+import com.wangqinauth.commons.shiro.ShiroUser;
 
 /**
  *

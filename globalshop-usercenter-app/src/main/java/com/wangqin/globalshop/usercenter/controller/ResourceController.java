@@ -2,10 +2,6 @@ package com.wangqin.globalshop.usercenter.controller;
 
 import java.util.Date;
 
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.shiro.ShiroUser;
-import com.wangqin.globalshop.usercenter.service.IResourceService;
-import com.wangqin.globalshop.usercenter.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.usercenter.model.Resource;
+import com.wangqin.globalshop.usercenter.service.IResourceService;
+import com.wangqinauth.commons.shiro.ShiroUser;
 
 /**
  * @description：资源管理
@@ -34,8 +35,7 @@ public class ResourceController extends BaseController {
     @PostMapping("/tree")
     @ResponseBody
     public Object tree() {
-        ShiroUser shiroUser = getShiroUser();
-        return resourceService.selectTree(shiroUser);
+        return null;
     }
 
     /**
