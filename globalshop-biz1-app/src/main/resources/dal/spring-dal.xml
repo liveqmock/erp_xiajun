@@ -20,7 +20,7 @@
     <!-- mapper scanner configurer -->
     <bean id="mappers" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage"
-                  value="com.wangqin.globalshop.biz1.app.dal.mapper;com.wangqin.globalshop.biz1.app.dal.mapperExt"/>
+                  value="com.wangqin.globalshop.biz1.app.dal.mapper;com.wangqin.globalshop.biz1.app.dal.mapperExt;com.wangqin.globalshop.item.app.dal.mapper;com.wangqin.globalshop.item.app.dal.mapperExt"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 

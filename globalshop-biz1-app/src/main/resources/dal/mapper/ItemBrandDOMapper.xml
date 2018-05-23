@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ItemBrandDOMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+<mapper namespace="com.wangqin.globalshop.item.app.dal.mapper.ItemBrandDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -28,7 +28,7 @@
     delete from item_brand
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -36,12 +36,12 @@
       name_china, name_alias, seq, 
       gmt_create, gmt_modify, is_del, 
       creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{brandNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{brandNo,jdbcType=VARCHAR},  #{name,jdbcType=VARCHAR}, 
       #{nameChina,jdbcType=VARCHAR}, #{nameAlias,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+  </insert>s
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -113,7 +113,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO" >
     update item_brand
     <set >
       <if test="brandNo != null" >
@@ -149,7 +149,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO" >
     update item_brand
     set brand_no = #{brandNo,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},

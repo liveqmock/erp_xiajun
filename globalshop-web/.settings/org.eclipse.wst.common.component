@@ -10,6 +10,9 @@
         <dependent-module archiveName="globalshop-biz1-app-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/globalshop-biz1-app/globalshop-biz1-app">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="globalshop-item-app-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/globalshop-item-app/globalshop-item-app">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="globalshop-common-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/globalshop-common/globalshop-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
