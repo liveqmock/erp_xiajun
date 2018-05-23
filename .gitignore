@@ -12,7 +12,7 @@ target/
 .idea
 .project
 .settings
-
+.classpath
 # Package Files #
 *.jar
 *.war
