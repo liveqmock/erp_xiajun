@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 
 
