@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallReturnOrderMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, order_no AS orderNo, outer_order_no AS outerOrderNo, sub_order_no AS subOrderNo, `status`, return_reason AS returnReason, return_reason_detail AS returnReasonDetail, return_quantity AS returnQuantity, return_price AS returnPrice, is_civil AS isCivil, is_checkin AS isCheckin, customer_open_id AS customerOpenId, telephone, receive_time AS receiveTime, return_pay_time AS returnPayTime, `desc`, return_refer AS returnRefer, proof_img AS proofImg, return_type AS returnType, gmt_create AS gmtCreate, gmt_modify AS gmtModify, is_del AS isDel, creator, modifier
+	</sql>
+
+</mapper>

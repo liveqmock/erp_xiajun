@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ItemFindMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, item_find_no AS itemFindNo, item_name AS itemName, item_code AS itemCode, sku_code AS skuCode, is_new AS isNew, sale_type AS saleType, currency, buy_site AS buySite, origin, logistic_type AS logisticType, contact_person AS contactPerson, contact_tel AS contactTel, id_card AS idCard, start_date AS startDate, end_date AS endDate, booking_date AS bookingDate, is_sale AS isSale, wxis_sale AS wxisSale, is_find AS isFind, `status`, `desc`, spec, model, detail, buyer_open_id AS buyerOpenId, buyer_name AS buyerName, purchase_status AS purchaseStatus, reason, find_address AS findAddress, refuse_reason AS refuseReason, creator, modifier, gmt_create AS gmtCreate, gmt_modify AS gmtModify, is_del AS isDel
+	</sql>
+
+</mapper>

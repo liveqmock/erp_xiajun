@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.BuyerStorageDetailMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, storage_no AS storageNo, warehouse_no AS warehouseNo, warehouse_name AS warehouseName, shelf_no AS shelfNo, sku_code AS skuCode, price, total_price AS totalPrice, currency, upc, quantity, trans_quantity AS transQuantity, gmt_modify AS gmtModify, purchase_storage_no AS purchaseStorageNo, gmt_create AS gmtCreate, buyer_task_detail_no AS buyerTaskDetailNo, item_code AS itemCode, sku_buysite AS skuBuysite, is_del AS isDel, creator, modifier
+	</sql>
+
+</mapper>

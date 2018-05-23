@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.AuthResourceMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, resource_id AS resourceId, `name`, url, open_mode AS openMode, description, icon, pid, seq, `status`, resource_type AS resourceType, gmt_create AS gmtCreate, gmt_modify AS gmtModify, creator, modifier, is_del AS isDel
+	</sql>
+
+</mapper>

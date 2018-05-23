@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.BuyerTaskMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, buyer_task_no AS buyerTaskNo, title, owner_no AS ownerNo, `desc`, start_time AS startTime, end_time AS endTime, `status`, gmt_create AS gmtCreate, gmt_modify AS gmtModify, buyer_open_id AS buyerOpenId, buyer_name AS buyerName, purchase_commission_mode AS purchaseCommissionMode, purchase_commission_str AS purchaseCommissionStr, is_del AS isDel, creator, modifier
+	</sql>
+
+</mapper>

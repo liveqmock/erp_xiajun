@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallShoppingCartMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, customer_no AS customerNo, open_id AS openId, company_no AS companyNo, channel_no AS channelNo, shop_code AS shopCode, sku_name AS skuName, sku_code AS skuCode, item_code AS itemCode, item_name AS itemName, `scale`, quantity, `status`, gmt_create AS gmtCreate, gmt_modify AS gmtModify, is_del AS isDel, creator, modifier
+	</sql>
+
+</mapper>

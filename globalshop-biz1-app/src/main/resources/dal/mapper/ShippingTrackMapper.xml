@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, order_no AS orderNo, waybill_no AS waybillNo, logistic_no AS logisticNo, logistics_status AS logisticsStatus, weight, volume, totalfee, receive_time AS receiveTime, oversea_in_time AS overseaInTime, oversea_out_time AS overseaOutTime, oversea_on_transfer_time AS overseaOnTransferTime, inland_in_time AS inlandInTime, inland_out_time AS inlandOutTime, inland_express_company_code AS inlandExpressCompanyCode, inland_express_num AS inlandExpressNum, buyer_sign_time AS buyerSignTime, air_take_off AS airTakeOff, airlines, flight, track_info AS trackInfo, gmt_create AS gmtCreate, gmt_modify AS gmtModify, is_del AS isDel, creator, modifier
+	</sql>
+
+</mapper>

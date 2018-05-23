@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallWxBannerMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, company_no AS companyNo, `type`, picture_url AS pictureUrl, gmt_create AS gmtCreate, gmt_modified AS gmtModified, start_time AS startTime, end_time AS endTime, `status`, url, item_code AS itemCode, special_page_no AS specialPageNo, is_del AS isDel, gmt_modify AS gmtModify, creator, modifier
+	</sql>
+
+</mapper>

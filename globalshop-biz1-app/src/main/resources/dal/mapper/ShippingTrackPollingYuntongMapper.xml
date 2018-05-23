@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackPollingYuntongMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, waybill_no AS waybillNo, inland_trans_code AS inlandTransCode, inland_trans_company_name AS inlandTransCompanyName, current_status AS currentStatus, status_time AS statusTime, gmt_create AS gmtCreate, gmt_modify AS gmtModify, is_del AS isDel, creator, modifier
+	</sql>
+
+</mapper>

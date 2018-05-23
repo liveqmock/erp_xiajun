@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.LogisticCompanyMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, `name`, code, name_in_jd AS nameInJd, code_in_jd AS codeInJd, name_in_youzan AS nameInYouzan, code_in_youzan AS codeInYouzan, name_in_pdd AS nameInPdd, code_in_pdd AS codeInPdd, name_in_taobao AS nameInTaobao, code_in_taobao AS codeInTaobao, is_del AS isDel, gmt_create AS gmtCreate, gmt_modify AS gmtModify, creator, modifier
+	</sql>
+
+</mapper>

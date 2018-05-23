@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.SiteMsgReadMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, site_msg_id AS siteMsgId, receiver_id AS receiverId, read_status AS readStatus, gmt_create AS gmtCreate, gmt_modified AS gmtModified, is_del AS isDel, sender_id AS senderId, gmt_modify AS gmtModify, creator, modifier
+	</sql>
+
+</mapper>
