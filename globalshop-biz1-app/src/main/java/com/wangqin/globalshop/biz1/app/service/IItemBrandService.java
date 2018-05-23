@@ -1,18 +1,14 @@
 package com.wangqin.globalshop.biz1.app.service;
 
-
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrand;
 import com.baomidou.framework.service.ISuperService;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 
 /**
- * Created by Patrick on 2018/5/15.
+ *
+ * ItemBrand 表数据服务层接口
+ *
  */
+public interface IItemBrandService extends ISuperService<ItemBrand> {
 
 
-public interface IItemBrandService extends ISuperService<ItemBrandDO>{
-
-
-    void add(ItemBrandDO itemBrand);
-      
-    
 }
