@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResource;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRole;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResource;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleResourceMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserRoleMapper;
