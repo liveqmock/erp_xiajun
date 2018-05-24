@@ -18,7 +18,7 @@ import com.wangqin.globalshop.item.app.service.IItemBrandService;
 
 
 @Service
-public class ItemBrandServiceImpl  implements IItemBrandService {
+public class ShippingPackingPatternServiceImpl  implements IItemBrandService {
 
 	@Autowired
 	private ItemBrandDOMapperExt itemBrandDOMapperExt;

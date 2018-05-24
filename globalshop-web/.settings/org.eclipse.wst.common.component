@@ -9,9 +9,6 @@
         <dependent-module archiveName="globalshop-item-app-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/globalshop-item-app/globalshop-item-app">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="globalshop-usercenter-app-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/globalshop-usercenter-app/globalshop-usercenter-app">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="globalshop-common-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/globalshop-common/globalshop-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -24,7 +21,5 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
   </wb-module>
 </project-modules>
