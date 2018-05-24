@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.item.app.dal.dataObject;
+package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 

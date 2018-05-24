@@ -2,7 +2,7 @@ package com.wangqin.globalshop.item.app.service;
 
 
 import com.baomidou.framework.service.ISuperService;
-import com.wangqin.globalshop.item.app.dal.dataObject.ItemBrandDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 
 /**
  * 
