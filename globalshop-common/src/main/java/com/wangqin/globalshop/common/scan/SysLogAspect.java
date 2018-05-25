@@ -36,10 +36,10 @@ public class SysLogAspect {
     //@Autowired
     //private ISysLogService sysLogService;
 
-    @Pointcut("within(@org.springframework.stereotype.Controller *)")
+//    @Pointcut("within(@org.springframework.stereotype.Controller *)")
     public void cutController() {}
 
-    @Around("cutController()")
+//    @Around("cutController()")
     public Object recordSysLog(ProceedingJoinPoint point) throws Throwable {
         String strMethodName = point.getSignature().getName();
         String strClassName = point.getTarget().getClass().getName();

@@ -41,6 +41,12 @@
             <groupId>com.wangqin.globalshop</groupId>
             <artifactId>globalshop-common</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j-api</artifactId>
+                    <groupId>org.apache.logging.log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

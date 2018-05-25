@@ -1,4 +1,4 @@
-package com.wangqinauth.commons.shiro;
+package com.wangqin.globalshop.common.shiro;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
