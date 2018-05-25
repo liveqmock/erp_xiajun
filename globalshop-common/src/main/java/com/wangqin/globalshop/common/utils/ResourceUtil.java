@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * 读取系统配置信息
  * 
- * @author Robin 2014年7月15日 上午11:42:50
+ * @author Sivan
  */
 public final class ResourceUtil {
 
@@ -59,7 +59,7 @@ public final class ResourceUtil {
         }
         return msg;
     }
-    
+
     public static String getChatDomain() {
         String msg = null;
         try {
@@ -119,7 +119,7 @@ public final class ResourceUtil {
         }
         return msg;
     }
-    
+
     public static String getStyleDomain(String msg) {
         try {
             if (StringUtils.isNotBlank(msg)) {
