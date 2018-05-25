@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wangqin.globalshop.item.app.service.IShippingPackingPatternService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import com.wangqin.globalshop.item.app.service.IItemBrandService;
 
 
 @Service
-public class ShippingPackingPatternServiceImpl  implements IItemBrandService {
+public class ShippingPackingPatternServiceImpl  implements IShippingPackingPatternService {
 
 	@Autowired
 	private ItemBrandDOMapperExt itemBrandDOMapperExt;

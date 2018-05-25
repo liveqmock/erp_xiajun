@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.item.app.dal.mapperExt.SequenceMapperExt">
+<mapper namespace="com.wangqin.globalshop.item.app.dal.mapper.SequenceDOMapper">
 
 	<!-- item -->
     <select id="gainItemSequence" resultType="java.lang.Long">
