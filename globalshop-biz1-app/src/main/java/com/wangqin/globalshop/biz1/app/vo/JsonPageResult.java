@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.common.utils;
+package com.wangqin.globalshop.biz1.app.vo;
 
 
 

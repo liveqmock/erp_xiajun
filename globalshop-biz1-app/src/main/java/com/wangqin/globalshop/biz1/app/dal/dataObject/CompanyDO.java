@@ -9,7 +9,7 @@ public class CompanyDO {
 
     private String companyName;
 
-    private Byte status;
+    private Integer status;
 
     private Date gmtCreate;
 
@@ -19,7 +19,7 @@ public class CompanyDO {
 
     private String logoUrl;
 
-    private Byte forceIdcard;
+    private Integer forceIdcard;
 
     private String tel;
 
@@ -27,7 +27,7 @@ public class CompanyDO {
 
     private String serviceTime;
 
-    private Byte forceIdcardUpload;
+    private Integer forceIdcardUpload;
 
     private Date gmtModify;
 
@@ -35,7 +35,7 @@ public class CompanyDO {
 
     private String modifier;
 
-    private Byte isDel;
+    private Boolean isDel;
 
     private String intro;
 
@@ -63,11 +63,11 @@ public class CompanyDO {
         this.companyName = companyName == null ? null : companyName.trim();
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -103,11 +103,11 @@ public class CompanyDO {
         this.logoUrl = logoUrl == null ? null : logoUrl.trim();
     }
 
-    public Byte getForceIdcard() {
+    public Integer getForceIdcard() {
         return forceIdcard;
     }
 
-    public void setForceIdcard(Byte forceIdcard) {
+    public void setForceIdcard(Integer forceIdcard) {
         this.forceIdcard = forceIdcard;
     }
 
@@ -135,11 +135,11 @@ public class CompanyDO {
         this.serviceTime = serviceTime == null ? null : serviceTime.trim();
     }
 
-    public Byte getForceIdcardUpload() {
+    public Integer getForceIdcardUpload() {
         return forceIdcardUpload;
     }
 
-    public void setForceIdcardUpload(Byte forceIdcardUpload) {
+    public void setForceIdcardUpload(Integer forceIdcardUpload) {
         this.forceIdcardUpload = forceIdcardUpload;
     }
 
@@ -167,11 +167,11 @@ public class CompanyDO {
         this.modifier = modifier == null ? null : modifier.trim();
     }
 
-    public Byte getIsDel() {
+    public Boolean getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(Byte isDel) {
+    public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
     }
 

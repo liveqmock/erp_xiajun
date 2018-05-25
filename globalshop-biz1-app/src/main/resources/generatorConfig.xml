@@ -148,10 +148,10 @@
           <!--<generatedKey column="id" sqlStatement="MySql"/>-->
         <!--</table>-->
 
-        <!--<table tableName="company" domainObjectName="CompanyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-          <!--<generatedKey column="id" sqlStatement="MySql"/>-->
-        <!--</table>-->
+        <table tableName="company" domainObjectName="CompanyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+          <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
 
         <!--<table tableName="country" domainObjectName="CountryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -199,10 +199,10 @@
         <!--</table>-->
 
 
-        <table tableName="item" domainObjectName="ItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false" >
-          <generatedKey column="id" sqlStatement="MySql"/>
-        </table>
+        <!--<table tableName="item" domainObjectName="ItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+          <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
 
         <!--<table tableName="item_brand" domainObjectName="ItemBrandDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->

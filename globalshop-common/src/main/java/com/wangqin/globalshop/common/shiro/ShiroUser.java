@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.wangqinauth.commons.shiro;
+package com.wangqin.globalshop.common.shiro;
 
 import java.io.Serializable;
 import java.util.Set;

@@ -50,7 +50,11 @@
             <artifactId>globalshop-item-app</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
+        <!--<dependency>-->
+            <!--<groupId>com.wangqin.globalshop</groupId>-->
+            <!--<artifactId>globalshop-usercenter-app</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.wangqin.globalshop</groupId>
             <artifactId>globalshop-common</artifactId>

@@ -14,7 +14,7 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
  */
 
 
-public interface IItemBrandService {
+public interface IShippingPackingPatternService {
 
 
     void add(ItemBrandDO itemBrand);

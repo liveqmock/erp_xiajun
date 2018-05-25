@@ -1,4 +1,4 @@
-package com.wangqinauth.commons.shiro;
+package com.wangqin.globalshop.common.shiro;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;

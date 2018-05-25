@@ -1,8 +1,10 @@
 package com.wangqin.globalshop.biz1.app.dal.mapper;
 
+import com.baomidou.mybatisplus.mapper.AutoMapper;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 
-public interface ItemBrandDOMapper {
+
+public interface ItemBrandDOMapper{
     int deleteByPrimaryKey(Long id);
 
     int insert(ItemBrandDO record);

@@ -1,7 +1,8 @@
 package com.wangqin.globalshop.biz1.app.service.company;
 
-import com.baomidou.framework.service.ISuperService;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.Company;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
+
+import java.util.List;
 
 /**
  *
@@ -9,6 +10,23 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.Company;
  *
  */
 public interface ICompanyService  {
+
+	public int deleteByPrimaryKey(Long id);
+
+	public int insert(CompanyDO record);
+
+	public int insertSelective(CompanyDO record);
+
+	public CompanyDO selectByPrimaryKey(Long id);
+
+	public int updateByPrimaryKeySelective(CompanyDO record);
+
+	public int updateByPrimaryKeyWithBLOBs(CompanyDO record);
+
+	public int updateByPrimaryKey(CompanyDO record);
+
+
+	public List<CompanyDO> queryPoList(CompanyDO company);
 
 
 }
