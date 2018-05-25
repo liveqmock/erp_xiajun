@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.item.app.dal.mapperExt.ShippingPackingPatternDOMapperExt">
+	
+	<sql id="Base_Column_List">
+		id,name,package_en AS packageEn,package_level AS packageLevel,package_id AS packageId,weight
+	</sql>
+	
+	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.vo.PackageLevelQueryVO">
+        SELECT
+        	count(1)
+        FROM
+            `package_level` T1
+        where
+     		   1=1
+            <if test=" name != null and name != '' ">
+                and T1.name = #{name}
+            </if>
+            <if test=" packageEn != null and packageEn != '' ">
+            	and T1.package_en = #{packageEn}
+            </if>
+            <if test=" packageLevel != null ">
+            	and T1.package_level = #{packageLevel}
+            </if>
+            <if test=" packageId != null ">
+            	and T1.package_id = #{packageId}
+            </if>
+            
+    </select>
+    
+    <select id="queryPackageLevels" resultType="com.wangqin.model.PackageLevel" parameterType="com.wangqin.vo.PackageLevelQueryVO">
+        SELECT
+        	 <include refid="Base_Column_List" />
+        FROM
+            `package_level` T1
+        where
+             1=1
+            <if test=" name != null and name != '' ">
+                and T1.name = #{name}
+            </if>
+            <if test=" packageEn != null and packageEn != '' ">
+            	and T1.package_en = #{packageEn}
+            </if>
+            <if test=" packageLevel != null ">
+            	and T1.package_level = #{packageLevel}
+            </if>
+            <if test=" packageId != null ">
+            	and T1.package_id = #{packageId}
+            </if>
+          order by T1.id 
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+    
+</mapper>

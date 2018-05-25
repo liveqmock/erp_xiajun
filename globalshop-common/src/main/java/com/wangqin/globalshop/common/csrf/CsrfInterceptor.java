@@ -23,7 +23,7 @@ import com.wangqin.globalshop.common.utils.WebUtils;
  * @author L.cm
  */
 public class CsrfInterceptor extends HandlerInterceptorAdapter {
-	private static final Logger logger = LogManager.getLogger(ExceptionResolver.class);
+	private static final Logger logger = LogManager.getLogger(CsrfInterceptor.class);
 	
 	@Autowired 
 	private CsrfTokenRepository csrfTokenRepository;
