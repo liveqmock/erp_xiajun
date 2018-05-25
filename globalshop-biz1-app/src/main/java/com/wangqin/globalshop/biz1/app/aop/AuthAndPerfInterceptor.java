@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.biz1.app.aop;
 
-import com.wangqin.globalshop.common.redis.RedisCacheTemplate;
 import com.wangqin.globalshop.common.utils.LogWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
