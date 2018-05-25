@@ -14,4 +14,5 @@ public interface IChannelAccountService {
 	public List<ChannelAccountDO> queryPoList(ChannelAccountSo channelAccountSo);
 
 	public void createOrupdateAccount4Taobao(String shopCode, String cookie);
+
 }

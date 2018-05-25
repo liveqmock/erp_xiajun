@@ -12,19 +12,20 @@ import java.util.Set;
  * @date：2015/10/1 14:51
  */
 public class ShiroUser implements Serializable {
+
     private static final long serialVersionUID = -1373760761780840081L;
-    
+
     private final Long id;
     private final String loginName;
     private final String name;
     private final Set<String> urlSet;
     private Set<String> roles;
     private Set<String> resCodes;
-    private final Long companyId;
+    private final String companyNo;
 
-    public ShiroUser(Long id, Long companyId, String loginName, String name, Set<String> urlSet) {
+    public ShiroUser(Long id, String companyNo, String loginName, String name, Set<String> urlSet) {
         this.id = id;
-        this.companyId = companyId;
+        this.companyNo = companyNo;
         this.loginName = loginName;
         this.name = name;
         this.urlSet = urlSet;
@@ -69,10 +70,7 @@ public class ShiroUser implements Serializable {
 	public void setResCodes(Set<String> resCodes) {
 		this.resCodes = resCodes;
 	}
-
-	public Long getCompanyId() {
-		return companyId;
-	}
-    
-    
+    public String getCompanyNo() {
+        return companyNo;
+    }
 }

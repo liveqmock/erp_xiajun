@@ -123,10 +123,10 @@
           <!--<generatedKey column="id" sqlStatement="MySql"/>-->
         <!--</table>-->
 
-        <table tableName="channel_account_config" domainObjectName="ChannelAccountConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false" >
-            <generatedKey column="id" sqlStatement="MySql"/>
-        </table>
+        <!--<table tableName="channel_account_config" domainObjectName="ChannelAccountConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
 
         <!--<table tableName="channel_listing_item" domainObjectName="ChannelListingItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -199,10 +199,10 @@
         <!--</table>-->
 
 
-        <!--<table tableName="item" domainObjectName="ItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-          <!--<generatedKey column="id" sqlStatement="MySql"/>-->
-        <!--</table>-->
+        <table tableName="item" domainObjectName="ItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+          <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
 
         <!--<table tableName="item_brand" domainObjectName="ItemBrandDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->

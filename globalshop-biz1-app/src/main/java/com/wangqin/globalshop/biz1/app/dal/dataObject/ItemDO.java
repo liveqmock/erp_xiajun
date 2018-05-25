@@ -67,7 +67,7 @@ public class ItemDO {
 
     private Byte isFind;
 
-    private Byte status;
+    private Integer status;
 
     private String spec;
 
@@ -343,11 +343,11 @@ public class ItemDO {
         this.isFind = isFind;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
