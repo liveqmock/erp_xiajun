@@ -5,9 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.biz1.app.service.channelItem.IChannelListingItemService;
+import com.wangqin.globalshop.biz1.app.service.channelItem.IChannelListingItemSkuService;
 import com.wangqin.globalshop.biz1.app.service.item.IItemService;
+import com.wangqin.globalshop.biz1.app.service.item.IItemSkuService;
+import com.wangqin.globalshop.biz1.app.service.order.IShippingOrderService;
 import com.wangqin.globalshop.common.scan.SpringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,11 +52,14 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	protected ChannelAccountDO channelAccount;
 	
 	protected IChannelAccountService channelAccountService = SpringUtils.getBean(IChannelAccountService.class);
-	protected IItemService itemService = SpringUtils.getBean(IItemService.class);
 
+	protected IItemService itemService = SpringUtils.getBean(IItemService.class);
 	protected IItemSkuService itemSkuService = SpringUtils.getBean(IItemSkuService.class);
 
-	protected IOuterItemService outerItemService = SpringUtils.getBean(IOuterItemService.class);
+	protected IChannelListingItemService outerItemService = SpringUtils.getBean(IChannelListingItemService.class);
+	protected IChannelListingItemSkuService outerItemSkuService = SpringUtils.getBean(IChannelListingItemSkuService.class);
+
+
 	protected OuterOrderDetailMapper outerOrderDetailMapper = SpringUtils.getBean(OuterOrderDetailMapper.class);
 
 	protected IErpOrderService erpOrderService = SpringUtils.getBean(IErpOrderService.class);
@@ -72,15 +81,15 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	
 	static public class AdapterData {
 		public ItemDO item;
-		public chananlIt outerItem;
-		public List<OuterItemSku> outerItemSkus = new ArrayList<OuterItemSku>();
+		public ChannelListingItemDO outerItem;
+		public List<ChannelListingItemSkuDO> outerItemSkus = new ArrayList<ChannelListingItemSkuDO>();
 	}
 	
 	protected void auth() {
 		adapterAuth();
 		// 保存到channel_account中
-		channelAccount.setGmtModified(new Date());
-		channelAccountService.updateById(channelAccount);
+		channelAccount.setGmtModify(new Date());
+		channelAccountService.updateByPrimaryKey(channelAccount);
 	}
 	
 	

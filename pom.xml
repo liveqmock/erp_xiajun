@@ -249,6 +249,9 @@
         <module>globalshop-mall</module>
         <module>globalshop-common</module>
         <module>globalshop-web</module>
+        <module>channel</module>
+        <module>globalshop-channel</module>
+        <module>globalshop-channel</module>
     </modules>
 
 

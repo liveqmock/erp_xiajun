@@ -16,12 +16,21 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataObjectVo.ItemSkuVo;
+import com.wangqin.globalshop.biz1.app.dal.dataObjectVo.ItemVo;
+import com.wangqin.globalshop.biz1.app.dal.youzan.ItemImages;
+import com.wangqin.globalshop.biz1.app.dal.youzan.PicModel;
+import com.wangqin.globalshop.biz1.app.dal.youzan.YouzanMsgDetailEntity;
+import com.wangqin.globalshop.biz1.app.dal.youzan.YouzanMsgPushEntity;
 import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.youzan.open.sdk.gen.v3_0_0.api.*;
 import com.youzan.open.sdk.gen.v3_0_0.model.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -36,11 +45,13 @@ import com.google.common.collect.Sets;
 
 import com.youzan.open.sdk.client.auth.Token;
 import com.youzan.open.sdk.client.core.DefaultYZClient;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateResult.ItemSkuOpenModel;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsExpressGetResult.LogisticsExpressOpenApiModel;
 import com.youzan.open.sdk.model.ByteWrapper;
 
+import com.wangqin.globalshop.biz1.app.dal.youzan.TradeDetailV2;
+
 import net.sf.json.JSONObject;
+import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateResult.ItemSkuOpenModel;
+
 
 @Channel(type = ChannelType.YouZan)
 public class YouZanChannelServiceImp extends AbstractChannelService implements IChannelService {
@@ -80,37 +91,33 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	}
 
 	/**
+	 * 网擒内部新增商品：channel_listting_item,channel_listting_item_sku
 	 * 新增外部商品和SKU信息
 	 * 
 	 * @param item
 	 * @param youzanItemCreateResult
 	 */
-	private AdapterData addOuterItem(ItemDO item, YouzanItemCreateResult youzanItemCreateResult) {
+	private AdapterData addOuterItem(ItemVo item, YouzanItemCreateResult youzanItemCreateResult) {
 		AdapterData adapterData = new AdapterData();
 		String alias = youzanItemCreateResult.getItem().getAlias();// 有赞别名
 		Long numIid = youzanItemCreateResult.getItem().getItemId();// 有赞ID
 		// 1、保存外部商品
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
-		outerItem.setItemId(item.getId());
-		outerItem.setPlatformType(PlatformType.YOUZAN.getCode());
-		// OuterItem selOuterItem = this.baseMapper.selectOne(outerItem);
-		outerItem.setOuterAlias(alias);
-		outerItem.setOuterId(numIid);
+
+		outerItem.setChannelNo(PlatformType.YOUZAN.getDescription());
+        outerItem.setCompanyNo(channelAccount.getCompanyNo());
+		outerItem.setShopCode(channelAccount.getShopCode());
+		outerItem.setChannelItemAlias(alias);
+		outerItem.setChannelItemCode(String.valueOf(numIid));
+		outerItem.setItemCode(item.getItemCode());
 		outerItem.setStatus(ItemStatus.LISTING.getCode());// 上架
-		outerItem.setImageIds(item.getImageIds());
-		// if(selOuterItem == null) {
-		// this.baseMapper.insert(outerItem);
-		// } else {
-		// outerItem.setId(selOuterItem.getId());
-		// this.baseMapper.updateSelectiveById(outerItem);
-		// }
 
 		adapterData.item = item;
 		adapterData.outerItem = outerItem;
 
-		List<ItemSku> itemSkuList = item.getItemSkus();
+		List<ItemSkuVo> itemSkuList = item.getItemSkus();
 		Map<String, Long> itemSkuIdMap = new HashMap<String, Long>();
-		for (ItemSku itemSku : itemSkuList) {
+		for (ItemSkuDO itemSku : itemSkuList) {
 			itemSkuIdMap.put(itemSku.getSkuCode(), itemSku.getId());
 		}
 
@@ -122,61 +129,57 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 				if (StringUtil.isBlank(sku.getItemNo()) || itemSkuIdMap.get(sku.getItemNo()) == null) {
 					continue;
 				}
-				OuterItemSku outerItemSku = new OuterItemSku();
-				outerItemSku.setSkuId(itemSkuIdMap.get(sku.getItemNo()));
-				outerItemSku.setPlatformType(PlatformType.YOUZAN.getCode());
-				// OuterItemSku selOuterItemSku = outerItemSkuMapper.selectOne(outerItemSku);
-				outerItemSku.setItemId(item.getId());
-				outerItemSku.setOuterId(numIid);
-				outerItemSku.setOuterSkuId(sku.getSkuId());
-				outerItemSku.setOuterItemId(outerItem.getId());
-				outerItemSku.setSkuCode(sku.getItemNo());
+				ChannelListingItemSkuDO outerItemSku = new ChannelListingItemSkuDO();
 
+				outerItemSku.setPlatformType(PlatformType.YOUZAN.getCode());
+                //外部信息
+				outerItemSku.setChannelItemCode(outerItem.getChannelItemCode());
+				outerItemSku.setChannelItemSkuCode(String.valueOf(sku.getSkuId()));
+                //内部信息
+				outerItemSku.setItemCode(String.valueOf(item.getId()));
+				outerItemSku.setSkuCode(sku.getItemNo());
 				adapterData.outerItemSkus.add(outerItemSku);
-				// if(selOuterItemSku == null) {
-				// outerItemSkuMapper.insert(outerItemSku);
-				// } else {
-				// outerItemSku.setId(selOuterItemSku.getId());
-				// outerItemSkuMapper.updateSelectiveById(outerItemSku);
-				// }
+
 			}
 		}
-
-		// //3、更新erp商品信息
-		// item.setStatus(ItemStatus.LISTING.getCode());
-		// item.setGmtModify(new Date());
-		// itemService.updateById(item);
 
 		return adapterData;
 	}
 
-	private AdapterData updateOuterItem(Item item, YouzanItemUpdateResult youzanItemUpdateResult) {
+
+	/**
+	 * 网擒内部更新商品：channel_list_item,channel_list_item_sku
+	 * @param item
+	 * @param youzanItemUpdateResult
+	 * @return
+	 */
+	private AdapterData updateOuterItem(ItemVo item, YouzanItemUpdateResult youzanItemUpdateResult) {
 		AdapterData adapterData = new AdapterData();
 		// String alias = youzanItemUpdateResult.getItem().getAlias();//有赞别名
 		Long numIid = youzanItemUpdateResult.getItemId();// 有赞ID
 		// 1、保存外部商品
-		OuterItem outerItem = new OuterItem();
-		outerItem.setItemId(item.getId());
-		outerItem.setPlatformType(PlatformType.YOUZAN.getCode());
-		OuterItem outerItemDb = this.outerItemService.selectOne(outerItem);
+		ChannelListingItemDO outerItem = new ChannelListingItemDO();
+		outerItem.setItemCode(item.getItemCode());
+		outerItem.setChannelNo(PlatformType.YOUZAN.getDescription());
+		ChannelListingItemDO outerItemDb = this.outerItemService.queryPo(outerItem);
 		if (outerItemDb == null) {
-			throw new ErpCommonException("更新outerItem 订单信息错误");
+			throw new ErpCommonException("更新outerItem 商品信息错误");
 		} else {
-			outerItemDb.setImageIds(item.getImageIds());
-			this.outerItemService.updateSelectiveById(outerItemDb);
+
+			this.outerItemService.updateByPrimaryKey(outerItemDb);
 		}
-		List<ItemSku> itemSkuList = item.getItemSkus();
+		List<ItemSkuVo> itemSkuList = item.getItemSkus();
 		Map<String, Long> itemSkuIdMap = new HashMap<String, Long>();
-		for (ItemSku itemSku : itemSkuList) {
+		for (ItemSkuDO itemSku : itemSkuList) {
 			itemSkuIdMap.put(itemSku.getSkuCode(), itemSku.getId());
 		}
 
 		// 2、更新外部SKU信息
 		YouzanItemGetParams youzanItemGetParams = new YouzanItemGetParams();
-		youzanItemGetParams.setItemId(outerItemDb.getOuterId());
-		youzanItemGetParams.setAlias(outerItemDb.getOuterAlias());
+		youzanItemGetParams.setItemId(Long.valueOf(outerItemDb.getChannelItemCode()));
+		youzanItemGetParams.setAlias(outerItemDb.getChannelItemAlias());
 		YouzanItemGetResult itemGetResult = youzanItemGet(youzanItemGetParams);
-		YouzanItemGetResult.ItemSkuOpenModel[] goodsSku = itemGetResult.getItem()
+		com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemGetResult.ItemSkuOpenModel[] goodsSku = itemGetResult.getItem()
 				.getSkus();
 		if (goodsSku != null && goodsSku.length > 0) {
 			for (int i = 0; i < goodsSku.length; i++) {
@@ -184,29 +187,33 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 				if (StringUtil.isBlank(sku.getItemNo()) || itemSkuIdMap.get(sku.getItemNo()) == null) {
 					continue;
 				}
-				OuterItemSku outerItemSku = new OuterItemSku();
-				outerItemSku.setSkuId(itemSkuIdMap.get(sku.getItemNo()));
-				outerItemSku.setPlatformType(PlatformType.YOUZAN.getCode());
-				OuterItemSku selOuterItemSku = this.outerItemService.getSkuMapper().selectOne(outerItemSku);
-				outerItemSku.setItemId(item.getId());
-				outerItemSku.setOuterId(numIid);
-				outerItemSku.setOuterSkuId(sku.getSkuId());
-				outerItemSku.setOuterItemId(outerItemDb.getId());
+				ChannelListingItemSkuDO outerItemSku = new ChannelListingItemSkuDO();
 				outerItemSku.setSkuCode(sku.getItemNo());
+				outerItemSku.setPlatformType(PlatformType.YOUZAN.getCode());
+				ChannelListingItemSkuDO selOuterItemSku = this.outerItemSkuService.queryPo(outerItemSku);
+				//外部信息
+				outerItemSku.setChannelItemCode(outerItem.getChannelItemCode());
+				outerItemSku.setChannelItemSkuCode(String.valueOf(sku.getSkuId()));
+				//内部信息
+				outerItemSku.setItemCode(String.valueOf(item.getId()));
 				if (selOuterItemSku == null) {
-					this.outerItemService.getSkuMapper().insert(outerItemSku);
+					this.outerItemSkuService.insert(outerItemSku);
 				} else {
 					outerItemSku.setId(selOuterItemSku.getId());
-					this.outerItemService.getSkuMapper().updateSelectiveById(outerItemSku);
+					this.outerItemSkuService.updateByPrimaryKey(outerItemSku);
 				}
 			}
 		}
 		return adapterData;
 	}
-
-	private YouzanItemCreateParams createYouzanAddItem(ItemDO item) {
+	/**
+	 * 新增商品图片地址
+	 * @param item
+	 * @return
+	 */
+	private YouzanItemCreateParams createYouzanAddItem(ItemVo item) {
 		YouzanItemCreateParams youzanItemCreateParams = new YouzanItemCreateParams();
-		youzanItemCreateParams.setTitle(item.getName());
+		youzanItemCreateParams.setTitle(item.getItemName());
 		if (StringUtils.isNotEmpty(item.getDetail())) {
 			try {
 				// String decodeStr = URLDecoder.decode(item.getDetail(),"UTF-8");
@@ -215,7 +222,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 				e.printStackTrace();
 			}
 		} else {
-			youzanItemCreateParams.setDesc(item.getName());
+			youzanItemCreateParams.setDesc(item.getItemName());
 		}
 		if (item.getFreight() != null && item.getFreight() > 0) {
 			youzanItemCreateParams.setPostFee((long) (item.getFreight() * 100));
@@ -246,7 +253,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 
 		youzanItemCreateParams.setItemNo(item.getItemCode());
 		// SKU
-		List<ItemSku> itemSkus = item.getItemSkus();
+		List<ItemSkuVo> itemSkus = item.getItemSkus();
 		// List<YouZanSku> youZanSkuList = initSkuJson(itemSkus);
 		List<Map<String, Object>> youZanSkuList = initSkuJsonOne(itemSkus);
 		if (CollectionUtils.isNotEmpty(youZanSkuList)) {
@@ -254,7 +261,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			youzanItemCreateParams.setSkuStocks(skusWithJson);
 		}
 		Double minSalePrice = itemSkus.get(0).getSalePrice();
-		for (ItemSku itemSku : itemSkus) {
+		for (ItemSkuVo itemSku : itemSkus) {
 			if (itemSku.getSalePrice() < minSalePrice) {
 				minSalePrice = itemSku.getSalePrice();
 			}
@@ -262,10 +269,14 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		youzanItemCreateParams.setPrice((long) (minSalePrice * 100));
 		return youzanItemCreateParams;
 	}
-
-	private YouzanItemUpdateParams createYouzanUpdateItem(ItemDO item) {
+	/**
+	 * 更新图片地址
+	 * @param item
+	 * @return
+	 */
+	private YouzanItemUpdateParams createYouzanUpdateItem(ItemVo item) {
 		YouzanItemUpdateParams youzanItemUpdateParams = new YouzanItemUpdateParams();
-		youzanItemUpdateParams.setTitle(item.getName());
+		youzanItemUpdateParams.setTitle(item.getItemName());
 		if (StringUtils.isNotEmpty(item.getDetail())) {
 			try {
 				// String decodeStr = URLDecoder.decode(item.getDetail(),"UTF-8");
@@ -301,15 +312,14 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			youzanItemUpdateParams.setImageIds(imageIds);
 		}
 		// SKU
-		List<ItemSku> itemSkus = item.getItemSkus();
-		// List<YouZanSku> youZanSkuList = initSkuJson(itemSkus);
+		List<ItemSkuVo> itemSkus = item.getItemSkus();
 		List<Map<String, Object>> youZanSkuList = initSkuJsonOne(itemSkus);
 		if (CollectionUtils.isNotEmpty(youZanSkuList)) {
 			String skusWithJson = HaiJsonUtils.toJson(youZanSkuList);
 			youzanItemUpdateParams.setSkuStocks(skusWithJson);
 		}
 		Double minSalePrice = itemSkus.get(0).getSalePrice();
-		for (ItemSku itemSku : itemSkus) {
+		for (ItemSkuDO itemSku : itemSkus) {
 			if (itemSku.getSalePrice() < minSalePrice) {
 				minSalePrice = itemSku.getSalePrice();
 			}
@@ -318,13 +328,13 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		return youzanItemUpdateParams;
 	}
 
-	private List<Map<String, Object>> initSkuJsonOne(List<ItemSku> itemSkus) {
+	private List<Map<String, Object>> initSkuJsonOne(List<ItemSkuVo> itemSkus) {
 		List<Map<String, Object>> youZanSkuList = Lists.newArrayList();
-		Map<String, ItemSku> itemSkuMap = Maps.newHashMap();
+		Map<String, ItemSkuVo> itemSkuMap = Maps.newHashMap();
 		Set<String> colorSet = Sets.newHashSet();
 		Set<String> scaleSet = Sets.newHashSet();
 		if (CollectionUtils.isNotEmpty(itemSkus)) {
-			for (ItemSku itemSku : itemSkus) {
+			for (ItemSkuVo itemSku : itemSkus) {
 				String colorScaleKey = "";
 				if (StringUtil.isNotBlank(itemSku.getColor())) {
 					colorSet.add(itemSku.getColor());
@@ -339,10 +349,10 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			if (colorSet.size() > 0 && scaleSet.size() == 0) {
 				for (String color : colorSet) {
 					Map<String, Object> skuStocksMap = new HashMap<String, Object>();
-					ItemSku itemSku = itemSkuMap.get(color);
+					ItemSkuVo itemSku = itemSkuMap.get(color);
 					skuStocksMap.put("price", itemSku.getSalePrice() * 100);
 					int skuQuantity = 0;
-					int lockedVirtualInv = itemSku.getLockedVirtualInv();
+					int lockedVirtualInv =  itemSku.getLockedVirtualInv();
 					if (itemSku.getVirtualInv() > 0) {
 						skuQuantity = itemSku.getVirtualInv() - lockedVirtualInv;
 					} else {
@@ -364,7 +374,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			} else if (scaleSet.size() > 0 && colorSet.size() == 0) {
 				for (String scale : scaleSet) {
 					Map<String, Object> skuStocksMap = new HashMap<String, Object>();
-					ItemSku itemSku = itemSkuMap.get(scale);
+					ItemSkuVo itemSku = itemSkuMap.get(scale);
 					skuStocksMap.put("price", itemSku.getSalePrice() * 100);
 					int skuQuantity = 0;
 					int lockedVirtualInv = itemSku.getLockedVirtualInv();
@@ -390,7 +400,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 				for (String color : colorSet) {
 					for (String scale : scaleSet) {
 						Map<String, Object> skuStocksMap = new HashMap<String, Object>();
-						ItemSku itemSku = itemSkuMap.get(color + scale);
+						ItemSkuVo itemSku = itemSkuMap.get(color + scale);
 						if (itemSku == null) {
 							skuStocksMap.put("price", 100000 * 100);
 							skuStocksMap.put("quantity", 0);
@@ -551,14 +561,20 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		return result;
 	}
 
-	public void syncLogisticsOnlineConfirm(List<ErpOrder> orderList, ShippingOrder shippingOrder) {
+
+	/**
+	 * 发货反馈
+	 * @param orderList
+	 * @param shippingOrder
+	 */
+	public void syncLogisticsOnlineConfirm(List<MallOrderDO> orderList, ShippingOrderDO shippingOrder) {
 		logger.error("有赞发货");
 
 		boolean hasFailed = false;
-		for (ErpOrder order : orderList) {
+		for (MallOrderDO order : orderList) {
 			try {
 				// 获取第三方订单
-				String tid = order.getTargetNo();
+				String tid = order.getChannelOrderNo();
 				// 获取物流信息
 				String logisticNo = shippingOrder.getShippingNo();
 				String logisticCompany = shippingOrder.getLogisticCompany();
@@ -594,7 +610,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		if (!hasFailed) {
 			try {
 				shippingOrder.setSyncSendStatus(1);
-				shippingOrderService.update(shippingOrder);
+				shippingOrderService.updateByPrimaryKey(shippingOrder);
 			} catch (Exception e) {
 				this.logger.error("同步发货给 有赞 返回结果异常");
 			}
@@ -607,12 +623,12 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		YouzanLogisticsExpressGet youzanLogisticsExpressGet = new YouzanLogisticsExpressGet();
 		youzanLogisticsExpressGet.setAPIParams(youzanLogisticsExpressGetParams);
 		YouzanLogisticsExpressGetResult result = yzClient.invoke(youzanLogisticsExpressGet);
-		LogisticsExpressOpenApiModel[] allExpress = result.getAllExpress();
+		YouzanLogisticsExpressGetResult.LogisticsExpressOpenApiModel[] allExpress = result.getAllExpress();
 		if (allExpress == null || allExpress.length == 0) {
 			return;
 		}
 		expressMap = new HashMap<String, Long>();
-		for (LogisticsExpressOpenApiModel model : allExpress) {
+		for (YouzanLogisticsExpressGetResult.LogisticsExpressOpenApiModel model : allExpress) {
 			Long id = model.getId();
 			String name = model.getName();
 			if (StringUtils.isNotBlank(name)) {
@@ -623,9 +639,6 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 
 	@Override
 	public AdapterData adapterAuth() {
-//		if (!StringUtils.isEmpty(channelAccount.getAccessToken())) {
-//			return null;
-//		}
 
 		String urlresponse = DimensionCodeUtil.sendGet("https://open.youzan.com/oauth/token",
 				"client_id=" + this.channelAccount.getAppKey() + "&client_secret=" + this.channelAccount.getAppSecret()
@@ -648,49 +661,49 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	 */
 
 	@Override
-	public AdapterData adapterCreateItem(ItemDO item) {
+	public AdapterData adapterCreateItem(ItemVo item) {
 		// 构造上传的商品对象
 		YouzanItemCreateParams youzanItemCreateParams = createYouzanAddItem(item);
 		YouzanItemCreateResult youzanItemCreateResult = youzanItemCreate(youzanItemCreateParams);
 
-		item.setImageIds(youzanItemCreateParams.getImageIds());
+		//item.setImageIds(youzanItemCreateParams.getImageIds());
 		return addOuterItem(item, youzanItemCreateResult);
 	}
 
 	@Override
-	public AdapterData adapterUpdateItem(ItemDO item, ChannelListingItemDO outerItem) {
+	public AdapterData adapterUpdateItem(ItemVo item, ChannelListingItemDO outerItem) {
 		YouzanItemUpdateParams youzanItemUpdateParams = createYouzanUpdateItem(item);
-		youzanItemUpdateParams.setItemId(outerItem.getOuterId());
-		youzanItemUpdateParams.setRemoveImageIds(outerItem.getImageIds());
+		youzanItemUpdateParams.setItemId(Long.valueOf(outerItem.getChannelItemCode()));
+		//youzanItemUpdateParams.setRemoveImageIds(outerItem.getImageIds());
 		YouzanItemUpdateResult youzanItemUpdateResult = youzanItemUpdate(youzanItemUpdateParams);
 
-		item.setImageIds(youzanItemUpdateParams.getImageIds());
+		//item.setImageIds(youzanItemUpdateParams.getImageIds());
 		updateOuterItem(item, youzanItemUpdateResult);
 		return null;
 	}
 
 	@Override
-	public AdapterData adapterListingItem(Item item, OuterItem outerItem) {
+	public AdapterData adapterListingItem(ItemDO item, ChannelListingItemDO outerItem) {
 		YouzanItemUpdateListingParams youzanItemUpdateListingParams = new YouzanItemUpdateListingParams();
-		youzanItemUpdateListingParams.setItemId(outerItem.getOuterId());
+		youzanItemUpdateListingParams.setItemId(Long.valueOf(outerItem.getChannelItemCode()));
 		youzanItemUpdateListing(youzanItemUpdateListingParams);
 		return null;
 	}
 
 	@Override
-	public AdapterData adapterDelistingItem(Item item, OuterItem outerItem) {
+	public AdapterData adapterDelistingItem(ItemDO item, ChannelListingItemDO outerItem) {
 		YouzanItemUpdateDelistingParams youzanItemUpdateDelistingParams = new YouzanItemUpdateDelistingParams();
-		youzanItemUpdateDelistingParams.setItemId(outerItem.getOuterId());
+		youzanItemUpdateDelistingParams.setItemId(Long.valueOf(outerItem.getChannelItemCode()));
 		youzanItemUpdateDelisting(youzanItemUpdateDelistingParams);
 		return null;
 	}
 
 	@Override
-	public AdapterData adapterUpdateSkuInventory(OuterItemSku sku, Inventory inventory) {
+	public AdapterData adapterUpdateSkuInventory(ChannelListingItemSkuDO sku, InventoryDO inventory) {
 		YouzanItemSkuUpdateParams youzanItemSkuUpdateParams = new YouzanItemSkuUpdateParams();
-		youzanItemSkuUpdateParams.setItemId(sku.getOuterId());
-		youzanItemSkuUpdateParams.setSkuId(sku.getOuterSkuId());
-		youzanItemSkuUpdateParams.setQuantity(inventory.getSysInventory() + "");
+		youzanItemSkuUpdateParams.setItemId(Long.valueOf(sku.getChannelItemCode()));
+		youzanItemSkuUpdateParams.setSkuId(Long.valueOf(sku.getChannelItemSkuCode()));
+		//youzanItemSkuUpdateParams.setQuantity(inventory.getSysInventory() + "");
 		youzanItemSkuUpdate(youzanItemSkuUpdateParams);
 		return null;
 	}
@@ -734,7 +747,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			pageNo++;
 			hasNext = result.getHasNext();
 
-			TradeDetailV2[] tradeList = result.getTrades();
+			YouzanTradesSoldGetResult.TradeDetailV2[] tradeList = result.getTrades();
 			for (int i = tradeList.length - 1; i >= 0; i--) {
 				this.syncOrder(tradeList[i]);
 			}
@@ -803,8 +816,8 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 
 				youzanTradeGet.setAPIParams(youzanTradeGetParams);
 
-				YouzanTradeGetResult result = yzClient.invoke(youzanTradeGet);
-				TradeDetailV2 TradeDetail = result.getTrade();
+				com.wangqin.globalshop.biz1.app.dal.youzan.YouzanTradeGetResult result = yzClient.invoke(youzanTradeGet);
+				com.wangqin.globalshop.biz1.app.dal.youzan.TradeDetailV2 TradeDetail = result.getTrade();
 
 				this.syncOrder(TradeDetail);
 			}
@@ -815,7 +828,10 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		 */
 		return res;
 	}
-
+	/**
+	 * 内部订单和外部订单合并成mall_order
+	 * @param TradeDetail
+	 */
 	void syncOrder(TradeDetailV2 TradeDetail) {
 		List<Long> outOrderIdList = new ArrayList<Long>();
 
@@ -859,10 +875,10 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 
 		outOrderIdList.add(outerOrder.getId()); // 收集主订单ID
 
-		TradeOrderV2[] tradeOrderArr = TradeDetail.getOrders();
+		com.wangqin.globalshop.biz1.app.dal.youzan.YouzanTradeGetResult.TradeOrderV2[] tradeOrderArr = TradeDetail.getOrders();
 		List<OuterOrderDetail> outerOrderDetails = new ArrayList<OuterOrderDetail>();
 		for (int j = 0; j < tradeOrderArr.length; j++) {
-			TradeOrderV2 tradeOrder = tradeOrderArr[j];
+			com.wangqin.globalshop.biz1.app.dal.youzan.TradeOrderV2 tradeOrder = tradeOrderArr[j];
 
 			OuterOrderDetail outerOrderDetail = new OuterOrderDetail();
 			outerOrderDetail.setCompanyId(outerOrder.getCompanyId());

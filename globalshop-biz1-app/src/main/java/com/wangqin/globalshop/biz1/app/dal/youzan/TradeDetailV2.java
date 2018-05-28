@@ -3,13 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.youzan;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wangqin.model.youzan.YouzanTradeGetResult.AdjustFee;
-import com.wangqin.model.youzan.YouzanTradeGetResult.FansInfo;
-import com.wangqin.model.youzan.YouzanTradeGetResult.HotelInfo;
-import com.wangqin.model.youzan.YouzanTradeGetResult.TradeFetch;
-import com.wangqin.model.youzan.YouzanTradeGetResult.TradeOrderV2;
-import com.wangqin.model.youzan.YouzanTradeGetResult.TradePromotion;
-import com.wangqin.model.youzan.YouzanTradeGetResult.UmpTradeCoupon;
+
 
 public class TradeDetailV2 {
 

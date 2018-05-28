@@ -13,11 +13,11 @@ public class ChannelListingItemDO {
 
     private String channelItemCode;
 
-    private Long shopCode;
+    private String shopCode;
 
     private String channelItemAlias;
 
-    private Byte status;
+    private Integer status;
 
     private Boolean isDel;
 
@@ -69,12 +69,12 @@ public class ChannelListingItemDO {
         this.channelItemCode = channelItemCode == null ? null : channelItemCode.trim();
     }
 
-    public Long getShopCode() {
+    public String getShopCode() {
         return shopCode;
     }
 
-    public void setShopCode(Long shopCode) {
-        this.shopCode = shopCode;
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode == null ? null : shopCode.trim();
     }
 
     public String getChannelItemAlias() {
@@ -85,11 +85,11 @@ public class ChannelListingItemDO {
         this.channelItemAlias = channelItemAlias == null ? null : channelItemAlias.trim();
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

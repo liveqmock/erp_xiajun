@@ -1,10 +1,11 @@
 package com.wangqin.globalshop.biz1.app.service.channel;
 
-import com.wangqin.model.Inventory;
-import com.wangqin.model.Item;
-import com.wangqin.model.item.OuterItem;
-import com.wangqin.model.item.OuterItemSku;
-import com.wangqin.service.channels.AbstractChannelService.AdapterData;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObjectVo.ItemVo;
+
 
 /**
  * 渠道适配接口
@@ -18,14 +19,14 @@ public interface IChannelAdapter {
 	 * 授权
 	 * @return
 	 */
-	public AdapterData adapterAuth();
+	public AbstractChannelService.AdapterData adapterAuth();
 	
 	/**
 	 * 创建商品
 	 * @param item
 	 * @return
 	 */
-	public AdapterData adapterCreateItem(Item item);
+	public AbstractChannelService.AdapterData adapterCreateItem(ItemVo item);
 	
 	/**
 	 * 更新商品
@@ -33,7 +34,7 @@ public interface IChannelAdapter {
 	 * @param outerItem
 	 * @return
 	 */
-	public AdapterData adapterUpdateItem(Item item, OuterItem outerItem);
+	public AbstractChannelService.AdapterData adapterUpdateItem(ItemVo item, ChannelListingItemDO outerItem);
 	
 	/**
 	 * 上架商品
@@ -41,7 +42,7 @@ public interface IChannelAdapter {
 	 * @param outerItem
 	 * @return
 	 */
-	public AdapterData adapterListingItem(Item item, OuterItem outerItem);
+	public AbstractChannelService.AdapterData adapterListingItem(ItemDO item, ChannelListingItemDO outerItem);
 	
 	/**
 	 * 下架商品
@@ -49,7 +50,7 @@ public interface IChannelAdapter {
 	 * @param outerItem
 	 * @return
 	 */
-	public AdapterData adapterDelistingItem(Item item, OuterItem outerItem);
+	public AbstractChannelService.AdapterData adapterDelistingItem(ItemDO item, ChannelListingItemDO outerItem);
 	
 	/**
 	 * 更新sku库存
@@ -57,5 +58,5 @@ public interface IChannelAdapter {
 	 * @param inventory
 	 * @return
 	 */
-	public AdapterData adapterUpdateSkuInventory(OuterItemSku sku, Inventory inventory);
+	public AbstractChannelService.AdapterData adapterUpdateSkuInventory(ChannelListingItemSkuDO sku, InventoryDO inventory);
 }

@@ -43,6 +43,34 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 	}
 
 
+
+	public int deleteByPrimaryKey(Long id){
+		return this.channelAccountDOMapperExt.deleteByPrimaryKey(id);
+	}
+
+	public int insert(ChannelAccountDO record){
+		return this.channelAccountDOMapperExt.insert(record);
+	}
+
+	public int insertSelective(ChannelAccountDO record){
+		return this.channelAccountDOMapperExt.insertSelective(record);
+	}
+
+	public ChannelAccountDO selectByPrimaryKey(Long id){
+		return this.channelAccountDOMapperExt.selectByPrimaryKey(id);
+	}
+
+	public int updateByPrimaryKeySelective(ChannelAccountDO record){
+		return this.channelAccountDOMapperExt.updateByPrimaryKeySelective(record);
+	}
+
+	public int updateByPrimaryKey(ChannelAccountDO record){
+		return this.channelAccountDOMapperExt.updateByPrimaryKey(record);
+	}
+
+
+
+
 	/**
 	 * 淘宝授权暂时写死，没有所属哪个company的信息，也么有channel信息
 	 * @param shopCode

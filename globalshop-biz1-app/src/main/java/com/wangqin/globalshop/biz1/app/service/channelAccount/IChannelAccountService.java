@@ -7,6 +7,20 @@ import java.util.List;
 
 public interface IChannelAccountService {
 
+
+	public int deleteByPrimaryKey(Long id);
+
+	public int insert(ChannelAccountDO record);
+
+	public int insertSelective(ChannelAccountDO record);
+
+	public ChannelAccountDO selectByPrimaryKey(Long id);
+
+	public int updateByPrimaryKeySelective(ChannelAccountDO record);
+
+	public int updateByPrimaryKey(ChannelAccountDO record);
+
+
 	public Integer queryPoCount(ChannelAccountSo channelAccountSo);
 
 	public ChannelAccountDO queryPo(ChannelAccountSo channelAccountSo);
