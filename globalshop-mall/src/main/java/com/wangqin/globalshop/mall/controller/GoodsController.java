@@ -5,6 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/wx/item")
-public class ItemController {
+public class GoodsController {
 
 }
