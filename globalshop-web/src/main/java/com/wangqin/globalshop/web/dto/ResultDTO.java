@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.web.dto;
 
-import lombok.Data;
-
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * @author pw

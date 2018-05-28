@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.common.utils;
 import java.util.ResourceBundle;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 /**

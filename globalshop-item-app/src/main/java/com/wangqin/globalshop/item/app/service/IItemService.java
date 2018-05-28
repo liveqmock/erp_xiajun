@@ -4,7 +4,6 @@ package com.wangqin.globalshop.item.app.service;
 import java.util.List;
 import java.util.Map;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;

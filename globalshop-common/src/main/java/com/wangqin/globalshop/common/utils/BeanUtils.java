@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.common.utils;
 
 
+import java.util.Map;
+
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.beans.BeanMap;
-
-import java.util.Map;
 
 /**
  * 基于CGlib

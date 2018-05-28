@@ -1,12 +1,9 @@
 package com.wangqin.globalshop.item.app.service.channels;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 
 
 public interface IChannelService {

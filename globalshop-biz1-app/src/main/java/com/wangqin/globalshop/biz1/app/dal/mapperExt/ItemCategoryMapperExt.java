@@ -2,10 +2,6 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import java.util.List;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.impl.PublicImpl;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-
-import com.baomidou.mybatisplus.mapper.AutoMapper;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemCategoryDOMapper;
 
