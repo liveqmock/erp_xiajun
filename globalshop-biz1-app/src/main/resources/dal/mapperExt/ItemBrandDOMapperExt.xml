@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.item.app.dal.mapperExt.ItemBrandDOMapperExt" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemBrandDOMapperExt" >
 <!-- 通用查询结果列 -->
 	<sql id="Base_Column_List">
 		T1.id,T1.name,T1.name_china AS nameChina,T1.name_alias AS nameAlias,
@@ -8,7 +8,7 @@
 	</sql>
 
 	<!--查询总条数 -->
-	<select id="queryBrandCount" resultType="java.lang.Integer" parameterType="com.wangqin.vo.BrandQueryVO">
+	<select id="queryBrandCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
 		SELECT COUNT(*) 
 		FROM brand T1 
 		WHERE 1=1 
@@ -21,7 +21,7 @@
 	</select>
 
 	<!--分页查询 -->
-	<select id="queryBrands" resultType="com.wangqin.model.Brand" parameterType="com.wangqin.vo.BrandQueryVO">
+	<select id="queryBrands" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
 		SELECT <include refid="Base_Column_List" /> 
 		FROM brand T1 
 		WHERE 1=1 
@@ -37,14 +37,14 @@
 	</select>
 	
 	<!--总查询 -->
-	<select id="queryAllBrand" resultType="com.wangqin.model.Brand" >
+	<select id="queryAllBrand" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
 		SELECT 
 		concat(name,"->",IFNULL(name_china, "")) as name 
 		FROM brand
 		WHERE 1=1
 	</select>
 
-	<select id="selectByName" resultType="com.wangqin.model.Brand" parameterType="java.lang.String">
+	<select id="selectByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
 		SELECT 
 		<include refid="Base_Column_List" />
 		FROM brand T1 
