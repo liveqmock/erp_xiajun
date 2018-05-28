@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.item.app.dal.mapperExt.ItemDOMapperExt">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt">
 
    <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
@@ -182,8 +182,6 @@
         and <![CDATA[  T1.gmt_modify >= #{gmtModify} ]]>
      </if>
 	order by T1.gmt_create desc
-         
-
 </select>
 
 <!-- 按照天统计上新量,XiaJun -->
@@ -205,6 +203,17 @@
 		AND	<![CDATA[PERIOD_DIFF(DATE_FORMAT(NOW( ),'%Y%m'),DATE_FORMAT(T1.gmt_create,'%Y%m')) =#{months}]]>
 	</where>
 	</select>
+	
+	<select id="queryItemByItemCode" >
+	SELECT 
+	<include refid="Base_Column_List" />
+	FROM item 
+	<where>
+	item_code={itemCode}
+	AND is_del=0;
+	</where>
+	</select>
+
 
     
 </mapper>
