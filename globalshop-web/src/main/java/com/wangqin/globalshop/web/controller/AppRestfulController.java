@@ -2,18 +2,24 @@ package com.wangqin.globalshop.web.controller;
 
 
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wangqin.globalshop.biz1.api.AppApi;
 import com.wangqin.globalshop.biz1.api.dto.ConfigDTO;
 import com.wangqin.globalshop.biz1.api.dto.request.AppRequest;
 import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 import com.wangqin.globalshop.common.utils.LogWorker;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**

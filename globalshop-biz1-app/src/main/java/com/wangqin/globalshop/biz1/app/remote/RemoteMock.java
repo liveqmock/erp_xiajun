@@ -11,6 +11,7 @@ import com.wangqin.globalshop.biz1.api.dto.ConfigDTO;
 import com.wangqin.globalshop.biz1.api.dto.request.AppRequest;
 import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 
+
 /**
  * @author  patrick
  */
