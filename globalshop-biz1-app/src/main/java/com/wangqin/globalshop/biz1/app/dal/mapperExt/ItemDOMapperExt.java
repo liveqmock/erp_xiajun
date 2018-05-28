@@ -3,11 +3,14 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import java.util.List;
 import java.util.Map;
 
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 
 
-public interface ItemDOMapperExt {
+public interface ItemDOMapperExt extends ItemDOMapper{
 
     Integer queryItemsCount(ItemQueryVO itemQueryVO);
 	
@@ -34,4 +37,6 @@ public interface ItemDOMapperExt {
 	Integer sumNewItemNumByDate(Integer days);
 	
 	Integer sumNewItemNumByMonth(Integer months);
+	
+	ItemDO queryItemByItemCode(String itemCode);
 }

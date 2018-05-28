@@ -13,13 +13,13 @@ public class ItemCategoryDO {
 
     private String rootCode;
 
-    private Byte seq;
+    private Integer seq;
 
-    private Byte level;
+    private Integer level;
 
     private String allPath;
 
-    private Byte status;
+    private Integer status;
 
     private Date gmtCreate;
 
@@ -71,19 +71,19 @@ public class ItemCategoryDO {
         this.rootCode = rootCode == null ? null : rootCode.trim();
     }
 
-    public Byte getSeq() {
+    public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(Byte seq) {
+    public void setSeq(Integer seq) {
         this.seq = seq;
     }
 
-    public Byte getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(Byte level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
@@ -95,11 +95,11 @@ public class ItemCategoryDO {
         this.allPath = allPath == null ? null : allPath.trim();
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

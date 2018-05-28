@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.item.app.dal.mapperExt.ShippingPackingPatternDOMapperExt">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingPackingPatternDOMapperExt">
 	
 	<sql id="Base_Column_List">
 		id,name,package_en AS packageEn,package_level AS packageLevel,package_id AS packageId,weight
