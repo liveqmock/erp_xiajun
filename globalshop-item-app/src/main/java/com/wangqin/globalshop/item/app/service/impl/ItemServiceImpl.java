@@ -189,7 +189,7 @@ public class ItemServiceImpl implements IItemService {
 	public JsonPageResult<List<ItemDO>> queryItems(ItemQueryVO itemQueryVO) {
 		JsonPageResult<List<ItemDO>> itemResult = new JsonPageResult<>();
 		
-		itemQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
+		//itemQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
 		
 		//1、查询总的记录数量
 		Integer totalCount =   itemDOMapperExt.queryItemsCount(itemQueryVO);

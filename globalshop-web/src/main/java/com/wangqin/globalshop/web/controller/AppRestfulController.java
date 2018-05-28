@@ -34,7 +34,7 @@ public class AppRestfulController {
     public BaseResp getConfig(@PathVariable String id)  {
         LogWorker.logStart(log,"配置","id:{}",id);
         AppRequest request = new AppRequest();
-        request.setId(id);
+        //request.setId(id);
         BaseResp<ConfigDTO> resp = appApi.getConfig(request);
         LogWorker.logEnd(log,"配置","response:{}",resp);
         return resp;

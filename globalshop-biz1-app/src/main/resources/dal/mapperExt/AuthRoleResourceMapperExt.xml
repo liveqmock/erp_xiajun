@@ -7,7 +7,7 @@
         id, role_id AS roleId, resource_id AS resourceId
     </sql>
 
-    <select id="selectIdListByRoleId" resultType="java.lang.Long" parameterType="java.lang.Long">
+    <select id="selectIdListByRoleId" resultMap="java.lang.Long" parameterType="java.lang.Long">
         SELECT
             e.id AS id
         FROM

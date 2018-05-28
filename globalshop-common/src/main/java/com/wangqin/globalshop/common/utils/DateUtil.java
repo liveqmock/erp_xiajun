@@ -18,6 +18,7 @@ public class DateUtil {
 	public static final String DATE_PARTEN_YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
 	public static final String DATE_PARTEN_YYMMDD = "yyMMdd";
 	public static final String DATE_PARTEN_YYMMDDHHMMSS = "yyMMddHHmmss";
+	public static final String formateStr19 = "yyyy-MM-dd HH:mm:ss";
 
 	public static boolean isToday(Date date) {
 		if (date != null) {
@@ -188,6 +189,14 @@ public class DateUtil {
 		return sdf.parse(str);
 	}
 
+	public static String convertDate2Str(Date date, String format){
+		if(date == null || StringUtils.isEmpty(format)){
+			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(date);
+	}
+
 	/**
 	 * 
 	 * @param date
@@ -271,7 +280,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date getDateByCalculate(Date date, int type, int hourAmount) {
-		java.util.Calendar Cal=java.util.Calendar.getInstance();    
+		Calendar Cal=Calendar.getInstance();
 		Cal.setTime(date);
 		Cal.add(type, hourAmount);
 		return Cal.getTime();

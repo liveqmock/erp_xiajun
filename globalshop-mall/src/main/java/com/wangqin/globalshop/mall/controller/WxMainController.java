@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxSpecialPageDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallWxBannerDOMapper;
-import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.mall.dal.mapperExt.MallWxBannerDOMapperExt;
 import com.wangqin.globalshop.mall.dal.mapperExt.MallWxSpecialPageDOMapperExt;
 

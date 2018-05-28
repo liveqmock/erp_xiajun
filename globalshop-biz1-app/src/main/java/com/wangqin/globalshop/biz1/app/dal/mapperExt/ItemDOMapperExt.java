@@ -8,7 +8,14 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 
 
-public interface ItemDOMapperExt extends ItemDOMapper{
+/**
+ * Create by 777 on 2018/5/25
+ */
+public interface ItemDOMapperExt extends ItemDOMapper {
+
+	public List<ItemDO> selectBatchIds(List<Long> idList);
+
+	public void updateBatchById(List<ItemDO> itemDOList);
 
     Integer queryItemsCount(ItemQueryVO itemQueryVO);
 	

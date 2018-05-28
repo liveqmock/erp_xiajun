@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
-import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 
 @Controller
