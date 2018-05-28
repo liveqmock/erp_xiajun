@@ -9,10 +9,10 @@ target/
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-.idea
-.project
-.settings
-.classpath
+.idea/
+.project/
+.settings/
+.classpath/
 # Package Files #
 *.jar
 *.war
@@ -24,3 +24,9 @@ target/
 *.iml
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+globalshop-biz1-api/.classpath
+globalshop-biz1-app/.classpath
+globalshop-common/.classpath
+globalshop-item-app/.classpath
+globalshop-mall/.classpath
+globalshop-web/.classpath

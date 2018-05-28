@@ -8,7 +8,7 @@
 	</sql>
 
 	<!--查询总条数 -->
-	<select id="queryBrandCount" resultMap="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
+	<select id="queryBrandCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
 		SELECT COUNT(*) 
 		FROM brand T1 
 		WHERE 1=1 
@@ -21,7 +21,7 @@
 	</select>
 
 	<!--分页查询 -->
-	<select id="queryBrands" resultMap="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
+	<select id="queryBrands" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
 		SELECT <include refid="Base_Column_List" /> 
 		FROM brand T1 
 		WHERE 1=1 
@@ -37,14 +37,14 @@
 	</select>
 	
 	<!--总查询 -->
-	<select id="queryAllBrand" resultMap="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+	<select id="queryAllBrand" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
 		SELECT 
 		concat(name,"->",IFNULL(name_china, "")) as name 
 		FROM brand
 		WHERE 1=1
 	</select>
 
-	<select id="selectByName" resultMap="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
+	<select id="selectByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
 		SELECT 
 		<include refid="Base_Column_List" />
 		FROM brand T1 

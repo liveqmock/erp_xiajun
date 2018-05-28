@@ -6,7 +6,7 @@
 		id,name,package_en AS packageEn,package_level AS packageLevel,package_id AS packageId,weight
 	</sql>
 	
-	<select id="queryPackageLevelsCount" resultMap="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO">
+	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO">
         SELECT
         	count(1)
         FROM
@@ -28,7 +28,7 @@
             
     </select>
     
-    <select id="queryPackageLevels" resultMap="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO">
+    <select id="queryPackageLevels" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO">
         SELECT
         	 <include refid="Base_Column_List" />
         FROM
