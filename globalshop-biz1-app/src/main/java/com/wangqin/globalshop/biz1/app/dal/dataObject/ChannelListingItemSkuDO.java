@@ -9,7 +9,7 @@ public class ChannelListingItemSkuDO {
 
     private String skuCode;
 
-    private Integer platformType;
+    private Byte platformType;
 
     private String channelItemSkuCode;
 
@@ -49,11 +49,11 @@ public class ChannelListingItemSkuDO {
         this.skuCode = skuCode == null ? null : skuCode.trim();
     }
 
-    public Integer getPlatformType() {
+    public Byte getPlatformType() {
         return platformType;
     }
 
-    public void setPlatformType(Integer platformType) {
+    public void setPlatformType(Byte platformType) {
         this.platformType = platformType;
     }
 

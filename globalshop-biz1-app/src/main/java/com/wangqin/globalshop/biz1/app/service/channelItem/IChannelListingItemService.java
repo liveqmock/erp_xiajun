@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.biz1.app.service.channelItem;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
 
 /**
  *
@@ -8,20 +7,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
  *
  */
 public interface IChannelListingItemService  {
-
-	public int deleteByPrimaryKey(Long id);
-
-	public int insert(ChannelListingItemDO record);
-
-	public int insertSelective(ChannelListingItemDO record);
-
-	public ChannelListingItemDO selectByPrimaryKey(Long id);
-
-	public int updateByPrimaryKeySelective(ChannelListingItemDO record);
-
-	public int updateByPrimaryKey(ChannelListingItemDO record);
-
-	public ChannelListingItemDO queryPo(ChannelListingItemDO so);
 
 
 }
