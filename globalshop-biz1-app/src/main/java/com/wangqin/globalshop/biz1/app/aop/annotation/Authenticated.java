@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.biz1.app.aop.inter;
+package com.wangqin.globalshop.biz1.app.aop.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

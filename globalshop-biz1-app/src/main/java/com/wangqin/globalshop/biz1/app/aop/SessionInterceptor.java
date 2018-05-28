@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.biz1.app.aop.inter;
+package com.wangqin.globalshop.biz1.app.aop;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
