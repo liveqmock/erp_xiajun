@@ -14,13 +14,13 @@ import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 
 public interface ItemBrandDOMapperExt  extends ItemBrandDOMapper {
 	    //获取条数
-		Integer queryItemBrandCount(ItemBrandQueryVO brandQueryVO);
+		Integer queryBrandCount(ItemBrandQueryVO brandQueryVO);
 		
 		//分页查询
-		List<ItemBrandDO> queryItemBrands(ItemBrandQueryVO brandQueryVO);
+		List<ItemBrandDO> queryBrands(ItemBrandQueryVO brandQueryVO);
 
 		//总查询
-		List<ItemBrandDO> queryAllItemBrand();
+		List<ItemBrandDO> queryItemBrand();
 
 	    ItemBrandDO selectByName(String name);
 }

@@ -23,7 +23,7 @@ import com.google.common.collect.Table;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
-import com.wangqinauth.commons.shiro.ShiroUser;
+
 
 @Service
 public class InventoryServiceImpl  implements IInventoryService {

@@ -1,19 +1,17 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.ShippingPackingPatternDOMapper;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemBrandDOMapperExt;
+
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingPackingPatternDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
+
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
 

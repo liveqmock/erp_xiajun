@@ -12,42 +12,20 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 
-
-
-
 @Controller
-@RequestMapping(value = "/brand")
-public class ItemBrandController{
-	
+@RequestMapping(value = "/item/brand")
+public class ItemBrandController {
+
 	@Autowired
-    private IItemBrandService itemBrandService;
-	
-	/*
-	@RequestMapping(value = "/add")
-	@ResponseBody
-    public Object addBrand(ItemBrandDO itemBrandDO){
-		JsonResult<ItemBrandDO> result = new JsonResult<>();
-        itemBrandDO.setBrandNo("12");
-        itemBrandDO.setCreator("xiajun");
-        itemBrandDO.setModifier("xiaJun");
-        itemBrandDO.setGmtCreate(new Date());
-        itemBrandDO.setIsDel(false);
-        itemBrandDO.setName("ASML");
-        itemBrandDO.setNameAlias("mi");
-        itemBrandDO.setNameChina("光科技");
-        itemBrandDO.setSeq(null);
-        itemBrandDO.setGmtModify(new Date());
-        itemBrandService.add(itemBrandDO);
-        System.out.println("添加品牌成功");
-	    return result.buildMsg("添加品牌成功").buildIsSuccess(true);
-   
-    }*/
-	
+	private IItemBrandService itemBrandService;
+
+
 
 	/**
-	 * 添加品牌
+	 * 添加品牌(fin)
 	 *
 	 * @param
 	 * @return
@@ -56,24 +34,30 @@ public class ItemBrandController{
 	@ResponseBody
 	public Object add(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		if (brand.getId() != null) {
-			return result.buildMsg("新增品牌ID有值").buildIsSuccess(false);
-		}
-		if(StringUtil.isBlank(brand.getName())) {
-			return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
-		}
+		//brand.setName("mingzi");
+		//brand.setNameChina("中文名");
+		//brand.setNameAlias("别名");
+		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
+		brand.setCreator("admin");
+		brand.setModifier("admin");
+		// if (brand.getId() != null) {
+		// return result.buildMsg("新增品牌ID有值").buildIsSuccess(false);
+		// }
+		// if(StringUtil.isBlank(brand.getName())) {
+		// return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
+		// }
 		/**
 		 * @author XiaJun，禁止重复品牌提交，英文名重复即视为重复
 		 */
-		if(itemBrandService.selectByName(brand.getName()) != null) {
-			return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
-		}
-		itemBrandService.add(brand);
+		// if(itemBrandService.selectByName(brand.getName()) != null) {
+		// return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+		// }
+		itemBrandService.addBrand(brand);
 		return result.buildIsSuccess(true);
 	}
-	
+
 	/**
-	 * 根据id查找品牌
+	 * 根据id查找品牌(fin)
 	 *
 	 * @param
 	 * @return
@@ -88,7 +72,7 @@ public class ItemBrandController{
 	}
 
 	/**
-	 * 修改品牌
+	 * 修改品牌(fin)
 	 * 
 	 * @param category
 	 * @return
@@ -97,18 +81,18 @@ public class ItemBrandController{
 	@ResponseBody
 	public Object update(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		if (brand.getId() == null) {
+		/*if (brand.getId() == null) {
 			return result.buildMsg("新增品牌ID为空").buildIsSuccess(false);
 		}
-		if(StringUtil.isBlank(brand.getName())) {
+		if (StringUtil.isBlank(brand.getName())) {
 			return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
-		}
+		}*/
 		itemBrandService.updateBrand(brand);
 		return result.buildIsSuccess(true);
 	}
-	
+
 	/**
-	 * 删除品牌
+	 * 删除品牌(fin)
 	 *
 	 * @param
 	 * @return
@@ -122,7 +106,7 @@ public class ItemBrandController{
 	}
 
 	/**
-	 * 分页查询
+	 * 分页查询(fin)
 	 */
 	@RequestMapping("/queryBrands")
 	@ResponseBody
@@ -133,13 +117,15 @@ public class ItemBrandController{
 	}
 
 	/**
-	 * 总查询
+	 * 总查询(unuse)
 	 */
+	/*
 	@RequestMapping("/queryAllBrand")
 	@ResponseBody
 	public Object queryItemBrandDOpage(ItemBrandDO brand) {
 		JsonResult<List<ItemBrandDO>> result = itemBrandService.queryAllBrand();
 		return result.buildIsSuccess(true);
 	}
-	
+	*/
+
 }

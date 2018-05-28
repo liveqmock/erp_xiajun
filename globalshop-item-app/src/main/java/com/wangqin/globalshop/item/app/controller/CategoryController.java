@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.util.Date;
+
 import java.util.List;
 
 
@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
-import com.wangqinauth.commons.shiro.ShiroUser;
+
 
 @Controller
 @RequestMapping("/category")
@@ -36,12 +38,12 @@ public class CategoryController  {
 		//category.setCategoryCode("0000000");//XiaJun，在确定了category_code的生成方式之后，再重写这一句
 		//ShiroUser shiroUser = this.getShiroUser();
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
-		if (category.getpCode() == null) {
-			category.setpCode("0000");
-			category.setLevel(0);
-			
+		if (category.getpCode() == null) {//添加一级类目
+			category.setpCode("0000000000");
+			category.setLevel(1);			
 		} else {
-			ItemCategoryDO categoryP = categoryService.queryByCategoryCode(category.getCategoryCode());
+			category.setpCode("0000000000");
+			ItemCategoryDO categoryP = categoryService.queryByCategoryCode(category.getpCode());
 			if (categoryP == null) {
 				return result.buildIsSuccess(false).buildMsg("not find parent category!");
 			} else {
@@ -62,7 +64,9 @@ public class CategoryController  {
 			}
 		}
 		
+		category.setCategoryCode(RandomUtils.getTimeRandom());
 		category.setCreator("admin");
+		category.setModifier("admin");
 		category.setStatus(1);//设置为有效状态
 		categoryService.insert(category);
 		return result.buildIsSuccess(true);
@@ -159,7 +163,7 @@ public class CategoryController  {
 	
 	
 	/**
-	 * 类目管理列表
+	 * 查询所有类目(fin)
 	 *
 	 * @return
 	 */
@@ -180,7 +184,7 @@ public class CategoryController  {
 	@RequestMapping("/tree")
 	@ResponseBody
 	public Object tree() {
-		JsonResult<List<ItemCategoryDO>> result = new JsonResult<>();
+		JsonResult<List<ItemCategoryDTO>> result = new JsonResult<>();
 		result.setData(categoryService.tree());
 		result.setSuccess(true);
 		return result;

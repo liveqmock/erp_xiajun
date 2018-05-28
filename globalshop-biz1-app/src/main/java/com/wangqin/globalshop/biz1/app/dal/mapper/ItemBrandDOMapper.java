@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.mapper;
 
-import com.baomidou.mybatisplus.mapper.AutoMapper;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 
 

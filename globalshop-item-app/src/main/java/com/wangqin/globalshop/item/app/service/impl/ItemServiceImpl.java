@@ -22,15 +22,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.alibaba.druid.sql.ast.expr.SQLCaseExpr.Item;
-import com.google.common.collect.Lists;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.common.utils.ShiroUtil;
 import com.wangqin.globalshop.item.app.service.IFreightService;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
@@ -196,7 +192,7 @@ public class ItemServiceImpl implements IItemService {
 	public JsonPageResult<List<ItemDO>> queryItems(ItemQueryVO itemQueryVO) {
 		JsonPageResult<List<ItemDO>> itemResult = new JsonPageResult<>();
 		
-		itemQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
+		//itemQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
 		
 		//1、查询总的记录数量
 		Integer totalCount =   itemDOMapperExt.queryItemsCount(itemQueryVO);
