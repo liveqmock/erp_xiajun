@@ -1,19 +1,14 @@
 package com.wangqin.globalshop.biz1.app.service;
 
 
+import org.springframework.stereotype.Service;
+
 import com.wangqin.globalshop.biz1.api.AppApi;
 import com.wangqin.globalshop.biz1.api.dto.ConfigDTO;
 import com.wangqin.globalshop.biz1.api.dto.request.AppRequest;
 import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
-//import com.wangqin.globalshop.biz1.app.dal.dataObject.ConfigDO;
-//import com.wangqin.globalshop.biz1.app.dal.mapperExt.ConfigDOMapperExt;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.LogWorker;
-import com.wangqin.globalshop.common.utils.ValidateUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by Patrick on 2018/5/15.

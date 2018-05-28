@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.item.app.dal.mapperExt.ItemBrandDOMapperExt" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemBrandDOMapperExt" >
 <!-- 通用查询结果列 -->
 	<sql id="Base_Column_List">
 		T1.id,T1.name,T1.name_china AS nameChina,T1.name_alias AS nameAlias,

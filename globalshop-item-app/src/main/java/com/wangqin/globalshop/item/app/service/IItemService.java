@@ -19,7 +19,9 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
 public interface IItemService {
 
-
+	ItemDO queryItemByItemCode(String itemCode);
+	
+	ItemDO selectByPrimaryKey(Long id);
 	/**
 	 * add item 
 	 * @param item

@@ -1,30 +1,23 @@
 package com.wangqin.globalshop.common.utils;
 
-import java.util.ResourceBundle;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * 读取系统配置信息
  * 
  * @author Sivan
  */
-public final class ResourceUtil {
 
-    private final static Log      log = LogFactory.getLog(ResourceUtil.class);
+public final class ResourceUtil {
 
     private static ResourceBundle system;
     static {
         try {
-            system = ResourceBundle.getBundle("systemConfig");
+            system = ResourceBundle.getBundle("/config/application");
         } catch (Exception e) {
-            log.error("systemConfig.properties Not Found,", e);
+            System.out.println("application.properties Not Found,");
         }
     }
 
     /**
-     * 读取systemConfig.properties文件里面的值
      * 
      * @param key
      * @return

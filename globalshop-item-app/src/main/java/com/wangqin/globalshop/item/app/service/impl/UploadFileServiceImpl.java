@@ -30,7 +30,7 @@ public class UploadFileServiceImpl implements IUploadFileService {
 	
 //	private String urlhead = "http://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/";
 	private String urlhead = "http://img.haihu.com/";
-	
+	 
 	@Override
 	public String uploadImg(InputStream inputStream, String picKey) {
 		 ObjectMetadata objectMeta = new ObjectMetadata();

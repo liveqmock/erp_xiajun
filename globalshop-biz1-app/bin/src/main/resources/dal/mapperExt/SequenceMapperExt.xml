@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.item.app.dal.mapper.SequenceDOMapper">
+
+	<!-- item -->
+    <select id="gainItemSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('ITEM');
+    </select>
+    
+	<!-- item_sku 根据itemCode来,无用-->
+    <select id="gainSkuSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('SKU');
+    </select>
+    
+    <!-- purchase_storage 入库单 -->
+    <select id="gainPOSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('PO');
+    </select>
+    <!-- erp_order 子订单号 根据orderNo来,无用-->
+    <select id="gainERPOSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('ERPO');
+    </select>
+    
+    <!-- Receipt ORDER 小票订单号 -->
+    <select id="gainRECOSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('RECO');
+    </select>
+    
+     <!--  outer_order 主订单号 -->
+    <select id="gainORDSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('ORD');
+    </select>
+    
+    <!--  shipping_order 发货单号(包裹号) -->
+    <select id="gainPKGSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('PKG');
+    </select>
+    
+    <!--  task_daily 采购任务单号 -->
+    <select id="gainTASKSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('TASK');
+    </select>
+    
+    <!--  task_daily 出库单号 -->
+    <select id="gainINVOUTSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('IOUT');
+    </select>
+    
+</mapper>
