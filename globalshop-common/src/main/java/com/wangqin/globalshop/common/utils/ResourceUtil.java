@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.common.utils;
-
+import java.util.ResourceBundle;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 /**
  * 读取系统配置信息
  * 
@@ -7,7 +9,7 @@ package com.wangqin.globalshop.common.utils;
  */
 
 public final class ResourceUtil {
-
+    private final static Log      log = LogFactory.getLog(ResourceUtil.class);
     private static ResourceBundle system;
     static {
         try {

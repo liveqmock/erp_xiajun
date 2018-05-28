@@ -1,8 +1,6 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.util.Date;
 import java.util.List;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +13,6 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
-import com.wangqinauth.commons.shiro.ShiroUser;
 
 @Controller
 @RequestMapping("/category")

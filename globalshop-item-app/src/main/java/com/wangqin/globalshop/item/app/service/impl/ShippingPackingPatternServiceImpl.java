@@ -1,7 +1,17 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
 
-import src.main.java.com.wangqin.globalshop.item.app.service.IShippingPackingPatternService;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingPackingPatternDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
+import com.wangqin.globalshop.item.app.service.IShippingPackingPatternService;
 
 
 
