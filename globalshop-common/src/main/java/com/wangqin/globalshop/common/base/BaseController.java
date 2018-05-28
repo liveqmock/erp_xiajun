@@ -9,8 +9,8 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import com.wangqin.globalshop.common.result.Result;
-import com.wangqin.globalshop.common.utils.StringTrimEditor;
+import src.main.java.com.wangqin.globalshop.common.result.Result;
+import src.main.java.com.wangqin.globalshop.common.utils.StringTrimEditor;
 
 
 /**
