@@ -11,13 +11,13 @@ public class ShippingOrderDO {
 
     private String logisticCompany;
 
-    private Byte type;
+    private Integer type;
 
-    private Byte status;
+    private Integer status;
 
-    private Byte transferStatus;
+    private Integer transferStatus;
 
-    private Byte syncSendStatus;
+    private Integer syncSendStatus;
 
     private String tplPkgStatus;
 
@@ -63,6 +63,8 @@ public class ShippingOrderDO {
 
     private String modifier;
 
+    private String logisticType;
+
     public Long getId() {
         return id;
     }
@@ -95,35 +97,35 @@ public class ShippingOrderDO {
         this.logisticCompany = logisticCompany == null ? null : logisticCompany.trim();
     }
 
-    public Byte getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Byte getTransferStatus() {
+    public Integer getTransferStatus() {
         return transferStatus;
     }
 
-    public void setTransferStatus(Byte transferStatus) {
+    public void setTransferStatus(Integer transferStatus) {
         this.transferStatus = transferStatus;
     }
 
-    public Byte getSyncSendStatus() {
+    public Integer getSyncSendStatus() {
         return syncSendStatus;
     }
 
-    public void setSyncSendStatus(Byte syncSendStatus) {
+    public void setSyncSendStatus(Integer syncSendStatus) {
         this.syncSendStatus = syncSendStatus;
     }
 
@@ -301,5 +303,13 @@ public class ShippingOrderDO {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getLogisticType() {
+        return logisticType;
+    }
+
+    public void setLogisticType(String logisticType) {
+        this.logisticType = logisticType == null ? null : logisticType.trim();
     }
 }

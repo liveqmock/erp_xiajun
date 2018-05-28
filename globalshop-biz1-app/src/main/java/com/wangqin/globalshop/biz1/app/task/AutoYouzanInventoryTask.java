@@ -9,11 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
-import com.wangqin.enums.GeneralStatus;
-import com.wangqin.model.InventoryListener;
-import com.wangqin.service.IInventoryListenerService;
 
 /**
  * 根据数据库监听同步库存到有赞

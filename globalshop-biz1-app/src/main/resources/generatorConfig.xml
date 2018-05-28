@@ -134,9 +134,9 @@
         <!--</table>-->
 
         <!--<table tableName="channel_listing_item_sku" domainObjectName="ChannelListingItemSkuDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-          <!--<generatedKey column="id" sqlStatement="MySql"/>-->
-        <!--</table>-->
+                       <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+    <!--</table>-->
 
         <!--<table tableName="channel_sale_price" domainObjectName="ChannelSalePriceDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -148,10 +148,10 @@
           <!--<generatedKey column="id" sqlStatement="MySql"/>-->
         <!--</table>-->
 
-        <table tableName="company" domainObjectName="CompanyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false" >
-          <generatedKey column="id" sqlStatement="MySql"/>
-        </table>
+        <!--<table tableName="company" domainObjectName="CompanyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+          <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
 
         <!--<table tableName="country" domainObjectName="CountryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -310,10 +310,10 @@
         <!--<table tableName="sequence" domainObjectName="SequenceDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" />-->
 
-        <!--<table tableName="shipping_order" domainObjectName="ShippingOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-          <!--<generatedKey column="id" sqlStatement="MySql"/>-->
-        <!--</table>-->
+        <table tableName="shipping_order" domainObjectName="ShippingOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+          <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
 
         <!--<table tableName="shipping_packaging_pattern" domainObjectName="ShippingPackingPatternDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->

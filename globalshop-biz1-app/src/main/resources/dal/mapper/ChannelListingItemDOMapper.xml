@@ -7,9 +7,9 @@
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="channel_item_code" property="channelItemCode" jdbcType="VARCHAR" />
-    <result column="shop_code" property="shopCode" jdbcType="BIGINT" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
     <result column="channel_item_alias" property="channelItemAlias" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
@@ -40,8 +40,8 @@
       gmt_create, gmt_modify, creator, 
       modifier)
     values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, 
-      #{companyNo,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, #{shopCode,jdbcType=BIGINT}, 
-      #{channelItemAlias,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{isDel,jdbcType=BIT}, 
+      #{companyNo,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
+      #{channelItemAlias,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{isDel,jdbcType=BIT}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
@@ -104,13 +104,13 @@
         #{channelItemCode,jdbcType=VARCHAR},
       </if>
       <if test="shopCode != null" >
-        #{shopCode,jdbcType=BIGINT},
+        #{shopCode,jdbcType=VARCHAR},
       </if>
       <if test="channelItemAlias != null" >
         #{channelItemAlias,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=TINYINT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
@@ -145,13 +145,13 @@
         channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
       </if>
       <if test="shopCode != null" >
-        shop_code = #{shopCode,jdbcType=BIGINT},
+        shop_code = #{shopCode,jdbcType=VARCHAR},
       </if>
       <if test="channelItemAlias != null" >
         channel_item_alias = #{channelItemAlias,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
@@ -177,9 +177,9 @@
       channel_no = #{channelNo,jdbcType=VARCHAR},
       company_no = #{companyNo,jdbcType=VARCHAR},
       channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
-      shop_code = #{shopCode,jdbcType=BIGINT},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
       channel_item_alias = #{channelItemAlias,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       is_del = #{isDel,jdbcType=BIT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
