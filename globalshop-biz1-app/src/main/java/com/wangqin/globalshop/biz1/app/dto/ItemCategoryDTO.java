@@ -44,6 +44,14 @@ public class ItemCategoryDTO {
 	public void setChildren(List<ItemCategoryDTO> children) {
 		this.children = children;
 	}
+	
+	public String getValue(){
+		return this.id+"";
+	}
+	
+	public String getLabel(){
+		return this.name;
+	}
 
 	public Long getId() {
         return id;
