@@ -25,5 +25,5 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 
     List<MallSubOrderDO> queryByOrderId(List<Long> erpOrderIdList);
 
-	String selectPositionNoByOrderId(Long id);
+	String selectPositionNoByOrderId(String orderNo);
 }

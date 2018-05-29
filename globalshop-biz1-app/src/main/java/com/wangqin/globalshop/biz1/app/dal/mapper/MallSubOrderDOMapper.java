@@ -1,9 +1,10 @@
 package com.wangqin.globalshop.biz1.app.dal.mapper;
 
-import com.baomidou.mybatisplus.mapper.AutoMapper;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 
-public interface MallSubOrderDOMapper extends AutoMapper<MallSubOrderDO> {
+import java.util.List;
+
+public interface MallSubOrderDOMapper {
     int deleteByPrimaryKey(Long id);
 
     int insert(MallSubOrderDO record);
@@ -15,4 +16,7 @@ public interface MallSubOrderDOMapper extends AutoMapper<MallSubOrderDO> {
     int updateByPrimaryKeySelective(MallSubOrderDO record);
 
     int updateByPrimaryKey(MallSubOrderDO record);
+
+    List<MallSubOrderDO> selectList(MallSubOrderDO order);
+
 }
