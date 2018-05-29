@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.order.app.service.shipping.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
@@ -114,9 +113,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             tjErpOrder.setStatus((byte) 0);								//订单状态：新建
             //tjErpOrder.setStockStatus(erpOrder.getStockStatus());	//备货状态：已备货
             //tjErpOrder.setWarehouseId(erpOrder.getWarehouseId());	//相同仓库
-            EntityWrapper<MallSubOrderDO>  entityWrapper = new EntityWrapper<>();
-            entityWrapper.setEntity(tjErpOrder);
-            List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectList(entityWrapper);
+            List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectList(tjErpOrder);
             for(int i=0; i<selErpOrderList.size(); i++) {
                 MallSubOrderDO selErpOrder= selErpOrderList.get(i);
                 //不在同一仓库的情况，不用考虑
@@ -125,7 +122,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 }
                 //在同一仓库的或者未备货的
                 if(!erpOrderIdSet.contains(selErpOrder.getId())) {
-                    String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(selErpOrder.getId());
+                    String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(selErpOrder.getOrderNo());
                     // TODO: 18.5.28 Biscuits
                     /* selErpOrder.setPositionNo(positionNoStr);*/
                     totalMallSubOrderList.add(selErpOrder);
@@ -162,7 +159,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         List<MallSubOrderDO> ErpOrderList = mallSubOrderMapper.queryByOrderId(erpOrderIdList);
         ErpOrderList.forEach(erpOrder ->{
             //在同一仓库的或者未备货的
-            String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(erpOrder.getId());
+            String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(erpOrder.getOrderNo());
             // TODO: 18.5.28 Biscuits
 //            erpOrder.setPositionNo(positionNoStr);
         });
@@ -175,11 +172,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             if (mainId != null) {
                 MallOrderDO outerOrder = mallOrderService.selectById(mainId);
                 if (outerOrder != null) {
-                    EntityWrapper<MallSubOrderDO> entityWrapper = new EntityWrapper<>();
                     //entityWrapper.where("outer_order_id={0} and status=0", mainId);
                     //int count = erpOrderService.selectCount(entityWrapper);
-                    entityWrapper.where("outer_order_id={0}", mainId);
-                    List<MallSubOrderDO> erpOrderList = mallSubOrderService.selectList(entityWrapper);
+                    List<MallSubOrderDO> erpOrderList = mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
                     int totalCount = erpOrderList.size();
                     int initCount = 0;
                     int sentCount = 0;
