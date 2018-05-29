@@ -32,21 +32,24 @@
         SELECT
         	 <include refid="Base_Column_List" />
         FROM
-            `package_level` T1
+            `shipping_packing_pattern` T1
         where
-             1=1
+             T1.is_del=0
             <if test=" name != null and name != '' ">
                 and T1.name = #{name}
             </if>
             <if test=" packageEn != null and packageEn != '' ">
-            	and T1.package_en = #{packageEn}
+            	and T1.name_en = #{packageEn}
             </if>
+            <!--  
             <if test=" packageLevel != null ">
             	and T1.package_level = #{packageLevel}
             </if>
+           
             <if test=" packageId != null ">
             	and T1.package_id = #{packageId}
             </if>
+             -->
           order by T1.id 
           	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>

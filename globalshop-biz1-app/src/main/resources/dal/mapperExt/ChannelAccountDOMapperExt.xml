@@ -4,6 +4,12 @@
 
     <sql id="tableSection">channel_account</sql>
 
+	
+    <sql id="Base_Column_List">
+        T1.type,T1.channel_name AS channelName,T1,status 
+    </sql>
+
+
 
 
 
@@ -68,5 +74,25 @@
         ORDER BY T.id desc
     </select>
     -->
+    
+    <!--分页查询 -->
+	<select id="queryChannelAccountList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO">
+		SELECT <include refid="Base_Column_List" /> 
+		FROM channel_account T1 
+		WHERE T1.is_del=0
+		<if test=" name != null and name != '' ">
+			and T1.channel_name LIKE concat('%',#{name},'%')
+        </if>
+         <if test=" type != null ">
+			and T1.type = #{type}
+        </if>
+        <if test=" status != null ">
+			and T1.status = #{status}
+        </if>
+        <if test=" companyId != null ">
+			and T1.company_no = #{companyNo}
+        </if>
+        ORDER BY T1.id desc
+	</select>
 
 </mapper>

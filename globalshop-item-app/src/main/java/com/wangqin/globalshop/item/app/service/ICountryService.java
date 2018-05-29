@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.baomidou.framework.service.ISuperService;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 
 /**
  * Country Service层接口
@@ -31,7 +32,7 @@ public interface ICountryService {
 	/**
 	 * 查找所有国家
 	 */
-	//JsonPageResult<List<Country>> queryAllCountries();
+	JsonPageResult<List<CountryDO>> queryAllCountries();
 	
 	CountryDO queryCountrySelective(CountryDO countryDO);
 }

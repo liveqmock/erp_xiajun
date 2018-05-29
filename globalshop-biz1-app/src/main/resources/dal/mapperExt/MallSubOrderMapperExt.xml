@@ -27,12 +27,12 @@
 
     <update id="updateUpcForOuterOrderDetail"
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
-		UPDATE outer_order_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}
+		UPDATE mall_sub_order SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_code=#{skuCode}
     </update>
 
     <update id="updateWeightForOuterOrderDetail"
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
-		UPDATE outer_order_detail SET weight=#{weight} WHERE (weight!=#{weight} or weight is null) and sku_id=#{skuId}
+		UPDATE mall_sub_order SET weight=#{weight} WHERE (weight!=#{weight} or weight is null) and sku_code=#{skuCode}
     </update>
     <select id="queryByOrderId" resultMap="BaseResultMap">
         SELECT
@@ -69,9 +69,9 @@
             #{item}
         </foreach>
     </select>
-    <select id="selectPositionNoByOrderId" resultType="java.lang.String" parameterType="java.lang.Long">
+    <select id="selectPositionNoByOrderId" resultType="java.lang.String" parameterType="java.lang.String">
       SELECT group_concat(CONCAT(position_no, ':', booked_quantity))
             FROM inventory_booking_record
-            WHERE order_no = #{erpOrderId}
+            WHERE order_no = #{orderNo}
     </select>
 </mapper>

@@ -17,13 +17,16 @@
 	</select>
 	-->
 	
-	<!--查询所有国家 
-	<select id="queryAllCountries" resultType="com.wangqin.model.Country" >
-		SELECT 
-		id,name
-		FROM country
+	<!--查询所有国家 -->
+	<select id="queryAllCountries" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
+		select
+    	<include refid="Base_Column_List" />
+     	FROM country
+     	<where>
+        is_del=0
+        </where>
 	</select>
-	-->
+	
 	
 	<select id="queryCountrySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
    		select

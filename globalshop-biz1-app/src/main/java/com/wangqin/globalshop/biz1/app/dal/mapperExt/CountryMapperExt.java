@@ -28,7 +28,7 @@ public interface CountryMapperExt extends CountryDOMapper{
 	 * 查找所有国家
 	 * @return
 	 */
-	//List<Country> queryAllCountries();
+	List<CountryDO> queryAllCountries();
 	
 	CountryDO queryCountrySelective(CountryDO countryDO);
 }

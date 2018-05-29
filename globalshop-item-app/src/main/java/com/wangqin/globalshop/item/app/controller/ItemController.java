@@ -25,8 +25,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-
-
+import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
@@ -39,6 +38,7 @@ import com.wangqin.globalshop.common.utils.ImageUtil;
 
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.item.app.enums.ChannelType;
+import com.wangqin.globalshop.item.app.service.IBuyerService;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
@@ -83,6 +83,11 @@ public class ItemController  {
 
 	@Autowired
 	private ICountryService countryService;
+	
+	@Autowired
+	private IBuyerService buyerService;
+	
+	
 	
 	
 	public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
@@ -721,21 +726,20 @@ public class ItemController  {
 	}
 	
 	/**
-	 * 查询买手列表(原来的注释叫查询意大利买手列表)
+	 * 查询买手列表
 	 * @return
 	 */
-	/**
 	@RequestMapping("/queryAllItaliaBuyer")
 	@ResponseBody
 	public Object queryAllItaliaBuyer() {
-		logger.info("voidDimensionCodeUtil start");
-		EntityWrapper<WxPurchaseUser> entityWrapper = new EntityWrapper<WxPurchaseUser>();
-		entityWrapper.orderBy("gmt_create");
-        Integer powerCode = 0;
-		entityWraspper.where("power_code > {0}",powerCode);
-		List<WxPurchaseUser> buyers = wxPurchaseUserService.selectList(entityWrapper);
+		//logger.info("voidDimensionCodeUtil start");
+		//EntityWrapper<BuyerDO> entityWrapper = new EntityWrapper<BuyerDO>();
+		//entityWrapper.orderBy("gmt_create");
+        //Integer powerCode = 0;
+		//entityWrapper.where("power_code > {0}",powerCode);
+		List<BuyerDO> buyers = buyerService.queryAllBuyers();
 		return JsonResult.buildSuccess(buyers);
-	}*/
+	}
 	
 	
 	
