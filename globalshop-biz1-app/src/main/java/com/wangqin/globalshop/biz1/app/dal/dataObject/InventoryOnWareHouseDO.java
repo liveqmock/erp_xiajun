@@ -4,10 +4,12 @@ import java.util.Date;
 
 public class InventoryOnWareHouseDO {
     private Long id;
-
+    
+    private String inventoryOnWarehouseNo;
+    
     private String companyNo;
 
-    private Long itemCode;
+	private Long itemCode;
 
     private String itemName;
 
@@ -52,6 +54,14 @@ public class InventoryOnWareHouseDO {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getInventoryOnWarehouseNo() {
+  		return inventoryOnWarehouseNo;
+  	}
+
+  	public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+  		this.inventoryOnWarehouseNo = inventoryOnWarehouseNo;
+  	}
 
     public String getCompanyNo() {
         return companyNo;

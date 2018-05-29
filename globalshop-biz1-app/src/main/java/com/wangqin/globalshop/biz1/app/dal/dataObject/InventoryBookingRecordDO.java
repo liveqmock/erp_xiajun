@@ -6,6 +6,8 @@ public class InventoryBookingRecordDO {
     private Long id;
 
     private String companyNo;
+    
+    private String inventoryOnWarehouseNo;
 
     private String orderNo;
 
@@ -48,8 +50,16 @@ public class InventoryBookingRecordDO {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public String getInventoryOnWarehouseNo() {
+		return inventoryOnWarehouseNo;
+	}
 
-    public String getCompanyNo() {
+	public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+		this.inventoryOnWarehouseNo = inventoryOnWarehouseNo;
+	}
+
+	public String getCompanyNo() {
         return companyNo;
     }
 

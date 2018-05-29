@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.mapper;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 
 import java.util.List;
 
@@ -19,4 +20,7 @@ public interface MallSubOrderDOMapper {
 
     List<MallSubOrderDO> selectList(MallSubOrderDO order);
 
+    List<MallSubOrderDO> selectBatchIds(List<Long> batchIds);
+
+    List<MallSubOrderDO> queryByShippingOrder(ShippingOrderVO shippingOrderQueryVO);
 }

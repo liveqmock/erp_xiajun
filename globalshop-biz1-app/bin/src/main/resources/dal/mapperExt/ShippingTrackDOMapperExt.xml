@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackDOMapperExt" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackDOMapperExt" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
+    <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
+    <result column="logistics_status" property="logisticsStatus" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="volume" property="volume" jdbcType="VARCHAR" />
+    <result column="totalfee" property="totalfee" jdbcType="DOUBLE" />
+    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    <result column="oversea_in_time" property="overseaInTime" jdbcType="TIMESTAMP" />
+    <result column="oversea_out_time" property="overseaOutTime" jdbcType="TIMESTAMP" />
+    <result column="oversea_on_transfer_time" property="overseaOnTransferTime" jdbcType="TIMESTAMP" />
+    <result column="inland_in_time" property="inlandInTime" jdbcType="TIMESTAMP" />
+    <result column="inland_out_time" property="inlandOutTime" jdbcType="TIMESTAMP" />
+    <result column="inland_express_company_code" property="inlandExpressCompanyCode" jdbcType="VARCHAR" />
+    <result column="inland_express_num" property="inlandExpressNum" jdbcType="VARCHAR" />
+    <result column="buyer_sign_time" property="buyerSignTime" jdbcType="TIMESTAMP" />
+    <result column="air_take_off" property="airTakeOff" jdbcType="VARCHAR" />
+    <result column="airlines" property="airlines" jdbcType="VARCHAR" />
+    <result column="flight" property="flight" jdbcType="VARCHAR" />
+    <result column="track_info" property="trackInfo" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_no, waybill_no, logistic_no, logistics_status, weight, volume, totalfee, 
+    receive_time, oversea_in_time, oversea_out_time, oversea_on_transfer_time, inland_in_time, 
+    inland_out_time, inland_express_company_code, inland_express_num, buyer_sign_time, 
+    air_take_off, airlines, flight, track_info, gmt_create, gmt_modify, is_del, creator, 
+    modifier
+  </sql>
+  <select id="queryShippingTrack" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_track
+    where  logistic_no= #{logisticNo}
+  </select>
+</mapper>

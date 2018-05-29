@@ -1,13 +1,12 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOnWareHouseDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -110,4 +109,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	void updateUpcForInventoryArea(MallOrderDO erpOrder);
 	
 	List<InventoryOnWareHouseDO> queryInventoryAreaForExcel(InventoryQueryVO inventoryQueryVO);
+
+    InventoryOnWareHouseDO selectById(Long inventoryAreaId);
+
 }

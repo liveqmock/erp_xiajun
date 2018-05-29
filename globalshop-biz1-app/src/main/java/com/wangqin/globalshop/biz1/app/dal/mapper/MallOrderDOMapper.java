@@ -13,6 +13,6 @@ public interface MallOrderDOMapper {
 
     int updateByPrimaryKeySelective(MallOrderDO record);
 
-    int updateByPrimaryKey(MallOrderDO record);
+
 
 }

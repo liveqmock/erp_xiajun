@@ -38,7 +38,7 @@ public interface IInventoryService {
 	 * @param skuId
 	 * @return
 	 */
-	InventoryDO queryInventoryBySkuId(Long itemId,Long skuId) ;
+	InventoryDO queryInventoryBySkuId(String itemId,String skuId) ;
 	
 	//int updateLockInventory(Long id , int booked, int transBooked);
 

@@ -64,6 +64,17 @@
         from mall_sub_order
         where id = #{id,jdbcType=BIGINT}
     </select>
+    <select id="selectBatchIds" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        mall_sub_order
+        WHERE
+        id IN
+        <foreach item="item" index="index" collection="batchIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
     <select id="selectList" resultMap="BaseResultMap"
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
         select
@@ -608,4 +619,21 @@
       is_del = #{isDel,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+    <select id="queryByShippingOrder" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mall_sub_order
+        <where>
+            <if test=" startOrderTime!=null">
+                and   <![CDATA[ T1.gmt_create >= #{startOrderTime} ]]>
+            </if>
+            <if test=" endOrderTime!=null">
+                and    <![CDATA[ T1.gmt_create <= #{endOrderTime} ]]>
+            </if>
+        </where>
+        order by id desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
 </mapper>

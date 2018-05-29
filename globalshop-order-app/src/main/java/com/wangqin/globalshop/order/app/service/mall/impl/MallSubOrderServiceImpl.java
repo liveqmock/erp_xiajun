@@ -2,6 +2,7 @@ package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper;
+import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,22 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         MallSubOrderDO mallSubOrderDO = new MallSubOrderDO();
         mallSubOrderDO.setOrderNo(mainId);
         return mallSubOrderDOMapper.selectList(mallSubOrderDO);
+    }
+
+    @Override
+    public List<MallSubOrderDO> selectBatchIds(List<Long> erpOrderIdList) {
+        return mallSubOrderDOMapper.selectBatchIds(erpOrderIdList);
+    }
+
+    @Override
+    public void updateBatchById(List<MallSubOrderDO> erpOrderList) {
+        for (MallSubOrderDO mallSubOrderDO : erpOrderList) {
+            mallSubOrderDOMapper.updateByPrimaryKey(mallSubOrderDO);
+        }
+    }
+
+    @Override
+    public List<MallSubOrderDO> queryByShippingOrder(ShippingOrderVO shippingOrderQueryVO) {
+        return mallSubOrderDOMapper.queryByShippingOrder(shippingOrderQueryVO);
     }
 }
