@@ -1,9 +1,8 @@
 package com.wangqin.globalshop.biz1.app.dto;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+
 import java.util.List;
-
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-
 
 
 public class MultiDeliveryFormDTO {
@@ -23,7 +22,15 @@ public class MultiDeliveryFormDTO {
 	private Double skuWeight;
 	private Double totalSalePrice;
 	
-	private List<MallOrderDO> erpOrderList;
+	private List<MallSubOrderDO> mallSubOrderList;
+
+	public List<MallSubOrderDO> getMallSubOrderList() {
+		return mallSubOrderList;
+	}
+
+	public void setMallSubOrderList(List<MallSubOrderDO> mallSubOrderList) {
+		this.mallSubOrderList = mallSubOrderList;
+	}
 
 	public String getErpOrderId() {
 		return erpOrderId;
@@ -83,13 +90,7 @@ public class MultiDeliveryFormDTO {
 		this.info = info;
 	}
 
-	public List<MallOrderDO> getErpOrderList() {
-		return erpOrderList;
-	}
 
-	public void setErpOrderList(List<MallOrderDO> erpOrderList) {
-		this.erpOrderList = erpOrderList;
-	}
 
 	public String getReceiverState() {
 		return receiverState;

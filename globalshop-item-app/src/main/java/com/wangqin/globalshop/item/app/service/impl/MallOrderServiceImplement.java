@@ -15,7 +15,7 @@ import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IMallOrderService;
 
 @Service
-public class MallOrderServiceImpl implements IMallOrderService {
+public class MallOrderServiceImplement implements IMallOrderService {
 
     @Autowired
     private MallOrderMapperExt            erpOrderMapper;

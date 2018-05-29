@@ -1,8 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.mapper;
 
+import com.baomidou.mybatisplus.mapper.AutoMapper;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 
-public interface MallSubOrderDOMapper {
+public interface MallSubOrderDOMapper extends AutoMapper<MallSubOrderDO> {
     int deleteByPrimaryKey(Long id);
 
     int insert(MallSubOrderDO record);
