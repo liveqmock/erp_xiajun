@@ -42,14 +42,14 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 		itemBrandDOMapperExt.updateByPrimaryKeySelective(brand);
 	}
 
-	/**
+	
 	@Override
 	public JsonPageResult<List<ItemBrandDO>> queryAllBrand() {
 		JsonPageResult<List<ItemBrandDO>> brandResult = new JsonPageResult<>();
-		List<ItemBrandDO> brandList = itemBrandDOMapperExt.queryAllItemBrand();
+		List<ItemBrandDO> brandList = itemBrandDOMapperExt.queryAllBrand();
 		brandResult.setData(brandList);
 		return brandResult;
-	}**/
+	}
 
 	//分页查询
 	@Override

@@ -31,10 +31,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 		return categoryMapper.selectAll();
 	}
 	
-	@Override
-	 public void deleteByPrimaryKey(Long id) {
-		 categoryMapper.deleteByPrimaryKey(id);
-	 }
+	
 
 	
 
@@ -75,7 +72,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 	@Override
 	public void update(ItemCategoryDO category) {
 		// TODO Auto-generated method stub
-		categoryMapper.updateByPrimaryKey(category);
+		categoryMapper.updateByPrimaryKeySelective(category);
 	}
 
 	@Override
@@ -120,9 +117,6 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 	@Override
 	public List<ItemCategoryDTO> tree() {
 		List<ItemCategoryDTO> cates = selectAllDTO();
-		for(ItemCategoryDTO d:cates) {
-			System.out.println(d.getName());
-		}
 		List<ItemCategoryDTO> cateListlevel1 = new ArrayList<>();
 		if(cates!=null&&!cates.isEmpty()){
 			Map<String,ItemCategoryDTO> categoryLevel1 = new HashMap<>();
@@ -145,10 +139,14 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 				}
 			});
 		}
-		System.out.println("adsf");
-		for(ItemCategoryDTO d:cateListlevel1) {
-			System.out.println(d.getName());
-		}
+
 		return cateListlevel1;
+	}
+
+	@Override
+	public void deleteById(ItemCategoryDO category) {
+		category.setIsDel(true);
+		categoryMapper.updateByPrimaryKeySelective(category);
+		
 	}
 }

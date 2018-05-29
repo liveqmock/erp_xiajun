@@ -24,7 +24,7 @@ public interface ItemBrandDOMapperExt  extends ItemBrandDOMapper {
 
 	    ItemBrandDO selectByName(String name);
 
-        List<ItemBrandDO> queryAllItemBrand();
+        List<ItemBrandDO> queryAllBrand();
 
         Integer queryItemBrandCount(ItemBrandQueryVO brandQueryVO);
 }

@@ -53,17 +53,26 @@ public class ItemServiceImplement implements IItemService {
 
     @Override
     public void addItem(ItemDO item) {
-        itemDOMapperExt.insertSelective(item);
-
-        /*
-         * List<ItemSkuDO> itemSkuList = item.getItemSkus(); if (itemSkuList != null && !itemSkuList.isEmpty()) {
-         * itemSkuList.forEach(itemSku -> { itemSku.setItemCode(item.getItemCode());
-         * itemSku.setItemName(item.getName()); itemSku.setItemId(item.getId());
-         * itemSku.setCategoryId(item.getCategoryId()); itemSku.setCategoryName(item.getCategoryName());
-         * itemSku.setBrand(item.getBrand()); itemSku.setCompanyId(item.getCompanyId()); skuFreight(itemSku); });
-         * itemSkuService.insertBatch(itemSkuList); List<InventoryDO> inventoryList =
-         * itemSkuService.initInventory(itemSkuList); inventoryService.insertBatch(inventoryList); }
-         */
+    	/**/
+    	
+    	itemDOMapperExt.insertSelective(item);	
+    	/**
+		List<ItemSku> itemSkuList = item.getItemSkus();
+		if (itemSkuList != null && !itemSkuList.isEmpty()) {
+			itemSkuList.forEach(itemSku -> {
+				itemSku.setItemCode(item.getItemCode());
+				itemSku.setItemName(item.getName());
+				itemSku.setItemId(item.getId());
+				itemSku.setCategoryId(item.getCategoryId());
+				itemSku.setCategoryName(item.getCategoryName());
+				itemSku.setBrand(item.getBrand());
+				itemSku.setCompanyId(item.getCompanyId());
+				skuFreight(itemSku);
+			});
+			itemSkuService.insertBatch(itemSkuList);
+			List<Inventory> inventoryList = itemSkuService.initInventory(itemSkuList);
+			inventoryService.insertBatch(inventoryList);
+		}**/
     }
 
     // 计算当前SKU的运费

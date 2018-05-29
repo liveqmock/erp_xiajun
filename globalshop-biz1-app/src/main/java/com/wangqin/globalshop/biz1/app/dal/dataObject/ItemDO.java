@@ -33,7 +33,7 @@ public class ItemDO {
 
     private String brandName;
 
-    private Byte country;
+    private String country;
 
     private Byte currency;
 
@@ -207,11 +207,11 @@ public class ItemDO {
         this.brandName = brandName == null ? null : brandName.trim();
     }
 
-    public Byte getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(Byte country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
