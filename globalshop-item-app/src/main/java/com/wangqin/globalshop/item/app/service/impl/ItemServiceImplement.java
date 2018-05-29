@@ -31,7 +31,7 @@ import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IUploadFileService;
 
 @Service
-public class ItemServiceImpl implements IItemService {
+public class ItemServiceImplement implements IItemService {
 
     @Autowired
     private ItemDOMapperExt    itemDOMapperExt;
