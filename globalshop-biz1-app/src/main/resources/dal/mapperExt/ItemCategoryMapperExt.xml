@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemCategoryDOMapperExt">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemCategoryMapperExt">
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, name, pid, level, seq,status,gmt_create as gmtCreate ,gmt_modify as gmtModify,all_path as allPath
+        id, category_code AS categoryCode,name, p_code AS pCode,root_code AS rootCode, seq,level,status,all_path as allPath,
+        gmt_create as gmtCreate ,gmt_modify as gmtModify,creator,modifier,is_del AS isDel
     </sql>
 	
 	<select id="selectByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" parameterType="java.lang.String">
@@ -14,22 +15,36 @@
 		WHERE name = #{name}
 	</select>
 	
-	<select id="queryByCategoryCode"> 
+	
+	
+	<!-- 查询所有类目 -->
+	<select id="selectAll" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO"> 
 	SELECT 
 	<include refid="Base_Column_List" />
-	from item_category
+	from item_category T1
 	<where>
-	category_code=#{categoryCode}
-	AND is_del=0
+      T1.is_del=0
 	</where>
 	</select>
 	
-	<select id="queryAll"> 
+	<!-- 查询所有类目,返回DTO -->
+	<select id="selectAllDTO" resultType="com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO"> 
 	SELECT 
 	<include refid="Base_Column_List" />
-	from item_category
+	from item_category T1
 	<where>
-      is_del=0
+      T1.is_del=0
+	</where>
+	</select>
+	
+	<!-- 根据索引查找 -->
+	<select id="queryByCategoryCode" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO"> 
+	SELECT 
+	<include refid="Base_Column_List" />
+	from item_category T1
+	<where>
+      T1.is_del=0
+      AND T1.category_code = #{categoryCode}
 	</where>
 	</select>
 </mapper>

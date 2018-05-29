@@ -2,7 +2,8 @@ package com.wangqin.globalshop.common.utils;
 
 import org.apache.shiro.SecurityUtils;
 
-import com.wangqinauth.commons.shiro.ShiroUser;
+import com.wangqin.globalshop.common.shiro.ShiroUser;
+
 
 public class ShiroUtil {
 	/**

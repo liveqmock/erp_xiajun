@@ -3,15 +3,12 @@ package com.wangqin.globalshop.item.app.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import javax.print.attribute.standard.RequestingUserName;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.google.common.collect.Lists;
 
 import com.google.common.base.Function;
-
+import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;

@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.wangqin.globalshop.common.result.Result;
-import com.wangqin.globalshop.common.utils.WebUtils;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.WebUtils;
 
 
 /**

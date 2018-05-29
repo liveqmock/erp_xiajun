@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.common.utils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @description：分页实体类 (结合jqery easyui)

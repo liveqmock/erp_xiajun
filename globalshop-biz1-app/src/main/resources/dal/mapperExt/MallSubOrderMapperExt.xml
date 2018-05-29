@@ -1,32 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt">
-
-	<!-- 通用查询结果列-->
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO"/>
+    <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
 		 T1.`id`,T1.`outer_order_id` as outerOrderId,T1.`item_id` as itemId,T1.`sku_id` as skuId,T1.`sku_code` as skuCode,T1.`sku_pic` as skuPic,T1.`logistic_type` as logisticType,T1.`upc`,T1.`item_name` as itemName,T1.`color`,T1.`scale`,T1.`freight`,T1.`sale_price` as salePrice,T1.`quantity`,T1.`user_create` as userCreate,T1.`user_modify` as userModify,T1.`gmt_create` as gmtCreate,T1.`gmt_modify` as gmtModify,T1.third_sku_code as thirdSkuCode 
 	</sql>
 
-	<update id="updateOuterOrderDetailByItemSku">
-		UPDATE outer_order_detail a 
-		LEFT JOIN item_sku b ON a.sku_code=b.sku_code 
-		SET a.item_id=b.item_id,a.sku_id=b.id,a.upc=b.upc,a.weight=b.weight,a.item_name=b.item_name,a.color=b.color,a.scale=b.scale,a.sku_pic=b.sku_pic,a.logistic_type=b.logistic_type 
-		WHERE a.outer_order_id IN 
-		<foreach item="item" index="index" collection="erpOrderIdList" open="(" separator="," close=")">  
-			#{item}
-		</foreach> 
-    </update>
-    
-    <select id="selectOuterOrderDetailByOuterOrderId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" parameterType="java.lang.Long">
-        SELECT <include refid="Base_Column_List" />  FROM  `outer_order_detail` T1 WHERE T1.outer_order_id=#{outerOrderId}
-    </select>
-    
-    <update id="updateUpcForOuterOrderDetail" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
-		UPDATE outer_order_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}
-    </update>
-    
-    <update id="updateWeightForOuterOrderDetail" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
-		UPDATE outer_order_detail SET weight=#{weight} WHERE (weight!=#{weight} or weight is null) and sku_id=#{skuId}
+    <update id="updateOuterOrderDetailByItemSku">
+        UPDATE outer_order_detail a
+        LEFT JOIN item_sku b ON a.sku_code=b.sku_code
+        SET
+        a.item_id=b.item_id,a.sku_id=b.id,a.upc=b.upc,a.weight=b.weight,a.item_name=b.item_name,a.color=b.color,a.scale=b.scale,a.sku_pic=b.sku_pic,a.logistic_type=b.logistic_type
+        WHERE a.outer_order_id IN
+        <foreach item="item" index="index" collection="erpOrderIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </update>
 
+    <select id="selectOuterOrderDetailByOuterOrderId"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `outer_order_detail` T1 WHERE T1.outer_order_id=#{outerOrderId}
+    </select>
+
+    <update id="updateUpcForOuterOrderDetail"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+		UPDATE outer_order_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}
+    </update>
+
+    <update id="updateWeightForOuterOrderDetail"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+		UPDATE outer_order_detail SET weight=#{weight} WHERE (weight!=#{weight} or weight is null) and sku_id=#{skuId}
+    </update>
+    <select id="queryByOrderId" resultMap="BaseResultMap">
+        SELECT
+        id,
+        company_no,
+        order_no,
+        sku_code,
+        upc,
+        item_name,
+        stock_status,
+        scale,
+        channel_sku_code,
+        receiver,
+        telephone,
+        postcode,
+        memo,
+        receiver_address,
+        receiver_state,
+        receiver_city,
+        receiver_district,
+        id_card,
+        sale_price,
+        weight,
+        quantity,
+        warehouse_no,
+        order_time,
+        sku_pic,
+        logistic_type
+        FROM
+        mall_sub_order
+        WHERE
+        id IN
+        <foreach item="item" index="index" collection="erpOrderIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectPositionNoByOrderId" resultType="java.lang.String" parameterType="java.lang.Long">
+      SELECT group_concat(CONCAT(position_no, ':', booked_quantity))
+            FROM inventory_booking_record
+            WHERE order_no = #{erpOrderId}
+    </select>
 </mapper>

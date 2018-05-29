@@ -1,11 +1,12 @@
 package com.wangqin.globalshop.biz1.app.task;
 
-import com.wangqin.globalshop.common.utils.LogWorker;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import com.wangqin.globalshop.common.utils.LogWorker;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by Patrick on 2018/5/17.

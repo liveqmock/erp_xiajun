@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.common.utils;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangqin.globalshop.common.scan.JacksonObjectMapper;
-
-import java.io.IOException;
 
 /**
  * Created by L.cm

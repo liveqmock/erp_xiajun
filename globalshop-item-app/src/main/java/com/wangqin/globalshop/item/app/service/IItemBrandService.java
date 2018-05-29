@@ -17,7 +17,7 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 public interface IItemBrandService {
 
 
-    void add(ItemBrandDO itemBrand);
+    //void add(ItemBrandDO itemBrand);
       
     void addBrand(ItemBrandDO brand);
 
@@ -27,7 +27,7 @@ public interface IItemBrandService {
 	JsonPageResult<List<ItemBrandDO>> queryBrands(ItemBrandQueryVO brandQueryVO);
 
 	//总查询
-	JsonPageResult<List<ItemBrandDO>> queryAllBrand();
+	//JsonPageResult<List<ItemBrandDO>> queryAllBrand();
 	
 	/**
 	 * 根据品牌英文名查找品牌，防止重复

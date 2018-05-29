@@ -2,8 +2,8 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
-import com.baomidou.framework.service.ISuperService;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 import com.wangqin.globalshop.common.utils.Tree;
 
 
@@ -35,9 +35,14 @@ public interface IItemCategoryService {
 		 * 获取树形结构类目
 		 * @return
 		 */
-	   List<ItemCategoryDO> tree();
+	   List<ItemCategoryDTO> tree();
 	   
 	   void deleteByPrimaryKey(Long id);
+	   
+	   ItemCategoryDO selectByPrimaryKey(Long id);
+	   
+	   List<ItemCategoryDTO> selectAllDTO();
+
 	   
 	   
 

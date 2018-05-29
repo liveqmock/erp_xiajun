@@ -1,8 +1,5 @@
 package com.wangqin.globalshop.item.app.service;
 
-import com.baomidou.framework.service.ISuperService;
-
-
 public interface ISequenceUtilService {
 
 	Long gainSkuSequence();
