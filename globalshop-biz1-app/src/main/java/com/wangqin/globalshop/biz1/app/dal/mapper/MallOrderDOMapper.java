@@ -15,5 +15,4 @@ public interface MallOrderDOMapper {
 
     int updateByPrimaryKey(MallOrderDO record);
 
-
 }

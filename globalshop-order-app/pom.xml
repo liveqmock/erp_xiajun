@@ -14,7 +14,7 @@
   <artifactId>globalshop-order-app</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>globalshop-biz1-app</name>
+  <name>globalshop-order-app</name>
 
   <packaging>jar</packaging>
 
@@ -27,26 +27,42 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+         <dependency>
+            <groupId>com.wangqin.globalshop</groupId>
+            <artifactId>globalshop-biz1-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+         <dependency>
+            <groupId>com.wangqin.globalshop</groupId>
+            <artifactId>globalshop-biz1-app</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.wangqin.globalshop</groupId>
             <artifactId>globalshop-common</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j-api</artifactId>
+                    <groupId>org.apache.logging.log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
             <version>2.6.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>org.apache.zookeeper</groupId> -->
+<!--             <artifactId>zookeeper</artifactId> -->
+<!--             <exclusions> -->
+<!--                 <exclusion> -->
+<!--                     <artifactId>slf4j-log4j12</artifactId> -->
+<!--                     <groupId>org.slf4j</groupId> -->
+<!--                 </exclusion> -->
+<!--             </exclusions> -->
+<!--         </dependency> -->
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
@@ -79,11 +95,6 @@
             <artifactId>quartz</artifactId>
             <version>2.2.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.wangqin.globalshop</groupId>
-            <artifactId>globalshop-biz1-app</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
 
     </dependencies>
     <build>
@@ -96,14 +107,6 @@
                 <configuration>
                     <verbose>true</verbose>
                     <overwrite>true</overwrite>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
