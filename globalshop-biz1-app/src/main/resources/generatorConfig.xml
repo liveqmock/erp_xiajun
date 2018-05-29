@@ -29,6 +29,7 @@
 
         <javaModelGenerator targetPackage="com.wangqin.globalshop.biz1.app.dal.dataObject"
                             targetProject="src/main/java">
+            <!--<property name="rootClass" value="com.wangqin.globalshop.biz1.app.dal.baseModel"/>-->
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -41,6 +42,7 @@
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="com.wangqin.globalshop.biz1.app.dal.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
+            <!--<property name="rootInterface" value="com.wangqin.globalshop.biz1.app.dal.mapper.BaseMapper"/>-->
         </javaClientGenerator>
 
         <!--<table tableName="auth_organization"  domainObjectName="AuthOrganizationDO"   enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
