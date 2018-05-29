@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
+import java.util.List;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
-
-import java.util.List;
 
 public interface ChannelAccountDOMapperExt extends ChannelAccountDOMapper {
 

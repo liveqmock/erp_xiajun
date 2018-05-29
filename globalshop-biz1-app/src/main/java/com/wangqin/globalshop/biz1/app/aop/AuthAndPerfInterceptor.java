@@ -1,22 +1,21 @@
 package com.wangqin.globalshop.biz1.app.aop;
 
-import com.wangqin.globalshop.common.redis.RedisCacheTemplate;
-import com.wangqin.globalshop.common.utils.LogWorker;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-
-import redis.clients.jedis.Jedis;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+
+import com.wangqin.globalshop.common.utils.LogWorker;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 登录校验

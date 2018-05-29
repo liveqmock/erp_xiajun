@@ -1,13 +1,14 @@
 package com.wangqin.globalshop.web.controller.taobao;
 
-import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.biz1.app.service.channelAccountConfig.IChannelAccountConfigService;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
+import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.biz1.app.service.channelAccountConfig.IChannelAccountConfigService;
 
 @Controller
 @RequestMapping("/taobao")

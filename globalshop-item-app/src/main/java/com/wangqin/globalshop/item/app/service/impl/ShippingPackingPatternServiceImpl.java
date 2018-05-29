@@ -115,7 +115,7 @@ public class ShippingPackingPatternServiceImpl implements IShippingPackingPatter
 
     @Override
     public void add(ItemBrandDO itemBrand) {
-        
+
     }
 
 }

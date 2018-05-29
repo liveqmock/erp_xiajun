@@ -1,5 +1,13 @@
 package com.wangqin.globalshop.biz1.app.task;
 
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
@@ -8,12 +16,6 @@ import com.wangqin.globalshop.biz1.app.service.channel.ChannelFactory;
 import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.biz1.app.service.company.ICompanyService;
 import com.wangqin.globalshop.common.utils.EasyUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import java.util.List;
 
 /**
  * 自动去有赞下载订单

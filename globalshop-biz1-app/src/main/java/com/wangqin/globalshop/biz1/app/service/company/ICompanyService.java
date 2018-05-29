@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.biz1.app.service.company;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
-
 import java.util.List;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 
 /**
  *

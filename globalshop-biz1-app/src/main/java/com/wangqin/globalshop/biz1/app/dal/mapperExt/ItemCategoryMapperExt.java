@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemCategoryDOMapper;
+import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 
 
 /**
@@ -18,5 +19,8 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
  ItemCategoryDO queryByCategoryCode(String categoryCode);
  
  List<ItemCategoryDO> selectAll();
+ 
+ 
+ List<ItemCategoryDTO> selectAllDTO();
 
 }

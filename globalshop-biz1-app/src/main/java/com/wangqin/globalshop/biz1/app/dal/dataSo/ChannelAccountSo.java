@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataSo;
 
-import com.wangqin.globalshop.biz1.app.dal.dataVo.PageQueryVO;
-
 import java.util.Date;
 
 /**

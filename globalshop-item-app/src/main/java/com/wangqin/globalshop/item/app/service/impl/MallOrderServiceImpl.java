@@ -15,47 +15,40 @@ import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IMallOrderService;
 
 @Service
-public class MallOrderServiceImpl  implements IMallOrderService {
-	
+public class MallOrderServiceImpl implements IMallOrderService {
 
-	@Autowired
-	private MallOrderMapperExt erpOrderMapper;
-	@Autowired
-	private IItemSkuService itemSkuService;
-	@Autowired
-	private IInventoryService inventoryService;
-	
-	@Autowired
-	private MallSubOrderMapperExt outerOrderDetailMapper;
-	@Autowired
-	private InventoryMapperExt inventoryMapperExt;
-	@Autowired
-	private InventoryOnWarehouseMapperExt inventoryAreaMapper;
-	@Autowired
-	private BuyerStorageDetailMapperExt purchaseStorageDetailMapper;
-	@Autowired
-	private BuyerTaskDetailMapperExt taskDailyDetailMapper;
+    @Autowired
+    private MallOrderMapperExt            erpOrderMapper;
+    @Autowired
+    private IItemSkuService               itemSkuService;
+    @Autowired
+    private IInventoryService             inventoryService;
+    @Autowired
+    private MallSubOrderMapperExt         outerOrderDetailMapper;
+    @Autowired
+    private InventoryMapperExt            inventoryMapperExt;
+    @Autowired
+    private InventoryOnWarehouseMapperExt inventoryAreaMapper;
+    @Autowired
+    private BuyerStorageDetailMapperExt   purchaseStorageDetailMapper;
+    @Autowired
+    private BuyerTaskDetailMapperExt      taskDailyDetailMapper;
 
-	
+    @Override
+    public void updateUpcForOrder(MallOrderDO erpOrder) {
+        erpOrderMapper.updateUpcForErpOrder(erpOrder);
+        outerOrderDetailMapper.updateUpcForOuterOrderDetail(erpOrder);
+        inventoryMapperExt.updateUpcForInventory(erpOrder);
+        inventoryAreaMapper.updateUpcForInventoryArea(erpOrder);
+        purchaseStorageDetailMapper.updateUpcForPurchaseStorageDetail(erpOrder);
+        taskDailyDetailMapper.updateUpcForTaskDailyDetail(erpOrder);
 
-	
-	@Override
-	public void updateUpcForOrder(MallOrderDO erpOrder) {
-		erpOrderMapper.updateUpcForErpOrder(erpOrder);
-		outerOrderDetailMapper.updateUpcForOuterOrderDetail(erpOrder);
-		inventoryMapperExt.updateUpcForInventory(erpOrder);
-		inventoryAreaMapper.updateUpcForInventoryArea(erpOrder);
-		purchaseStorageDetailMapper.updateUpcForPurchaseStorageDetail(erpOrder);
-		taskDailyDetailMapper.updateUpcForTaskDailyDetail(erpOrder);
-		
-	}
-	
-	@Override
-	public void updateWeightForOrder(MallOrderDO erpOrder) {
-		erpOrderMapper.updateWeightForErpOrder(erpOrder);
-		outerOrderDetailMapper.updateWeightForOuterOrderDetail(erpOrder);
-	}
+    }
 
-
+    @Override
+    public void updateWeightForOrder(MallOrderDO erpOrder) {
+        erpOrderMapper.updateWeightForErpOrder(erpOrder);
+        outerOrderDetailMapper.updateWeightForOuterOrderDetail(erpOrder);
+    }
 
 }

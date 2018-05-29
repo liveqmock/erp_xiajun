@@ -1,11 +1,13 @@
 package com.wangqin.globalshop.biz1.app.service.company;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import javax.annotation.Resource;
-import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
 
 /**
  *

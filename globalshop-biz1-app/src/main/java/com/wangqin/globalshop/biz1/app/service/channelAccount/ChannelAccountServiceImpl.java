@@ -1,17 +1,17 @@
 package com.wangqin.globalshop.biz1.app.service.channelAccount;
 
-import com.baomidou.framework.service.impl.SuperServiceImpl;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
 
 @Service("channelAccountService")
 public class ChannelAccountServiceImpl  implements IChannelAccountService {

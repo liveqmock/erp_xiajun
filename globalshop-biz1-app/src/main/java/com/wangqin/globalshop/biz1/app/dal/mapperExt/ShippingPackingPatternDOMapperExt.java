@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.biz1.app.dal.mapperExt;
+package src.main.java.com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import java.util.List;
 

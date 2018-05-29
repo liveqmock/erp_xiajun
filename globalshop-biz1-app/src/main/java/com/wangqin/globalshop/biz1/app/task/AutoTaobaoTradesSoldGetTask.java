@@ -1,16 +1,17 @@
 package com.wangqin.globalshop.biz1.app.task;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
-import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
 
 @Component
 public class AutoTaobaoTradesSoldGetTask {

@@ -1,12 +1,5 @@
 package com.wangqin.globalshop.web.controller.youzan;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
-import com.wangqin.globalshop.biz1.app.service.channel.ChannelFactory;
-import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.web.dto.youzan.YouzanMsgPushEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.service.channel.ChannelFactory;
+import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.web.dto.youzan.YouzanMsgPushEntity;
 
 import net.sf.json.JSONObject;
 
