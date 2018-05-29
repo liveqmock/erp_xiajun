@@ -46,7 +46,7 @@ public class AutoTaobaoRefreshCookieTask {
 		}
 		CookieRefreshRequest refreshRequest = new CookieRefreshRequest();
 		DefaultTaobaoClient tbClient = new DefaultTaobaoClient();
-		refreshRequest.setShopType(Constants.SHOP_TYPE_TAOBAO);
+		//refreshRequest.setShopType(Constants.SHOP_TYPE_TAOBAO);
 		try {
 			CookieRefreshResponse refreshResponse = tbClient.execute(refreshRequest, po.getCookie());
 			logger.info("成功："+refreshResponse.getBody());

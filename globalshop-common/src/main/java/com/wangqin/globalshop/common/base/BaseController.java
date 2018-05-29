@@ -1,6 +1,4 @@
-package src.main.java.com.wangqin.globalshop.common.base;
-
-
+package com.wangqin.globalshop.common.base;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

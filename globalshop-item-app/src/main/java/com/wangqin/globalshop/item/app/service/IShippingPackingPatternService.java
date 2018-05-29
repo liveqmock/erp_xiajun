@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
 
+
 /**
  * 
  */

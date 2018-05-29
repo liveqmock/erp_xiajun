@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
+import com.wangqin.globalshop.common.utils.Tree;
 
 
 public interface IItemCategoryService {

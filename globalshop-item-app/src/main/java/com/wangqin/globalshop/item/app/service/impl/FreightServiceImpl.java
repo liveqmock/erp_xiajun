@@ -29,7 +29,7 @@ public class FreightServiceImpl  implements IFreightService {
 	
 	@Override
 	public ShippingPackingPatternDO getPackageLevel(Long id) {
-		return iPackageLevelService.selectByPrimaryKey(id);
+		return null;
 	}
 
 	
