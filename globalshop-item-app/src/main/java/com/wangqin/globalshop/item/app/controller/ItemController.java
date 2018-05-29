@@ -233,7 +233,7 @@ public class ItemController  {
 				}
 			}
 			
-			//iItemService.addItem(item);
+			
 			ItemDO newItem = new ItemDO();
 			newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
 			newItem.setCategoryName(categoryService.selectByPrimaryKey(item.getCategoryId()).getName());
@@ -250,7 +250,9 @@ public class ItemController  {
 			newItem.setEndDate(item.getEndDate());
 			newItem.setCreator("admin");
 			newItem.setModifier("admin");
-			
+			newItem.setBookingDate(item.getBookingDate());
+	        newItem.setDesc(item.getRemark());
+	        iItemService.addItem(newItem);
 			//同步到有赞并上架
 			/**
 			if(item.getIsSale()!=null && item.getIsSale()==1) {
@@ -717,6 +719,23 @@ public class ItemController  {
 		}
 		
 	}
+	
+	/**
+	 * 查询买手列表(原来的注释叫查询意大利买手列表)
+	 * @return
+	 */
+	/**
+	@RequestMapping("/queryAllItaliaBuyer")
+	@ResponseBody
+	public Object queryAllItaliaBuyer() {
+		logger.info("voidDimensionCodeUtil start");
+		EntityWrapper<WxPurchaseUser> entityWrapper = new EntityWrapper<WxPurchaseUser>();
+		entityWrapper.orderBy("gmt_create");
+        Integer powerCode = 0;
+		entityWraspper.where("power_code > {0}",powerCode);
+		List<WxPurchaseUser> buyers = wxPurchaseUserService.selectList(entityWrapper);
+		return JsonResult.buildSuccess(buyers);
+	}*/
 	
 	
 	
