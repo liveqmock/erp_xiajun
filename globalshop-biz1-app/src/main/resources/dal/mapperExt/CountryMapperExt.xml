@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.CountryMapperExt">
+<!-- @Author:Xiajun -->
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, name, country_code AS countryCode
+    </sql>
+    
+    <!-- 根据名字查找国家，防止添加已存在的国家
+    <select id="selectCountryByName" resultType="com.wangqin.model.Country" parameterType="java.lang.String">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM country T1 
+		WHERE name = #{name}
+	</select>
+	-->
+	
+	<!--查询所有国家 
+	<select id="queryAllCountries" resultType="com.wangqin.model.Country" >
+		SELECT 
+		id,name
+		FROM country
+	</select>
+	-->
+	
+	<select id="queryCountrySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
+   		select
+    	<include refid="Base_Column_List" />
+     	FROM country
+      <where>
+      is_del=0
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null" >
+        country_code = #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lengthUnit != null" >
+        length_unit = #{lengthUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeUnit != null" >
+        volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="weightUnit != null" >
+        weight_unit = #{weightUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyUnit != null" >
+        money_unit = #{moneyUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </where> 
+  </select>
+	
+	
+</mapper>

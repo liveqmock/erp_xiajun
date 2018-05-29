@@ -69,7 +69,7 @@ public class ShippingPackingPatternServiceImpl implements IShippingPackingPatter
     @Override
     public JsonPageResult<List<ItemBrandDO>> queryAllBrand() {
         JsonPageResult<List<ItemBrandDO>> brandResult = new JsonPageResult<>();
-        List<ItemBrandDO> brandList = itemBrandDOMapperExt.queryAllItemBrand();
+        List<ItemBrandDO> brandList = itemBrandDOMapperExt.queryAllBrand();
         brandResult.setData(brandList);
         return brandResult;
     }
@@ -82,7 +82,7 @@ public class ShippingPackingPatternServiceImpl implements IShippingPackingPatter
         // 2、查询分页记录
         if (totalCount != null && totalCount != 0L) {
             brandResult.buildPage(totalCount.intValue(), brandQueryVO);
-            List<ItemBrandDO> queryBrands = itemBrandDOMapperExt.queryAllItemBrand();
+            List<ItemBrandDO> queryBrands = itemBrandDOMapperExt.queryAllBrand();
             brandResult.setData(queryBrands);
         } else {
             List<ItemBrandDO> queryBrands = new ArrayList<>();
