@@ -1,12 +1,11 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -23,4 +22,8 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	void updateUpcForOuterOrderDetail(MallOrderDO erpOrder);
 	
 	void updateWeightForOuterOrderDetail(MallOrderDO erpOrder);
+
+    List<MallSubOrderDO> queryByOrderId(List<Long> erpOrderIdList);
+
+	String selectPositionNoByOrderId(Long id);
 }
