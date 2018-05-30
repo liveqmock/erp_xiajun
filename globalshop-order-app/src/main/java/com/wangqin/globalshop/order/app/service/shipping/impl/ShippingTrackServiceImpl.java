@@ -28,4 +28,22 @@ public class ShippingTrackServiceImpl implements IShippingTrackService {
 
     }
 
+    @Override
+    public void insertOrUpdateInfo() {
+		/*List<ShippingTrack> shippingTrackList = shippingTrackMapper.queryStatus();
+
+		shippingTrackList.forEach(shippingTrack -> {
+			if (StringUtil.isNotBlank(shippingTrack.getInlandExpressId())
+					&& StringUtil.isNotBlank(shippingTrack.getInlandExpressNo())
+					&& !shippingTrack.getInlandExpressId().contains("haihu")) {
+				String info = ExpressUtil.callbackLogisticsTrajectory(shippingTrack.getInlandExpressId(),
+						shippingTrack.getInlandExpressNo());
+				if (info.contains("签收")) {
+					shippingOrderMapper.updateStatusByShippingNo(shippingTrack.getShippingNo());
+				}
+				shippingTrackMapper.updateInfo(info, shippingTrack.getShippingNo());
+			}
+		});*/
+    }
+
 }

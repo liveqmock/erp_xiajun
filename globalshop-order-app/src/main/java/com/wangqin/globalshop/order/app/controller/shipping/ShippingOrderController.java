@@ -12,7 +12,6 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -29,7 +28,7 @@ import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.ShippingTrackService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -65,13 +64,11 @@ public class ShippingOrderController {
 	@Autowired
 	private IMallSubOrderService mallSubOrderService;
 	@Autowired
-	private MallSubOrderDOMapperExt mallSubOrderDOMapper;
-	@Autowired
 	private OrderMallCustomerService mallCustomerService;
 	@Autowired
 	private IMallOrderService mallOrderService;
 	@Autowired
-	private ShippingTrackService shippingTrackService;
+	private IShippingTrackService shippingTrackService;
 
 
 	@RequestMapping("/query")
@@ -452,7 +449,7 @@ public class ShippingOrderController {
 		document.open();
 		PdfContentByte cd = writer.getDirectContent();
 		// =========虚线start===================
-		com.wangqin.globalshop.order.app.controller.CustomDashedLineSeparator separator = new com.wangqin.globalshop.order.app.controller.CustomDashedLineSeparator();
+		CustomDashedLineSeparator separator = new CustomDashedLineSeparator();
 		separator.setDash(1);
 		separator.setGap(1);
 		separator.setLineWidth(0.5f);
@@ -724,7 +721,7 @@ public class ShippingOrderController {
 			//拼邮、备货状态(已备货)、子订单状态(新建)
 			if(erpOrder.getLogisticType()!=null && erpOrder.getLogisticType()==1 && erpOrder.getStockStatus()==StockUpStatus.STOCKUP.getCode() && erpOrder.getStatus()== OrderStatus.INIT.getCode()) {
 				erpOrder.setStockStatus((byte) StockUpStatus.PREPARE.getCode());
-				mallSubOrderDOMapper.updateByPrimaryKey(erpOrder);
+				mallSubOrderService.update(erpOrder);
 			} else {
 				errorMsg.append(erpOrder.getOrderNo() + ",");
 			}

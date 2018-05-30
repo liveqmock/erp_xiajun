@@ -2,7 +2,7 @@ package com.wangqin.globalshop.order.app.controller.shipping;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.order.app.service.shipping.ShippingTrackService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/shipping")
 public class ShippingTrackController {
 	@Autowired
-	private ShippingTrackService shippingTrackService;
+	private IShippingTrackService shippingTrackService;
 	
 	/**
 	 * 根据shippingNo查找物流运行轨迹

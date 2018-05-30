@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.notice_bean;
 
+import com.wangqin.globalshop.common.utils.StringUtil;
 import org.apache.log4j.Logger;
 
 import java.io.*;

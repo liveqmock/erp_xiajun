@@ -14,4 +14,5 @@ public interface IShippingTrackService {
 
     void insert(ShippingTrackDO shippingTrackDO);
 
+    void insertOrUpdateInfo();
 }
