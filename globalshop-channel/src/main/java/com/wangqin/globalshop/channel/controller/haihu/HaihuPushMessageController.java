@@ -1,20 +1,27 @@
 package com.wangqin.globalshop.channel.controller.haihu;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.service.channel.ChannelFactory;
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
-import com.wangqin.globalshop.common.utils.Md5Util;
-import net.sf.json.JSONObject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
+import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.utils.HttpClientUtil;
+import com.wangqin.globalshop.common.utils.Md5Util;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/haihuPushMessage")
