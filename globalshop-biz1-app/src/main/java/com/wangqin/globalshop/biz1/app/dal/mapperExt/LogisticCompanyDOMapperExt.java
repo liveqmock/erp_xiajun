@@ -8,4 +8,6 @@ import java.util.List;
 public interface LogisticCompanyDOMapperExt extends LogisticCompanyDOMapper {
 
     List<LogisticCompanyDO> selectList();
+
+    LogisticCompanyDO selectByCode(String code);
 }

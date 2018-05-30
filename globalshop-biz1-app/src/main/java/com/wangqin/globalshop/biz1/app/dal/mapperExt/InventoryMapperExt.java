@@ -35,7 +35,7 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	 */
 	//Inventory getInventoryBySkuIdLock(@Param("itemId") Long itemId,@Param("skuId")  Long skuId);
 	
-	int updateLockInventory(@Param("id") Long id ,@Param("booked") int booked,@Param("transBooked") int transBooked);
+	int updateLockInventory(@Param("id") Long id ,@Param("booked") Long booked,@Param("transBooked") Long transBooked);
 	
 	void updateInventoryByInventoryArea();
 	

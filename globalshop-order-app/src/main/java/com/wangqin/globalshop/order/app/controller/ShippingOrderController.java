@@ -12,7 +12,7 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -29,7 +29,7 @@ import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.OrderShippingTrackService;
+import com.wangqin.globalshop.order.app.service.shipping.ShippingTrackService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -65,13 +65,13 @@ public class ShippingOrderController {
 	@Autowired
 	private IMallSubOrderService mallSubOrderService;
 	@Autowired
-	private MallSubOrderDOMapper mallSubOrderDOMapper;
+	private MallSubOrderDOMapperExt mallSubOrderDOMapper;
 	@Autowired
 	private OrderMallCustomerService mallCustomerService;
 	@Autowired
 	private IMallOrderService mallOrderService;
 	@Autowired
-	private OrderShippingTrackService shippingTrackService;
+	private ShippingTrackService shippingTrackService;
 
 
 	@RequestMapping("/query")
@@ -148,7 +148,7 @@ public class ShippingOrderController {
 				}
 			}
 			try {
-				Set<Long> mainIds=shippingOrderService.multiDelivery(shippingOrder);
+				Set<String> mainIds=shippingOrderService.multiDelivery(shippingOrder);
 				//更新主订单发货状态
 				if(CollectionUtils.isNotEmpty(mainIds)){
 					shippingOrderService.updateOuterstatus(mainIds);
@@ -287,13 +287,13 @@ public class ShippingOrderController {
 				}
 			}
 			try {
-				Map<String, Set<Long>> idsMap = shippingOrderService.batchDelivery(shippingOrder);
-				Set<Long> mainIds = idsMap.get("mainIds");
+				Map<String, Set<String>> idsMap = shippingOrderService.batchDelivery(shippingOrder);
+				Set<String> mainIds = idsMap.get("mainIds");
 				//更新主订单发货状态
 				if(CollectionUtils.isNotEmpty(mainIds)){
 					shippingOrderService.updateOuterstatus(mainIds);
 				}
-				Set<Long> shippingOrderIds = idsMap.get("shippingOrderIds");
+				Set<String> shippingOrderIds = idsMap.get("shippingOrderIds");
 //				//对接邮客
 //				if(CollectionUtils.isNotEmpty(shippingOrderIds) && shippingOrder.getLogisticCompany().equals("邮客")) {
 //					for(Long shippingOrderId : shippingOrderIds) {
@@ -788,11 +788,10 @@ public class ShippingOrderController {
 	@RequestMapping("/updateOuterstatusBatch")
 	public void updateOuterstatusBatch() {
 		List<MallOrderDO> outerOrderList = mallOrderService.queryByStatus((byte)0);
-		Set<Long> mainIds = Sets.newHashSet();
+		Set<String> mainIds = Sets.newHashSet();
 		for(int i=0; i<outerOrderList.size(); i++) {
-			mainIds.add(outerOrderList.get(i).getId());
+			mainIds.add(outerOrderList.get(i).getOrderNo());
 		}
-		System.out.println(mainIds.size());
 		shippingOrderService.updateOuterstatus(mainIds);
 	}
 

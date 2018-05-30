@@ -22,13 +22,13 @@ public interface IShippingOrderService {
 
     MultiDeliveryFormDTO queryByOrderId(String erpOrderId);
 
-    Set<Long> multiDelivery(ShippingOrderDO shippingOrderDO);
+    Set<String> multiDelivery(ShippingOrderDO shippingOrderDO) throws InventoryException;
 
     List<MallSubOrderDO> queryShippingOrderDetail(String mallOrders);
 
-    void updateOuterstatus(Set<Long> mainIds);
+    void updateOuterstatus(Set<String> mainIds);
 
-    Map<String,Set<Long>> batchDelivery(ShippingOrderDO shippingOrder) throws InventoryException;
+    Map<String,Set<String>> batchDelivery(ShippingOrderDO shippingOrder) throws InventoryException;
 
     void update(ShippingOrderDO shippingOrder);
 

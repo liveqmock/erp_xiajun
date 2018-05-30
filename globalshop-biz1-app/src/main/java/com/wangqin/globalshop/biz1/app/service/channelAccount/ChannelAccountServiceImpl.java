@@ -106,4 +106,9 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 
 	}
 
+	@Override
+	public ChannelAccountDO queryByChannelNo(String channelNo) {
+		return channelAccountDOMapperExt.queryByChannelNo(channelNo);
+	}
+
 }

@@ -8,7 +8,9 @@ import java.util.List;
  * @author biscuit
  * @data 2018/05/28
  */
-public interface OrderShippingTrackService {
+public interface ShippingTrackService {
 
     List<ShippingTrackDO> queryShippingTrack(String logisticNo);
+
+    void insertOrUpdateInfo();
 }

@@ -33,5 +33,14 @@
     from inventory_booking_record
     where order_no = #{orderNo}
   </select>
+  <select id="sumBookedByInventoryType"  resultMap="BaseResultMap">
+    SELECT
+    sum(booked_quantity) AS booked,inventory_type AS inventoryType
+    FROM
+    inventory_booking_record T1
+    WHERE
+    order_no = #{orderId}
+    GROUP BY inventory_type
+  </select>
 
 </mapper>

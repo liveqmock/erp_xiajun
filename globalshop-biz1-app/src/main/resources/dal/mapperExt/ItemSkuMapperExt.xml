@@ -175,6 +175,16 @@
             T1.upc = #{upc}
           </if>
 </select>
-    
+<select id="queryItemBySkuCode" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.String">
+     SELECT
+        <include refid="Base_Column_List" />
+        FROM
+            item_sku T1
+        where
+          <if test=" skuCode!= null">
+            T1.sku_code = #{skuCode}
+          </if>
+</select>
+
     
 </mapper>

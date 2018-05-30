@@ -74,4 +74,11 @@
             FROM inventory_booking_record
             WHERE order_no = #{orderNo}
     </select>
+    <select id="selectCount" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+        SELECT COUNT(*) FROM mall_sub_order WHERE order_no = #{orderNo};
+    </select>
+    <select id="SelectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * FROM mall_sub_order WHERE order_no = #{orderNo};
+    </select>
+
 </mapper>
