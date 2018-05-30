@@ -11,7 +11,6 @@ import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountConfigDOMapper;
 import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountConfigSo;
-import com.wangqin.globalshop.channel.dal.mapperExt.ChannelAccountConfigDOMapperExt;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 

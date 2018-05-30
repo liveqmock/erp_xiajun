@@ -4,8 +4,6 @@ package com.wangqin.globalshop.channel.service.channelAccount;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,6 @@ import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
 import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountSo;
-import com.wangqin.globalshop.channel.dal.mapperExt.ChannelAccountDOMapperExt;
 
 @Service("channelAccountService")
 public class ChannelAccountServiceImpl  implements IChannelAccountService {
@@ -25,7 +22,7 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 		return channelAccountDOMapper;
 	}
 
-//	public void setChannelAccountMapper(ChannelAccountDOMapperExt channelAccountMapper) {
+//	public void setChannelAccountMapper(CAChannelAccountDOMapperExt channelAccountMapper) {
 //		this.channelAccountDOMapperExt = channelAccountMapper;
 //	}
 

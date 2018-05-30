@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallSubOrderDOMapperExt;
 import com.wangqin.globalshop.common.utils.BizResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 

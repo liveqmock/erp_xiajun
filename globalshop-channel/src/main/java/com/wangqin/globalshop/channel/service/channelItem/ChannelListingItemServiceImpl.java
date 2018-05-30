@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelListingItemDOMapper;
-import com.wangqin.globalshop.channel.dal.mapperExt.ChannelListingItemDOMapperExt;
 
 /**
  *

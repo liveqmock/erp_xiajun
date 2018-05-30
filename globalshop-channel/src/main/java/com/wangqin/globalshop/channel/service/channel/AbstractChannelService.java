@@ -14,8 +14,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallOrderDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallSubOrderDOMapperExt;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemSkuService;

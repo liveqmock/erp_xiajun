@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelListingItemSkuDOMapper;
-import com.wangqin.globalshop.channel.dal.mapperExt.ChannelListingItemSkuDOMapperExt;
 
 /**
  *

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.ItemSkuDOMapperExt">
+<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt">
 
     <select id="queryItemSkusForItemThirdSale" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">
         SELECT

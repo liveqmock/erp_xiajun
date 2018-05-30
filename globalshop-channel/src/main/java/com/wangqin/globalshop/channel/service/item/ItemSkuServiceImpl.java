@@ -3,7 +3,6 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
-import com.wangqin.globalshop.channel.dal.mapperExt.ItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.springframework.stereotype.Service;
 

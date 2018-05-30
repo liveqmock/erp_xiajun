@@ -6,9 +6,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.channel.dal.mapperExt.InventoryDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.ItemDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.ItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.springframework.stereotype.Service;
 

@@ -5,7 +5,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.channel.dal.mapperExt.ShippingOrderDOMapperExt;
 
 /**
  *
