@@ -30,7 +30,7 @@ public class MallOrderDO {
 
     private Double  actualAmount;
 
-    private Byte    payType;
+    private Integer payType;
 
     private Date    orderTime;
 
@@ -164,11 +164,11 @@ public class MallOrderDO {
         this.actualAmount = actualAmount;
     }
 
-    public Byte getPayType() {
+    public Integer getPayType() {
         return payType;
     }
 
-    public void setPayType(Byte payType) {
+    public void setPayType(Integer payType) {
         this.payType = payType;
     }
 

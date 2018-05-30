@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.MallOrderDOMapperExt" >
+
+    <update id="updateOuterOrderDetailByItemSku">
+        UPDATE mall_sub_order a
+        LEFT JOIN item_sku b ON a.sku_code=b.sku_code
+        SET a.item_id=b.item_id,a.sku_id=b.id,a.upc=b.upc,a.weight=b.weight,a.item_name=b.item_name,a.color=b.color,a.scale=b.scale,a.sku_pic=b.sku_pic,a.logistic_type=b.logistic_type
+        WHERE a.orderNo IN
+        <foreach item="item" index="index" collection="erpOrderIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+
+</mapper>

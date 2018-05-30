@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.InventoryOnWarehouseMapperExt">
+
+   <!-- 通用查询结果列-->
+    <sql id="inventoryAreaResultMapping">
+        T1.id As id,T1.item_id AS itemId,T1.sku_id AS skuId,T1.item_name AS itemName,T1.color,T1.scale,T1.sku_code AS skuCode,T1.upc ,T1.sku_pic AS skuPic,T1.locked_inv as lockedInv,T1.inventory,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T1.warehouse_id AS warehouseId, T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify
+    </sql>
+
+	<select id="getInventoryArea" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"  >
+        SELECT
+        	 <include refid="inventoryAreaResultMapping" />
+        FROM
+            inventory_area T1
+        <where>
+        		<if test="itemId != null">
+        			item_id = #{itemId}	
+        		</if>
+        		<if test="skuId != null">
+        			and sku_id = #{skuId}	
+        		</if>
+        		<if test="warehouseId != null">
+        			and warehouse_id = #{warehouseId}	
+        		</if>
+        		<if test="positionNo != null">
+        			and position_no = #{positionNo}	
+        		</if>
+        </where>
+    </select>
+    
+	<select id="sumInventoryBySkuId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"  >
+        SELECT
+        	 	item_id AS itemId,sku_id AS skuId,sum(locked_inv) as lockedInv,sum(inventory) as inventory,sum(trans_inv) AS transInv,sum(locked_trans_inv) AS lockedTransInv
+        FROM
+            inventory_area T1
+        <where>
+        		<if test="itemId != null">
+        			item_id = #{itemId}	
+        		</if>
+        		<if test="skuId != null">
+        			and sku_id = #{skuId}	
+        		</if>
+        </where>
+        		
+        	GROUP BY 
+        		item_id ,sku_id
+    </select>
+    
+	<select id="sumInventoryBySkuIdGroupbyWarehouse" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"  >
+        SELECT
+        	 	item_id AS itemId,sku_id AS skuId,warehouse_id AS warehouseId,sum(locked_inv) as lockedInv,sum(inventory) as inventory,sum(trans_inv) AS transInv,sum(locked_trans_inv) AS lockedTransInv
+        FROM
+            inventory_area T1 
+        LEFT JOIN warehouse T2 ON T1.warehouse_id=T2.id 
+        <where>
+        		T2.seq>0 
+        		<if test="itemId != null">
+        			and item_id = #{itemId}	
+        		</if>
+        		<if test="skuId != null">
+        			and sku_id = #{skuId}	
+        		</if>
+        		<if test="warehouseId != null">
+        			and warehouse_id = #{warehouseId}	
+        		</if>
+        </where>
+        	GROUP BY 
+        		item_id ,sku_id ,warehouse_id
+    </select>
+    
+    	<select id="queryInventoryAreaByWarehouse" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"  >
+        SELECT
+        	 <include refid="inventoryAreaResultMapping" />
+        FROM
+            inventory_area T1
+        <where>
+        		<if test="itemId != null">
+        			item_id = #{itemId}	
+        		</if>
+        		<if test="skuId != null">
+        			and sku_id = #{skuId}	
+        		</if>
+        		<if test="warehouseId != null">
+        			and warehouse_id = #{warehouseId}	
+        		</if>
+        </where>
+    </select>
+    
+    	<select id="queryInventoryAreaCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+        SELECT
+        		count(1)
+        FROM
+            inventory_area T1 
+        LEFT JOIN item T2 on T1.item_id=T2.id 
+        WHERE  (inventory>0 OR trans_inv>0) 
+       		<if test="itemName!=null and itemName!=''">
+       			and T1.item_name LIKE concat('%',#{itemName},'%')
+       		</if>
+       		<if test="skuCode!=null and skuCode!=''">
+       			and T1.sku_code = #{skuCode} 
+       		</if>
+       		<if test="upc!=null and upc!=''">
+       			and T1.upc = #{upc} 
+       		</if>
+       		<if test="warehouseId != null">
+        			and T1.warehouse_id = #{warehouseId}	
+        	</if>
+        	<if test="positionNo != null and positionNo!=''">
+        			and T1.position_no = #{positionNo}	
+        	</if>
+        	<if test="buySite != null and buySite!=''">
+        			and T2.buy_site = #{buySite}	
+        	</if>
+        	<if test="companyId != null ">
+            		and T2.company_id = #{companyId}
+            </if>
+    </select>
+    
+    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+        SELECT
+        	 <include refid="inventoryAreaResultMapping" />
+        	 ,T2.buy_site As buySite,T3.sale_price As salePrice
+        FROM
+            inventory_area T1 
+        LEFT JOIN item T2 on T1.item_id=T2.id 
+        LEFT JOIN item_sku T3 on T1.sku_id=T3.id 
+        WHERE  (inventory>0 OR trans_inv>0) 
+       		<if test="warehouseId != null">
+        			and T1.warehouse_id = #{warehouseId}	
+        	</if>
+        	<if test="positionNo != null and positionNo!=''">
+        			and T1.position_no = #{positionNo}	
+        	</if>
+       		<if test="itemName!=null and itemName!=''">
+       			and T1.item_name LIKE concat('%',#{itemName},'%')
+       		</if>
+       		<if test="skuCode!=null and skuCode!=''">
+       			and T1.sku_code = #{skuCode} 
+       		</if>
+       		<if test="upc!=null and upc!=''">
+       			and T1.upc = #{upc} 
+       		</if> 
+       		<if test="buySite != null and buySite!=''">
+        		and T2.buy_site = #{buySite}	
+        	</if>
+        	<if test="companyId != null ">
+            		and T2.company_id = #{companyId}
+            </if>
+        	<choose>
+		        <when test="orderBy!=null and sort!=null">
+		            order by ${orderBy} ${sort}
+		        </when>
+		        <otherwise>
+		            <![CDATA[ order by T1.inventory desc ]]>
+		        </otherwise>
+		    </choose>
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+            
+    </select>
+    
+    <select id="queryInventoryAreaForExcel" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+    	SELECT T2.sku_code AS skuCode,T2.item_name AS itemName,T2.sku_pic AS skuPic,T2.brand,T2.upc,T2.color,T2.scale,
+    			T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.inventory,T1.locked_inv AS lockedInv,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T2.sale_price AS salePrice 
+    	FROM inventory_area T1 
+    	LEFT JOIN item_sku T2 ON T1.sku_id=T2.id  
+    	WHERE (inventory>0 OR trans_inv>0) 
+    	<if test="warehouseId != null">
+       			and T1.warehouse_id = #{warehouseId}	
+       	</if>
+       	<if test="positionNo != null and positionNo!=''">
+       			and T1.position_no = #{positionNo}	
+       	</if>
+     		<if test="itemName!=null and itemName!=''">
+     			and T1.item_name LIKE concat('%',#{itemName},'%')
+     		</if>
+     		<if test="skuCode!=null and skuCode!=''">
+     			and T1.sku_code = #{skuCode} 
+     		</if>
+     		<if test="upc!=null and upc!=''">
+     			and T1.upc = #{upc} 
+     		</if> 
+     		<if test="companyId != null ">
+            	and T2.company_id = #{companyId}
+            </if>
+     	order by T1.inventory desc
+    </select>
+    
+    <update id="updateTransToInventoryArea" >  
+    		<![CDATA[ 
+	    UPDATE
+	    		inventory_area
+	    	SET
+			inventory = inventory + #{toTrans},
+			trans_inv = trans_inv - #{toTrans},
+			locked_inv = locked_inv + #{lockedTransToInv},
+			locked_trans_inv = locked_trans_inv - #{lockedTransToInv}
+	    WHERE  
+	    		id = #{id} and trans_inv - #{toTrans} >= 0 and locked_trans_inv = #{lockedTransInv}
+	    		]]> 
+	</update> 
+	
+	<update id="updateInventoryAreaCheck" >  
+    		<![CDATA[ 
+	    UPDATE
+	    		inventory_area
+	    	SET
+			inventory = inventory - #{toCheck}
+	    WHERE  
+	    		id = #{id} and inventory = #{inventory} and inventory - #{toCheck} >= 0
+	    		]]> 
+	</update> 
+	
+	<update id="updateInventoryAreaTransCheck" >  
+    		<![CDATA[ 
+	    UPDATE
+	    		inventory_area
+	    	SET
+			trans_inv = trans_inv - #{toCheck}
+	    WHERE  
+	    		id = #{id} and trans_inv = #{transInv} and trans_inv - #{toCheck} >= 0
+	    		]]> 
+	</update> 
+	
+	<update id="updateInventoryAreaAddInventory" >  
+    		<![CDATA[ 
+	    UPDATE
+	    		inventory_area
+	    	SET
+			inventory = inventory + #{toAdd}
+	    WHERE  
+	    		id = #{id} and inventory = #{inventory} 
+	    		]]> 
+	</update> 
+	
+	<update id="updateUpcForInventoryArea" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+		UPDATE inventory_area SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}
+    </update>
+
+
+
+</mapper>

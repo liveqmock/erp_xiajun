@@ -17,7 +17,7 @@ public class ShippingOrderDO {
 
     private Byte transferStatus;
 
-    private Byte syncSendStatus;
+    private Integer syncSendStatus;
 
     private String tplPkgStatus;
 
@@ -119,11 +119,11 @@ public class ShippingOrderDO {
         this.transferStatus = transferStatus;
     }
 
-    public Byte getSyncSendStatus() {
+    public Integer getSyncSendStatus() {
         return syncSendStatus;
     }
 
-    public void setSyncSendStatus(Byte syncSendStatus) {
+    public void setSyncSendStatus(Integer syncSendStatus) {
         this.syncSendStatus = syncSendStatus;
     }
 
