@@ -42,7 +42,7 @@ public class LogAspect {
     }
 
 
-    @AfterReturning(value = "pointcutExpression()", returning = "returnValue")
+//    @AfterReturning(value = "pointcutExpression()", returning = "returnValue")
     public void afterRunningMethod(JoinPoint joinPoint, Object returnValue) {
         LogWorker.log(log,"返回通知执行，执行结果：" ,"");
     }
