@@ -7,8 +7,6 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import com.wangqin.globalshop.common.result.Cache;
-
 public class RedisCacheTemplate implements Cache, InitializingBean {
 
     private String                prefix;    // key的前缀，加前缀是为了防止key的重复或者生成新的缓存，该值在整个应用里面不能重复
@@ -16,6 +14,7 @@ public class RedisCacheTemplate implements Cache, InitializingBean {
 
     RedisTemplate<String, Object> cacheRedis;
 
+    @Override
     public void afterPropertiesSet() throws Exception {
         if (cacheRedis == null) {
             throw new Exception("\"cacheRedis\" must be configurated");
@@ -26,10 +25,11 @@ public class RedisCacheTemplate implements Cache, InitializingBean {
 
     }
 
+    @Override
     public Object get(final String key) {
         Object result = cacheRedis.execute(new RedisCallback<Object>() {
 
-            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
             public Object doInRedis(RedisConnection connection) throws DataAccessException {
                 RedisSerializer serializer = cacheRedis.getDefaultSerializer();
                 byte[] keyBytes = serializer.serialize(rebuildKey(key));
@@ -44,10 +44,11 @@ public class RedisCacheTemplate implements Cache, InitializingBean {
         return result;
     }
 
-    public boolean put(final String key, final Object value) {
+    @Override
+    public boolean putEx(final String key, final Object value, long expiry) {
         boolean result = cacheRedis.execute(new RedisCallback<Boolean>() {
 
-            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
                 RedisSerializer serializer = cacheRedis.getDefaultSerializer();
                 byte[] keyBytes = serializer.serialize(rebuildKey(key));
@@ -59,6 +60,22 @@ public class RedisCacheTemplate implements Cache, InitializingBean {
         return result;
     }
 
+    @Override
+    public boolean put(final String key, final Object value) {
+        boolean result = cacheRedis.execute(new RedisCallback<Boolean>() {
+
+            @Override
+            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                RedisSerializer serializer = cacheRedis.getDefaultSerializer();
+                byte[] keyBytes = serializer.serialize(rebuildKey(key));
+                byte[] valueBytes = serializer.serialize(value);
+                connection.set(keyBytes, valueBytes);
+                return true;
+            }
+        });
+        return result;
+    }
+    @Override
     public void remove(String key) {
         cacheRedis.delete(rebuildKey(key));
     }
@@ -67,7 +84,7 @@ public class RedisCacheTemplate implements Cache, InitializingBean {
     public Long incr(final String key) {
         Long result = cacheRedis.execute(new RedisCallback<Long>() {
 
-            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 RedisSerializer serializer = cacheRedis.getDefaultSerializer();
                 byte[] keyBytes = serializer.serialize(rebuildKey(key));
