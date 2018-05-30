@@ -3,61 +3,62 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 import java.util.Date;
 
 public class MallOrderDO {
-    private Long id;
 
-    private String customerNo;
+    private Long    id;
 
-    private String orderNo;
+    private String  customerNo;
 
-    private String companyNo;
+    private String  orderNo;
 
-    private String channelNo;
+    private String  companyNo;
 
-    private String channelName;
+    private String  channelNo;
 
-    private String channelOrderNo;
+    private String  channelName;
 
-    private String channelCustomerNo;
+    private String  channelOrderNo;
 
-    private String channelType;
+    private String  channelCustomerNo;
 
-    private String shopCode;
+    private String  channelType;
 
-    private String wxPayTradeNo;
+    private String  shopCode;
 
-    private Double totalAmount;
+    private String  wxPayTradeNo;
 
-    private Double actualAmount;
+    private Double  totalAmount;
 
-    private Byte payType;
+    private Double  actualAmount;
 
-    private Date orderTime;
+    private Byte    payType;
 
-    private Byte status;
+    private Date    orderTime;
 
-    private String memo;
+    private Integer status;
 
-    private String idCard;
+    private String  memo;
 
-    private String idcardPicFront;
+    private String  idCard;
 
-    private String idcardPicReverse;
+    private String  idcardPicFront;
 
-    private Long source;
+    private String  idcardPicReverse;
 
-    private Double freight;
+    private Long    source;
 
-    private Double freightAgent;
+    private Double  freight;
 
-    private Date gmtModify;
+    private Double  freightAgent;
 
-    private Date gmtCreate;
+    private Date    gmtModify;
+
+    private Date    gmtCreate;
 
     private Boolean isDel;
 
-    private String modifier;
+    private String  modifier;
 
-    private String creator;
+    private String  creator;
 
     public Long getId() {
         return id;
@@ -179,11 +180,11 @@ public class MallOrderDO {
         this.orderTime = orderTime;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
