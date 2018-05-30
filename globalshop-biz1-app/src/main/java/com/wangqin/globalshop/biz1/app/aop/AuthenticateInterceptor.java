@@ -61,10 +61,16 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
             sessionId = CookieUtil.getCookieValue(request, sessionIDName);
         }
         if (StringUtils.isNotBlank(sessionId)) {
-            Integer userId = (Integer) loginCache.get(sessionId);
-            if (userId != null) {
-                AppUtil.setLoginUserId(userId.intValue());
-                return true;
+            try {
+                //redis 缓存尝试取
+                Integer userId = (Integer) loginCache.get(sessionId);
+                if (userId != null) {
+                    AppUtil.setLoginUserId(userId.intValue());
+                    return true;
+                }
+            }catch (Exception e){
+                response.setStatus(302);
+                return false;
             }
         }
         if (isJump) {
