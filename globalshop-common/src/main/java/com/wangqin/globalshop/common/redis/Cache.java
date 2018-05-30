@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.common.result;
+package com.wangqin.globalshop.common.redis;
 
 /**
  * 
@@ -23,6 +23,16 @@ public interface Cache {
      * @return
      */
     boolean put(String key, Object value);
+
+    /**
+     * 向缓存put临时数据
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean putEx(String key, Object value, long expiry);
+
 
     /**
      * remove数据

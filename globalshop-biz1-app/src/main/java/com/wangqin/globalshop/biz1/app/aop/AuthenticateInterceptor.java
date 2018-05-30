@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.common.result.Cache;
+import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CookieUtil;
 
