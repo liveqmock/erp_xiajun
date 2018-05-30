@@ -62,6 +62,9 @@ public class CountryServiceImpl   implements ICountryService {
 		return countryMapper.queryCountrySelective(countryDO);
 	}
 
-	
+	@Override
+	public String queryCodeById(Integer id) {
+		return countryMapper.queryCodeById(id);
+	}
 
 }

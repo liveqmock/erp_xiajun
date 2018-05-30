@@ -5,38 +5,34 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.PackageLevelQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.PackageScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingPackingPatternDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
+
 import com.wangqin.globalshop.common.utils.JsonPageResult;
-import com.wangqin.globalshop.item.app.service.IShippingPackingScaleService;
+import com.wangqin.globalshop.item.app.dal.dto.ItemPackageScaleDTO;
+import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
+import com.wangqin.globalshop.item.dal.mapperExt.ItemPackagePatternMapperExt;
+import com.wangqin.globalshop.item.dal.mapperExt.ItemPackageScaleMapperExt;
 
 @Service
-public class ShippingPackingScaleServiceImplement implements IShippingPackingScaleService{
+public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 
 	@Autowired
-	private PackageScaleMapperExt packageScaleMapperExt;
+	private ItemPackageScaleMapperExt packageScaleMapperExt;
 	
 	@Autowired
-	private ShippingPackingPatternDOMapperExt shippingPackingPatternDOMapperExt;
+	private ItemPackagePatternMapperExt shippingPackingPatternDOMapperExt;
 	
-	public List<ShippingPackingScaleDO> queryPackageScales() {
-		return packageScaleMapperExt.queryPackageScales();
-	}
+	//public List<ItemPackageScaleDTO> queryPackageScales() {
+		//return packageScaleMapperExt.queryPackageScales();
+	//}
 	
 	@Override
-	public JsonPageResult<List<ShippingPackingScaleDO>> queryPackageScaleTree() {
-		JsonPageResult<List<ShippingPackingScaleDO>> result = new JsonPageResult<>();
+	public JsonPageResult<List<ItemPackageScaleDTO>>  queryPackageScaleTree() {
+		JsonPageResult<List<ItemPackageScaleDTO>> result = new JsonPageResult<>();
 		
-		List<ShippingPackingScaleDO> packageScales = packageScaleMapperExt.queryPackageScales();
+		List<ItemPackageScaleDTO> packageScales = packageScaleMapperExt.queryAllPackageScale();
 		
-		for (ShippingPackingScaleDO packageScale : packageScales) {
-			ShippingPackingPatternQueryVO packageLevelQueryVO = new ShippingPackingPatternQueryVO();
-			packageLevelQueryVO.setFirstStart(0);
-			packageLevelQueryVO.setPackageEn(packageScale.getNameEn());
-			//packageScale.setPackageLevels(shippingPackingPatternDOMapperExt.queryPackageLevels(packageLevelQueryVO));
+		for (ItemPackageScaleDTO packageScale : packageScales) {
+			packageScale.setPackageLevels(shippingPackingPatternDOMapperExt.queryPatternsByScaleNo(packageScale.getPackagingScaleNo()));
 		}
 		
 		result.setData(packageScales);

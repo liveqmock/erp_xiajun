@@ -35,7 +35,7 @@ public interface IItemBrandService {
 	 * @param name
 	 * @return
 	 */
-	ItemBrandDO selectByName(String name);
+	String selectBrandNoByName(String name);
 	
 	ItemBrandDO selectByPrimaryKey(Long id);
 	

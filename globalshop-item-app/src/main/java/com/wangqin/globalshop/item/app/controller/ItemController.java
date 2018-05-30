@@ -35,7 +35,7 @@ import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
-
+import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.item.app.enums.ChannelType;
 import com.wangqin.globalshop.item.app.service.IBuyerService;
@@ -95,7 +95,7 @@ public class ItemController  {
 //    public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wx56e36d38aff90280&secret=9269561bae6e1b59c8107c35a669016c";
 	
 	/**
-	 * 添加商品
+	 * 添加商品(fin)
 	 *
 	 * @param
 	 */
@@ -129,7 +129,8 @@ public class ItemController  {
 				return result.buildMsg("没有找到类目").buildIsSuccess(false);
 			}
 			//设置item_code栏位的值
-			item.setItemCode("I" + categoryCode + "Q" + sequenceUtilService.gainItemSequence());
+			//item.setItemCode("I" + categoryCode + "Q" + sequenceUtilService.gainItemSequence());
+			item.setItemCode("I" + categoryCode + "Q" + RandomUtils.getTimeRandom());
 			String imgJson = ImageUtil.getImageUrl(item.getMainPic());
 			
 			// 解析skuList 数组对象
@@ -205,13 +206,13 @@ public class ItemController  {
 			item.setMainPic(imgJson);
 			detailDecoder(item);
 			//判断是否可售
-			if(item.getStartDate()==null || item.getEndDate()==null) {
-				item.setIsSale(0);
-			} else if(DateUtil.belongCalendar(new Date(), item.getStartDate(), DateUtil.getDateByCalculate(item.getEndDate(), Calendar.DATE, 1))) {
-				item.setIsSale(1);
-			} else {
-				item.setIsSale(0);
-			}
+//			if(item.getStartDate()==null || item.getEndDate()==null) {
+//				item.setIsSale(0);
+//			} else if(DateUtil.belongCalendar(new Date(), item.getStartDate(), DateUtil.getDateByCalculate(item.getEndDate(), Calendar.DATE, 1))) {
+//				item.setIsSale(1);
+//			} else {
+//				item.setIsSale(0);
+//			}
 			//item.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
 			
 			
@@ -243,21 +244,24 @@ public class ItemController  {
 			newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
 			newItem.setCategoryName(categoryService.selectByPrimaryKey(item.getCategoryId()).getName());
 			newItem.setBrandName(item.getBrand());
-			newItem.setBrandNo(brandService.selectByName(item.getBrand()).getBrandNo());
+			newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand()));
 			newItem.setEnName(item.getEnName());
 			newItem.setItemName(item.getName());
 			newItem.setCurrency(item.getCurrency().byteValue());
 			newItem.setIdCard(item.getIdCard().byteValue());
 			CountryDO countryDO = new CountryDO();
 			countryDO.setId(item.getCountry());
-			newItem.setCountry(countryService.queryCountrySelective(countryDO).getName());
-			newItem.setStartDate(item.getStartDate());
-			newItem.setEndDate(item.getEndDate());
+			newItem.setCountry(countryService.queryCodeById(item.getCountry()));
+			//newItem.setStartDate(item.getStartDate());
+			//newItem.setEndDate(item.getEndDate());
 			newItem.setCreator("admin");
 			newItem.setModifier("admin");
-			newItem.setBookingDate(item.getBookingDate());
-	        newItem.setDesc(item.getRemark());
+			//newItem.setBookingDate(item.getBookingDate());
+	        //newItem.setDesc(item.getRemark());
+	        newItem.setCompanyNo(RandomUtils.getTimeRandom());
+	        System.out.println("before");
 	        iItemService.addItem(newItem);
+	        System.out.println("after");
 			//同步到有赞并上架
 			/**
 			if(item.getIsSale()!=null && item.getIsSale()==1) {

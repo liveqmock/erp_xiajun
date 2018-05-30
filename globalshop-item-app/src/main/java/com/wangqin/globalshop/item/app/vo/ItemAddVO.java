@@ -7,9 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.time.DateFormatUtils;
 
-import com.baomidou.mybatisplus.annotations.IdType;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
+
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.item.app.enums.ChannelType;
@@ -21,66 +19,83 @@ import com.wangqin.globalshop.item.app.enums.ChannelType;
  */
 public class ItemAddVO implements Serializable{
 
-	/** 主键id */
-	@TableId(type = IdType.AUTO)
+	private String startDate;
+	
+	private String endDate;
+	
+	
+
+	public String getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+	public String getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
 	private Long id;
 	
-	@TableField(value = "company_id")
+
 	private Long companyId;
 	
 	private String name;
-	@TableField(value = "category_id")
+
 	private Long categoryId;
-	@TableField(value = "category_name")
+
 	private String categoryName;
-	@TableField(value = "item_code")
+
 	private  String itemCode;
-	@TableField(value = "is_new")
+
 	private Integer isNew;
-	@TableField(value = "sale_type")
+
 	private Integer saleType;
-	@TableField(value = "main_pic")
+
 	private String mainPic;
-	@TableField(value = "item_short")
+
 	private String itemShort;
-	@TableField(value = "en_name")
+
 	private String enName;
 	private String brand;
 	private Integer country;
 	private Integer currency;
-	@TableField(value = "buy_site")
+
 	private String buySite;
 	private String  origin;
 	private Double  freight;
 	private Double  weight;
-	@TableField(value = "price_range")
+
 	private String priceRange;
 	private String  unit;
 	private String  source;
 	private String promotion;
-	@TableField(value = "contact_person")
+
 	private String contactPerson;
-	@TableField(value = "contact_tel")
+
 	private String contactTel;
-	@TableField(value = "id_card")
+
 	private Integer idCard;
-	@TableField(value = "start_date")
-	private Date startDate;
-	@TableField(value = "end_date")
-	private Date endDate;
-	@TableField(value = "is_sale")
+
+	//private Date startDate;
+
+	//private Date endDate;
+
 	private Integer isSale;
-	@TableField(value = "gmt_create")
-	private Date gmtCreate;
-	@TableField(value = "gmt_modify")
-	private Date gmtModify;
-	@TableField(value = "user_create")
+
+	//private Date gmtCreate;
+
+	//private Date gmtModify;
+
 	private String userCreate;
-	@TableField(value = "user_modify")
+
 	private String userModify;
-	@TableField(exist = false)
+
 	private  List<ItemSkuAddVO> itemSkus = new ArrayList<ItemSkuAddVO>();
-	@TableField(exist = false)
+
 	private   String skuList;
 	//商品状态 0新档 1上架 2下架 3删除
 	private Integer status;
@@ -92,61 +107,58 @@ public class ItemAddVO implements Serializable{
 	private String spec;//规格
 	
 	private String model;//型号
-	
-	@TableField(value = "logistic_type")
+
 	private Integer logisticType;
 	
-	@TableField(exist = false)
+
 	private String outerAlias;	//有赞商品链接
 	
-	@TableField(exist = false)
+
 	private String sexStyle;	//男女款式
 	
-	@TableField(value = "dimensioncode_pic")//二维码图片
+
 	private String dimensionCodePic;
 	
-	@TableField(value = "booking_date")//预售时间
-	private Date bookingDate;
-	
-	@TableField(value = "wxis_sale")//小程序是否可售
+
+	//private Date bookingDate;
+
 	private Integer wxisSale;
-	@TableField(value = "refuse_reason")//拒绝理由
+
 	private String refuseReason;
 	
-	@TableField(value = "buyer_id")
+
 	private Long buyerId;
-	
-	@TableField(value = "buyer_name")
+
 	private String buyerName;
 	
-	@TableField(exist = false)
+
 	private String imageIds;	//男女款式
 	
-	@TableField(value = "third_sale")//第三方销售平台
+
 	private Integer thirdSale;
 	
-	@TableField(value = "sale_on_youzan")
+
 	private Integer saleOnYouzan; // 在有赞售卖
 	
-	@TableField(exist = false)
+
 	private String skuCode;	//skucode
 	
-	@TableField(exist = false)
+
 	private String salePrice;	
 	
-	@TableField(exist = false)
+
 	private String skuColor;
 	
-	@TableField(exist = false)
+
 	private Integer itemQuantity;
 	
-	@TableField(exist = false)
+
 	private List<BuyerDO> wxList;
 	
-	@TableField(exist = false)
+
 	private List<Integer> saleOnChannels;
 	
-	@TableField(value = "owners")
+
 	private String owners;
 	public String getSkuColor() {
 		return skuColor;
@@ -160,7 +172,7 @@ public class ItemAddVO implements Serializable{
 	public void setSkuWeight(String skuWeight) {
 		this.skuWeight = skuWeight;
 	}
-	@TableField(exist = false)
+
 	private String skuWeight;
 	
 	public String getSkuCode() {
@@ -181,7 +193,7 @@ public class ItemAddVO implements Serializable{
 	public void setSkuUpc(String skuUpc) {
 		this.skuUpc = skuUpc;
 	}
-	@TableField(exist = false)
+
 	private String skuUpc;	
 	public Long getId() {
 		return id;
@@ -300,26 +312,28 @@ public class ItemAddVO implements Serializable{
 		this.idCard = idCard;
 	}
 
-	public Date getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
+//	public Date getStartDate() {
+//		return startDate;
+//	}
+//	public void setStartDate(Date startDate) {
+//		this.startDate = startDate;
+//	}
+//
+//	public Date getEndDate() {
+//		return endDate;
+//	}
+//	
+//	public void setEndDate(Date endDate) {
+//		this.endDate = endDate;
+//	}
 	
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
 	public Integer getIsSale() {
 		return isSale;
 	}
 	public void setIsSale(Integer isSale) {
 		this.isSale = isSale;
 	}
+	/*
 	public Date getGmtCreate() {
 		return gmtCreate;
 	}
@@ -331,7 +345,7 @@ public class ItemAddVO implements Serializable{
 	}
 	public void setGmtModify(Date gmtModify) {
 		this.gmtModify = gmtModify;
-	}
+	}*/
 	public String getUserCreate() {
 		return userCreate;
 	}
@@ -426,25 +440,22 @@ public class ItemAddVO implements Serializable{
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
-	public String getStartDateStr() {
-		if(startDate!=null){
-		 return DateFormatUtils.format(startDate, DateFormatUtils.ISO_DATE_FORMAT.getPattern());
-		}
-		return "";
-	}
 	
-	public String getEndDateStr() {
-		if(endDate!=null){
-		  return DateFormatUtils.format(endDate, DateFormatUtils.ISO_DATE_FORMAT.getPattern());
-		}
-		return "";
-	}
-	public String getBookingDateStr() {
-		if(bookingDate!=null){
-		  return DateFormatUtils.format(bookingDate, "yyyy-MM-dd HH:mm:ss");
-		}
-		return "";
-	}
+//	public String getStartDateStr() {
+//		if(startDate!=null){
+//		 return DateFormatUtils.format(startDate, DateFormatUtils.ISO_DATE_FORMAT.getPattern());
+//		}
+//		return "";
+//	}
+//	
+//	
+//	public String getEndDateStr() {
+//		if(endDate!=null){
+//		  return DateFormatUtils.format(endDate, DateFormatUtils.ISO_DATE_FORMAT.getPattern());
+//		}
+//		return "";
+//	}
+
 	public Integer getLogisticType() {
 		return logisticType;
 	}
@@ -463,12 +474,7 @@ public class ItemAddVO implements Serializable{
 	public void setDimensionCodePic(String dimensionCodePic) {
 		this.dimensionCodePic = dimensionCodePic;
 	}
-	public Date getBookingDate() {
-		return bookingDate;
-	}
-	public void setBookingDate(Date bookingDate) {
-		this.bookingDate = bookingDate;
-	}
+
 	public Integer getWxisSale() {
 		return wxisSale;
 	}

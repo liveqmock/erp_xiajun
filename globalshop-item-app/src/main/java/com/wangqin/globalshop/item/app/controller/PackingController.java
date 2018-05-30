@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.item.app.service.IShippingPackingScaleService;
+import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
 
 @Controller
 public class PackingController {
 
 	@Autowired
-	private IShippingPackingScaleService shippingPackingScaleService;
+	private IItemPackageScaleService shippingPackingScaleService;
 	
 	@RequestMapping("/freight/getPackageScaleList")
 	@ResponseBody

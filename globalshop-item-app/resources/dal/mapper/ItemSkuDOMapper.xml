@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="upc" property="upc" jdbcType="VARCHAR" />
+    <result column="saleable" property="saleable" jdbcType="TINYINT" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+    <result column="freight" property="freight" jdbcType="BIGINT" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="logistic_type" property="logisticType" jdbcType="TINYINT" />
+    <result column="cost_price" property="costPrice" jdbcType="DOUBLE" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+    <result column="package_code" property="packageCode" jdbcType="VARCHAR" />
+    <result column="package_name" property="packageName" jdbcType="VARCHAR" />
+    <result column="package_en" property="packageEn" jdbcType="VARCHAR" />
+    <result column="package_weight" property="packageWeight" jdbcType="DOUBLE" />
+    <result column="package_level_id" property="packageLevelId" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="VARCHAR" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="sale_type" property="saleType" jdbcType="BIT" />
+    <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" extends="BaseResultMap" >
+    <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sku_code, item_code, item_name, company_no, category_code, category_name, upc, 
+    saleable, purchase_price, freight, discount, logistic_type, cost_price, brand_name, 
+    weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id, 
+    scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del
+  </sql>
+  <sql id="Blob_Column_List" >
+    desc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item_sku
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from item_sku
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into item_sku (id, sku_code, item_code, 
+      item_name, company_no, category_code, 
+      category_name, upc, saleable, 
+      purchase_price, freight, discount, 
+      logistic_type, cost_price, brand_name, 
+      weight, sku_pic, package_code, 
+      package_name, package_en, package_weight, 
+      package_level_id, scale, model, 
+      sale_type, sale_price, creator, 
+      modifier, gmt_create, gmt_modify, 
+      is_del, desc)
+    values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, 
+      #{categoryName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{saleable,jdbcType=TINYINT}, 
+      #{purchasePrice,jdbcType=DOUBLE}, #{freight,jdbcType=BIGINT}, #{discount,jdbcType=DOUBLE}, 
+      #{logisticType,jdbcType=TINYINT}, #{costPrice,jdbcType=DOUBLE}, #{brandName,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=DOUBLE}, #{skuPic,jdbcType=VARCHAR}, #{packageCode,jdbcType=VARCHAR}, 
+      #{packageName,jdbcType=VARCHAR}, #{packageEn,jdbcType=VARCHAR}, #{packageWeight,jdbcType=DOUBLE}, 
+      #{packageLevelId,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{desc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into item_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="skuCode != null" >
+        sku_code,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="categoryCode != null" >
+        category_code,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="upc != null" >
+        upc,
+      </if>
+      <if test="saleable != null" >
+        saleable,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="freight != null" >
+        freight,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="logisticType != null" >
+        logistic_type,
+      </if>
+      <if test="costPrice != null" >
+        cost_price,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="skuPic != null" >
+        sku_pic,
+      </if>
+      <if test="packageCode != null" >
+        package_code,
+      </if>
+      <if test="packageName != null" >
+        package_name,
+      </if>
+      <if test="packageEn != null" >
+        package_en,
+      </if>
+      <if test="packageWeight != null" >
+        package_weight,
+      </if>
+      <if test="packageLevelId != null" >
+        package_level_id,
+      </if>
+      <if test="scale != null" >
+        scale,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="saleType != null" >
+        sale_type,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="desc != null" >
+        desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="skuCode != null" >
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null" >
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null" >
+        #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="saleable != null" >
+        #{saleable,jdbcType=TINYINT},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="freight != null" >
+        #{freight,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="logisticType != null" >
+        #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="costPrice != null" >
+        #{costPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="skuPic != null" >
+        #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="packageCode != null" >
+        #{packageCode,jdbcType=VARCHAR},
+      </if>
+      <if test="packageName != null" >
+        #{packageName,jdbcType=VARCHAR},
+      </if>
+      <if test="packageEn != null" >
+        #{packageEn,jdbcType=VARCHAR},
+      </if>
+      <if test="packageWeight != null" >
+        #{packageWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="packageLevelId != null" >
+        #{packageLevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="saleType != null" >
+        #{saleType,jdbcType=BIT},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="desc != null" >
+        #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+    update item_sku
+    <set >
+      <if test="skuCode != null" >
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null" >
+        category_code = #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null" >
+        upc = #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="saleable != null" >
+        saleable = #{saleable,jdbcType=TINYINT},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="freight != null" >
+        freight = #{freight,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="logisticType != null" >
+        logistic_type = #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="costPrice != null" >
+        cost_price = #{costPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="skuPic != null" >
+        sku_pic = #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="packageCode != null" >
+        package_code = #{packageCode,jdbcType=VARCHAR},
+      </if>
+      <if test="packageName != null" >
+        package_name = #{packageName,jdbcType=VARCHAR},
+      </if>
+      <if test="packageEn != null" >
+        package_en = #{packageEn,jdbcType=VARCHAR},
+      </if>
+      <if test="packageWeight != null" >
+        package_weight = #{packageWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="packageLevelId != null" >
+        package_level_id = #{packageLevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="saleType != null" >
+        sale_type = #{saleType,jdbcType=BIT},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="desc != null" >
+        desc = #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+    update item_sku
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      category_code = #{categoryCode,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      upc = #{upc,jdbcType=VARCHAR},
+      saleable = #{saleable,jdbcType=TINYINT},
+      purchase_price = #{purchasePrice,jdbcType=DOUBLE},
+      freight = #{freight,jdbcType=BIGINT},
+      discount = #{discount,jdbcType=DOUBLE},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      cost_price = #{costPrice,jdbcType=DOUBLE},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      sku_pic = #{skuPic,jdbcType=VARCHAR},
+      package_code = #{packageCode,jdbcType=VARCHAR},
+      package_name = #{packageName,jdbcType=VARCHAR},
+      package_en = #{packageEn,jdbcType=VARCHAR},
+      package_weight = #{packageWeight,jdbcType=DOUBLE},
+      package_level_id = #{packageLevelId,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      sale_type = #{saleType,jdbcType=BIT},
+      sale_price = #{salePrice,jdbcType=DOUBLE},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      desc = #{desc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+    update item_sku
+    set sku_code = #{skuCode,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      category_code = #{categoryCode,jdbcType=VARCHAR},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      upc = #{upc,jdbcType=VARCHAR},
+      saleable = #{saleable,jdbcType=TINYINT},
+      purchase_price = #{purchasePrice,jdbcType=DOUBLE},
+      freight = #{freight,jdbcType=BIGINT},
+      discount = #{discount,jdbcType=DOUBLE},
+      logistic_type = #{logisticType,jdbcType=TINYINT},
+      cost_price = #{costPrice,jdbcType=DOUBLE},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      sku_pic = #{skuPic,jdbcType=VARCHAR},
+      package_code = #{packageCode,jdbcType=VARCHAR},
+      package_name = #{packageName,jdbcType=VARCHAR},
+      package_en = #{packageEn,jdbcType=VARCHAR},
+      package_weight = #{packageWeight,jdbcType=DOUBLE},
+      package_level_id = #{packageLevelId,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      sale_type = #{saleType,jdbcType=BIT},
+      sale_price = #{salePrice,jdbcType=DOUBLE},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

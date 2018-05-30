@@ -13,7 +13,7 @@ import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
  * 
  */
 
-public interface IShippingPackingPatternService {
+public interface IItemPackagePatternService {
 
     Integer queryPackageLevelsCount(ShippingPackingPatternQueryVO packageLevelQueryVO);
 
@@ -33,17 +33,12 @@ public interface IShippingPackingPatternService {
     // 总查询
     JsonPageResult<List<ItemBrandDO>> queryAllBrand();
 
-    /**
-     * 根据品牌英文名查找品牌，防止重复
-     * 
-     * @author XiaJun
-     * @param name
-     * @return
-     */
-    ItemBrandDO selectByName(String name);
+   
 
     ItemBrandDO selectByPrimaryKey(Long id);
 
     void deleteByPrimaryKey(Long id);
+    
+    List<ShippingPackingPatternDO> queryPatternsByScaleNo(String no);
 
 }

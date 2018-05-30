@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.impl.PublicImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,10 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingPackingPatternDOMap
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
-import com.wangqin.globalshop.item.app.service.IShippingPackingPatternService;
+import com.wangqin.globalshop.item.app.service.IItemPackagePatternService;
 
 @Service
-public class ShippingPackingPatternServiceImpl implements IShippingPackingPatternService {
+public class ItemPackagePatternServiceImpl implements IItemPackagePatternService {
 
     @Autowired
     private ShippingPackingPatternDOMapperExt packageLevelMapper;
@@ -91,17 +92,7 @@ public class ShippingPackingPatternServiceImpl implements IShippingPackingPatter
         return brandResult;
     }
 
-    /**
-     * 根据品牌英文名查找品牌，防止重复
-     * 
-     * @author XiaJun
-     * @param name
-     * @return
-     */
-    @Override
-    public ItemBrandDO selectByName(String name) {
-        return itemBrandDOMapperExt.selectByName(name);
-    }
+  
 
     @Override
     public ItemBrandDO selectByPrimaryKey(Long id) {
@@ -116,6 +107,14 @@ public class ShippingPackingPatternServiceImpl implements IShippingPackingPatter
     @Override
     public void add(ItemBrandDO itemBrand) {
 
+    } 
+    
+    
+    @Override
+    public List<ShippingPackingPatternDO> queryPatternsByScaleNo(String no) {
+    	return packageLevelMapper.queryPatternsByScaleNo(no);
     }
+    
+   
 
 }

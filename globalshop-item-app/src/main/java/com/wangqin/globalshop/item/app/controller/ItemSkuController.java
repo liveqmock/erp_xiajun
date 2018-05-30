@@ -25,6 +25,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -36,6 +37,7 @@ import com.wangqin.globalshop.item.app.service.IInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IMallOrderService;
+import com.wangqin.globalshop.item.app.service.IScaleTypeService;
 
 
 /**
@@ -56,6 +58,9 @@ public class ItemSkuController  {
 	private IInventoryService inventoryService;
 	@Autowired
 	private IMallOrderService erpOrderService;
+	
+	@Autowired
+	private IScaleTypeService scaleTypeService;
 
 
 	
@@ -342,4 +347,15 @@ public class ItemSkuController  {
     	}
     	return result;
 	}
+    
+
+	@RequestMapping("/scaleTypeList")
+	@ResponseBody
+	public Object scaleTypeList() {
+		JsonResult<List<ScaleType>> result = new JsonResult<>();
+		List<ScaleType> scaleTypeList= scaleTypeService.scaleTypeList();
+		
+		return result.buildData(scaleTypeList).buildIsSuccess(true);
+	}
+    
 }

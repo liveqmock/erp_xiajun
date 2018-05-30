@@ -35,4 +35,6 @@ public interface ICountryService {
 	JsonPageResult<List<CountryDO>> queryAllCountries();
 	
 	CountryDO queryCountrySelective(CountryDO countryDO);
+	
+	String queryCodeById(Integer id);
 }
