@@ -3,6 +3,7 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class ItemSkuServiceImpl  implements IItemSkuService {
 
 
-	@Resource ItemSkuDOMapperExt itemSkuDOMapperExt;
+	@Resource CAItemSkuDOMapperExt itemSkuDOMapperExt;
 
 	public ItemSkuDOMapper getMapper(){
 		return itemSkuDOMapperExt;

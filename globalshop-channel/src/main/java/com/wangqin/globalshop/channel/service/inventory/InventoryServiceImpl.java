@@ -7,6 +7,9 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryBookingRecordDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryOnWarehouseMapperExt;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,11 +38,11 @@ import com.wangqin.globalshop.common.utils.BeanUtils;
 @Service("inventoryService")
 public class InventoryServiceImpl  implements IInventoryService {
 
-	@Resource InventoryDOMapperExt inventoryDOMapperExt;
+	@Resource CAInventoryDOMapperExt inventoryDOMapperExt;
 
-	@Resource InventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
+	@Resource CAInventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
 
-	@Resource InventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
+	@Resource CAInventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
 
 	@Autowired IWarehouseService warehouseService;
 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAWarehouseDOMapperExt;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
@@ -18,7 +19,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 @Service("wareHouseService")
 public class WarehouseServiceImpl implements IWarehouseService {
 
-	@Resource WarehouseDOMapperExt warehouseDOMapperExt;
+	@Resource CAWarehouseDOMapperExt warehouseDOMapperExt;
 
 	public Map<String,Integer> getWarehousePropeties(String companyNo){
 

@@ -2,6 +2,7 @@ package com.wangqin.globalshop.channel.service.channelItem;
 
 import javax.annotation.Resource;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAChannelListingItemDOMapperExt;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
@@ -15,7 +16,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelListingItemDOMapper;
 @Service("channelListingItemService")
 public class ChannelListingItemServiceImpl implements IChannelListingItemService {
 
-	@Resource ChannelListingItemDOMapperExt channelListingItemDOMapperExt;
+	@Resource CAChannelListingItemDOMapperExt channelListingItemDOMapperExt;
 
 	public  ChannelListingItemDOMapper getMapper(){
 		return  channelListingItemDOMapperExt;

@@ -3,9 +3,13 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAItemDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +28,11 @@ public class ItemServiceImpl  implements IItemService {
 
 
 
-	@Resource ItemDOMapperExt itemDOMapperExt;
+	@Resource CAItemDOMapperExt itemDOMapperExt;
 
-	@Resource ItemSkuDOMapperExt itemSkuDOMapperExt;
+	@Resource CAItemSkuDOMapperExt itemSkuDOMapperExt;
 
-	@Resource InventoryDOMapperExt inventoryDOMapperExt;
+	@Resource CAInventoryDOMapperExt inventoryDOMapperExt;
 
 	public int deleteByPrimaryKey(Long id){
 		return itemDOMapperExt.deleteByPrimaryKey(id);

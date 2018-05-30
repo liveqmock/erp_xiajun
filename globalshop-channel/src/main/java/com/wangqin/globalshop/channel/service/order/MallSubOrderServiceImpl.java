@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAMallSubOrderDOMapperExt;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
 
-	@Resource MallSubOrderDOMapperExt mallSubOrderDOMapperExt;
+	@Resource CAMallSubOrderDOMapperExt mallSubOrderDOMapperExt;
 
 
 	public int deleteByPrimaryKey(Long id){
