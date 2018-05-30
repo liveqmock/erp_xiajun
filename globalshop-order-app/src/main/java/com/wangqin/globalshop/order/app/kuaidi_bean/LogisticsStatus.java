@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.notice_bean;
+package com.wangqin.globalshop.order.app.kuaidi_bean;
 
 import org.springframework.util.StringUtils;
 

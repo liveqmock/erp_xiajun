@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.order.app.controller.kuaidi100;
 
-import com.wangqin.globalshop.order.app.notice_bean.NoticeResponse;
+import com.wangqin.globalshop.order.app.kuaidi_bean.NoticeResponse;
 import com.wangqin.globalshop.order.app.service.kuaidi100.IKuaidi100Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

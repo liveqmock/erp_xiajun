@@ -16,4 +16,6 @@ public interface IChannelAccountService {
 	public void createOrupdateAccount4Taobao(String shopCode, String cookie);
 
 	ChannelAccountDO queryByChannelNo(String channelNo);
+
+    ChannelAccountDO selectOne(ChannelAccountDO tmEntity);
 }

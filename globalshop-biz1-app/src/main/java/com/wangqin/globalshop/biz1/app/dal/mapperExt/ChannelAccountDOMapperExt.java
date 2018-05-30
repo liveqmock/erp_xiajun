@@ -15,4 +15,6 @@ public interface ChannelAccountDOMapperExt extends ChannelAccountDOMapper {
 	public List<ChannelAccountDO> queryPoList(ChannelAccountSo channelAccountSo);
 
     ChannelAccountDO queryByChannelNo(String channelNo);
+
+    ChannelAccountDO queryByTypeAndCompanyNo(ChannelAccountDO tmEntity);
 }

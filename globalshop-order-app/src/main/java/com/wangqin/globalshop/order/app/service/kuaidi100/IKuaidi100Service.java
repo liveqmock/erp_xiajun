@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.order.app.service.kuaidi100;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.order.app.notice_bean.NoticeResponse;
+import com.wangqin.globalshop.order.app.kuaidi_bean.NoticeResponse;
 
 public interface IKuaidi100Service {
 	/**

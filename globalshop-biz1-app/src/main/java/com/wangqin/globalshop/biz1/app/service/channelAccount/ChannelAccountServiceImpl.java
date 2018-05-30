@@ -111,4 +111,9 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 		return channelAccountDOMapperExt.queryByChannelNo(channelNo);
 	}
 
+	@Override
+	public ChannelAccountDO selectOne(ChannelAccountDO tmEntity) {
+		return channelAccountDOMapperExt.queryByTypeAndCompanyNo(tmEntity);
+	}
+
 }
