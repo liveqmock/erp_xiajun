@@ -133,7 +133,7 @@
     	update item set is_sale=1 where <![CDATA[ now()>=start_date and now()<date_sub(end_date,interval -1 day) ]]> and is_sale!=1
 	</update>
 	
-   <select id="queryItemsCountByhaihu" resultMap="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+   <select id="queryItemsCountByhaihu" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
         SELECT
         	count(1)
         FROM
@@ -148,7 +148,7 @@
             </if>
     </select>
     
-	 <select id="queryHaihuItems" resultMap="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+	 <select id="queryHaihuItems" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
         SELECT
         	 <include refid="Haihu_Column_List" />,T2.sku_code As skuCode,T2.upc As skuUpc, T2.color As skuColor, T2.sale_price As salePrice,T2.weight As skuWeight
         FROM
@@ -166,7 +166,7 @@
             
     </select>
     
-<select id="queryHaihuByUptime" resultMap="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+<select id="queryHaihuByUptime" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
 	SELECT
 	<include refid="Haihu_Column_List" /> 
 	FROM
@@ -187,7 +187,7 @@
 </select>
 
 <!-- 按照天统计上新量,XiaJun -->
-	<select id="sumNewItemNumByDate" resultMap="java.lang.Integer">
+	<select id="sumNewItemNumByDate" resultType="java.lang.Integer">
 	SELECT IFNULL(count(1),0)
 	FROM item T1 
 	<where>
@@ -197,7 +197,7 @@
 	</select>
 
 <!-- 按照月统计上新量,XiaJun -->
-	<select id="sumNewItemNumByMonth" resultMap="java.lang.Integer">
+	<select id="sumNewItemNumByMonth" resultType="java.lang.Integer">
 	SELECT IFNULL(count(1),0)
 	FROM item T1
 	<where>
