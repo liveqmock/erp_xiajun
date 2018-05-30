@@ -461,4 +461,14 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         return shippingOrderMapper.selectByPrimaryKey(shippingOrderId);
     }
 
+    @Override
+    public ShippingOrderDO selectOne(ShippingOrderDO order) {
+        return shippingOrderMapper.selectByLogisticNo(order);
+    }
+
+    @Override
+    public void updateStatusByShippingNo(String logisticNo) {
+        shippingOrderMapper.updateStatusByShippingNo(logisticNo);
+    }
+
 }

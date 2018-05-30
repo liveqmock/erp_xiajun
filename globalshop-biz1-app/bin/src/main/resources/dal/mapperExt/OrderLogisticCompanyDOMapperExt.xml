@@ -13,6 +13,8 @@
     <result column="code_in_pdd" property="codeInPdd" jdbcType="VARCHAR" />
     <result column="name_in_taobao" property="nameInTaobao" jdbcType="VARCHAR" />
     <result column="code_in_taobao" property="codeInTaobao" jdbcType="VARCHAR" />
+    <result column="name_in_kuaidi100" property="nameInKuaidi100" jdbcType="VARCHAR" />
+    <result column="code_in_kuaidi100" property="codeInKuaidi100" jdbcType="VARCHAR" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />

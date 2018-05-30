@@ -44,6 +44,10 @@ public interface IShippingOrderService {
 
     ShippingOrderDO selectById(Long shippingOrderId);
 
+    ShippingOrderDO selectOne(ShippingOrderDO order);
+
+    void updateStatusByShippingNo(String logisticNo);
+
 
 //	MultiDeliveryFormDTO queryByErpOrderId(String erpOrderId);
 //

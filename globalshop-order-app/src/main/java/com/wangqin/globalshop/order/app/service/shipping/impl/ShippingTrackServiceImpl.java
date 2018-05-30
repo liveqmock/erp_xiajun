@@ -2,7 +2,7 @@ package com.wangqin.globalshop.order.app.service.shipping.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackDOMapperExt;
-import com.wangqin.globalshop.order.app.service.shipping.ShippingTrackService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @data 2018/05/28
  */
 @Service
-public class ShippingTrackServiceImpl implements ShippingTrackService {
+public class ShippingTrackServiceImpl implements IShippingTrackService {
     @Autowired
     private ShippingTrackDOMapperExt shippingTrackDOMapper;
 
@@ -23,7 +23,9 @@ public class ShippingTrackServiceImpl implements ShippingTrackService {
     }
 
     @Override
-    public void insertOrUpdateInfo() {
+    public void insert(ShippingTrackDO shippingTrackDO) {
+        shippingTrackDOMapper.insert(shippingTrackDO);
 
     }
+
 }

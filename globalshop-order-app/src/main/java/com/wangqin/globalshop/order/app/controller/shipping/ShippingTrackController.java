@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.controller;
+package com.wangqin.globalshop.order.app.controller.shipping;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;

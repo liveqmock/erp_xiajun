@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.controller;
+package com.wangqin.globalshop.order.app.controller.shipping;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
@@ -452,7 +452,7 @@ public class ShippingOrderController {
 		document.open();
 		PdfContentByte cd = writer.getDirectContent();
 		// =========虚线start===================
-		CustomDashedLineSeparator separator = new CustomDashedLineSeparator();
+		com.wangqin.globalshop.order.app.controller.CustomDashedLineSeparator separator = new com.wangqin.globalshop.order.app.controller.CustomDashedLineSeparator();
 		separator.setDash(1);
 		separator.setGap(1);
 		separator.setLineWidth(0.5f);
@@ -966,34 +966,34 @@ public class ShippingOrderController {
 }
 
 
-	class CustomDashedLineSeparator extends DottedLineSeparator {
-		protected float dash = 5;
-		protected float phase = 2.5f;
+class CustomDashedLineSeparator extends DottedLineSeparator {
+    protected float dash = 5;
+    protected float phase = 2.5f;
 
-		public float getDash() {
-			return dash;
-		}
+    public float getDash() {
+        return dash;
+    }
 
-		public float getPhase() {
-			return phase;
-		}
+    public float getPhase() {
+        return phase;
+    }
 
-		public void setDash(float dash) {
-			this.dash = dash;
-		}
+    public void setDash(float dash) {
+        this.dash = dash;
+    }
 
-		public void setPhase(float phase) {
-			this.phase = phase;
-		}
+    public void setPhase(float phase) {
+        this.phase = phase;
+    }
 
-		@Override
-		public void draw(PdfContentByte canvas, float llx, float lly, float urx, float ury, float y) {
-			canvas.saveState();
-			canvas.setLineWidth(lineWidth);
-			canvas.setLineDash(dash, gap, phase);
-			drawLine(canvas, llx, urx, y);
-			canvas.restoreState();
-		}
+    @Override
+    public void draw(PdfContentByte canvas, float llx, float lly, float urx, float ury, float y) {
+        canvas.saveState();
+        canvas.setLineWidth(lineWidth);
+        canvas.setLineDash(dash, gap, phase);
+        drawLine(canvas, llx, urx, y);
+        canvas.restoreState();
+    }
 
 
 }

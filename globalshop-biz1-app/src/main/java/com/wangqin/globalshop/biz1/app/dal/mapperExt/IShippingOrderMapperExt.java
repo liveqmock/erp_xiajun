@@ -25,4 +25,7 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
 
     int selectCount(String idCard, String logisticCompany);
 
+    ShippingOrderDO selectByLogisticNo(ShippingOrderDO order);
+
+    void updateStatusByShippingNo(String logisticNo);
 }

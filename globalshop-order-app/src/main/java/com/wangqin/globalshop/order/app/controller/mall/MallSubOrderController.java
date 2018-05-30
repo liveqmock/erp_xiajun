@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.controller;
+package com.wangqin.globalshop.order.app.controller.mall;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
