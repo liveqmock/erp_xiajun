@@ -12,7 +12,7 @@ import com.wangqin.globalshop.channel.dal.mapperExt.ShippingOrderDOMapperExt;
  * ShippingOrder 表数据服务层接口实现类
  *
  */
-@Service
+@Service("shippingOrderService")
 public class ShippingOrderServiceImpl  implements IShippingOrderService {
 
 	@Resource ShippingOrderDOMapperExt shippingOrderDOMapperExt;

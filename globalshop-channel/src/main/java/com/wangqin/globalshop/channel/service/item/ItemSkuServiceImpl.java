@@ -16,7 +16,7 @@ import java.util.List;
  * ItemSku 表数据服务层接口实现类
  *
  */
-@Service
+@Service("itemSkuService")
 public class ItemSkuServiceImpl  implements IItemSkuService {
 
 

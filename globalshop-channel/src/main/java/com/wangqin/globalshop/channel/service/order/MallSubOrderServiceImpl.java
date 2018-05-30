@@ -20,7 +20,7 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
  * MallSubOrder 表数据服务层接口实现类
  *
  */
-@Service
+@Service("mallSubOrderService")
 public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
 

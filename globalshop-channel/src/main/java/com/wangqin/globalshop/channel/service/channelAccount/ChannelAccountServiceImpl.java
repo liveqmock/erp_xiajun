@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
@@ -17,56 +18,56 @@ import com.wangqin.globalshop.channel.dal.mapperExt.ChannelAccountDOMapperExt;
 @Service("channelAccountService")
 public class ChannelAccountServiceImpl  implements IChannelAccountService {
 
-	@Resource ChannelAccountDOMapperExt channelAccountDOMapperExt;
+	@Autowired ChannelAccountDOMapperExt channelAccountDOMapper;
 
 
 	public ChannelAccountDOMapper getChannelAccountMapper() {
-		return channelAccountDOMapperExt;
+		return channelAccountDOMapper;
 	}
 
-	public void setChannelAccountMapper(ChannelAccountDOMapperExt channelAccountMapper) {
-		this.channelAccountDOMapperExt = channelAccountDOMapperExt;
-	}
+//	public void setChannelAccountMapper(ChannelAccountDOMapperExt channelAccountMapper) {
+//		this.channelAccountDOMapperExt = channelAccountMapper;
+//	}
 
 	@Override
 	public Integer queryPoCount(ChannelAccountSo so) {
-		return this.channelAccountDOMapperExt.queryPoCount(so);
+		return this.channelAccountDOMapper.queryPoCount(so);
 	}
 
 	@Override
 	public ChannelAccountDO queryPo(ChannelAccountSo so){
-		return this.channelAccountDOMapperExt.queryPo(so);
+		return this.channelAccountDOMapper.queryPo(so);
 	}
 
 	@Override
 	public List<ChannelAccountDO> queryPoList(ChannelAccountSo so) {
-		return this.channelAccountDOMapperExt.queryPoList(so);
+		return this.channelAccountDOMapper.queryPoList(so);
 	}
 
 
 
 	public int deleteByPrimaryKey(Long id){
-		return this.channelAccountDOMapperExt.deleteByPrimaryKey(id);
+		return this.channelAccountDOMapper.deleteByPrimaryKey(id);
 	}
 
 	public int insert(ChannelAccountDO record){
-		return this.channelAccountDOMapperExt.insert(record);
+		return this.channelAccountDOMapper.insert(record);
 	}
 
 	public int insertSelective(ChannelAccountDO record){
-		return this.channelAccountDOMapperExt.insertSelective(record);
+		return this.channelAccountDOMapper.insertSelective(record);
 	}
 
 	public ChannelAccountDO selectByPrimaryKey(Long id){
-		return this.channelAccountDOMapperExt.selectByPrimaryKey(id);
+		return this.channelAccountDOMapper.selectByPrimaryKey(id);
 	}
 
 	public int updateByPrimaryKeySelective(ChannelAccountDO record){
-		return this.channelAccountDOMapperExt.updateByPrimaryKeySelective(record);
+		return this.channelAccountDOMapper.updateByPrimaryKeySelective(record);
 	}
 
 	public int updateByPrimaryKey(ChannelAccountDO record){
-		return this.channelAccountDOMapperExt.updateByPrimaryKey(record);
+		return this.channelAccountDOMapper.updateByPrimaryKey(record);
 	}
 
 
@@ -82,7 +83,7 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 		ChannelAccountSo entitySo = new ChannelAccountSo();
 		entitySo.setShopCode(shopCode);
 		entitySo.setChannelNo(ChannelType.TaoBao.getValue()+"");
-		ChannelAccountDO channelAccount =	channelAccountDOMapperExt.queryPo(entitySo);
+		ChannelAccountDO channelAccount = channelAccountDOMapper.queryPo(entitySo);
 
 		if(channelAccount == null) {
 			channelAccount = new ChannelAccountDO();
@@ -107,7 +108,7 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 			channelAccount.setCreator("-1");
 			channelAccount.setGmtCreate(new Date());
 
-			channelAccountDOMapperExt.insert(channelAccount);
+			channelAccountDOMapper.insert(channelAccount);
 		}else {
 
 			//渠道信息
@@ -130,7 +131,7 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 			channelAccount.setModifier("-1");
 			channelAccount.setGmtModify(new Date());
 
-			channelAccountDOMapperExt.updateByPrimaryKey(channelAccount);
+			channelAccountDOMapper.updateByPrimaryKey(channelAccount);
 		}
 
 	}
