@@ -16,7 +16,8 @@ import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountSo;
 @Service("channelAccountService")
 public class ChannelAccountServiceImpl  implements IChannelAccountService {
 
-	@Autowired CAChannelAccountDOMapperExt channelAccountDOMapper;
+	@Autowired
+	CAChannelAccountDOMapperExt channelAccountDOMapper;
 
 
 	public ChannelAccountDOMapper getChannelAccountMapper() {

@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.annotation.Resource;
 
 import com.wangqin.globalshop.channel.dal.mapperExt.CAChannelAccountConfigDOMapperExt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
@@ -18,7 +19,8 @@ import com.wangqin.globalshop.common.utils.StringUtils;
 @Service("channelAccountConfigService")
 public class ChannelAccountConfigServiceImpl implements IChannelAccountConfigService {
 
-	@Resource CAChannelAccountConfigDOMapperExt channelAccountConfigDOMapperExt;
+	@Autowired
+	CAChannelAccountConfigDOMapperExt channelAccountConfigDOMapperExt;
 
 
 	public ChannelAccountConfigDOMapper getMapper() {

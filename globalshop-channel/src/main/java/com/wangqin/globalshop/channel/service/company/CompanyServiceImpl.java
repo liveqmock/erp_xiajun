@@ -2,6 +2,7 @@ package com.wangqin.globalshop.channel.service.company;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +16,7 @@ import java.util.List;
 @Service("companyService")
 public class CompanyServiceImpl implements ICompanyService {
 
-	@Resource CompanyDOMapperExt companyDOMapperExt;
+	@Autowired CompanyDOMapperExt companyDOMapperExt;
 
 	public int deleteByPrimaryKey(Long id){
 		return companyDOMapperExt.deleteByPrimaryKey(id);

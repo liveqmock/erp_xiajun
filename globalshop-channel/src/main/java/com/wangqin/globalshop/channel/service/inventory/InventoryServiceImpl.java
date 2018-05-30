@@ -38,11 +38,11 @@ import com.wangqin.globalshop.common.utils.BeanUtils;
 @Service("inventoryService")
 public class InventoryServiceImpl  implements IInventoryService {
 
-	@Resource CAInventoryDOMapperExt inventoryDOMapperExt;
+	@Autowired CAInventoryDOMapperExt inventoryDOMapperExt;
 
-	@Resource CAInventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
+	@Autowired CAInventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
 
-	@Resource CAInventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
+	@Autowired CAInventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
 
 	@Autowired IWarehouseService warehouseService;
 

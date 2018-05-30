@@ -11,6 +11,7 @@ import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
 import com.wangqin.globalshop.channel.dal.mapperExt.CAItemDOMapperExt;
 import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,13 +27,14 @@ import java.util.List;
 public class ItemServiceImpl  implements IItemService {
 
 
+	@Autowired
+	CAItemDOMapperExt itemDOMapperExt;
 
+	@Autowired
+	CAItemSkuDOMapperExt itemSkuDOMapperExt;
 
-	@Resource CAItemDOMapperExt itemDOMapperExt;
-
-	@Resource CAItemSkuDOMapperExt itemSkuDOMapperExt;
-
-	@Resource CAInventoryDOMapperExt inventoryDOMapperExt;
+	@Autowired
+	CAInventoryDOMapperExt inventoryDOMapperExt;
 
 	public int deleteByPrimaryKey(Long id){
 		return itemDOMapperExt.deleteByPrimaryKey(id);

@@ -35,9 +35,9 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
 	protected Logger logger = LogManager.getLogger(getClass());
 
-	@Resource CAMallOrderDOMapperExt mallOrderDOMapperExt;
+	@Autowired CAMallOrderDOMapperExt mallOrderDOMapperExt;
 
-	@Resource CAMallSubOrderDOMapperExt mallSubOrderDOMapperExt;
+	@Autowired CAMallSubOrderDOMapperExt mallSubOrderDOMapperExt;
 
 	public MallOrderDOMapper getMapper(){
 		return mallOrderDOMapperExt;

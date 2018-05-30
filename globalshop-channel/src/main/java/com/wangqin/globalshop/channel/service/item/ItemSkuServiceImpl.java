@@ -5,6 +5,7 @@ import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
 import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,7 +21,7 @@ import java.util.List;
 public class ItemSkuServiceImpl  implements IItemSkuService {
 
 
-	@Resource CAItemSkuDOMapperExt itemSkuDOMapperExt;
+	@Autowired CAItemSkuDOMapperExt itemSkuDOMapperExt;
 
 	public ItemSkuDOMapper getMapper(){
 		return itemSkuDOMapperExt;

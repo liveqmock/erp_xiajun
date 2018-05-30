@@ -3,6 +3,7 @@ package com.wangqin.globalshop.channel.service.order;
 import javax.annotation.Resource;
 
 import com.wangqin.globalshop.channel.dal.mapperExt.CAShippingOrderDOMapperExt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
@@ -15,7 +16,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 @Service("shippingOrderService")
 public class ShippingOrderServiceImpl  implements IShippingOrderService {
 
-	@Resource CAShippingOrderDOMapperExt shippingOrderDOMapperExt;
+	@Autowired CAShippingOrderDOMapperExt shippingOrderDOMapperExt;
 
 	public CAShippingOrderDOMapperExt getShippingOrderDOMapperExt() {
 		return shippingOrderDOMapperExt;
