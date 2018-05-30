@@ -27,13 +27,28 @@
         </where>
 	</select>
 	
+	<!--id查code -->
+	<select id="queryCodeById" resultType="java.lang.String" parameterType= "java.lang.Integer">
 	
-	<select id="queryCountrySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
+		select
+    	country_code
+     	FROM country
+     	<where>
+        is_del=0
+        AND id=#{id}
+        </where>
+	</select>
+	
+	
+	<select id="queryCountrySelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
    		select
     	<include refid="Base_Column_List" />
      	FROM country
       <where>
       is_del=0
+      <if test="id != null" >
+        id = #{id,jdbcType=BIGINT},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>

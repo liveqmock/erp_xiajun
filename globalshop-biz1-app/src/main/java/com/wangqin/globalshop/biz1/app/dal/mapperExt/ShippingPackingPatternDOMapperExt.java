@@ -12,4 +12,5 @@ public interface ShippingPackingPatternDOMapperExt extends ShippingPackingPatter
 
     List<ShippingPackingPatternDO> queryPackageLevels(ShippingPackingPatternQueryVO packageLevelQueryVO);
 
+    List<ShippingPackingPatternDO> queryPatternsByScaleNo(String no);
 }

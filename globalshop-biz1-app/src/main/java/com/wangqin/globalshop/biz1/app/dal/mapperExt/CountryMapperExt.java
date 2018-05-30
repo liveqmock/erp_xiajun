@@ -31,4 +31,6 @@ public interface CountryMapperExt extends CountryDOMapper{
 	List<CountryDO> queryAllCountries();
 	
 	CountryDO queryCountrySelective(CountryDO countryDO);
+	
+	String queryCodeById(Integer id);
 }
