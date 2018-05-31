@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt">
+
+    <select id="queryItemSkusForItemThirdSale" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />, T2.quantity AS itemSkuQuantity
+        FROM item_sku T1 LEFT JOIN  mall_order T2 on T1.id= T2.sku_id
+        WHERE T1.item_id = #{itemId} and T2.sales_name = '海狐海淘'
+        AND T2.receiver = '地址稍后'
+        AND T2.quantity >1
+    </select>
+
+
+    <sql id="commonSelectSection">
+       1 = 1
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(itemCode)">
+    and T.item_code = #{itemCode}
+    </if>
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(skuCode)">
+    and T.sku_code = #{skuCode}
+    </if>
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(companyNo)">
+      and T.company_no = #{companyNo}
+    </if>
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(itemName)">
+       and T.item_name = #{itemName}
+    </if>
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(categoryCode)">
+       and T.category_code = #{categoryCode}
+    </if>
+
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(upc)">
+    and T.upc = #{upc}
+    </if>
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(id)">
+        and T.id  = #{id}
+    </if>
+    <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(status)">
+        and T.status = #{status}
+    </if>
+    <if test=" isDel == true">
+        and T.is_del is true
+    </if>
+    <if test=" isDel == false">
+         and T.is_del is false
+    </if>
+
+    </sql>
+
+
+    <!--查询总条数 -->
+    <select id="queryPo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+    SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
+    FROM item T
+    WHERE
+    <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="queryPoCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+    SELECT COUNT(*)
+    FROM item T
+    WHERE
+    <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+    SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
+    FROM item T
+    WHERE
+    <include refid="commonSelectSection"/>
+    ORDER BY T.id desc
+    </select>
+
+
+
+</mapper>

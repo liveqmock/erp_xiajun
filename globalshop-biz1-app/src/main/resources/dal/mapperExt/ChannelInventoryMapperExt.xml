@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryMapperExt">
+
+   <!-- 通用查询结果列-->
+    <sql id="inventoryResultMapping">
+        id,item_id AS itemId,sku_id AS skuId,item_name AS itemName,upc ,sku_code AS skuCode,locked_inv as lockedInv,inventory,virtual_inv AS virtualInv,locked_virtual_inv AS lockedVirtualInv,trans_inv AS transInv,locked_trans_inv AS lockedTransInv,gmt_create AS gmtCreate,gmt_modify AS gmtModify
+    </sql>
+
+	<select id="getInventoryBySkuId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO"  >
+        SELECT
+        	 <include refid="inventoryResultMapping" />
+        FROM
+            inventory T1
+        <where>
+        		<if test="itemId != null" >
+        			item_id = #{itemId}	
+        		</if>
+        		<if test="skuId != null" >
+        			and sku_id = #{skuId}
+        		</if>
+        </where>
+    </select>
+    
+    	<select id="getInventoryBySkuIdLock" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO"  >
+        SELECT
+        	 <include refid="inventoryResultMapping" />
+        FROM
+            inventory T1
+        <where>
+        		<if test="itemId != null" >
+        			item_id = #{itemId}	
+        		</if>
+        		<if test="skuId != null" >
+        			and sku_id = #{skuId}
+        		</if>
+        </where>
+        for update
+    </select>
+    
+    <update id="updateLockInventory" >  
+    <![CDATA[ 
+	    UPDATE
+	    		inventory
+	    	SET
+			locked_inv = locked_inv + #{booked},
+			locked_trans_inv = locked_trans_inv + #{transBooked}
+	    WHERE  
+	    		id = #{id} and inventory - #{booked} >=0  and inventory >= locked_inv + #{booked} 
+	    				   and trans_inv - #{transBooked} >=0  and trans_inv >= locked_trans_inv + #{transBooked} 
+	    		]]> 
+	</update> 
+	
+	<update id="updateInventoryByInventoryArea">
+		UPDATE inventory a LEFT JOIN (
+		SELECT t.sku_id,SUM(t.trans_inv) s_trans_inv,SUM(t.locked_inv) s_locked_inv,SUM(t.inventory) s_inventory FROM inventory_area t GROUP BY t.sku_id) b 
+		ON a.`sku_id`=b.sku_id 
+		SET a.`inventory`=b.s_inventory,a.`trans_inv`=b.s_trans_inv,a.`locked_inv`=b.s_locked_inv
+	</update>
+	
+	<update id="updateTransToInventory" >  
+    		<![CDATA[ 
+	    UPDATE
+	    		inventory
+	    	SET
+			inventory = inventory + #{toTrans},
+			trans_inv = trans_inv - #{toTrans},
+			locked_inv = locked_inv + #{lockedTransToInv},
+			locked_trans_inv = locked_trans_inv - #{lockedTransToInv}
+	    WHERE  
+	    		item_id = #{itemId}	and sku_id = #{skuId} and trans_inv - #{toTrans} >= 0 and locked_trans_inv = #{lockedTransInv}
+	    		]]> 
+	</update> 
+	
+	<delete id="deleteInventoryBySkuId" parameterType="java.lang.Long">
+		DELETE FROM inventory WHERE sku_id=#{skuId}
+	</delete>
+	
+	<update id="updateInventoryCheck" >  
+    		<![CDATA[ 
+	    UPDATE
+	    		inventory
+	    	SET
+			inventory = inventory - #{toCheck}
+	    WHERE  
+	    		id = #{id} and inventory = #{inventory} and inventory - #{toCheck} >= 0
+	    		]]> 
+	</update> 
+	
+	<update id="updateInventoryTransCheck" >  
+    		<![CDATA[ 
+	    UPDATE
+	    		inventory
+	    	SET
+			trans_inv = trans_inv - #{toCheck},
+			inventory = inventory + #{toCheck}
+	    WHERE  
+	    		id = #{id} and trans_inv = #{transInv} and trans_inv - #{toCheck} >= 0
+	    		]]> 
+	</update> 
+	
+	<update id="updateUpcForInventory" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+		UPDATE inventory SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};
+    </update>
+    
+    <update id="updateVirtualInvByItemId" parameterType="java.lang.Long">
+        UPDATE inventory SET virtual_inv=0 WHERE item_id=#{itemId}
+    </update>
+    
+    
+    
+    
+    <insert id="insertBatch" >  
+    insert into inventory (company_no,creator,modifier)   
+    values   
+    <foreach collection="inventoryList" item="item" index="index" open="(" separator=","  close=")">  
+         #{item.CompanyNo}, 
+         #{item.Creator}, 
+         #{item.Modifier}  
+    </foreach>  
+    </insert>
+    
+    <select id="queryInventoryBySkuCode">
+       SELECT <include refid="inventoryResultMapping" />
+       FROM inventory
+       <where>
+       sku_code=#{skuCode}
+       </where>
+    </select>
+
+    
+</mapper>

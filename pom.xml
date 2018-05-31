@@ -173,6 +173,7 @@
         <module>globalshop-common</module>
         <module>globalshop-web</module>
         <module>globalshop-order-app</module>
+        <module>globalshop-channel</module>
     </modules>
 
 

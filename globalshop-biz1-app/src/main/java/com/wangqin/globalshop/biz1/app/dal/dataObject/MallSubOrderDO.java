@@ -3,95 +3,96 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 import java.util.Date;
 
 public class MallSubOrderDO {
-    private Long id;
 
-    private String orderNo;
+    private Long    id;
 
-    private String mallReturnOrderNo;
+    private String  orderNo;
 
-    private String customerNo;
+    private String  mallReturnOrderNo;
 
-    private String openId;
+    private String  customerNo;
 
-    private String companyNo;
+    private String  openId;
 
-    private String shopCode;
+    private String  companyNo;
 
-    private String channelOrderNo;
+    private String  shopCode;
 
-    private Date orderTime;
+    private String  channelOrderNo;
 
-    private String itemCode;
+    private Date    orderTime;
 
-    private String itemName;
+    private String  itemCode;
 
-    private String skuCode;
+    private String  itemName;
 
-    private String channelSkuCode;
+    private String  skuCode;
 
-    private String upc;
+    private String  channelSkuCode;
 
-    private String scale;
+    private String  upc;
 
-    private String skuPic;
+    private String  scale;
 
-    private Byte logisticType;
+    private String  skuPic;
 
-    private Double freight;
+    private Byte    logisticType;
 
-    private Double freightReal;
+    private Double  freight;
 
-    private Double weight;
+    private Double  freightReal;
 
-    private Double salePrice;
+    private Double  weight;
 
-    private Double salePriceAgent;
+    private Double  salePrice;
+
+    private Double  salePriceAgent;
 
     private Integer quantity;
 
-    private Byte status;
+    private Byte    status;
 
-    private String closeReason;
+    private String  closeReason;
 
-    private String warehouseNo;
+    private String  warehouseNo;
 
-    private Byte stockStatus;
+    private Integer stockStatus;
 
-    private String shippingOrderNo;
+    private String  shippingOrderNo;
 
-    private String shippingNo;
+    private String  shippingNo;
 
-    private String receiver;
+    private String  receiver;
 
-    private String receiverCountry;
+    private String  receiverCountry;
 
-    private String receiverState;
+    private String  receiverState;
 
-    private String receiverCity;
+    private String  receiverCity;
 
-    private String receiverDistrict;
+    private String  receiverDistrict;
 
-    private String receiverAddress;
+    private String  receiverAddress;
 
-    private String telephone;
+    private String  telephone;
 
-    private String postcode;
+    private String  postcode;
 
-    private String idCard;
+    private String  idCard;
 
-    private String idcardPicFront;
+    private String  idcardPicFront;
 
-    private String idcardPicReverse;
+    private String  idcardPicReverse;
 
-    private String memo;
+    private String  memo;
 
-    private Date gmtCreate;
+    private Date    gmtCreate;
 
-    private Date gmtModify;
+    private Date    gmtModify;
 
-    private String creator;
+    private String  creator;
 
-    private String modifier;
+    private String  modifier;
 
     private Boolean isDel;
 
@@ -303,11 +304,11 @@ public class MallSubOrderDO {
         this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
     }
 
-    public Byte getStockStatus() {
+    public Integer getStockStatus() {
         return stockStatus;
     }
 
-    public void setStockStatus(Byte stockStatus) {
+    public void setStockStatus(Integer stockStatus) {
         this.stockStatus = stockStatus;
     }
 
