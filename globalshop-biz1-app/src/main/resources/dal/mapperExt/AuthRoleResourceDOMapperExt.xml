@@ -11,9 +11,9 @@
     <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
   <!--</resultMap>-->
-  <!--<sql id="Base_Column_List" >-->
-    <!--id, role_id, resource_id, is_del, gmt_create, gmt_modify, creator, modifier-->
-  <!--</sql>-->
+  <sql id="Base_Column_List2" >
+    id, role_id, resource_id, is_del, gmt_create, gmt_modify, creator, modifier
+  </sql>
 
   <select id="selectIdListByRoleId" resultType="java.lang.Long" parameterType="java.lang.Long">
     SELECT

@@ -11,13 +11,13 @@
     <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
   <!--</resultMap>-->
-  <!--<sql id="Base_Column_List" >-->
-    <!--id, user_id, role_id, is_del, gmt_create, gmt_modify, creator, modifier-->
-  <!--</sql>-->
+  <sql id="Base_Column_List2" >
+    id, user_id, role_id, is_del, gmt_create, gmt_modify, creator, modifier
+  </sql>
 
   <select id="selectByUserId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO" parameterType="java.lang.Long">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List2"/>
     from auth_user_role
     where user_id = #{userId}
   </select>

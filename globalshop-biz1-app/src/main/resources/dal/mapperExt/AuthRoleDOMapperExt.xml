@@ -15,14 +15,14 @@
     <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
   <!--</resultMap>-->
-  <!--<sql id="Base_Column_List" >-->
-    <!--id, role_id, company_no, name, seq, description, status, is_del, gmt_create, gmt_modify, -->
-    <!--creator, modifier-->
-  <!--</sql>-->
+  <sql id="Base_Column_List2" >
+    id, role_id, company_no, name, seq, description, status, is_del, gmt_create, gmt_modify,
+    creator, modifier
+  </sql>
 
   <select id="selectList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
     select distinct
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper.Base_Column_List"/>
+    <include refid="Base_Column_List2"/>
     from auth_role
   </select>
 
@@ -75,7 +75,7 @@
 
   <select id="selectRoleList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List2"/>
     from auth_role
     order by ${sort} ${order}
   </select>

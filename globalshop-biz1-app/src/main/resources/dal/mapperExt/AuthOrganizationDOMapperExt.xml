@@ -16,26 +16,26 @@
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
     <!--<result column="is_del" property="isDel" jdbcType="BIT" />-->
   <!--</resultMap>-->
-  <!--<sql id="Base_Column_List" >-->
-    <!--id, org_id, name, address, code, icon, pid, seq, gmt_create, gmt_modify, creator, -->
-    <!--modifier, is_del-->
-  <!--</sql>-->
+  <sql id="Base_Column_List2" >
+    id, org_id, name, address, code, icon, pid, seq, gmt_create, gmt_modify, creator,
+    modifier, is_del
+  </sql>
 
   <select id="selectByPIdNull" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO">
     select distinct
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AuthOrganizationDOMapper.Base_Column_List"/>
+    <include refid="Base_Column_List2"/>
     from auth_organization where pid is null order by seq
   </select>
 
   <select id="selectAllByPId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO">
     select distinct
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AuthOrganizationDOMapper.Base_Column_List"/>
+    <include refid="Base_Column_List2"/>
     from auth_organization where pid = #{pId} order by seq
   </select>
 
   <select id="selectList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO">
     select distinct
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AuthOrganizationDOMapper.Base_Column_List"/>
+    <include refid="Base_Column_List2"/>
     from auth_organization order by seq
   </select>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->

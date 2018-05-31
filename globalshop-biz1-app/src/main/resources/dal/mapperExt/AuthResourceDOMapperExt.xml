@@ -19,14 +19,14 @@
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
     <!--<result column="is_del" property="isDel" jdbcType="BIT" />-->
   <!--</resultMap>-->
-  <!--<sql id="Base_Column_List" >-->
-    <!--id, resource_id, name, url, open_mode, description, icon, pid, seq, status, resource_type, -->
-    <!--gmt_create, gmt_modify, creator, modifier, is_del-->
-  <!--</sql>-->
+  <sql id="Base_Column_List2" >
+    id, resource_id, name, url, open_mode, description, icon, pid, seq, status, resource_type,
+    gmt_create, gmt_modify, creator, modifier, is_del
+  </sql>
 
   <select id="selectList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO">
     select distinct
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AuthResourceDOMapper.Base_Column_List"/>
+    <include refid="Base_Column_List2"/>
     from auth_resource
   </select>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->

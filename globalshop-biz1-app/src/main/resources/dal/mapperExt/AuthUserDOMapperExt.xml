@@ -23,11 +23,11 @@
     <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
   <!--</resultMap>-->
-  <!--<sql id="Base_Column_List" >-->
-    <!--id, user_no, login_name, name, password, sex, age, phone, user_type, status, organization_id, -->
-    <!--create_time, wx_user_id, email, company_no, is_del, gmt_create, gmt_modify, creator, -->
-    <!--modifier-->
-  <!--</sql>-->
+  <sql id="Base_Column_List2" >
+    id, user_no, login_name, name, password, sex, age, phone, user_type, status, organization_id,
+    create_time, wx_user_id, email, company_no, is_del, gmt_create, gmt_modify, creator,
+    modifier
+  </sql>
 
   <resultMap id="userVoResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
     <id column="id" property="id" jdbcType="BIGINT"/>
@@ -54,7 +54,7 @@
 
   <select id="selectByLoginName" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.Base_Column_List" />
+    <include refid="Base_Column_List2" />
     from auth_user
     where user_no = #{userNo,jdbcType=VARCHAR}
   </select>
