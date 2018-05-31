@@ -47,27 +47,27 @@ public class ItemQueryVO extends PageQueryVO {
     /**
      * 创建时间开始
      */
-    private Date    startGmt;
+    private String    startGmt;
     /**
      * 创建时间end
      */
-    private Date    endGmt;
+    private String    endGmt;
 
     /**
      * 销售开始日期
      */
-    private Date    startDate;
+    private String    startDate;
 
     /**
      * 销售结束日期
      */
-    private Date    endDate;
+    private String    endDate;
 
     /**
      * 商品状态
      */
     private Integer purchaseStatus;
-    private Date    gmtModify;
+    private String    gmtModify;
 
     private Integer hasInventory;
     private Integer hasVirtualInventory;
@@ -138,63 +138,57 @@ public class ItemQueryVO extends PageQueryVO {
         this.buySite = buySite;
     }
 
-    public Date getStartGmt() {
-        return startGmt;
-    }
+   
 
-    public void setStartGmt(Date startGmt) {
-        this.startGmt = startGmt;
-    }
+    public String getStartGmt() {
+		return startGmt;
+	}
 
-    public Date getEndGmt() {
-        return endGmt;
-    }
+	public void setStartGmt(String startGmt) {
+		this.startGmt = startGmt;
+	}
 
-    public void setEndGmt(Date endGmt) {
-        this.endGmt = endGmt;
-    }
+	public String getEndGmt() {
+		return endGmt;
+	}
 
-    public void setPage(Integer page) {
-        this.setPageIndex(page);
-    }
+	public void setEndGmt(String endGmt) {
+		this.endGmt = endGmt;
+	}
 
-    public void setRows(Integer rows) {
-        this.setPageSize(rows);
-    }
+	public String getStartDate() {
+		return startDate;
+	}
 
-    public Date getStartDate() {
-        return startDate;
-    }
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
+	public String getEndDate() {
+		return endDate;
+	}
 
-    public Date getEndDate() {
-        return endDate;
-    }
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
+	public Integer getPurchaseStatus() {
+		return purchaseStatus;
+	}
 
-    public Integer getPurchaseStatus() {
-        return purchaseStatus;
-    }
+	public void setPurchaseStatus(Integer purchaseStatus) {
+		this.purchaseStatus = purchaseStatus;
+	}
 
-    public void setPurchaseStatus(Integer purchaseStatus) {
-        this.purchaseStatus = purchaseStatus;
-    }
+	public String getGmtModify() {
+		return gmtModify;
+	}
 
-    public Date getGmtModify() {
-        return gmtModify;
-    }
+	public void setGmtModify(String gmtModify) {
+		this.gmtModify = gmtModify;
+	}
 
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public String getOwners() {
+	public String getOwners() {
         return owners;
     }
 

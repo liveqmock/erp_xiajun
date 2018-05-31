@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.item.dal.mapperExt.ItemPackageScaleMapperExt">
 
-	<!-- 通用查询结果列-->
+	<!-- 1.0到2.0过度通用查询结果列-->
     <sql id="Base_Column_List">
-		 id,name,packaging_scale_no AS packagingScaleNo
+		 id,name,name_en AS enName,packaging_scale_no AS packagingScaleNo
 	</sql>
 
     <!--  
@@ -25,6 +25,7 @@
     </select>
     -->
     
+   
     <select id="queryAllPackageScale" resultType="com.wangqin.globalshop.item.app.dal.dto.ItemPackageScaleDTO" >
         SELECT
         	 <include refid="Base_Column_List" />
@@ -33,5 +34,53 @@
         where
              T1.is_del=0
     </select>
+    
+    <insert id="insertPackageScale" parameterType="com.wangqin.globalshop.item.app.dal.dto.ItemPackageScaleDTO" >
+    insert into shipping_packing_scale
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="packagingScaleNo != null" >
+        packaging_scale_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="enName != null" >
+        name_en,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="packagingScaleNo != null" >
+        #{packagingScaleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        #{enName,jdbcType=VARCHAR},
+      </if>    
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="delete" parameterType="java.lang.Long">
+  	update shipping_packing_scale
+  	set is_del=1
+  	<where>
+  	id=#{id}
+  	</where>
+  </update>
 
 </mapper>

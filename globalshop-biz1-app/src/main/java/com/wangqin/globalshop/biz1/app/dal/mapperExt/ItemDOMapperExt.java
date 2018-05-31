@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+
 
 
 /**
@@ -19,8 +21,9 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 
     Integer queryItemsCount(ItemQueryVO itemQueryVO);
 	
-	List<ItemDO> queryItems(ItemQueryVO itemQueryVO);
+	List<ItemDTO> queryItems(ItemQueryVO itemQueryVO);
 	
+	ItemDTO queryItemById(Long id);
 	/**
 	 * 2017-04-04, jc
 	 * query all itemCode and id
