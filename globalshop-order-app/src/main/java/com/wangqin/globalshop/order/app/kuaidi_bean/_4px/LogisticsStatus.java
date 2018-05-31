@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.kuaidi_bean;
+package com.wangqin.globalshop.order.app.kuaidi_bean._4px;
 
 import org.springframework.util.StringUtils;
 

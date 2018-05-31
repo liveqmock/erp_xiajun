@@ -46,4 +46,24 @@ public class ShippingTrackServiceImpl implements IShippingTrackService {
 		});*/
     }
 
+    @Override
+    public ShippingTrackDO selectByShippingOrderNo(ShippingTrackDO selShippingTrack) {
+        return shippingTrackDOMapper.selectByShippingOrderNo(selShippingTrack.getShippingOrderNo());
+    }
+
+    @Override
+    public List<ShippingTrackDO> selectByShippingOrderNoList(String selShippingTrack) {
+        return shippingTrackDOMapper.selectByShippingOrderNoList(selShippingTrack);
+    }
+
+    @Override
+    public void update(ShippingTrackDO selectOne) {
+        shippingTrackDOMapper.updateByPrimaryKey(selectOne);
+    }
+
+    @Override
+    public int selectCount(ShippingTrackDO selShippingTrack) {
+        return shippingTrackDOMapper.selectCountByShippingOrderNo(selShippingTrack.getShippingOrderNo());
+    }
+
 }

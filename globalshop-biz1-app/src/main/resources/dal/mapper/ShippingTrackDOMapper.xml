@@ -3,7 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="shipping_order_no" property="shippingOrderNo" jdbcType="VARCHAR" />
     <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
     <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
     <result column="logistics_status" property="logisticsStatus" jdbcType="INTEGER" />
@@ -30,7 +30,7 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, order_no, waybill_no, logistic_no, logistics_status, weight, volume, totalfee, 
+    id, shipping_order_no, waybill_no, logistic_no, logistics_status, weight, volume, totalfee, 
     receive_time, oversea_in_time, oversea_out_time, oversea_on_transfer_time, inland_in_time, 
     inland_out_time, inland_express_company_code, inland_express_num, buyer_sign_time, 
     air_take_off, airlines, flight, track_info, gmt_create, gmt_modify, is_del, creator, 
@@ -50,7 +50,7 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_track (id, order_no, waybill_no, 
+    insert into shipping_track (id, shipping_order_no, waybill_no, 
       logistic_no, logistics_status, weight, 
       volume, totalfee, receive_time, 
       oversea_in_time, oversea_out_time, oversea_on_transfer_time, 
@@ -59,7 +59,7 @@
       airlines, flight, track_info, 
       gmt_create, gmt_modify, is_del, 
       creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{waybillNo,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{shippingOrderNo,jdbcType=VARCHAR}, #{waybillNo,jdbcType=VARCHAR}, 
       #{logisticNo,jdbcType=VARCHAR}, #{logisticsStatus,jdbcType=INTEGER}, #{weight,jdbcType=DOUBLE}, 
       #{volume,jdbcType=VARCHAR}, #{totalfee,jdbcType=DOUBLE}, #{receiveTime,jdbcType=TIMESTAMP}, 
       #{overseaInTime,jdbcType=TIMESTAMP}, #{overseaOutTime,jdbcType=TIMESTAMP}, #{overseaOnTransferTime,jdbcType=TIMESTAMP}, 
@@ -76,8 +76,8 @@
     insert into shipping_track
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
-      <if test="orderNo != null" >
-        order_no,
+      <if test="shippingOrderNo != null" >
+        shipping_order_no,
       </if>
       <if test="waybillNo != null" >
         waybill_no,
@@ -154,8 +154,8 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
-      <if test="orderNo != null" >
-        #{orderNo,jdbcType=VARCHAR},
+      <if test="shippingOrderNo != null" >
+        #{shippingOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="waybillNo != null" >
         #{waybillNo,jdbcType=VARCHAR},
@@ -234,8 +234,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO" >
     update shipping_track
     <set >
-      <if test="orderNo != null" >
-        order_no = #{orderNo,jdbcType=VARCHAR},
+      <if test="shippingOrderNo != null" >
+        shipping_order_no = #{shippingOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="waybillNo != null" >
         waybill_no = #{waybillNo,jdbcType=VARCHAR},
@@ -314,7 +314,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO" >
     update shipping_track
-    set order_no = #{orderNo,jdbcType=VARCHAR},
+    set shipping_order_no = #{shippingOrderNo,jdbcType=VARCHAR},
       waybill_no = #{waybillNo,jdbcType=VARCHAR},
       logistic_no = #{logisticNo,jdbcType=VARCHAR},
       logistics_status = #{logisticsStatus,jdbcType=INTEGER},

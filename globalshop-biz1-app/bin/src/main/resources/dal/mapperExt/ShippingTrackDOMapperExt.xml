@@ -3,7 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackDOMapperExt" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackDOMapperExt" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="shipping_order_no" property="shippingOrderNo" jdbcType="VARCHAR" />
     <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
     <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
     <result column="logistics_status" property="logisticsStatus" jdbcType="INTEGER" />
@@ -30,7 +30,7 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, order_no, waybill_no, logistic_no, logistics_status, weight, volume, totalfee, 
+    id, shipping_order_no, waybill_no, logistic_no, logistics_status, weight, volume, totalfee, 
     receive_time, oversea_in_time, oversea_out_time, oversea_on_transfer_time, inland_in_time, 
     inland_out_time, inland_express_company_code, inland_express_num, buyer_sign_time, 
     air_take_off, airlines, flight, track_info, gmt_create, gmt_modify, is_del, creator, 
@@ -41,5 +41,28 @@
     <include refid="Base_Column_List" />
     from shipping_track
     where  logistic_no= #{logisticNo}
+  </select>
+  <select id="selectByShippingOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from shipping_track
+    where  shipping_order_no= #{shippingOrderNo}
+  </select>
+  <select id="selectCountByShippingOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+      COUNT(*)
+    from shipping_track
+    where  shipping_order_no= #{shippingOrderNo}
+  </select>
+  <select id="selectByShippingOrderNoList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from shipping_track
+    where  shipping_order_no= #{shippingOrderNo}
+  </select>
+  <select id="selectByShippingOrderNo" resultType="java.util." parameterType="java.lang.String" >
+    select
+    from shipping_track
+    where  shipping_order_no= #{shippingOrderNo}
   </select>
 </mapper>

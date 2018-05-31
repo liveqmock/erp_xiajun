@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackPolling4pxDOMapperExt" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPolling4pxDO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="delivery_no" property="deliveryNo" jdbcType="VARCHAR" />
+    <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR" />
+    <result column="is_normal" property="isNormal" jdbcType="INTEGER" />
+    <result column="track_info" property="trackInfo" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, delivery_no, shipping_no, is_normal, track_info, gmt_create, gmt_modify, creator, 
+    modifier, is_del
+  </sql>
+  <select id="selectByShippingOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_track_polling_4px
+    where shipping_no = #{shipperOrderNo}
+  </select>
+</mapper>

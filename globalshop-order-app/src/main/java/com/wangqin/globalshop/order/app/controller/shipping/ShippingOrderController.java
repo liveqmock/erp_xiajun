@@ -24,11 +24,13 @@ import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
+import com.wangqin.globalshop.order.app.service.sifang.ISiFangService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -69,6 +71,10 @@ public class ShippingOrderController {
 	private IMallOrderService mallOrderService;
 	@Autowired
 	private IShippingTrackService shippingTrackService;
+	@Autowired
+	private IHaihuService haihuService;
+	@Autowired
+	private ISiFangService siFangService;
 
 
 	@RequestMapping("/query")
@@ -159,18 +165,18 @@ public class ShippingOrderController {
 //					yunTongService.createOrder(shippingOrder.getId());
 //				}
 //				//对接海狐
-//				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐")) {
-//					haihuService.createOrder(shippingOrder.getId());
-//				}
+				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐")) {
+					haihuService.createOrder(shippingOrder.getId());
+				}
 //				//对接海狐联邦转运
 //				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")) {
 //					haihuService.returnPackageNo(shippingOrder);
 //
 //				}
-//				//对接美国转运四方
-//				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX")) {
-//					siFangService.createOrder(shippingOrder.getId());
-//				}
+				//对接美国转运四方
+				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX")) {
+					siFangService.createOrder(shippingOrder.getShippingNo());
+				}
 //				//对接联邦
 //				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("联邦转运")) {
 //					fadRoadService.createOrder(shippingOrder.getId());
@@ -211,10 +217,10 @@ public class ShippingOrderController {
 			StringBuffer erpNoTipStr = new StringBuffer();
 			for(MallSubOrderDO erpOrder : erpOrderList) {
 				if(erpOrder.getStockStatus()==null || erpOrder.getStockStatus()!= StockUpStatus.STOCKUP.getCode()) {
-					throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getOrderNo());
+					throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getShopCode());
 				}
 				if(StringUtils.isBlank(erpOrder.getReceiver()) || StringUtils.isBlank(erpOrder.getTelephone()) || StringUtils.isBlank(erpOrder.getReceiverState()) || StringUtils.isBlank(erpOrder.getReceiverCity()) || StringUtils.isBlank(erpOrder.getReceiverDistrict())) {
-					throw new ErpCommonException("收货人地址不能为空：" + erpOrder.getOrderNo());
+					throw new ErpCommonException("收货人地址不能为空：" + erpOrder.getShopCode());
 				}
 				MallSubOrderDO tjErpOrder = new MallSubOrderDO();
 				tjErpOrder.setReceiver(erpOrder.getReceiver());
@@ -244,10 +250,10 @@ public class ShippingOrderController {
 					}
 				}
 				if(countErr > 1) {
-					erpNoErrStr.append("\r\n" + erpOrder.getOrderNo() + ";");
+					erpNoErrStr.append("\r\n" + erpOrder.getShopCode() + ";");
 				}
 				if(countTip > 0) {
-					erpNoTipStr.append(erpOrder.getOrderNo() + "；");
+					erpNoTipStr.append(erpOrder.getShopCode() + "；");
 				}
 			}
 
@@ -316,11 +322,11 @@ public class ShippingOrderController {
 //
 //				}
 //				//对接美国转运四方
-//				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX")) {
-//					for(Long shippingOrderId : shippingOrderIds) {
-//						siFangService.createOrder(shippingOrderId);
-//					}
-//				}
+				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX")) {
+					for(String shippingOrderNO : shippingOrderIds) {
+						siFangService.createOrder(shippingOrderNO);
+					}
+				}
 //				//对接联邦
 //				if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("联邦转运")) {
 //					for(Long shippingOrderId : shippingOrderIds) {
@@ -363,27 +369,29 @@ public class ShippingOrderController {
 //				youkeService.createOrder(shippingOrder.getId());
 //			} else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("运通快递") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接运通
 //				yunTongService.createOrder(shippingOrder.getId());
-//			} else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接4PX
-//				message = siFangService.createOrder(shippingOrder.getId());
-//			} else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接海狐联邦转运
+//			} else
+ 			if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接4PX
+				message = siFangService.createOrder(shippingOrder.getShippingNo());
+			}
+// else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接海狐联邦转运
 //				haihuService.returnPackageNo(shippingOrder);
 //			} else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("联邦转运") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接联邦
 //				fadRoadService.createOrder(shippingOrder.getId());
 //			}
-//			else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接海狐
-//				List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
-//				if(ErpOrderList.size()>1) {
-//					throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
-//				}else if(ErpOrderList.get(0).getQuantity() > 1) {
-//					throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
-//				}else if(StringUtils.isEmpty(ErpOrderList.get(0).getIdCard())){
-//					throw new ErpCommonException("海狐物流发货单号缺少身份证信息");
-//				}else{
-//					haihuService.createOrder(shippingOrder.getId());
-//				}
-//			} else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运") && StringUtil.isBlank(shippingOrder.getLogisticNo())){
-//				haihuService.returnPackageNo(shippingOrder);
-//			}
+			else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐") && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接海狐
+				List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
+				if(ErpOrderList.size()>1) {
+					throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
+				}else if(ErpOrderList.get(0).getQuantity() > 1) {
+					throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
+				}else if(StringUtils.isEmpty(ErpOrderList.get(0).getIdCard())){
+					throw new ErpCommonException("海狐物流发货单号缺少身份证信息");
+				}else{
+					haihuService.createOrder(shippingOrder.getId());
+				}
+			} else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运") && StringUtil.isBlank(shippingOrder.getLogisticNo())){
+				haihuService.returnPackageNo(shippingOrder);
+			}
 //			else if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("顺丰")|| shippingOrder.getLogisticCompany().equals("韵达"))){
 //				ShippingTrack shippingTrack = new ShippingTrack();
 //				shippingTrack.setGmtCreate(new Date());
@@ -617,6 +625,7 @@ public class ShippingOrderController {
 				list.add(erpOrder.getQuantity());			//发货数量
 				//list.add(erpOrder.getSalePrice());			//商品单价
 				list.add(erpOrder.getGmtCreate());			//发货时间
+				list.add(erpOrder.getShippingNo());				//子订单编号
 				list.add(erpOrder.getReceiver());			//收件人
 				list.add(erpOrder.getTelephone());			//联系电话
 				list.add(erpOrder.getReceiverState());		//省
@@ -625,7 +634,7 @@ public class ShippingOrderController {
 				list.add(erpOrder.getReceiverAddress());		//详细地址
 				list.add(erpOrder.getWarehouseNo());		//仓库名称
 				list.add(erpOrder.getShippingNo());			//包裹号
-				list.add(erpOrder.getLogisticType());	//物流公司
+				list.add(erpOrder.getCompanyNo());	//物流公司
 				list.add(ShippingOrderType.of(erpOrder.getLogisticType()).getDescription());//渠道方式
 				if(erpOrder.getLogisticType()==null ||  erpOrder.getLogisticType()==0) {
 					list.add("直邮");
@@ -723,7 +732,7 @@ public class ShippingOrderController {
 				erpOrder.setStockStatus((byte) StockUpStatus.PREPARE.getCode());
 				mallSubOrderService.update(erpOrder);
 			} else {
-				errorMsg.append(erpOrder.getOrderNo() + ",");
+				errorMsg.append(erpOrder.getShopCode() + ",");
 			}
 		});
 

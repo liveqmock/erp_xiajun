@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.WareHouseDOMapper">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO">
+    </resultMap>
+    <sql id="Base_Column_List">
+      id,
+  warehouse_no warehouseNo,
+  name,
+  company_no companyNo,
+  delivery_priority deliveryPriority,
+  address,
+  tel,
+  contact_person contactPerson,
+  gmt_create gmtCreate,
+  gmt_modify gmtModify,
+  is_del isDel,
+  creator,
+  modifier
+  </sql>
+    <select id="selectByWarehourseNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        warehouse
+        WHERE warehouse_no =${warehouseNo}
+
+    </select>
+
+</mapper>

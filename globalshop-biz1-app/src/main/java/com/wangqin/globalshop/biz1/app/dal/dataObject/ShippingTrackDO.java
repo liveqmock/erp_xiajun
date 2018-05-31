@@ -5,7 +5,7 @@ import java.util.Date;
 public class ShippingTrackDO {
     private Long id;
 
-    private String orderNo;
+    private String shippingOrderNo;
 
     private String waybillNo;
 
@@ -63,12 +63,12 @@ public class ShippingTrackDO {
         this.id = id;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getShippingOrderNo() {
+        return shippingOrderNo;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+    public void setShippingOrderNo(String shippingOrderNo) {
+        this.shippingOrderNo = shippingOrderNo;
     }
 
     public String getWaybillNo() {

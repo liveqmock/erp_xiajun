@@ -15,4 +15,11 @@ public interface IShippingTrackService {
     void insert(ShippingTrackDO shippingTrackDO);
 
     void insertOrUpdateInfo();
+
+    ShippingTrackDO selectByShippingOrderNo(ShippingTrackDO selShippingTrack);
+    List<ShippingTrackDO> selectByShippingOrderNoList(String selShippingTrack);
+
+    void update(ShippingTrackDO selectOne);
+
+    int selectCount(ShippingTrackDO selShippingTrack);
 }

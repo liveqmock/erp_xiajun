@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.common.utils.Md5Util;
 import com.wangqin.globalshop.order.app.kuaidi_bean.*;
 import com.wangqin.globalshop.order.app.kuaidi_bean.HttpClient.HttpResponse;
+import com.wangqin.globalshop.order.app.kuaidi_bean._4px.LogisticsStatus;
 import com.wangqin.globalshop.order.app.service.kuaidi100.IKuaidi100Service;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;

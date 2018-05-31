@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.itemsku;
+package com.wangqin.globalshop.order.app.service.item;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 
