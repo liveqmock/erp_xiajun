@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.ItemSkuMapperExt">
+<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuMapperExt">
 <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
 		T1.id,T1.sale_type AS saleType,T1.brand,T1.weight,T1.item_id AS itemId,T1.item_name AS itemName,T1.category_id AS categoryId,T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,T1.upc,T1.salable,T1.color,T1.`scale`,T1.purchase_price AS purchasePrice,T1.freight AS freight,T1.sale_price AS salePrice,T1.remark,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.user_create AS userCreate,T1.user_modify AS userModify,

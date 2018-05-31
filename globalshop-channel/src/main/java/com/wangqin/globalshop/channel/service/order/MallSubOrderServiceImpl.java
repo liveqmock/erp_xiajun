@@ -4,14 +4,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAMallSubOrderDOMapperExt;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallSubOrderDOMapperExt;
 import com.wangqin.globalshop.common.utils.BizResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 
@@ -20,11 +21,11 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
  * MallSubOrder 表数据服务层接口实现类
  *
  */
-@Service
+@Service("mallSubOrderService")
 public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
 
-	@Resource MallSubOrderDOMapperExt mallSubOrderDOMapperExt;
+	@Autowired CAMallSubOrderDOMapperExt mallSubOrderDOMapperExt;
 
 
 	public int deleteByPrimaryKey(Long id){

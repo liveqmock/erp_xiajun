@@ -21,8 +21,6 @@ public class TaobaoAccountInfoController {
 	@ResponseBody
 	public void accountInfo(String name, String cookie) throws IOException {
 
-		System.out.print("hhhh");
-
 		//配置店铺授权表
 		channelAccountService.createOrupdateAccount4Taobao(name,cookie);
 

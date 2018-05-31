@@ -2,22 +2,23 @@ package com.wangqin.globalshop.channel.service.order;
 
 import javax.annotation.Resource;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAShippingOrderDOMapperExt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.channel.dal.mapperExt.ShippingOrderDOMapperExt;
 
 /**
  *
  * ShippingOrder 表数据服务层接口实现类
  *
  */
-@Service
+@Service("shippingOrderService")
 public class ShippingOrderServiceImpl  implements IShippingOrderService {
 
-	@Resource ShippingOrderDOMapperExt shippingOrderDOMapperExt;
+	@Autowired CAShippingOrderDOMapperExt shippingOrderDOMapperExt;
 
-	public ShippingOrderDOMapperExt getShippingOrderDOMapperExt() {
+	public CAShippingOrderDOMapperExt getShippingOrderDOMapperExt() {
 		return shippingOrderDOMapperExt;
 	}
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAMallOrderDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAMallSubOrderDOMapperExt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,8 +16,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallOrderDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallSubOrderDOMapperExt;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemSkuService;
@@ -44,9 +44,9 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	protected IChannelListingItemSkuService outerItemSkuService = SpringUtils.getBean(IChannelListingItemSkuService.class);
 
 
-	protected MallSubOrderDOMapperExt outerOrderDetailMapper = SpringUtils.getBean(MallSubOrderDOMapperExt.class);
+	protected CAMallSubOrderDOMapperExt outerOrderDetailMapper = SpringUtils.getBean(CAMallSubOrderDOMapperExt.class);
 
-	protected MallOrderDOMapperExt outerOrderMapper = SpringUtils.getBean(MallOrderDOMapperExt.class);
+	protected CAMallOrderDOMapperExt outerOrderMapper = SpringUtils.getBean(CAMallOrderDOMapperExt.class);
 
 	protected IMallOrderService outerOrderService = SpringUtils.getBean(IMallOrderService.class);
 

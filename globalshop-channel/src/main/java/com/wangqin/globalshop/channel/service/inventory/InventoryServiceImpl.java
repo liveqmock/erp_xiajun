@@ -7,6 +7,9 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryBookingRecordDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryOnWarehouseMapperExt;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +26,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.InventoryVo;
-import com.wangqin.globalshop.channel.dal.mapperExt.InventoryBookingRecordDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.InventoryDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.channel.service.order.IMallSubOrderService;
 import com.wangqin.globalshop.channel.service.warehouse.IWarehouseService;
 import com.wangqin.globalshop.common.utils.BeanUtils;
@@ -38,11 +38,11 @@ import com.wangqin.globalshop.common.utils.BeanUtils;
 @Service("inventoryService")
 public class InventoryServiceImpl  implements IInventoryService {
 
-	@Resource InventoryDOMapperExt inventoryDOMapperExt;
+	@Autowired CAInventoryDOMapperExt inventoryDOMapperExt;
 
-	@Resource InventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
+	@Autowired CAInventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
 
-	@Resource InventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
+	@Autowired CAInventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
 
 	@Autowired IWarehouseService warehouseService;
 

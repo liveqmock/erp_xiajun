@@ -3,13 +3,15 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.channel.dal.mapperExt.InventoryDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.ItemDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.ItemSkuDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAItemDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,13 +27,14 @@ import java.util.List;
 public class ItemServiceImpl  implements IItemService {
 
 
+	@Autowired
+	CAItemDOMapperExt itemDOMapperExt;
 
+	@Autowired
+	CAItemSkuDOMapperExt itemSkuDOMapperExt;
 
-	@Resource ItemDOMapperExt itemDOMapperExt;
-
-	@Resource ItemSkuDOMapperExt itemSkuDOMapperExt;
-
-	@Resource InventoryDOMapperExt inventoryDOMapperExt;
+	@Autowired
+	CAInventoryDOMapperExt inventoryDOMapperExt;
 
 	public int deleteByPrimaryKey(Long id){
 		return itemDOMapperExt.deleteByPrimaryKey(id);

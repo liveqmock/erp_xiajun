@@ -5,8 +5,8 @@ import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallOrderDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.MallSubOrderDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAMallOrderDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAMallSubOrderDOMapperExt;
 import com.wangqin.globalshop.channel.service.inventory.IInventoryService;
 import com.wangqin.globalshop.channel.service.inventory.InventoryServiceImpl.WarehouseCollector;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -35,9 +35,9 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
 	protected Logger logger = LogManager.getLogger(getClass());
 
-	@Resource MallOrderDOMapperExt mallOrderDOMapperExt;
+	@Autowired CAMallOrderDOMapperExt mallOrderDOMapperExt;
 
-	@Resource MallSubOrderDOMapperExt mallSubOrderDOMapperExt;
+	@Autowired CAMallSubOrderDOMapperExt mallSubOrderDOMapperExt;
 
 	public MallOrderDOMapper getMapper(){
 		return mallOrderDOMapperExt;
