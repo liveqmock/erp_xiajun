@@ -14,7 +14,6 @@ import java.util.List;
  */
 public interface IMallSubOrderService {
 
-    List<MallSubOrderDO> selectList(MallSubOrderDO tjErpOrder);
 
 
     List<MallSubOrderDO> selectByOrderNo(String orderNo);
@@ -44,4 +43,11 @@ public interface IMallSubOrderService {
     JsonResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException;
 
     List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
+
+    /**
+     * 根据订单号找出已发货的单数
+     * @param erpOrderQuery
+     * @return
+     */
+    int selectCountWithStateAndOrderNo(MallSubOrderDO erpOrderQuery);
 }

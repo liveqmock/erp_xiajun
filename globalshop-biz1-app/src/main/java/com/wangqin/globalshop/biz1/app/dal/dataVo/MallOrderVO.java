@@ -65,6 +65,31 @@ public class MallOrderVO extends MallOrderDO {
     private String modifier;
 
     private String creator;
+    /**
+     * 订单开始时间
+     */
+    private Date startGmtCreate;
+
+    /**
+     * 订单结束时间
+     */
+    private Date endGmtCreate;
+
+    public Date getStartGmtCreate() {
+        return startGmtCreate;
+    }
+
+    public void setStartGmtCreate(Date startGmtCreate) {
+        this.startGmtCreate = startGmtCreate;
+    }
+
+    public Date getEndGmtCreate() {
+        return endGmtCreate;
+    }
+
+    public void setEndGmtCreate(Date endGmtCreate) {
+        this.endGmtCreate = endGmtCreate;
+    }
 
     public String getOuterOrderDetailList() {
         return outerOrderDetailList;

@@ -63,7 +63,6 @@
         inventory_on_warehouse T1
         LEFT JOIN warehouse T2 ON T1.warehouse_no=T2.warehouse_no
         <where>
-            T2.seq>0
             <if test="itemCode != null">
                 and T1.item_code = #{itemCode}
             </if>

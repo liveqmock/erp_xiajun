@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -25,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -51,17 +53,18 @@ public class MallSubOrderController {
 	@Autowired
 	private IShippingOrderService shippingOrderService;
 
-	@RequestMapping("/query")
+	@RequestMapping(value = "/query",method = RequestMethod.POST)
 	@ResponseBody
-	public Object query(MallSubOrderVO erpOrderQueryVO) {
+	public Object query(String erpOrderQueryVO) {
+		MallSubOrderVO mallSubOrderVO = JSON.parseObject(erpOrderQueryVO, MallSubOrderVO.class);
 		JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();
-		if(erpOrderQueryVO.getEndGmtCreate()!=null) {
-			String endGmtCreateStr = DateUtil.ymdFormat(erpOrderQueryVO.getEndGmtCreate());
+		if(mallSubOrderVO.getEndGmtCreate()!=null) {
+			String endGmtCreateStr = DateUtil.ymdFormat(mallSubOrderVO.getEndGmtCreate());
 			Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");
-			erpOrderQueryVO.setEndGmtCreate(endGmtCreate);
+			mallSubOrderVO.setEndGmtCreate(endGmtCreate);
 		}
-		
-		erpOrderQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+
+		mallSubOrderVO.setCompanyNo("MallSUbOrderController?JLJLJJLJ");
 		
 //		//如果是代理
 //		ShiroUser shiroUser = this.getShiroUser();
@@ -77,7 +80,7 @@ public class MallSubOrderController {
 //				erpOrderQueryVO.setOpenId(seller.getOpenId());
 //			}
 //		}
-		result = erpOrderService.queryErpOrders(erpOrderQueryVO);
+		result = erpOrderService.queryErpOrders(mallSubOrderVO);
 //		if(roles.contains("irhdaili")) {
 //			result.setAgentRoler(true);
 //		}

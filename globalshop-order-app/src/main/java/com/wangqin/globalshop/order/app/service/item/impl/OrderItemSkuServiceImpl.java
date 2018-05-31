@@ -3,7 +3,9 @@ package com.wangqin.globalshop.order.app.service.item.impl;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**

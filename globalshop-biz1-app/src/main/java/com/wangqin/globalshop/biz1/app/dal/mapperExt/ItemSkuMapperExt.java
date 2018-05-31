@@ -43,5 +43,5 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	 */
 	List<ItemSkuDO> queryItemSkusByUpc(String upc);
 
-    ItemSkuDO queryItemBySkuCode(String skuCode);
+    ItemSkuDO queryItemBySkuCode(@Param("skuCode") String skuCode);
 }

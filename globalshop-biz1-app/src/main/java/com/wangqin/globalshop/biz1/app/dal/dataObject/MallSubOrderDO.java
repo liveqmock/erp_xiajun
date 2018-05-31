@@ -159,6 +159,14 @@ public class MallSubOrderDO {
         this.channelOrderNo = channelOrderNo == null ? null : channelOrderNo.trim();
     }
 
+    public String getSkuCode() {
+        return skuCode;
+    }
+
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
+
     public Date getOrderTime() {
         return orderTime;
     }
@@ -183,13 +191,6 @@ public class MallSubOrderDO {
         this.itemName = itemName == null ? null : itemName.trim();
     }
 
-    public String getSkuCode() {
-        return skuCode;
-    }
-
-    public void setSkuCode(String skuCode) {
-        this.skuCode = skuCode == null ? null : skuCode.trim();
-    }
 
     public String getChannelSkuCode() {
         return channelSkuCode;

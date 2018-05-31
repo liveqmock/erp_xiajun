@@ -59,6 +59,40 @@ public class MallOrderDO {
 
     private String creator;
 
+    @Override
+    public String toString() {
+        return "MallOrderDO{" +
+                "id=" + id +
+                ", customerNo='" + customerNo + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", companyNo='" + companyNo + '\'' +
+                ", channelNo='" + channelNo + '\'' +
+                ", channelName='" + channelName + '\'' +
+                ", channelOrderNo='" + channelOrderNo + '\'' +
+                ", channelCustomerNo='" + channelCustomerNo + '\'' +
+                ", channelType='" + channelType + '\'' +
+                ", shopCode='" + shopCode + '\'' +
+                ", wxPayTradeNo='" + wxPayTradeNo + '\'' +
+                ", totalAmount=" + totalAmount +
+                ", actualAmount=" + actualAmount +
+                ", payType=" + payType +
+                ", orderTime=" + orderTime +
+                ", status=" + status +
+                ", memo='" + memo + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", idcardPicFront='" + idcardPicFront + '\'' +
+                ", idcardPicReverse='" + idcardPicReverse + '\'' +
+                ", source=" + source +
+                ", freight=" + freight +
+                ", freightAgent=" + freightAgent +
+                ", gmtModify=" + gmtModify +
+                ", gmtCreate=" + gmtCreate +
+                ", isDel=" + isDel +
+                ", modifier='" + modifier + '\'' +
+                ", creator='" + creator + '\'' +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }

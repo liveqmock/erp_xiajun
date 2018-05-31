@@ -8,7 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.OuterOrderQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO;
@@ -36,7 +36,7 @@ import java.util.Set;
 @Service
 public class MallOrderServiceImpl implements IMallOrderService {
     @Autowired
-    private MallOrderDOMapperExt mallOrderDOMapper;
+    private MallOrderMapperExt mallOrderDOMapper;
     @Autowired
     private OrderItemSkuService itemSkuService;
     @Autowired
@@ -53,7 +53,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     @Override
     public void updateById(MallOrderDO outerOrder) {
-        mallOrderDOMapper.updateByPrimaryKey(outerOrder);
+        mallOrderDOMapper.updateByPrimaryKeySelective(outerOrder);
     }
 
     @Override
@@ -68,54 +68,56 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     @Override
     public void addOuterOrder(MallOrderVO outerOrder) {
-        mallOrderDOMapper.insertSelective(outerOrder);
-        if (outerOrder.getOuterOrderDetails() != null && !outerOrder.getOuterOrderDetails().isEmpty()) {
-            List<MallSubOrderDO> outerOrderDetails = outerOrder.getOuterOrderDetails();
-            outerOrderDetails.forEach(outerOrderDetail -> {
-                outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
-                outerOrderDetail.setGmtCreate(new Date());
-                outerOrderDetail.setGmtModify(new Date());
-                outerOrderDetail.setCompanyNo(outerOrder.getCompanyNo());
-                // 计算运费和销售价格
-                ItemSkuDO sku = itemSkuService.selectBySkuCode(outerOrderDetail.getSkuCode());
-                if (sku != null) {
-                    outerOrderDetail.setItemName(sku.getItemName());
-                    outerOrderDetail.setScale(sku.getScale());
-                    outerOrderDetail.setSkuCode(sku.getSkuCode());
+        List<MallSubOrderDO> outerOrderDetails = outerOrder.getOuterOrderDetails();
+        Double totalPrice = 0.0;
+        int i = 0;
+        for (MallSubOrderDO outerOrderDetail : outerOrderDetails) {
+            totalPrice+=outerOrderDetail.getSalePrice()*outerOrderDetail.getQuantity();
+            outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
+            outerOrderDetail.setShopCode("O" + outerOrder.getOrderNo().substring(1) + String.format("%0" + 4 + "d", i));
+            i++;
+            outerOrderDetail.setGmtCreate(new Date());
+            outerOrderDetail.setGmtModify(new Date());
+            outerOrderDetail.setCompanyNo(outerOrder.getCompanyNo());
+            // 计算运费和销售价格
+            ItemSkuDO sku = itemSkuService.selectBySkuCode(outerOrderDetail.getSkuCode());
+            if (sku != null) {
+                outerOrderDetail.setItemName(sku.getItemName());
+                outerOrderDetail.setScale(sku.getScale());
+                outerOrderDetail.setSkuCode(sku.getSkuCode());
 //                    outerOrderDetail.setChannelSkuCode(sku.getSaleable());
-                    outerOrderDetail.setUpc(sku.getUpc());
-                    outerOrderDetail.setItemCode(sku.getItemCode());
-                    outerOrderDetail.setSkuPic(sku.getSkuPic());
-                    outerOrderDetail.setLogisticType(sku.getLogisticType());
-                    outerOrderDetail.setWeight(sku.getWeight());
+                outerOrderDetail.setUpc(sku.getUpc());
+                outerOrderDetail.setItemCode(sku.getItemCode());
+                outerOrderDetail.setSkuPic(sku.getSkuPic());
+                outerOrderDetail.setLogisticType(sku.getLogisticType());
+                outerOrderDetail.setWeight(sku.getWeight());
 
-                    //如果有虚拟库存就扣减虚拟库存
-                    InventoryDO inventory = inventoryService.queryInventoryBySkuCode(sku.getItemCode(), sku.getSkuCode());
-                    if (inventory.getVirtualInv() > 0 || inventory.getLockedVirtualInv() > 0) {
-                        Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
-                        virtualInv = virtualInv > 0 ? virtualInv : 0;
-                        //可售库存 = 现货库存 - 现货占用 + 在途库存- 在途占用
-                        Long totalAvailableInv = inventory.getInv() - inventory.getLockedInv() + inventory.getTransInv() - inventory.getLockedTransInv();
-                        //如果虚拟库存小于等于可售库存，虚拟库存清零
-                        virtualInv = virtualInv > totalAvailableInv ? virtualInv : 0;
+                //如果有虚拟库存就扣减虚拟库存
+                InventoryDO inventory = inventoryService.queryInventoryBySkuCode(sku.getItemCode(), sku.getSkuCode());
+                if (inventory.getVirtualInv() > 0 || inventory.getLockedVirtualInv() > 0) {
+                    Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
+                    virtualInv = virtualInv > 0 ? virtualInv : 0;
+                    //可售库存 = 现货库存 - 现货占用 + 在途库存- 在途占用
+                    Long totalAvailableInv = inventory.getInv() - inventory.getLockedInv() + inventory.getTransInv() - inventory.getLockedTransInv();
+                    //如果虚拟库存小于等于可售库存，虚拟库存清零
+                    virtualInv = virtualInv > totalAvailableInv ? virtualInv : 0;
 
-                        //如果虚拟占用库存大于零
-                        if (inventory.getLockedVirtualInv() > 0) {
-                            Long lockedVirtualInv = inventory.getLockedVirtualInv() - outerOrderDetail.getQuantity();
-                            lockedVirtualInv = lockedVirtualInv > 0 ? lockedVirtualInv : 0;
-                            inventory.setLockedVirtualInv(lockedVirtualInv);
-                        }
-                        inventory.setVirtualInv(virtualInv);
-                        inventory.setGmtModify(new Date());
-                        inventoryService.update(inventory);
+                    //如果虚拟占用库存大于零
+                    if (inventory.getLockedVirtualInv() > 0) {
+                        Long lockedVirtualInv = inventory.getLockedVirtualInv() - outerOrderDetail.getQuantity();
+                        lockedVirtualInv = lockedVirtualInv > 0 ? lockedVirtualInv : 0;
+                        inventory.setLockedVirtualInv(lockedVirtualInv);
                     }
+                    inventory.setVirtualInv(virtualInv);
+                    inventory.setGmtModify(new Date());
+                    inventoryService.update(inventory);
                 }
-            });
-            for (MallSubOrderDO outerOrderDetail : outerOrderDetails) {
-                mallSubOrderDOMapper.insert(outerOrderDetail);
             }
-
+            mallSubOrderDOMapper.insert(outerOrderDetail);
         }
+        outerOrder.setTotalAmount(totalPrice);
+        mallOrderDOMapper.insertSelective(outerOrder);
+
     }
 
     @Override
@@ -140,8 +142,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
                     }
                 }
                 //落单的商品，其他的仓库随机分配库存
-                erpOrders.forEach(erpOrder->{
-                    if(!erpOrderIds.contains(erpOrder.getId())){
+                erpOrders.forEach(erpOrder -> {
+                    if (!erpOrderIds.contains(erpOrder.getId())) {
                         try {
                             mallSubOrderService.lockErpOrder(erpOrder);
                         } catch (Exception e) {
@@ -159,9 +161,10 @@ public class MallOrderServiceImpl implements IMallOrderService {
     }
 
     @Override
-    public List<MallOrderDO> queryOuterOrderList(OuterOrderQueryVO outerOrderQueryVO) {
+    public List<MallOrderDO> queryOuterOrderList(MallOrderVO outerOrderQueryVO) {
         List<MallOrderDO> outerOrders;
-        outerOrderQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+        outerOrderQueryVO.setCompanyNo("MallOrderServiceImplYYYYYY");
+//        outerOrderQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
         // 1、查询总的记录数量
         Integer totalCount = mallOrderDOMapper.queryOuterOrdersCount(outerOrderQueryVO);
         // 2、查询分页记录
@@ -188,32 +191,32 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     @Override
     public JsonResult<Object> lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
-        if(erpOrder.getStatus()!= OrderStatus.INIT.getCode()){
+        if (erpOrder.getStatus() != OrderStatus.INIT.getCode()) {
             return JsonResult.buildFailed("订单状态错误");
         }
         //未备货订单
-        if(erpOrder.getStockStatus()== StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
-            if(erpOrder.getWarehouseNo()==null){
+        if (erpOrder.getStockStatus() == StockUpStatus.INIT.getCode() || erpOrder.getStockStatus() == StockUpStatus.RELEASED.getCode()) {
+            if (erpOrder.getWarehouseNo() == null) {
                 List<MallSubOrderDO> erpOrders = Lists.newArrayList();
                 erpOrders.add(erpOrder);
                 List<WarehouseCollector> wcs = inventoryService.selectWarehousesByErpOrders(erpOrders);
-                if(CollectionUtils.isNotEmpty(wcs)){
+                if (CollectionUtils.isNotEmpty(wcs)) {
                     inventoryService.lockedInventroy(wcs.get(0));
-                }else{
+                } else {
                     return JsonResult.buildFailed("没有库存备货失败");
                 }
-            }else{
+            } else {
                 return JsonResult.buildFailed("没有仓库信息");
             }
-        }else{
-            if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.MIX_STOCKUP.getCode()&&erpOrder.getWarehouseNo()!=null){
+        } else {
+            if (erpOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode() && erpOrder.getStockStatus() != StockUpStatus.MIX_STOCKUP.getCode() && erpOrder.getWarehouseNo() != null) {
                 WarehouseCollector wc = inventoryService.selectWarehousesByErpOrder(erpOrder);
-                if(wc!=null){
+                if (wc != null) {
                     inventoryService.lockedInventroy(wc);
-                }else{
+                } else {
                     return JsonResult.buildFailed("没有库存备货失败");
                 }
-            }else{
+            } else {
                 return JsonResult.buildFailed("订单备货状态错误");
             }
 
@@ -222,13 +225,19 @@ public class MallOrderServiceImpl implements IMallOrderService {
     }
 
     @Override
-    public List<MallOrderDO> queryOuterOrderForExcel(MallOrderQueryVO outerOrderQueryVO) {
-        return mallOrderDOMapper.queryOuterOrderForExcel(outerOrderQueryVO);
+    public List<MallOrderDO> queryOuterOrderForExcel(MallOrderVO outerOrderQueryVO) {
+        return mallOrderDOMapper.queryOuterOrders(outerOrderQueryVO);
     }
 
     @Override
     public List<MallOrderDO> selectByStatus(byte b) {
-        return mallOrderDOMapper.selectByStatus(b);
+        return mallOrderDOMapper.queryByStatus(b);
+    }
+
+    @Override
+    public void addMallOrderDO(MallOrderDO mallOrderDO) {
+        mallOrderDOMapper.insertSelective(mallOrderDO);
+
     }
 
 }

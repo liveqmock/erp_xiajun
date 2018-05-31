@@ -136,7 +136,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             tjErpOrder.setStatus((byte) 0);								//订单状态：新建
             //tjErpOrder.setStockStatus(erpOrder.getStockStatus());	//备货状态：已备货
             //tjErpOrder.setWarehouseId(erpOrder.getWarehouseId());	//相同仓库
-            List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectList(tjErpOrder);
+            List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectByOrderNo(mallSubOrder.getOrderNo());
             for(int i=0; i<selErpOrderList.size(); i++) {
                 MallSubOrderDO selErpOrder= selErpOrderList.get(i);
                 //不在同一仓库的情况，不用考虑

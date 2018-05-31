@@ -233,7 +233,7 @@ public class ShippingOrderController {
 				//tjErpOrder.setWarehouseId(erpOrder.getWarehouseId());	//相同仓库
 
 
-				List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectList(tjErpOrder);
+				List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectByOrderNo(erpOrder.getOrderNo());
 				int countErr = 0;
 				int countTip = 0;
 				for(int i=0; i<selErpOrderList.size(); i++) {

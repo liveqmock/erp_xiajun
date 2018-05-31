@@ -5,14 +5,13 @@ import com.google.common.collect.Maps;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.BizResult;
 import com.wangqin.globalshop.order.app.service.inventory.OrderIInventoryService;
 import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
 import com.wangqin.globalshop.order.app.service.inventory.impl.OrderIInventoryServiceImpl;
@@ -35,22 +34,16 @@ import java.util.Map;
 @Service
 public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Autowired
-    private MallSubOrderDOMapperExt mallSubOrderDOMapper;
+    private MallSubOrderMapperExt mallSubOrderDOMapper;
     @Autowired
     private OrderIInventoryService inventoryService;
     @Autowired
     private OrderInventoryBookingRecordService inventoryRecordService;
 
-    @Override
-    public List<MallSubOrderDO> selectList(MallSubOrderDO tjErpOrder) {
-        return mallSubOrderDOMapper.selectList(tjErpOrder);
-    }
 
     @Override
     public List<MallSubOrderDO> selectByOrderNo(String mainId) {
-        MallSubOrderDO mallSubOrderDO = new MallSubOrderDO();
-        mallSubOrderDO.setOrderNo(mainId);
-        return mallSubOrderDOMapper.selectList(mallSubOrderDO);
+        return mallSubOrderDOMapper.selectByOrderNo(mainId);
     }
 
     @Override
@@ -350,5 +343,10 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     public List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO) {
         return mallSubOrderDOMapper.queryErpOrderForExcel(erpOrderQueryVO);
+    }
+
+    @Override
+    public int selectCountWithStateAndOrderNo(MallSubOrderDO erpOrderQuery) {
+        return mallSubOrderDOMapper.findAlreadyShipped(erpOrderQuery.getOrderNo());
     }
 }
