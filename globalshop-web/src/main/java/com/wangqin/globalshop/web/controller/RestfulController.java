@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class RestfulController {
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/restful", method = RequestMethod.GET)
     public String index()  {
         LogWorker.log(log,"健康检查","");
         return "I'm OK!";

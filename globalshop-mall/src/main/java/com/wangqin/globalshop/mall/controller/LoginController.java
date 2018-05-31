@@ -18,7 +18,7 @@ import com.wangqin.globalshop.mall.dal.mapperExt.MallCustomerDOMapperExt;
 
 import net.sf.json.JSONObject;
 
-@Controller
+@Controller("wxLoginController")
 @RequestMapping("/wx")
 public class LoginController extends BaseController {
 
