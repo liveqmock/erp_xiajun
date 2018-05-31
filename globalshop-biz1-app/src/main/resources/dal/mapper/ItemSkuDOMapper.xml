@@ -33,6 +33,7 @@
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" extends="BaseResultMap" >
     <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
@@ -41,7 +42,8 @@
     id, sku_code, item_code, item_name, company_no, category_code, category_name, upc, 
     saleable, purchase_price, freight, discount, logistic_type, cost_price, brand_name, 
     weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id, 
-    scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del
+    scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del, 
+    status
   </sql>
   <sql id="Blob_Column_List" >
     desc
@@ -72,7 +74,8 @@
       package_level_id, scale, model, 
       sale_type, sale_price, creator, 
       modifier, gmt_create, gmt_modify, 
-      is_del, desc)
+      is_del, status, desc
+      )
     values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
       #{itemName,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, 
       #{categoryName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{saleable,jdbcType=TINYINT}, 
@@ -83,7 +86,8 @@
       #{packageLevelId,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
       #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{desc,jdbcType=LONGVARCHAR})
+      #{isDel,jdbcType=BIT}, #{status,jdbcType=INTEGER}, #{desc,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -182,6 +186,9 @@
       <if test="isDel != null" >
         is_del,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
       <if test="desc != null" >
         desc,
       </if>
@@ -277,6 +284,9 @@
       </if>
       <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="desc != null" >
         #{desc,jdbcType=LONGVARCHAR},
@@ -376,6 +386,9 @@
       <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
       <if test="desc != null" >
         desc = #{desc,jdbcType=LONGVARCHAR},
       </if>
@@ -414,6 +427,7 @@
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},
+      status = #{status,jdbcType=INTEGER},
       desc = #{desc,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -448,7 +462,8 @@
       modifier = #{modifier,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT}
+      is_del = #{isDel,jdbcType=BIT},
+      status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

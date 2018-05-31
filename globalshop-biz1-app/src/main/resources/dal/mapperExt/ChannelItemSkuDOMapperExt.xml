@@ -4,7 +4,7 @@
 
     <select id="queryItemSkusForItemThirdSale" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">
         SELECT
-        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />, T2.quantity AS itemSkuQuantity
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.Base_Column_List" />, T2.quantity AS itemSkuQuantity
         FROM item_sku T1 LEFT JOIN  mall_order T2 on T1.id= T2.sku_id
         WHERE T1.item_id = #{itemId} and T2.sales_name = '海狐海淘'
         AND T2.receiver = '地址稍后'
@@ -51,8 +51,8 @@
 
     <!--查询总条数 -->
     <select id="queryPo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
-    SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
-    FROM item T
+    SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.Base_Column_List" />
+    FROM item_sku T
     WHERE
     <include refid="commonSelectSection"/>
     </select>
@@ -60,15 +60,15 @@
     <!--查询总条数 -->
     <select id="queryPoCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
     SELECT COUNT(*)
-    FROM item T
+    FROM item_sku T
     WHERE
     <include refid="commonSelectSection"/>
     </select>
 
     <!-- -->
-    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
-    SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
-    FROM item T
+    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+    SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.Base_Column_List" />
+    FROM item_sku T
     WHERE
     <include refid="commonSelectSection"/>
     ORDER BY T.id desc

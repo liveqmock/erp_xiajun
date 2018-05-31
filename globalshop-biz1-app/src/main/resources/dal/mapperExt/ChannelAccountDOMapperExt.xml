@@ -9,28 +9,28 @@
 
     <sql id="commonSelectSection">
         1 = 1
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelNo)">
+        <if test="channelNo != null">
             and T.channel_no = #{channelNo}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelName)">
+        <if test="channelName != null">
             and T.channel_name = #{channelName}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(companyNo)">
+        <if test="companyNo != null">
             and T.company_no = #{companyNo}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(type)">
+        <if test="type != null">
             and T.type = #{type}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(shopCode)">
+        <if test="shopCode != null">
             and T.shop_code = #{shopCode}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(status)">
+        <if test="status != null">
             and T.status = #{status}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(appKey)">
+        <if test="appKey != null">
             and T.app_key = #{appKey}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(accessKey)">
+        <if test="accessKey != null">
             and T.access_key = #{accessKey}
         </if>
         <if test=" isDel == true">
@@ -44,7 +44,8 @@
 
 
     <!--查询总条数 -->
-    <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap">
+    <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap"
+            >
         SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.Base_Column_List" />
         FROM channel_account T
         WHERE
@@ -52,7 +53,8 @@
     </select>
 
     <!--查询总条数 -->
-    <select id="queryPoCount" resultType="java.lang.Integer">
+    <select id="queryPoCount" resultType="java.lang.Integer"
+           >
         SELECT COUNT(*)
         FROM channel_account T
         WHERE
@@ -60,7 +62,8 @@
     </select>
 
     <!-- -->
-    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap">
+    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap"
+            >
         SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.Base_Column_List" />
         FROM channel_account T
         WHERE

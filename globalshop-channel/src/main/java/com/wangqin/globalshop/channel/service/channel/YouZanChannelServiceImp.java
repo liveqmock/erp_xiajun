@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangqin.globalshop.common.utils.AppUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.entity.ContentType;
@@ -140,13 +141,22 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		// 1、保存外部商品
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
 
-		outerItem.setChannelNo(PlatformType.YOUZAN.getDescription());
+		outerItem.setChannelNo(String.valueOf(ChannelType.YouZan.getValue()));
         outerItem.setCompanyNo(channelAccount.getCompanyNo());
 		outerItem.setShopCode(channelAccount.getShopCode());
 		outerItem.setChannelItemAlias(alias);
 		outerItem.setChannelItemCode(String.valueOf(numIid));
 		outerItem.setItemCode(item.getItemCode());
-		outerItem.setStatus(ItemStatus.LISTING.getCode());// 上架
+		outerItem.setStatus(ItemStatus.LISTING.getCode());
+
+		//补充必填信息
+		outerItem.setIsDel(false);
+		outerItem.setGmtCreate(new Date());
+		outerItem.setGmtModify(new Date());
+		//outerItem.setCreator(AppUtil.getLoginAccount());
+		//outerItem.setModifier(AppUtil.getLoginAccount());
+		outerItem.setCreator("-1");
+		outerItem.setModifier("-1");
 
 		adapterData.item = item;
 		adapterData.outerItem = outerItem;
@@ -174,8 +184,17 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
                 //内部信息
 				outerItemSku.setItemCode(String.valueOf(item.getId()));
 				outerItemSku.setSkuCode(sku.getItemNo());
-				adapterData.outerItemSkus.add(outerItemSku);
 
+				//补充必填信息
+				outerItemSku.setIsDel(false);
+				outerItemSku.setGmtCreate(new Date());
+				outerItemSku.setGmtModify(new Date());
+				//outerItem.setCreator(AppUtil.getLoginAccount());
+				//outerItem.setModifier(AppUtil.getLoginAccount());
+				outerItemSku.setCreator("-1");
+				outerItemSku.setModifier("-1");
+
+				adapterData.outerItemSkus.add(outerItemSku);
 			}
 		}
 

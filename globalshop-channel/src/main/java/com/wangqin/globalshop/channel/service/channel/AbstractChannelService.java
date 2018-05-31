@@ -102,12 +102,15 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 		// 未同步过
 		if(selOuterItem == null) {
 			AdapterData adapterData = this.adapterCreateItem(item);
+
+
 			this.outerItemService.insert(adapterData.outerItem);
 			
 			for (ChannelListingItemSkuDO sku : adapterData.outerItemSkus) {
 				ChannelListingItemSkuDO outerItemSku = new ChannelListingItemSkuDO();
 				outerItemSku.setSkuCode(sku.getSkuCode());
 				outerItemSku.setPlatformType(this.channelAccount.getType());
+
 				ChannelListingItemSkuDO selOuterItemSku = this.outerItemSkuService.queryPo(outerItemSku);
 				if (selOuterItemSku == null) {
 					this.outerItemSkuService.insert(sku);

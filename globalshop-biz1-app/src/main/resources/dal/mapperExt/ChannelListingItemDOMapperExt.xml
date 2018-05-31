@@ -8,29 +8,29 @@
 
     <sql id="commonSelectSection">
         1 = 1
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(itemCode)">
+        <if test="itemCode != null">
             and T.item_code = #{itemCode}
         </if>
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelNo)">
+        <if test="channelNo != null">
             and T.channel_no = #{channelNo}
         </if>
 
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(companyNo)">
+        <if test="companyNo != null">
             and T.company_no = #{companyNo}
         </if>
 
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelItemCode)">
+        <if test="channelItemCode != null">
             and T.channel_item_code = #{channelItemCode}
         </if>
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(shopCode)">
+        <if test="shopCode != null">
             and T.shop_code = #{shopCode}
         </if>
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(status)">
+        <if test="status != null">
             and T.status = #{status}
         </if>
 

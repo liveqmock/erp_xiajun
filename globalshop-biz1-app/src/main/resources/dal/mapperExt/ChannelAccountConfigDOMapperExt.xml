@@ -6,14 +6,14 @@
 
     <sql id="commonSelectSection">
         1 = 1
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(companyNo)">
+        <if test="companyNo != null">
             and T.company_no = #{companyNo}
         </if>
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(shopcode)">
+        <if test="shopcode != null">
             and T.shopCode = #{shopcode}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(itemkey)">
+        <if test="itemkey != null">
             and T.itemKey = #{itemkey}
         </if>
 

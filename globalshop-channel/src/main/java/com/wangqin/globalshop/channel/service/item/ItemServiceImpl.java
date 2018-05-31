@@ -3,6 +3,8 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuScaleDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
@@ -35,6 +37,9 @@ public class ItemServiceImpl  implements IItemService {
 
 	@Autowired
 	CAInventoryDOMapperExt inventoryDOMapperExt;
+
+	@Autowired
+	ItemSkuScaleDOMapper itemSkuScaleDOMapper;
 
 	public int deleteByPrimaryKey(Long id){
 		return itemDOMapperExt.deleteByPrimaryKey(id);
@@ -91,9 +96,14 @@ public class ItemServiceImpl  implements IItemService {
 		for(ItemSkuDO sku : skuList){
 			ItemSkuVo itemSkuVo = new ItemSkuVo();
 			BeanUtils.copies(sku,itemSkuVo);
+
+			//库存
 			InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(),sku.getSkuCode());
 			itemSkuVo.setInventoryDO(inventoryDO);
 			itemSkuVos.add(itemSkuVo);
+
+			//规格尺寸
+			//ItemSkuScaleDO itemSkuScaleDO = itemSkuScaleDOMapper.selectByPrimaryKey();
 		}
 		itemVo.setItemSkus(itemSkuVos);
 		return itemVo;
