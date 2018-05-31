@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackagePatternMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackageScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
+import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
-import com.wangqin.globalshop.item.app.dal.dto.ItemPackageScaleDTO;
 import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
-import com.wangqin.globalshop.item.dal.mapperExt.ItemPackagePatternMapperExt;
-import com.wangqin.globalshop.item.dal.mapperExt.ItemPackageScaleMapperExt;
 
 @Service
 public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
@@ -58,5 +58,15 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 	@Override
 	public void delete(Long id) {
 		packageScaleMapperExt.delete(id);
+	}
+	
+	@Override
+	public void updateScaleSelectiveById(ItemPackageScaleDTO itemPackageScaleDTO) {
+		packageScaleMapperExt.updateScaleSelectiveById(itemPackageScaleDTO);
+	}
+	
+	@Override
+	public List<ItemPackageScaleDTO> queryScaleList(ShippingPackingScaleQueryVO scaleVO) {
+		return packageScaleMapperExt.queryScaleList(scaleVO);
 	}
 }

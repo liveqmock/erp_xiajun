@@ -13,10 +13,14 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
+
 
 
 @Service
@@ -28,9 +32,12 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	@Autowired
 	private ItemSkuMapperExt itemSkuMapperExt;
 
-	
+	@Override
+	public void insertBatch(List<ItemSkuAddVO> skuList) {
+		itemSkuMapperExt.insertBatch(skuList);
+	}
 	/**
-	 * 按条件查询sku列表
+	 * 按条件查询sku列表(分页）
 	 */
 	@Override
 	public JsonPageResult<List<ISkuDTO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
@@ -46,22 +53,27 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		}
 		return itemResult;
 	}
+	
+	
 
+	/**
+	 * 初始化库存信息，添加商品时用
+	 */
 	@Override
-	public List<InventoryDO> initInventory(List<ItemSkuDO> itemSkuList) {
-		List<InventoryDO> inventoryList = null;
+	public List<InventoryAddVO> initInventory(List<ItemSkuAddVO> itemSkuList) {
+		List<InventoryAddVO> inventoryList = null;
 		if (CollectionUtils.isNotEmpty(itemSkuList)) {
-			inventoryList = Lists.transform(itemSkuList, new Function<ItemSkuDO, InventoryDO>() {
+			inventoryList = Lists.transform(itemSkuList, new Function<ItemSkuAddVO, InventoryAddVO>() {
 				@Override
-				public InventoryDO apply(ItemSkuDO itemSku) {
+				public InventoryAddVO apply(ItemSkuAddVO itemSku) {
 					// 初始化库存信息
-					InventoryDO inventory = new InventoryDO();
-					inventory.setGmtCreate(new Date());
-					inventory.setGmtModify(new Date());
-					inventory.setItemCode(itemSku.getItemCode());
+					InventoryAddVO inventory = new InventoryAddVO();
+					inventory.setCompanyNo(itemSku.getCompanyNo());
 					inventory.setItemName(itemSku.getItemName());
-				
-									inventory.setSkuCode(itemSku.getSkuCode());
+				    inventory.setCreator("admin");
+				    inventory.setModifier("admin");
+				    inventory.setItemCode(itemSku.getItemCode());
+					inventory.setSkuCode(itemSku.getSkuCode());
 					inventory.setUpc(itemSku.getUpc());
 					return inventory;
 				}
@@ -77,8 +89,8 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		if(inventory==null){
 			List<ItemSkuDO> newInvList = Lists.newArrayList();
 			newInvList.add(itemSku);
-			List<InventoryDO>  inventoryList = initInventory(newInvList);
-			inventoryService.insertBatch(inventoryList);
+			//List<InventoryDO>  inventoryList = initInventory(newInvList);
+			//inventoryService.insertBatch(inventoryList);
 		}else{
 			//if(inventory.getVirtualInv()!=itemSku.getVirtualInv()){
 			//	inventory.setVirtualInv(itemSku.getVirtualInv());
@@ -96,8 +108,8 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		if(inventory==null){
 			List<ItemSkuDO> newInvList = Lists.newArrayList();
 			newInvList.add(itemSku);
-			List<InventoryDO>  inventoryList = initInventory(newInvList);
-			inventoryService.insertBatch(inventoryList);
+			//List<InventoryDO>  inventoryList = initInventory(newInvList);
+			//inventoryService.insertBatch(inventoryList);
 		}else{
 			//if(inventory.getVirtualInv()!=itemSku.getVirtualInv()){
 			//	inventory.setVirtualInv(itemSku.getVirtualInv());
@@ -156,5 +168,21 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		return itemSkuMapperExt.queryItemSkusByUpc(upc);
 	}
 	
+	@Override
+	public ISkuDTO queryItemSkuBySkuCode(String skuCode) {
+		 return itemSkuMapperExt.queryItemSkuBySkuCode(skuCode); 
 	}
+	
+	@Override
+	public void updateById(ItemSkuUpdateVO itemSkuUpdateVO) {
+		itemSkuMapperExt.updateById(itemSkuUpdateVO);
+	}
+	
+	@Override
+	public void deleteSkuByCode(String code) {
+		itemSkuMapperExt.deleteBySkuCode(code);
+		inventoryService.deleteInvBySkuCode(code);;
+	}
+	
+}
 

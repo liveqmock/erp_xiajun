@@ -23,6 +23,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IFreightService;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
@@ -271,12 +272,7 @@ public class ItemServiceImplement implements IItemService {
         return itemDOMapperExt.sumNewItemNumByMonth(months);
     }
 
-    @Override
-    public ItemDO queryItemByItemCode(String itemCode) {
-        // TODO Auto-generated method stub
-        return itemDOMapperExt.queryItemByItemCode(itemCode);
-
-    }
+ 
 
     @Override
     public ItemDO selectByPrimaryKey(Long id) {
@@ -284,4 +280,16 @@ public class ItemServiceImplement implements IItemService {
 
         return itemDOMapperExt.selectByPrimaryKey(id);
     }
+
+	@Override
+	public List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO) {
+		return itemDOMapperExt.queryItems(itemQueryVO);
+	}
+    
+	@Override
+	public void updateItemById(ItemQueryVO itemQueryVO) {
+		itemDOMapperExt.updateItemById(itemQueryVO);
+	}
+
+   
 }

@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
-
+import com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO;
+import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
-import com.wangqin.globalshop.item.app.dal.dto.ItemPackagePatternDTO;
-import com.wangqin.globalshop.item.app.vo.PackageLevelQueryVO;
+
 
 
 /**
@@ -37,4 +37,6 @@ public interface IItemPackagePatternService {
     
 
 	void deleteById(Long id);
+	
+	void updateLevelSelectiveById(ItemPackagePatternDTO shippingPackingPatternDO);
 }

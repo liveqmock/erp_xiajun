@@ -3,6 +3,7 @@ package com.wangqin.globalshop.item.app.service;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 
 
 public interface IInventoryService {
@@ -38,7 +39,14 @@ public interface IInventoryService {
 	 * @param skuId
 	 * @return
 	 */
-	InventoryDO queryInventoryBySkuId(Long itemId,Long skuId) ;
+	InventoryDO queryInventoryBySkuId(Long itemId,Long skuId);
+	
+	InventoryAddVO queryInvBySkuCode(String skuCode);
+	
+	void lockVirtualInv(InventoryAddVO inventory);
+	
+	//item_module
+	void deleteInvBySkuCode(String skuCode);
 	
 	//int updateLockInventory(Long id , int booked, int transBooked);
 
@@ -119,10 +127,11 @@ public interface IInventoryService {
 	// WarehouseCollector selectWarehousesByErpOrder(ErpOrder erpOrder) throws InventoryException;
 	 
 	 
-	 //void updateVirtualInvByItemId(Long itemId);
+	void updateVirtualInvByItemCode(String itemCode);
 	
-	void insertBatch(List<InventoryDO> invList);
+	//void insertBatch(List<InventoryDO> invList);
 	
+	void insertBatchInventory(List<InventoryAddVO> inventoryList);
 
 	InventoryDO queryInventoryBySkuCode(String skuCode);
 

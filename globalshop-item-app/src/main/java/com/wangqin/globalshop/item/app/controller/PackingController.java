@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.item.app.controller;
 
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,15 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO;
+import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
+import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
-import com.wangqin.globalshop.item.app.dal.dto.ItemPackagePatternDTO;
-import com.wangqin.globalshop.item.app.dal.dto.ItemPackageScaleDTO;
 import com.wangqin.globalshop.item.app.service.IItemPackagePatternService;
 import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
-import com.wangqin.globalshop.item.app.vo.PackageLevelQueryVO;
+
 
 /**
  * 包装以及包装规格控制器
@@ -48,6 +49,22 @@ public class PackingController {
 	@ResponseBody
 	public Object queryPackageScaleList() {
 		JsonPageResult<List<ItemPackageScaleDTO>> result = shippingPackingScaleService.queryPackageScaleList();
+		
+		return result.buildIsSuccess(true);
+	}
+	
+	/**
+	 * 查单个规格
+	 * @return
+	 */
+	@RequestMapping("/packageScale/query")
+	@ResponseBody
+	public Object queryScale(Long id) {
+		JsonResult<ItemPackageScaleDTO> result = new JsonResult<>();
+		ShippingPackingScaleQueryVO shippingPackingScaleQueryVO = new ShippingPackingScaleQueryVO();
+		shippingPackingScaleQueryVO.setId(id);
+		result.setData(shippingPackingScaleService.queryScaleList(shippingPackingScaleQueryVO).get(0));
+		
 		
 		return result.buildIsSuccess(true);
 	}
@@ -89,6 +106,23 @@ public class PackingController {
 	}
 	
 	/**
+	 * 更新包装规格
+	 * @param packageScale
+	 * @return
+	 */
+	@RequestMapping("/packageScale/update")
+	@ResponseBody
+	public Object updateScale(ItemPackageScaleDTO packageScale) {
+		JsonResult<String> result = new JsonResult<>();
+		
+		packageScale.setCreator("admin");
+		packageScale.setModifier("admin");
+		shippingPackingScaleService.updateScaleSelectiveById(packageScale);
+		result.buildIsSuccess(true);
+		return result;
+	}
+	
+	/**
 	 * 删除包装规格类别
 	 * @return
 	 */
@@ -113,6 +147,52 @@ public class PackingController {
 		JsonPageResult<List<ItemPackagePatternDTO>> result = iPackageLevelService.queryPackageLevelList(packageLevelQueryVO);
 		
 		return result.buildIsSuccess(true);
+	}
+	
+	/**
+	 * 查询单个packagelevel
+	 * @param packageLevelQueryVO
+	 * @return
+	 */
+	@RequestMapping("/packageLevel/query")
+	@ResponseBody
+	public Object queryPackageLevelList(Long id) {
+		JsonResult<ItemPackagePatternDTO> result = new JsonResult<>();
+		PackageLevelQueryVO packageLevelQueryVO = new PackageLevelQueryVO();
+		packageLevelQueryVO.setId(id);
+		JsonPageResult<List<ItemPackagePatternDTO>> scale = iPackageLevelService.queryPackageLevelList(packageLevelQueryVO);
+		result.setData(scale.getData().get(0));
+		return result.buildIsSuccess(true);
+	}
+	
+	/**
+	 * 更新level
+	 * @param packageSca
+	 * @return
+	 */
+	@RequestMapping("/packageLevel/update")
+	@ResponseBody
+	public Object update(ItemPackagePatternDTO packageLevel) {
+		JsonResult<String> result = new JsonResult<>();
+		/*
+		if (null != packageLevel.getId()) {
+
+			if ((StringUtils.isNotBlank(packageLevel.getName())) 
+					&& (StringUtils.isNotBlank(packageLevel.getPackageEn()))) {
+				if (!checkUniqueness(packageLevel)) {
+					result.buildData("相同包装规格，包装级别名称不可以重复").buildIsSuccess(false);
+				} else {
+					result.buildIsSuccess(iPackageLevelService.updateSelectiveById(packageLevel));
+				}
+			} else {
+				result.buildData("包装规格名称和包装规格类别英文名称不可以为空").buildIsSuccess(false);
+			}
+		} else {
+			result.buildData("错误数据").buildIsSuccess(false);
+		}
+		*/
+		iPackageLevelService.updateLevelSelectiveById(packageLevel);
+		return result;
 	}
 	
 	/**

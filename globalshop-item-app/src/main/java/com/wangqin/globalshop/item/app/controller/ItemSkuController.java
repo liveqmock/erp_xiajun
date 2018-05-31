@@ -27,7 +27,9 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
@@ -74,12 +76,13 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/update")
 	@ResponseBody
-	public Object update(ItemSkuDO itemSku) {
-		JsonResult<ItemSkuDO> result = new JsonResult<>();
-
+	public Object update(ItemSkuUpdateVO itemSku) {
+		itemSku.setModifier("admin");
+		itemSku.setCreator("admin");
+		JsonResult<String> result = new JsonResult<>();
+         /**		
 		//if haven't item id ,add item
 		if(itemSku.getId()==null){
-			
 			return result.buildIsSuccess(false).buildMsg("没有SKU id");
 		}else{
 			//当upc改变时，订正订单明细里面的upc数据
@@ -132,20 +135,29 @@ public class ItemSkuController  {
 				}				
 			}*/
 			
-			return result.buildIsSuccess(true);
-		}
+			//return result.buildIsSuccess(true);
+		//}
+		result.buildIsSuccess(true);
+		result.buildMsg("更新成功");
+		iItemSkuService.updateById(itemSku);
+		return null;
 	}
 	
-	
+	/**
+	 * 根据sku_code获取sku
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/query")
 	@ResponseBody
-	public Object query(Long id) {
-		JsonResult<ItemSkuDO> result = new JsonResult<>();
+	public Object query(String skuCode) {
+		JsonResult<ISkuDTO> result = new JsonResult<>();
 		//if haven't item id ,add item
-		if(id!=null){
-			result.setData(iItemSkuService.selectByPrimaryKey(id));
+		if(null != skuCode) {
+			ISkuDTO itemSku = iItemSkuService.queryItemSkuBySkuCode(skuCode);
+			result.setData(itemSku);
 		}else{
-			result.buildIsSuccess(false).buildMsg("没有SKU id");
+			result.buildIsSuccess(false).buildMsg("没有skuCode");
 		}
 		return result.buildIsSuccess(true);
 	}
@@ -195,11 +207,16 @@ public class ItemSkuController  {
 		return result;
 	}
 	
-	
+	/**
+	 * 删除
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	public Object delete(Long id) {
+	public Object delete(String code) {
 		JsonResult<String> result = new JsonResult<>();
+		/*
 		if(id!=null){
 			if(iItemSkuService.isCanDeleteSku(id)) {
 				iItemSkuService.deleteByPrimaryKey(id);
@@ -209,7 +226,10 @@ public class ItemSkuController  {
 			}
 		}else{
 			return result.buildIsSuccess(false).buildMsg("没有SKU id");
-		}
+		}*/
+		iItemSkuService.deleteSkuByCode(code);
+		result.buildIsSuccess(true);
+		return result;
 	}
 	
 
@@ -222,27 +242,26 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/lockedVirtualInv")
 	@ResponseBody
-	public Object lockedVirtualInv(ItemSkuDO itemSku) {
+	public Object lockedVirtualInv(InventoryAddVO inventory) {
 		JsonResult<ItemSkuDO> result = new JsonResult<>();
-		if(itemSku.getId()==null) {
-			return result.buildIsSuccess(false).buildMsg("SKU ID错误");
-		} else if(itemSku.getItemCode()==null) {
-			return result.buildIsSuccess(false).buildMsg("商品编码错误");
-		}
+//		if(itemSku.getId()==null) {
+//			return result.buildIsSuccess(false).buildMsg("SKU ID错误");
+//		} else if(itemSku.getItemCode()==null) {
+//			return result.buildIsSuccess(false).buildMsg("商品编码错误");
+//		}
+		InventoryAddVO inv = inventoryService.queryInvBySkuCode(inventory.getSkuCode());
+		//if(inventory == null) {
+		//	return result.buildIsSuccess(false).buildMsg("未找到此sku的库存");
+		//}
 		
-		InventoryDO inventory = inventoryService.queryInventoryBySkuCode(itemSku.getSkuCode());
-		if(inventory == null) {
-			return result.buildIsSuccess(false).buildMsg("未找到此sku的库存");
-		}
+//		int lockedNum = inventory.getLockedVirtualInv() + itemSku.getLockedVirtualInv();
+//		if(lockedNum<0 || (lockedNum>inventory.getVirtualInv() && lockedNum>inventory.getTotalAvailableInv())) {
+//			return result.buildIsSuccess(false).buildMsg("锁定数量异常");
+//		}
+		inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
+		inventoryService.lockVirtualInv(inv);
 		
 		/**
-		int lockedNum = inventory.getLockedVirtualInv() + itemSku.getLockedVirtualInv();
-		if(lockedNum<0 || (lockedNum>inventory.getVirtualInv() && lockedNum>inventory.getTotalAvailableInv())) {
-			return result.buildIsSuccess(false).buildMsg("锁定数量异常");
-		}
-		inventory.setLockedVirtualInv(lockedNum);
-		inventoryService.updateSelectiveById(inventory);
-		
 		//同步到有赞
 		Item item = iItemService.selectById(itemSku.getItemId());
 		// 同步到有赞并上架
