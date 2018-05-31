@@ -4,6 +4,8 @@ import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.common.utils.BizResult;
 
+import java.util.List;
+
 /**
  *
  * MallSubOrder 表数据服务层接口
@@ -29,7 +31,7 @@ public interface IMallSubOrderService  {
 
 	public int updateByPrimaryKey(MallSubOrderDO record);
 
-
+	public void insertBatch(List<MallSubOrderDO> outerOrderDetails);
 
 
 }

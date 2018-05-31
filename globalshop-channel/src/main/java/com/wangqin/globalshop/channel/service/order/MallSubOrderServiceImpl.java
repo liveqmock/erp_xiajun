@@ -81,7 +81,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 	}
 
 
-
+	public void insertBatch(List<MallSubOrderDO> outerOrderDetails){
+		for(MallSubOrderDO mallSubOrderDO : outerOrderDetails){
+			mallSubOrderDOMapperExt.insert(mallSubOrderDO);
+		}
+	}
 
 
 	public void splitErpOrder(MallSubOrderDO erpOrder, int splitCount)  {
