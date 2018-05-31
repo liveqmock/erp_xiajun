@@ -13,7 +13,14 @@
     </sql>
     <!-- 2.0版通用查询结果列,xiajun-->
     <sql id="Base_Column_List_2">
-        T1.id,T1.item_name AS name,T1.status, T1.desc AS remark,T1.spec,T1.model,T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,unit,source,promotion,T1.id_card AS idCard,T1.start_date AS startDate,T1.end_date AS endDate,T1.is_sale AS isSale,T1.logistic_type as logisticType,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.creator AS userCreate,T1.modifier AS userModify 
+        T1.id,T1.item_name AS name,T1.status, T1.desc AS remark,T1.spec,T1.model,
+        T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
+        main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
+        en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
+        unit,source,promotion,T1.id_card AS idCard,T1.start_date AS startDate,
+        T1.end_date AS endDate,T1.is_sale AS isSale,T1.logistic_type as logisticType,
+        T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.creator AS userCreate,
+        T1.modifier AS userModify 
     </sql>
     
     <!-- 根据条件查询商品总数量(fin)-->
@@ -86,6 +93,9 @@
             item T1  LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         where
      		    T1.is_del=0 
+     		<if test="id != null">
+     			and T1.id = #{id}
+     		</if>
      		<!-- 
      		<if test="companyId != null">
      			and T1.company_id = #{companyId}
@@ -140,6 +150,31 @@
 		order by T1.gmt_modify desc;
            
     </select>
+    
+    
+     <!-- 按条件修改商品(fin) -->
+    <update id="updateItemById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+       UPDATE item T1
+       SET
+       <trim suffixOverrides="," >
+            <if test=" name != null and name != '' ">
+                T1.item_name=#{name},
+            </if>        
+            <if test=" brand != null and brand != ''">
+              T1.brand_name = #{brand},
+            </if>
+            <if test=" startDate!= null ">
+                T1.start_date = #{startDate},
+            </if>
+            <if test=" endDate!= null ">
+           		T1.end_date = #{endDate},
+            </if>
+            <if test=" dimensionCodePic!= null ">
+           		T1.qr_code_url = #{dimensionCodePic},
+            </if>
+         </trim>
+           where id=#{id}
+    </update>
     
     <!-- 根据id查询单个商品，修改时使用(fin) -->
     <select id="queryItemById" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO" parameterType="java.lang.Long">

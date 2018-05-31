@@ -47,4 +47,6 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	Integer sumNewItemNumByMonth(Integer months);
 	
 	ItemDO queryItemByItemCode(String itemCode);
+	
+	void updateItemById(ItemQueryVO itemQueryVO);
 }

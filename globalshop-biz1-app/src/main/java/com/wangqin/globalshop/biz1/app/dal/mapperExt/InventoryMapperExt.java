@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper;
+import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 
 
 /**
@@ -75,9 +76,20 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	
 	void updateUpcForInventory(MallOrderDO erpOrder);
 	
-	void updateVirtualInvByItemId(Long itemId);
+	void updateVirtualInvByItemCode(String itemCode);
 	
 	void insertBatch(List<InventoryDO> inv);
 	
 	InventoryDO queryInventoryBySkuCode(String skuCode);
+	
+	void insertBatchInventory(List<InventoryAddVO> inventoryList);
+	
+	//item_module
+	InventoryAddVO queryInvBySkuCode(String skuCode);
+	
+	//item_module
+	void lockVirtualInv(InventoryAddVO inv);
+	
+	//item_module
+	void deleteInvBySkuCode(String skuCode);
 }

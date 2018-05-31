@@ -10,10 +10,10 @@
 	<select id="queryItemSkusCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
         SELECT
         	count(1)
-        FROM
-            item_sku T1
+         FROM
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code 
         where
-           is_del=0
+           T1.is_del=0
               <if test=" itemName != null and itemName != '' ">
                 and T1.item_name LIKE concat('%',#{itemName},'%')
             </if>
@@ -51,7 +51,6 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code 
         where
            T1.is_del=0
-           AND inv.is_del=0
               <if test=" itemName != null and itemName != '' ">
                 and T1.item_name LIKE concat('%',#{itemName},'%')
             </if>
@@ -74,10 +73,59 @@
             <if test=" endGmt != null ">
             and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
             </if>
-          order by T1.id desc
-          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-            
+          order by T1.id desc   
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>          
     </select>
+    
+    <!-- 通过skuCode查找单个sku -->
+     <select id="queryItemSkuBySkuCode" resultType="com.wangqin.globalshop.biz1.app.dto.ISkuDTO" parameterType="java.lang.String">
+        SELECT
+        	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
+        	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
+        	 T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,
+             inv.locked_inv as lockedInv,inv.inv as inventory
+			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
+			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
+			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv 
+        FROM
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code 
+        where
+           T1.is_del=0
+           AND 
+           T1.sku_code=#{skuCode}                 
+    </select>
+    
+    <!-- 根据id更新itemsku -->
+    <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO" >
+    update item_sku
+    <set >
+      <if test="salePrice != null" >
+        sale_price = #{salePrice},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale},
+      </if>
+      <if test="upc != null" >
+        upc = #{upc},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight},
+      </if>
+      <if test="brand != null" >
+        brand_name = #{brand},
+      </if>
+      <if test="skuPic != null" >
+        sku_pic = #{skuPic},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
     
     
      <select id="queryItemSkusById" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
@@ -161,11 +209,17 @@
             separator=",">
             (
             #{wdSolr.skuCode},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
-            #{wdSolr.description},#{wdSolr.sectionNo},#{wdSolr.lookCount},#{wdSolr.favoriteCount},
-            #{wdSolr.createUid},#{wdSolr.createTime},#{wdSolr.updateTime},#{wdSolr.timestamp}
+            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier}
             )
         </foreach>
     </insert>
+    
+    <update id="deleteBySkuCode" parameterType="java.lang.String">
+    	update item_sku 
+    	set is_del=1
+    	where sku_code=#{skuCode}
+    </update>
+    
     
     
 </mapper>

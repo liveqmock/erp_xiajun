@@ -451,4 +451,10 @@
       is_del = #{isDel,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <update id="deleteById" parameterType="java.lang.Long">
+  	update item_sku 
+  	set is_del=1
+  	where id=#{id}
+  </update>
 </mapper>

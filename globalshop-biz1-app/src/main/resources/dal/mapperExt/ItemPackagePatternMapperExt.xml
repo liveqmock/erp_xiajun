@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.item.dal.mapperExt.ItemPackagePatternMapperExt">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackagePatternMapperExt">
 	
 	<sql id="Base_Column_List">
 		id,pattern_name AS name
@@ -10,7 +10,7 @@
 		id,pattern_name AS name,name_en AS packageEn,packaging_scale_no AS packagingScaleNo
 	</sql>
 	
-	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.item.app.vo.PackageLevelQueryVO">
+	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO">
         SELECT
         	count(1)
         FROM
@@ -34,13 +34,16 @@
             
     </select>
     
-    <select id="queryPackageLevels" resultType="com.wangqin.globalshop.item.app.dal.dto.ItemPackagePatternDTO" parameterType="com.wangqin.globalshop.item.app.vo.PackageLevelQueryVO">
+    <select id="queryPackageLevels" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO">
         SELECT
         	 <include refid="Base_Column_List_Old" />
         FROM
             `shipping_packing_pattern` T1
         where
              is_del=0
+            <if test=" id != null and id != '' ">
+                and T1.id = #{id}
+            </if>
             <if test=" name != null and name != '' ">
                 and T1.name = #{name}
             </if>
@@ -60,7 +63,7 @@
     </select>
     
     
-    <select id="queryPatternsByScaleNo" resultType="com.wangqin.globalshop.item.app.dal.dto.ItemPackagePatternDTO"  >
+    <select id="queryPatternsByScaleNo" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO"  >
         SELECT
         	 <include refid="Base_Column_List" />
         FROM
@@ -127,5 +130,29 @@
   	where id=#{id}
   </update>
  
+ 
+ <!-- 按条件修改pattern(fin) -->
+    <update id="updateLevelSelectiveById" parameterType="com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO">
+       UPDATE `shipping_packing_pattern` T1
+       SET
+       <trim suffixOverrides="," >
+            <if test=" name != null and name != '' ">
+                T1.pattern_name=#{name},
+            </if>        
+            <if test=" packageEn != null and packageEn  != ''">
+              T1.name_en = #{packageEn},
+            </if>
+            <if test=" packagingScaleNo!= null ">
+                T1.packaging_scale_no = #{packagingScaleNo},
+            </if>
+            <if test=" creator!= null ">
+           		T1.creator = #{creator},
+            </if>
+            <if test=" modifier!= null ">
+           		T1.modifier = #{modifier},
+            </if>
+         </trim>
+           where id=#{id}
+    </update>
     
 </mapper>
