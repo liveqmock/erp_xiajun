@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt" >
+  <!--<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >-->
+    <!--<id column="id" property="id" jdbcType="BIGINT" />-->
+    <!--<result column="user_no" property="userNo" jdbcType="VARCHAR" />-->
+    <!--<result column="login_name" property="loginName" jdbcType="VARCHAR" />-->
+    <!--<result column="name" property="name" jdbcType="VARCHAR" />-->
+    <!--<result column="password" property="password" jdbcType="VARCHAR" />-->
+    <!--<result column="sex" property="sex" jdbcType="TINYINT" />-->
+    <!--<result column="age" property="age" jdbcType="TINYINT" />-->
+    <!--<result column="phone" property="phone" jdbcType="VARCHAR" />-->
+    <!--<result column="user_type" property="userType" jdbcType="TINYINT" />-->
+    <!--<result column="status" property="status" jdbcType="TINYINT" />-->
+    <!--<result column="organization_id" property="organizationId" jdbcType="INTEGER" />-->
+    <!--<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />-->
+    <!--<result column="wx_user_id" property="wxUserId" jdbcType="BIGINT" />-->
+    <!--<result column="email" property="email" jdbcType="VARCHAR" />-->
+    <!--<result column="company_no" property="companyNo" jdbcType="VARCHAR" />-->
+    <!--<result column="is_del" property="isDel" jdbcType="BIT" />-->
+    <!--<result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />-->
+    <!--<result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />-->
+    <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
+    <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
+  <!--</resultMap>-->
+  <!--<sql id="Base_Column_List" >-->
+    <!--id, user_no, login_name, name, password, sex, age, phone, user_type, status, organization_id, -->
+    <!--create_time, wx_user_id, email, company_no, is_del, gmt_create, gmt_modify, creator, -->
+    <!--modifier-->
+  <!--</sql>-->
+
+  <resultMap id="userVoResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+    <id column="id" property="id" jdbcType="BIGINT"/>
+    <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
+    <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="password" property="password" jdbcType="VARCHAR"/>
+    <result column="sex" property="sex" jdbcType="TINYINT"/>
+    <result column="age" property="age" jdbcType="TINYINT"/>
+    <result column="user_type" property="userType" jdbcType="TINYINT"/>
+    <result column="status" property="status" jdbcType="TINYINT"/>
+    <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+
+    <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+      <id column="roleId" property="id"/>
+      <result column="roleId" property="role_id"/>
+      <result column="roleName" property="name"/>
+    </collection>
+  </resultMap>
+
+
+  <select id="selectByLoginName" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.Base_Column_List" />
+    from auth_user
+    where user_no = #{userNo,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+  update auth_user
+  <set >
+  <if test="userNo != null" >
+  user_no = #{userNo,jdbcType=VARCHAR},
+  </if>
+  <if test="loginName != null" >
+  login_name = #{loginName,jdbcType=VARCHAR},
+  </if>
+  <if test="name != null" >
+  name = #{name,jdbcType=VARCHAR},
+  </if>
+  <if test="password != null" >
+  password = #{password,jdbcType=VARCHAR},
+  </if>
+  <if test="sex != null" >
+  sex = #{sex,jdbcType=TINYINT},
+  </if>
+  <if test="age != null" >
+  age = #{age,jdbcType=TINYINT},
+  </if>
+  <if test="phone != null" >
+  phone = #{phone,jdbcType=VARCHAR},
+  </if>
+  <if test="userType != null" >
+  user_type = #{userType,jdbcType=TINYINT},
+  </if>
+  <if test="status != null" >
+  status = #{status,jdbcType=TINYINT},
+  </if>
+  <if test="organizationId != null" >
+  organization_id = #{organizationId,jdbcType=INTEGER},
+  </if>
+  <if test="createTime != null" >
+  create_time = #{createTime,jdbcType=TIMESTAMP},
+  </if>
+  <if test="wxUserId != null" >
+  wx_user_id = #{wxUserId,jdbcType=BIGINT},
+  </if>
+  <if test="email != null" >
+  email = #{email,jdbcType=VARCHAR},
+  </if>
+  <if test="companyNo != null" >
+  company_no = #{companyNo,jdbcType=VARCHAR},
+  </if>
+  <if test="isDel != null" >
+  is_del = #{isDel,jdbcType=BIT},
+  </if>
+  <if test="gmtCreate != null" >
+  gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+  </if>
+  <if test="gmtModify != null" >
+  gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+  </if>
+  <if test="creator != null" >
+  creator = #{creator,jdbcType=VARCHAR},
+  </if>
+  <if test="modifier != null" >
+  modifier = #{modifier,jdbcType=VARCHAR},
+  </if>
+  </set>
+  where login_name = #{loginName,jdbcType=VARCHAR}
+  </update>
+
+  <update id="deleteByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    update auth_user set is_del=1
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectUserVoById" resultMap="userVoResultMap" parameterType="java.lang.Long">
+    SELECT
+    t.id,
+    login_name,
+    t.`name`,
+    `password`,
+    sex,
+    age,
+    user_type,
+    t.`status`,
+    organization_id,
+    t.create_time,
+    phone,
+    s.`name` AS organizationName,
+    o.id AS roleId,
+    o.`name` AS roleName
+    FROM
+    auth_user t
+    LEFT JOIN auth_user_role r ON t.id = r.user_id
+    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_organization s ON s.id = t.organization_id
+    <where>
+      t.id = #{id}
+    </where>
+  </select>
+
+  <select id="selectUserVoPage" resultMap="userVoResultMap">
+    SELECT
+    t.id,
+    login_name,
+    t.`name`,
+    `password`,
+    sex,
+    age,
+    user_type,
+    t.`status`,
+    organization_id,
+    t.create_time,
+    phone,
+    s.`name` AS organizationName,
+    o.id AS roleId,
+    o.`name` AS roleName
+    FROM
+    auth_user t
+    LEFT JOIN auth_user_role r ON t.id = r.user_id
+    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_organization s ON s.id = t.organization_id
+    <where>
+      <if test=" name != null and name != '' ">
+        t.name = #{name}
+      </if>
+      <if test=" organizationId != null ">
+        t.organization_id = #{organizationId}
+      </if>
+      <if test=" startTime != null ">
+        <![CDATA[ and t.create_time >= #{startTime} ]]>
+      </if>
+      <if test=" endTime != null ">
+        <![CDATA[ and t.create_time <= #{endTime} ]]>
+      </if>
+    </where>
+  </select>
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
+    <!--delete from auth_user-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >-->
+    <!--<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >-->
+      <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    <!--insert into auth_user (id, user_no, login_name, -->
+      <!--name, password, sex, -->
+      <!--age, phone, user_type, -->
+      <!--status, organization_id, create_time, -->
+      <!--wx_user_id, email, company_no, -->
+      <!--is_del, gmt_create, gmt_modify, -->
+      <!--creator, modifier)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{userNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, -->
+      <!--#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, -->
+      <!--#{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, -->
+      <!--#{status,jdbcType=TINYINT}, #{organizationId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, -->
+      <!--#{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, -->
+      <!--#{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, -->
+      <!--#{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >-->
+    <!--<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >-->
+      <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    <!--insert into auth_user-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--id,-->
+      <!--<if test="userNo != null" >-->
+        <!--user_no,-->
+      <!--</if>-->
+      <!--<if test="loginName != null" >-->
+        <!--login_name,-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="password != null" >-->
+        <!--password,-->
+      <!--</if>-->
+      <!--<if test="sex != null" >-->
+        <!--sex,-->
+      <!--</if>-->
+      <!--<if test="age != null" >-->
+        <!--age,-->
+      <!--</if>-->
+      <!--<if test="phone != null" >-->
+        <!--phone,-->
+      <!--</if>-->
+      <!--<if test="userType != null" >-->
+        <!--user_type,-->
+      <!--</if>-->
+      <!--<if test="status != null" >-->
+        <!--status,-->
+      <!--</if>-->
+      <!--<if test="organizationId != null" >-->
+        <!--organization_id,-->
+      <!--</if>-->
+      <!--<if test="createTime != null" >-->
+        <!--create_time,-->
+      <!--</if>-->
+      <!--<if test="wxUserId != null" >-->
+        <!--wx_user_id,-->
+      <!--</if>-->
+      <!--<if test="email != null" >-->
+        <!--email,-->
+      <!--</if>-->
+      <!--<if test="companyNo != null" >-->
+        <!--company_no,-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--is_del,-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--gmt_create,-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--gmt_modify,-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--creator,-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--modifier,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--#{id,jdbcType=BIGINT},-->
+      <!--<if test="userNo != null" >-->
+        <!--#{userNo,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="loginName != null" >-->
+        <!--#{loginName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="password != null" >-->
+        <!--#{password,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="sex != null" >-->
+        <!--#{sex,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="age != null" >-->
+        <!--#{age,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="phone != null" >-->
+        <!--#{phone,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="userType != null" >-->
+        <!--#{userType,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="status != null" >-->
+        <!--#{status,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="organizationId != null" >-->
+        <!--#{organizationId,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="createTime != null" >-->
+        <!--#{createTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="wxUserId != null" >-->
+        <!--#{wxUserId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="email != null" >-->
+        <!--#{email,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="companyNo != null" >-->
+        <!--#{companyNo,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--#{isDel,jdbcType=BIT},-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--#{gmtCreate,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--#{gmtModify,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--#{creator,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--#{modifier,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >-->
+    <!--update auth_user-->
+    <!--<set >-->
+      <!--<if test="userNo != null" >-->
+        <!--user_no = #{userNo,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="loginName != null" >-->
+        <!--login_name = #{loginName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="password != null" >-->
+        <!--password = #{password,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="sex != null" >-->
+        <!--sex = #{sex,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="age != null" >-->
+        <!--age = #{age,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="phone != null" >-->
+        <!--phone = #{phone,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="userType != null" >-->
+        <!--user_type = #{userType,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="status != null" >-->
+        <!--status = #{status,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="organizationId != null" >-->
+        <!--organization_id = #{organizationId,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="createTime != null" >-->
+        <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="wxUserId != null" >-->
+        <!--wx_user_id = #{wxUserId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="email != null" >-->
+        <!--email = #{email,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="companyNo != null" >-->
+        <!--company_no = #{companyNo,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--is_del = #{isDel,jdbcType=BIT},-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--creator = #{creator,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--modifier = #{modifier,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >-->
+    <!--update auth_user-->
+    <!--set user_no = #{userNo,jdbcType=VARCHAR},-->
+      <!--login_name = #{loginName,jdbcType=VARCHAR},-->
+      <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--password = #{password,jdbcType=VARCHAR},-->
+      <!--sex = #{sex,jdbcType=TINYINT},-->
+      <!--age = #{age,jdbcType=TINYINT},-->
+      <!--phone = #{phone,jdbcType=VARCHAR},-->
+      <!--user_type = #{userType,jdbcType=TINYINT},-->
+      <!--status = #{status,jdbcType=TINYINT},-->
+      <!--organization_id = #{organizationId,jdbcType=INTEGER},-->
+      <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+      <!--wx_user_id = #{wxUserId,jdbcType=BIGINT},-->
+      <!--email = #{email,jdbcType=VARCHAR},-->
+      <!--company_no = #{companyNo,jdbcType=VARCHAR},-->
+      <!--is_del = #{isDel,jdbcType=BIT},-->
+      <!--gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},-->
+      <!--gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},-->
+      <!--creator = #{creator,jdbcType=VARCHAR},-->
+      <!--modifier = #{modifier,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+</mapper>

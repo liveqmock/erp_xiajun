@@ -14,6 +14,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     @Resource
     Cache loginCache;
 
+    @Override
     public Long checkAuth(String sessionId) {
         return (Long) loginCache.get(sessionId);
     }
