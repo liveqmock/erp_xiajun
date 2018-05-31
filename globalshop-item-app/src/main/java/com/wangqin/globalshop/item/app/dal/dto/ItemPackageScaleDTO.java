@@ -1,6 +1,9 @@
 package com.wangqin.globalshop.item.app.dal.dto;
 
+import java.security.KeyStore.PrivateKeyEntry;
 import java.util.List;
+
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 
 /**
@@ -14,7 +17,13 @@ public class ItemPackageScaleDTO {
 	
 	private String name;//名称
 	
+	private String enName;//英文名
+	
 	private String packagingScaleNo;
+	
+	private String creator;
+	
+	private String modifier;
 	
 	private List<ItemPackagePatternDTO> packageLevels;
 	
@@ -41,6 +50,24 @@ public class ItemPackageScaleDTO {
 	}
 	public void setPackagingScaleNo(String packagingScaleNo) {
 		this.packagingScaleNo = packagingScaleNo;
+	}
+	public String getEnName() {
+		return enName;
+	}
+	public void setEnName(String enName) {
+		this.enName = enName;
+	}
+	public String getCreator() {
+		return creator;
+	}
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+	public String getModifier() {
+		return modifier;
+	}
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
 	}
 	
 

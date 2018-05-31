@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
@@ -15,7 +16,7 @@ public interface IItemSkuService  {
 	 * @param itemQueryVO
 	 * @return
 	 */
-	JsonPageResult<List<ItemSkuDO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO);
+	JsonPageResult<List<ISkuDTO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO);
 	
 	/**
 	 * 根据SKU初始化库存信息

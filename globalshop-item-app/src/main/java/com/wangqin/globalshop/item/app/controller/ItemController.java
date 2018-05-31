@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Maps;
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.service.channel.ChannelFactory;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -37,7 +37,7 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
-import com.wangqin.globalshop.item.app.enums.ChannelType;
+
 import com.wangqin.globalshop.item.app.service.IBuyerService;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
@@ -46,7 +46,9 @@ import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.ISequenceUtilService;
+
 import com.wangqin.globalshop.item.app.vo.ItemAddVO;
+
 import com.wangqin.globalshop.item.app.vo.ItemSkuAddVO;
 
 import net.sf.json.JSONObject;
@@ -256,25 +258,42 @@ public class ItemController  {
 			//newItem.setEndDate(item.getEndDate());
 			newItem.setCreator("admin");
 			newItem.setModifier("admin");
+			newItem.setItemCode(RandomUtils.getTimeRandom());
 			//newItem.setBookingDate(item.getBookingDate());
 	        //newItem.setDesc(item.getRemark());
 	        newItem.setCompanyNo(RandomUtils.getTimeRandom());
-	        System.out.println("before");
 	        iItemService.addItem(newItem);
-	        System.out.println("after");
+	        /**插入itemsku和库存
+	        List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
+	        		if (itemSkuList != null && !itemSkuList.isEmpty()) {
+	        			itemSkuList.forEach(itemSku -> {
+	        				itemSku.setItemCode(item.getItemCode());
+	        				itemSku.setItemName(item.getName());
+	        				itemSku.setItemId(item.getId());
+	        				itemSku.setCategoryId(item.getCategoryId());
+	        				itemSku.setCategoryName(item.getCategoryName());
+	        				itemSku.setBrand(item.getBrand());
+	        				itemSku.setCompanyId(item.getCompanyId());
+	        				//skuFreight(itemSku);
+	        			});
+	        			itemSkuService.insertBatch(itemSkuList);
+	        			List<Inventory> inventoryList = itemSkuService.initInventory(itemSkuList);
+	        			inventoryService.insertBatch(inventoryList);
+	        		}**/
 			//同步到有赞并上架
-			/**
+			
 			if(item.getIsSale()!=null && item.getIsSale()==1) {
 				if (item.getSaleOnYouzan() == 1) {
 					try {
-//						outerItemService.synItemYouzan(item.getId());
-						ShiroUser user = ShiroUtil.getShiroUser();
-						ChannelFactory.getChannel(user.getCompanyId(), ChannelType.YouZan).createItem(item.getId());
+						//outerItemService.synItemYouzan(item.getId());
+						//ShiroUser user = ShiroUtil.getShiroUser();
+						String companyNo = "c23";
+						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
 					} catch(Exception e) {
 						//logger.error("商品添加时同步到有赞：", e);
 					}
 				}				
-			}*/
+			}
 						
 			//同步生成小程序的二维码
 			if(item.getId()!= null) {
@@ -505,19 +524,25 @@ public class ItemController  {
 		}
 	}
 	
+	/**
+	 * 通过id查找商品（在修改商品的时候使用，fin）
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/query")
 	@ResponseBody
 	public Object query(Long id) {
 		//logger.info("query item start");
-		JsonResult<ItemDO> result = new JsonResult<>();
+		JsonResult<ItemDTO> result = new JsonResult<>();
 		// if haven't item id ,add item
 		if (id != null) {
-			ItemDO item = iItemService.queryItem(id);
+			ItemDTO item = iItemService.queryItemById(id);
 			if (item == null) {
 				result.buildIsSuccess(false).buildMsg("没有找到Item");
 			}
-			String itemName = item.getItemName();
-		/*
+			String itemName = item.getName();
+		
+			/*
             if(StringUtils.isNotBlank(buyers)){
             	List<WxPurchaseUser>  wxPurchaseUser = new ArrayList();
             	EntityWrapper<ItemBuyer>  entityWrapper = new EntityWrapper<ItemBuyer>();
@@ -528,7 +553,7 @@ public class ItemController  {
             		wxPurchaseUser.add(one);
 				}
             	item.setWxList(wxPurchaseUser);
-            }
+            }*/
           
 			if(itemName.contains("婴儿款")) {
 				item.setSexStyle("婴儿款");
@@ -549,21 +574,24 @@ public class ItemController  {
 			} else if(itemName.contains("小童款")) {
 				item.setSexStyle("小童款");
 			}
-			  */
+			  
 			StringBuffer nameRep = new StringBuffer();
 			//品牌
-			String[] brandArr = item.getBrandName().split("->");
+			String[] brandArr = item.getBrand().split("->");
+			
 			if(StringUtil.isNotBlank(brandArr[0])) {	//英文品牌
 				nameRep.append(brandArr[0] + " ");
 			}
 			if(brandArr.length>1 && StringUtil.isNotBlank(brandArr[1])) {	//中文品牌
 				nameRep.append(brandArr[1] + " ");
 			}
-			//if(StringUtil.isNotBlank(item.getSexStyle())) {		//男女款
-			//	nameRep.append(item.getSexStyle() + " ");
-			//}
+			if(StringUtil.isNotBlank(item.getSexStyle())) {		//男女款
+				nameRep.append(item.getSexStyle() + " ");
+			}
+			System.out.println(nameRep.toString());
 			//重新设置商品名称
-			item.setItemName(itemName.replace(nameRep.toString(), ""));
+			//item.setName(itemName.replace(nameRep.toString(), ""));
+			item.setName(nameRep.toString());
 			
 			//item.setSaleOnChannels(item.generateSaleOnChannels());
 			
@@ -574,6 +602,7 @@ public class ItemController  {
 		}
 	}
 
+	/**
 	@RequestMapping("/queryItems")
 	@ResponseBody
 	public Object queryItems(ItemQueryVO itemQueryVO) {
@@ -581,6 +610,7 @@ public class ItemController  {
 		JsonPageResult<List<ItemDO>> result = iItemService.queryItems(itemQueryVO);
 		return result.buildIsSuccess(true);
 	}
+	**/
 	/**
 	 * 商品批量上架
 	 * @param itemIdStrs 要上架的商品ID集合 ，分隔符   123,222,132 
@@ -662,8 +692,8 @@ public class ItemController  {
 	@ResponseBody
 	public Object queryItemList(ItemQueryVO itemQueryVO) {
 		//logger.info("itemsPush start");
-		JsonPageResult<List<ItemDO>> result = iItemService.queryItems(itemQueryVO);
-		EasyuiJsonResult<List<ItemDO>> jsonResult = new EasyuiJsonResult<>();
+		JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
+		EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
 		jsonResult.setTotal(result.getTotalCount());
 		jsonResult.setRows(result.getData());
 //		/ShiroUser shiroUser = this.getShiroUser();

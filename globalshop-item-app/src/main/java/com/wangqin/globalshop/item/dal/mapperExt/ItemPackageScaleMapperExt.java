@@ -13,4 +13,8 @@ import com.wangqin.globalshop.item.app.dal.dto.ItemPackageScaleDTO;
 public interface ItemPackageScaleMapperExt {
 	
 	List<ItemPackageScaleDTO> queryAllPackageScale();
+	
+	void insertPackageScale(ItemPackageScaleDTO itemPackageScaleDTO);
+	
+	void delete(Long id);
 }

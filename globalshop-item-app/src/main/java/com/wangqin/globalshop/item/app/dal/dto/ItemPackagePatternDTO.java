@@ -1,13 +1,13 @@
 package com.wangqin.globalshop.item.app.dal.dto;
 
-
+import com.wangqin.globalshop.common.utils.PageQueryVO;
 
 /**
  * 包裝的附表
  * @author xiajun
  *
  */
-public class ItemPackagePatternDTO {
+public class ItemPackagePatternDTO extends PageQueryVO{
 
 		private Long id;//类型id
 		
@@ -15,6 +15,7 @@ public class ItemPackagePatternDTO {
 		
 		private String packagingScaleNo;
 	
+		private String packageEn;
 		
 		public Long getId() {
 			return id;
@@ -33,6 +34,12 @@ public class ItemPackagePatternDTO {
 		}
 		public void setPackagingScaleNo(String packagingScaleNo) {
 			this.packagingScaleNo = packagingScaleNo;
+		}
+		public String getPackageEn() {
+			return packageEn;
+		}
+		public void setPackageEn(String packageEn) {
+			this.packageEn = packageEn;
 		}
 		
 	

@@ -16,6 +16,28 @@ import com.wangqin.globalshop.common.utils.Money;
  *
  */
 public class ItemSkuAddVO implements Serializable {
+	private String companyNo;
+	private String creator;
+	private String modifier;
+	
+	public String getCompanyNo() {
+		return companyNo;
+	}
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
+	public String getCreator() {
+		return creator;
+	}
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+	public String getModifier() {
+		return modifier;
+	}
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
+	}
 	/** 主键id */
 	@TableId(type = IdType.AUTO)
 	private Long id;

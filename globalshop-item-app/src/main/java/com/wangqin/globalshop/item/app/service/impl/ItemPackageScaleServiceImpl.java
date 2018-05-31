@@ -39,4 +39,24 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 		
 		return result;
 	}
+	
+	@Override
+	public JsonPageResult<List<ItemPackageScaleDTO>> queryPackageScaleList() {
+		JsonPageResult<List<ItemPackageScaleDTO>> result = new JsonPageResult<>();
+		
+		List<ItemPackageScaleDTO> packageScales = packageScaleMapperExt.queryAllPackageScale();
+		result.setData(packageScales);
+		
+		return result;
+	}
+	
+	@Override
+	public void insertPackageScale(ItemPackageScaleDTO itemPackageScaleDTO) {
+		packageScaleMapperExt.insertPackageScale(itemPackageScaleDTO);
+	}
+	
+	@Override
+	public void delete(Long id) {
+		packageScaleMapperExt.delete(id);
+	}
 }

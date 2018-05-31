@@ -26,6 +26,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
+import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -179,7 +180,7 @@ public class ItemSkuController  {
 	@RequestMapping("/queryItemSkuList")
 	@ResponseBody
 	public Object queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
-		JsonPageResult<List<ItemSkuDO>> result = new JsonPageResult<>();
+		JsonPageResult<List<ISkuDTO>> result = new JsonPageResult<>();
 		try{
 			try {
 				//itemSkuQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());

@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IFreightService;
@@ -53,26 +54,9 @@ public class ItemServiceImplement implements IItemService {
 
     @Override
     public void addItem(ItemDO item) {
-    	/**/
     	
     	itemDOMapperExt.insertSelective(item);	
-    	/**
-		List<ItemSku> itemSkuList = item.getItemSkus();
-		if (itemSkuList != null && !itemSkuList.isEmpty()) {
-			itemSkuList.forEach(itemSku -> {
-				itemSku.setItemCode(item.getItemCode());
-				itemSku.setItemName(item.getName());
-				itemSku.setItemId(item.getId());
-				itemSku.setCategoryId(item.getCategoryId());
-				itemSku.setCategoryName(item.getCategoryName());
-				itemSku.setBrand(item.getBrand());
-				itemSku.setCompanyId(item.getCompanyId());
-				skuFreight(itemSku);
-			});
-			itemSkuService.insertBatch(itemSkuList);
-			List<Inventory> inventoryList = itemSkuService.initInventory(itemSkuList);
-			inventoryService.insertBatch(inventoryList);
-		}**/
+
     }
 
     // 计算当前SKU的运费
@@ -138,8 +122,8 @@ public class ItemServiceImplement implements IItemService {
     }
 
     @Override
-    public JsonPageResult<List<ItemDO>> queryItems(ItemQueryVO itemQueryVO) {
-        JsonPageResult<List<ItemDO>> itemResult = new JsonPageResult<>();
+    public JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO) {
+        JsonPageResult<List<ItemDTO>> itemResult = new JsonPageResult<>();
 
         // itemQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
 
@@ -149,13 +133,18 @@ public class ItemServiceImplement implements IItemService {
         // 2、查询分页记录
         if (totalCount != null && totalCount != 0) {
             itemResult.buildPage(totalCount, itemQueryVO);
-            List<ItemDO> items = itemDOMapperExt.queryItems(itemQueryVO);
+            List<ItemDTO> items = itemDOMapperExt.queryItems(itemQueryVO);
             itemResult.setData(items);
         } else {
-            List<ItemDO> items = new ArrayList<>();
+            List<ItemDTO> items = new ArrayList<>();
             itemResult.setData(items);
         }
         return itemResult;
+    }
+    
+    @Override
+    public ItemDTO queryItemById(Long id) {
+    	return itemDOMapperExt.queryItemById(id);
     }
 
     @Override

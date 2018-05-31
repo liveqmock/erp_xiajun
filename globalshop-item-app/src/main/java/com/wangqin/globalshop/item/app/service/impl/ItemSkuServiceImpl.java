@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
@@ -27,16 +28,20 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	@Autowired
 	private ItemSkuMapperExt itemSkuMapperExt;
 
+	
+	/**
+	 * 按条件查询sku列表
+	 */
 	@Override
-	public JsonPageResult<List<ItemSkuDO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
-		JsonPageResult<List<ItemSkuDO>> itemResult = new JsonPageResult<>();
+	public JsonPageResult<List<ISkuDTO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
+		JsonPageResult<List<ISkuDTO>> itemResult = new JsonPageResult<>();
 		//1、查询总的记录数量
 		Integer totalCount =  itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
-		
+		System.out.println("shuliang"+totalCount);
 		//2、查询分页记录
 		if(totalCount!=null&&totalCount!=0L){
 			itemResult.buildPage(totalCount, itemSkuQueryVO);
-			List<ItemSkuDO> itemSkus = itemSkuMapperExt.queryItemSkus(itemSkuQueryVO);
+			List<ISkuDTO> itemSkus = itemSkuMapperExt.queryItemSkus(itemSkuQueryVO);
 			itemResult.setData(itemSkus);
 		}
 		return itemResult;
