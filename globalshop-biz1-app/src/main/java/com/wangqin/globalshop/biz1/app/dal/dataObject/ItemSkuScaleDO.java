@@ -12,6 +12,8 @@ public class ItemSkuScaleDO {
     private String scaleCode;
 
     private String scaleName;
+    
+    private String scaleValue;
 
     private Date gmtCreate;
 
@@ -63,7 +65,16 @@ public class ItemSkuScaleDO {
         this.scaleName = scaleName == null ? null : scaleName.trim();
     }
 
-    public Date getGmtCreate() {
+    
+    public String getScaleValue() {
+		return scaleValue;
+	}
+
+	public void setScaleValue(String scaleValue) {
+		this.scaleValue = scaleValue;
+	}
+
+	public Date getGmtCreate() {
         return gmtCreate;
     }
 

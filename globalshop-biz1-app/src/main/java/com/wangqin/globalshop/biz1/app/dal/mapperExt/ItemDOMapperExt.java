@@ -15,6 +15,9 @@ import java.util.Map;
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
 
+	//插入单个商品
+	int insertItemSelective(ItemDO item);
+	
 	public List<ItemDO> selectBatchIds(List<Long> idList);
 
 	public void updateBatchById(List<ItemDO> itemDOList);

@@ -19,6 +19,24 @@ public class CountryController {
 	private ICountryService countryService;
 	
 	/**
+	 * 添加国家
+	 *
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/add")
+	@ResponseBody
+	public Object add(CountryDO country) {
+		JsonResult<CountryDO> result = new JsonResult<>();		
+		if(countryService.queryCountrySelective(country) != null) {
+			return result.buildMsg("添加失败，该国已存在").buildIsSuccess(false);
+		}
+		countryService.insertCountrySelective(country);
+		result.buildData(countryService.queryCountrySelective(country));
+		return result.buildIsSuccess(true).buildMsg("添加成功");
+	}
+	
+	/**
 	 * 总查询所有国家
 	 */
 	@RequestMapping("/queryAllCountries")

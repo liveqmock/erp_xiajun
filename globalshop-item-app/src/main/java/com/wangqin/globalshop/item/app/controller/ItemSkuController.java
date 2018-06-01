@@ -184,6 +184,11 @@ public class ItemSkuController  {
 		return result.buildIsSuccess(true);
 	}
 	
+	/**
+	 * sku列表展示
+	 * @param itemSkuQueryVO
+	 * @return
+	 */
 	@RequestMapping("/queryItemSkuList")
 	@ResponseBody
 	public Object queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {

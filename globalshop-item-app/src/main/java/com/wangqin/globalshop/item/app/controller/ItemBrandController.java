@@ -52,7 +52,7 @@ public class ItemBrandController {
 		// if(itemBrandService.selectByName(brand.getName()) != null) {
 		// return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
 		// }
-		itemBrandService.addBrand(brand);
+		itemBrandService.insertBrandSelective(brand);
 		return result.buildIsSuccess(true);
 	}
 

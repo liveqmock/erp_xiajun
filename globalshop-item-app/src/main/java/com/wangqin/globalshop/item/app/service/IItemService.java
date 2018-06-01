@@ -20,7 +20,9 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 public interface IItemService {
 
 	
-	
+	//插入单个商品
+	int insertItemSelective(ItemDO item);
+		
 	ItemDO selectByPrimaryKey(Long id);
 	/**
 	 * add item 
