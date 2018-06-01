@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderDOMapperExt" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
+    <result column="channel_customer_no" property="channelCustomerNo" jdbcType="VARCHAR" />
+    <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="wx_pay_trade_no" property="wxPayTradeNo" jdbcType="VARCHAR" />
+    <result column="total_amount" property="totalAmount" jdbcType="DOUBLE" />
+    <result column="actual_amount" property="actualAmount" jdbcType="DOUBLE" />
+    <result column="pay_type" property="payType" jdbcType="TINYINT" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR" />
+    <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="BIGINT" />
+    <result column="freight" property="freight" jdbcType="DOUBLE" />
+    <result column="freight_agent" property="freightAgent" jdbcType="DOUBLE" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_no, order_no, company_no, channel_no, channel_name, channel_order_no, 
+    channel_customer_no, channel_type, shop_code, wx_pay_trade_no, total_amount, actual_amount, 
+    pay_type, order_time, status, memo, id_card, idcard_pic_front, idcard_pic_reverse, 
+    source, freight, freight_agent, gmt_modify, gmt_create, is_del, modifier, creator
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mall_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from mall_order
+    where order_no = #{orderNo}
+  </select>
+  <select id="queryByStatus" resultMap="BaseResultMap" parameterType="java.lang.Byte" >
+    select
+    <include refid="Base_Column_List" />
+    from mall_order
+    where status = #{status}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mall_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_order (id, customer_no, order_no, 
+      company_no, channel_no, channel_name, 
+      channel_order_no, channel_customer_no, channel_type, 
+      shop_code, wx_pay_trade_no, total_amount, 
+      actual_amount, pay_type, order_time, 
+      status, memo, id_card, 
+      idcard_pic_front, idcard_pic_reverse, source, 
+      freight, freight_agent, gmt_modify, 
+      gmt_create, is_del, modifier, 
+      creator)
+    values (#{id,jdbcType=BIGINT}, #{customerNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, 
+      #{channelOrderNo,jdbcType=VARCHAR}, #{channelCustomerNo,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR}, 
+      #{shopCode,jdbcType=VARCHAR}, #{wxPayTradeNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DOUBLE}, 
+      #{actualAmount,jdbcType=DOUBLE}, #{payType,jdbcType=TINYINT}, #{orderTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{memo,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, #{source,jdbcType=BIGINT}, 
+      #{freight,jdbcType=DOUBLE}, #{freightAgent,jdbcType=DOUBLE}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{modifier,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="channelName != null" >
+        channel_name,
+      </if>
+      <if test="channelOrderNo != null" >
+        channel_order_no,
+      </if>
+      <if test="channelCustomerNo != null" >
+        channel_customer_no,
+      </if>
+      <if test="channelType != null" >
+        channel_type,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="wxPayTradeNo != null" >
+        wx_pay_trade_no,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="idcardPicFront != null" >
+        idcard_pic_front,
+      </if>
+      <if test="idcardPicReverse != null" >
+        idcard_pic_reverse,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="freight != null" >
+        freight,
+      </if>
+      <if test="freightAgent != null" >
+        freight_agent,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCustomerNo != null" >
+        #{channelCustomerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        #{channelType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wxPayTradeNo != null" >
+        #{wxPayTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="actualAmount != null" >
+        #{actualAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicFront != null" >
+        #{idcardPicFront,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicReverse != null" >
+        #{idcardPicReverse,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=BIGINT},
+      </if>
+      <if test="freight != null" >
+        #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="freightAgent != null" >
+        #{freightAgent,jdbcType=DOUBLE},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    update mall_order
+    <set >
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        channel_name = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCustomerNo != null" >
+        channel_customer_no = #{channelCustomerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        channel_type = #{channelType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wxPayTradeNo != null" >
+        wx_pay_trade_no = #{wxPayTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount = #{actualAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicFront != null" >
+        idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicReverse != null" >
+        idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=BIGINT},
+      </if>
+      <if test="freight != null" >
+        freight = #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="freightAgent != null" >
+        freight_agent = #{freightAgent,jdbcType=DOUBLE},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    update mall_order
+    set customer_no = #{customerNo,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      channel_name = #{channelName,jdbcType=VARCHAR},
+      channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      channel_customer_no = #{channelCustomerNo,jdbcType=VARCHAR},
+      channel_type = #{channelType,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      wx_pay_trade_no = #{wxPayTradeNo,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DOUBLE},
+      actual_amount = #{actualAmount,jdbcType=DOUBLE},
+      pay_type = #{payType,jdbcType=TINYINT},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      memo = #{memo,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
+      idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
+      source = #{source,jdbcType=BIGINT},
+      freight = #{freight,jdbcType=DOUBLE},
+      freight_agent = #{freightAgent,jdbcType=DOUBLE},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

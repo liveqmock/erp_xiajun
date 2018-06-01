@@ -64,7 +64,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
 	}
 
 	public int updateByPrimaryKey(MallOrderDO record){
-		return mallOrderDOMapperExt.updateByPrimaryKey(record);
+		return mallOrderDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
 	public Integer queryPoCount(MallOrderDO mallOrderDO){

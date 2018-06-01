@@ -27,7 +27,14 @@
         		</if>
         </where>
     </select>
-    
+	<select id="selectById" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"  >
+        SELECT
+        	 <include refid="inventoryAreaResultMapping" />
+        FROM
+            inventory_on_warehouse T1
+		WHERE T1.id = ${inventoryAreaId}
+    </select>
+
 	<select id="sumInventoryBySkuId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"  >
         SELECT
         	 	item_id AS itemId,sku_id AS skuId,sum(locked_inv) as lockedInv,sum(inventory) as inventory,sum(trans_inv) AS transInv,sum(locked_trans_inv) AS lockedTransInv

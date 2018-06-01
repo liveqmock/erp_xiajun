@@ -38,3 +38,4 @@ public interface IChannelService {
 	public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception;
 		
 }
+

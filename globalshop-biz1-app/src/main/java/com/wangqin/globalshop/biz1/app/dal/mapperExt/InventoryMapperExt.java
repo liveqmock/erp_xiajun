@@ -25,7 +25,7 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	 * @param skuId
 	 * @return
 	 */
-	InventoryDO getInventoryBySkuId(@Param("itemId") Long itemId,@Param("skuId")  Long skuId);
+	InventoryDO getInventoryBySkuId(@Param("itemCode") String itemCode,@Param("skuCoude")  String skuCoude);
 	
 	/**
 	 * 根据skuId 加悲观锁

@@ -27,8 +27,8 @@ public class InventoryServiceImpl implements IInventoryService {
     }
     
     @Override
-    public InventoryDO queryInventoryBySkuId(Long itemId, Long skuId) {
-        return inventoryMapper.getInventoryBySkuId(itemId, skuId);
+    public InventoryDO queryInventoryBySkuId(String itemCode, String skuCode) {
+        return inventoryMapper.getInventoryBySkuId(itemCode, skuCode);
     }
 
     @Override
