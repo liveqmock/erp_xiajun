@@ -373,6 +373,16 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 					outerOrderDetailTemp.setTelephone(outerOrderHh.getTelephone());
 					outerOrderDetailTemp.setPostcode(outerOrderHh.getPostcode());
 					outerOrderDetailTemp.setChannelName(ChannelType.HaiHu.getName());
+
+
+					outerOrderDetailTemp.setCustomerNo("无");
+					outerOrderDetailTemp.setIsDel(false);
+					outerOrderDetailTemp.setCreator("系统");
+					outerOrderDetailTemp.setModifier("系统");
+					outerOrderDetailTemp.setChannelOrderNo(outerOrder.getChannelOrderNo());
+
+
+
 					outerOrderDetailList.add(outerOrderDetailTemp);
 					//如果有虚拟库存就扣减虚拟库存
 					ItemSkuDO tjItemSku = new ItemSkuDO();
