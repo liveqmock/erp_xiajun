@@ -212,14 +212,25 @@ public class ItemController  {
 			
 			item.setMainPic(imgJson);
 			//detailDecoder(item);
+			//对前端传来的时间进行处理
+			ItemDO newItem = new ItemDO();
+			DateFormat format= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			try {
+				newItem.setStartDate(format.parse(item.getStartDate()));
+				newItem.setEndDate(format.parse(item.getEndDate()));
+				newItem.setBookingDate(format.parse(item.getBookingDate()));
+			} catch(Exception e) {
+				//
+			}
+
 			//判断是否可售
-//			if(item.getStartDate()==null || item.getEndDate()==null) {
-//				item.setIsSale(0);
-//			} else if(DateUtil.belongCalendar(new Date(), item.getStartDate(), DateUtil.getDateByCalculate(item.getEndDate(), Calendar.DATE, 1))) {
-//				item.setIsSale(1);
-//			} else {
-//				item.setIsSale(0);
-//			}
+			if(item.getStartDate()==null || item.getEndDate()==null) {
+				item.setIsSale(0);
+			} else if(DateUtil.belongCalendar(new Date(), newItem.getStartDate(), DateUtil.getDateByCalculate(newItem.getEndDate(), Calendar.DATE, 1))) {
+				item.setIsSale(1);
+			} else {
+				item.setIsSale(0);
+			}
 			//item.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());			
 			
 			// 设置销售渠道
@@ -244,7 +255,7 @@ public class ItemController  {
 					}
 				}
 			}	
-			ItemDO newItem = new ItemDO();
+
 			newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
 			newItem.setCategoryName(categoryService.selectByPrimaryKey(item.getCategoryId()).getName());
 			newItem.setBrandName(item.getBrand());
@@ -256,14 +267,7 @@ public class ItemController  {
 			CountryDO countryDO = new CountryDO();
 			countryDO.setId(item.getCountry());
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));
-			DateFormat format= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			try {
-				newItem.setStartDate(format.parse(item.getStartDate()));
-				newItem.setEndDate(format.parse(item.getEndDate()));
-				newItem.setBookingDate(format.parse(item.getBookingDate()));
-			} catch(Exception e) {
-				//
-			}
+
 			newItem.setItemCode(RandomUtils.getTimeRandom());
 			
 	        newItem.setDesc(item.getRemark());
@@ -291,7 +295,7 @@ public class ItemController  {
 	        			inventoryService.insertBatchInventory(inventoryList);
 	        		}
 			//同步到有赞并上架
-			
+	        		
 			if(item.getIsSale()!=null && item.getIsSale()==1) {
 				if (item.getSaleOnYouzan() == 1) {
 					try {
@@ -370,20 +374,21 @@ public class ItemController  {
 				return result.buildMsg("没有找到类目").buildIsSuccess(false);
 			}
 		}
-/*
+
 			String skuList = item.getSkuList();
 			Double minPrice = null;
 			Double maxPrice = null;
 			if (StringUtils.isNotBlank(skuList)) {
-				Integer i = itemSkuService.queryMaxSkuCodeIndex(item.getId());
-				if(i==null) i=0;
+				Integer i = 0;
+				//Integer i = itemSkuService.queryMaxSkuCodeIndex(item.getId());
+				//if(i==null) i=0;
 				
 				try {
 					String s = skuList.replace("&quot;", "\"");
-					List<ItemSku> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSku>>(){});
+					List<ItemSkuAddVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>(){});
 					Map<String, Integer> colorScaleMap = new HashMap<String, Integer>();
 					if (skus != null && !skus.isEmpty()) {
-						for(ItemSku itemSku : skus) {
+						for(ItemSkuAddVO itemSku : skus) {
 							//颜色和尺寸不能都为空
 							if(StringUtil.isBlank(itemSku.getColor()) && StringUtil.isBlank(itemSku.getScale())) {
 								return result.buildMsg("颜色和尺寸不能都为空").buildIsSuccess(false);
@@ -451,13 +456,14 @@ public class ItemController  {
 			item.setMainPic(imgJson);
 			detailDecoder(item);
 			//判断是否可售
+			/*
 			if(item.getStartDate()==null || item.getEndDate()==null) {
 				item.setIsSale(0);
 			} else if(DateUtil.belongCalendar(new Date(), item.getStartDate(), DateUtil.getDateByCalculate(item.getEndDate(), Calendar.DATE, 1))) {
 				item.setIsSale(1);
 			} else {
 				item.setIsSale(0);
-			}
+			}*/
 			//编辑运费
 			if(item.getFreight()==null) {
 				item.setFreight(0.0d);
@@ -485,7 +491,6 @@ public class ItemController  {
 					}
 				}
 			}
-			*/
 			iItemService.updateItemById(item);
 			/*
 			//修改商品授权买手
@@ -519,7 +524,7 @@ public class ItemController  {
 			
 			return result.buildIsSuccess(true);
 		}*/
-		return null;
+		return result.buildIsSuccess(true);
 	}
 
 	private void detailDecoder(ItemQueryVO item) {
