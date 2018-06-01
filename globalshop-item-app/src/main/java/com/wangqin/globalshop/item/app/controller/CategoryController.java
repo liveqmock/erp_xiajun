@@ -72,7 +72,7 @@ public class CategoryController  {
 		category.setCreator("admin");
 		category.setModifier("admin");
 		category.setStatus(1);//设置为有效状态
-		categoryService.insert(category);
+		categoryService.insertCategorySelective(category);
 		return result.buildIsSuccess(true);
 	}
 
