@@ -91,7 +91,22 @@
             <artifactId>globalshop-purchase</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
+		<!-- youzan sdk -->
+		<dependency>
+			<groupId>open-sdk-java</groupId>
+			<artifactId>open-sdk-java</artifactId>
+			<version>2.0.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/libs/open-sdk-java-2.0.2.jar</systemPath>
+		</dependency>
+		<!-- taobao sdk -->
+		<dependency>
+			<groupId>com.wangqin.globalshop</groupId>
+			<artifactId>top-sdk</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/libs/top-sdk-1.0.0.jar</systemPath>
+		</dependency>
     </dependencies>
     <build>
         <finalName>globalshop-web</finalName>
