@@ -133,15 +133,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             tjErpOrder.setReceiverState(mallSubOrder.getReceiverState());
             tjErpOrder.setReceiverCity(mallSubOrder.getReceiverCity());
             tjErpOrder.setReceiverDistrict(mallSubOrder.getReceiverDistrict());
-<<<<<<< HEAD
             tjErpOrder.setStatus(0); // 订单状态：新建
             // tjErpOrder.setStockStatus(erpOrder.getStockStatus()); //备货状态：已备货
             // tjErpOrder.setWarehouseId(erpOrder.getWarehouseId()); //相同仓库
-=======
-            tjErpOrder.setStatus( 0);								//订单状态：新建
-            //tjErpOrder.setStockStatus(erpOrder.getStockStatus());	//备货状态：已备货
-            //tjErpOrder.setWarehouseId(erpOrder.getWarehouseId());	//相同仓库
->>>>>>> b4e254f62c8db97eb4584281c6523408e497ea44
             List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectByOrderNo(mallSubOrder.getOrderNo());
             for(int i=0; i<selErpOrderList.size(); i++) {
                 MallSubOrderDO selErpOrder= selErpOrderList.get(i);
@@ -401,18 +395,12 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             shippingOrder.setGmtModify(nowDate);
             shippingOrderMapper.insert(shippingOrder);
 
-<<<<<<< HEAD
             // 对接邮客、运通快递
             if (shippingOrder.getLogisticCompany() != null
                 && (shippingOrder.getLogisticCompany().equals("邮客") || shippingOrder.getLogisticCompany().equals("运通快递")
                     || shippingOrder.getLogisticCompany().equals("4PX")
                     || shippingOrder.getLogisticCompany().equals("联邦转运"))) {
                 shippingOrderIds.add(shippingOrder.getId().toString());
-=======
-            //对接邮客、运通快递
-            if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("邮客") || shippingOrder.getLogisticCompany().equals("运通快递") || shippingOrder.getLogisticCompany().equals("4PX") || shippingOrder.getLogisticCompany().equals("联邦转运"))) {
-                shippingOrderIds.add(shippingOrder.getShippingNo());
->>>>>>> b4e254f62c8db97eb4584281c6523408e497ea44
             }
 
             erpOrder.setOrderNo(shippingOrder.getShippingNo());
@@ -423,15 +411,10 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         // 通知渠道发货
         try {
             MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
-<<<<<<< HEAD
-            ChannelFactory.getChannel(ShiroUtil.getShiroUser().getCompanyNo(),
-                                      ChannelType.getChannelType(outerOrder.getPayType()));
-=======
             ChannelFactory
                     .getChannel(ShiroUtil.getShiroUser().getCompanyNo(),
                             ChannelType.getChannelType(outerOrder.getPayType()))
                     .syncLogisticsOnlineConfirm(erpOrderList, shippingOrder);
->>>>>>> b4e254f62c8db97eb4584281c6523408e497ea44
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

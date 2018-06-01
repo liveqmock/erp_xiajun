@@ -322,6 +322,13 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 	public Object syncOrder(Object data) {
 		return null;
 	}
+
+
+    @Override
+    public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+        // TODO Auto-generated method stub
+        
+    }
 	
 	/**
 	 * 发货接口

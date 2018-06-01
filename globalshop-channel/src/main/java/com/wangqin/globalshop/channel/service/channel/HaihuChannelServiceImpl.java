@@ -420,6 +420,12 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 		return null;
 	}
 
+    @Override
+    public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+        // TODO Auto-generated method stub
+        
+    }
+
 //	@Override
 //	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
 //		Map<String, Object> param = new HashMap<String, Object>();
