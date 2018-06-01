@@ -42,13 +42,13 @@
     <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     <result column="phone" property="phone" jdbcType="VARCHAR"/>
-    <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+    <!-- <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/> -->
 
-    <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+    <!-- <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
       <id column="roleId" property="id"/>
-      <result column="roleId" property="role_id"/>
-      <result column="roleName" property="name"/>
-    </collection>
+      <result column="role_id" property="roleId"/>
+      <result column="name" property="name"/>
+    </collection> -->
   </resultMap>
 
 
@@ -154,42 +154,7 @@
     </where>
   </select>
 
-  <select id="selectUserVoPage" resultMap="userVoResultMap">
-    SELECT
-    t.id,
-    login_name,
-    t.`name`,
-    `password`,
-    sex,
-    age,
-    user_type,
-    t.`status`,
-    organization_id,
-    t.create_time,
-    phone,
-    s.`name` AS organizationName,
-    o.id AS roleId,
-    o.`name` AS roleName
-    FROM
-    auth_user t
-    LEFT JOIN auth_user_role r ON t.id = r.user_id
-    LEFT JOIN auth_role o ON r.role_id = o.id
-    LEFT JOIN auth_organization s ON s.id = t.organization_id
-    <where>
-      <if test=" name != null and name != '' ">
-        t.name = #{name}
-      </if>
-      <if test=" organizationId != null ">
-        t.organization_id = #{organizationId}
-      </if>
-      <if test=" startTime != null ">
-        <![CDATA[ and t.create_time >= #{startTime} ]]>
-      </if>
-      <if test=" endTime != null ">
-        <![CDATA[ and t.create_time <= #{endTime} ]]>
-      </if>
-    </where>
-  </select>
+  
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
     <!--delete from auth_user-->
     <!--where id = #{id,jdbcType=BIGINT}-->
