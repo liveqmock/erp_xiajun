@@ -14,4 +14,5 @@ public interface InventoryBookingRecordDOMapper {
     int updateByPrimaryKeySelective(InventoryBookingRecordDO record);
 
     int updateByPrimaryKey(InventoryBookingRecordDO record);
+
 }

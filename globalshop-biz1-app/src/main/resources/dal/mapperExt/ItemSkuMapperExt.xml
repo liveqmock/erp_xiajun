@@ -2,16 +2,54 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt">
 <!-- 通用查询结果列-->
-    <sql id="Base_Column_List">
-		T1.id,T1.sale_type AS saleType,T1.brand,T1.weight,T1.item_id AS itemId,T1.item_name AS itemName,T1.category_id AS categoryId,T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,T1.upc,T1.salable,T1.color,T1.`scale`,T1.purchase_price AS purchasePrice,T1.freight AS freight,T1.sale_price AS salePrice,T1.remark,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.user_create AS userCreate,T1.user_modify AS userModify,
-		T1.package_id as packageId,T1.package_name AS packageName,T1.package_en as packageEn,T1.package_weight as packageWeight,T1.sku_pic AS skuPic
-	</sql>
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+        <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="saleable" property="saleable" jdbcType="TINYINT" />
+        <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+        <result column="freight" property="freight" jdbcType="BIGINT" />
+        <result column="discount" property="discount" jdbcType="DOUBLE" />
+        <result column="logistic_type" property="logisticType" jdbcType="TINYINT" />
+        <result column="cost_price" property="costPrice" jdbcType="DOUBLE" />
+        <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+        <result column="weight" property="weight" jdbcType="DOUBLE" />
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+        <result column="package_code" property="packageCode" jdbcType="VARCHAR" />
+        <result column="package_name" property="packageName" jdbcType="VARCHAR" />
+        <result column="package_en" property="packageEn" jdbcType="VARCHAR" />
+        <result column="package_weight" property="packageWeight" jdbcType="DOUBLE" />
+        <result column="package_level_id" property="packageLevelId" jdbcType="VARCHAR" />
+        <result column="scale" property="scale" jdbcType="VARCHAR" />
+        <result column="model" property="model" jdbcType="VARCHAR" />
+        <result column="sale_type" property="saleType" jdbcType="BIT" />
+        <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" extends="BaseResultMap" >
+        <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, sku_code, item_code, item_name, company_no, category_code, category_name, upc,
+        saleable, purchase_price, freight, discount, logistic_type, cost_price, brand_name,
+        weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id,
+        scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del
+    </sql>
 
 	<select id="queryItemSkusCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
         SELECT
         	count(1)
          FROM
-            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code 
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
               <if test=" itemName != null and itemName != '' ">
@@ -46,9 +84,9 @@
              inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
 			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
-			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv 
+			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv
         FROM
-            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code 
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
               <if test=" itemName != null and itemName != '' ">
@@ -73,8 +111,8 @@
             <if test=" endGmt != null ">
             and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
             </if>
-          order by T1.id desc   
-          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>          
+          order by T1.id desc
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
     
     <!-- 通过skuCode查找单个sku -->
@@ -86,15 +124,15 @@
              inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
 			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
-			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv 
+			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv
         FROM
-            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code 
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
-           AND 
-           T1.sku_code=#{skuCode}                 
+           AND
+           T1.sku_code=#{skuCode}
     </select>
-    
+
     <!-- 根据id更新itemsku -->
     <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO" >
     update item_sku
@@ -126,14 +164,14 @@
     </set>
     where id = #{id}
   </update>
-    
-    
+
+
      <select id="queryItemSkusById" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
         SELECT
-        	 T1.id as id,T1.sale_type AS saleType,T1.brand as brand,T1.weight as weight,T1.sku_pic as skuPic,T1.item_id AS itemId,T1.item_name AS itemName,T1.category_id AS categoryId,T1.category_name AS categoryName,
+        	 T1.id as id,T1.sale_type AS saleType,T1.weight as weight,T1.sku_pic as skuPic,T1.item_id AS itemId,T1.item_name AS itemName,T1.category_id AS categoryId,T1.category_name AS categoryName,
 			 T1.item_code AS itemCode,T1.sku_code AS skuCode,T1.upc as upc,T1.salable as salable,T1.color as color,T1.scale as scale,T1.purchase_price AS purchasePrice,T1.freight AS freight,T1.sale_price AS salePrice,T1.remark as remark,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.user_create AS userCreate,T1.user_modify AS userModify,
 			 T1.package_id as packageId,T1.package_level_id as packageLevelId,T1.package_name AS packageName,T1.package_en as packageEn,T1.package_weight as packageWeight,inv.locked_inv as lockedInv,inv.inv as inventory
-			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,(inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv,T1.cost_price AS costPrice,T1.discount AS discount,T1.third_sku_code AS thirdSkuCode  
+			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,(inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv,T1.cost_price AS costPrice,T1.discount AS discount,T1.third_sku_code AS thirdSkuCode
         FROM
             item_sku T1 left join inventory inv on T1.id= inv.sku_id 
         where
@@ -174,14 +212,7 @@
 		WHERE a.status=1
     </select>
     
-    <select id="queryItemSkusForItemThirdSale" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">
-        SELECT 
-            <include refid="Base_Column_List" />, T2.quantity AS itemSkuQuantity
-        FROM item_sku T1 LEFT JOIN  erp_order T2 on T1.id= T2.sku_id
-        WHERE T1.item_id = #{itemId} and T2.sales_name = '海狐海淘'
-	AND T2.receiver = '地址稍后'
-	AND T2.quantity >1
-    </select>
+
     
     
 <!-- 根据upc获取商品信息(item_sku),@Author:XiaJun -->
@@ -195,6 +226,17 @@
             T1.upc = #{upc}
           </if>
 </select>
+<select id="queryItemBySkuCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+     SELECT
+        <include refid="Base_Column_List" />
+        FROM
+            item_sku T1
+        where
+          <if test=" skuCode!= null">
+            T1.sku_code = #{skuCode}
+          </if>
+</select>
+
 
    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
         <selectKey resultType="long" keyProperty="id" order="AFTER">
@@ -203,7 +245,7 @@
         </selectKey>
         insert into item_sku
         (sku_code,item_code,item_name,company_no,upc,creator,modifier)
-       
+
         values
         <foreach collection="list" item="wdSolr" index="index"
             separator=",">
@@ -213,13 +255,88 @@
             )
         </foreach>
     </insert>
-    
+
     <update id="deleteBySkuCode" parameterType="java.lang.String">
-    	update item_sku 
+    	update item_sku
     	set is_del=1
     	where sku_code=#{skuCode}
     </update>
-    
-    
-    
+
+
+    <sql id="tableSection">item_sku</sql>
+
+    <sql id="commonSelectSection">
+        1 = 1
+        <if test="itemCode != null">
+            and T1.item_code = #{itemCode}
+        </if>
+        <if test="skuCode != null">
+            and T1.sku_code = #{skuCode}
+        </if>
+        <if test="companyNo != null">
+            and T1.company_no = #{companyNo}
+        </if>
+        <if test="itemName != null">
+            and T1.item_name = #{itemName}
+        </if>
+        <if test="categoryCode != null">
+            and T1.category_code = #{categoryCode}
+        </if>
+
+        <if test="upc != null">
+            and T1.upc = #{upc}
+        </if>
+        <if test="id != null">
+            and T1.id  = #{id}
+        </if>
+        <if test="status != null">
+            and T1.status = #{status}
+        </if>
+        <if test=" isDel == true">
+            and T1.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T1.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T1.is_del is false
+        </if>
+
+    </sql>
+
+
+    <!--查询总条数 -->
+    <select id="queryItemSku" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.Base_Column_List" />
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="queryItemSkuCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+        SELECT COUNT(*)
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="queryItemSkuList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.Base_Column_List" />
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T1.id desc
+    </select>
+
+    <select id="queryItemSkusForItemThirdSale" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List" />, T2.quantity AS itemSkuQuantity
+        FROM <include refid="tableSection"/> T1 LEFT JOIN  mall_sub_order T2 on T1.sku_code= T2.sku_code
+        WHERE T1.item_code = #{itemCode} and T2.sales_name = '海狐海淘'
+        AND T2.receiver = '地址稍后'
+        AND T2.quantity >1
+    </select>
+
 </mapper>

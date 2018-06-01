@@ -1,21 +1,20 @@
 package com.wangqin.globalshop.channel.task;
 
-import java.util.List;
-
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
+import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.channel.service.company.ICompanyService;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
-import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountSo;
-import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
-import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.channel.service.company.ICompanyService;
-import com.wangqin.globalshop.common.utils.EasyUtil;
+import java.util.List;
 
 /**
  * 自动去有赞下载订单
@@ -34,16 +33,16 @@ public class AutoYouzanTradesSoldGetTask {
     IChannelAccountService channelAccountService;
 
     // 每隔半小时执行一次
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void run() {
         logger.info("定时任务：自动去有赞下载订单===>Start");
+        Long startTime = System.currentTimeMillis();
         // 首先轮训出company
         CompanyDO companySo = new CompanyDO();
         companySo.setIsDel(false);
         List<CompanyDO> companyDOList = companyService.queryPoList(companySo);
-        if (EasyUtil.isListEmpty(companyDOList)) {
-            return;
-        }
+
+        Long shopCount= 0L;
 
         // 第二步，轮训出该账户下的有赞账户token等
         for (CompanyDO company : companyDOList) {
@@ -58,11 +57,13 @@ public class AutoYouzanTradesSoldGetTask {
             for (ChannelAccountDO channelAccountDO : channelAccountList) {
                 try {
                     ChannelFactory.getChannel(channelAccountDO).syncOrder();
+                    shopCount++;
                 } catch (Exception e) {
                     logger.error("get youzan orders error, shopCode: " + channelAccountDO.getShopCode(), e);
                 }
             }
         }
-        logger.info("定时任务：自动去有赞下载订单===>End");
+        Long endTime = System.currentTimeMillis();
+        logger.info("定时任务：自动去有赞下载订单===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
     }
 }

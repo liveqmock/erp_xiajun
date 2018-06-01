@@ -8,7 +8,7 @@ package com.wangqin.globalshop.common.utils;
 public class AppUtil {
 
     // 存储当前登录用户的userId，这个信息只在单次访问线程内有效，每次访问登录鉴权的时候会设置这个值
-    private static ThreadLocal<Integer> CURRENT_USER_ID          = new ThreadLocal<Integer>();
+    private static ThreadLocal<String> CURRENT_USER_ID          = new ThreadLocal<String>();
 
     private static ThreadLocal<String>  CURRENT_ACCOUNT_USERNAME = new ThreadLocal<String>();
 
@@ -17,8 +17,8 @@ public class AppUtil {
      * 
      * @return
      */
-    public static Integer getLoginUserId() {
-        return (Integer) CURRENT_USER_ID.get();
+    public static String getLoginUserId() {
+        return  CURRENT_USER_ID.get();
     }
 
     /**
@@ -26,7 +26,7 @@ public class AppUtil {
      * 
      * @param userId
      */
-    public static void setLoginUserId(Integer userId) {
+    public static void setLoginUserId(String userId) {
         CURRENT_USER_ID.set(userId);
     }
 

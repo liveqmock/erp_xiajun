@@ -1,36 +1,73 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAChannelAccountDOMapperExt" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt" >
 
     <sql id="tableSection">channel_account</sql>
 
 
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="channel_id" property="channelId" jdbcType="BIGINT" />
+        <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+        <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+        <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+        <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR" />
+        <result column="server_url" property="serverUrl" jdbcType="VARCHAR" />
+        <result column="token_url" property="tokenUrl" jdbcType="VARCHAR" />
+        <result column="access_key" property="accessKey" jdbcType="VARCHAR" />
+        <result column="secrete_key" property="secreteKey" jdbcType="VARCHAR" />
+        <result column="cookie" property="cookie" jdbcType="VARCHAR" />
+        <result column="app_value1" property="appValue1" jdbcType="VARCHAR" />
+        <result column="value1_desc" property="value1Desc" jdbcType="VARCHAR" />
+        <result column="app_value2" property="appValue2" jdbcType="VARCHAR" />
+        <result column="value2_desc" property="value2Desc" jdbcType="VARCHAR" />
+        <result column="app_value3" property="appValue3" jdbcType="VARCHAR" />
+        <result column="value3_desc" property="value3Desc" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
+    </resultMap>
+    <sql id="Base_Column_List2" >
+        id, channel_id, channel_no, type, channel_name, company_no, shop_code, shop_name,
+        status, app_key, app_secret, access_token, refresh_token, server_url, token_url,
+        access_key, secrete_key, cookie, app_value1, value1_desc, app_value2, value2_desc,
+        app_value3, value3_desc, creator, modifier, gmt_create, gmt_modify, is_del
+    </sql>
 
 
     <sql id="commonSelectSection">
         1 = 1
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelNo)">
+        <if test="channelNo != null">
             and T.channel_no = #{channelNo}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelName)">
+        <if test="channelName != null">
             and T.channel_name = #{channelName}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(companyNo)">
+        <if test="companyNo != null">
             and T.company_no = #{companyNo}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(type)">
+        <if test="type != null">
             and T.type = #{type}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(shopCode)">
+        <if test="shopCode != null">
             and T.shop_code = #{shopCode}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(status)">
+        <if test="status != null">
             and T.status = #{status}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(appKey)">
+        <if test="appKey != null">
             and T.app_key = #{appKey}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(accessKey)">
+        <if test="accessKey != null">
             and T.access_key = #{accessKey}
         </if>
         <if test=" isDel == true">
@@ -44,15 +81,17 @@
 
 
     <!--查询总条数 -->
-    <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap">
-        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.Base_Column_List" />
+    <select id="queryPo" resultMap="BaseResultMap"
+            >
+        SELECT <include refid="Base_Column_List2" />
         FROM channel_account T
         WHERE
         <include refid="commonSelectSection"/>
     </select>
 
     <!--查询总条数 -->
-    <select id="queryPoCount" resultType="java.lang.Integer">
+    <select id="queryPoCount" resultType="java.lang.Integer"
+           >
         SELECT COUNT(*)
         FROM channel_account T
         WHERE
@@ -60,12 +99,20 @@
     </select>
 
     <!-- -->
-    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap">
-        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.Base_Column_List" />
+    <select id="queryPoList" resultMap="BaseResultMap"
+            >
+        SELECT  <include refid="Base_Column_List2" />
         FROM channel_account T
         WHERE
         <include refid="commonSelectSection"/>
         ORDER BY T.id desc
+    </select>
+
+    <select id="queryByTypeAndCompanyNo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List2" />
+        from channel_account
+        where t = #{id,jdbcType=BIGINT}
     </select>
 
 </mapper>

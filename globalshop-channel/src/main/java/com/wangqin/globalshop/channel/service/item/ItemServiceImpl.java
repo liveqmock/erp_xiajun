@@ -3,18 +3,17 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuScaleDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAItemDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +27,16 @@ public class ItemServiceImpl  implements IItemService {
 
 
 	@Autowired
-	CAItemDOMapperExt itemDOMapperExt;
+	ItemDOMapperExt itemDOMapperExt;
 
 	@Autowired
-	CAItemSkuDOMapperExt itemSkuDOMapperExt;
+	ItemSkuMapperExt itemSkuDOMapperExt;
 
 	@Autowired
-	CAInventoryDOMapperExt inventoryDOMapperExt;
+	InventoryMapperExt inventoryDOMapperExt;
+
+	@Autowired
+	ItemSkuScaleDOMapper itemSkuScaleDOMapper;
 
 	public int deleteByPrimaryKey(Long id){
 		return itemDOMapperExt.deleteByPrimaryKey(id);
@@ -87,13 +89,18 @@ public class ItemServiceImpl  implements IItemService {
         List<ItemSkuVo> itemSkuVos = new ArrayList<>();
 		ItemSkuDO skuSo = new ItemSkuDO();
 		skuSo.setItemCode(itemDo.getItemCode());
-		List<ItemSkuDO> skuList = itemSkuDOMapperExt.queryPoList(skuSo);
+		List<ItemSkuDO> skuList = itemSkuDOMapperExt.queryItemSkuList(skuSo);
 		for(ItemSkuDO sku : skuList){
 			ItemSkuVo itemSkuVo = new ItemSkuVo();
 			BeanUtils.copies(sku,itemSkuVo);
+
+			//库存
 			InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(),sku.getSkuCode());
 			itemSkuVo.setInventoryDO(inventoryDO);
 			itemSkuVos.add(itemSkuVo);
+
+			//规格尺寸
+			//ItemSkuScaleDO itemSkuScaleDO = itemSkuScaleDOMapper.selectByPrimaryKey();
 		}
 		itemVo.setItemSkus(itemSkuVos);
 		return itemVo;

@@ -7,22 +7,20 @@
 
     <sql id="commonSelectSection">
         1 = 1
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(companyNo)">
+        <if test="companyNo != null">
             and T.company_no = #{companyNo}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelName)">
+        <if test="companyName != null">
             and T.company_name = #{companyName}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(companyNo)">
-            and T.company_no = #{companyNo}
-        </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(status)">
+
+        <if test="status != null">
             and T.status = #{status}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(shopName)">
+        <if test="shopName != null">
             and T.shop_name = #{shopName}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(forceIdcard)">
+        <if test="forceIdcard != null">
             and T.force_idcard = #{forceIdcard}
         </if>
         <if test=" isDel == true">

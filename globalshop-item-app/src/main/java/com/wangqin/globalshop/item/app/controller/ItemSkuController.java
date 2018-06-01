@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -21,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
@@ -33,13 +29,12 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ImageUtil;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.item.app.service.IInventoryService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.IMallOrderService;
+import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
 import com.wangqin.globalshop.item.app.service.IScaleTypeService;
 
 
@@ -58,9 +53,9 @@ public class ItemSkuController  {
 	private IItemService iItemService;
 
 	@Autowired
-	private IInventoryService inventoryService;
+	private ItemIInventoryService inventoryService;
 	@Autowired
-	private IMallOrderService erpOrderService;
+	private ItemIMallOrderService erpOrderService;
 	
 	@Autowired
 	private IScaleTypeService scaleTypeService;

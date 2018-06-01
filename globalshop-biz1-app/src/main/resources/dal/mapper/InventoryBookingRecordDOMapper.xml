@@ -13,7 +13,6 @@
     <result column="inventory" property="inventory" jdbcType="BIGINT" />
     <result column="inventory_type" property="inventoryType" jdbcType="VARCHAR" />
     <result column="operator_type" property="operatorType" jdbcType="VARCHAR" />
-    <result column="inventory_area_id" property="inventoryAreaId" jdbcType="BIGINT" />
     <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
     <result column="position_no" property="positionNo" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
@@ -24,7 +23,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, order_no, sub_order_no, item_code, sku_code, quantity, booked_quantity, 
-    inventory, inventory_type, operator_type, inventory_area_id, warehouse_id, position_no, 
+    inventory, inventory_type, operator_type,  warehouse_id, position_no,
     gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >

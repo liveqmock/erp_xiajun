@@ -45,12 +45,20 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	 * @return
 	 */
 	List<ItemSkuDO> queryItemSkusByUpc(String upc);
-	
+
 	void insertBatch(List<ItemSkuAddVO> skuList);
-	
+
 	ISkuDTO queryItemSkuBySkuCode(String skuCode);
-	
+
 	void updateById(ItemSkuUpdateVO itemSkuUpdateVO);
-	
+
 	void deleteBySkuCode(String skuCode);
+
+    ItemSkuDO queryItemBySkuCode(@Param("skuCode") String skuCode);
+
+    List<ItemSkuDO> queryItemSkuList(ItemSkuDO skuSo);
+
+	ItemSkuDO queryItemSku(ItemSkuDO itemSkuDO);
+
+	Integer queryItemSkuCount(ItemSkuDO itemSkuDO);
 }

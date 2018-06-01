@@ -1,26 +1,23 @@
 package com.wangqin.globalshop.channel.service.channelAccountConfig;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.annotation.Resource;
-
-import com.wangqin.globalshop.channel.dal.mapperExt.CAChannelAccountConfigDOMapperExt;
+import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountConfigDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountConfigSo;
+import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountConfigDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountConfigDOMapperExt;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountConfigDOMapper;
-import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountConfigSo;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
+import java.util.Calendar;
+import java.util.Date;
 
 @Service("channelAccountConfigService")
 public class ChannelAccountConfigServiceImpl implements IChannelAccountConfigService {
 
 	@Autowired
-	CAChannelAccountConfigDOMapperExt channelAccountConfigDOMapperExt;
+	private ChannelAccountConfigDOMapperExt channelAccountConfigDOMapperExt;
 
 
 	public ChannelAccountConfigDOMapper getMapper() {

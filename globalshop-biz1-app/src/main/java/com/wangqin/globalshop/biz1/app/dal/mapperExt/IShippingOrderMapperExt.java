@@ -16,4 +16,16 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
     List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO);
 
     Integer queryShippingOrderCount(ShippingOrderVO shippingOrderVO);
+
+    List<ShippingOrderDO> selectBatchIds(List<Long> shippingOrderIdList);
+
+    List<ShippingOrderDO> queryByShippingOrderPackageTime(ShippingOrderVO shippingOrderQueryVO);
+
+    ShippingOrderDO selectByShippingNo(String shippingNO);
+
+    int selectCount(String idCard, String logisticCompany);
+
+    ShippingOrderDO selectByLogisticNo(ShippingOrderDO order);
+
+    void updateStatusByShippingNo(String logisticNo);
 }

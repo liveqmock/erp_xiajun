@@ -3,10 +3,42 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt">
 
     <!-- 通用查询结果列-->
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="customer_no" property="customerNo" jdbcType="VARCHAR"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="channel_no" property="channelNo" jdbcType="VARCHAR"/>
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR"/>
+        <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR"/>
+        <result column="channel_customer_no" property="channelCustomerNo" jdbcType="VARCHAR"/>
+        <result column="channel_type" property="channelType" jdbcType="VARCHAR"/>
+        <result column="shop_code" property="shopCode" jdbcType="VARCHAR"/>
+        <result column="wx_pay_trade_no" property="wxPayTradeNo" jdbcType="VARCHAR"/>
+        <result column="total_amount" property="totalAmount" jdbcType="DOUBLE"/>
+        <result column="actual_amount" property="actualAmount" jdbcType="DOUBLE"/>
+        <result column="pay_type" property="payType" jdbcType="TINYINT"/>
+        <result column="order_time" property="orderTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="id_card" property="idCard" jdbcType="VARCHAR"/>
+        <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR"/>
+        <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="BIGINT"/>
+        <result column="freight" property="freight" jdbcType="DOUBLE"/>
+        <result column="freight_agent" property="freightAgent" jdbcType="DOUBLE"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+    </resultMap>
     <sql id="Base_Column_List">
-
+        id, customer_no, order_no, company_no, channel_no, channel_name, channel_order_no,
+        channel_customer_no, channel_type, shop_code, wx_pay_trade_no, total_amount, actual_amount,
+        pay_type, order_time, status, memo, id_card, idcard_pic_front, idcard_pic_reverse,
+        source, freight, freight_agent, gmt_modify, gmt_create, is_del, modifier, creator
     </sql>
-
     <select id="queryErpOrdersCount" resultType="java.lang.Integer"
             parameterType="com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO">
         SELECT
@@ -347,7 +379,68 @@
         </if>
         ORDER BY T1.id
     </select>
+    <select id="queryOuterOrdersCount" resultType="java.lang.Integer"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+        SELECT
+        count(1)
+        FROM
+        `mall_order` T1
+        where
+        1=1
+        <if test="status != null">
+            AND T1.status = #{status}
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            and T1.order_no LIKE concat('%',#{orderNo},'%')
+        </if>
+        <if test=" startGmtCreate!= null ">
+            and   <![CDATA[ T1.order_time >= #{startGmtCreate} ]]>
+        </if>
+        <if test=" endGmtCreate != null ">
+            and    <![CDATA[ T1.order_time <= #{endGmtCreate} ]]>
+        </if>
 
+    </select>
+    <select id="queryOuterOrders" resultMap="BaseResultMap"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_order`
+        where
+        1=1
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            and order_no LIKE concat('%',#{orderNo},'%')
+        </if>
+        <if test=" startGmtCreate!= null ">
+            and   <![CDATA[ order_time >= #{startGmtCreate} ]]>
+        </if>
+        <if test=" endGmtCreate != null ">
+            and    <![CDATA[ order_time <= #{endGmtCreate} ]]>
+        </if>
+
+    </select>
+    <select id="queryByStatus" resultMap="BaseResultMap" parameterType="java.lang.Byte">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_order`
+        WHERE
+        status = #{status}
+
+    </select>
+    <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_order`
+        WHERE
+        order_no = #{orderNo}
+
+    </select>
     <!-- 今日发货订单表(我也不知道这句话什么意思),XiaJun -->
     <select id="todaySendOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
         SELECT
@@ -362,4 +455,79 @@
             </foreach>
         </where>
     </select>
+
+
+
+
+
+
+
+    <sql id="commonSelectSection">
+        1 = 1
+        <if test="channelNo != null">
+            and T1.channel_no = #{channelNo}
+        </if>
+        <if test="channelName != null">
+            and T1.channel_name = #{channelName}
+        </if>
+        <if test="companyNo != null">
+            and T1.company_no = #{companyNo}
+        </if>
+
+        <if test="channelOrderNo != null">
+            and T1.channel_order_no = #{channelOrderNo}
+        </if>
+
+
+        <if test="shopCode != null">
+            and T1.shop_code = #{shopCode}
+        </if>
+
+
+        <if test="status != null">
+            and T1.status = #{status}
+        </if>
+
+        <if test=" isDel == true">
+            and T1.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T1.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T1.is_del is false
+        </if>
+
+    </sql>
+
+    <sql id="tableSection">mall_order</sql>
+    <!--查询总条数 -->
+    <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
+    >
+        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="queryPoCount" resultType="java.lang.Integer"
+    >
+        SELECT COUNT(*)
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
+    >
+        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T1.id desc
+    </select>
+
+
 </mapper>

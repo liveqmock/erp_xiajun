@@ -65,6 +65,8 @@ public class ItemSkuDO {
 
     private Boolean isDel;
 
+    private Integer status;
+
     private String desc;
 
     public Long getId() {
@@ -313,6 +315,14 @@ public class ItemSkuDO {
 
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getDesc() {

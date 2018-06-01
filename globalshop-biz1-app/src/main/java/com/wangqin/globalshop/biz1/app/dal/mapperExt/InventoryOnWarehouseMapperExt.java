@@ -1,13 +1,12 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOnWareHouseDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -51,7 +50,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	 *            唯一商品型号 类似skucode
 	 * @return
 	 */
-	List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(@Param("itemId") Long itemId, @Param("skuId") Long skuId,@Param("warehouseId") Long warehouseId);
+	List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(@Param("itemCode") String itemCode, @Param("skuCode") String skuCode,@Param("warehouseNo") String warehouseNo);
 
 	/**
 	 * 某个仓库某个商品库存详情
@@ -61,8 +60,8 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	 * @param skuId
 	 * @return
 	 */
-	List<InventoryOnWareHouseDO> queryInventoryAreaByWarehouse(@Param("warehouseId") Long warehouseId,
-			@Param("itemId") Long itemId, @Param("skuId") Long skuId);
+	List<InventoryOnWareHouseDO> queryInventoryAreaByWarehouse(@Param("warehouseId") String warehouseId,
+			@Param("itemId") String itemId, @Param("skuId") String skuId);
 
 	Integer queryInventoryAreaCount(InventoryQueryVO inventoryQueryVO);
 
@@ -110,4 +109,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	void updateUpcForInventoryArea(MallOrderDO erpOrder);
 	
 	List<InventoryOnWareHouseDO> queryInventoryAreaForExcel(InventoryQueryVO inventoryQueryVO);
+
+    InventoryOnWareHouseDO selectById(Long inventoryAreaId);
+
 }

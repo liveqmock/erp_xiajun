@@ -1,57 +1,37 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.eclipse.jetty.util.StringUtil;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.dal.youzan.PicModel;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
-import com.wangqin.globalshop.common.utils.Md5Util;
-import com.wangqin.globalshop.common.utils.StringUtils;
-
+import com.wangqin.globalshop.common.utils.*;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.util.StringUtil;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Channel(type=ChannelType.HaiHu)
 public class HaihuChannelServiceImpl extends AbstractChannelService {
@@ -392,6 +372,16 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 					outerOrderDetailTemp.setReceiverAddress(outerOrderHh.getAddressDetail());
 					outerOrderDetailTemp.setTelephone(outerOrderHh.getTelephone());
 					outerOrderDetailTemp.setPostcode(outerOrderHh.getPostcode());
+					outerOrderDetailTemp.setChannelName(ChannelType.HaiHu.getName());
+
+
+					outerOrderDetailTemp.setCustomerNo("无");
+					outerOrderDetailTemp.setIsDel(false);
+					outerOrderDetailTemp.setCreator("系统");
+					outerOrderDetailTemp.setModifier("系统");
+					outerOrderDetailTemp.setChannelOrderNo(outerOrder.getChannelOrderNo());
+
+
 
 					outerOrderDetailList.add(outerOrderDetailTemp);
 					//如果有虚拟库存就扣减虚拟库存
@@ -412,7 +402,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 						}
 					}
 				}
-				outerOrderDetailMapper.insertBatch(outerOrderDetailList);				//添加子订单
+				mallSubOrderService.insertBatch(outerOrderDetailList);				//添加子订单
 				if(outOrderIdList.size() > 0) {
 	    			//把商品详情更新到主订单明细里面
 	    			outerOrderDetailMapper.updateOuterOrderDetailByItemSku(outOrderIdList);
@@ -440,46 +430,52 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 		return null;
 	}
 
+    @Override
+    public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("packageNo", shippingOrder.getShippingNo());
-		param.put("logisticsCompany", shippingOrder.getLogisticCompany());
-		param.put("enteCode", "irhua");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String timeStamp = dateFormat.format(new Date());
-		String sign = Md5Util.getMD5("enteCode=irhua&timeStamp="+timeStamp);
-		param.put("timeStamp", timeStamp);
-		param.put("sign", sign);
-		String targetNo = "";
-//		List<Long> erpOrderIdList = HaiJsonUtils.toBean(shippingOrder.getErpOrderId(), new TypeReference<List<Long>>() {
-//		});
-//		List<ErpOrder> erpOrderList = erpOrderService.selectBatchIds(erpOrderIdList);
-		List<Map<String, Object>> itemSkusList = new ArrayList<>();
-		for (int j = 0; j < erpOrderList.size(); j++) {
-			MallSubOrderDO erpOrder = erpOrderList.get(j);
-			Map<String, Object> itemSkusDetail = new HashMap<String, Object>();
-			itemSkusDetail.put("skuCode", erpOrder.getSkuCode());
-			itemSkusList.add(itemSkusDetail);
-			param.put("itemSkusList", itemSkusList);
-			targetNo = erpOrderList.get(0).getChannelOrderNo();
-		}
-		param.put("erpOrderNo", targetNo);
-		JSONObject json = JSONObject.fromObject(param);
-		System.out.println(json);
-		this.logger.error("同步发货给海狐 req: " + json);
-		JSONObject description = HttpClientUtil.post("http://expressjob.haihu.com/erp/notify", null, param,"1");
-		this.logger.error("同步发货给海狐 resp: " + description.toString());
-		System.err.println(description);
-
-		try {
-			Integer respCode = (Integer) description.get("ResponseCode");
-			if (respCode == 100) {
-				shippingOrder.setSyncSendStatus(1);
-				shippingOrderService.updateByPrimaryKey(shippingOrder);
-			}
-		} catch (Exception e) {
-			this.logger.error("同步发货给海狐 返回结果异常: " + description.toString());
-		}
-	}
+//	@Override
+//	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+//		Map<String, Object> param = new HashMap<String, Object>();
+//		param.put("packageNo", shippingOrder.getShippingNo());
+//		param.put("logisticsCompany", shippingOrder.getLogisticCompany());
+//		param.put("enteCode", "irhua");
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		String timeStamp = dateFormat.format(new Date());
+//		String sign = Md5Util.getMD5("enteCode=irhua&timeStamp="+timeStamp);
+//		param.put("timeStamp", timeStamp);
+//		param.put("sign", sign);
+//		String targetNo = "";
+////		List<Long> erpOrderIdList = HaiJsonUtils.toBean(shippingOrder.getErpOrderId(), new TypeReference<List<Long>>() {
+////		});
+////		List<ErpOrder> erpOrderList = erpOrderService.selectBatchIds(erpOrderIdList);
+//		List<Map<String, Object>> itemSkusList = new ArrayList<>();
+//		for (int j = 0; j < erpOrderList.size(); j++) {
+//			MallSubOrderDO erpOrder = erpOrderList.get(j);
+//			Map<String, Object> itemSkusDetail = new HashMap<String, Object>();
+//			itemSkusDetail.put("skuCode", erpOrder.getSkuCode());
+//			itemSkusList.add(itemSkusDetail);
+//			param.put("itemSkusList", itemSkusList);
+//			targetNo = erpOrderList.get(0).getChannelOrderNo();
+//		}
+//		param.put("erpOrderNo", targetNo);
+//		JSONObject json = JSONObject.fromObject(param);
+//		System.out.println(json);
+//		this.logger.error("同步发货给海狐 req: " + json);
+//		JSONObject description = HttpClientUtil.post("http://expressjob.haihu.com/erp/notify", null, param,"1");
+//		this.logger.error("同步发货给海狐 resp: " + description.toString());
+//		System.err.println(description);
+//
+//		try {
+//			Integer respCode = (Integer) description.get("ResponseCode");
+//			if (respCode == 100) {
+//				shippingOrder.setSyncSendStatus(1);
+//				shippingOrderService.updateByPrimaryKey(shippingOrder);
+//			}
+//		} catch (Exception e) {
+//			this.logger.error("同步发货给海狐 返回结果异常: " + description.toString());
+//		}
+//	}
 }

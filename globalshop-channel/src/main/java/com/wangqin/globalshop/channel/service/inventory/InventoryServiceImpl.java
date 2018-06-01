@@ -1,19 +1,5 @@
 package com.wangqin.globalshop.channel.service.inventory;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryBookingRecordDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryOnWarehouseMapperExt;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -24,11 +10,22 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.InventoryVo;
-import com.wangqin.globalshop.channel.service.order.IMallSubOrderService;
+import com.wangqin.globalshop.channel.service.order.ChannelIMallSubOrderService;
 import com.wangqin.globalshop.channel.service.warehouse.IWarehouseService;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -38,15 +35,19 @@ import com.wangqin.globalshop.common.utils.BeanUtils;
 @Service("inventoryService")
 public class InventoryServiceImpl  implements IInventoryService {
 
-	@Autowired CAInventoryDOMapperExt inventoryDOMapperExt;
+	@Autowired
+	private InventoryMapperExt inventoryDOMapperExt;
 
-	@Autowired CAInventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
+	@Autowired
+	private InventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
 
-	@Autowired CAInventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
+	@Autowired
+	private InventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
 
 	@Autowired IWarehouseService warehouseService;
 
-	@Autowired IMallSubOrderService mallSubOrderService;
+	@Autowired
+    ChannelIMallSubOrderService mallSubOrderService;
 
 
 	public InventoryDOMapper getMapper(){
@@ -179,7 +180,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 			return null;
 		}
 		//Long:仓库ID,Long:erporderid,WarehouseCollector
-		Table<Long, Long, WarehouseCollector> table = HashBasedTable.create();
+		Table<String, Long, WarehouseCollector> table = HashBasedTable.create();
 
 		String companyNo = erpOrders.get(0).getCompanyNo();
 
@@ -205,46 +206,46 @@ public class InventoryServiceImpl  implements IInventoryService {
 						whc.setQuantity(Long.valueOf(erpOrder.getQuantity()));
 						whc.setErpOrder(erpOrder);
 						initBooked(inventory, whc);
-						table.put(inventory.getWarehouseNo(), whc.getErpOrderId(), whc);
+						table.put(String.valueOf(inventory.getWarehouseNo()), whc.getErpOrderId(), whc);
 					}
 				}
 			}
 		}
 		// 计算每个仓库下面的得分。
 		if (!table.isEmpty()) {
-			Map<Long, Double> scoreMap = Maps.newHashMap();
-			Set<Long> rows = table.rowKeySet();
-			for (Long wareId : rows) {
-				Map<Long, WarehouseCollector> rowData = table.row(wareId);
+			Map<String, Double> scoreMap = Maps.newHashMap();
+			Set<String> rows = table.rowKeySet();
+			for (String wareNo : rows) {
+				Map<Long, WarehouseCollector> rowData = table.row(wareNo);
 				for (Map.Entry<Long, WarehouseCollector> entry : rowData.entrySet()) {
 					WarehouseCollector whc = entry.getValue();
-					if (scoreMap.containsKey(wareId)) {
-						Double d = scoreMap.get(wareId) + score(whc);
-						scoreMap.put(wareId, d);
+					if (scoreMap.containsKey(wareNo)) {
+						Double d = scoreMap.get(wareNo) + score(whc);
+						scoreMap.put(wareNo, d);
 					} else {
-						scoreMap.put(wareId, score(whc));
+						scoreMap.put(wareNo, score(whc));
 					}
 				}
 			}
-			Long maxWareId = null;
+			String maxWareNo = null;
 			Double maxD = null;
-			for (Long wareId : scoreMap.keySet()) {
+			for (String wareNo : scoreMap.keySet()) {
 				if (maxD == null) {
-					maxWareId = wareId;
-					maxD = scoreMap.get(wareId);
+					maxWareNo = wareNo;
+					maxD = scoreMap.get(wareNo);
 				} else {
-					if (maxD < scoreMap.get(wareId)) {
-						maxD = scoreMap.get(wareId);
-						maxWareId = wareId;
-					} else if(maxD.equals(scoreMap.get(wareId)) && warehouseSeqMap.get(wareId) > warehouseSeqMap.get(maxWareId)) {
-						maxD = scoreMap.get(wareId);
-						maxWareId = wareId;
+					if (maxD < scoreMap.get(wareNo)) {
+						maxD = scoreMap.get(wareNo);
+						maxWareNo = wareNo;
+					} else if(maxD.equals(scoreMap.get(wareNo)) && warehouseSeqMap.get(wareNo) > warehouseSeqMap.get(maxWareNo)) {
+						maxD = scoreMap.get(wareNo);
+						maxWareNo = wareNo;
 					}
 				}
 			}
-			if (maxWareId != null) {
+			if (maxWareNo != null) {
 				List<WarehouseCollector> wcs = Lists.newArrayList();
-				Map<Long, WarehouseCollector> rowData = table.row(maxWareId);
+				Map<Long, WarehouseCollector> rowData = table.row(maxWareNo);
 				for (Map.Entry<Long, WarehouseCollector> entry : rowData.entrySet()) {
 					wcs.add(entry.getValue());
 				}

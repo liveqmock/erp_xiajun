@@ -13,7 +13,7 @@ public class InventoryOutManifestDO {
 
     private String warehouseName;
 
-    private Byte status;
+    private Integer status;
 
     private String desc;
 
@@ -67,11 +67,11 @@ public class InventoryOutManifestDO {
         this.warehouseName = warehouseName == null ? null : warehouseName.trim();
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

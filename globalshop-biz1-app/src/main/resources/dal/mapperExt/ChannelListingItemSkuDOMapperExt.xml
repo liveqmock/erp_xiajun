@@ -7,17 +7,17 @@
     <sql id="commonSelectSection">
         1 = 1
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(itemCode)">
+        <if test="itemCode != null">
             and T.item_code = #{itemCode}
         </if>
 
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(skuCode)">
+        <if test="skuCode != null">
             and T.sku_code = #{skuCode}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(platformType)">
+        <if test="platformType != null">
             and T.platform_type = #{platformType}
         </if>
-        <if test="@com.wangqin.globalshop.common.utils.StringUtils@isNotBlank(channelItemCode)">
+        <if test="channelItemCode != null">
             and T.channel_item_code = #{channelItemCode}
         </if>
 

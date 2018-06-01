@@ -18,6 +18,8 @@ public class MallSubOrderDO {
 
     private String  shopCode;
 
+    private String channelName;
+
     private String  channelOrderNo;
 
     private Date    orderTime;
@@ -50,13 +52,13 @@ public class MallSubOrderDO {
 
     private Integer quantity;
 
-    private Byte    status;
+    private Integer    status = 0;
 
     private String  closeReason;
 
     private String  warehouseNo;
 
-    private Integer stockStatus;
+    private Integer stockStatus = 0;
 
     private String  shippingOrderNo;
 
@@ -96,6 +98,12 @@ public class MallSubOrderDO {
 
     private Boolean isDel;
 
+    public String getChannelName() {
+        return channelName;
+    }
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
     public Long getId() {
         return id;
     }
@@ -160,6 +168,22 @@ public class MallSubOrderDO {
         this.channelOrderNo = channelOrderNo == null ? null : channelOrderNo.trim();
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getSkuCode() {
+        return skuCode;
+    }
+
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
+
     public Date getOrderTime() {
         return orderTime;
     }
@@ -184,13 +208,6 @@ public class MallSubOrderDO {
         this.itemName = itemName == null ? null : itemName.trim();
     }
 
-    public String getSkuCode() {
-        return skuCode;
-    }
-
-    public void setSkuCode(String skuCode) {
-        this.skuCode = skuCode == null ? null : skuCode.trim();
-    }
 
     public String getChannelSkuCode() {
         return channelSkuCode;
@@ -280,13 +297,6 @@ public class MallSubOrderDO {
         this.quantity = quantity;
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
 
     public String getCloseReason() {
         return closeReason;

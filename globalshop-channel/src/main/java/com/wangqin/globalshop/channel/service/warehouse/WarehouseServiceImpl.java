@@ -1,16 +1,13 @@
 package com.wangqin.globalshop.channel.service.warehouse;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import com.wangqin.globalshop.channel.dal.mapperExt.CAWarehouseDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -20,7 +17,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 @Service("wareHouseService")
 public class WarehouseServiceImpl implements IWarehouseService {
 
-	@Autowired CAWarehouseDOMapperExt warehouseDOMapperExt;
+	@Autowired
+	private WarehouseDOMapperExt warehouseDOMapperExt;
 
 	public Map<String,Integer> getWarehousePropeties(String companyNo){
 
@@ -28,7 +26,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
 
 		WarehouseDO so = new WarehouseDO();
 		so.setCompanyNo(companyNo);
-		List<WarehouseDO> warehouseDOS =  warehouseDOMapperExt.queryPoList(so);
+		List<WarehouseDO> warehouseDOS =  warehouseDOMapperExt.selectWhList(so);
 
 		for(WarehouseDO warehouseDO : warehouseDOS){
 			propetiesMap.put(warehouseDO.getWarehouseNo(),warehouseDO.getDeliveryPriority());

@@ -1,20 +1,9 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.wangqin.globalshop.channel.dal.mapperExt.CAMallOrderDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAMallSubOrderDOMapperExt;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
@@ -22,11 +11,17 @@ import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemSku
 import com.wangqin.globalshop.channel.service.inventory.IInventoryService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channel.service.item.IItemSkuService;
-import com.wangqin.globalshop.channel.service.order.IMallOrderService;
-import com.wangqin.globalshop.channel.service.order.IMallSubOrderService;
-import com.wangqin.globalshop.channel.service.order.IShippingOrderService;
+import com.wangqin.globalshop.channel.service.order.ChannelIMallOrderService;
+import com.wangqin.globalshop.channel.service.order.ChannelIMallSubOrderService;
+import com.wangqin.globalshop.channel.service.order.ChannelIShippingOrderService;
 import com.wangqin.globalshop.channel.service.utils.ISequenceService;
 import com.wangqin.globalshop.common.scan.SpringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public abstract class AbstractChannelService implements IChannelService, IChannelAdapter {
 	// logger
@@ -44,15 +39,15 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	protected IChannelListingItemSkuService outerItemSkuService = SpringUtils.getBean(IChannelListingItemSkuService.class);
 
 
-	protected CAMallSubOrderDOMapperExt outerOrderDetailMapper = SpringUtils.getBean(CAMallSubOrderDOMapperExt.class);
+	protected MallSubOrderMapperExt outerOrderDetailMapper = SpringUtils.getBean(MallSubOrderMapperExt.class);
 
-	protected CAMallOrderDOMapperExt outerOrderMapper = SpringUtils.getBean(CAMallOrderDOMapperExt.class);
+	protected MallOrderMapperExt outerOrderMapper = SpringUtils.getBean(MallOrderMapperExt.class);
 
-	protected IMallOrderService outerOrderService = SpringUtils.getBean(IMallOrderService.class);
+	protected ChannelIMallOrderService outerOrderService = SpringUtils.getBean(ChannelIMallOrderService.class);
 
-	protected IMallSubOrderService mallSubOrderService = SpringUtils.getBean(IMallSubOrderService.class);
+	protected ChannelIMallSubOrderService mallSubOrderService = SpringUtils.getBean(ChannelIMallSubOrderService.class);
 	
-	protected IShippingOrderService shippingOrderService = SpringUtils.getBean(IShippingOrderService.class);
+	protected ChannelIShippingOrderService shippingOrderService = SpringUtils.getBean(ChannelIShippingOrderService.class);
 	protected IInventoryService inventoryService = SpringUtils.getBean(IInventoryService.class);
 
 	public AbstractChannelService(ChannelAccountDO channelAccount) {
@@ -102,12 +97,15 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 		// 未同步过
 		if(selOuterItem == null) {
 			AdapterData adapterData = this.adapterCreateItem(item);
+
+
 			this.outerItemService.insert(adapterData.outerItem);
 			
 			for (ChannelListingItemSkuDO sku : adapterData.outerItemSkus) {
 				ChannelListingItemSkuDO outerItemSku = new ChannelListingItemSkuDO();
 				outerItemSku.setSkuCode(sku.getSkuCode());
 				outerItemSku.setPlatformType(this.channelAccount.getType());
+
 				ChannelListingItemSkuDO selOuterItemSku = this.outerItemSkuService.queryPo(outerItemSku);
 				if (selOuterItemSku == null) {
 					this.outerItemSkuService.insert(sku);

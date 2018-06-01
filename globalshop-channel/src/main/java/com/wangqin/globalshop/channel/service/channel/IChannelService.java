@@ -1,10 +1,13 @@
 package com.wangqin.globalshop.channel.service.channel;
 
 import java.text.ParseException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 
 public interface IChannelService {
@@ -36,5 +39,6 @@ public interface IChannelService {
 	
 	public void syncOrder() throws ParseException;
 	public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception;
-		
+
+    void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder);
 }

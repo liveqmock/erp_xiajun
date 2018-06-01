@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.channel.service.item;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,8 @@ import java.util.List;
 public class ItemSkuServiceImpl  implements IItemSkuService {
 
 
-	@Autowired CAItemSkuDOMapperExt itemSkuDOMapperExt;
+	@Autowired
+	ItemSkuMapperExt itemSkuDOMapperExt;
 
 	public ItemSkuDOMapper getMapper(){
 		return itemSkuDOMapperExt;
@@ -58,14 +59,14 @@ public class ItemSkuServiceImpl  implements IItemSkuService {
 
 
 	public ItemSkuDO queryPo(ItemSkuDO itemSkuDO){
-		return itemSkuDOMapperExt.queryPo(itemSkuDO);
+		return itemSkuDOMapperExt.queryItemSku(itemSkuDO);
 	}
 
 	public Integer queryPoCount(ItemSkuDO itemSkuDO){
-		return itemSkuDOMapperExt.queryPoCount(itemSkuDO);
+		return itemSkuDOMapperExt.queryItemSkuCount(itemSkuDO);
 	}
 	public List<ItemSkuDO> queryPoList(ItemSkuDO itemSkuDO){
-		return itemSkuDOMapperExt.queryPoList(itemSkuDO);
+		return itemSkuDOMapperExt.queryItemSkuList(itemSkuDO);
 	}
 
 
@@ -83,7 +84,7 @@ public class ItemSkuServiceImpl  implements IItemSkuService {
 
 	public List<ItemSkuVo> queryVoList(ItemSkuDO itemSkuDO){
 
-		List<ItemSkuDO> itemSkuDOS = itemSkuDOMapperExt.queryPoList(itemSkuDO);
+		List<ItemSkuDO> itemSkuDOS = itemSkuDOMapperExt.queryItemSkuList(itemSkuDO);
 		List<ItemSkuVo> itemSkuVos = new ArrayList<>();
 		for(ItemSkuDO itemSku : itemSkuDOS){
 			ItemSkuVo vo = new ItemSkuVo();

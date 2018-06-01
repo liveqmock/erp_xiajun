@@ -1,52 +1,15 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.entity.ContentType;
-import org.eclipse.jetty.util.StringUtil;
-import org.eclipse.jetty.util.security.Credential.MD5;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.PayType;
-import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.biz1.app.constants.enums.*;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.youzan.ItemImages;
-import com.wangqin.globalshop.channel.dal.youzan.PicModel;
-import com.wangqin.globalshop.channel.dal.youzan.TradeDetailV2;
-import com.wangqin.globalshop.channel.dal.youzan.YouzanMsgDetailEntity;
-import com.wangqin.globalshop.channel.dal.youzan.YouzanMsgPushEntity;
+import com.wangqin.globalshop.channel.dal.youzan.*;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGet;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -54,40 +17,25 @@ import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.youzan.open.sdk.client.auth.Token;
 import com.youzan.open.sdk.client.core.DefaultYZClient;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemCreate;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemGet;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemSkuUpdate;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemUpdate;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemUpdateDelisting;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemUpdateListing;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanLogisticsExpressGet;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanLogisticsOnlineConfirm;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanMaterialsStoragePlatformImgUpload;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateResult;
+import com.youzan.open.sdk.gen.v3_0_0.api.*;
+import com.youzan.open.sdk.gen.v3_0_0.model.*;
 import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateResult.ItemSkuOpenModel;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemGetResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemSkuUpdateParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemSkuUpdateResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateDelistingParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateDelistingResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateListingParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateListingResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsExpressGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsExpressGetResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsOnlineConfirmParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsOnlineConfirmResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanMaterialsStoragePlatformImgUploadParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanMaterialsStoragePlatformImgUploadResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanTradeGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanTradesSoldGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanTradesSoldGetResult;
 import com.youzan.open.sdk.model.ByteWrapper;
-
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.entity.ContentType;
+import org.eclipse.jetty.util.StringUtil;
+import org.eclipse.jetty.util.security.Credential.MD5;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.text.ParseException;
+import java.util.*;
 
 @Channel(type = ChannelType.YouZan)
 public class YouZanChannelServiceImp extends AbstractChannelService implements IChannelService {
@@ -140,13 +88,22 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		// 1、保存外部商品
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
 
-		outerItem.setChannelNo(PlatformType.YOUZAN.getDescription());
+		outerItem.setChannelNo(String.valueOf(ChannelType.YouZan.getValue()));
         outerItem.setCompanyNo(channelAccount.getCompanyNo());
 		outerItem.setShopCode(channelAccount.getShopCode());
 		outerItem.setChannelItemAlias(alias);
 		outerItem.setChannelItemCode(String.valueOf(numIid));
 		outerItem.setItemCode(item.getItemCode());
-		outerItem.setStatus(ItemStatus.LISTING.getCode());// 上架
+		outerItem.setStatus(ItemStatus.LISTING.getCode());
+
+		//补充必填信息
+		outerItem.setIsDel(false);
+		outerItem.setGmtCreate(new Date());
+		outerItem.setGmtModify(new Date());
+		//outerItem.setCreator(AppUtil.getLoginAccount());
+		//outerItem.setModifier(AppUtil.getLoginAccount());
+		outerItem.setCreator("-1");
+		outerItem.setModifier("-1");
 
 		adapterData.item = item;
 		adapterData.outerItem = outerItem;
@@ -174,8 +131,17 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
                 //内部信息
 				outerItemSku.setItemCode(String.valueOf(item.getId()));
 				outerItemSku.setSkuCode(sku.getItemNo());
-				adapterData.outerItemSkus.add(outerItemSku);
 
+				//补充必填信息
+				outerItemSku.setIsDel(false);
+				outerItemSku.setGmtCreate(new Date());
+				outerItemSku.setGmtModify(new Date());
+				//outerItem.setCreator(AppUtil.getLoginAccount());
+				//outerItem.setModifier(AppUtil.getLoginAccount());
+				outerItemSku.setCreator("-1");
+				outerItemSku.setModifier("-1");
+
+				adapterData.outerItemSkus.add(outerItemSku);
 			}
 		}
 
@@ -196,7 +162,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		// 1、保存外部商品
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
 		outerItem.setItemCode(item.getItemCode());
-		outerItem.setChannelNo(PlatformType.YOUZAN.getDescription());
+		outerItem.setChannelNo(channelAccount.getChannelNo());
 		ChannelListingItemDO outerItemDb = this.outerItemService.queryPo(outerItem);
 		if (outerItemDb == null) {
 			throw new ErpCommonException("更新outerItem 商品信息错误");
@@ -598,17 +564,16 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		return result;
 	}
 
-
 	/**
 	 * 发货反馈,
 	 * @param orderList
 	 * @param shippingOrder
 	 */
-	public void syncLogisticsOnlineConfirm(List<MallOrderDO> orderList, ShippingOrderDO shippingOrder) {
+	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> orderList, ShippingOrderDO shippingOrder) {
 		logger.error("有赞发货");
 
 		boolean hasFailed = false;
-		for (MallOrderDO order : orderList) {
+		for (MallSubOrderDO order : orderList) {
 			try {
 				// 获取第三方订单
 				String tid = order.getChannelOrderNo();
@@ -754,12 +719,32 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception {
 	}
 
+
+
+
+	/**
+	 * job主动抓取的订单处理
+	 */
 	@Override
 	public void syncOrder() {
 		// 交易状态更新的结束时间,值为当前时间
-		Date endUpdate = new Date();
+		//Date endUpdate = new Date();
 		// 交易状态更新的开始时间,值为当前时间的1个小时前，因为定时任务设置为半个小时,这样每个订单会有2次抓取机会
-		Date startUpdate = DateUtil.getDateByCalculate(endUpdate, Calendar.HOUR_OF_DAY, -1);
+		//Date startUpdate = DateUtil.getDateByCalculate(endUpdate, Calendar.HOUR_OF_DAY, -1);
+
+
+		String startTime = "2018-05-02 10:33:00";
+		String endTime = "2018-05-03 19:33:00";
+		Date startUpdate = null;
+		Date endUpdate = null;
+		try {
+			 startUpdate = DateUtil.convertStr2Date(startTime,DateUtil.formateStr19);
+			 endUpdate = DateUtil.convertStr2Date(endTime,DateUtil.formateStr19);
+		}catch (ParseException e){
+			logger.info("");
+		}
+
+
 
 		// 方法
 		YouzanTradesSoldGet youzanTradesSoldGet = new YouzanTradesSoldGet();
@@ -778,19 +763,25 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		while (hasNext) {
 			youzanTradesSoldGetParams.setPageNo(pageNo);
 			youzanTradesSoldGet.setAPIParams(youzanTradesSoldGetParams);
-			YouzanTradesSoldGetResult result = yzClient.invoke(youzanTradesSoldGet);
+			com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGetResult result = yzClient.invoke(youzanTradesSoldGet);
 
 			// 设置循环
 			pageNo++;
 			hasNext = result.getHasNext();
 
-			YouzanTradesSoldGetResult.TradeDetailV2[] tradeList = result.getTrades();
+			com.wangqin.globalshop.channel.dal.youzan.TradeDetailV2[] tradeList = result.getTrades();
 			for (int i = tradeList.length - 1; i >= 0; i--) {
 				this.syncOrder(tradeList[i]);
 			}
 		}
-	}
 
+
+	}
+	/**
+	 * 有赞推过来的订单
+	 * @param data
+	 * @return
+	 */
 	@Override
 	public Object syncOrder(Object data) {
 		YouzanMsgPushEntity entity = (YouzanMsgPushEntity) data;
@@ -877,6 +868,8 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		p.setChannelOrderNo(TradeDetail.getTid());
 		if (outerOrderMapper.queryPoCount(p) > 0) {
 			logger.error("有赞订单已经存在 tid:" + TradeDetail.getTid());
+			//生产时，直接return，测试时，进行插入
+			//return;
 		}
 
 		// 如果有赞订单还不存在，继续
@@ -912,6 +905,14 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		outerOrder.setGmtCreate(TradeDetail.getCreated()); // 创建时间
 		outerOrder.setGmtModify(TradeDetail.getUpdateTime()); // 修改时间
 
+
+		//补充必填信息
+		outerOrder.setCustomerNo("无");
+		outerOrder.setChannelCustomerNo("自定义类型，无买家昵称");
+		outerOrder.setIsDel(false);
+		outerOrder.setModifier("-1");
+
+
 		outerOrderMapper.insert(outerOrder); // 添加主订单
 
 		outOrderIdList.add(outerOrder.getOrderNo()); // 收集主订单ID
@@ -938,6 +939,14 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			outerOrderDetail.setReceiverAddress(TradeDetail.getReceiverAddress()); // 详细地址
 			outerOrderDetail.setTelephone(TradeDetail.getReceiverMobile()); // 联系电话
 			outerOrderDetail.setPostcode(TradeDetail.getReceiverZip()); // 邮编
+			outerOrderDetail.setChannelName(ChannelType.YouZan.getName());
+
+			outerOrderDetail.setCustomerNo("无");
+			outerOrderDetail.setIsDel(false);
+			outerOrderDetail.setCreator("系统");
+			outerOrderDetail.setModifier("系统");
+			outerOrderDetail.setChannelOrderNo(outerOrder.getChannelOrderNo());
+
 			outerOrderDetails.add(outerOrderDetail);
 
 			// 如果有虚拟库存就扣减虚拟库存
@@ -966,7 +975,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 				}
 			}
 		}
-		outerOrderDetailMapper.insertBatch(outerOrderDetails); // 添加子订单
+		mallSubOrderService.insertBatch(outerOrderDetails); // 添加子订单
 
 		if (outOrderIdList.size() > 0) {
 			// 把商品详情更新到主订单明细里面

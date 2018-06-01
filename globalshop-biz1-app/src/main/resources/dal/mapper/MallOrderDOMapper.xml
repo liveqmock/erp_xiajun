@@ -47,7 +47,7 @@
     delete from mall_order
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+  <insert id="insert"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>

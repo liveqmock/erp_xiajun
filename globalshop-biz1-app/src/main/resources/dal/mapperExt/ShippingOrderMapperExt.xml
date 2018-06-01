@@ -95,6 +95,19 @@
         order by id desc
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
+
+    <select id="selectBatchIds" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        shipping_order
+        WHERE
+        id IN
+        <foreach item="item" index="index" collection="shippingOrderIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="queryShippingOrderCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO">
         SELECT
         count(1)
@@ -147,5 +160,44 @@
             </if>
         </where>
     </select>
+
+    <select id="queryByShippingOrderPackageTime" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE 1=1
+        <if test=" startOrderTime!= null ">
+            and   <![CDATA[ gmt_create >= #{startOrderTime} ]]>
+        </if>
+        <if test=" endOrderTime != null ">
+            and    <![CDATA[ gmt_create <= #{endOrderTime} ]]>
+        </if>
+        <if test=" logisticCompany != null and logisticCompany !='' ">
+            and    <![CDATA[ logistic_company = #{logisticCompany} ]]>
+        </if>
+        ORDER BY gmt_create asc
+    </select>
+    <select id="selectByShippingNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE shipping_no = ${shippingNO}
+    </select>
+    <select id="selectCount" >
+        SELECT
+        count(*)
+        FROM shipping_order
+        WHERE id_card=${idCard} and logistic_company=${logisticCompany} and gmt_create>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+    </select>
+    <select id="selectByLogisticNo" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE  logistic_no=${logisticNo}
+    </select>
+
+    <update id="updateStatusByShippingNo" parameterType="java.lang.String">
+        UPDATE shipping_order SET status=2 WHERE logistic_no=#{logisticNo}
+    </update>
 
 </mapper>

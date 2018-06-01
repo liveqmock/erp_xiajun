@@ -55,7 +55,7 @@
     spec, model, gmt_modify, gmt_create, is_del, creator, modifier
   </sql>
   <sql id="Blob_Column_List" >
-    desc, detail
+    `desc`, detail
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 

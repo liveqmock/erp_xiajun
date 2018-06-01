@@ -13,9 +13,11 @@ import java.io.IOException;
 @RequestMapping("/taobao")
 public class TaobaoAccountInfoController {
 			
-	@Autowired IChannelAccountService channelAccountService;
+	@Autowired
+	IChannelAccountService channelAccountService;
 
-	@Autowired IChannelAccountConfigService channelAccountConfigService;
+	@Autowired
+	IChannelAccountConfigService channelAccountConfigService;
 						
 	@RequestMapping("/accountInfo")
 	@ResponseBody

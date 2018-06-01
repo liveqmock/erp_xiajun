@@ -1,16 +1,5 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.taobao.api.Constants;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.domain.Order;
@@ -23,16 +12,14 @@ import com.taobao.api.response.TradeReceiverGetResponse;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.common.utils.DateUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.util.*;
 
 @Channel(type = ChannelType.TaoBao)
 public class TaobaoChannelServiceImpl extends AbstractChannelService implements IChannelService{
@@ -198,7 +185,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 			outerOrderDetail.setReceiverAddress(receiver.getReceiverAddress()); // 详细地址
 			outerOrderDetail.setTelephone(receiver.getReceiverMobile()); // 联系电话
 			outerOrderDetail.setPostcode(receiver.getReceiverZip()); // 邮编
-
+			outerOrderDetail.setChannelName(ChannelType.TaoBao.getName());
 			outerOrderDetails.add(outerOrderDetail);
 
 			// 如果有虚拟库存就扣减虚拟库存
@@ -227,7 +214,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 				}
 			}
 		}
-		outerOrderDetailMapper.insertBatch(outerOrderDetails); // 添加子订单
+		mallSubOrderService.insertBatch(outerOrderDetails); // 添加子订单
 
 		if (outOrderIdList.size() > 0) {
 			// 把商品详情更新到主订单明细里面
@@ -335,59 +322,67 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 	public Object syncOrder(Object data) {
 		return null;
 	}
+
+
+    @Override
+    public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+        // TODO Auto-generated method stub
+        
+    }
 	
 	/**
 	 * 发货接口
 	 */
-	public void syncLogisticsOnlineConfirm(List<MallOrderDO> orderList, ShippingOrderDO shippingOrder) {
-		logger.error("发货");
-		
-		boolean hasFailed = false;
-		for (MallOrderDO order : orderList) {
-			try {
-				// 获取第三方订单
-				String tid = order.getChannelOrderNo();
-				// 获取物流信息
-				String logisticNo = shippingOrder.getShippingNo();
-				String logisticCompany = shippingOrder.getLogisticCompany();
-
-				// 调用"商家已发货"
-				String expressType = null;
-				if (logisticCompany != null) {
-					expressType = localExpressMap.get(logisticCompany);
-				}
-				if (expressType == null) {
-					expressType = "1";
-				}
-//				YouzanLogisticsOnlineConfirmParams youzanLogisticsOnlineConfirmParams = new YouzanLogisticsOnlineConfirmParams();
+//	@Override
+//	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> orderList, ShippingOrderDO shippingOrder) {
+//		logger.error("发货");
+//		
+//		boolean hasFailed = false;
+//		for (MallSubOrderDO order : orderList) {
+//			try {
+//				// 获取第三方订单
+//				String tid = order.getChannelOrderNo();
+//				// 获取物流信息
+//				String logisticNo = shippingOrder.getShippingNo();
+//				String logisticCompany = shippingOrder.getLogisticCompany();
 //
-//				youzanLogisticsOnlineConfirmParams.setTid(tid);
-//				youzanLogisticsOnlineConfirmParams.setOutStype(expressType);
-//				youzanLogisticsOnlineConfirmParams.setOutSid(logisticNo);
-//				// youzanLogisticsOnlineConfirmParams.setOids("1440273929715322794");
-//
-//				YouzanLogisticsOnlineConfirm youzanLogisticsOnlineConfirm = new YouzanLogisticsOnlineConfirm();
-//				youzanLogisticsOnlineConfirm.setAPIParams(youzanLogisticsOnlineConfirmParams);
-//				YouzanLogisticsOnlineConfirmResult result = yzClient.invoke(youzanLogisticsOnlineConfirm);
-				
-//				if (!hasFailed && !result.getIsSuccess()) {
-//					hasFailed = true;
-//					this.logger.error("同步发货给 有赞 返回结果异常：" + result.toString());
+//				// 调用"商家已发货"
+//				String expressType = null;
+//				if (logisticCompany != null) {
+//					expressType = localExpressMap.get(logisticCompany);
 //				}
-			} catch (Exception e) {
-				hasFailed = true;
-				logger.error("淘宝发货异常: ", e);
-			}
-		}
-
-		if (!hasFailed) {
-			try {
-				shippingOrder.setSyncSendStatus(1);
-				shippingOrderService.updateByPrimaryKey(shippingOrder);
-			} catch (Exception e) {
-				this.logger.error("同步发货给 淘宝 返回结果异常");
-			}
-		}
-	}
+//				if (expressType == null) {
+//					expressType = "1";
+//				}
+////				YouzanLogisticsOnlineConfirmParams youzanLogisticsOnlineConfirmParams = new YouzanLogisticsOnlineConfirmParams();
+////
+////				youzanLogisticsOnlineConfirmParams.setTid(tid);
+////				youzanLogisticsOnlineConfirmParams.setOutStype(expressType);
+////				youzanLogisticsOnlineConfirmParams.setOutSid(logisticNo);
+////				// youzanLogisticsOnlineConfirmParams.setOids("1440273929715322794");
+////
+////				YouzanLogisticsOnlineConfirm youzanLogisticsOnlineConfirm = new YouzanLogisticsOnlineConfirm();
+////				youzanLogisticsOnlineConfirm.setAPIParams(youzanLogisticsOnlineConfirmParams);
+////				YouzanLogisticsOnlineConfirmResult result = yzClient.invoke(youzanLogisticsOnlineConfirm);
+//				
+////				if (!hasFailed && !result.getIsSuccess()) {
+////					hasFailed = true;
+////					this.logger.error("同步发货给 有赞 返回结果异常：" + result.toString());
+////				}
+//			} catch (Exception e) {
+//				hasFailed = true;
+//				logger.error("淘宝发货异常: ", e);
+//			}
+//		}
+//
+//		if (!hasFailed) {
+//			try {
+//				shippingOrder.setSyncSendStatus(1);
+//				shippingOrderService.updateByPrimaryKey(shippingOrder);
+//			} catch (Exception e) {
+//				this.logger.error("同步发货给 淘宝 返回结果异常");
+//			}
+//		}
+//	}
 
 }

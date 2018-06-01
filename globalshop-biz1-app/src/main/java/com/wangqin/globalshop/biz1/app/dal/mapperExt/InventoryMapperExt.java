@@ -25,7 +25,7 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	 * @param skuId
 	 * @return
 	 */
-	InventoryDO getInventoryBySkuId(@Param("itemId") Long itemId,@Param("skuId")  Long skuId);
+	InventoryDO getInventoryBySkuId(@Param("itemCode") String itemCode,@Param("skuCode")  String skuCode);
 	
 	/**
 	 * 根据skuId 加悲观锁
@@ -36,7 +36,7 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	 */
 	//Inventory getInventoryBySkuIdLock(@Param("itemId") Long itemId,@Param("skuId")  Long skuId);
 	
-	int updateLockInventory(@Param("id") Long id ,@Param("booked") int booked,@Param("transBooked") int transBooked);
+	int updateLockInventory(@Param("id") Long id ,@Param("booked") Long booked,@Param("transBooked") Long transBooked);
 	
 	void updateInventoryByInventoryArea();
 	
@@ -92,4 +92,9 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	
 	//item_module
 	void deleteInvBySkuCode(String skuCode);
+
+	InventoryDO queryInventoryByCode(@Param("itemCode") String itemCode, @Param("skuCode") String skuCode);
+
+
+
 }

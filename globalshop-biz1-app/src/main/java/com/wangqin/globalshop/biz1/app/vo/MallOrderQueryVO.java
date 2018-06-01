@@ -87,7 +87,7 @@ public class MallOrderQueryVO extends PageQueryVO {
 	
 	private String idCard;
 	
-	private Long companyId;
+	private String companyNO;
 
 	public Integer getStatus() {
 		return status;
@@ -249,12 +249,12 @@ public class MallOrderQueryVO extends PageQueryVO {
 		this.idCard = idCard;
 	}
 
-	public Long getCompanyId() {
-		return companyId;
+	public String getCompanyNo() {
+		return companyNO;
 	}
 
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
+	public void setCompanyNo(String companyId) {
+		this.companyNO = companyId;
 	}
 	
 }

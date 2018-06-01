@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.channel.service.channelAccountConfig;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountConfigDO;
-import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountConfigSo;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountConfigSo;
 
 public interface IChannelAccountConfigService  {
 
