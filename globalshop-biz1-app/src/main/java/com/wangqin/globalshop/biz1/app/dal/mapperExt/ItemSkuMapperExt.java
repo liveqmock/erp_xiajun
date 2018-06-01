@@ -56,9 +56,9 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
     ItemSkuDO queryItemBySkuCode(@Param("skuCode") String skuCode);
 
-    List<ItemSkuDO> queryPoList(ItemSkuDO skuSo);
+    List<ItemSkuDO> queryItemSkuList(ItemSkuDO skuSo);
 
-	ItemSkuDO queryPo(ItemSkuDO itemSkuDO);
+	ItemSkuDO queryItemSku(ItemSkuDO itemSkuDO);
 
-	Integer queryPoCount(ItemSkuDO itemSkuDO);
+	Integer queryItemSkuCount(ItemSkuDO itemSkuDO);
 }

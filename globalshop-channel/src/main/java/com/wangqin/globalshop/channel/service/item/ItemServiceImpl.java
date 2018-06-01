@@ -3,9 +3,9 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuScaleDOMapper;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
@@ -33,7 +33,7 @@ public class ItemServiceImpl  implements IItemService {
 	ItemSkuMapperExt itemSkuDOMapperExt;
 
 	@Autowired
-	InventoryDOMapperExt inventoryDOMapperExt;
+	InventoryMapperExt inventoryDOMapperExt;
 
 	@Autowired
 	ItemSkuScaleDOMapper itemSkuScaleDOMapper;
@@ -89,7 +89,7 @@ public class ItemServiceImpl  implements IItemService {
         List<ItemSkuVo> itemSkuVos = new ArrayList<>();
 		ItemSkuDO skuSo = new ItemSkuDO();
 		skuSo.setItemCode(itemDo.getItemCode());
-		List<ItemSkuDO> skuList = itemSkuDOMapperExt.queryPoList(skuSo);
+		List<ItemSkuDO> skuList = itemSkuDOMapperExt.queryItemSkuList(skuSo);
 		for(ItemSkuDO sku : skuList){
 			ItemSkuVo itemSkuVo = new ItemSkuVo();
 			BeanUtils.copies(sku,itemSkuVo);
