@@ -162,7 +162,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		// 1、保存外部商品
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
 		outerItem.setItemCode(item.getItemCode());
-		outerItem.setChannelNo(PlatformType.YOUZAN.getDescription());
+		outerItem.setChannelNo(channelAccount.getChannelNo());
 		ChannelListingItemDO outerItemDb = this.outerItemService.queryPo(outerItem);
 		if (outerItemDb == null) {
 			throw new ErpCommonException("更新outerItem 商品信息错误");
@@ -938,6 +938,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			outerOrderDetail.setReceiverAddress(TradeDetail.getReceiverAddress()); // 详细地址
 			outerOrderDetail.setTelephone(TradeDetail.getReceiverMobile()); // 联系电话
 			outerOrderDetail.setPostcode(TradeDetail.getReceiverZip()); // 邮编
+			outerOrderDetail.setChannelName(ChannelType.YouZan.getName());
 			outerOrderDetails.add(outerOrderDetail);
 
 			// 如果有虚拟库存就扣减虚拟库存

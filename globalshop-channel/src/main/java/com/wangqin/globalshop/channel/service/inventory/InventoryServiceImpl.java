@@ -11,7 +11,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.InventoryVo;
@@ -36,7 +36,7 @@ import java.util.Set;
 public class InventoryServiceImpl  implements IInventoryService {
 
 	@Autowired
-	private InventoryDOMapperExt inventoryDOMapperExt;
+	private InventoryMapperExt inventoryDOMapperExt;
 
 	@Autowired
 	private InventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;

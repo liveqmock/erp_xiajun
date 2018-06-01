@@ -59,14 +59,14 @@ public class ItemSkuServiceImpl  implements IItemSkuService {
 
 
 	public ItemSkuDO queryPo(ItemSkuDO itemSkuDO){
-		return itemSkuDOMapperExt.queryPo(itemSkuDO);
+		return itemSkuDOMapperExt.queryItemSku(itemSkuDO);
 	}
 
 	public Integer queryPoCount(ItemSkuDO itemSkuDO){
-		return itemSkuDOMapperExt.queryPoCount(itemSkuDO);
+		return itemSkuDOMapperExt.queryItemSkuCount(itemSkuDO);
 	}
 	public List<ItemSkuDO> queryPoList(ItemSkuDO itemSkuDO){
-		return itemSkuDOMapperExt.queryPoList(itemSkuDO);
+		return itemSkuDOMapperExt.queryItemSkuList(itemSkuDO);
 	}
 
 
@@ -84,7 +84,7 @@ public class ItemSkuServiceImpl  implements IItemSkuService {
 
 	public List<ItemSkuVo> queryVoList(ItemSkuDO itemSkuDO){
 
-		List<ItemSkuDO> itemSkuDOS = itemSkuDOMapperExt.queryPoList(itemSkuDO);
+		List<ItemSkuDO> itemSkuDOS = itemSkuDOMapperExt.queryItemSkuList(itemSkuDO);
 		List<ItemSkuVo> itemSkuVos = new ArrayList<>();
 		for(ItemSkuDO itemSku : itemSkuDOS){
 			ItemSkuVo vo = new ItemSkuVo();

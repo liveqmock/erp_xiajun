@@ -23,7 +23,7 @@ public class AutoTaobaoRefreshCookieTask {
 
 	@Autowired IChannelAccountService channelAccountService;
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/15 * * * ?")
 	public void refreshCookie() {
 		logger.info("refresh taobao token start");
 
