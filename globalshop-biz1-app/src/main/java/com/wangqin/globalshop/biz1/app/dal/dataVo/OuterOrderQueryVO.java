@@ -51,7 +51,7 @@ public class OuterOrderQueryVO extends PageQueryVO{
 	
 	private String openId;		//open_id
 	
-	private Long companyId;
+	private String companyNo;
 	
 	public Integer getSalesId() {
 		return salesId;
@@ -139,10 +139,10 @@ public class OuterOrderQueryVO extends PageQueryVO{
 	public void setEndGmtCreate(Date endGmtCreate) {
 		this.endGmtCreate = endGmtCreate;
 	}
-	public Long getCompanyId() {
-		return companyId;
+	public String getCompanyNo() {
+		return companyNo;
 	}
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
+	public void setCompanyNo(String companyId) {
+		this.companyNo = companyId;
 	}
 }

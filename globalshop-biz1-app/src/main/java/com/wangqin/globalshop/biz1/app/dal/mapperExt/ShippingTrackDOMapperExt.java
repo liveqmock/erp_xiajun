@@ -8,4 +8,10 @@ import java.util.List;
 public interface ShippingTrackDOMapperExt extends ShippingTrackDOMapper {
 
     List<ShippingTrackDO> queryShippingTrack(String logisticNo);
+
+    ShippingTrackDO selectByShippingOrderNo(String shippingOrderNo);
+
+    int selectCountByShippingOrderNo(String shippingOrderNo);
+
+    List<ShippingTrackDO> selectByShippingOrderNoList(String selShippingTrack);
 }

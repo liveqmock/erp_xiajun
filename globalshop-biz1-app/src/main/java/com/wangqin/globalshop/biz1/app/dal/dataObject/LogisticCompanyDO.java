@@ -16,6 +16,9 @@ public class LogisticCompanyDO {
     private String nameInYouzan;
 
     private String codeInYouzan;
+    private String nameInKuaidi100;
+
+    private String codeInKuaidi100;
 
     private String nameInPdd;
 
@@ -34,6 +37,22 @@ public class LogisticCompanyDO {
     private String creator;
 
     private String modifier;
+
+    public String getNameInKuaidi100() {
+        return nameInKuaidi100;
+    }
+
+    public void setNameInKuaidi100(String nameInKuaidi100) {
+        this.nameInKuaidi100 = nameInKuaidi100;
+    }
+
+    public String getCodeInKuaidi100() {
+        return codeInKuaidi100;
+    }
+
+    public void setCodeInKuaidi100(String codeInKuaidi100) {
+        this.codeInKuaidi100 = codeInKuaidi100;
+    }
 
     public Long getId() {
         return id;

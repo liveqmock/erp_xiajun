@@ -1,15 +1,11 @@
 package com.wangqin.globalshop.biz1.app.vo;
 
-import java.io.Serializable;
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang.time.DateFormatUtils;
-
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 
 
 /**
@@ -36,7 +32,7 @@ public class ItemQueryVO extends PageQueryVO{
 	private Long companyId;
 	
 	private String name;
-
+	private Date    gmtModify;
 	private Long categoryId;
 
 	private String categoryName;
@@ -184,6 +180,14 @@ public class ItemQueryVO extends PageQueryVO{
 	}
 	public void setSkuWeight(String skuWeight) {
 		this.skuWeight = skuWeight;
+	}
+
+	public Date getGmtModify() {
+		return gmtModify;
+	}
+
+	public void setGmtModify(Date gmtModify) {
+		this.gmtModify = gmtModify;
 	}
 
 	private String skuWeight;
