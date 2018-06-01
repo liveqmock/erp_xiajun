@@ -49,14 +49,20 @@ public class BookingRecordServiceImpl implements InventoryBookingRecordService {
 	 *            唯一商品型号 类似skucode
 	 * @return
 	 */
-	@Override
-	public List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(String itemCode, String skuCode, Object o) {
-		return null;
-	}
+//	//@Override
+//	//public List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(String itemCode, String skuCode, Object o) {
+//	/	return null;
+//	}
 
 	@Override
 	public InventoryBookingRecordDO queryById(Long id) {
 		return mapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(String itemCode, String skuCode, Object o) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

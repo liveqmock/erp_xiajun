@@ -9,7 +9,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataVo;
 public class InventoryQueryVO extends PageQueryVO {
 
 	
-	private Long warehouseId;
+	private String warehouseNo;
 	
 	private String skuCode;
 	
@@ -19,7 +19,7 @@ public class InventoryQueryVO extends PageQueryVO {
 
 	private Integer operatorType;
 	
-	private String positionNo;
+	private String shelfNo;
 	
 	private String orderBy;
 	
@@ -37,12 +37,24 @@ public class InventoryQueryVO extends PageQueryVO {
 		this.companyNo = companyNo;
 	}
 
-	public String getPositionNo() {
-		return positionNo;
+    
+
+
+
+	public String getWarehouseNo() {
+		return warehouseNo;
 	}
 
-	public void setPositionNo(String positionNo) {
-		this.positionNo = positionNo;
+	public void setWarehouseNo(String warehouseNo) {
+		this.warehouseNo = warehouseNo;
+	}
+
+	public String getShelfNo() {
+		return shelfNo;
+	}
+
+	public void setShelfNo(String shelfNo) {
+		this.shelfNo = shelfNo;
 	}
 
 	public Integer getOperatorType() {
@@ -53,13 +65,7 @@ public class InventoryQueryVO extends PageQueryVO {
 		this.operatorType = operatorType;
 	}
 
-	public Long getWarehouseId() {
-		return warehouseId;
-	}
 
-	public void setWarehouseId(Long warehouseId) {
-		this.warehouseId = warehouseId;
-	}
 
 	public String getSkuCode() {
 		return skuCode;
