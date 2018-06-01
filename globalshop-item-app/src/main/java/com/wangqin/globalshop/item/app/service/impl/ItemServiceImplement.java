@@ -53,6 +53,14 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private IUploadFileService uploadFileService;
 
+    //插入单个商品
+    @Override
+    public int insertItemSelective(ItemDO item) {
+    	item.setCreator("admin");
+    	item.setModifier("admin");
+    	return itemDOMapperExt.insertItemSelective(item);
+    }
+  	
     @Override
     public void addItem(ItemDO item) {
     	

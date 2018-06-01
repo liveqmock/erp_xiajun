@@ -90,7 +90,11 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 		itemBrandDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	
+	//插入单个品牌
+	@Override
+	public int insertBrandSelective(ItemBrandDO brand) {
+    	return itemBrandDOMapperExt.insertBrandSelective(brand);
+    }
 	
 
 }

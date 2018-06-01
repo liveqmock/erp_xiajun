@@ -23,17 +23,16 @@ public interface ICountryService {
 	 */
 	//Country selectCountryByName(String name);
 	
-	/**
-	 * 添加国家
-	 * @param country
-	 */
-	//void addCountry(Country country);
+
+	//插入单个国家
+	int insertCountrySelective(CountryDO country);
 	
 	/**
 	 * 查找所有国家
 	 */
 	JsonPageResult<List<CountryDO>> queryAllCountries();
 	
+	//按条件查找国家
 	CountryDO queryCountrySelective(CountryDO countryDO);
 	
 	String queryCodeById(Integer id);

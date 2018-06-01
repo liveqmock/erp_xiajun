@@ -264,13 +264,11 @@ public class ItemController  {
 			} catch(Exception e) {
 				//
 			}
-			newItem.setCreator("admin");
-			newItem.setModifier("admin");
 			newItem.setItemCode(RandomUtils.getTimeRandom());
 			
-	        //newItem.setDesc(item.getRemark());
+	        newItem.setDesc(item.getRemark());
 	        newItem.setCompanyNo(RandomUtils.getTimeRandom());      
-	        iItemService.addItem(newItem);
+	        iItemService.insertItemSelective(newItem);
 	        /**插入itemsku和库存**/
 	        List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
 	        		if (itemSkuList != null && !itemSkuList.isEmpty()) {

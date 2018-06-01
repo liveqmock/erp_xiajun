@@ -41,4 +41,6 @@ public interface IItemBrandService {
 	
 	void deleteByPrimaryKey(Long id);
     
+	//插入单个品牌
+    int insertBrandSelective(ItemBrandDO brand);
 }
