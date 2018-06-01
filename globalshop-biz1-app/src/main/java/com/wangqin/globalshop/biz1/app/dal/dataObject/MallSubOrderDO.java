@@ -50,13 +50,13 @@ public class MallSubOrderDO {
 
     private Integer quantity;
 
-    private Integer    status;
+    private Integer    status = 0;
 
     private String  closeReason;
 
     private String  warehouseNo;
 
-    private Integer stockStatus;
+    private Integer stockStatus = 0;
 
     private String  shippingOrderNo;
 
