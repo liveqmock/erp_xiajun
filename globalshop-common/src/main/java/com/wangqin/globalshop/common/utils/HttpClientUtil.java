@@ -4,6 +4,7 @@ package com.wangqin.globalshop.common.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,18 +12,40 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import net.sf.json.JSONObject;
@@ -272,4 +295,149 @@ public class HttpClientUtil {
     	String ttt = post("http://api.yuntongexpress.cn/api.ashx", null, param, "2", "2");
     	System.out.println(ttt);
 	}
+    
+    
+    public static String get(String url) {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(url);
+        CloseableHttpResponse response;
+        try {
+            response = httpclient.execute(httpget);
+            try {
+                HttpEntity entity = response.getEntity();
+                // 显示结果
+                return EntityUtils.toString(entity, "utf-8");
+            } finally {
+                response.close();
+            }
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static String post(String url, String content) {
+        return post(url, content, null);
+    }
+
+    public static String post(String url, String content, Map<String, String> headers) {
+        HttpResponse response = postRequest(url, content, headers);
+        HttpEntity entity = response.getEntity();
+        try {
+            return EntityUtils.toString(entity, "utf-8");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static byte[] postWithResponseByte(String url, String content, Map<String, String> headers) {
+        HttpResponse response = postRequest(url, content, headers);
+        HttpEntity entity = response.getEntity();
+        try {
+            return EntityUtils.toByteArray(entity);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static HttpResponse postRequest(String url, String content, Map<String, String> headers) {
+        HttpClient httpclient = getNewHttpClient();
+        try {
+            SSLContext ctx = SSLContext.getInstance("SSL");
+            X509TrustManager tm = new X509TrustManager() {
+
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain,
+                                               String authType) throws java.security.cert.CertificateException {
+                }
+
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain,
+                                               String authType) throws java.security.cert.CertificateException {
+                }
+
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            };
+            ctx.init(null, new TrustManager[] { tm }, null);
+            SSLSocketFactory ssf = new SSLSocketFactory(ctx);
+            ClientConnectionManager ccm = httpclient.getConnectionManager();
+            // register https protocol in httpclient's scheme registry
+            SchemeRegistry sr = ccm.getSchemeRegistry();
+            sr.register(new Scheme("https", 443, ssf));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        HttpPost httpPost = new HttpPost(url);
+
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                httpPost.addHeader(key, headers.get(key));
+            }
+        }
+
+        HttpEntity requestEntity = new StringEntity(content, "utf-8");
+        httpPost.setEntity(requestEntity);
+
+        try {
+            return httpclient.execute(httpPost);
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @SuppressWarnings("deprecation")
+    private static HttpClient getNewHttpClient() {
+        try {
+            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            trustStore.load(null, null);
+            SSLSocketFactory sf = new SSLSocketFactory(trustStore);
+            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            HttpParams params = new BasicHttpParams();
+            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+            SchemeRegistry registry = new SchemeRegistry();
+            registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+            registry.register(new Scheme("https", sf, 443));
+            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+            return new DefaultHttpClient(ccm, params);
+        } catch (Exception e) {
+            return new DefaultHttpClient();
+        }
+    }
+
+    public static String getRequestBody(HttpServletRequest request) {
+        int size = request.getContentLength();
+        byte[] content = new byte[size];
+        try {
+            InputStream is = request.getInputStream();
+            int pad = 0;
+            while (pad < size) {
+                pad += is.read(content, pad, size);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String body = new String(content);
+        return body;
+    }
 }

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -42,7 +41,7 @@ public class LogAspect {
     }
 
 
-//    @AfterReturning(value = "pointcutExpression()", returning = "returnValue")
+    //@AfterReturning(value = "pointcutExpression()", returning = "returnValue")
     public void afterRunningMethod(JoinPoint joinPoint, Object returnValue) {
         LogWorker.log(log,"返回通知执行，执行结果：" ,"");
     }
