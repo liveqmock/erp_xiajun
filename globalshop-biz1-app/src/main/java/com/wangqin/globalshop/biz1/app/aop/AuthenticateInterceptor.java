@@ -4,13 +4,15 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangqin.globalshop.common.utils.LogWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.common.result.Cache;
+import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CookieUtil;
 
@@ -26,6 +28,7 @@ import com.wangqin.globalshop.common.utils.CookieUtil;
  * @see AppUtil
  * @author Sivan
  */
+@Slf4j
 public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
 
     private String sessionIDName;
@@ -69,6 +72,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                     return true;
                 }
             }catch (Exception e){
+                LogWorker.log(log,"从Cache获取session异常，跳转登录页面","");
                 response.setStatus(302);
                 return false;
             }

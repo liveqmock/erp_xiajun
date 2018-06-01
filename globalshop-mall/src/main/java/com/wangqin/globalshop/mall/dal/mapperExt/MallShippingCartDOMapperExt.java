@@ -9,4 +9,9 @@ public interface MallShippingCartDOMapperExt extends MallShippingCartDOMapper {
 
     List<MallShippingCartDO> selectListByOpenId(String openId);
 
+    MallShippingCartDO selectByOpenIdAndSkuCode(String skuCode, String openId);
+
+    Integer deleteShoppingByIdsAndOpenId(List<String> idList, String openId);
+
+
 }

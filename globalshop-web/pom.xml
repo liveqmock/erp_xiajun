@@ -50,6 +50,11 @@
             <artifactId>globalshop-item-app</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+         <dependency>
+            <groupId>com.wangqin.globalshop</groupId>
+            <artifactId>globalshop-mall</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>com.wangqin.globalshop</groupId>-->
             <!--<artifactId>globalshop-usercenter-app</artifactId>-->
@@ -70,6 +75,16 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wangqin.globalshop</groupId>
+            <artifactId>globalshop-order-app</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wangqin.globalshop</groupId>
+            <artifactId>globalshop-channel</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
 
