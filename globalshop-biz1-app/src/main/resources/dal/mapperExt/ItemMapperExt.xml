@@ -23,6 +23,243 @@
         T1.modifier AS userModify 
     </sql>
     
+    <!-- 插入单个商品 -->
+    <insert id="insertItemSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
+    insert into item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="categoryCode != null" >
+        category_code,
+      </if>
+      <if test="qrCodeUrl != null" >
+        qr_code_url,
+      </if>
+      <if test="video != null" >
+        video,
+      </if>
+      <if test="subtitle != null" >
+        subtitle,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="enName != null" >
+        en_name,
+      </if>
+      <if test="itemShort != null" >
+        item_short,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="saleType != null" >
+        sale_type,
+      </if>
+      <if test="mainPic != null" >
+        main_pic,
+      </if>
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="origin != null" >
+        origin,
+      </if>
+      <if test="freight != null" >
+        freight,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="logisticType != null" >
+        logistic_type,
+      </if>
+      <if test="priceRange != null" >
+        price_range,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="promotion != null" >
+        promotion,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="bookingDate != null" >
+        booking_date,
+      </if>
+      <if test="isSale != null" >
+        is_sale,
+      </if>
+      <if test="wxisSale != null" >
+        wxis_sale,
+      </if>
+      <if test="isFind != null" >
+        is_find,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="spec != null" >
+        spec,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="desc != null" >
+        `desc`,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null" >
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeUrl != null" >
+        #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null" >
+        #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemShort != null" >
+        #{itemShort,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleType != null" >
+        #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="mainPic != null" >
+        #{mainPic,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="origin != null" >
+        #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null" >
+        #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="logisticType != null" >
+        #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="priceRange != null" >
+        #{priceRange,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="promotion != null" >
+        #{promotion,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null" >
+        #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null" >
+        #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null" >
+        #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null" >
+        #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="spec != null" >
+        #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="desc != null" >
+        #{desc},
+      </if>
+      <if test="detail != null" >
+        #{detail},
+      </if>
+    </trim>
+  </insert>
+  
     <!-- 根据条件查询商品总数量(fin)-->
 	<select id="queryItemsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
         SELECT

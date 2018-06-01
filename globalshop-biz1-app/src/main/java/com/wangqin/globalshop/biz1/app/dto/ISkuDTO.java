@@ -2,7 +2,9 @@ package com.wangqin.globalshop.biz1.app.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.common.utils.Money;
 
 
@@ -155,6 +157,9 @@ public class ISkuDTO implements Serializable {
 	
 
 	private Integer itemSkuQuantity;
+	
+	//规格
+	private List<ItemSkuScaleDO> scaleList;
 	
 	public Double getCostPrice() {
 		return costPrice;
@@ -474,5 +479,13 @@ public class ISkuDTO implements Serializable {
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
+	public List<ItemSkuScaleDO> getScaleList() {
+		return scaleList;
+	}
+	public void setScaleList(List<ItemSkuScaleDO> scaleList) {
+		this.scaleList = scaleList;
+	}
+	
+	
 
 }

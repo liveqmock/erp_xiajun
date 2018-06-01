@@ -27,4 +27,7 @@ public interface ItemBrandDOMapperExt  extends ItemBrandDOMapper {
         List<ItemBrandDO> queryAllBrand();
 
         Integer queryItemBrandCount(ItemBrandQueryVO brandQueryVO);
+        
+        //插入单个品牌
+        int insertBrandSelective(ItemBrandDO brand);
 }

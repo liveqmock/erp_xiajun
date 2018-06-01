@@ -8,6 +8,65 @@
         id, name, country_code AS countryCode
     </sql>
     
+    <!-- 插入单个国家 -->
+    <insert id="insertCountrySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
+    insert into country
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="countryCode != null" >
+        country_code,
+      </if>
+      <if test="lengthUnit != null" >
+        length_unit,
+      </if>
+      <if test="volumeUnit != null" >
+        volume_unit,
+      </if>
+      <if test="weightUnit != null" >
+        weight_unit,
+      </if>
+      <if test="moneyUnit != null" >
+        money_unit,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null" >
+        #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lengthUnit != null" >
+        #{lengthUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeUnit != null" >
+        #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="weightUnit != null" >
+        #{weightUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyUnit != null" >
+        #{moneyUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
     <!-- 根据名字查找国家，防止添加已存在的国家
     <select id="selectCountryByName" resultType="com.wangqin.model.Country" parameterType="java.lang.String">
 		SELECT 
@@ -39,7 +98,7 @@
         </where>
 	</select>
 	
-	
+	<!-- 查找国家 -->
 	<select id="queryCountrySelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
    		select
     	<include refid="Base_Column_List" />
@@ -47,37 +106,37 @@
       <where>
       is_del=0
       <if test="id != null" >
-        id = #{id,jdbcType=BIGINT},
+        and id = #{id,jdbcType=BIGINT}
       </if>
       <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+        and name = #{name,jdbcType=VARCHAR}
       </if>
       <if test="countryCode != null" >
-        country_code = #{countryCode,jdbcType=VARCHAR},
+         and country_code = #{countryCode,jdbcType=VARCHAR}
       </if>
       <if test="lengthUnit != null" >
-        length_unit = #{lengthUnit,jdbcType=VARCHAR},
+         and length_unit = #{lengthUnit,jdbcType=VARCHAR}
       </if>
       <if test="volumeUnit != null" >
-        volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+         and volume_unit = #{volumeUnit,jdbcType=VARCHAR}
       </if>
       <if test="weightUnit != null" >
-        weight_unit = #{weightUnit,jdbcType=VARCHAR},
+         and weight_unit = #{weightUnit,jdbcType=VARCHAR}
       </if>
       <if test="moneyUnit != null" >
-        money_unit = #{moneyUnit,jdbcType=VARCHAR},
+         and money_unit = #{moneyUnit,jdbcType=VARCHAR}
       </if>
       <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+         and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
       </if>
       <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+         and gmt_modify = #{gmtModify,jdbcType=TIMESTAMP}
       </if>
       <if test="creator != null" >
-        creator = #{creator,jdbcType=VARCHAR},
+         and creator = #{creator,jdbcType=VARCHAR}
       </if>
       <if test="modifier != null" >
-        modifier = #{modifier,jdbcType=VARCHAR},
+         and modifier = #{modifier,jdbcType=VARCHAR}
       </if>
     </where> 
   </select>
