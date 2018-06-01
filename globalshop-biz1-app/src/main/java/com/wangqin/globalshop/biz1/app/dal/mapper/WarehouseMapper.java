@@ -7,5 +7,15 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
  * @data 2018/06/01
  */
 public interface WarehouseMapper {
-    WarehouseDO selectByWarehourseNo(String warehouseNo);
+    int deleteByPrimaryKey(Long id);
+
+    int insert(WarehouseDO record);
+
+    int insertSelective(WarehouseDO record);
+
+    WarehouseDO selectByPrimaryKey(Long id);
+
+    int updateByPrimaryKeySelective(WarehouseDO record);
+
+    int updateByPrimaryKey(WarehouseDO record);
 }
