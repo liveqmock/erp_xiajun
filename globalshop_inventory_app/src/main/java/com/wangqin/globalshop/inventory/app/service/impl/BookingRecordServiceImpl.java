@@ -40,7 +40,15 @@ public class BookingRecordServiceImpl implements InventoryBookingRecordService {
 			mapper.updateByPrimaryKey(record);
 		}
 	}
-
+	/**
+	 * 计算分仓库总库存量
+	 *
+	 * @param itemId
+	 *            商品ID ，后续分库分表可使用
+	 * @param skuId
+	 *            唯一商品型号 类似skucode
+	 * @return
+	 */
 	@Override
 	public List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(String itemCode, String skuCode, Object o) {
 		return null;

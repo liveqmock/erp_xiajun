@@ -40,4 +40,24 @@ public class WarehouseServiceImpl implements IWarehouseService {
 	public WarehouseDO getWarehouseById(Long warehouseId) {
 		return mapper.selectByPrimaryKey(warehouseId);
 	}
+
+	@Override
+	public void addWarehouse(WarehouseDO warehouse) {
+		mapper.insertSelective(warehouse);
+	}
+
+	@Override
+	public void updateWarehouse(WarehouseDO warehouse) {
+		mapper.updateByPrimaryKeySelective(warehouse);
+	}
+
+	@Override
+	public Object selectById(Long id) {
+		return mapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public List<WarehouseDO> queryWarehouses(String companyNo) {
+		return mapper.selectByCompanyNo(companyNo);
+	}
 }

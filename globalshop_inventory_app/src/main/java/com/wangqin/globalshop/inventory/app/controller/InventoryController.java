@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
@@ -8,7 +7,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
-import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.shiro.ShiroUser;
@@ -559,67 +557,67 @@ public class InventoryController{
 //		}
 //		return result;
 //	}
-	/**
-	 * 盘出到备货仓
-	 * @param inventoryAreaId
-	 * @param quantity
-	 * @return
-	 * @throws InventoryException
-	 */
-	@RequestMapping("/inventoryCheckOuttoStock")
-	@ResponseBody
-	public Object inventoryCheckOuttoStock(Long inventoryAreaId, Integer quantity) throws InventoryException {
-		// 非空校验
-		if (inventoryAreaId== null ||quantity == null) {
-			return JsonResult.buildFailed("有空数据");
-		}else{
-			if (quantity <= 0) {
-				return JsonResult.buildFailed("盘出的库存要为正数");
-			}
-			try {
-				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
-			} catch (Exception ex) {
-				return JsonResult.buildFailed("未知异常");
-			}
-			
-			//对子订单进行库存分配
-			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
-			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
-		}
-		
-//		InventoryOnWareHouseDO inventoryArea = inventoryAreaMapper.selectById(inventoryAreaId);
-		
-//		InventoryStock tjInsetStock = new InventoryStock();
-//		tjInsetStock.setSkuId(inventoryArea.getSkuId());
-//		InventoryStock selInsetStock = inventoryStockService.selectOne(tjInsetStock);
-//		if(selInsetStock != null) {
-//			selInsetStock.setInventory(selInsetStock.getInventory() + quantity);
-//			selInsetStock.setGmtModify(new Date());
-//			inventoryStockService.updateSelectiveById(selInsetStock);
-//		} else {
-//			InventoryStock insetStock = new InventoryStock();
-//			BeanUtils.copyProperties(inventoryArea, insetStock);
-//			insetStock.setInventory(quantity);
-//			insetStock.setLockedInv(0);
-//			insetStock.setTransInv(0);
-//			insetStock.setLockedTransInv(0);
-//			insetStock.setGmtCreate(new Date());
-//			insetStock.setGmtModify(new Date());
-//			inventoryStockService.insertSelective(insetStock);
+//	/**
+//	 * 盘出到备货仓
+//	 * @param inventoryAreaId
+//	 * @param quantity
+//	 * @return
+//	 * @throws InventoryException
+//	 */
+//	@RequestMapping("/inventoryCheckOuttoStock")
+//	@ResponseBody
+//	public Object inventoryCheckOuttoStock(Long inventoryAreaId, Integer quantity) throws InventoryException {
+//		// 非空校验
+//		if (inventoryAreaId== null ||quantity == null) {
+//			return JsonResult.buildFailed("有空数据");
+//		}else{
+//			if (quantity <= 0) {
+//				return JsonResult.buildFailed("盘出的库存要为正数");
+//			}
+//			try {
+//				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
+//			} catch (Exception ex) {
+//				return JsonResult.buildFailed("未知异常");
+//			}
+//
+//			//对子订单进行库存分配
+//			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+//			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
 //		}
-		return JsonResult.buildSuccess(null);
-	}
-	/**
-	 * 库存调整，库存盘进、盘出
-	 * 
-	 * @param orderId
-	 * @return
-	 * @throws InventoryException
-	 */
-	@RequestMapping("/inventoryStockCheckIn")
-	@ResponseBody
-	public Object inventoryStockCheckIn(Long skuId, Long warehouseId, String positionNo, Integer quantity,Long id)
-			throws InventoryException {
+//
+////		InventoryOnWareHouseDO inventoryArea = inventoryAreaMapper.selectById(inventoryAreaId);
+//
+////		InventoryStock tjInsetStock = new InventoryStock();
+////		tjInsetStock.setSkuId(inventoryArea.getSkuId());
+////		InventoryStock selInsetStock = inventoryStockService.selectOne(tjInsetStock);
+////		if(selInsetStock != null) {
+////			selInsetStock.setInventory(selInsetStock.getInventory() + quantity);
+////			selInsetStock.setGmtModify(new Date());
+////			inventoryStockService.updateSelectiveById(selInsetStock);
+////		} else {
+////			InventoryStock insetStock = new InventoryStock();
+////			BeanUtils.copyProperties(inventoryArea, insetStock);
+////			insetStock.setInventory(quantity);
+////			insetStock.setLockedInv(0);
+////			insetStock.setTransInv(0);
+////			insetStock.setLockedTransInv(0);
+////			insetStock.setGmtCreate(new Date());
+////			insetStock.setGmtModify(new Date());
+////			inventoryStockService.insertSelective(insetStock);
+////		}
+//		return JsonResult.buildSuccess(null);
+//	}
+//	/**
+//	 * 库存调整，库存盘进、盘出
+//	 *
+//	 * @param orderId
+//	 * @return
+//	 * @throws InventoryException
+//	 */
+//	@RequestMapping("/inventoryStockCheckIn")
+//	@ResponseBody
+//	public Object inventoryStockCheckIn(Long skuId, Long warehouseId, String positionNo, Integer quantity,Long id)
+//			throws InventoryException {
 ////		InventoryStock insetStock = inventoryStockService.selectById(id);
 //		if(quantity > insetStock.getInventory()) {
 //			return JsonResult.buildFailed("存入库存数量超过国内仓现有数量");
@@ -651,6 +649,6 @@ public class InventoryController{
 ////		insetStock.setInventory(insetStock.getInventory()- quantity);
 ////		inventoryStockService.updateSelectiveById(insetStock);
 //		return JsonResult.buildSuccess(null);
-		return null;
-	}
+//		return null;
+//	}
 }
