@@ -1,14 +1,12 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.item.app.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -18,19 +16,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.item.app.service.IFreightService;
-import com.wangqin.globalshop.item.app.service.IInventoryService;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.IUploadFileService;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ItemServiceImplement implements IItemService {

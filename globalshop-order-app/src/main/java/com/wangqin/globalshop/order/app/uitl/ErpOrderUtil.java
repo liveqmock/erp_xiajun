@@ -36,6 +36,6 @@ public class ErpOrderUtil {
 				}
 			}
 		}
-		erpOrder.setStockStatus((byte) stockstatus);
+		erpOrder.setStockStatus( stockstatus);
 	}
 }

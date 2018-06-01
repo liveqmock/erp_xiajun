@@ -7,7 +7,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO;
 import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -126,7 +125,7 @@ public class MallOrderController {
             //查询是否有发货的订单，有的话订单不能修改
             MallSubOrderDO erpOrderQuery = new MallSubOrderDO();
             erpOrderQuery.setOrderNo(mallOrderVO.getOrderNo());
-            erpOrderQuery.setStatus((byte) OrderStatus.SENT.getCode());
+            erpOrderQuery.setStatus(OrderStatus.SENT.getCode());
             int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
             if (sendOrder > 0) {
                 return JsonResult.buildFailed("有子订单发货不能修改");
@@ -261,7 +260,7 @@ public class MallOrderController {
                 //查询是否有发货的订单，有的话订单不能修改
                 MallSubOrderDO erpOrderQuery = new MallSubOrderDO();
                 erpOrderQuery.setOrderNo(outerOrder.getOrderNo());
-                erpOrderQuery.setStatus((byte) OrderStatus.SENT.getCode());
+                erpOrderQuery.setStatus( OrderStatus.SENT.getCode());
                 int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
                 if (sendOrder > 0) {
                     return errorMsg.add("第" + i + "条有子订单发货不能关闭");
@@ -276,7 +275,7 @@ public class MallOrderController {
                             //1,释放子订单库存
                             inventoryService.releaseInventory(erpOrder);
                             //2,更改子订单状态
-                            erpOrder.setStatus((byte) OrderStatus.CLOSE.getCode());
+                            erpOrder.setStatus( OrderStatus.CLOSE.getCode());
                             erpOrder.setGmtModify(new Date());
                             mallSubOrderService.update(erpOrder);
                         } catch (InventoryException e) {
@@ -285,7 +284,7 @@ public class MallOrderController {
                     }
                 }
                 //2、更改主子订单状态
-                outerOrder.setStatus((byte) OrderStatus.CLOSE.getCode());
+                outerOrder.setStatus( OrderStatus.CLOSE.getCode());
                 outerOrder.setGmtModify(new Date());
                 mallOrderService.updateById(outerOrder);
             }
@@ -398,7 +397,7 @@ public class MallOrderController {
             outerOrderList.forEach((outerOrder) -> {
                 mallOrderService.review(outerOrder.getOrderNo());
 
-                outerOrder.setStatus((byte) 0);
+                outerOrder.setStatus( 0);
                 mallOrderService.updateById(outerOrder);
             });
         }

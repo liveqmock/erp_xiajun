@@ -161,7 +161,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
         inventoryMapper.updateByPrimaryKey(inventory);
 
         // 修改订单状态 为已释放
-        order.setStockStatus((byte) StockUpStatus.RELEASED.getCode());
+        order.setStockStatus(StockUpStatus.RELEASED.getCode());
         order.setWarehouseNo(null);
         order.setGmtModify(new Date());
         mallsubOrderService.update(order);

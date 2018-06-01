@@ -39,7 +39,7 @@ public interface IInventoryService {
 	 * @param skuId
 	 * @return
 	 */
-	InventoryDO queryInventoryBySkuId(Long itemId,Long skuId);
+//	InventoryDO queryInventoryBySkuId(Long itemId,Long skuId);
 	InventoryDO queryInventoryBySkuId(String itemId,String skuId) ;
 
 	InventoryAddVO queryInvBySkuCode(String skuCode);

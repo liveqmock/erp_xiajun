@@ -14,4 +14,6 @@ public interface WarehouseDOMapper {
     int updateByPrimaryKeySelective(WarehouseDO record);
 
     int updateByPrimaryKey(WarehouseDO record);
+
+    WarehouseDO selectByWarehourseNo(String warehouseNo);
 }

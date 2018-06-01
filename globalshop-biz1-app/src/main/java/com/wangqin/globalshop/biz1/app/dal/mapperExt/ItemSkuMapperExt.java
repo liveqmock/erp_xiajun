@@ -55,4 +55,10 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	void deleteBySkuCode(String skuCode);
 
     ItemSkuDO queryItemBySkuCode(@Param("skuCode") String skuCode);
+
+    List<ItemSkuDO> queryPoList(ItemSkuDO skuSo);
+
+	ItemSkuDO queryPo(ItemSkuDO itemSkuDO);
+
+	Integer queryPoCount(ItemSkuDO itemSkuDO);
 }

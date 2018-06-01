@@ -231,7 +231,7 @@ public class ShippingOrderController {
 				tjErpOrder.setReceiverState(erpOrder.getReceiverState());
 				tjErpOrder.setReceiverCity(erpOrder.getReceiverCity());
 				tjErpOrder.setReceiverDistrict(erpOrder.getReceiverDistrict());
-				tjErpOrder.setStatus((byte) 0);								//订单状态：新建
+				tjErpOrder.setStatus( 0);								//订单状态：新建
 				//tjErpOrder.setStockStatus(erpOrder.getStockStatus());	//备货状态：已备货
 				//tjErpOrder.setWarehouseId(erpOrder.getWarehouseId());	//相同仓库
 
@@ -732,7 +732,7 @@ public class ShippingOrderController {
 		erpOrderList.forEach(erpOrder -> {
 			//拼邮、备货状态(已备货)、子订单状态(新建)
 			if(erpOrder.getLogisticType()!=null && erpOrder.getLogisticType()==1 && erpOrder.getStockStatus()==StockUpStatus.STOCKUP.getCode() && erpOrder.getStatus()== OrderStatus.INIT.getCode()) {
-				erpOrder.setStockStatus((byte) StockUpStatus.PREPARE.getCode());
+				erpOrder.setStockStatus(StockUpStatus.PREPARE.getCode());
 				mallSubOrderService.update(erpOrder);
 			} else {
 				errorMsg.append(erpOrder.getShopCode() + ",");

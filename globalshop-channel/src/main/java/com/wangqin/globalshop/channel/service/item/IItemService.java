@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.channel.service.item;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
 
 import java.util.List;
 

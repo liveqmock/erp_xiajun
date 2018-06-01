@@ -11,10 +11,10 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.LogisticCompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.service.channel.ChannelFactory;
-import com.wangqin.globalshop.biz1.app.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
+import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -133,7 +133,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             tjErpOrder.setReceiverState(mallSubOrder.getReceiverState());
             tjErpOrder.setReceiverCity(mallSubOrder.getReceiverCity());
             tjErpOrder.setReceiverDistrict(mallSubOrder.getReceiverDistrict());
-            tjErpOrder.setStatus((byte) 0);								//订单状态：新建
+            tjErpOrder.setStatus( 0);								//订单状态：新建
             //tjErpOrder.setStockStatus(erpOrder.getStockStatus());	//备货状态：已备货
             //tjErpOrder.setWarehouseId(erpOrder.getWarehouseId());	//相同仓库
             List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectByOrderNo(mallSubOrder.getOrderNo());
@@ -186,7 +186,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 //扣减库存
                 inventoryService.sendInventroyOrder(erpOrder);
                 //修改子订单状态
-                erpOrder.setStatus((byte) OrderStatus.SENT.getCode());
+                erpOrder.setStatus(OrderStatus.SENT.getCode());
             } else if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()) {
                 throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getShopCode());
             } else {
@@ -349,7 +349,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 //扣减库存
                 orderInventoryService.sendInventroyOrder(erpOrder);
                 //修改子订单状态
-                erpOrder.setStatus((byte) OrderStatus.SENT.getCode());
+                erpOrder.setStatus(OrderStatus.SENT.getCode());
             } else if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()) {
                 throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getOrderNo());
             } else {

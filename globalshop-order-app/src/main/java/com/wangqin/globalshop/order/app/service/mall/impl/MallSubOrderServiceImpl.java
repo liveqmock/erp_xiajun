@@ -108,7 +108,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     @Transactional
     public void closeErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
-        erpOrder.setStatus((byte) OrderStatus.CLOSE.getCode());
+        erpOrder.setStatus(OrderStatus.CLOSE.getCode());
         erpOrder.setGmtModify(new Date());
         mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
         //备货状态清空占用库存
@@ -124,8 +124,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         BeanUtils.copyProperties(erpOrder, newErpOrder);
         newErpOrder.setId(null);
 //		newErpOrder.setErpNo(erpNo);
-        newErpOrder.setStatus((byte) OrderStatus.INIT.getCode());
-        newErpOrder.setStockStatus((byte) StockUpStatus.INIT.getCode());
+        newErpOrder.setStatus(OrderStatus.INIT.getCode());
+        newErpOrder.setStockStatus( StockUpStatus.INIT.getCode());
         newErpOrder.setGmtModify(new Date());
         newErpOrder.setQuantity(erpOrder.getQuantity()-splitCount);
         newErpOrder.setWarehouseNo(null);
@@ -292,7 +292,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                         tran.setGmtModify(new Date());
                     }
                 }
-                erpOrder.setStockStatus((byte) StockUpStatus.STOCKUP.getCode());
+                erpOrder.setStockStatus( StockUpStatus.STOCKUP.getCode());
                 erpOrder.setGmtModify(new Date());
                 mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 

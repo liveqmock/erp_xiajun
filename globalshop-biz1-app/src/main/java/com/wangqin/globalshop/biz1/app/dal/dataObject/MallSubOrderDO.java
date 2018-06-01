@@ -50,7 +50,7 @@ public class MallSubOrderDO {
 
     private Integer quantity;
 
-    private Byte    status;
+    private Integer    status;
 
     private String  closeReason;
 
@@ -158,6 +158,14 @@ public class MallSubOrderDO {
 
     public void setChannelOrderNo(String channelOrderNo) {
         this.channelOrderNo = channelOrderNo == null ? null : channelOrderNo.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getSkuCode() {
@@ -281,13 +289,6 @@ public class MallSubOrderDO {
         this.quantity = quantity;
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
 
     public String getCloseReason() {
         return closeReason;

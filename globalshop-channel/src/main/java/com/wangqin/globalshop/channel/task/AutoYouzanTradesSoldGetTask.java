@@ -1,21 +1,20 @@
 package com.wangqin.globalshop.channel.task;
 
-import java.util.List;
-
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
+import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.channel.service.company.ICompanyService;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
-import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountSo;
-import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
-import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.channel.service.company.ICompanyService;
-import com.wangqin.globalshop.common.utils.EasyUtil;
+import java.util.List;
 
 /**
  * 自动去有赞下载订单

@@ -14,7 +14,7 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	/**
 	 * 状态
 	 */
-	private Byte status;// 订单状态
+	private Integer status;// 订单状态
 	/**
 	 * 条形码
 	 */
@@ -36,12 +36,12 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	private String closeReason;
 
 	@Override
-	public Byte getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
 	@Override
-	public void setStatus(Byte status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 

@@ -1,57 +1,37 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.eclipse.jetty.util.StringUtil;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.dal.youzan.PicModel;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
-import com.wangqin.globalshop.common.utils.Md5Util;
-import com.wangqin.globalshop.common.utils.StringUtils;
-
+import com.wangqin.globalshop.common.utils.*;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.util.StringUtil;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Channel(type=ChannelType.HaiHu)
 public class HaihuChannelServiceImpl extends AbstractChannelService {
@@ -440,7 +420,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 		return null;
 	}
 
-
+	@Override
 	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("packageNo", shippingOrder.getShippingNo());

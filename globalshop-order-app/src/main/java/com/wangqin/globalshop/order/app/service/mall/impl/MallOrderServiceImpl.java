@@ -113,7 +113,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
                     inventoryService.update(inventory);
                 }
             }
-            mallSubOrderDOMapper.insert(outerOrderDetail);
+            mallSubOrderDOMapper.insertSelective(outerOrderDetail);
         }
         outerOrder.setTotalAmount(totalPrice);
         mallOrderDOMapper.insertSelective(outerOrder);

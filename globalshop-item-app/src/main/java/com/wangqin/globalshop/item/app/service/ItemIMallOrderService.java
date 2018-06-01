@@ -3,7 +3,7 @@ package com.wangqin.globalshop.item.app.service;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 
 
-public interface IMallOrderService {
+public interface ItemIMallOrderService {
 
 	/**
 	 * 外部订单到入内部订单

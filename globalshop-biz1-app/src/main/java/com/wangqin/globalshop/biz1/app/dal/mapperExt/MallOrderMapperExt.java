@@ -52,4 +52,9 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
 
 	List<MallOrderDO> queryOuterOrderForExcel(MallOrderVO outerOrderQueryVO);
 
+    Integer queryPoCount(MallOrderDO mallOrderDO);
+
+	MallOrderDO queryPo(MallOrderDO mallOrderDO);
+
+	List<MallOrderDO> queryPoList(MallOrderDO mallOrderDO);
 }

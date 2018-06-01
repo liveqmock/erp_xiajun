@@ -26,6 +26,11 @@ public class InventoryServiceImpl implements IInventoryService {
     	inventoryMapper.lockVirtualInv(inventory);
     }
 
+//    @Override
+//    public InventoryDO queryInventoryBySkuId(Long itemId, Long skuId) {
+//        return inventoryMapper.qu;
+//    }
+
     @Override
     public InventoryDO queryInventoryBySkuId(String itemCode, String skuCode) {
         return inventoryMapper.getInventoryBySkuId(itemCode, skuCode);

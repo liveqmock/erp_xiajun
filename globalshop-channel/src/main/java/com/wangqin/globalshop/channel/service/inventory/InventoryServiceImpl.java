@@ -1,19 +1,5 @@
 package com.wangqin.globalshop.channel.service.inventory;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryBookingRecordDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryOnWarehouseMapperExt;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -24,11 +10,22 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.InventoryVo;
-import com.wangqin.globalshop.channel.service.order.IMallSubOrderService;
+import com.wangqin.globalshop.channel.service.order.ChannelIMallSubOrderService;
 import com.wangqin.globalshop.channel.service.warehouse.IWarehouseService;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -38,15 +35,19 @@ import com.wangqin.globalshop.common.utils.BeanUtils;
 @Service("inventoryService")
 public class InventoryServiceImpl  implements IInventoryService {
 
-	@Autowired CAInventoryDOMapperExt inventoryDOMapperExt;
+	@Autowired
+	private InventoryDOMapperExt inventoryDOMapperExt;
 
-	@Autowired CAInventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
+	@Autowired
+	private InventoryOnWarehouseMapperExt inventoryOnWarehouseMapperExt;
 
-	@Autowired CAInventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
+	@Autowired
+	private InventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
 
 	@Autowired IWarehouseService warehouseService;
 
-	@Autowired IMallSubOrderService mallSubOrderService;
+	@Autowired
+    ChannelIMallSubOrderService mallSubOrderService;
 
 
 	public InventoryDOMapper getMapper(){

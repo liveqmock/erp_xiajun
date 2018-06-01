@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAChannelAccountDOMapperExt" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt" >
 
     <sql id="tableSection">channel_account</sql>
 
 
-    <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="channel_id" property="channelId" jdbcType="BIGINT" />
         <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
@@ -81,7 +81,7 @@
 
 
     <!--查询总条数 -->
-    <select id="queryPo" resultMap="BaseResultMap2"
+    <select id="queryPo" resultMap="BaseResultMap"
             >
         SELECT <include refid="Base_Column_List2" />
         FROM channel_account T
@@ -99,13 +99,20 @@
     </select>
 
     <!-- -->
-    <select id="queryPoList" resultMap="BaseResultMap2"
+    <select id="queryPoList" resultMap="BaseResultMap"
             >
         SELECT  <include refid="Base_Column_List2" />
         FROM channel_account T
         WHERE
         <include refid="commonSelectSection"/>
         ORDER BY T.id desc
+    </select>
+
+    <select id="queryByTypeAndCompanyNo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List2" />
+        from channel_account
+        where t = #{id,jdbcType=BIGINT}
     </select>
 
 </mapper>

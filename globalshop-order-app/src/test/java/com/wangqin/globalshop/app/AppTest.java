@@ -29,7 +29,7 @@ public class AppTest
                 mallOrderVO.setModifier("修改者");
                 mallOrderVO.setCreator("创建者");
                 mallOrderVO.setTotalAmount(999.1);//总金额
-                mallOrderVO.setPayType((byte) 1);//支付方式
+                mallOrderVO.setPayType(1);//支付方式
                 mallOrderVO.setChannelCustomerNo("bunengweikong");
                 List<MallSubOrderDO> list = new ArrayList<>();
                 MallSubOrderDO orderDO = new MallSubOrderDO();

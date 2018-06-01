@@ -12,10 +12,10 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.IMallOrderService;
+import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
 
 @Service
-public class MallOrderServiceImplement implements IMallOrderService {
+public class MallOrderServiceImplementItem implements ItemIMallOrderService {
 
     @Autowired
     private MallOrderMapperExt            erpOrderMapper;
