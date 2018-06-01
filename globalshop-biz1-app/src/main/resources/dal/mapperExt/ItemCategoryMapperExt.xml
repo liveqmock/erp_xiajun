@@ -15,6 +15,73 @@
 		WHERE name = #{name}
 	</select>
 	
+	 <insert id="insertCategorySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" >
+    insert into item_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="categoryCode != null" >
+        category_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="pCode != null" >
+        p_code,
+      </if>
+      <if test="rootCode != null" >
+        root_code,
+      </if>
+      <if test="seq != null" >
+        seq,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="allPath != null" >
+        all_path,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="categoryCode != null" >
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null" >
+        #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rootCode != null" >
+        #{rootCode,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="allPath != null" >
+        #{allPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
 	
 	
 	<!-- 查询所有类目 -->

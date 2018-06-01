@@ -16,11 +16,14 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
 
     List<ItemCategoryDO> selectByName(String categoryName);
     
- ItemCategoryDO queryByCategoryCode(String categoryCode);
+    ItemCategoryDO queryByCategoryCode(String categoryCode);
  
- List<ItemCategoryDO> selectAll();
+    List<ItemCategoryDO> selectAll();
  
  
- List<ItemCategoryDTO> selectAllDTO();
+    List<ItemCategoryDTO> selectAllDTO();
+    
+    //插入类目
+    void insertCategorySelective(ItemCategoryDO category);
 
 }

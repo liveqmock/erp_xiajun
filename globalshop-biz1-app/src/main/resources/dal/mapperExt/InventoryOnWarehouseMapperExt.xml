@@ -2,6 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt">
 
+ <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="BIGINT" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="upc" property="upc" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+    <result column="inventory" property="inventory" jdbcType="BIGINT" />
+    <result column="locked_inv" property="lockedInv" jdbcType="BIGINT" />
+    <result column="trans_inv" property="transInv" jdbcType="BIGINT" />
+    <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT" />
+    <result column="warehouse_no" property="warehouseNo" jdbcType="BIGINT" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 2.0结果列 -->
+  <sql id="Base_Column_List" >
+    id, company_no, item_code, item_name, upc, scale, sku_code, sku_pic, inventory, locked_inv, 
+    trans_inv, locked_trans_inv, warehouse_no, warehouse_name, shelf_no, batch_no, gmt_create, 
+    gmt_modify, is_del, creator, modifier
+  </sql>
+  
    <!-- 通用查询结果列-->
     <sql id="inventoryAreaResultMapping">
         T1.id As id,T1.item_id AS itemId,T1.sku_id AS skuId,T1.item_name AS itemName,T1.color,T1.scale,T1.sku_code AS skuCode,T1.upc ,T1.sku_pic AS skuPic,T1.locked_inv as lockedInv,T1.inventory,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T1.warehouse_id AS warehouseId, T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify
@@ -11,7 +41,7 @@
         SELECT
         	 <include refid="inventoryAreaResultMapping" />
         FROM
-            inventory_area T1
+            inventory_on_warehouse T1
         <where>
         		<if test="itemId != null">
         			item_id = #{itemId}	
@@ -32,7 +62,7 @@
         SELECT
         	 	item_id AS itemId,sku_id AS skuId,sum(locked_inv) as lockedInv,sum(inventory) as inventory,sum(trans_inv) AS transInv,sum(locked_trans_inv) AS lockedTransInv
         FROM
-            inventory_area T1
+            inventory_on_warehouse T1
         <where>
         		<if test="itemId != null">
         			item_id = #{itemId}	
@@ -50,7 +80,7 @@
         SELECT
         	 	item_id AS itemId,sku_id AS skuId,warehouse_id AS warehouseId,sum(locked_inv) as lockedInv,sum(inventory) as inventory,sum(trans_inv) AS transInv,sum(locked_trans_inv) AS lockedTransInv
         FROM
-            inventory_area T1 
+            inventory_on_warehouse T1 
         LEFT JOIN warehouse T2 ON T1.warehouse_id=T2.id 
         <where>
         		T2.seq>0 
@@ -72,7 +102,7 @@
         SELECT
         	 <include refid="inventoryAreaResultMapping" />
         FROM
-            inventory_area T1
+            inventory_on_warehouse T1
         <where>
         		<if test="itemId != null">
         			item_id = #{itemId}	
@@ -90,7 +120,7 @@
         SELECT
         		count(1)
         FROM
-            inventory_area T1 
+            inventory_on_warehouse T1 
         LEFT JOIN item T2 on T1.item_id=T2.id 
         WHERE  (inventory>0 OR trans_inv>0) 
        		<if test="itemName!=null and itemName!=''">
@@ -121,7 +151,7 @@
         	 <include refid="inventoryAreaResultMapping" />
         	 ,T2.buy_site As buySite,T3.sale_price As salePrice
         FROM
-            inventory_area T1 
+            inventory_on_warehouse T1 
         LEFT JOIN item T2 on T1.item_id=T2.id 
         LEFT JOIN item_sku T3 on T1.sku_id=T3.id 
         WHERE  (inventory>0 OR trans_inv>0) 
@@ -161,7 +191,7 @@
     <select id="queryInventoryAreaForExcel" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
     	SELECT T2.sku_code AS skuCode,T2.item_name AS itemName,T2.sku_pic AS skuPic,T2.brand,T2.upc,T2.color,T2.scale,
     			T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.inventory,T1.locked_inv AS lockedInv,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T2.sale_price AS salePrice 
-    	FROM inventory_area T1 
+    	FROM inventory_on_warehouse T1 
     	LEFT JOIN item_sku T2 ON T1.sku_id=T2.id  
     	WHERE (inventory>0 OR trans_inv>0) 
     	<if test="warehouseId != null">
@@ -188,7 +218,7 @@
     <update id="updateTransToInventoryArea" >  
     		<![CDATA[ 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			inventory = inventory + #{toTrans},
 			trans_inv = trans_inv - #{toTrans},
@@ -202,7 +232,7 @@
 	<update id="updateInventoryAreaCheck" >  
     		<![CDATA[ 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			inventory = inventory - #{toCheck}
 	    WHERE  
@@ -213,7 +243,7 @@
 	<update id="updateInventoryAreaTransCheck" >  
     		<![CDATA[ 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			trans_inv = trans_inv - #{toCheck}
 	    WHERE  
@@ -224,7 +254,7 @@
 	<update id="updateInventoryAreaAddInventory" >  
     		<![CDATA[ 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			inventory = inventory + #{toAdd}
 	    WHERE  
@@ -233,6 +263,6 @@
 	</update> 
 	
 	<update id="updateUpcForInventoryArea" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
-		UPDATE inventory_area SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}
+		UPDATE inventory_on_warehouse SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}
     </update>
 </mapper>
