@@ -45,7 +45,7 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_packaging_pattern
+    insert into shipping_packing_pattern
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
       <if test="patternNo != null" >

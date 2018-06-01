@@ -6,6 +6,11 @@
     <sql id="inventoryResultMapping">
         id,item_id AS itemId,sku_id AS skuId,item_name AS itemName,upc ,sku_code AS skuCode,locked_inv as lockedInv,inventory,virtual_inv AS virtualInv,locked_virtual_inv AS lockedVirtualInv,trans_inv AS transInv,locked_trans_inv AS lockedTransInv,gmt_create AS gmtCreate,gmt_modify AS gmtModify
     </sql>
+    
+     <!-- 通用查询结果列，item模块使用-->
+    <sql id="itemInventoryList">
+        T1.id,T1.sku_code AS sku_code,virtual_inv AS virtualInv,locked_virtual_inv AS lockedVirtualInv
+    </sql>
 
 	<select id="getInventoryBySkuId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO"  >
         SELECT
@@ -103,8 +108,9 @@
 		UPDATE inventory SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};
     </update>
     
-    <update id="updateVirtualInvByItemId" parameterType="java.lang.Long">
-        UPDATE inventory SET virtual_inv=0 WHERE item_id=#{itemId}
+    <!-- item-module -->
+    <update id="updateVirtualInvByItemCode" parameterType="java.lang.String">
+        UPDATE inventory SET virtual_inv=0 WHERE item_code=#{itemCode}
     </update>
     
     
@@ -127,6 +133,47 @@
        sku_code=#{skuCode}
        </where>
     </select>
+    
+    
+    <insert id="insertBatchInventory" parameterType="java.util.List" useGeneratedKeys="true">
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into inventory
+        (company_no,item_code,sku_code,inv,creator,modifier)
+       
+        values
+        <foreach collection="list" item="wdSolr" index="index"
+            separator=",">
+            (
+            #{wdSolr.companyNo},#{wdSolr.itemCode},#{wdSolr.skuCode},#{wdSolr.inventory},
+            #{wdSolr.creator},#{wdSolr.modifier}
+            )
+        </foreach>
+    </insert>
+    
+    <!-- item_module -->
+    <select id="queryInvBySkuCode" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.vo.InventoryAddVO">
+    	select
+    	<include refid="itemInventoryList" />
+    	from inventory T1
+   	 	where T1.is_del=0
+    	AND T1.sku_code=#{skuCode}  
+    </select>
+    
+     <!-- item_module -->
+    <update id="lockVirtualInv" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryAddVO">
+    	update `inventory` T1
+    	set T1.locked_virtual_inv=#{lockedVirtualInv}
+    	where T1.id=#{id}
+    </update>
 
+ 	<!-- item_module -->
+    <update id="deleteInvBySkuCode" parameterType="java.lang.String">
+    	update `inventory` T1
+    	set T1.is_del=1
+    	where T1.sku_code=#{skuCode}
+    </update>
     
 </mapper>
