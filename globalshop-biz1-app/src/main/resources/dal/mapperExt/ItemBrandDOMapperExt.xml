@@ -45,9 +45,9 @@
 		WHERE is_del=0
 	</select>
 
-	<select id="selectByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
+	<select id="selectNoByName" resultType="java.lang.String" parameterType="java.lang.String">
 		SELECT 
-		<include refid="Base_Column_List" />
+		T1.brand_no
 		FROM item_brand T1 
 		WHERE T1.name = #{name}
 		AND T1.is_del=0

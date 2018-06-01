@@ -175,6 +175,7 @@
         <module>globalshop-order-app</module>
         <module>globalshop-channel</module>
         <module>globalshop-purchase</module>
+        <module>globalshop-usercenter-app</module>
     </modules>
 
 

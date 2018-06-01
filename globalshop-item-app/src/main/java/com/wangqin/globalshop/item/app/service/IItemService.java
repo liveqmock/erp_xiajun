@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
@@ -18,7 +20,7 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
 public interface IItemService {
 
-	ItemDO queryItemByItemCode(String itemCode);
+	
 	
 	ItemDO selectByPrimaryKey(Long id);
 	/**
@@ -48,8 +50,9 @@ public interface IItemService {
 	 * @param itemQueryVO
 	 * @return
 	 */
-	JsonPageResult<List<ItemDO>> queryItems(ItemQueryVO itemQueryVO);
+	JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO);
 	
+    ItemDTO queryItemById(Long id);
 	
 	/**
 	 * 通过ID查询多个商品
@@ -83,6 +86,9 @@ public interface IItemService {
 
 	Integer sumNewItemNumByDate(Integer days);
 	
-	Integer sumNewItemNumByMonth(Integer months);	
-    
+	Integer sumNewItemNumByMonth(Integer months);
+	
+	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);
+	
+	void updateItemById(ItemQueryVO itemQueryVO);
 }

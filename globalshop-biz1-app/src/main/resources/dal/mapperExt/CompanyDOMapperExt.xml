@@ -10,12 +10,10 @@
         <if test="companyNo != null">
             and T.company_no = #{companyNo}
         </if>
-        <if test="channelName != null">
+        <if test="companyName != null">
             and T.company_name = #{companyName}
         </if>
-        <if test="companyNo != null">
-            and T.company_no = #{companyNo}
-        </if>
+
         <if test="status != null">
             and T.status = #{status}
         </if>

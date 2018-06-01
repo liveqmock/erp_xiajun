@@ -5,6 +5,43 @@
     <sql id="tableSection">channel_account</sql>
 
 
+    <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="channel_id" property="channelId" jdbcType="BIGINT" />
+        <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+        <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+        <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+        <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR" />
+        <result column="server_url" property="serverUrl" jdbcType="VARCHAR" />
+        <result column="token_url" property="tokenUrl" jdbcType="VARCHAR" />
+        <result column="access_key" property="accessKey" jdbcType="VARCHAR" />
+        <result column="secrete_key" property="secreteKey" jdbcType="VARCHAR" />
+        <result column="cookie" property="cookie" jdbcType="VARCHAR" />
+        <result column="app_value1" property="appValue1" jdbcType="VARCHAR" />
+        <result column="value1_desc" property="value1Desc" jdbcType="VARCHAR" />
+        <result column="app_value2" property="appValue2" jdbcType="VARCHAR" />
+        <result column="value2_desc" property="value2Desc" jdbcType="VARCHAR" />
+        <result column="app_value3" property="appValue3" jdbcType="VARCHAR" />
+        <result column="value3_desc" property="value3Desc" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
+    </resultMap>
+    <sql id="Base_Column_List2" >
+        id, channel_id, channel_no, type, channel_name, company_no, shop_code, shop_name,
+        status, app_key, app_secret, access_token, refresh_token, server_url, token_url,
+        access_key, secrete_key, cookie, app_value1, value1_desc, app_value2, value2_desc,
+        app_value3, value3_desc, creator, modifier, gmt_create, gmt_modify, is_del
+    </sql>
 
 
     <sql id="commonSelectSection">
@@ -44,9 +81,9 @@
 
 
     <!--查询总条数 -->
-    <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap"
+    <select id="queryPo" resultMap="BaseResultMap2"
             >
-        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.Base_Column_List" />
+        SELECT <include refid="Base_Column_List2" />
         FROM channel_account T
         WHERE
         <include refid="commonSelectSection"/>
@@ -62,9 +99,9 @@
     </select>
 
     <!-- -->
-    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.BaseResultMap"
+    <select id="queryPoList" resultMap="BaseResultMap2"
             >
-        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper.Base_Column_List" />
+        SELECT  <include refid="Base_Column_List2" />
         FROM channel_account T
         WHERE
         <include refid="commonSelectSection"/>

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.channel.dal.mapperExt.CAMallOrderDOMapperExt;
+import com.wangqin.globalshop.channel.dal.mapperExt.CAMallOrderMapperExt;
 import com.wangqin.globalshop.channel.dal.mapperExt.CAMallSubOrderDOMapperExt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,7 +48,7 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 
 	protected CAMallSubOrderDOMapperExt outerOrderDetailMapper = SpringUtils.getBean(CAMallSubOrderDOMapperExt.class);
 
-	protected CAMallOrderDOMapperExt outerOrderMapper = SpringUtils.getBean(CAMallOrderDOMapperExt.class);
+	protected CAMallOrderMapperExt outerOrderMapper = SpringUtils.getBean(CAMallOrderMapperExt.class);
 
 	protected IMallOrderService outerOrderService = SpringUtils.getBean(IMallOrderService.class);
 

@@ -15,30 +15,10 @@ import com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO;
  *
  */
 public interface CAMallOrderMapperExt extends MallOrderDOMapper{
-	
-	Integer queryErpOrdersCount(MallOrderQueryVO erpOrderQueryVO);
-	
-	List<MallOrderDO> queryErpOrders(MallOrderQueryVO erpOrderQueryVO);
-	
-	List<MallOrderDO> queryByErpOrderId(@Param("erpOrderIdList") List<Long> erpOrderIdList);
+	public Integer queryPoCount(MallOrderDO mallOrderDO);
 
-	//List<MallOrderDO> queryByShippingOrderTime(ShippingOrderQueryVO shippingOrderQueryVO);
+	public MallOrderDO queryPo(MallOrderDO mallOrderDO);
 
-	List<MallOrderDO> queryUnStockUpErpOrders(@Param("skuId") Long skuId);
+	public List<MallOrderDO> queryPoList(MallOrderDO mallOrderDO);
 
-	List<MallOrderDO> queryTransStockUpErpOrders(@Param("skuId") Long skuId);
-
-	List<MallOrderDO> queryErpOrderForExcel(MallOrderQueryVO erpOrderQueryVO);
-
-	void updateUpcForErpOrder(MallOrderDO erpOrder);
-
-	void updateWeightForErpOrder(MallOrderDO erpOrder);
-
-	String selectPositionNoByErpOrderId(@Param("erpOrderId") Long erpOrderId);
-
-	MallOrderDO queryHaihuErpOrders(MallSubOrderDO outerOrderDetail);
-
-	List<MallOrderDO> queryHaihuShippingNO(@Param("targetNo") String targetNo, @Param("skuCode") String skuCode);
-
-	List<MallOrderDO> todaySendOrders(@Param("statusList") List<Integer> statusList);
 }

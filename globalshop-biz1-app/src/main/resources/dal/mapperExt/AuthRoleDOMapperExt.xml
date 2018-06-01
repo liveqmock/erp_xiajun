@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt" >
+  <!--<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" >-->
+    <!--<id column="id" property="id" jdbcType="BIGINT" />-->
+    <!--<result column="role_id" property="roleId" jdbcType="BIGINT" />-->
+    <!--<result column="company_no" property="companyNo" jdbcType="VARCHAR" />-->
+    <!--<result column="name" property="name" jdbcType="VARCHAR" />-->
+    <!--<result column="seq" property="seq" jdbcType="TINYINT" />-->
+    <!--<result column="description" property="description" jdbcType="VARCHAR" />-->
+    <!--<result column="status" property="status" jdbcType="TINYINT" />-->
+    <!--<result column="is_del" property="isDel" jdbcType="BIT" />-->
+    <!--<result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />-->
+    <!--<result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />-->
+    <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
+    <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
+  <!--</resultMap>-->
+  <sql id="Base_Column_List2" >
+    id, role_id, company_no, name, seq, description, status, is_del, gmt_create, gmt_modify,
+    creator, modifier
+  </sql>
+
+  <select id="selectList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+    select distinct
+    <include refid="Base_Column_List2"/>
+    from auth_role
+  </select>
+
+  <select id="selectResourceIdListByRoleId" resultType="java.lang.Long" parameterType="java.lang.Long">
+    SELECT
+    e.resource_id AS id
+    FROM
+    auth_role r
+    LEFT JOIN auth_role_resource e ON r.id = e.role_id
+    WHERE
+    r.id = #{id}
+  </select>
+
+  <select id="selectResourceListByRoleIdList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO"
+          parameterType="java.lang.Long">
+    SELECT
+    DISTINCT s.id AS id,
+    s. NAME AS 'name',
+    s.url AS url,
+    s.description AS description,
+    s.icon AS icon,
+    s.pid AS pid,
+    s.seq AS seq,
+    s. STATUS AS 'status',
+    s.resource_type AS resource_type,
+    s.create_time AS create_time
+    FROM
+    auth_role r
+    LEFT JOIN auth_role_resource e ON r.id = e.role_id
+    LEFT JOIN auth_resource s ON e.resource_id = s.id
+    WHERE
+    r.id in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    AND s.resource_type = 0
+    ORDER BY seq
+  </select>
+
+  <select id="selectResourceListByRoleId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO" parameterType="java.lang.Long">
+    SELECT
+    s.id AS id,
+    s.url AS url,
+    s.res_code AS resCode
+    FROM
+    auth_role r , auth_role_resource e,auth_resource s
+    WHERE
+    r.id = #{id} and  e.resource_id = s.id and r.id = e.role_id
+  </select>
+
+  <select id="selectRoleList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+    select
+    <include refid="Base_Column_List2"/>
+    from auth_role
+    order by ${sort} ${order}
+  </select>
+
+  <select id="selectResourceUrlByRoleIdList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO"
+          parameterType="java.lang.Long">
+    SELECT
+    DISTINCT s.id AS id,
+    s. NAME AS 'name',
+    s.url AS url,
+    s.description AS description,
+    s.icon AS icon,
+    s.pid AS pid,
+    s.seq AS seq,
+    s. STATUS AS 'status',
+    s.resource_type AS resource_type,
+    s.create_time AS create_time
+    FROM
+    auth_role r
+    LEFT JOIN auth_role_resource e ON r.id = e.role_id
+    LEFT JOIN auth_resource s ON e.resource_id = s.id
+    WHERE
+    r.id in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    AND s.url IS  NOT  NULL
+    ORDER BY seq
+  </select>
+  <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from auth_role-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
+    <!--delete from auth_role-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" >-->
+    <!--<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >-->
+      <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    <!--insert into auth_role (id, role_id, company_no, -->
+      <!--name, seq, description, -->
+      <!--status, is_del, gmt_create, -->
+      <!--gmt_modify, creator, modifier-->
+      <!--)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, -->
+      <!--#{name,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, -->
+      <!--#{status,jdbcType=TINYINT}, #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, -->
+      <!--#{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" >-->
+    <!--<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >-->
+      <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    <!--insert into auth_role-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--id,-->
+      <!--<if test="roleId != null" >-->
+        <!--role_id,-->
+      <!--</if>-->
+      <!--<if test="companyNo != null" >-->
+        <!--company_no,-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="seq != null" >-->
+        <!--seq,-->
+      <!--</if>-->
+      <!--<if test="description != null" >-->
+        <!--description,-->
+      <!--</if>-->
+      <!--<if test="status != null" >-->
+        <!--status,-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--is_del,-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--gmt_create,-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--gmt_modify,-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--creator,-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--modifier,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--#{id,jdbcType=BIGINT},-->
+      <!--<if test="roleId != null" >-->
+        <!--#{roleId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="companyNo != null" >-->
+        <!--#{companyNo,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="seq != null" >-->
+        <!--#{seq,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="description != null" >-->
+        <!--#{description,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="status != null" >-->
+        <!--#{status,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--#{isDel,jdbcType=BIT},-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--#{gmtCreate,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--#{gmtModify,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--#{creator,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--#{modifier,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" >-->
+    <!--update auth_role-->
+    <!--<set >-->
+      <!--<if test="roleId != null" >-->
+        <!--role_id = #{roleId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="companyNo != null" >-->
+        <!--company_no = #{companyNo,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="seq != null" >-->
+        <!--seq = #{seq,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="description != null" >-->
+        <!--description = #{description,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="status != null" >-->
+        <!--status = #{status,jdbcType=TINYINT},-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--is_del = #{isDel,jdbcType=BIT},-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--creator = #{creator,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--modifier = #{modifier,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" >-->
+    <!--update auth_role-->
+    <!--set role_id = #{roleId,jdbcType=BIGINT},-->
+      <!--company_no = #{companyNo,jdbcType=VARCHAR},-->
+      <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--seq = #{seq,jdbcType=TINYINT},-->
+      <!--description = #{description,jdbcType=VARCHAR},-->
+      <!--status = #{status,jdbcType=TINYINT},-->
+      <!--is_del = #{isDel,jdbcType=BIT},-->
+      <!--gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},-->
+      <!--gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},-->
+      <!--creator = #{creator,jdbcType=VARCHAR},-->
+      <!--modifier = #{modifier,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+</mapper>

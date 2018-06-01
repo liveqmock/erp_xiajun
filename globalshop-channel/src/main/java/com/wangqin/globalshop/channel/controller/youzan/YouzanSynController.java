@@ -1,8 +1,10 @@
 package com.wangqin.globalshop.channel.controller.youzan;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +31,9 @@ import com.wangqin.globalshop.common.utils.ShiroUtil;
 
 /**
  * 
- * 接收有赞商品推送接口
+ * 商品批量上新或更新到有赞
+ * 新增商品，上新到有赞，主图，创建字图
+ * 更新商品，更新到有赞，
  * @author zhulu
  *
  */
@@ -53,12 +57,20 @@ public class YouzanSynController extends BaseController {
 		JsonResult<String> result = new JsonResult<>();
 		StringBuilder sb = new StringBuilder();
 		if(StringUtils.isNotEmpty(itemIds)){
-			String s = itemIds.replace("&quot;", "\"");
-			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
+
+			//String s = itemIds.replace("&quot;", "\"");
+			//List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
+
+			List<Long> idList = new ArrayList<>();
+			String[] itemIdstr = itemIds.split(",");
+			for(String id : itemIdstr){
+				idList.add(Long.valueOf(id));
+			}
 
 			ChannelAccountSo so = new ChannelAccountSo();
 			so.setType(ChannelType.YouZan.getValue());
-			so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+			//so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+			so.setCompanyNo(1+"");
 			so.setStatus(0);
 			List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
 			if(channelAccountList == null || channelAccountList.size() < 1){
@@ -100,14 +112,24 @@ public class YouzanSynController extends BaseController {
 		StringBuilder sb = new StringBuilder();
 		if (StringUtils.isNotEmpty(itemIds)) {
 			String s = itemIds.replace("&quot;", "\"");
-			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
-			});
+
+
+//			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+//			});
+
+			List<Long> idList = new ArrayList<>();
+			String[] itemIdstr = itemIds.split(",");
+			for(String id : itemIdstr){
+				idList.add(Long.valueOf(id));
+			}
+
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
 
 				ChannelAccountSo so = new ChannelAccountSo();
 				so.setType(ChannelType.YouZan.getValue());
-				so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+				//so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+				so.setCompanyNo(1+"");
 				so.setStatus(0);
 				List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
 
@@ -155,14 +177,25 @@ public class YouzanSynController extends BaseController {
 		StringBuilder sb = new StringBuilder();
 		if (StringUtils.isNotEmpty(itemIds)) {
 			String s = itemIds.replace("&quot;", "\"");
-			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
-			});
+
+
+//			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+//			});
+
+
+			List<Long> idList = new ArrayList<>();
+			String[] itemIdstr = itemIds.split(",");
+			for(String id : itemIdstr){
+				idList.add(Long.valueOf(id));
+			}
+
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
 
 				ChannelAccountSo so = new ChannelAccountSo();
 				so.setType(ChannelType.YouZan.getValue());
-				so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+				//so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+				so.setCompanyNo(1+"");
 				so.setStatus(0);
 				List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
 

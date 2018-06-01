@@ -37,13 +37,13 @@ public class AutoYouzanTradesSoldGetTask {
     @Scheduled(cron = "0 0/30 * * * ?")
     public void run() {
         logger.info("定时任务：自动去有赞下载订单===>Start");
+        Long startTime = System.currentTimeMillis();
         // 首先轮训出company
         CompanyDO companySo = new CompanyDO();
         companySo.setIsDel(false);
         List<CompanyDO> companyDOList = companyService.queryPoList(companySo);
-        if (EasyUtil.isListEmpty(companyDOList)) {
-            return;
-        }
+
+        Long shopCount= 0L;
 
         // 第二步，轮训出该账户下的有赞账户token等
         for (CompanyDO company : companyDOList) {
@@ -58,11 +58,13 @@ public class AutoYouzanTradesSoldGetTask {
             for (ChannelAccountDO channelAccountDO : channelAccountList) {
                 try {
                     ChannelFactory.getChannel(channelAccountDO).syncOrder();
+                    shopCount++;
                 } catch (Exception e) {
                     logger.error("get youzan orders error, shopCode: " + channelAccountDO.getShopCode(), e);
                 }
             }
         }
-        logger.info("定时任务：自动去有赞下载订单===>End");
+        Long endTime = System.currentTimeMillis();
+        logger.info("定时任务：自动去有赞下载订单===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
     }
 }

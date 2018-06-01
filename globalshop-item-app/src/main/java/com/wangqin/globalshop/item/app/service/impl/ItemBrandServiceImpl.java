@@ -76,8 +76,8 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 	 * @return
 	 */
 	@Override
-	public ItemBrandDO selectByName(String name) {
-		return itemBrandDOMapperExt.selectByName(name);
+	public String selectBrandNoByName(String name) {
+		return itemBrandDOMapperExt.selectNoByName(name);
 	}
 	
 	@Override

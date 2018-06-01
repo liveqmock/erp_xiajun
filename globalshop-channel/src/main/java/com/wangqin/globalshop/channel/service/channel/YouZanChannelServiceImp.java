@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -773,12 +774,30 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception {
 	}
 
+
+	/**
+	 * job主动抓取的订单处理
+	 */
 	@Override
 	public void syncOrder() {
 		// 交易状态更新的结束时间,值为当前时间
-		Date endUpdate = new Date();
+		//Date endUpdate = new Date();
 		// 交易状态更新的开始时间,值为当前时间的1个小时前，因为定时任务设置为半个小时,这样每个订单会有2次抓取机会
-		Date startUpdate = DateUtil.getDateByCalculate(endUpdate, Calendar.HOUR_OF_DAY, -1);
+		//Date startUpdate = DateUtil.getDateByCalculate(endUpdate, Calendar.HOUR_OF_DAY, -1);
+
+
+		String startTime = "2018-05-02 10:33:00";
+		String endTime = "2018-05-03 19:33:00";
+		Date startUpdate = null;
+		Date endUpdate = null;
+		try {
+			 startUpdate = DateUtil.convertStr2Date(startTime,DateUtil.formateStr19);
+			 endUpdate = DateUtil.convertStr2Date(endTime,DateUtil.formateStr19);
+		}catch (ParseException e){
+			logger.info("");
+		}
+
+
 
 		// 方法
 		YouzanTradesSoldGet youzanTradesSoldGet = new YouzanTradesSoldGet();
@@ -797,19 +816,25 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		while (hasNext) {
 			youzanTradesSoldGetParams.setPageNo(pageNo);
 			youzanTradesSoldGet.setAPIParams(youzanTradesSoldGetParams);
-			YouzanTradesSoldGetResult result = yzClient.invoke(youzanTradesSoldGet);
+			com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGetResult result = yzClient.invoke(youzanTradesSoldGet);
 
 			// 设置循环
 			pageNo++;
 			hasNext = result.getHasNext();
 
-			YouzanTradesSoldGetResult.TradeDetailV2[] tradeList = result.getTrades();
+			com.wangqin.globalshop.channel.dal.youzan.TradeDetailV2[] tradeList = result.getTrades();
 			for (int i = tradeList.length - 1; i >= 0; i--) {
 				this.syncOrder(tradeList[i]);
 			}
 		}
-	}
 
+
+	}
+	/**
+	 * 有赞推过来的订单
+	 * @param data
+	 * @return
+	 */
 	@Override
 	public Object syncOrder(Object data) {
 		YouzanMsgPushEntity entity = (YouzanMsgPushEntity) data;
@@ -896,6 +921,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		p.setChannelOrderNo(TradeDetail.getTid());
 		if (outerOrderMapper.queryPoCount(p) > 0) {
 			logger.error("有赞订单已经存在 tid:" + TradeDetail.getTid());
+			return;
 		}
 
 		// 如果有赞订单还不存在，继续
@@ -930,6 +956,14 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		outerOrder.setCreator("有赞推送订单");
 		outerOrder.setGmtCreate(TradeDetail.getCreated()); // 创建时间
 		outerOrder.setGmtModify(TradeDetail.getUpdateTime()); // 修改时间
+
+
+		//补充必填信息
+		outerOrder.setCustomerNo("无");
+		outerOrder.setChannelCustomerNo("自定义类型，无买家昵称");
+		outerOrder.setIsDel(false);
+		outerOrder.setModifier("-1");
+
 
 		outerOrderMapper.insert(outerOrder); // 添加主订单
 
@@ -985,7 +1019,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 				}
 			}
 		}
-		outerOrderDetailMapper.insertBatch(outerOrderDetails); // 添加子订单
+		mallSubOrderService.insertBatch(outerOrderDetails); // 添加子订单
 
 		if (outOrderIdList.size() > 0) {
 			// 把商品详情更新到主订单明细里面

@@ -66,9 +66,9 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isNotBlank(sessionId)) {
             try {
                 //redis 缓存尝试取
-                Integer userId = (Integer) loginCache.get(sessionId);
+                String userId = (String) loginCache.get(sessionId);
                 if (userId != null) {
-                    AppUtil.setLoginUserId(userId.intValue());
+                    AppUtil.setLoginUserId(userId);
                     return true;
                 }
             }catch (Exception e){

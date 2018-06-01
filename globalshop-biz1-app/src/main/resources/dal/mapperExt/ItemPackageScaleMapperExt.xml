@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackageScaleMapperExt">
+
+	<!-- 1.0到2.0过度通用查询结果列-->
+    <sql id="Base_Column_List">
+		 id,name,name_en AS enName,packaging_scale_no AS packagingScaleNo
+	</sql>
+
+    <!--  
+	<select id="queryPackageScalesCount" resultType="java.lang.Integer">
+        SELECT
+        	count(1)
+        FROM
+            `package_scale` T1
+        where
+     		   1=1
+            <if test=" name != null and name != '' ">
+                and T1.name = #{name}
+            </if>
+            <if test=" enName != null and enName != '' ">
+            	and T1.en_name = #{enName}
+            </if>
+            
+    </select>
+    -->
+    
+   
+    <select id="queryAllPackageScale" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO" >
+        SELECT
+        	 <include refid="Base_Column_List" />
+        FROM
+            `shipping_packing_scale` T1
+        where
+             T1.is_del=0
+    </select>
+    
+    <insert id="insertPackageScale" parameterType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO" >
+    insert into shipping_packing_scale
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="packagingScaleNo != null" >
+        packaging_scale_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="enName != null" >
+        name_en,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="packagingScaleNo != null" >
+        #{packagingScaleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        #{enName,jdbcType=VARCHAR},
+      </if>    
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="delete" parameterType="java.lang.Long">
+  	update shipping_packing_scale
+  	set is_del=1
+  	<where>
+  	id=#{id}
+  	</where>
+  </update>
+  
+  
+   <!-- 按条件修改商品(fin) -->
+    <update id="updateScaleSelectiveById" parameterType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO">
+       UPDATE `shipping_packing_scale` T1
+       SET
+       <trim suffixOverrides="," >
+            <if test=" name != null and name != '' ">
+                T1.name=#{name},
+            </if>        
+            <if test=" enName != null and enName != ''">
+              T1.name_en = #{enName},
+            </if>
+            <if test=" packagingScaleNo!= null ">
+                T1.packaging_scale_no = #{packagingScaleNo},
+            </if>
+            <if test=" creator!= null ">
+           		T1.creator = #{creator},
+            </if>
+            <if test=" modifier!= null ">
+           		T1.modifier = #{modifier},
+            </if>
+         </trim>
+           where id=#{id}
+    </update>
+    
+    <!-- 查list -->
+     <select id="queryScaleList" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO">
+        SELECT
+        	 <include refid="Base_Column_List" />
+        FROM
+            `shipping_packing_scale` T1
+        where
+             is_del=0
+            <if test=" id != null and id != '' ">
+                and T1.id = #{id}
+            </if>
+            <if test=" packagingScaleNo != null and packagingScaleNo != '' ">
+                and T1.packaging_scale_no = #{packagingScaleNo}
+            </if>
+
+
+          order by T1.id 
+    </select>
+
+</mapper>

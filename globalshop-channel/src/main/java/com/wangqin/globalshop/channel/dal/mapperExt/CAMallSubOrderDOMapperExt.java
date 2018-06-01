@@ -12,6 +12,7 @@ import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 public interface CAMallSubOrderDOMapperExt extends MallSubOrderDOMapper {
 
 	public void insertBatch(List<MallSubOrderDO> outerOrderDetails);
+
 	public void updateOuterOrderDetailByItemSku(List<String> erpOrderIdList);
 
 	public MallSubOrderDO queryHaihuErpOrders(OuterOrderDetail outerOrderDetail);
