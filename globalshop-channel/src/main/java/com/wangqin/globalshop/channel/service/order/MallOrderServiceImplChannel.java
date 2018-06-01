@@ -118,7 +118,7 @@ public class MallOrderServiceImplChannel implements ChannelIMallOrderService {
 		// 2、锁定库存
 		MallSubOrderDO so = new MallSubOrderDO();
 		so.setOrderNo(orderNo);
-		List<MallSubOrderDO> erpOrders = mallSubOrderDOMapperExt.queryPoList(so);
+		List<MallSubOrderDO> erpOrders = mallSubOrderDOMapperExt.selectSubOrderList(so);
 		if (CollectionUtils.isNotEmpty(erpOrders)) {
 			try {
 				//同一个仓库分配库存

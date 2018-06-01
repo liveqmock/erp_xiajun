@@ -64,11 +64,17 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 
     MallSubOrderDO queryHaihuErpOrders(MallSubOrderDO outerOrderDetail);
 
-    void insertBatch(List<MallSubOrderDO> outerOrderDetails);
 
 	List<MallSubOrderDO> queryPoList(MallSubOrderDO so);
 
 	MallSubOrderDO selectBySkuCode(String skuCode);
     //_____________________________________
+
+	Integer selectSubOrderCount(MallSubOrderDO mallSubOrderDO);
+
+	MallSubOrderDO selectSubOrder(MallSubOrderDO mallSubOrderDO);
+
+	List<MallSubOrderDO> selectSubOrderList(MallSubOrderDO mallSubOrderDO);
+
 
 }

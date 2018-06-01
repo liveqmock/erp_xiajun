@@ -26,7 +26,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
 
 		WarehouseDO so = new WarehouseDO();
 		so.setCompanyNo(companyNo);
-		List<WarehouseDO> warehouseDOS =  warehouseDOMapperExt.queryPoList(so);
+		List<WarehouseDO> warehouseDOS =  warehouseDOMapperExt.selectWhList(so);
 
 		for(WarehouseDO warehouseDO : warehouseDOS){
 			propetiesMap.put(warehouseDO.getWarehouseNo(),warehouseDO.getDeliveryPriority());

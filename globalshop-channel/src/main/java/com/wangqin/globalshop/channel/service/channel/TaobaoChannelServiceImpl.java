@@ -185,7 +185,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 			outerOrderDetail.setReceiverAddress(receiver.getReceiverAddress()); // 详细地址
 			outerOrderDetail.setTelephone(receiver.getReceiverMobile()); // 联系电话
 			outerOrderDetail.setPostcode(receiver.getReceiverZip()); // 邮编
-
+			outerOrderDetail.setChannelName(ChannelType.TaoBao.getName());
 			outerOrderDetails.add(outerOrderDetail);
 
 			// 如果有虚拟库存就扣减虚拟库存
@@ -214,7 +214,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 				}
 			}
 		}
-		outerOrderDetailMapper.insertBatch(outerOrderDetails); // 添加子订单
+		mallSubOrderService.insertBatch(outerOrderDetails); // 添加子订单
 
 		if (outOrderIdList.size() > 0) {
 			// 把商品详情更新到主订单明细里面
