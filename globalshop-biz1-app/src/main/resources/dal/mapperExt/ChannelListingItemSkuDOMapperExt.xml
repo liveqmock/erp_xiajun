@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAChannelListingItemSkuDOMapperExt" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemSkuDOMapperExt" >
 
     <sql id="tableSection">channel_listing_item_sku</sql>
 
