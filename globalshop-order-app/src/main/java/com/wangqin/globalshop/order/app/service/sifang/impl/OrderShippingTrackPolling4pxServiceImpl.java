@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.order.app.service.sifang.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPolling4pxDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackPolling4pxDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackPolling4pxDOMapperExt;
 import com.wangqin.globalshop.order.app.service.sifang.OrderShippingTrackPolling4pxService;
 import org.springframework.beans.factory.annotation.Autowired;

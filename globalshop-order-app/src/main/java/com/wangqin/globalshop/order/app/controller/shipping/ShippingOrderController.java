@@ -14,6 +14,11 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
+import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
+import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
+import com.wangqin.globalshop.order.app.service.sifang.ISiFangService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -63,13 +68,8 @@ import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
-import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
-import com.wangqin.globalshop.order.app.service.sifang.ISiFangService;
 
 /**
  * @author biscuits
@@ -84,15 +84,15 @@ public class ShippingOrderController {
     @Autowired
     private IMallSubOrderService     mallSubOrderService;
     @Autowired
-    private ISiFangService           siFangService;
+    private ISiFangService siFangService;
     @Autowired
     private OrderMallCustomerService mallCustomerService;
     @Autowired
-    private IMallOrderService        mallOrderService;
+    private IMallOrderService mallOrderService;
     @Autowired
-    private IHaihuService            haihuService;
+    private IHaihuService haihuService;
     @Autowired
-    private IShippingTrackService    shippingTrackService;
+    private IShippingTrackService shippingTrackService;
 
     @RequestMapping("/query")
     @ResponseBody

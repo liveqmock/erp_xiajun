@@ -67,6 +67,8 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
     void insertBatch(List<MallSubOrderDO> outerOrderDetails);
 
 	List<MallSubOrderDO> queryPoList(MallSubOrderDO so);
-	//_____________________________________
+
+	MallSubOrderDO selectBySkuCode(String skuCode);
+    //_____________________________________
 
 }

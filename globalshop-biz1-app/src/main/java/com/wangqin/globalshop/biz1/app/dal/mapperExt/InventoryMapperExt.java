@@ -92,4 +92,6 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	
 	//item_module
 	void deleteInvBySkuCode(String skuCode);
+
+    InventoryDO queryInventoryByCode(String itemCode, String skuCode);
 }

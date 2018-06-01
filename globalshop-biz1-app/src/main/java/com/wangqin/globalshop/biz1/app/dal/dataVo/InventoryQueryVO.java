@@ -27,8 +27,15 @@ public class InventoryQueryVO extends PageQueryVO {
 	
 	private String buySite;
 	
-	private Long companyId;
-	
+	private String companyNo;
+
+	public String getCompanyNo() {
+		return companyNo;
+	}
+
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
 
 	public String getPositionNo() {
 		return positionNo;
@@ -102,13 +109,6 @@ public class InventoryQueryVO extends PageQueryVO {
 		this.buySite = buySite;
 	}
 
-	public Long getCompanyId() {
-		return companyId;
-	}
 
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
-	}
-	
 	
 }

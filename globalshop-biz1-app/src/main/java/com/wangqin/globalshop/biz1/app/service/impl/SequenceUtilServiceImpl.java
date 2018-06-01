@@ -1,10 +1,10 @@
-package com.wangqin.globalshop.item.app.service.impl;
+package com.wangqin.globalshop.biz1.app.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
-import com.wangqin.globalshop.item.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 
 @Service
 public class SequenceUtilServiceImpl implements ISequenceUtilService {

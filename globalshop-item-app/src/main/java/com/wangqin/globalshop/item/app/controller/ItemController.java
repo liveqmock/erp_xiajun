@@ -39,12 +39,12 @@ import com.wangqin.globalshop.common.utils.StringUtils;
 
 import com.wangqin.globalshop.item.app.service.IBuyerService;
 import com.wangqin.globalshop.item.app.service.ICountryService;
-import com.wangqin.globalshop.item.app.service.IInventoryService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 
 
 
@@ -76,7 +76,7 @@ public class ItemController  {
 	
 	
 	@Autowired
-	private IInventoryService inventoryService;
+	private ItemIInventoryService inventoryService;
 	
 	@Autowired
 	private IItemBrandService brandService;

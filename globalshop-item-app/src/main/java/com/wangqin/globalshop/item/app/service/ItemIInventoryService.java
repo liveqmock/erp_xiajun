@@ -6,7 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 
 
-public interface IInventoryService {
+public interface ItemIInventoryService {
 
 	/**
 	 * 单商品库存预定

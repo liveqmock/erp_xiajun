@@ -1,16 +1,17 @@
-package com.wangqin.globalshop.order.app.service.inventory.impl;
+package com.wangqin.globalshop.inventory.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
-import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
+import com.wangqin.globalshop.inventory.app.service.InventoryBookingRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class OrderInventoryBookingRecordServiceImpl implements OrderInventoryBookingRecordService {
+public class BookingRecordServiceImpl implements InventoryBookingRecordService {
 	@Autowired
 	private InventoryBookingRecordDOMapperExt mapper;
 	@Override
@@ -39,4 +40,16 @@ public class OrderInventoryBookingRecordServiceImpl implements OrderInventoryBoo
 			mapper.updateByPrimaryKey(record);
 		}
 	}
+
+	@Override
+	public List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(String itemCode, String skuCode, Object o) {
+		return null;
+	}
+
+	@Override
+	public InventoryBookingRecordDO queryById(Long id) {
+		return mapper.selectByPrimaryKey(id);
+	}
+
+
 }
