@@ -1,8 +1,7 @@
 package com.wangqin.globalshop.channel.service.channelItem;
 
-import javax.annotation.Resource;
 
-import com.wangqin.globalshop.channel.dal.mapperExt.CAChannelListingItemSkuDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemSkuDOMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,8 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelListingItemSkuDOMapper;
 public class ChannelListingItemSkuServiceImpl  implements IChannelListingItemSkuService {
 
 
-	@Autowired CAChannelListingItemSkuDOMapperExt channelListingItemSkuDOMapperExt;
+	@Autowired
+	private ChannelListingItemSkuDOMapperExt channelListingItemSkuDOMapperExt;
 
 
 	public ChannelListingItemSkuDOMapper getMapper(){

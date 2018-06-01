@@ -1,12 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt">
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO"/>
     <!-- 通用查询结果列-->
-    <sql id="Base_Column_List">
-		 T1.`id`,T1.`outer_order_id` as outerOrderId,T1.`item_id` as itemId,T1.`sku_id` as skuId,T1.`sku_code` as skuCode,T1.`sku_pic` as skuPic,T1.`logistic_type` as logisticType,T1.`upc`,T1.`item_name` as itemName,T1.`color`,T1.`scale`,T1.`freight`,T1.`sale_price` as salePrice,T1.`quantity`,T1.`user_create` as userCreate,T1.`user_modify` as userModify,T1.`gmt_create` as gmtCreate,T1.`gmt_modify` as gmtModify,T1.third_sku_code as thirdSkuCode 
-	</sql>
-
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="mall_return_order_no" property="mallReturnOrderNo" jdbcType="VARCHAR" />
+        <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+        <result column="open_id" property="openId" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+        <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
+        <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="channel_sku_code" property="channelSkuCode" jdbcType="VARCHAR" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="scale" property="scale" jdbcType="VARCHAR" />
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+        <result column="logistic_type" property="logisticType" jdbcType="TINYINT" />
+        <result column="freight" property="freight" jdbcType="DOUBLE" />
+        <result column="freight_real" property="freightReal" jdbcType="DOUBLE" />
+        <result column="weight" property="weight" jdbcType="DOUBLE" />
+        <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
+        <result column="sale_price_agent" property="salePriceAgent" jdbcType="DOUBLE" />
+        <result column="quantity" property="quantity" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="close_reason" property="closeReason" jdbcType="VARCHAR" />
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+        <result column="stock_status" property="stockStatus" jdbcType="TINYINT" />
+        <result column="shipping_order_no" property="shippingOrderNo" jdbcType="VARCHAR" />
+        <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR" />
+        <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+        <result column="receiver_country" property="receiverCountry" jdbcType="VARCHAR" />
+        <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+        <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+        <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+        <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
+        <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+        <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+        <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+        <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR" />
+        <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR" />
+        <result column="memo" property="memo" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code,
+        channel_order_no, order_time, item_code, item_name, sku_code, channel_sku_code, upc,
+        scale, sku_pic, logistic_type, freight, freight_real, weight, sale_price, sale_price_agent,
+        quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no,
+        receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address,
+        telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, gmt_create,
+        gmt_modify, creator, modifier, is_del
+    </sql>
     <update id="updateOuterOrderDetailByItemSku">
         UPDATE outer_order_detail a
         LEFT JOIN item_sku b ON a.sku_code=b.sku_code
@@ -74,4 +126,36 @@
             FROM inventory_booking_record
             WHERE order_no = #{orderNo}
     </select>
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+        SELECT COUNT(*) FROM mall_sub_order WHERE order_no = #{orderNo};
+    </select>
+    <select id="findAlreadyShipped" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+        SELECT COUNT(*) FROM mall_sub_order WHERE order_no = #{orderNo} AND  (status ='0' OR status='3');
+    </select>
+    <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * FROM mall_sub_order WHERE order_no = #{orderNo} ;
+    </select>
+    <select id="selectUnClosedByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * FROM mall_sub_order WHERE order_no = #{orderNo} AND status != '-1';
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT * FROM mall_sub_order WHERE id = #{id};
+    </select>
+    <select id="SelectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * FROM mall_sub_order WHERE order_no = #{orderNo};
+    </select>
+
+    <select id="queryErpOrdersCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+        SELECT
+        count(1)
+        FROM
+        `mall_sub_order`
+    </select>
+    <select id="queryErpOrders" resultMap="BaseResultMap"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_sub_order`
+    </select>
+
 </mapper>

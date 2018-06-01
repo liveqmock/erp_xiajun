@@ -189,5 +189,15 @@
         FROM shipping_order
         WHERE id_card=${idCard} and logistic_company=${logisticCompany} and gmt_create>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)
     </select>
+    <select id="selectByLogisticNo" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE  logistic_no=${logisticNo}
+    </select>
+
+    <update id="updateStatusByShippingNo" parameterType="java.lang.String">
+        UPDATE shipping_order SET status=2 WHERE logistic_no=#{logisticNo}
+    </update>
 
 </mapper>

@@ -1,16 +1,16 @@
 package com.wangqin.globalshop.channel.service.channel;
 
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.common.scan.SpringUtils;
+import com.wangqin.globalshop.common.utils.ClassUtil;
+
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountSo;
-import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.common.scan.SpringUtils;
-import com.wangqin.globalshop.common.utils.ClassUtil;
 
 public class ChannelFactory {
 	// 公司_渠道 : 渠道实例

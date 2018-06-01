@@ -3,20 +3,17 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuScaleDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAInventoryDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAItemDOMapperExt;
-import com.wangqin.globalshop.channel.dal.mapperExt.CAItemSkuDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +27,13 @@ public class ItemServiceImpl  implements IItemService {
 
 
 	@Autowired
-	CAItemDOMapperExt itemDOMapperExt;
+	ItemDOMapperExt itemDOMapperExt;
 
 	@Autowired
-	CAItemSkuDOMapperExt itemSkuDOMapperExt;
+	ItemSkuMapperExt itemSkuDOMapperExt;
 
 	@Autowired
-	CAInventoryDOMapperExt inventoryDOMapperExt;
+	InventoryDOMapperExt inventoryDOMapperExt;
 
 	@Autowired
 	ItemSkuScaleDOMapper itemSkuScaleDOMapper;

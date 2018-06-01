@@ -1,54 +1,15 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.wangqin.globalshop.common.utils.AppUtil;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.entity.ContentType;
-import org.eclipse.jetty.util.StringUtil;
-import org.eclipse.jetty.util.security.Credential.MD5;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.PayType;
-import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.biz1.app.constants.enums.*;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
-import com.wangqin.globalshop.channel.dal.youzan.ItemImages;
-import com.wangqin.globalshop.channel.dal.youzan.PicModel;
-import com.wangqin.globalshop.channel.dal.youzan.TradeDetailV2;
-import com.wangqin.globalshop.channel.dal.youzan.YouzanMsgDetailEntity;
-import com.wangqin.globalshop.channel.dal.youzan.YouzanMsgPushEntity;
+import com.wangqin.globalshop.channel.dal.youzan.*;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGet;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -56,40 +17,25 @@ import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.youzan.open.sdk.client.auth.Token;
 import com.youzan.open.sdk.client.core.DefaultYZClient;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemCreate;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemGet;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemSkuUpdate;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemUpdate;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemUpdateDelisting;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanItemUpdateListing;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanLogisticsExpressGet;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanLogisticsOnlineConfirm;
-import com.youzan.open.sdk.gen.v3_0_0.api.YouzanMaterialsStoragePlatformImgUpload;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateResult;
+import com.youzan.open.sdk.gen.v3_0_0.api.*;
+import com.youzan.open.sdk.gen.v3_0_0.model.*;
 import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateResult.ItemSkuOpenModel;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemGetResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemSkuUpdateParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemSkuUpdateResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateDelistingParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateDelistingResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateListingParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateListingResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemUpdateResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsExpressGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsExpressGetResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsOnlineConfirmParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanLogisticsOnlineConfirmResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanMaterialsStoragePlatformImgUploadParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanMaterialsStoragePlatformImgUploadResult;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanTradeGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanTradesSoldGetParams;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanTradesSoldGetResult;
 import com.youzan.open.sdk.model.ByteWrapper;
-
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.entity.ContentType;
+import org.eclipse.jetty.util.StringUtil;
+import org.eclipse.jetty.util.security.Credential.MD5;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.text.ParseException;
+import java.util.*;
 
 @Channel(type = ChannelType.YouZan)
 public class YouZanChannelServiceImp extends AbstractChannelService implements IChannelService {
@@ -618,17 +564,16 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		return result;
 	}
 
-
 	/**
 	 * 发货反馈,
 	 * @param orderList
 	 * @param shippingOrder
 	 */
-	public void syncLogisticsOnlineConfirm(List<MallOrderDO> orderList, ShippingOrderDO shippingOrder) {
+	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> orderList, ShippingOrderDO shippingOrder) {
 		logger.error("有赞发货");
 
 		boolean hasFailed = false;
-		for (MallOrderDO order : orderList) {
+		for (MallSubOrderDO order : orderList) {
 			try {
 				// 获取第三方订单
 				String tid = order.getChannelOrderNo();
@@ -773,6 +718,8 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	@Override
 	public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception {
 	}
+
+
 
 
 	/**

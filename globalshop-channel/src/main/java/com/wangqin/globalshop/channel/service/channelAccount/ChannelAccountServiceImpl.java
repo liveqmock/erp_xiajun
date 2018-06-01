@@ -1,23 +1,22 @@
 package com.wangqin.globalshop.channel.service.channelAccount;
 
 
-import java.util.Date;
-import java.util.List;
-
-import com.wangqin.globalshop.channel.dal.mapperExt.CAChannelAccountDOMapperExt;
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
-import com.wangqin.globalshop.channel.dal.dataSo.ChannelAccountSo;
+import java.util.Date;
+import java.util.List;
 
 @Service("channelAccountService")
 public class ChannelAccountServiceImpl  implements IChannelAccountService {
 
 	@Autowired
-	CAChannelAccountDOMapperExt channelAccountDOMapper;
+	private ChannelAccountDOMapperExt channelAccountDOMapper;
 
 
 	public ChannelAccountDOMapper getChannelAccountMapper() {
@@ -133,6 +132,16 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 			channelAccountDOMapper.updateByPrimaryKey(channelAccount);
 		}
 
+	}
+
+	@Override
+	public ChannelAccountDO queryByChannelNo(String channelNo) {
+		return channelAccountDOMapper.queryByChannelNo(channelNo);
+	}
+
+	@Override
+	public ChannelAccountDO selectOne(ChannelAccountDO tmEntity) {
+		return channelAccountDOMapper.queryByTypeAndCompanyNo(tmEntity);
 	}
 
 }

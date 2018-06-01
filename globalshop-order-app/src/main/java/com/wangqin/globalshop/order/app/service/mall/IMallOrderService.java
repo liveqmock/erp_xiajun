@@ -1,6 +1,10 @@
 package com.wangqin.globalshop.order.app.service.mall;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.InventoryException;
 
 import java.util.List;
 
@@ -16,4 +20,20 @@ public interface IMallOrderService  {
     MallOrderDO selectByOrderNo(String orderNo);
 
     List<MallOrderDO> queryByStatus(byte b);
+
+    void addOuterOrder(MallOrderVO outerOrder);
+
+    void review(String id);
+
+    List<MallOrderDO> queryOuterOrderList(MallOrderVO outerOrderQueryVO);
+
+    void delete(MallOrderDO outerOrder);
+
+    JsonResult<Object> lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException;
+
+    List<MallOrderDO> queryOuterOrderForExcel(MallOrderVO outerOrderQueryVO);
+
+    List<MallOrderDO> selectByStatus(byte b);
+
+    void addMallOrderDO(MallOrderDO mallOrderDO);
 }

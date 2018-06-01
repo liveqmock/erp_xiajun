@@ -29,7 +29,7 @@ public interface IChannelService {
 	public void syncSkuInventory(String itemCode, String skuCode);
 	
 	// 确认发货
-	//public void syncLogisticsOnlineConfirm(List<MallOrderDO> order, ShippingOrder shippingOrder);
+	//public void syncLogisticsOnlineConfirm(List<MallOrderDO> order, ShippingOrderDO shippingOrder);
 	
 	// 同步订单
 	public Object syncOrder(Object data);
@@ -38,4 +38,3 @@ public interface IChannelService {
 	public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception;
 		
 }
-

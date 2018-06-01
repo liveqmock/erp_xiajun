@@ -46,6 +46,28 @@ public class InventoryOnWareHouseDO {
     private String creator;
 
     private String modifier;
+    /**
+     * 在途可用库存
+     * @return
+     */
+    public Long getAvailableTransInv() {
+        return this.getTransInv() - this.getLockedTransInv();
+    }
+    /**
+     * (现货)可用库存
+     * @return
+     */
+    public Long getAvailableInv() {
+        return this.getInventory() - this.getLockedInv();
+    }
+
+    /**
+     * (总共)可用库存
+     * @return
+     */
+    public Long getTotalAvailableInv() {
+        return getAvailableInv()+getAvailableTransInv();
+    }
 
     public Long getId() {
         return id;

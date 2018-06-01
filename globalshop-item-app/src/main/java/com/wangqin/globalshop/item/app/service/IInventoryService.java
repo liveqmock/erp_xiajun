@@ -39,16 +39,17 @@ public interface IInventoryService {
 	 * @param skuId
 	 * @return
 	 */
-	
+	InventoryDO queryInventoryBySkuId(String itemId,String skuId) ;
+
 	InventoryAddVO queryInvBySkuCode(String skuCode);
-	
+
 	void lockVirtualInv(InventoryAddVO inventory);
-	
+
 	//item_module
 	void deleteInvBySkuCode(String skuCode);
 	
-	InventoryDO queryInventoryBySkuId(String itemId,String skuId) ;
 	
+
 	//int updateLockInventory(Long id , int booked, int transBooked);
 
 	/**

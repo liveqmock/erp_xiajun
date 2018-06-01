@@ -1,13 +1,13 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -43,4 +43,18 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
 	List<MallOrderDO> todaySendOrders(@Param("statusList")List<Integer> statusList);
 
 
+	MallOrderDO selectByOrderNo(String orderNo);
+	List<MallOrderDO> queryByStatus(byte status);
+
+	Integer queryOuterOrdersCount(MallOrderVO outerOrderQueryVO);
+
+	List<MallOrderDO> queryOuterOrders(MallOrderVO outerOrderQueryVO);
+
+	List<MallOrderDO> queryOuterOrderForExcel(MallOrderVO outerOrderQueryVO);
+
+    Integer queryPoCount(MallOrderDO mallOrderDO);
+
+	MallOrderDO queryPo(MallOrderDO mallOrderDO);
+
+	List<MallOrderDO> queryPoList(MallOrderDO mallOrderDO);
 }

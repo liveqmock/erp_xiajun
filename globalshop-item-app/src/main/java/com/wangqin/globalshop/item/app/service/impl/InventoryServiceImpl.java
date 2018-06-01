@@ -20,12 +20,17 @@ public class InventoryServiceImpl implements IInventoryService {
     public InventoryAddVO queryInvBySkuCode(String skuCode) {
     	return inventoryMapper.queryInvBySkuCode(skuCode);
     }
-    
+
     @Override
     public void lockVirtualInv(InventoryAddVO inventory) {
     	inventoryMapper.lockVirtualInv(inventory);
     }
-    
+
+//    @Override
+//    public InventoryDO queryInventoryBySkuId(Long itemId, Long skuId) {
+//        return inventoryMapper.qu;
+//    }
+
     @Override
     public InventoryDO queryInventoryBySkuId(String itemCode, String skuCode) {
         return inventoryMapper.getInventoryBySkuId(itemCode, skuCode);
@@ -40,13 +45,13 @@ public class InventoryServiceImpl implements IInventoryService {
     public InventoryDO queryInventoryBySkuCode(String skuCode) {
         return inventoryMapper.queryInventoryBySkuCode(skuCode);
     }
-    
+
 
     @Override
     public void deleteInvBySkuCode(String skuCode) {
     	inventoryMapper.deleteInvBySkuCode(skuCode);
     }
-    
+
     /**
      * 清除虚拟库存
      */
