@@ -195,4 +195,52 @@
       WHERE warehouse_no =${warehouseNo}
 
   </select>
+
+
+
+
+  <sql id="commonSelectSection">
+    1 = 1
+    <if test="warehouseNo != null">
+      and T1.warehouse_no = #{warehouseNo}
+    </if>
+    <if test="name != null">
+      and T1.name = #{name}
+    </if>
+    <if test="companyNo != null">
+      and T1.company_no = #{companyNo}
+    </if>
+
+    <if test="deliveryPriority != null">
+      and T1.delivery_priority = #{deliveryPriority}
+    </if>
+
+    <if test=" isDel == true">
+      and T1.is_del is true
+    </if>
+    <if test=" isDel == false">
+      and T1.is_del is false
+    </if>
+    <if test=" isDel == null">
+      and T1.is_del is false
+    </if>
+
+  </sql>
+
+  <sql id="tableSection">warehouse</sql>
+
+  <select id="selectWhList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.WarehouseMapper.BaseResultMap"
+  >
+    SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.WarehouseMapper.Base_Column_List" />
+    FROM <include refid="tableSection"/> T1
+    WHERE
+    <include refid="commonSelectSection"/>
+    ORDER BY T1.id desc
+  </select>
+
+
+
+
+
+
 </mapper>

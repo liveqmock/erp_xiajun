@@ -180,7 +180,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 			return null;
 		}
 		//Long:仓库ID,Long:erporderid,WarehouseCollector
-		Table<Long, Long, WarehouseCollector> table = HashBasedTable.create();
+		Table<String, Long, WarehouseCollector> table = HashBasedTable.create();
 
 		String companyNo = erpOrders.get(0).getCompanyNo();
 
@@ -206,46 +206,46 @@ public class InventoryServiceImpl  implements IInventoryService {
 						whc.setQuantity(Long.valueOf(erpOrder.getQuantity()));
 						whc.setErpOrder(erpOrder);
 						initBooked(inventory, whc);
-						table.put(inventory.getWarehouseNo(), whc.getErpOrderId(), whc);
+						table.put(String.valueOf(inventory.getWarehouseNo()), whc.getErpOrderId(), whc);
 					}
 				}
 			}
 		}
 		// 计算每个仓库下面的得分。
 		if (!table.isEmpty()) {
-			Map<Long, Double> scoreMap = Maps.newHashMap();
-			Set<Long> rows = table.rowKeySet();
-			for (Long wareId : rows) {
-				Map<Long, WarehouseCollector> rowData = table.row(wareId);
+			Map<String, Double> scoreMap = Maps.newHashMap();
+			Set<String> rows = table.rowKeySet();
+			for (String wareNo : rows) {
+				Map<Long, WarehouseCollector> rowData = table.row(wareNo);
 				for (Map.Entry<Long, WarehouseCollector> entry : rowData.entrySet()) {
 					WarehouseCollector whc = entry.getValue();
-					if (scoreMap.containsKey(wareId)) {
-						Double d = scoreMap.get(wareId) + score(whc);
-						scoreMap.put(wareId, d);
+					if (scoreMap.containsKey(wareNo)) {
+						Double d = scoreMap.get(wareNo) + score(whc);
+						scoreMap.put(wareNo, d);
 					} else {
-						scoreMap.put(wareId, score(whc));
+						scoreMap.put(wareNo, score(whc));
 					}
 				}
 			}
-			Long maxWareId = null;
+			String maxWareNo = null;
 			Double maxD = null;
-			for (Long wareId : scoreMap.keySet()) {
+			for (String wareNo : scoreMap.keySet()) {
 				if (maxD == null) {
-					maxWareId = wareId;
-					maxD = scoreMap.get(wareId);
+					maxWareNo = wareNo;
+					maxD = scoreMap.get(wareNo);
 				} else {
-					if (maxD < scoreMap.get(wareId)) {
-						maxD = scoreMap.get(wareId);
-						maxWareId = wareId;
-					} else if(maxD.equals(scoreMap.get(wareId)) && warehouseSeqMap.get(wareId) > warehouseSeqMap.get(maxWareId)) {
-						maxD = scoreMap.get(wareId);
-						maxWareId = wareId;
+					if (maxD < scoreMap.get(wareNo)) {
+						maxD = scoreMap.get(wareNo);
+						maxWareNo = wareNo;
+					} else if(maxD.equals(scoreMap.get(wareNo)) && warehouseSeqMap.get(wareNo) > warehouseSeqMap.get(maxWareNo)) {
+						maxD = scoreMap.get(wareNo);
+						maxWareNo = wareNo;
 					}
 				}
 			}
-			if (maxWareId != null) {
+			if (maxWareNo != null) {
 				List<WarehouseCollector> wcs = Lists.newArrayList();
-				Map<Long, WarehouseCollector> rowData = table.row(maxWareId);
+				Map<Long, WarehouseCollector> rowData = table.row(maxWareNo);
 				for (Map.Entry<Long, WarehouseCollector> entry : rowData.entrySet()) {
 					wcs.add(entry.getValue());
 				}
