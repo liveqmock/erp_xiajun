@@ -21,12 +21,16 @@ public interface CountryMapperExt extends CountryDOMapper{
 	 */
 	//Country selectCountryByName(String name);
 	
+	//插入单个国家
+	int insertCountrySelective(CountryDO country);
+	
 	/**
 	 * 查找所有国家
 	 * @return
 	 */
 	List<CountryDO> queryAllCountries();
 	
+	//按条件查找国家
 	CountryDO queryCountrySelective(CountryDO countryDO);
 	
 	String queryCodeById(Integer id);

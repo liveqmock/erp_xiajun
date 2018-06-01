@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CountryMapperExt;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
+import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 
 /**
@@ -35,17 +36,17 @@ public class CountryServiceImpl   implements ICountryService {
 		return countryMapper.selectCountryByName(name);
 	}
 	*/
-	/**
-	 * 添加国家
-	 *//*
+
+	
+	//插入单个国家
 	@Override
-	public void addCountry(Country country) {
-		String userCreate = ShiroUtil.getShiroUser().getLoginName();
-		country.setUserCreate(userCreate);
-		country.setGmtCreate(new Date());
-		countryMapper.insert(country);
+	public int insertCountrySelective(CountryDO country) {
+		country.setCreator("admin");
+		country.setModifier("admin");
+		country.setCountryCode(RandomUtils.getTimeRandom());
+		return countryMapper.insertCountrySelective(country);
 	}
-	*/
+	
 	/**
 	 * 查找所有国家
 	 */
@@ -57,6 +58,7 @@ public class CountryServiceImpl   implements ICountryService {
 		return countryResult;
 	}
 	
+	//按条件查找国家
 	@Override
 	public CountryDO queryCountrySelective(CountryDO countryDO) {
 		return countryMapper.queryCountrySelective(countryDO);

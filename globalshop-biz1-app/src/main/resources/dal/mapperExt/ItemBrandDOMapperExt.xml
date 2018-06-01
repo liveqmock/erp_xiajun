@@ -52,4 +52,56 @@
 		WHERE T1.name = #{name}
 		AND T1.is_del=0
 	</select>
+	
+	<insert id="insertBrandSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+    insert into item_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nameChina != null" >
+        name_china,
+      </if>
+      <if test="nameAlias != null" >
+        name_alias,
+      </if>
+      <if test="seq != null" >
+        seq,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameChina != null" >
+        #{nameChina,jdbcType=VARCHAR},
+      </if>
+      <if test="nameAlias != null" >
+        #{nameAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
 </mapper>

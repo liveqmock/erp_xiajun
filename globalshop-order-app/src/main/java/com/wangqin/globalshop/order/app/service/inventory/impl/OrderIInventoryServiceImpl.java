@@ -118,7 +118,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
     @Override
     public int releaseInventory(MallSubOrderDO order) throws InventoryException {
         // 悲观锁 锁定库存记录，防止并发
-        InventoryDO inventory = inventoryMapper.getInventoryBySkuId(order.getItemCode(), order.getOrderNo());
+        InventoryDO inventory = inventoryMapper.getInventoryBySkuId(order.getItemCode(), order.getSkuCode());
 
         List<InventoryBookingRecordDO> records = inventoryRecordService.queryByErpOrderId(order.getOrderNo());
         int sumInvRelease = 0;

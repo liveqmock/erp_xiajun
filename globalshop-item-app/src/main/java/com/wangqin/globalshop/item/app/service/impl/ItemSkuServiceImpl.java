@@ -11,6 +11,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
@@ -19,6 +20,7 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IInventoryService;
+import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
 
@@ -31,6 +33,9 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	
 	@Autowired
 	private ItemSkuMapperExt itemSkuMapperExt;
+	
+	@Autowired
+	private IItemSkuScaleService itemSkuScaleService;
 
 	@Override
 	public void insertBatch(List<ItemSkuAddVO> skuList) {
@@ -49,6 +54,11 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		if(totalCount!=null&&totalCount!=0L){
 			itemResult.buildPage(totalCount, itemSkuQueryVO);
 			List<ISkuDTO> itemSkus = itemSkuMapperExt.queryItemSkus(itemSkuQueryVO);
+			//查询sku的规格信息
+			itemSkus.forEach(itemSku -> {
+				List<ItemSkuScaleDO> scaleList = itemSkuScaleService.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
+				itemSku.setScaleList(scaleList);
+			});
 			itemResult.setData(itemSkus);
 		}
 		return itemResult;
