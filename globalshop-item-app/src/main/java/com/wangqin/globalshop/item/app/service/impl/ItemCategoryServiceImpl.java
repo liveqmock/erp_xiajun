@@ -31,7 +31,13 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 		return categoryMapper.selectAll();
 	}
 	
-	
+	//插入类目
+	@Override
+	public void insertCategorySelective(ItemCategoryDO category) {
+    	category.setCreator("admin");
+    	category.setModifier("admin");
+    	categoryMapper.insertCategorySelective(category);
+    }
 
 	
 

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryInoutMapperExt">
+ <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
+    <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+    <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
+    <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 2.0 -->
+  <sql id="Base_Column_List" >
+    id, company_no, item_code, sku_code, inventory_on_warehouse_no, warehouse_no, shelf_no, 
+    quantity, operator_type, gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  
+   <select id="queryInventoryInoutCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+        SELECT
+        		count(1)
+        FROM
+            inventory_inout T1 ,item_sku T2
+        WHERE  1=1 
+        		and T1.sku_id=T2.id
+       		<if test="itemName!=null and itemName!=''">
+       			and T2.item_name LIKE concat('%',#{itemName},'%')
+       		</if>
+       		<if test="skuCode!=null and skuCode!=''">
+       			and T1.sku_code = #{skuCode} 
+       		</if>
+       		<if test="upc!=null and upc!=''">
+       			and T2.upc = #{upc} 
+       		</if>
+       		<if test="warehouseId != null">
+        			and T1.warehouse_id = #{warehouseId}	
+        	</if>
+       		<if test="operatorType != null">
+        			and T1.operator_type = #{operatorType}	
+        	</if>
+        	<if test="positionNo != null">
+        			and T1.position_no = #{positionNo}	
+        	</if>
+    </select>
+    
+    <select id="queryInventoryInouts" resultType="com.wangqin.globalshop.biz1.app.vo.InventoryInoutVO" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+		SELECT
+        		T1.id AS id, T1.sku_id AS skuId,T1.`warehouse_id` AS warehouseId,T1.`position_no` AS positionNo,T1.`operator_type` AS operatorType,
+				T2.`item_name` AS itemName,T2.`upc` AS upc, T2.`sku_pic` AS skuPic,T1.`quantity` AS quantity ,T1.`user_create` AS userCreate,T1.`gmt_create` AS gmtCreate,T1.sku_code as skuCode
+        FROM
+            inventory_inout T1 ,item_sku T2
+        WHERE  1=1 
+        		and T1.sku_id=T2.id
+       		<if test="itemName!=null and itemName!=''">
+       			and T2.item_name LIKE concat('%',#{itemName},'%')
+       		</if>
+       		<if test="skuCode!=null and skuCode!=''">
+       			and T1.sku_code = #{skuCode} 
+       		</if>
+       		<if test="upc!=null and upc!=''">
+       			and T2.upc = #{upc} 
+       		</if>
+       		<if test="warehouseId != null">
+        			and T1.warehouse_id = #{warehouseId}	
+        	</if>
+        	<if test="positionNo != null">
+        			and T1.position_no = #{positionNo}	
+        	</if>
+        	<if test="operatorType != null">
+        			and T1.operator_type = #{operatorType}	
+        	</if>
+          order by T1.gmt_create desc
+          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+            
+    </select>
+    
+    <!-- 查询 入库商品数,XiaJun-->
+    <select id="countTodayInInventoryItemNum" resultType="java.lang.Integer">
+    SELECT
+    	IFNULL(sum(IFNULL(T1.quantity,0)),0)
+    	FROM inventory_inout T1
+    	<where> 
+    	 1=1
+    	 AND T1.operator_type IN
+    	<foreach item="type" index="index" collection="typeList" open="(" separator="," close=")">  
+			#{type}
+		</foreach>
+
+			<if test="today != null">
+		AND
+			<![CDATA[ T1.gmt_create >= #{today} ]]>
+		</if>
+		</where>
+    </select>
+</mapper>
