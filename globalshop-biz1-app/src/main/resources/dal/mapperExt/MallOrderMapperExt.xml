@@ -432,6 +432,15 @@
         status = #{status}
 
     </select>
+    <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_order`
+        WHERE
+        order_no = #{orderNo}
+
+    </select>
     <!-- 今日发货订单表(我也不知道这句话什么意思),XiaJun -->
     <select id="todaySendOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
         SELECT

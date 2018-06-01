@@ -60,6 +60,8 @@ public class AppTest
         @Test
         public void testAD() {
                 MallSubOrderVO orderDO = new MallSubOrderVO();
+                orderDO.setId(53L);
+                orderDO.setSkuCode("123");
                 orderDO.setOrderNo("111");
                 System.out.println(JSON.toJSON(orderDO));
 

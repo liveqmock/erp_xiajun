@@ -96,15 +96,17 @@ public class MallSubOrderController {
 		result.buildIsSuccess(true).setData(erpOrder);
 		return result;
 	}
-	@RequestMapping("/update")
+	@RequestMapping(value = "/update",method = RequestMethod.POST)
 	@ResponseBody
-	public Object update(MallSubOrderDO erpOrder) {
+	public Object update(String erpOrder) {
+		MallSubOrderDO orderDO = JSON.parseObject(erpOrder, MallSubOrderDO.class);
 		JsonResult<MallSubOrderDO> result = new JsonResult<>();
 //		ShiroUser shiroUser = this.getShiroUser();
 //		erpOrder.setUserModify(shiroUser.getLoginName());
-		erpOrder.setGmtModify(new Date());
-		erpOrder.setQuantity(null);//不能修改销售数量，需要在主订单哪里修改数量
-		erpOrderService.update(erpOrder);
+		orderDO.setModifier("mallSubOrderController((((");
+		orderDO.setGmtModify(new Date());
+		orderDO.setQuantity(null);//不能修改销售数量，需要在主订单哪里修改数量
+		erpOrderService.update(orderDO);
 		result.setSuccess(true);
 		return result;
 	}
@@ -130,7 +132,7 @@ public class MallSubOrderController {
 				if(erpOrder==null){
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
-					if(erpOrder.getStatus()== OrderStatus.INIT.getCode()){
+ 					if( OrderStatus.INIT.getCode() == erpOrder.getStatus()){
 						try{
 							if(StringUtil.isNotBlank(closeReason)) {
 								erpOrder.setCloseReason(closeReason);

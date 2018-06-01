@@ -21,6 +21,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +55,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     public void updateBatchById(List<MallSubOrderDO> erpOrderList) {
         for (MallSubOrderDO mallSubOrderDO : erpOrderList) {
-            mallSubOrderDOMapper.updateByPrimaryKey(mallSubOrderDO);
+            mallSubOrderDOMapper.updateByPrimaryKeySelective(mallSubOrderDO);
         }
     }
 
@@ -70,7 +71,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
     @Override
     public void update(MallSubOrderDO order) {
-        mallSubOrderDOMapper.updateByPrimaryKey(order);
+        mallSubOrderDOMapper.updateByPrimaryKeySelective(order);
     }
 
     @Override
@@ -105,10 +106,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
+    @Transactional
     public void closeErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
         erpOrder.setStatus((byte) OrderStatus.CLOSE.getCode());
         erpOrder.setGmtModify(new Date());
-        mallSubOrderDOMapper.updateByPrimaryKey(erpOrder);
+        mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
         //备货状态清空占用库存
         if(erpOrder.getStockStatus()!= StockUpStatus.INIT.getCode()){
             inventoryService.releaseInventory(erpOrder);
@@ -137,7 +139,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 //		this.baseMapper.updateById(erpOrder);
         //未备货状态
         if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
-            mallSubOrderDOMapper.updateByPrimaryKey(erpOrder);
+            mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
         }else {//部分备货或者全部备货状态
             List<InventoryBookingRecordDO>  records = inventoryRecordService.queryByErpOrderId(erpOrder.getOrderNo());
@@ -168,9 +170,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                 inventoryRecordService.updates(records);
                 //根据备货数量计算订单状态
                 ErpOrderUtil.calculateStockStatus(erpOrder,realBooked,transBooked);
-                mallSubOrderDOMapper.updateByPrimaryKey(erpOrder);
                 //新订单改为未备货
-//				this.baseMapper.updateById(newErpOrder);
+                mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
             }else if(splitCount>realBooked){//比现货备货大，现货全部给予主订单。
                 Long mainReal = realBooked;  //主订单现货
@@ -233,11 +234,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                 //更新全部在途或者现货record
                 inventoryRecordService.updates(records);
                 ErpOrderUtil.calculateStockStatus(erpOrder,mainReal,mainTrans);
-                mallSubOrderDOMapper.updateByPrimaryKey(erpOrder);
+                mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
                 newErpOrder.setWarehouseNo(erpOrder.getWarehouseNo());
                 ErpOrderUtil.calculateStockStatus(newErpOrder,subReal,subTrans);
-                mallSubOrderDOMapper.updateByPrimaryKey(newErpOrder);
+                mallSubOrderDOMapper.updateByPrimaryKeySelective(newErpOrder);
             }else{//从1 <= splitCount <= realBooked 个
 //				int mainReal = realBooked;
 //				int mainTrans = 0;
@@ -293,11 +294,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                 }
                 erpOrder.setStockStatus((byte) StockUpStatus.STOCKUP.getCode());
                 erpOrder.setGmtModify(new Date());
-                mallSubOrderDOMapper.updateByPrimaryKey(erpOrder);
+                mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
                 newErpOrder.setWarehouseNo(erpOrder.getWarehouseNo());
                 ErpOrderUtil.calculateStockStatus(newErpOrder,subReal,subTrans);
-                mallSubOrderDOMapper.updateByPrimaryKey(newErpOrder);
+                mallSubOrderDOMapper.updateByPrimaryKeySelective(newErpOrder);
                 //更新全部在途或者现货record
                 inventoryRecordService.updates(records);
             }

@@ -22,9 +22,6 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 
 	MallSubOrderDO selectByPrimaryKey(Long id);
 
-	int updateByPrimaryKeySelective(MallSubOrderDO record);
-
-	int updateByPrimaryKey(MallSubOrderDO record);
 
 	List<MallSubOrderDO> selectList(MallSubOrderDO order);
 
