@@ -31,7 +31,7 @@ import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.item.app.service.IInventoryService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
@@ -53,7 +53,7 @@ public class ItemSkuController  {
 	private IItemService iItemService;
 
 	@Autowired
-	private IInventoryService inventoryService;
+	private ItemIInventoryService inventoryService;
 	@Autowired
 	private ItemIMallOrderService erpOrderService;
 	

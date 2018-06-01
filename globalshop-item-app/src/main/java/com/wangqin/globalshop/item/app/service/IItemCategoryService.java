@@ -44,7 +44,8 @@ public interface IItemCategoryService {
 	   
 	   List<ItemCategoryDTO> selectAllDTO();
 
-	   
+	   //插入类目
+	   void insertCategorySelective(ItemCategoryDO category);
 	   
 
 }

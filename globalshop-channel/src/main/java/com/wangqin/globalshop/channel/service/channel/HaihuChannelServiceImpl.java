@@ -373,6 +373,16 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 					outerOrderDetailTemp.setTelephone(outerOrderHh.getTelephone());
 					outerOrderDetailTemp.setPostcode(outerOrderHh.getPostcode());
 					outerOrderDetailTemp.setChannelName(ChannelType.HaiHu.getName());
+
+
+					outerOrderDetailTemp.setCustomerNo("无");
+					outerOrderDetailTemp.setIsDel(false);
+					outerOrderDetailTemp.setCreator("系统");
+					outerOrderDetailTemp.setModifier("系统");
+					outerOrderDetailTemp.setChannelOrderNo(outerOrder.getChannelOrderNo());
+
+
+
 					outerOrderDetailList.add(outerOrderDetailTemp);
 					//如果有虚拟库存就扣减虚拟库存
 					ItemSkuDO tjItemSku = new ItemSkuDO();
@@ -392,7 +402,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 						}
 					}
 				}
-				outerOrderDetailMapper.insertBatch(outerOrderDetailList);				//添加子订单
+				mallSubOrderService.insertBatch(outerOrderDetailList);				//添加子订单
 				if(outOrderIdList.size() > 0) {
 	    			//把商品详情更新到主订单明细里面
 	    			outerOrderDetailMapper.updateOuterOrderDetailByItemSku(outOrderIdList);

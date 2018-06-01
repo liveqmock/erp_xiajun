@@ -868,7 +868,8 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		p.setChannelOrderNo(TradeDetail.getTid());
 		if (outerOrderMapper.queryPoCount(p) > 0) {
 			logger.error("有赞订单已经存在 tid:" + TradeDetail.getTid());
-			return;
+			//生产时，直接return，测试时，进行插入
+			//return;
 		}
 
 		// 如果有赞订单还不存在，继续
@@ -939,6 +940,13 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			outerOrderDetail.setTelephone(TradeDetail.getReceiverMobile()); // 联系电话
 			outerOrderDetail.setPostcode(TradeDetail.getReceiverZip()); // 邮编
 			outerOrderDetail.setChannelName(ChannelType.YouZan.getName());
+
+			outerOrderDetail.setCustomerNo("无");
+			outerOrderDetail.setIsDel(false);
+			outerOrderDetail.setCreator("系统");
+			outerOrderDetail.setModifier("系统");
+			outerOrderDetail.setChannelOrderNo(outerOrder.getChannelOrderNo());
+
 			outerOrderDetails.add(outerOrderDetail);
 
 			// 如果有虚拟库存就扣减虚拟库存

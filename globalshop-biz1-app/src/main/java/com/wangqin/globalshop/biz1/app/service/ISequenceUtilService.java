@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.item.app.service;
+package com.wangqin.globalshop.biz1.app.service;
 
 public interface ISequenceUtilService {
 

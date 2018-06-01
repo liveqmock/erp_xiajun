@@ -60,11 +60,11 @@
         gmt_modify, creator, modifier, is_del
     </sql>
     <update id="updateOuterOrderDetailByItemSku">
-        UPDATE outer_order_detail a
+        UPDATE mall_sub_order a
         LEFT JOIN item_sku b ON a.sku_code=b.sku_code
         SET
-        a.item_id=b.item_id,a.sku_id=b.id,a.upc=b.upc,a.weight=b.weight,a.item_name=b.item_name,a.color=b.color,a.scale=b.scale,a.sku_pic=b.sku_pic,a.logistic_type=b.logistic_type
-        WHERE a.outer_order_id IN
+        a.item_code=b.item_code,a.sku_code=b.sku_code,a.upc=b.upc,a.weight=b.weight,a.item_name=b.item_name,a.sku_pic=b.sku_pic,a.logistic_type=b.logistic_type
+        WHERE a.channel_order_no IN
         <foreach item="item" index="index" collection="erpOrderIdList" open="(" separator="," close=")">
             #{item}
         </foreach>
@@ -157,5 +157,79 @@
         FROM
         `mall_sub_order`
     </select>
+
+
+
+    <sql id="commonSelectSection">
+        1 = 1
+        <if test="channelNo != null">
+            and T1.channel_no = #{channelNo}
+        </if>
+        <if test="channelName != null">
+            and T1.channel_name = #{channelName}
+        </if>
+        <if test="companyNo != null">
+            and T1.company_no = #{companyNo}
+        </if>
+
+        <if test="channelOrderNo != null">
+            and T1.channel_order_no = #{channelOrderNo}
+        </if>
+
+        <if test="orderNo != null">
+            and T1.order_no = #{orderNo}
+        </if>
+
+
+        <if test="shopCode != null">
+            and T1.shop_code = #{shopCode}
+        </if>
+
+
+        <if test="status != null">
+            and T1.status = #{status}
+        </if>
+
+        <if test=" isDel == true">
+            and T1.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T1.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T1.is_del is false
+        </if>
+
+    </sql>
+
+    <sql id="tableSection">mall_sub_order</sql>
+    <!--查询总条数 -->
+    <select id="selectSubOrder" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
+    >
+        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="selectSubOrderCount" resultType="java.lang.Integer"
+    >
+        SELECT COUNT(*)
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="selectSubOrderList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
+    >
+        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
+        FROM <include refid="tableSection"/> T1
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T1.id desc
+    </select>
+
 
 </mapper>

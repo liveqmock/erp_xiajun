@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -19,7 +18,7 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.item.app.service.IInventoryService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
@@ -29,7 +28,7 @@ import com.wangqin.globalshop.item.app.service.IItemSkuService;
 public class ItemSkuServiceImpl   implements IItemSkuService {
 	
 	@Autowired
-	private IInventoryService inventoryService;
+	private ItemIInventoryService inventoryService;
 	
 	@Autowired
 	private ItemSkuMapperExt itemSkuMapperExt;

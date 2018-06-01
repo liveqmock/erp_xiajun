@@ -10,7 +10,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.item.app.service.IInventoryService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
 
@@ -22,7 +22,7 @@ public class MallOrderServiceImplementItem implements ItemIMallOrderService {
     @Autowired
     private IItemSkuService               itemSkuService;
     @Autowired
-    private IInventoryService             inventoryService;
+    private ItemIInventoryService inventoryService;
     @Autowired
     private MallSubOrderMapperExt         outerOrderDetailMapper;
     @Autowired

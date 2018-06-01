@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface WarehouseDOMapperExt extends WarehouseMapper {
 
-    List<WarehouseDO> queryPoList(WarehouseDO so);
+    List<WarehouseDO> selectWhList(WarehouseDO so);
     WarehouseDO selectByWarehourseNo(String warehouseNo);
+
+    List<WarehouseDO> queryPoList(WarehouseDO so);
+
+    List<WarehouseDO> selectByCompanyNo(String companyNo);
 }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordMapperExt">
+<!-- 2.0结果列 -->
+ <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
+    <result column="booked_quantity" property="bookedQuantity" jdbcType="BIGINT" />
+    <result column="inventory" property="inventory" jdbcType="BIGINT" />
+    <result column="inventory_type" property="inventoryType" jdbcType="VARCHAR" />
+    <result column="operator_type" property="operatorType" jdbcType="VARCHAR" />
+    <result column="inventory_area_id" property="inventoryAreaId" jdbcType="BIGINT" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+    <result column="position_no" property="positionNo" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 2.0 -->
+  <sql id="Base_Column_List" >
+    id, company_no, order_no, sub_order_no, item_code, sku_code, quantity, booked_quantity, 
+    inventory, inventory_type, operator_type, inventory_area_id, warehouse_id, position_no, 
+    gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  
+  
+   <!-- 1.0通用查询结果列-->
+    <sql id="inventoryRecordResultMapping">
+        T1.id,T1.order_id AS orderId,T1.erp_order_id AS erpOrderId,T1.sku_id AS skuId,T1.item_id AS itemId,T1.sku_code AS skuCode,T1.quantity ,T1.booked,T1.inventory,
+        T1.inventory_type AS inventoryType,T1.operator_type as operatorType,T1.warehouse_id AS warehouseId,T1.position_no AS positionNo,T1.inventory_area_id AS inventoryAreaId, 
+        T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify
+    </sql>
+    
+	<select id="sumBookedBySkuId"  resultType="java.lang.Integer" >
+        SELECT
+        	 	sum(booked) 
+        FROM
+            inventory_booking_record T1
+        WHERE
+        		order_id = #{orderId}	 and erp_order_id = #{erpOrderId}  
+    </select>
+    
+    	<select id="sumBookedByInventoryType"  resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO">
+        SELECT
+        	 	sum(booked) AS booked,inventory_type AS inventoryType
+        FROM
+            inventory_booking_record T1
+        WHERE
+        		order_id = #{orderId}	 and erp_order_id = #{erpOrderId} 
+        GROUP BY inventory_type
+    </select>
+    
+    	<select id="queryByErpOrderId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO"  >
+        SELECT
+        	 <include refid="inventoryRecordResultMapping" />,T2.name as warehouseName 
+        FROM
+            inventory_booking_record T1 LEFT JOIN warehouse T2 ON T1.warehouse_id=T2.id 
+        WHERE
+        		erp_order_id = #{erpOrderId}  
+    </select>
+    
+    	<select id="sumInventoryCheckRecord" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO"  >
+		SELECT
+        	 	sum(T1.booked) as booked  , T1.erp_order_id as erpOrderId
+        FROM
+            inventory_booking_record T1 , erp_order T2
+        WHERE
+        		T1.erp_order_id = T2.id
+        		and
+        		T1.inventory_type = #{inventoryType}
+        		and
+        		T1.inventory_area_id = #{inventoryAreaId}
+        		and 
+        		T2.status in 
+        		<foreach item="item" index="index" collection="status" open="("  
+	            separator="," close=")">  
+	            #{item}  
+        		</foreach> 
+        		<!-- T2.stock_status in (10,4,1) and T2.status in (0,1)  -->
+		GROUP BY 
+        		T1.erp_order_id 
+       	HAVING booked > 0 
+       	<choose>
+	        <when test="inventoryType !=null and inventoryType.toString() == 'INVENTORY'">
+	            ORDER BY T1.erp_order_id desc 
+	        </when>
+	        <otherwise>
+	            ORDER BY T1.erp_order_id asc
+	        </otherwise>
+	    </choose>
+    </select>
+    
+    <update id="changePositionNo" >  
+    		<![CDATA[ 
+	    UPDATE 
+	    		inventory_booking_record 
+	    	SET 
+			position_no = #{positionNo} 
+	    WHERE  
+	    		inventory_area_id = #{inventoryAreaId}
+	    		]]> 
+	</update> 
+</mapper>

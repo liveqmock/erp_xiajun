@@ -5,7 +5,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.common.utils.Md5Util;
 import com.wangqin.globalshop.order.app.kuaidi_bean.*;
-import com.wangqin.globalshop.order.app.kuaidi_bean.HttpClient.HttpResponse;
 import com.wangqin.globalshop.order.app.kuaidi_bean._4px.LogisticsStatus;
 import com.wangqin.globalshop.order.app.service.kuaidi100.IKuaidi100Service;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
@@ -42,7 +41,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 	public static final Pattern comPattern = Pattern.compile("\"comCode\":\"([a-z].+?)\"");
 	
 	@Autowired
-	IShippingOrderService shippingOrderService;
+    IShippingOrderService shippingOrderService;
 	
 	@Autowired
 	private IShippingTrackService shippingTrackService;
@@ -230,7 +229,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("schema", "json");
 		params.put("param", JacksonHelper.toJSON(request));
-		HttpResponse response = HttpClient.httpPost(kuaidi100_post_url, params);
+		HttpClient.HttpResponse response = HttpClient.httpPost(kuaidi100_post_url, params);
 		return JacksonHelper.fromJSON(response.getStringResult("utf-8"), PostResponse.class);
 	}
 	
@@ -269,7 +268,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 			params.put("customer", customer);
 			params.put("sign", sign);
 			params.put("param", paramStr);
-			HttpResponse response = HttpClient.httpPost(kuaidi100_query_url, params);
+			HttpClient.HttpResponse response = HttpClient.httpPost(kuaidi100_query_url, params);
 
 			String resultStr = response.getStringResult("utf-8");
 			if (StringUtils.isEmpty(resultStr)) {

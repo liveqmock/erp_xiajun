@@ -204,7 +204,7 @@
     		<![CDATA[
 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			inventory = inventory + #{toTrans},
 			trans_inv = trans_inv - #{toTrans},
@@ -220,7 +220,7 @@
     		<![CDATA[
 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			inventory = inventory - #{toCheck}
 	    WHERE  
@@ -233,7 +233,7 @@
     		<![CDATA[
 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			trans_inv = trans_inv - #{toCheck}
 	    WHERE  
@@ -246,7 +246,7 @@
     		<![CDATA[
 
 	    UPDATE
-	    		inventory_area
+	    		inventory_on_warehouse
 	    	SET
 			inventory = inventory + #{toAdd}
 	    WHERE  

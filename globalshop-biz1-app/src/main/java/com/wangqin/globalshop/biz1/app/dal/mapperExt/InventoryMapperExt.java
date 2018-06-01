@@ -96,4 +96,5 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	InventoryDO queryInventoryByCode(@Param("itemCode") String itemCode, @Param("skuCode") String skuCode);
 
 
+
 }

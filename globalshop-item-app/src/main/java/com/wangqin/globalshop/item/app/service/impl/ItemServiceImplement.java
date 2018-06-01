@@ -38,7 +38,7 @@ public class ItemServiceImplement implements IItemService {
     private IFreightService    iFreightService;
 
     @Autowired
-    private IInventoryService  inventoryService;
+    private ItemIInventoryService inventoryService;
 
     @Autowired
     private IItemBrandService  iBrandService;

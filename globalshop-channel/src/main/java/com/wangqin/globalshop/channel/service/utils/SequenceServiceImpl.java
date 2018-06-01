@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.channel.service.utils;
 
 
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,10 @@ public class SequenceServiceImpl  implements ISequenceService {
 
 
 	@Autowired
-	private SequenceDOMapperExt sequenceDOMapperExt;
+	private SequenceUtilMapperExt sequenceUtilMapperExt;
 
 	public Long gainORDSequence(){
-           return sequenceDOMapperExt.gainORDSequence();
+           return sequenceUtilMapperExt.gainORDSequence();
 	}
 
 

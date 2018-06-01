@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
-import com.wangqin.globalshop.item.app.service.IInventoryService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 
 @Service
-public class InventoryServiceImpl implements IInventoryService {
+public class InventoryServiceImplItem implements ItemIInventoryService {
 
     @Autowired
     private InventoryMapperExt inventoryMapper;
