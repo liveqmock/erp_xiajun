@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemCategoryMapperExt">
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, category_code AS categoryCode,name, p_code AS pCode,root_code AS rootCode, seq,level,status,all_path as allPath,
+        gmt_create as gmtCreate ,gmt_modify as gmtModify,creator,modifier,is_del AS isDel
+    </sql>
+	
+	<select id="selectByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" parameterType="java.lang.String">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM category 
+		WHERE name = #{name}
+	</select>
+	
+	
+	
+	<!-- 查询所有类目 -->
+	<select id="selectAll" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO"> 
+	SELECT 
+	<include refid="Base_Column_List" />
+	from item_category T1
+	<where>
+      T1.is_del=0
+	</where>
+	</select>
+	
+	<!-- 查询所有类目,返回DTO -->
+	<select id="selectAllDTO" resultType="com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO"> 
+	SELECT 
+	<include refid="Base_Column_List" />
+	from item_category T1
+	<where>
+      T1.is_del=0
+	</where>
+	</select>
+	
+	<!-- 根据索引查找 -->
+	<select id="queryByCategoryCode" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO"> 
+	SELECT 
+	<include refid="Base_Column_List" />
+	from item_category T1
+	<where>
+      T1.is_del=0
+      AND T1.category_code = #{categoryCode}
+	</where>
+	</select>
+</mapper>

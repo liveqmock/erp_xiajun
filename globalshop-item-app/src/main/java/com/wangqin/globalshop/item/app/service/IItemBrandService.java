@@ -27,7 +27,7 @@ public interface IItemBrandService {
 	JsonPageResult<List<ItemBrandDO>> queryBrands(ItemBrandQueryVO brandQueryVO);
 
 	//总查询
-	//JsonPageResult<List<ItemBrandDO>> queryAllBrand();
+	JsonPageResult<List<ItemBrandDO>> queryAllBrand();
 	
 	/**
 	 * 根据品牌英文名查找品牌，防止重复
@@ -35,7 +35,7 @@ public interface IItemBrandService {
 	 * @param name
 	 * @return
 	 */
-	ItemBrandDO selectByName(String name);
+	String selectBrandNoByName(String name);
 	
 	ItemBrandDO selectByPrimaryKey(Long id);
 	

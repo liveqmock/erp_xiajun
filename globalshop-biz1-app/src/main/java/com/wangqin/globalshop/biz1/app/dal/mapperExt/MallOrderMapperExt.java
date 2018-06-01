@@ -41,6 +41,8 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
 	List<MallOrderDO> queryHaihuShippingNO(@Param("targetNo")String targetNo,@Param("skuCode")String skuCode);
 	
 	List<MallOrderDO> todaySendOrders(@Param("statusList")List<Integer> statusList);
+
+
 	MallOrderDO selectByOrderNo(String orderNo);
 	List<MallOrderDO> queryByStatus(byte status);
 

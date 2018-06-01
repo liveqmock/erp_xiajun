@@ -48,62 +48,10 @@
 	<select id="queryItemSkusCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
         SELECT
         	count(1)
-        FROM
-            item_sku T1
+         FROM
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
-     		   1=1
-            <if test=" itemName != null and itemName != '' ">
-                and T1.item_name LIKE concat('%',#{itemName},'%')
-            </if>
-            <if test=" itemCode != null and itemCode != '' ">
-               and T1.item_code = #{itemCode}
-            </if>
-            <if test=" upc != null and upc != '' ">
-               and T1.upc = #{upc}
-            </if>
-            <if test=" skuCode != null and skuCode != '' ">
-               and T1.sku_code = #{skuCode}
-            </if>
-             <if test=" enName != null and enName != '' ">
-              and  T1.en_name LIKE concat('%',#{enName},'%')
-            </if>
-            <if test=" categoryId != null">
-              and  T1.category_id = #{categoryId}
-            </if>
-            <if test=" brand != null and brand != ''">
-              and  T1.brand = #{brand}
-            </if>
-            <if test=" color != null and color != '' ">
-                and T1.color LIKE concat('%',#{color},'%')
-            </if>
-            <if test=" buySite != null and buySite != '' ">
-                and T1.buy_site LIKE concat('%',#{buySite},'%')
-            </if>
-            <if test=" startGmt!= null ">
-             and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
-            </if>
-            <if test=" endGmt != null ">
-            and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
-            </if>
-            <if test=" companyId != null ">
-            and    <![CDATA[ T1.company_id = #{companyId} ]]>
-            </if>
-            
-    </select>
-    
-    <select id="queryItemSkus" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
-        SELECT
-        	 T1.id as id,T1.sale_type AS saleType,T1.brand as brand,T1.weight as weight,T1.sku_pic as skuPic,T1.item_id AS itemId,T1.item_name AS itemName,T1.category_id AS categoryId,T1.category_name AS categoryName,
-			 T1.item_code AS itemCode,T1.sku_code AS skuCode,T1.upc as upc,T1.salable as salable,T1.color as color,T1.scale as scale,T1.purchase_price AS purchasePrice,T1.freight AS freight,T1.sale_price AS salePrice,T1.remark as remark,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.user_create AS userCreate,T1.user_modify AS userModify,
-			 T1.package_id as packageId,T1.package_level_id as packageLevelId,T1.package_name AS packageName,T1.package_en as packageEn,T1.package_weight as packageWeight,T1.buy_site as buySite,inv.locked_inv as lockedInv,inv.inventory as inventory
-			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,(inv.inventory-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv ,T1.third_sku_code AS thirdSkuCode
-			 <if test="isPurchase!=null and isPurchase==1">
-                ,getTaskDailyItemSkuCase(T1.id) as taskDailyItemSkuCase 
-            </if>
-        FROM
-            item_sku T1 left join inventory inv on T1.id= inv.sku_id 
-        where
-           1=1
+           T1.is_del=0
               <if test=" itemName != null and itemName != '' ">
                 and T1.item_name LIKE concat('%',#{itemName},'%')
             </if>
@@ -116,20 +64,9 @@
             <if test=" skuCode != null and skuCode != '' ">
                and T1.sku_code = #{skuCode}
             </if>
-             <if test=" enName != null and enName != '' ">
-              and  T1.en_name LIKE concat('%',#{enName},'%')
-            </if>
-            <if test=" categoryId != null">
-              and  T1.category_id = #{categoryId}
-            </if>
+
             <if test=" brand != null and brand != ''">
-              and  T1.brand = #{brand}
-            </if>
-            <if test=" color != null and color != '' ">
-                and T1.color LIKE concat('%',#{color},'%')
-            </if>
-            <if test=" buySite != null and buySite != '' ">
-                and T1.buy_site LIKE concat('%',#{buySite},'%')
+              and  T1.brand_name = #{brand}
             </if>
             <if test=" startGmt!= null ">
              and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
@@ -137,21 +74,104 @@
             <if test=" endGmt != null ">
             and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
             </if>
-            <if test=" companyId != null ">
-            and    <![CDATA[ T1.company_id = #{companyId} ]]>
+    </select>
+    
+    <select id="queryItemSkus" resultType="com.wangqin.globalshop.biz1.app.dto.ISkuDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
+        SELECT
+        	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
+        	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
+        	 T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,
+             inv.locked_inv as lockedInv,inv.inv as inventory
+			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
+			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
+			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv
+        FROM
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
+        where
+           T1.is_del=0
+              <if test=" itemName != null and itemName != '' ">
+                and T1.item_name LIKE concat('%',#{itemName},'%')
+            </if>
+            <if test=" itemCode != null and itemCode != '' ">
+               and T1.item_code = #{itemCode}
+            </if>
+             <if test=" upc != null and upc != '' ">
+               and T1.upc = #{upc}
+            </if>
+            <if test=" skuCode != null and skuCode != '' ">
+               and T1.sku_code = #{skuCode}
+            </if>
+
+            <if test=" brand != null and brand != ''">
+              and  T1.brand_name = #{brand}
+            </if>
+            <if test=" startGmt!= null ">
+             and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+            </if>
+            <if test=" endGmt != null ">
+            and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
             </if>
           order by T1.id desc
           	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-            
     </select>
     
-    
+    <!-- 通过skuCode查找单个sku -->
+     <select id="queryItemSkuBySkuCode" resultType="com.wangqin.globalshop.biz1.app.dto.ISkuDTO" parameterType="java.lang.String">
+        SELECT
+        	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
+        	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
+        	 T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,
+             inv.locked_inv as lockedInv,inv.inv as inventory
+			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
+			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
+			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv
+        FROM
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
+        where
+           T1.is_del=0
+           AND
+           T1.sku_code=#{skuCode}
+    </select>
+
+    <!-- 根据id更新itemsku -->
+    <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO" >
+    update item_sku
+    <set >
+      <if test="salePrice != null" >
+        sale_price = #{salePrice},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale},
+      </if>
+      <if test="upc != null" >
+        upc = #{upc},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight},
+      </if>
+      <if test="brand != null" >
+        brand_name = #{brand},
+      </if>
+      <if test="skuPic != null" >
+        sku_pic = #{skuPic},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
      <select id="queryItemSkusById" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
         SELECT
         	 T1.id as id,T1.sale_type AS saleType,T1.weight as weight,T1.sku_pic as skuPic,T1.item_id AS itemId,T1.item_name AS itemName,T1.category_id AS categoryId,T1.category_name AS categoryName,
 			 T1.item_code AS itemCode,T1.sku_code AS skuCode,T1.upc as upc,T1.salable as salable,T1.color as color,T1.scale as scale,T1.purchase_price AS purchasePrice,T1.freight AS freight,T1.sale_price AS salePrice,T1.remark as remark,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.user_create AS userCreate,T1.user_modify AS userModify,
-			 T1.package_id as packageId,T1.package_level_id as packageLevelId,T1.package_name AS packageName,T1.package_en as packageEn,T1.package_weight as packageWeight,inv.locked_inv as lockedInv,inv.inventory as inventory
-			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,(inv.inventory-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv,T1.cost_price AS costPrice,T1.discount AS discount,T1.third_sku_code AS thirdSkuCode  
+			 T1.package_id as packageId,T1.package_level_id as packageLevelId,T1.package_name AS packageName,T1.package_en as packageEn,T1.package_weight as packageWeight,inv.locked_inv as lockedInv,inv.inv as inventory
+			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,(inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv,T1.cost_price AS costPrice,T1.discount AS discount,T1.third_sku_code AS thirdSkuCode
         FROM
             item_sku T1 left join inventory inv on T1.id= inv.sku_id 
         where
@@ -205,7 +225,7 @@
 <!-- 根据upc获取商品信息(item_sku),@Author:XiaJun -->
 <select id="queryItemSkusByUpc" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.String">
      SELECT
-        <include refid="Base_Column_List" />, inv.inventory as inventory,inv.virtual_inv as virtualInv
+        <include refid="Base_Column_List" />, inv.inv as inventory,inv.virtual_inv as virtualInv
         FROM
             item_sku T1 left join inventory inv on T1.id= inv.sku_id 
         where
@@ -224,5 +244,29 @@
           </if>
 </select>
 
-    
+
+   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into item_sku
+        (sku_code,item_code,item_name,company_no,upc,creator,modifier)
+
+        values
+        <foreach collection="list" item="wdSolr" index="index"
+            separator=",">
+            (
+            #{wdSolr.skuCode},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
+            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier}
+            )
+        </foreach>
+    </insert>
+
+    <update id="deleteBySkuCode" parameterType="java.lang.String">
+    	update item_sku
+    	set is_del=1
+    	where sku_code=#{skuCode}
+    </update>
+
 </mapper>

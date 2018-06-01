@@ -68,7 +68,7 @@ public class ShippingTrackDO {
     }
 
     public void setShippingOrderNo(String shippingOrderNo) {
-        this.shippingOrderNo = shippingOrderNo;
+        this.shippingOrderNo = shippingOrderNo == null ? null : shippingOrderNo.trim();
     }
 
     public String getWaybillNo() {

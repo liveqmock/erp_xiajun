@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
-@Controller
+@Controller("wxLoginController")
 @RequestMapping("/wx")
 public class LoginController extends BaseController {
 

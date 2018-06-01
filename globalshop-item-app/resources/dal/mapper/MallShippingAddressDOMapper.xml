@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallShippingAddressDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+    <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+    <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+    <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+    <result column="address_detail" property="addressDetail" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="identity_card" property="identityCard" jdbcType="VARCHAR" />
+    <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR" />
+    <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR" />
+    <result column="is_default" property="isDefault" jdbcType="TINYINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, channel_no, customer_no, open_id, receiver, receiver_state, receiver_city, receiver_district, 
+    address_detail, telephone, identity_card, idcard_pic_front, idcard_pic_reverse, is_default, 
+    gmt_create, gmt_modify, is_del, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mall_shipping_address
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mall_shipping_address
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_shipping_address (id, channel_no, customer_no, 
+      open_id, receiver, receiver_state, 
+      receiver_city, receiver_district, address_detail, 
+      telephone, identity_card, idcard_pic_front, 
+      idcard_pic_reverse, is_default, gmt_create, 
+      gmt_modify, is_del, creator, 
+      modifier)
+    values (#{id,jdbcType=INTEGER}, #{channelNo,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{receiverState,jdbcType=VARCHAR}, 
+      #{receiverCity,jdbcType=VARCHAR}, #{receiverDistrict,jdbcType=VARCHAR}, #{addressDetail,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{identityCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, 
+      #{idcardPicReverse,jdbcType=VARCHAR}, #{isDefault,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_shipping_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="customerNo != null" >
+        customer_no,
+      </if>
+      <if test="openId != null" >
+        open_id,
+      </if>
+      <if test="receiver != null" >
+        receiver,
+      </if>
+      <if test="receiverState != null" >
+        receiver_state,
+      </if>
+      <if test="receiverCity != null" >
+        receiver_city,
+      </if>
+      <if test="receiverDistrict != null" >
+        receiver_district,
+      </if>
+      <if test="addressDetail != null" >
+        address_detail,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="identityCard != null" >
+        identity_card,
+      </if>
+      <if test="idcardPicFront != null" >
+        idcard_pic_front,
+      </if>
+      <if test="idcardPicReverse != null" >
+        idcard_pic_reverse,
+      </if>
+      <if test="isDefault != null" >
+        is_default,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverState != null" >
+        #{receiverState,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCity != null" >
+        #{receiverCity,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverDistrict != null" >
+        #{receiverDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null" >
+        #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="identityCard != null" >
+        #{identityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicFront != null" >
+        #{idcardPicFront,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicReverse != null" >
+        #{idcardPicReverse,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null" >
+        #{isDefault,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO" >
+    update mall_shipping_address
+    <set >
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null" >
+        customer_no = #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverState != null" >
+        receiver_state = #{receiverState,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCity != null" >
+        receiver_city = #{receiverCity,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverDistrict != null" >
+        receiver_district = #{receiverDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null" >
+        address_detail = #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="identityCard != null" >
+        identity_card = #{identityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicFront != null" >
+        idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicReverse != null" >
+        idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null" >
+        is_default = #{isDefault,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO" >
+    update mall_shipping_address
+    set channel_no = #{channelNo,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      receiver_state = #{receiverState,jdbcType=VARCHAR},
+      receiver_city = #{receiverCity,jdbcType=VARCHAR},
+      receiver_district = #{receiverDistrict,jdbcType=VARCHAR},
+      address_detail = #{addressDetail,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      identity_card = #{identityCard,jdbcType=VARCHAR},
+      idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
+      idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
+      is_default = #{isDefault,jdbcType=TINYINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

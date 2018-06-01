@@ -6,7 +6,10 @@ import org.apache.ibatis.annotations.Param;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
+import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 
 
 /**
@@ -18,7 +21,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
 	Integer queryItemSkusCount(ItemSkuQueryVO itemSkuQueryVO);
 	
-	List<ItemSkuDO> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO);
+	List<ISkuDTO> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO);
 	
 	List<ItemSkuDO> queryItemSkusById(@Param(value="itemId") Long itemId,@Param(value="skuId") Long skuId );
 	
@@ -42,6 +45,14 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	 * @return
 	 */
 	List<ItemSkuDO> queryItemSkusByUpc(String upc);
+
+	void insertBatch(List<ItemSkuAddVO> skuList);
+
+	ISkuDTO queryItemSkuBySkuCode(String skuCode);
+
+	void updateById(ItemSkuUpdateVO itemSkuUpdateVO);
+
+	void deleteBySkuCode(String skuCode);
 
     ItemSkuDO queryItemBySkuCode(@Param("skuCode") String skuCode);
 }

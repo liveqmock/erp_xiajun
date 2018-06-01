@@ -9,10 +9,12 @@ target/
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+bin/
+target/
 .idea/
-.project/
+.project
 .settings/
-.classpath/
+.classpath
 # Package Files #
 *.war
 *.nar

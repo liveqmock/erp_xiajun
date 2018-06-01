@@ -9,7 +9,11 @@ import java.util.Date;
  */
 public class ItemSkuQueryVO extends PageQueryVO{
 
+	private Long id;
 	
+	private Long itemId;
+	
+	private Long lockedVirtualInv;
 	/**
 	 * 商品编码
 	 */
@@ -212,4 +216,30 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
+	}
+
+	public Long getLockedVirtualInv() {
+		return lockedVirtualInv;
+	}
+
+	public void setLockedVirtualInv(Long lockedVirtualInv) {
+		this.lockedVirtualInv = lockedVirtualInv;
+	}
+	
+	
 }

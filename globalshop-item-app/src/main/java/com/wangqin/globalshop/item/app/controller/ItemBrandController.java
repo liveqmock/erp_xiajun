@@ -2,6 +2,7 @@ package com.wangqin.globalshop.item.app.controller;
 
 import java.util.List;
 
+import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,15 +117,15 @@ public class ItemBrandController {
 	}
 
 	/**
-	 * 总查询(unuse)
+	 * 总查询，用在商品列表(fin)
 	 */
-	/*
+	
 	@RequestMapping("/queryAllBrand")
 	@ResponseBody
 	public Object queryItemBrandDOpage(ItemBrandDO brand) {
 		JsonResult<List<ItemBrandDO>> result = itemBrandService.queryAllBrand();
 		return result.buildIsSuccess(true);
 	}
-	*/
+	
 
 }

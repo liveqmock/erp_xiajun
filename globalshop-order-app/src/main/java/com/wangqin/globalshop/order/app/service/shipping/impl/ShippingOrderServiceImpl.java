@@ -310,13 +310,13 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                         }
                     }
                     if(closeCount == totalCount) {	//主订单关闭
-                        outerOrder.setStatus((byte) OrderStatus.CLOSE.getCode());
+                        outerOrder.setStatus(OrderStatus.CLOSE.getCode());
                     } else if((closeCount+sentCount) == totalCount) {	//全部发货
-                        outerOrder.setStatus((byte) OrderStatus.SENT.getCode());
+                        outerOrder.setStatus(OrderStatus.SENT.getCode());
                     } else if(sentCount > 0) {	//部分发货
-                        outerOrder.setStatus((byte) OrderStatus.PART_SENT.getCode());
+                        outerOrder.setStatus( OrderStatus.PART_SENT.getCode());
                     } else {
-                        outerOrder.setStatus((byte) OrderStatus.INIT.getCode());
+                        outerOrder.setStatus( OrderStatus.INIT.getCode());
                     }
                     outerOrder.setGmtModify(new Date());
                     mallOrderService.updateById(outerOrder);

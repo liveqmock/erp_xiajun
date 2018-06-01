@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.channel.dal.mapperExt.CAMallOrderMapperExt">
+
+
+    <sql id="commonSelectSection">
+        1 = 1
+        <if test="channelNo != null">
+            and T.channel_no = #{channelNo}
+        </if>
+        <if test="channelName != null">
+            and T.channel_name = #{channelName}
+        </if>
+        <if test="companyNo != null">
+            and T.company_no = #{companyNo}
+        </if>
+
+        <if test="channelOrderNo != null">
+            and T.channel_order_no = #{channelOrderNo}
+        </if>
+
+
+        <if test="shopCode != null">
+            and T.shop_code = #{shopCode}
+        </if>
+
+
+        <if test="status != null">
+            and T.status = #{status}
+        </if>
+
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+
+    </sql>
+
+
+    <!--查询总条数 -->
+    <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
+    >
+        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
+        FROM mall_order T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="queryPoCount" resultType="java.lang.Integer"
+    >
+        SELECT COUNT(*)
+        FROM mall_order T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
+    >
+        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
+        FROM mall_order T
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T.id desc
+    </select>
+
+
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        insert into mall_order
+        (
+        company_no,
+        channel_no,
+        channel_name,
+        customer_no,
+        channel_type,
+        shop_code,
+        order_no,
+        order_time,
+        status,
+        channel_order_no,
+        id_card,
+        pay_type,
+        freight,
+        total_amount,
+        actual_amount,
+        memo,
+        creator,
+        gmt_create,
+        gmt_modify,
+        customer_no,
+        channel_customer_no,
+        modifier,
+        isDel
+        )
+        values
+        <foreach collection="list" item="mallOrder" index="index"
+                 separator=",">
+            (
+            #{mallOrder.companyNo},
+            #{mallOrder.channelNo},
+            #{mallOrder.channelName},
+            #{mallOrder.channelType},
+            #{mallOrder.shopCode},
+            #{mallOrder.orderNo},
+            #{mallOrder.orderTime},
+            #{mallOrder.status},
+            #{mallOrder.channelOrderNo},
+            #{mallOrder.idCard},
+            #{mallOrder.payType},
+            #{mallOrder.freight},
+            #{mallOrder.totalAmount},
+            #{mallOrder.actualAmount},
+            #{mallOrder.memo},
+            #{mallOrder.creator},
+            #{mallOrder.gmtCreate},
+            #{mallOrder.gmtModify},
+            #{mallOrder.customerNo},
+            #{mallOrder.channelCustomerNo},
+            #{mallOrder.modifier},
+            #{mallOrder.isDel}
+            )
+        </foreach>
+    </insert>
+
+
+
+</mapper>

@@ -2,129 +2,134 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-/**
- * 仓库
- * 
- * @author liuhui
- *
- */
-public class WarehouseDO  {
+public class WarehouseDO {
+    private Long id;
 
-	private Long id;
-	private String warehouseNo;
-	private String name;
-	private String companyNo;
-	private Integer delivery_priority = 0;
-	private String address;
-	private String tel;
-	private String contactPerson;
-	private Date gmtCreate;
-	private Date gmtModify;
-	private Byte isDel=0;
-	private String creator;
-	private String modifier;
+    private String warehouseNo;
 
-	public Long getId() {
-		return id;
-	}
+    private String name;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private String companyNo;
 
-	public String getWarehouseNo() {
-		return warehouseNo;
-	}
+    private Integer deliveryPriority;
 
-	public void setWarehouseNo(String warehouseNo) {
-		this.warehouseNo = warehouseNo;
-	}
+    private String address;
 
-	public String getName() {
-		return name;
-	}
+    private String tel;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String contactPerson;
 
-	public String getCompanyNo() {
-		return companyNo;
-	}
+    private Date gmtCreate;
 
-	public void setCompanyNo(String companyNo) {
-		this.companyNo = companyNo;
-	}
+    private Date gmtModify;
 
-	public Integer getDelivery_priority() {
-		return delivery_priority;
-	}
+    private Boolean isDel;
 
-	public void setDelivery_priority(Integer delivery_priority) {
-		this.delivery_priority = delivery_priority;
-	}
+    private String creator;
 
-	public String getAddress() {
-		return address;
-	}
+    private String modifier;
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getTel() {
-		return tel;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
+    public String getWarehouseNo() {
+        return warehouseNo;
+    }
 
-	public String getContactPerson() {
-		return contactPerson;
-	}
+    public void setWarehouseNo(String warehouseNo) {
+        this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
+    }
 
-	public void setContactPerson(String contactPerson) {
-		this.contactPerson = contactPerson;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Date getGmtCreate() {
-		return gmtCreate;
-	}
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
-	}
+    public String getCompanyNo() {
+        return companyNo;
+    }
 
-	public Date getGmtModify() {
-		return gmtModify;
-	}
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
+    }
 
-	public void setGmtModify(Date gmtModify) {
-		this.gmtModify = gmtModify;
-	}
+    public Integer getDeliveryPriority() {
+        return deliveryPriority;
+    }
 
-	public Byte getIsDel() {
-		return isDel;
-	}
+    public void setDeliveryPriority(Integer deliveryPriority) {
+        this.deliveryPriority = deliveryPriority;
+    }
 
-	public void setIsDel(Byte isDel) {
-		this.isDel = isDel;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public String getCreator() {
-		return creator;
-	}
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
+    public String getTel() {
+        return tel;
+    }
 
-	public String getModifier() {
-		return modifier;
-	}
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
+    }
 
-	public void setModifier(String modifier) {
-		this.modifier = modifier;
-	}
+    public String getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(String contactPerson) {
+        this.contactPerson = contactPerson == null ? null : contactPerson.trim();
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModify() {
+        return gmtModify;
+    }
+
+    public void setGmtModify(Date gmtModify) {
+        this.gmtModify = gmtModify;
+    }
+
+    public Boolean getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
 }
