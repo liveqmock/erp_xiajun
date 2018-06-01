@@ -2,22 +2,30 @@ package com.wangqin.globalshop.inventory.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryInoutMapperExt;
 import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author biscuit
  * @data 2018/06/01
  */
 public class InventoryOnWarehouseServiceImpl implements IInventoryInoutService {
+
+
+	@Autowired
+	private InventoryInoutMapperExt inventoryInoutMapperExt;
+	
     @Override
     public Integer queryInventoryInoutCount(InventoryQueryVO inventoryQueryVO) {
-        return null;
+        return inventoryInoutMapperExt.queryInventoryInoutCount(inventoryQueryVO);
     }
 
     @Override
     public List<InventoryInoutVO> queryInventoryInouts(InventoryQueryVO inventoryQueryVO) {
-        return null;
+       return inventoryInoutMapperExt.queryInventoryInouts(inventoryQueryVO);
     }
 }

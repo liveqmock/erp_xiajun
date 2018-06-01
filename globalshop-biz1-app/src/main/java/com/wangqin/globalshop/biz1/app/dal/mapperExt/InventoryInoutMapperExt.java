@@ -6,7 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
-import com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+
 
 public interface InventoryInoutMapperExt {
 

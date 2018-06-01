@@ -11,10 +11,7 @@ public class InventoryInoutVO {
 
 	
 	private Long id;
-	/**
-	 * skuid
-	 */
-	private Long skuId;
+
 	/**
 	 * skuCode
 	 */
@@ -33,17 +30,14 @@ public class InventoryInoutVO {
 	/**
 	 * 仓库Id
 	 */
-	private Long warehouseId;
+	private String warehouseNo;
 	
 	private String warehouseName;
 	/**
 	 * 货架编号
 	 */
-	private String positionNo;
-	/**
-	 * 创建者
-	 */
-	private String userCreate;
+	private String shelfNo;
+
 	/**
 	 * 创建时间
 	 */
@@ -58,12 +52,7 @@ public class InventoryInoutVO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getSkuId() {
-		return skuId;
-	}
-	public void setSkuId(Long skuId) {
-		this.skuId = skuId;
-	}
+
 	public String getSkuCode() {
 		return skuCode;
 	}
@@ -89,24 +78,8 @@ public class InventoryInoutVO {
 		this.upc = upc;
 	}
 
-	public Long getWarehouseId() {
-		return warehouseId;
-	}
-	public void setWarehouseId(Long warehouseId) {
-		this.warehouseId = warehouseId;
-	}
-	public String getPositionNo() {
-		return positionNo;
-	}
-	public void setPositionNo(String positionNo) {
-		this.positionNo = positionNo;
-	}
-	public String getUserCreate() {
-		return userCreate;
-	}
-	public void setUserCreate(String userCreate) {
-		this.userCreate = userCreate;
-	}
+
+
 	public Date getGmtCreate() {
 		return gmtCreate;
 	}
@@ -131,4 +104,17 @@ public class InventoryInoutVO {
 	public void setSkuPic(String skuPic) {
 		this.skuPic = skuPic;
 	}
+	public String getWarehouseNo() {
+		return warehouseNo;
+	}
+	public void setWarehouseNo(String warehouseNo) {
+		this.warehouseNo = warehouseNo;
+	}
+	public String getShelfNo() {
+		return shelfNo;
+	}
+	public void setShelfNo(String shelfNo) {
+		this.shelfNo = shelfNo;
+	}
+	
 }
