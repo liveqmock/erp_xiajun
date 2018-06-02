@@ -1,16 +1,13 @@
 package com.wangqin.globalshop.channel.dal.haihu;
 
-import com.baomidou.mybatisplus.annotations.IdType;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@TableName("`outer_order`")
-public class OuterOrder implements Serializable {
+/**
+ * 海狐推送的订单是1.0结构
+ */
+public class OuterOrder {
 
 	// `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键',
 	// `taget_no` varchar(64) NOT NULL COMMENT '外部订单编号',
@@ -28,64 +25,41 @@ public class OuterOrder implements Serializable {
 	// `gmt_create` datetime NOT NULL COMMENT '创建时间',
 	// `gmt_modify` datetime NOT NULL COMMENT '操作时间',
 
-	@TableId(type = IdType.AUTO)
 	private Long id;
-	@TableField(value = "target_no")
 	private String targetNo;
-	@TableField(value = "order_no")
 	private String orderNo;
-	@TableField(value = "sales_id")
 	private Long salesId;// 销售ID
-	@TableField(value = "sales_name")
 	private String salesName;// 销售名称
-	@TableField(value = "order_time")
 	private Date orderTime;// 销售时间
 	private Integer status;// 订单状态
 	private String receiver;
-	@TableField(value = "address_detail")
 	private String addressDetail;// 地址详情
 	private String telephone;
 	private String postcode;
 	private String remark;
 	
-	@TableField(value = "receiver_state")
 	private String receiverState;// 省
-	@TableField(value = "receiver_city")
 	private String receiverCity;// 市
-	@TableField(value = "receiver_district")
 	private String receiverDistrict;// 区
-	@TableField(value = "platform_type")
 	private Integer platformType;// 销售来源
-	@TableField(value = "pay_type")
 	private Integer payType;// 支付方式
-	@TableField(value = "id_card")
 	private String idCard;// 身份证号码
 
-	@TableField(exist = false)
 	private String outerOrderDetailList;
 
-	@TableField(value = "gmt_create")
 	private Date gmtCreate;
-	@TableField(value = "gmt_modify")
 	private Date gmtModify;
 
-	@TableField(value = "user_create")
 	private String userCreate;
-	@TableField(value = "user_modify")
 	private String userModify;
-	@TableField(exist = false)
 	private List<OuterOrderDetail> outerOrderDetails;
 	
-	@TableField(exist = false)
 	private Double totalSalePrice;
 	
-	@TableField(value = "wx_pay_trade_no")
 	private String wxPayTradeNo;	// 微信支付商户订单号
 	
-	@TableField(value = "company_id")
 	private Long companyId;
 	
-	@TableField(exist = false)
 	private Integer countOfSubOrder; // 子订单数
 	
 	public Long getId() {

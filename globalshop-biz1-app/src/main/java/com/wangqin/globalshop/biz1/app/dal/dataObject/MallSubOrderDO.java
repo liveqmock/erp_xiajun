@@ -18,7 +18,6 @@ public class MallSubOrderDO {
 
     private String  shopCode;
 
-    private String channelName;
 
     private String  channelOrderNo;
 
@@ -98,11 +97,13 @@ public class MallSubOrderDO {
 
     private Boolean isDel;
 
-    public String getChannelName() {
-        return channelName;
+    private String subOrderNo;
+
+    public String getSubOrderNo() {
+        return subOrderNo;
     }
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
+    public void setSubOrderNo(String subOrderNo) {
+        this.subOrderNo = subOrderNo;
     }
     public Long getId() {
         return id;

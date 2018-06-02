@@ -1,52 +1,48 @@
 package com.wangqin.globalshop.channel.dal.haihu;
 
-import com.baomidou.mybatisplus.annotations.IdType;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class OuterOrderDetail implements Serializable {
-	@TableId(type = IdType.AUTO)
+public class OuterOrderDetail  {
+
 	private Long id;
-	@TableField(value = "outer_order_id")
+
 	private Long outerOrderId;
-	@TableField(value = "sku_id")
+
 	private Long skuId;
-	@TableField(value = "item_id")
+
 	private Long itemId;
-	@TableField(value = "sku_code")
+
 	private String skuCode;
 	private String upc;
-	@TableField(value = "item_name")
+
 	private String itemName;
 	private String color;
 	private String scale;
-	@TableField(value = "sku_pic")
+
 	private String skuPic;
-	@TableField(value = "logistic_type")
+
 	private Integer logisticType;
 	private Double freight;
 	private Double weight;
-	@TableField(value = "sale_price")
+
 	private Double salePrice;
-	@TableField(exist = false)
+
 	private String freightStr;
-	@TableField(exist = false)
+
 	private String salePriceStr;
 
 	private Integer quantity;
 
-	@TableField(value = "gmt_create")
+
 	private Date gmtCreate;
-	@TableField(value = "gmt_modify")
+
 	private Date gmtModify;
 
-	@TableField(value = "third_sku_code") // 第三方sku
+
 	private String  thirdSkuCode;
 	
-	@TableField(value = "company_id")
+
 	private Long companyId;
 	
 	public Long getId() {

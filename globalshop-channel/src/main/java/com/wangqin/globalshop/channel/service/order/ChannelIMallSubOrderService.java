@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.channel.service.order;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.common.utils.BizResult;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface ChannelIMallSubOrderService {
 
-	public void splithaihuErpOrder(String outerOrderDetailList, String channelOrderNo);
+	public void splithaihuErpOrder(String outerOrderDetailList, String channelOrderNo, ChannelAccountDO channelAccount) throws InventoryException;
 
 
 	BizResult lockErpOrder(MallSubOrderDO erpOrder)throws InventoryException;

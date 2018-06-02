@@ -939,7 +939,10 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			outerOrderDetail.setReceiverAddress(TradeDetail.getReceiverAddress()); // 详细地址
 			outerOrderDetail.setTelephone(TradeDetail.getReceiverMobile()); // 联系电话
 			outerOrderDetail.setPostcode(TradeDetail.getReceiverZip()); // 邮编
-			outerOrderDetail.setChannelName(ChannelType.YouZan.getName());
+
+			outerOrderDetail.setShopCode(channelAccount.getShopCode());
+			outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
+			outerOrderDetail.setSubOrderNo("O" + outerOrder.getOrderNo().substring(1) + String.format("%0"+4+"d", outerOrderDetails.size()+1));
 
 			outerOrderDetail.setCustomerNo("无");
 			outerOrderDetail.setIsDel(false);

@@ -162,11 +162,11 @@
 
     <sql id="commonSelectSection">
         1 = 1
-        <if test="channelNo != null">
-            and T1.channel_no = #{channelNo}
+        <if test="subOrderNo != null">
+            and T1.sub_order_no = #{subOrderNo}
         </if>
-        <if test="channelName != null">
-            and T1.channel_name = #{channelName}
+        <if test="shopCode != null">
+            and T1.shop_code = #{shopCode}
         </if>
         <if test="companyNo != null">
             and T1.company_no = #{companyNo}
@@ -231,5 +231,24 @@
         ORDER BY T1.id desc
     </select>
 
+
+    <select id="queryHaihuErpOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="tableSection"/> T1
+        WHERE
+        T1.receiver='地址稍后'  and T1.status=0
+        <if test="shopCode!=null">
+            and T1.shop_code = #{shopCode}
+        </if>
+        <if test="skuCode!=null">
+            and T1.sku_code = #{skuCode}
+        </if>
+        <if test="quantity>0">
+            and T1.quantity >= #{quantity}
+        </if>
+        LIMIT 0,1
+    </select>
 
 </mapper>

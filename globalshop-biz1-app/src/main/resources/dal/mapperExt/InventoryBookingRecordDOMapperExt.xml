@@ -32,4 +32,12 @@
     FROM inventory_booking_record
     WHERE order_no = #{orderNo}
   </select>
+
+  <select id="selectBySubOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM inventory_booking_record
+    WHERE sub_order_no = #{subOrderNo}
+  </select>
+
 </mapper>

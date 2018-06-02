@@ -185,7 +185,12 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 			outerOrderDetail.setReceiverAddress(receiver.getReceiverAddress()); // 详细地址
 			outerOrderDetail.setTelephone(receiver.getReceiverMobile()); // 联系电话
 			outerOrderDetail.setPostcode(receiver.getReceiverZip()); // 邮编
-			outerOrderDetail.setChannelName(ChannelType.TaoBao.getName());
+
+
+			outerOrderDetail.setShopCode(channelAccount.getShopCode());
+			outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
+			outerOrderDetail.setSubOrderNo("O" + outerOrder.getOrderNo().substring(1) + String.format("%0"+4+"d", outerOrderDetails.size()+1));
+
 			outerOrderDetails.add(outerOrderDetail);
 
 			// 如果有虚拟库存就扣减虚拟库存

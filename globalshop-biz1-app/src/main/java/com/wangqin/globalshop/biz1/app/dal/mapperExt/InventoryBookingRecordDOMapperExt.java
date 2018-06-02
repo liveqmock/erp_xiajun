@@ -8,7 +8,10 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface InventoryBookingRecordDOMapperExt extends InventoryBookingRecordDOMapper {
+
     List<InventoryBookingRecordDO> selectByOrderNo(@Param("orderNo") String orderNo);
+
+    List<InventoryBookingRecordDO> selectBySubOrderNo(@Param("subOrderNo") String subOrderNo);
 
     List<InventoryRecord> sumBookedByInventoryType(String orderNo);
 }

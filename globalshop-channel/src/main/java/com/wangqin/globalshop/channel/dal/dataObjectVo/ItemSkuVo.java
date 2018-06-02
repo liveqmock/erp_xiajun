@@ -49,9 +49,10 @@ public class ItemSkuVo extends ItemSkuDO{
 	 */
 	public String getColor(){
 		if(itemSkuScaleDO == null){
-			return null;
+			return getScale();
+		}else {
+			return itemSkuScaleDO.getScaleCode();
 		}
-		return itemSkuScaleDO.getScaleCode();
 	}
 
 	public String getScale(){

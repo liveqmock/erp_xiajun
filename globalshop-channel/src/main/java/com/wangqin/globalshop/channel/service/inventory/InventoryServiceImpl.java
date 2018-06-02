@@ -17,6 +17,7 @@ import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.InventoryVo;
 import com.wangqin.globalshop.channel.service.order.ChannelIMallSubOrderService;
 import com.wangqin.globalshop.channel.service.warehouse.IWarehouseService;
+import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,8 +101,8 @@ public class InventoryServiceImpl  implements IInventoryService {
 		private String orderNo;
 		private Long erpOrderId;
 		private Integer stockStatus;// 备货状态 0:未备货 1:部分备货 2 备货完成
-		private Long booked;// 本次预定量
-		private Long transBooked;// 本次在途预定量
+		private Long booked;// 本次预定量（实际）
+		private Long transBooked;// 本次在途预定量（在途）
 		private Long lastBooked; //上次预定在途（数据库）
 		private Long lastTransBooked; //上次预定在途（数据库）
 		private String warehouseNo;//仓库ID
@@ -351,7 +352,13 @@ public class InventoryServiceImpl  implements IInventoryService {
 		erpOrder.setWarehouseNo(warehouseCollector.getWarehouseNo());
 		mallSubOrderService.updateByPrimaryKey(erpOrder);//更新状态
 	}
-
+	/**
+	 * 实际库存锁定（备货，预分配）
+	 * @param erpOrder
+	 * @param warehouseCollector
+	 * @param availableInv
+	 * @throws InventoryException
+	 */
 	private void insertInventoryLockedRecord(MallSubOrderDO erpOrder, WarehouseCollector warehouseCollector, Long availableInv)
 			throws InventoryException {
 		String itemCode = erpOrder.getItemCode();
@@ -360,7 +367,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 		Long booked = warehouseCollector.getBooked();
 		List<InventoryOnWareHouseDO> areas = inventoryOnWarehouseMapperExt.queryInventoryAreaByWarehouse(warehouseNo, itemCode, skuCode);
 		for (InventoryOnWareHouseDO inventoryArea : areas) {
-			Long available = inventoryArea.getInventory()-inventoryArea.getLockedInv();;
+			Long available = inventoryArea.getInventory()-inventoryArea.getLockedInv();
 			if (available == 0) {
 				continue;
 			}
@@ -381,7 +388,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 			}
 			inventoryOnWarehouseMapperExt.updateByPrimaryKey(inventoryArea);
 			inventoryBookingRecordDOMapperExt
-					.insert(buildLockedRecord(erpOrder, bookedArea, inventoryArea, skuCode, InventoryType.INVENTORY));
+					.insert(buildLockedRecord(erpOrder, bookedArea, inventoryArea, skuCode, InventoryRecord.InventoryType.INVENTORY));
 			// 预定量为0直接推出循环
 			if (booked == 0) {
 				break;
@@ -392,8 +399,13 @@ public class InventoryServiceImpl  implements IInventoryService {
 			warehouseCollector.setBooked(warehouseCollector.getBooked()-booked);
 		}
 	}
-
-
+	/**
+	 * 在途库存锁定（预分配，备货）
+	 * @param erpOrder
+	 * @param warehouseCollector
+	 * @param availableInv
+	 * @throws InventoryException
+	 */
 	private void insertTransInventoryLockedRecord(MallSubOrderDO erpOrder, WarehouseCollector warehouseCollector,
 			Long availableInv) throws InventoryException {
 		String itemCode = erpOrder.getItemCode();
@@ -423,7 +435,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 			}
 			inventoryOnWarehouseMapperExt.updateByPrimaryKey(inventoryArea);
 			inventoryBookingRecordDOMapperExt
-					.insert(buildLockedRecord(erpOrder, bookedArea, inventoryArea, skuCode, InventoryType.TRANS_INV));
+					.insert(buildLockedRecord(erpOrder, bookedArea, inventoryArea, skuCode, InventoryRecord.InventoryType.TRANS_INV));
 			// 预定量为0直接推出循环
 			if (booked == 0) {
 				break;
@@ -436,20 +448,21 @@ public class InventoryServiceImpl  implements IInventoryService {
 	}
 
 	private InventoryBookingRecordDO buildLockedRecord(MallSubOrderDO erpOrder, Long booked, InventoryOnWareHouseDO inventory, String skuCode,
-			InventoryType inventoryType) {
+			String inventoryType) {
 		InventoryBookingRecordDO bookedRecord = new InventoryBookingRecordDO();
 		bookedRecord.setOrderNo(erpOrder.getOrderNo());
+		bookedRecord.setSubOrderNo(erpOrder.getSubOrderNo());
 		bookedRecord.setSkuCode(skuCode);
 		bookedRecord.setItemCode(erpOrder.getItemCode());
 		bookedRecord.setSkuCode(erpOrder.getSkuCode());
 		bookedRecord.setInventory(inventory.getInventory());
-		//bookedRecord.setPositionNo(inventory.getPositionNo());
+		bookedRecord.setPositionNo(inventory.getShelfNo());
 		bookedRecord.setBookedQuantity(booked);
 		bookedRecord.setInventoryAreaId(inventory.getId());
 		bookedRecord.setWarehouseId(inventory.getWarehouseNo());
 		bookedRecord.setQuantity(Long.valueOf(erpOrder.getQuantity()));
-		bookedRecord.setInventoryType(String.valueOf(inventoryType));
-		bookedRecord.setOperatorType(String.valueOf(OperatorType.LOCKED));
+		bookedRecord.setInventoryType(inventoryType);
+		bookedRecord.setOperatorType(InventoryRecord.OperatorType.LOCKED);
 		Date now = new Date();
 		bookedRecord.setGmtCreate(now);
 		bookedRecord.setGmtModify(now);

@@ -9,6 +9,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
+import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
@@ -263,9 +264,13 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 				String outerOrderDetailList = outerOrder.getOrderDetailList();
 				if (StringUtils.isNotBlank(outerOrderDetailList)) {
 					try {
-						mallSubOrderService.splithaihuErpOrder(outerOrderDetailList, targetNo);
+						mallSubOrderService.splithaihuErpOrder(outerOrderDetailList, targetNo, channelAccount);
+					} catch (InventoryException e) {
+						this.logger.error("",e);
+						result.buildMsg("库存记录错误："+e.getMessage()).buildIsSuccess(false);
 					} catch (ErpCommonException e) {
 						this.logger.error("",e);
+						result.buildMsg("库存记录错误:"+e.getErrorCode()+" "+e.getErrorMsg()).buildIsSuccess(false);
 					}
 				} else {
 					result.buildMsg("参数信息不对").buildIsSuccess(false);
@@ -351,6 +356,13 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 				outerOrder.setCompanyNo(this.channelAccount.getCompanyNo());
 				outerOrder.setGmtCreate(new Date());
 				outerOrder.setGmtModify(new Date());
+
+
+				outerOrder.setCustomerNo("无");
+				outerOrder.setChannelCustomerNo("自定义类型，无买家昵称");
+				outerOrder.setIsDel(false);
+				outerOrder.setModifier("-1");
+
 				outerOrderMapper.insert(outerOrder);  //添加主订单
 				outOrderIdList.add(outerOrder.getOrderNo());
 
@@ -372,9 +384,12 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 					outerOrderDetailTemp.setReceiverAddress(outerOrderHh.getAddressDetail());
 					outerOrderDetailTemp.setTelephone(outerOrderHh.getTelephone());
 					outerOrderDetailTemp.setPostcode(outerOrderHh.getPostcode());
-					outerOrderDetailTemp.setChannelName(ChannelType.HaiHu.getName());
+
+					outerOrderDetailTemp.setOrderNo(outerOrder.getOrderNo());
+					outerOrderDetailTemp.setSubOrderNo("O" + outerOrder.getOrderNo().substring(1) + String.format("%0"+4+"d", outerOrderDetails.size()+1));
 
 
+					outerOrderDetailTemp.setShopCode(channelAccount.getShopCode());
 					outerOrderDetailTemp.setCustomerNo("无");
 					outerOrderDetailTemp.setIsDel(false);
 					outerOrderDetailTemp.setCreator("系统");
@@ -430,52 +445,48 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 		return null;
 	}
 
-    @Override
-    public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
-        // TODO Auto-generated method stub
-        
-    }
 
-//	@Override
-//	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
-//		Map<String, Object> param = new HashMap<String, Object>();
-//		param.put("packageNo", shippingOrder.getShippingNo());
-//		param.put("logisticsCompany", shippingOrder.getLogisticCompany());
-//		param.put("enteCode", "irhua");
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		String timeStamp = dateFormat.format(new Date());
-//		String sign = Md5Util.getMD5("enteCode=irhua&timeStamp="+timeStamp);
-//		param.put("timeStamp", timeStamp);
-//		param.put("sign", sign);
-//		String targetNo = "";
-////		List<Long> erpOrderIdList = HaiJsonUtils.toBean(shippingOrder.getErpOrderId(), new TypeReference<List<Long>>() {
-////		});
-////		List<ErpOrder> erpOrderList = erpOrderService.selectBatchIds(erpOrderIdList);
-//		List<Map<String, Object>> itemSkusList = new ArrayList<>();
-//		for (int j = 0; j < erpOrderList.size(); j++) {
-//			MallSubOrderDO erpOrder = erpOrderList.get(j);
-//			Map<String, Object> itemSkusDetail = new HashMap<String, Object>();
-//			itemSkusDetail.put("skuCode", erpOrder.getSkuCode());
-//			itemSkusList.add(itemSkusDetail);
-//			param.put("itemSkusList", itemSkusList);
-//			targetNo = erpOrderList.get(0).getChannelOrderNo();
-//		}
-//		param.put("erpOrderNo", targetNo);
-//		JSONObject json = JSONObject.fromObject(param);
-//		System.out.println(json);
-//		this.logger.error("同步发货给海狐 req: " + json);
-//		JSONObject description = HttpClientUtil.post("http://expressjob.haihu.com/erp/notify", null, param,"1");
-//		this.logger.error("同步发货给海狐 resp: " + description.toString());
-//		System.err.println(description);
-//
-//		try {
-//			Integer respCode = (Integer) description.get("ResponseCode");
-//			if (respCode == 100) {
-//				shippingOrder.setSyncSendStatus(1);
-//				shippingOrderService.updateByPrimaryKey(shippingOrder);
-//			}
-//		} catch (Exception e) {
-//			this.logger.error("同步发货给海狐 返回结果异常: " + description.toString());
-//		}
-//	}
+
+	@Override
+	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("packageNo", shippingOrder.getShippingNo());
+		param.put("logisticsCompany", shippingOrder.getLogisticCompany());
+		param.put("enteCode", "irhua");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String timeStamp = dateFormat.format(new Date());
+		String sign = Md5Util.getMD5("enteCode=irhua&timeStamp="+timeStamp);
+		param.put("timeStamp", timeStamp);
+		param.put("sign", sign);
+		String targetNo = "";
+//		List<Long> erpOrderIdList = HaiJsonUtils.toBean(shippingOrder.getErpOrderId(), new TypeReference<List<Long>>() {
+//		});
+//		List<ErpOrder> erpOrderList = erpOrderService.selectBatchIds(erpOrderIdList);
+		List<Map<String, Object>> itemSkusList = new ArrayList<>();
+		for (int j = 0; j < erpOrderList.size(); j++) {
+			MallSubOrderDO erpOrder = erpOrderList.get(j);
+			Map<String, Object> itemSkusDetail = new HashMap<String, Object>();
+			itemSkusDetail.put("skuCode", erpOrder.getSkuCode());
+			itemSkusList.add(itemSkusDetail);
+			param.put("itemSkusList", itemSkusList);
+			targetNo = erpOrderList.get(0).getChannelOrderNo();
+		}
+		param.put("erpOrderNo", targetNo);
+		JSONObject json = JSONObject.fromObject(param);
+		System.out.println(json);
+		this.logger.error("同步发货给海狐 req: " + json);
+		JSONObject description = HttpClientUtil.post("http://expressjob.haihu.com/erp/notify", null, param,"1");
+		this.logger.error("同步发货给海狐 resp: " + description.toString());
+		System.err.println(description);
+
+		try {
+			Integer respCode = (Integer) description.get("ResponseCode");
+			if (respCode == 100) {
+				shippingOrder.setSyncSendStatus(1);
+				shippingOrderService.updateByPrimaryKey(shippingOrder);
+			}
+		} catch (Exception e) {
+			this.logger.error("同步发货给海狐 返回结果异常: " + description.toString());
+		}
+	}
 }
