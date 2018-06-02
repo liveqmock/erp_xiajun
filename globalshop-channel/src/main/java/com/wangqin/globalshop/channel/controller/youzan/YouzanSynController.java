@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.channel.controller.youzan;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
@@ -13,6 +14,7 @@ import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/youzanSyn")
+//@Authenticated
 public class YouzanSynController extends BaseController {
 	
 	@Autowired
@@ -68,6 +71,9 @@ public class YouzanSynController extends BaseController {
 			so.setCompanyNo(1+"");
 			so.setStatus(0);
 			List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
+
+			//List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByUserNo(AppUtil.getLoginUserId());
+
 			if(channelAccountList == null || channelAccountList.size() < 1){
 				return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
 			}

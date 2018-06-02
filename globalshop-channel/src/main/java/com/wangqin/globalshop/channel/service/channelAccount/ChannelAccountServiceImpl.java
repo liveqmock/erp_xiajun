@@ -2,13 +2,17 @@ package com.wangqin.globalshop.channel.service.channelAccount;
 
 
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +21,9 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 
 	@Autowired
 	private ChannelAccountDOMapperExt channelAccountDOMapper;
+
+	@Autowired
+	private AuthUserDOMapperExt authUserDOMapperExt;
 
 
 	public ChannelAccountDOMapper getChannelAccountMapper() {
@@ -143,5 +150,22 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 	public ChannelAccountDO selectOne(ChannelAccountDO tmEntity) {
 		return channelAccountDOMapper.queryByTypeAndCompanyNo(tmEntity);
 	}
+
+	@Override
+	public List<ChannelAccountDO> searchCAListByUserNo(String userNo){
+		List<ChannelAccountDO> resultList = new ArrayList<>();
+		if(EasyUtil.isStringEmpty(userNo)){
+			return resultList;
+		}
+        AuthUserDO authUserDO = authUserDOMapperExt.selectByLoginName(userNo);
+
+		ChannelAccountSo so = new ChannelAccountSo();
+		so.setType(ChannelType.YouZan.getValue());
+		so.setCompanyNo(authUserDO.getCompanyNo());
+		so.setStatus(0);
+		resultList = channelAccountDOMapper.queryPoList(so);
+		return resultList;
+	}
+
 
 }

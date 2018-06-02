@@ -31,4 +31,7 @@ public interface IChannelAccountService {
 
     ChannelAccountDO queryByChannelNo(String channelNo);
 	public ChannelAccountDO selectOne(ChannelAccountDO tmEntity);
+
+	public List<ChannelAccountDO> searchCAListByUserNo(String userNo);
+
 }
