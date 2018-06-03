@@ -15,10 +15,6 @@ public class WarehouseServiceImpl implements IWarehouseService {
 
 	@Autowired
 	private WarehouseDOMapperExt mapper;
-	@Override
-	public WarehouseDO selectByWarehourseNo(String warehouseNo) {
-		return mapper.selectByWarehourseNo(warehouseNo);
-	}
 
 	public Map<String,Integer> getWarehousePropeties(String companyNo){
 

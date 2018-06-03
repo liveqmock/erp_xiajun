@@ -47,7 +47,7 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	 * @param lockedTransInv 入仓时的在途锁定数量，用来防止并发数据过期
 	 * @return
 	 */
-	int updateTransToInventory(@Param("itemId") Long itemId,@Param("skuId")  Long skuId, @Param("toTrans")int toTrans, @Param("lockedTransToInv")int lockedTransToInv,  @Param("lockedTransInv")int lockedTransInv);
+	int updateTransToInventory(@Param("itemId") String itemId,@Param("skuId")  String skuId, @Param("toTrans")int toTrans, @Param("lockedTransToInv")Long lockedTransToInv,  @Param("lockedTransInv")Long lockedTransInv);
 
 	/**
 	 * 删除sku时，根据删除库存记录
@@ -72,7 +72,7 @@ public interface InventoryMapperExt extends InventoryDOMapper{
 	 * @param toCheck
 	 * @return
 	 */
-	int updateInventoryTransCheck(@Param("id")Long id , @Param("transInv")int transInv, @Param("toCheck")int toCheck);
+	int updateInventoryTransCheck(@Param("id")Long id , @Param("transInv")Long transInv, @Param("toCheck")int toCheck);
 	
 	void updateUpcForInventory(MallOrderDO erpOrder);
 	

@@ -2,7 +2,6 @@ package com.wangqin.globalshop.inventory.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
-import com.wangqin.globalshop.common.enums.InventoryRecord;
 
 import java.util.List;
 
@@ -14,11 +13,16 @@ public interface InventoryBookingRecordService {
 
     void insert(InventoryBookingRecordDO inventoryRecord);
 
-    List<InventoryRecord> sumBookedByInventoryType(String orderNo);
+    List<InventoryBookingRecordDO> sumBookedByInventoryType(String orderNo);
 
-    void updates(List<InventoryBookingRecordDO> records);
 
     List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(String itemCode, String skuCode, Object o);
 
     InventoryBookingRecordDO queryById(Long id);
+
+    List<InventoryBookingRecordDO> queryByOnWarehouseNoAndInventoryType(String inventoryOnWarehouseNo, String transInv);
+
+    void updateSelectiveById(InventoryBookingRecordDO inventoryRecord);
+
+    List<InventoryBookingRecordDO> sumInventoryCheckRecord(Long id, String transInv, List<Integer> integers);
 }

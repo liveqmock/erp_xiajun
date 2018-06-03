@@ -27,8 +27,8 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	 * @param positionNo
 	 * @return
 	 */
-	InventoryOnWareHouseDO getInventoryArea(@Param("itemId") Long itemId, @Param("skuId") Long skuId,
-			@Param("warehouseId") Long warehouseId, @Param("positionNo") String positionNo);
+	InventoryOnWareHouseDO getInventoryArea(@Param("itemId") String itemId, @Param("skuId") String skuId,
+			@Param("warehourseNo") String warehourseNo, @Param("positionNo") String positionNo);
 
 	/**
 	 * 商品型号总库存
@@ -74,7 +74,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	 * @param lockedTransInv 入仓时的在途锁定数量，用来防止并发数据过期
 	 * @return
 	 */
-	int updateTransToInventoryArea(@Param("id")Long id , @Param("toTrans")int toTrans, @Param("lockedTransToInv")int lockedTransToInv,  @Param("lockedTransInv")int lockedTransInv);
+	int updateTransToInventoryArea(@Param("id")Long id , @Param("toTrans")int toTrans, @Param("lockedTransToInv")Long lockedTransToInv,  @Param("lockedTransInv")Long lockedTransInv);
 
 	/**
 	 * 减库存盘点
@@ -94,7 +94,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	 * @param toCheck
 	 * @return
 	 */
-	int updateInventoryAreaTransCheck(@Param("id")Long id , @Param("transInv")int transInv, @Param("toCheck")int toCheck);
+	int updateInventoryAreaTransCheck(@Param("id")Long id , @Param("transInv")Long transInv, @Param("toCheck")int toCheck);
 	
 	/**
 	 * 增加实际库存
@@ -104,7 +104,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	 * @param toAdd
 	 * @return
 	 */
-	int updateInventoryAreaAddInventory(@Param("id")Long id , @Param("inventory")int inventory, @Param("toAdd")int toAdd);
+	int updateInventoryAreaAddInventory(@Param("id")Long id , @Param("inventory")Long inventory, @Param("toAdd")int toAdd);
 	
 	void updateUpcForInventoryArea(MallOrderDO erpOrder);
 	

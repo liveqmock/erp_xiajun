@@ -74,4 +74,7 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	List<MallSubOrderDO> selectSubOrderList(MallSubOrderDO mallSubOrderDO);
 
 
+	MallSubOrderDO selectBySkuCode(String skuCode);
+
+    MallSubOrderDO selectBySubOrderNo(String subOrderNo);
 }

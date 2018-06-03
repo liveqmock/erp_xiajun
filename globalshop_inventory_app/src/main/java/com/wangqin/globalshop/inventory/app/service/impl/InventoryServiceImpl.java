@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -8,11 +9,13 @@ import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryInoutDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryInoutMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
+import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -29,10 +32,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.wangqin.globalshop.common.enums.InventoryRecord.OperatorType.LOCKED;
 
@@ -54,6 +54,8 @@ public class InventoryServiceImpl implements IInventoryService {
     private MallSubOrderMapperExt mallSubOrderMapperExt;
     @Autowired
     private IWarehouseService warehouseService;
+    @Autowired
+    private InventoryInoutMapperExt inventoryInoutMapper;
 //    private OrderInventoryOnWareHouseService inventoryOnWarehouseService;
 
     @Override
@@ -236,7 +238,7 @@ public class InventoryServiceImpl implements IInventoryService {
         warehouseColl.setWarehouseNo(erpOrder.getWarehouseNo());
 
         // 从预定记录里面查询已经预定的量
-        List<InventoryRecord> inventoryRecords = inventoryRecordService
+        List<InventoryBookingRecordDO> inventoryRecords = inventoryRecordService
                 .sumBookedByInventoryType(erpOrder.getOrderNo());
         if(CollectionUtils.isEmpty(inventoryRecords)){
             throw new InventoryException(
@@ -244,11 +246,11 @@ public class InventoryServiceImpl implements IInventoryService {
         }
         Long lastBooked = 0L;
         Long lastTransBooked = 0L;
-        for(InventoryRecord inventoryRecord:inventoryRecords){
+        for(InventoryBookingRecordDO inventoryRecord:inventoryRecords){
             if(inventoryRecord.getInventoryType()== InventoryRecord.InventoryType.TRANS_INV){
-                lastTransBooked = inventoryRecord.getBooked();
+                lastTransBooked = inventoryRecord.getBookedQuantity();
             } else if(inventoryRecord.getInventoryType()== InventoryRecord.InventoryType.INVENTORY){
-                lastBooked = inventoryRecord.getBooked();
+                lastBooked = inventoryRecord.getBookedQuantity();
             }
         }
         warehouseColl.setLastBooked(lastBooked);
@@ -266,35 +268,6 @@ public class InventoryServiceImpl implements IInventoryService {
         return warehouseColl;
     }
 
-    @Override
-    public int deleteByPrimaryKey(Long id) {
-        return 0;
-    }
-
-    @Override
-    public int insert(InventoryDO record) {
-        return 0;
-    }
-
-    @Override
-    public int insertSelective(InventoryDO record) {
-        return 0;
-    }
-
-    @Override
-    public InventoryDO selectByPrimaryKey(Long id) {
-        return null;
-    }
-
-    @Override
-    public int updateByPrimaryKeySelective(InventoryDO record) {
-        return 0;
-    }
-
-    @Override
-    public int updateByPrimaryKey(InventoryDO record) {
-        return 0;
-    }
 
     /**
      * 计算在指定仓库可以备货的库存数量
@@ -461,26 +434,13 @@ public class InventoryServiceImpl implements IInventoryService {
 
 
 
-
-
-
-
-    @Override
-    public InventoryDO queryInventoryByCode(String itemCode, String skuCode) {
-        return inventoryMapper.queryInventoryByCode(itemCode, skuCode);
-    }
-
-
-
-
-
     @Override
     public List<WarehouseCollector> selectWarehousesByErpOrders(List<MallSubOrderDO> erpOrders) throws InventoryException  {
         if(CollectionUtils.isEmpty(erpOrders)){
             return null;
         }
         //Long:仓库ID,Long:erporderid,WarehouseCollector
-        Table<Long, String, WarehouseCollector> table = HashBasedTable.create();
+        Table<String, String, WarehouseCollector> table = HashBasedTable.create();
 
         String companyNo = erpOrders.get(0).getCompanyNo();
 
@@ -512,9 +472,9 @@ public class InventoryServiceImpl implements IInventoryService {
         }
         // 计算每个仓库下面的得分。
         if (!table.isEmpty()) {
-            Map<Long, Double> scoreMap = Maps.newHashMap();
-            Set<Long> rows = table.rowKeySet();
-            for (Long wareId : rows) {
+            Map<String, Double> scoreMap = Maps.newHashMap();
+            Set<String> rows = table.rowKeySet();
+            for (String wareId : rows) {
                 Map<String, WarehouseCollector> rowData = table.row(wareId);
                 for (Map.Entry<String, WarehouseCollector> entry : rowData.entrySet()) {
                     WarehouseCollector whc = entry.getValue();
@@ -526,9 +486,9 @@ public class InventoryServiceImpl implements IInventoryService {
                     }
                 }
             }
-            Long maxWareId = null;
+            String maxWareId = null;
             Double maxD = null;
-            for (Long wareId : scoreMap.keySet()) {
+            for (String wareId : scoreMap.keySet()) {
                 if (maxD == null) {
                     maxWareId = wareId;
                     maxD = scoreMap.get(wareId);
@@ -606,8 +566,19 @@ public class InventoryServiceImpl implements IInventoryService {
     }
 
     @Override
-    public void transToInventory(Long inventoryAreaId, int toTrans, String positionNo) {
-
+    public void transToInventory(Long inventoryAreaId, int toTrans, String positionNo) throws InventoryException {
+        InventoryOnWareHouseDO inventoryArea = inventoryOnWarehouseMapper.selectById(inventoryAreaId);
+        if (inventoryArea == null) {
+            throw new InventoryException(
+                    String.format("transToInventory exception :   InventoryArea[%d] is not exist!", inventoryAreaId));
+        }
+        if(StringUtils.isEmpty(positionNo)
+//                ||positionNo.equals(inventoryArea.getPositionNo())
+                ){
+            transToSameInventory(inventoryArea, toTrans);
+        }else{
+            transToOtherInventory(inventoryArea, toTrans, positionNo);
+        }
     }
 
     @Override
@@ -616,7 +587,7 @@ public class InventoryServiceImpl implements IInventoryService {
     }
 
     @Override
-    public void inventoryCheckOut(Long inventoryAreaId, Integer quantity) {
+    public void inventoryCheckOut(String inventoryAreaId, Integer quantity) {
 
     }
 
@@ -660,10 +631,244 @@ public class InventoryServiceImpl implements IInventoryService {
             warehouseCollector.setBooked(warehouseCollector.getBooked()-booked);
         }
     }
+    /**
+     * 一个货架入仓到另外一个货架
+     *
+     */
+    public void transToOtherInventory(InventoryOnWareHouseDO inventoryArea, int toTrans, String positionNo) throws InventoryException{
+
+        if (inventoryArea.getTransInv() < toTrans) {
+            throw new InventoryException(String.format("InventoryArea[%d] transInv less than toTrans[%d]",
+                    inventoryArea.getTransInv(), toTrans));
+        }
+        Long availableInv = inventoryArea.getTransInv() - inventoryArea.getLockedTransInv();
+        // 1、如果可用的在途库存不够，则先释放，直到够用为止
+        if (availableInv < toTrans) {
+            Long lockedCheckInv = toTrans - availableInv;// 需要释放锁定库存
+            // int release = 0;
+            List<InventoryBookingRecordDO> records = inventoryRecordService.sumInventoryCheckRecord(inventoryArea.getId(),
+                    InventoryType.TRANS_INV, Arrays.asList(OrderStatus.INIT.getCode()/*, OrderStatus.CONFIRM.getCode()*/));
+            for (InventoryBookingRecordDO inventoryRecord : records) {
+                Long sumBooked = inventoryRecord.getBookedQuantity();
+                lockedCheckInv -= sumBooked;
+                // release += sumBooked;
+                MallSubOrderDO erpOrder = mallSubOrderMapperExt.selectBySubOrderNo(inventoryRecord.getOrderNo());
+                releaseInventory(erpOrder);
+                if (lockedCheckInv <= 0) {
+                    break;
+                }
+            }
+            if (lockedCheckInv > 0) {
+                throw new InventoryException("inventoryCheck is not enough!");
+            }
+            inventoryArea = inventoryOnWarehouseMapper.selectById(inventoryArea.getId());
+        }
 
 
+        // 2、总库存操作： 减掉在途库存 转移到 实际库存
+        InventoryDO inventory = inventoryMapper.getInventoryBySkuId(inventoryArea.getItemCode(), inventoryArea.getSkuCode());
+        int inventoryRecords = inventoryMapper.updateInventoryTransCheck(inventory.getId(), inventory.getTransInv(),
+                toTrans);
+        if (inventoryRecords <= 0) {
+            throw new InventoryException("Inventory data expire exception!");
+        }
 
+        // 3、减掉原货架上的在途库存
+        int inventoryAreaRecords = inventoryOnWarehouseMapper.updateInventoryAreaTransCheck(inventoryArea.getId(),
+                inventoryArea.getTransInv(), toTrans);
+        if (inventoryAreaRecords <= 0) {
+            throw new InventoryException("inventoryArea data expire exception!");
+        }
 
+        //4、转移到新的货架的实际库存上
+        InventoryOnWareHouseDO otherInventoryArea = inventoryOnWarehouseMapper.getInventoryArea(inventoryArea.getItemCode(), inventoryArea.getSkuCode(), inventoryArea.getWarehouseNo(), positionNo);
+        if(otherInventoryArea==null) {
+            otherInventoryArea = new InventoryOnWareHouseDO();
+            otherInventoryArea.setItemCode(inventoryArea.getItemCode());
+            otherInventoryArea.setItemName(inventoryArea.getItemName());
+            otherInventoryArea.setUpc(inventoryArea.getUpc());
+            otherInventoryArea.setScale(inventoryArea.getScale());
+            otherInventoryArea.setSkuCode(inventoryArea.getSkuCode());
+            otherInventoryArea.setSkuPic(inventoryArea.getSkuPic());
+            otherInventoryArea.setInventory(Long.valueOf(toTrans));
+            otherInventoryArea.setLockedInv(0L);
+            otherInventoryArea.setTransInv(0L);
+            otherInventoryArea.setLockedTransInv(0L);
+//            otherInventoryArea.setWarehouseId(inventoryArea.getWarehouseId());
+            otherInventoryArea.setWarehouseNo(inventory.getCompanyNo());
+            otherInventoryArea.setWarehouseName(inventoryArea.getWarehouseName());
+//            otherInventoryArea.setPositionNo(positionNo);
+            otherInventoryArea.setGmtCreate(new Date());
+            otherInventoryArea.setGmtModify(new Date());
+            inventoryOnWarehouseMapper.insert(otherInventoryArea);
+        } else {
+            int otherInventoryAreaRecords = inventoryOnWarehouseMapper.updateInventoryAreaAddInventory(otherInventoryArea.getId(),
+                    otherInventoryArea.getInventory(), toTrans);
+            if (otherInventoryAreaRecords <= 0) {
+                throw new InventoryException("otherInventoryAreaRecords data expire exception!");
+            }
+        }
+
+        //记录库存变动日志 。FIXME ：仅仅记录了到新货架的日志，未记录来自于哪个货架
+        String userCreate = null;
+        try {
+            ShiroUser su = ShiroUtil.getShiroUser();
+            userCreate = su.getLoginName();
+        } catch (Exception e) {
+            throw new ErpCommonException("没有登入");
+        }
+        InventoryInoutDO inventoryInout = new InventoryInoutDO();
+        inventoryInout.setItemCode(otherInventoryArea.getItemCode());
+        inventoryInout.setSkuCode(otherInventoryArea.getSkuCode());
+        inventoryInout.setSkuCode(otherInventoryArea.getSkuCode());
+        inventoryInout.setQuantity((long) toTrans);
+        inventoryInout.setSkuCode(otherInventoryArea.getSkuCode());
+        inventoryInout.setInventoryOnWarehouseNo(otherInventoryArea.getInventoryOnWarehouseNo());
+        inventoryInout.setWarehouseNo(otherInventoryArea.getWarehouseNo());
+//        inventoryInout.setPositionNo(otherInventoryArea.getPositionNo());
+        inventoryInout.setOperatorType((byte) InoutOperatorType.TRANS_IN.getCode());
+        inventoryInout.setCreator(userCreate);
+        inventoryInout.setGmtCreate(new Date());
+        inventoryInout.setGmtModify(new Date());
+        inventoryInoutMapper.insert(inventoryInout);
+    }
+
+    public void transToSameInventory(InventoryOnWareHouseDO inventoryArea, int toTrans) throws InventoryException {
+        Long lockedTransInv = inventoryArea.getLockedTransInv();// 已锁定的在途数量
+        Long transInv = inventoryArea.getTransInv();// 在途数量
+
+        if (transInv < toTrans) {
+            throw new InventoryException(
+                    String.format("transToInventory exception :   InventoryArea[%d ，%d] is less than toTrans[%d]!",
+                            inventoryArea.getId(), transInv, toTrans));
+        }
+        Long lockedTransToInv = Math.min(toTrans, lockedTransInv);// 在途锁定 ->
+        // 实际库存锁定的数量
+        int records = inventoryOnWarehouseMapper.updateTransToInventoryArea(inventoryArea.getId(), toTrans, lockedTransToInv,
+                lockedTransInv);
+        if (records == 0) {// 数据过期，直接抛异常
+            throw new InventoryException(
+                    String.format("transToInventory data expiration exception :InventoryArea[%d] , toTrans[%d] ",
+                            inventoryArea.getId(), toTrans));
+        }
+        InventoryDO inventory = inventoryMapper.getInventoryBySkuId(inventoryArea.getItemCode(), inventoryArea.getSkuCode());
+        // 修改inventory表
+        int iRecords = inventoryMapper.updateTransToInventory(inventoryArea.getItemCode(), inventoryArea.getSkuCode(),
+                toTrans, lockedTransToInv, inventory.getLockedTransInv());
+        if (iRecords == 0) {// 数据过期，直接抛异常
+            throw new InventoryException(String.format(
+                    "transToInventory updateTransToInventory data expiration exception :Inventory[%d] , toTrans[%d] ",
+                    inventory.getId(), toTrans));
+        }
+
+        // 记录入仓日志
+        String userCreate = null;
+        try {
+            ShiroUser su = ShiroUtil.getShiroUser();
+            userCreate = su.getLoginName();
+        } catch (Exception e) {
+            throw new ErpCommonException("没有登入");
+        }
+        InventoryInoutDO inventoryInout = new InventoryInoutDO();
+        inventoryInout.setItemCode(inventoryArea.getItemCode());
+        inventoryInout.setSkuCode(inventoryArea.getSkuCode());
+        inventoryInout.setQuantity(Long.valueOf(toTrans));
+        inventoryInout.setSkuCode(inventoryArea.getSkuCode());
+        inventoryInout.setInventoryOnWarehouseNo(inventoryArea.getInventoryOnWarehouseNo());
+//        inventoryInout.setPositionNo(inventoryArea.getPositionNo());
+        inventoryInout.setOperatorType((byte) InoutOperatorType.TRANS_IN.getCode());
+        inventoryInout.setCreator(userCreate);
+        inventoryInout.setGmtCreate(new Date());
+        inventoryInout.setGmtModify(new Date());
+        inventoryInoutMapper.insertSelective(inventoryInout);
+
+        if (lockedTransToInv > 0) {
+            // 上面更新成功，变更inventoryRecord表中的在途转实际
+            Map<String, Object> param = new HashMap<>();
+            param.put("inventory_area_id", inventoryArea.getId());
+            param.put("inventory_type", InventoryType.TRANS_INV);
+            List<InventoryBookingRecordDO> inventoryRecords = inventoryRecordService.queryByOnWarehouseNoAndInventoryType(inventoryArea.getInventoryOnWarehouseNo(),InventoryType.TRANS_INV);// 需要在途转实际的记录
+            Long remainToTrans = lockedTransToInv;
+            // 用于存储变更过类型的订单列表，这些订单需要重新计算stockup的状态， 例如是在途备货完成的，可能需要改成备货完成
+            Set<String> orderIds = new HashSet<>();
+
+            for (InventoryBookingRecordDO inventoryRecord : inventoryRecords) {
+                Long trans = inventoryRecord.getBookedQuantity();
+                if (remainToTrans >= trans) {// 直接把类型转变为实际库存锁定类型
+                    inventoryRecord.setInventoryType(InventoryType.INVENTORY);
+                    inventoryRecordService.updateSelectiveById(inventoryRecord);
+                    orderIds.add(inventoryRecord.getOrderNo());
+                    remainToTrans -= trans;
+                    if (remainToTrans == 0) {
+                        break;
+                    }
+                } else {// 如果剩下的数量不够一条record的数量，则需要拆分record,例如转换5个，而recordbooked
+                    // =10: [TRANS_INV,10] -> [TRANS_INV,5]+ [INVENTORY,5]
+                    inventoryRecord.setBookedQuantity(trans - remainToTrans);
+                    inventoryRecordService.updateSelectiveById(inventoryRecord);
+
+                    // 剩下的新增一条InventoryType.INVENTORY的记录
+                    MallSubOrderDO erpOrder = mallSubOrderMapperExt.selectBySubOrderNo(inventoryRecord.getSubOrderNo());
+                    inventoryRecordService.insert(buildLockedRecord(erpOrder, remainToTrans, inventoryArea,
+                            inventoryRecord.getSkuCode(), InventoryType.INVENTORY));
+
+                    orderIds.add(inventoryRecord.getSubOrderNo());
+                    remainToTrans = 0L;
+                    break;
+                }
+            }
+
+            if (remainToTrans > 0) {// 数据有问题
+                throw new InventoryException(String.format("transToInventory exception :  remainToTrans > 0 !"));
+            }
+
+            // //重新计算备货状态
+            for (String orderId : orderIds) {
+                MallSubOrderDO erpOrder = mallSubOrderMapperExt.selectBySubOrderNo(orderId);
+
+                Integer stockStatus = erpOrder.getStockStatus();
+
+                List<InventoryBookingRecordDO> inventoryTypeBooked = inventoryRecordService
+                        .sumBookedByInventoryType(erpOrder.getSubOrderNo());
+                int quantity = erpOrder.getQuantity();// 订单购买量
+                Long sumBooked = inventoryTypeBooked.stream().mapToLong((t) -> t.getBookedQuantity()).sum();// 已经预定的总量
+
+                int decideStockup = decideStockup(inventoryTypeBooked);
+
+                if (quantity == sumBooked) {// 全部预定,重新订单计算stockstatus
+                    if (decideStockup == 2) {// 备货完成
+                        stockStatus = WarehouseCollector.STOCKSTATUS_FINISHED;
+                    } else if (decideStockup == 1) {// 混合备货完成
+                        stockStatus = WarehouseCollector.STOCKSTATUS_MIX_STOCKUP;
+                    } else {
+                        new InventoryException(String.format(
+                                "transToInventory  calc order[%d] stockStatus exception : decideStockup[%d]", orderId,
+                                decideStockup));
+                    }
+                    erpOrder.setStockStatus(stockStatus);
+                    mallSubOrderMapperExt.updateByPrimaryKeySelective(erpOrder);
+                }
+            }
+        }
+    }
+
+    private int decideStockup(List<InventoryBookingRecordDO> inventoryRecords) throws InventoryException {
+
+        if (inventoryRecords == null || inventoryRecords.size() == 0) {
+            return 0;// 无记录
+        } else if (inventoryRecords.size() == 2) {
+            return 1;// 混合
+        } else if (inventoryRecords.size() == 1) {
+            InventoryBookingRecordDO inventoryRecord = inventoryRecords.get(0);
+            if (InventoryType.INVENTORY == inventoryRecord.getInventoryType()) {
+                return 2;
+            } else if (InventoryType.TRANS_INV == inventoryRecord.getInventoryType()) {
+                return 3;
+            }
+        }
+        throw new InventoryException("decideStockup incorrect exception !");
+
+    }
     private void insertTransInventoryLockedRecord(MallSubOrderDO erpOrder, WarehouseCollector warehouseCollector,
                                                   Long availableInv) throws InventoryException {
         String itemId = erpOrder.getItemCode();

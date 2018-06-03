@@ -23,4 +23,6 @@ public interface IInventoryOnWarehouseService {
     List<InventoryOnWareHouseDO> queryInventoryAreaForExcel(InventoryQueryVO inventoryQueryVO);
 
     void changePositionNo(InventoryOnWareHouseDO inventoryArea);
+
+    InventoryOnWareHouseDO selectByNo(String inventoryAreaId);
 }

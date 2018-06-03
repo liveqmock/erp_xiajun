@@ -100,7 +100,7 @@ public class InventoryController{
 
 	@RequestMapping("/area/transTo")
 	@ResponseBody
-	public Object transToInventory(Long inventoryAreaId, int toTrans, String positionNo) {
+	public Object transToInventory(Long inventoryAreaId, int toTrans, String positionNo) throws InventoryException {
 		if (inventoryAreaId == null) {
 			return JsonResult.buildFailed("没有inventoryArea id");
 		}
@@ -125,7 +125,7 @@ public class InventoryController{
 
 	@RequestMapping("/add")
 	@ResponseBody
-	public Object add(Long  itemCode, String skuCode, Long warehouseNo, String positionNo, Long inventory,
+	public Object add(String  itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory,
 			Long transInv) {
 		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
 		inventoryArea.setItemCode(itemCode);
@@ -201,7 +201,7 @@ public class InventoryController{
 
 	@RequestMapping("/inventoryCheckOut")
 	@ResponseBody
-	public Object inventoryCheckOut(Long inventoryAreaId, Integer quantity) throws InventoryException {
+	public Object inventoryCheckOut(String inventoryAreaId, Integer quantity) throws InventoryException {
 		// 非空校验
 		if (inventoryAreaId== null ||quantity == null) {
 			return JsonResult.buildFailed("有空数据");
@@ -216,7 +216,7 @@ public class InventoryController{
 			}
 			
 			//对子订单进行库存分配
-			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectByNo(inventoryAreaId);
 			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
 		}
 		return JsonResult.buildSuccess(null);
@@ -251,7 +251,7 @@ public class InventoryController{
 				List<InventoryInoutVO> inventoryInoutVOS = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
 				if(CollectionUtils.isNotEmpty(inventoryInoutVOS)){
 					inventoryInoutVOS.forEach(inout->
-					inout.setWarehouseName(warehouseService.getWarehouseById(inout.getWarehouseId()).getName())
+					inout.setWarehouseName(warehouseService.getWarehouseById(inout.getId()).getName())
 							);
 				}
 				result.setData(inventoryInoutVOS);

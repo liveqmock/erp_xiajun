@@ -459,7 +459,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 		bookedRecord.setPositionNo(inventory.getShelfNo());
 		bookedRecord.setBookedQuantity(booked);
 		bookedRecord.setInventoryAreaId(inventory.getId());
-		bookedRecord.setWarehouseId(inventory.getWarehouseNo());
+		bookedRecord.setInventoryOnWarehouseNo(inventory.getWarehouseNo());
 		bookedRecord.setQuantity(Long.valueOf(erpOrder.getQuantity()));
 		bookedRecord.setInventoryType(inventoryType);
 		bookedRecord.setOperatorType(InventoryRecord.OperatorType.LOCKED);

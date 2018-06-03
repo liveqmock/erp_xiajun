@@ -7,7 +7,6 @@ import java.util.Map;
 
 public interface IWarehouseService {
 
-	WarehouseDO selectByWarehourseNo(String warehouseNo);
 
 	Map<String,Integer> getWarehousePropeties(String companyNo);
 

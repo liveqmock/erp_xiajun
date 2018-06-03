@@ -29,7 +29,7 @@ public class OrderInventoryBookingRecordServiceImpl implements OrderInventoryBoo
 	}
 
 	@Override
-	public List<InventoryRecord> sumBookedByInventoryType(String orderNo) {
+	public List<InventoryBookingRecordDO> sumBookedByInventoryType(String orderNo) {
 		return mapper.sumBookedByInventoryType(orderNo);
 	}
 

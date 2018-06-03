@@ -39,5 +39,12 @@
     FROM inventory_booking_record
     WHERE sub_order_no = #{subOrderNo}
   </select>
+  <select id="queryByOnWarehouseNoAndInventoryType" resultMap="BaseResultMap"  >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM inventory_booking_record
+    WHERE inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
+    AND  inventory_type = #{inventoryType}
+  </select>
 
 </mapper>

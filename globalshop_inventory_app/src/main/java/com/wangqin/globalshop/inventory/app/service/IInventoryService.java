@@ -31,20 +31,6 @@ public interface IInventoryService {
 
     InventoryServiceImpl.WarehouseCollector selectWarehousesByErpOrder(MallSubOrderDO erpOrder) throws InventoryException;
 
-    public int deleteByPrimaryKey(Long id);
-
-    public int insert(InventoryDO record);
-
-    public int insertSelective(InventoryDO record);
-
-    public InventoryDO selectByPrimaryKey(Long id);
-
-    public int updateByPrimaryKeySelective(InventoryDO record);
-
-    public int updateByPrimaryKey(InventoryDO record);
-
-    public InventoryDO queryInventoryByCode(String itemCode, String skuCode);
-
 
     /**
      * 未备货的子订单，选定唯一仓库
@@ -64,9 +50,9 @@ public interface IInventoryService {
     void lockedInventroy(InventoryServiceImpl.WarehouseCollector warehouseCollector) throws InventoryException;
 
 
-    void transToInventory(Long inventoryAreaId, int toTrans, String positionNo);
+    void transToInventory(Long inventoryAreaId, int toTrans, String positionNo) throws InventoryException;
 
     Object lockedInventroyErpOrder(MallSubOrderDO order);
 
-    void inventoryCheckOut(Long inventoryAreaId, Integer quantity);
+    void inventoryCheckOut(String inventoryAreaId, Integer quantity);
 }

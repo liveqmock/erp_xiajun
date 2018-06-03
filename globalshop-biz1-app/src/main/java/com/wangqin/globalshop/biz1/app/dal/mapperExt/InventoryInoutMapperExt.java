@@ -1,15 +1,15 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryInoutDOMapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.Date;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
-
-
-public interface InventoryInoutMapperExt {
+public interface InventoryInoutMapperExt extends InventoryInoutDOMapper {
 
 Integer queryInventoryInoutCount(InventoryQueryVO inventoryQueryVO);
 	

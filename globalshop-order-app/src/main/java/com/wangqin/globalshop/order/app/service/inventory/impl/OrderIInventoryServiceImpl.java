@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryInoutDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryInoutMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.wangqin.globalshop.common.enums.InventoryRecord.OperatorType.LOCKED;
 
 /**
  * @author biscuit
@@ -43,7 +42,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
     @Autowired
     private InventoryOnWarehouseMapperExt inventoryOnWarehouseMapper;
     @Autowired
-    private InventoryInoutDOMapper inoutDOMapper;
+    private InventoryInoutMapperExt inoutDOMapper;
     @Autowired
     private IMallSubOrderService mallsubOrderService;
 //    private OrderInventoryOnWareHouseService inventoryOnWarehouseService;
@@ -58,7 +57,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
             InventoryOnWareHouseDO inventoryArea = inventoryOnWarehouseMapper.selectById(inventoryRecord.getInventoryAreaId());
             if (inventoryArea == null) {
                 throw new InventoryException(
-                        String.format("sendInventroy exception : InventoryRecord[%d]  InventoryAreaId[%d] is null",
+                        String.format("sendInventroy exception : InventoryBookingRecordDO[%d]  InventoryAreaId[%d] is null",
                                 inventoryRecord.getId(), inventoryRecord.getInventoryAreaId()));
             }
             Long send = inventoryRecord.getBookedQuantity();
@@ -67,7 +66,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
 
             if (inventoryArea.getLockedInv() < 0 || inventoryArea.getInventory() < 0) {
                 throw new InventoryException(String.format(
-                        "sendInventroy exception : InventoryRecord[%d] remainLocked[%d] or remainInventory[%d] error!",
+                        "sendInventroy exception : InventoryBookingRecordDO[%d] remainLocked[%d] or remainInventory[%d] error!",
                         inventoryRecord.getId(), inventoryArea.getLockedInv(), inventoryArea.getInventory()));
             }
             sumSend += send;
@@ -127,7 +126,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
             InventoryOnWareHouseDO inventoryArea = inventoryOnWarehouseMapper.selectById(inventoryRecord.getInventoryAreaId());
             if (inventoryArea == null) {
                 throw new InventoryException(
-                        String.format("sendInventroy exception : InventoryRecord[%d]  InventoryAreaId[%d] is null",
+                        String.format("sendInventroy exception : InventoryBookingRecordDO[%d]  InventoryAreaId[%d] is null",
                                 inventoryRecord.getId(), inventoryRecord.getInventoryAreaId()));
             }
             Long release = inventoryRecord.getBookedQuantity();
@@ -136,7 +135,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
                 inventoryArea.setLockedInv(inventoryArea.getLockedInv() - release);
                 if (inventoryArea.getLockedInv() < 0) {
                     throw new InventoryException(String.format(
-                            "sendInventroy exception : InventoryRecord[%d] remainLocked[%d] or remainInventory[%d] error!",
+                            "sendInventroy exception : InventoryBookingRecordDO[%d] remainLocked[%d] or remainInventory[%d] error!",
                             inventoryRecord.getId(), inventoryArea.getLockedInv(), inventoryArea.getInventory()));
                 }
                 sumInvRelease += release;
@@ -144,7 +143,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
                 inventoryArea.setLockedTransInv(inventoryArea.getLockedTransInv() - release);
                 if (inventoryArea.getLockedInv() < 0) {
                     throw new InventoryException(String.format(
-                            "sendInventroy exception : InventoryRecord[%d] remainLocked[%d] or remainInventory[%d] error!",
+                            "sendInventroy exception : InventoryBookingRecordDO[%d] remainLocked[%d] or remainInventory[%d] error!",
                             inventoryRecord.getId(), inventoryArea.getLockedInv(), inventoryArea.getInventory()));
                 }
                 sumTransRelease += release;
@@ -304,7 +303,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
         warehouseColl.setWarehouseNo(erpOrder.getWarehouseNo());
 
         // 从预定记录里面查询已经预定的量
-        List<InventoryRecord> inventoryRecords = inventoryRecordService
+        List<InventoryBookingRecordDO> inventoryRecords = inventoryRecordService
                 .sumBookedByInventoryType(erpOrder.getOrderNo());
         if(CollectionUtils.isEmpty(inventoryRecords)){
             throw new InventoryException(
@@ -312,11 +311,11 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
         }
         Long lastBooked = 0L;
         Long lastTransBooked = 0L;
-        for(InventoryRecord inventoryRecord:inventoryRecords){
+        for(InventoryBookingRecordDO inventoryRecord:inventoryRecords){
             if(inventoryRecord.getInventoryType()== InventoryRecord.InventoryType.TRANS_INV){
-                lastTransBooked = inventoryRecord.getBooked();
+                lastTransBooked = inventoryRecord.getBookedQuantity();
             } else if(inventoryRecord.getInventoryType()== InventoryRecord.InventoryType.INVENTORY){
-                lastBooked = inventoryRecord.getBooked();
+                lastBooked = inventoryRecord.getBookedQuantity();
             }
         }
         warehouseColl.setLastBooked(lastBooked);
@@ -585,7 +584,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
         bookedRecord.setInventoryOnWarehouseNo(inventory.getInventoryOnWarehouseNo());
         bookedRecord.setQuantity(Long.valueOf(erpOrder.getQuantity()));
         bookedRecord.setInventoryType(inventoryType);
-        bookedRecord.setOperatorType(LOCKED);
+        bookedRecord.setOperatorType(InventoryRecord.OperatorType.LOCKED);
         Date now = new Date();
         bookedRecord.setGmtCreate(now);
         bookedRecord.setGmtModify(now);

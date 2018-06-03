@@ -150,12 +150,122 @@
         count(1)
         FROM
         `mall_sub_order`
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="stockStatus != null">
+                and stock_status = #{stockStatus}
+            </if>
+            <if test="orderNo != null">
+                and order_no LIKE concat('%',#{orderNo},'%')
+            </if>
+            <if test="upc != null">
+                and upc = #{upc}
+            </if>
+            <if test="skuCode!=null and skuCode!=''">
+                and sku_code = #{skuCode}
+            </if>
+            <if test="openId!=null and openId!='' and salesId==null">
+                and open_id = #{openId}
+            </if>
+            <if test="itemName!=null and itemName!=''">
+                and item_name LIKE concat('%',#{itemName},'%')
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                and receiver LIKE concat('%',#{receiver},'%')
+            </if>
+            <if test="telephone!=null and telephone!=''">
+                and telephone = #{telephone}
+            </if>
+            <if test="warehouseNo!=null and warehouseNo!=''">
+                and warehouse_no = #{warehouseNo}
+            </if>
+            <if test="logisticType!=null and logisticType!=''">
+                and logistic_type = #{logisticType}
+            </if>
+            <if test="closeReason!=null and closeReason!=''">
+                and close_reason = #{closeReason}
+            </if>
+
+            <if test=" startGmtCreate!= null ">
+                and   <![CDATA[ gmt_create >= #{startGmtCreate} ]]>
+            </if>
+            <if test=" endGmtCreate != null ">
+                and    <![CDATA[ gmt_create <= #{endGmtCreate} ]]>
+            </if>
+            <if test = "companyNo != null">
+                and company_no = #{companyNo}
+            </if>
+        </where>
     </select>
     <select id="queryErpOrders" resultMap="BaseResultMap"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
         `mall_sub_order`
+        <where>
+            <if test="status != null">
+            and status = #{status}
+            </if>
+            <if test="stockStatus != null">
+                and stock_status = #{stockStatus}
+            </if>
+            <if test="orderNo != null">
+            and order_no LIKE concat('%',#{orderNo},'%')
+            </if>
+            <if test="upc != null">
+            and upc = #{upc}
+            </if>
+            <if test="skuCode!=null and skuCode!=''">
+                and sku_code = #{skuCode}
+            </if>
+            <if test="openId!=null and openId!='' and salesId==null">
+                and open_id = #{openId}
+            </if>
+            <if test="itemName!=null and itemName!=''">
+                and item_name LIKE concat('%',#{itemName},'%')
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                and receiver LIKE concat('%',#{receiver},'%')
+            </if>
+            <if test="telephone!=null and telephone!=''">
+                and telephone = #{telephone}
+            </if>
+            <if test="warehouseNo!=null and warehouseNo!=''">
+                and warehouse_no = #{warehouseNo}
+            </if>
+            <if test="logisticType!=null and logisticType!=''">
+                and logistic_type = #{logisticType}
+            </if>
+            <if test="closeReason!=null and closeReason!=''">
+                and close_reason = #{closeReason}
+            </if>
+
+            <if test=" startGmtCreate!= null ">
+                and   <![CDATA[ gmt_create >= #{startGmtCreate} ]]>
+            </if>
+            <if test=" endGmtCreate != null ">
+                and    <![CDATA[ gmt_create <= #{endGmtCreate} ]]>
+            </if>
+            <if test = "companyNo != null">
+                and company_no = #{companyNo}
+            </if>
+        </where>
+    </select>
+    <select id="selectBySkuCode" resultMap="BaseResultMap"  parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_sub_order`
+        WHERE sku_code=#{skuCode}
+    </select>
+    <select id="selectBySubOrderNo" resultMap="BaseResultMap"  parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_sub_order`
+        WHERE sku_code=#{skuCode}
     </select>
 
 

@@ -9,7 +9,7 @@ public class InventoryOnWareHouseDO {
     
     private String companyNo;
 
-	private Long itemCode;
+	private String itemCode;
 
     private String itemName;
 
@@ -29,7 +29,7 @@ public class InventoryOnWareHouseDO {
 
     private Long lockedTransInv;
 
-    private Long warehouseNo;
+    private String warehouseNo;
 
     private String warehouseName;
 
@@ -93,11 +93,11 @@ public class InventoryOnWareHouseDO {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
-    public Long getItemCode() {
+    public String getItemCode() {
         return itemCode;
     }
 
-    public void setItemCode(Long itemCode) {
+    public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
     }
 
@@ -173,11 +173,11 @@ public class InventoryOnWareHouseDO {
         this.lockedTransInv = lockedTransInv;
     }
 
-    public Long getWarehouseNo() {
+    public String getWarehouseNo() {
         return warehouseNo;
     }
 
-    public void setWarehouseNo(Long warehouseNo) {
+    public void setWarehouseNo(String warehouseNo) {
         this.warehouseNo = warehouseNo;
     }
 

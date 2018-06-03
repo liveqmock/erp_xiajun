@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.order.app.service.inventory;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
-import com.wangqin.globalshop.common.enums.InventoryRecord;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface OrderInventoryBookingRecordService {
 
     void insert(InventoryBookingRecordDO inventoryRecord);
 
-    List<InventoryRecord> sumBookedByInventoryType(String orderNo);
+    List<InventoryBookingRecordDO> sumBookedByInventoryType(String orderNo);
 
     void updates(List<InventoryBookingRecordDO> records);
 }
