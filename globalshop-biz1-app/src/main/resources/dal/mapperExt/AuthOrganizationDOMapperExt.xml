@@ -28,7 +28,7 @@
     from auth_organization where pid is null order by seq
   </select>
 
-  <select id="selectAllByPId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO">
+  <select id="selectAllByPId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO" parameterType="java.lang.Long" >
     select distinct
     <include refid="Base_Column_List2"/>
     from auth_organization where pid = #{pId} order by seq
