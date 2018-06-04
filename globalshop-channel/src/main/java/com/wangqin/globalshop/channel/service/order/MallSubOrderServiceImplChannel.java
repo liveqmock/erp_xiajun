@@ -1,31 +1,33 @@
 package com.wangqin.globalshop.channel.service.order;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.StockUpStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
+import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.service.inventory.ErpOrderUtil;
 import com.wangqin.globalshop.channel.service.inventory.IInventoryBookingRecordChannelService;
+import com.wangqin.globalshop.channel.service.inventory.IInventoryService;
+import com.wangqin.globalshop.channel.service.inventory.InventoryServiceImpl;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.BizResult;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
-import com.wangqin.globalshop.common.utils.BizResult;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -37,13 +39,16 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 
 
 	@Autowired
-	MallSubOrderMapperExt mallSubOrderDOMapperExt;
+	private MallSubOrderMapperExt mallSubOrderDOMapperExt;
 
 	@Autowired
-	InventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
+	private InventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
 
 	@Autowired
-	IInventoryBookingRecordChannelService iInventoryBookingRecordChannelService;
+	private IInventoryBookingRecordChannelService iInventoryBookingRecordChannelService;
+
+	@Autowired
+	private IInventoryService iInventoryService;
 
 
 	public int deleteByPrimaryKey(Long id){
@@ -325,37 +330,37 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 
 
 	@Override
-	public BizResult lockErpOrder(MallSubOrderDO erpOrder) {
-//		if(erpOrder.getStatus()!=OrderStatus.INIT.getCode()){
-//			return BizResult.buildFailed("订单状态错误");
-//		}
-//		//未备货订单
-//		if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
-//			if(erpOrder.getWarehouseId()==null){
-//				List<ErpOrder> erpOrders = Lists.newArrayList();
-//				erpOrders.add(erpOrder);
-//				List<WarehouseCollector> wcs = inventoryService.selectWarehousesByErpOrders(erpOrders);
-//				if(CollectionUtils.isNotEmpty(wcs)){
-//					inventoryService.lockedInventroy(wcs.get(0));
-//				}else{
-//					return BizResult.buildFailed("没有库存备货失败");
-//				}
-//			}else{
-//				return BizResult.buildFailed("没有仓库信息");
-//			}
-//		}else{
-//			if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.MIX_STOCKUP.getCode()&&erpOrder.getWarehouseId()!=null){
-//				WarehouseCollector wc = inventoryService.selectWarehousesByErpOrder(erpOrder);
-//				if(wc!=null){
-//					inventoryService.lockedInventroy(wc);
-//				}else{
-//					return BizResult.buildFailed("没有库存备货失败");
-//				}
-//			}else{
-//				return BizResult.buildFailed("订单备货状态错误");
-//			}
-//
-//		}
+	public BizResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException{
+		if(erpOrder.getStatus()!=OrderStatus.INIT.getCode()){
+			return BizResult.buildFailed("订单状态错误");
+		}
+		//未备货订单
+		if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
+			if(erpOrder.getWarehouseNo()==null){
+				List<MallSubOrderDO> erpOrders = Lists.newArrayList();
+				erpOrders.add(erpOrder);
+				List<InventoryServiceImpl.WarehouseCollector> wcs = iInventoryService.selectWarehousesByErpOrders(erpOrders);
+				if(CollectionUtils.isNotEmpty(wcs)){
+					iInventoryService.lockedInventroy(wcs.get(0));
+				}else{
+					return BizResult.buildFailed("没有库存备货失败");
+				}
+			}else{
+				return BizResult.buildFailed("没有仓库信息");
+			}
+		}else{
+			if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.MIX_STOCKUP.getCode()&&erpOrder.getWarehouseNo()!=null){
+				InventoryServiceImpl.WarehouseCollector wc = iInventoryService.selectWarehousesByErpOrder(erpOrder);
+				if(wc!=null){
+					iInventoryService.lockedInventroy(wc);
+				}else{
+					return BizResult.buildFailed("没有库存备货失败");
+				}
+			}else{
+				return BizResult.buildFailed("订单备货状态错误");
+			}
+
+		}
 		return BizResult.buildSuccess();
 	}
 

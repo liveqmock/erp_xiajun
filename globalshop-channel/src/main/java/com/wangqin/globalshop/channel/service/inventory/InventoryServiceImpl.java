@@ -175,6 +175,53 @@ public class InventoryServiceImpl  implements IInventoryService {
 
 
 
+	@Override
+	public WarehouseCollector selectWarehousesByErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
+		if(erpOrder.getWarehouseNo()==null){
+			throw new InventoryException(
+					String.format("子订单没有备货的仓库：erporderid=[%d],erpno=[%s]", erpOrder.getId(), erpOrder.getOrderNo()+erpOrder.getSubOrderNo()));
+		}
+		WarehouseCollector warehouseColl = new WarehouseCollector();
+		warehouseColl.setErpOrderId(erpOrder.getId());
+		warehouseColl.setOrderNo(erpOrder.getOrderNo());
+		warehouseColl.setErpOrder(erpOrder);
+		warehouseColl.setQuantity(Long.valueOf(erpOrder.getQuantity()));
+		warehouseColl.setWarehouseNo(erpOrder.getWarehouseNo());
+
+		// 从预定记录里面查询已经预定的量
+		List<InventoryBookingRecordDO> inventoryRecords = inventoryBookingRecordDOMapperExt
+				.sumBookedByInventoryType(erpOrder.getOrderNo());
+		if(CollectionUtils.isEmpty(inventoryRecords)){
+			throw new InventoryException(
+					String.format("子订单没有备货的记录：erporderid=[%d],erpno=[%s]", erpOrder.getId(), erpOrder.getOrderNo()+erpOrder.getSubOrderNo()));
+		}
+		Long lastBooked = 0L;
+		Long lastTransBooked = 0L;
+		for(InventoryBookingRecordDO inventoryRecord:inventoryRecords){
+			if(inventoryRecord.getInventoryType()==InventoryRecord.InventoryType.TRANS_INV){
+				lastTransBooked = inventoryRecord.getBookedQuantity();
+			} else if(inventoryRecord.getInventoryType()==InventoryRecord.InventoryType.INVENTORY){
+				lastBooked = inventoryRecord.getBookedQuantity();
+			}
+		}
+		warehouseColl.setLastBooked(lastBooked);
+		warehouseColl.setLastTransBooked(lastTransBooked);
+
+		List<InventoryOnWareHouseDO> sumInventorys = inventoryOnWarehouseMapperExt.sumInventoryBySkuIdGroupbyWarehouse(erpOrder.getItemCode(),
+				erpOrder.getSkuCode(),warehouseColl.getWarehouseNo());
+
+		if(CollectionUtils.isNotEmpty(sumInventorys)){
+			InventoryOnWareHouseDO inventoryArea  = sumInventorys.get(0);
+			if(inventoryArea.getTotalAvailableInv()>0){
+				initBooked(inventoryArea, warehouseColl);
+			}
+		}
+		return warehouseColl;
+	}
+
+
+
+
 
 	public List<WarehouseCollector> selectWarehousesByErpOrders(List<MallSubOrderDO> erpOrders) throws InventoryException  {
 		if(CollectionUtils.isEmpty(erpOrders)){

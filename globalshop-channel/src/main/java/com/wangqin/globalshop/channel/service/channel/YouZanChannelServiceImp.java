@@ -985,6 +985,9 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 			outerOrderDetailMapper.updateOuterOrderDetailByItemSku(outOrderIdList);
 			// 生成子订单并配货
 			outerOrderService.reviewByIdList(outOrderIdList);
+
+
+
 		}
 	}
 }
