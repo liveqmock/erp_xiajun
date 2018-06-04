@@ -91,6 +91,9 @@
             <if test=" endOrderTime!=null">
                 and    <![CDATA[ T1.gmt_create <= #{endOrderTime} ]]>
             </if>
+            <if test=" syncSendStatus!=null">
+                and    <![CDATA[ T1.sync_send_status <= #{syncSendStatus} ]]>
+            </if>
         </where>
         order by id desc
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
