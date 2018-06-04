@@ -45,58 +45,58 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM
-        `shipping_order` T1
+        `shipping_order`
         <where>
             <if test="shippingNo!=null and shippingNo!=''">
-                T1.shipping_no = #{shippingNo}
+                shipping_no = #{shippingNo}
             </if>
             <!--<if test="logisticNo!=null and logisticNo!=''">-->
-                <!--and   T1.logistic_no = #{logisticNo}-->
+                <!--and   logistic_no = #{logisticNo}-->
             <!--</if>-->
             <if test="logisticCompany!=null and logisticCompany!=''">
-                and   T1.logistic_company = #{logisticCompany}
+                and   logistic_company = #{logisticCompany}
             </if>
             <!--<if test="erpNo!=null and erpNo!=''">-->
-                <!--and   T1.erp_no LIKE concat('%',#{erpNo},'%')-->
+                <!--and   erp_no LIKE concat('%',#{erpNo},'%')-->
             <!--</if>-->
             <if test="receiver!=null and receiver!=''">
-                and   T1.receiver = #{receiver}
+                and   receiver = #{receiver}
             </if>
             <if test="telephone!=null and telephone!=''">
-                and   T1.telephone = #{telephone}
+                and   telephone = #{telephone}
             </if>
             <if test="status!=null">
-                and   T1.status = #{status}
+                and   status = #{status}
             </if>
             <if test="type!=null">
-                and   T1.type = #{type}
+                and   type = #{type}
             </if>
             <if test="salesId!=null">
                 <if test = "openId == null" >
-                    and   T1.id IN (
+                    and   id IN (
                     SELECT a.order_no FROM mall_order a
                     LEFT JOIN mall_order b ON a.order_no=b.id
                     WHERE b.channel_no=#{salesId} AND a.order_no IS NOT NULL)
                 </if>
                 <if test = "customer_no != null" >
-                    and   T1.id IN (
+                    and   id IN (
                     SELECT a.order_no FROM mall_order a
                     LEFT JOIN mall_order b ON a.order_no=b.id
                     WHERE (b.channel_no = #{salesId} || b.customer_no=#{customer_no}) AND a.order_no IS NOT NULL)
                 </if>
             </if>
             <if test=" startOrderTime!=null">
-                and   <![CDATA[ T1.gmt_create >= #{startOrderTime} ]]>
+                and   <![CDATA[ gmt_create >= #{startOrderTime} ]]>
             </if>
             <if test=" endOrderTime!=null">
-                and    <![CDATA[ T1.gmt_create <= #{endOrderTime} ]]>
+                and    <![CDATA[ gmt_create <= #{endOrderTime} ]]>
             </if>
             <if test=" syncSendStatus!=null">
-                and    <![CDATA[ T1.sync_send_status <= #{syncSendStatus} ]]>
+                and    <![CDATA[sync_send_status <= #{syncSendStatus} ]]>
             </if>
         </where>
         order by id desc
-        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+--         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
 
     <select id="selectBatchIds" resultMap="BaseResultMap" >
