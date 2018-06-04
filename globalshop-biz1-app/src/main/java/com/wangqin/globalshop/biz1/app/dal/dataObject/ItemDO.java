@@ -65,6 +65,10 @@ public class ItemDO {
 
     private Byte wxisSale;
 
+    private Integer third_sale;
+
+    private Integer sale_on_youzan;
+
     private Byte isFind;
 
     private Integer status;
@@ -421,5 +425,18 @@ public class ItemDO {
 
     public void setDetail(String detail) {
         this.detail = detail == null ? null : detail.trim();
+    }
+
+    public Integer getThird_sale() {
+        return third_sale;
+    }
+    public void setThird_sale(Integer third_sale) {
+        this.third_sale = third_sale;
+    }
+    public Integer getSale_on_youzan() {
+        return sale_on_youzan;
+    }
+    public void setSale_on_youzan(Integer sale_on_youzan) {
+        this.sale_on_youzan = sale_on_youzan;
     }
 }

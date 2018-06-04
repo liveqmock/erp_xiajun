@@ -913,7 +913,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		outerOrder.setModifier("-1");
 
 
-		outerOrderMapper.insert(outerOrder); // 添加主订单
+		outerOrderMapper.insertMallOrder(outerOrder); // 添加主订单
 
 		outOrderIdList.add(outerOrder.getOrderNo()); // 收集主订单ID
 

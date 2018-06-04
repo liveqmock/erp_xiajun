@@ -480,8 +480,8 @@
 	FROM
 	item T1 
 	WHERE T1.third_sale = 1 
-	<if test=" name != null and name != '' ">
-		and T1.name LIKE concat('%',#{name},'%')
+	<if test=" itemName != null and itemName != '' ">
+		and T1.item_name LIKE concat('%',#{itemName},'%')
 	</if>
 	<if test=" itemCode != null and itemCode != '' ">
 		and T1.item_code = #{itemCode}

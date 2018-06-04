@@ -534,4 +534,28 @@
     </select>
 
 
+    <insert id="insertMallOrder" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+
+        insert into mall_order (id, customer_no, order_no,
+        company_no, channel_no, channel_name,
+        channel_order_no, channel_customer_no, channel_type,
+        shop_code, wx_pay_trade_no, total_amount,
+        actual_amount, pay_type, order_time,
+        status, memo, id_card,
+        idcard_pic_front, idcard_pic_reverse, source,
+        freight, freight_agent, gmt_modify,
+        gmt_create, is_del, modifier,
+        creator)
+        values (#{id,jdbcType=BIGINT}, #{customerNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
+        #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR},
+        #{channelOrderNo,jdbcType=VARCHAR}, #{channelCustomerNo,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR},
+        #{shopCode,jdbcType=VARCHAR}, #{wxPayTradeNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DOUBLE},
+        #{actualAmount,jdbcType=DOUBLE}, #{payType,jdbcType=TINYINT}, #{orderTime,jdbcType=TIMESTAMP},
+        #{status,jdbcType=TINYINT}, #{memo,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR},
+        #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, #{source,jdbcType=BIGINT},
+        #{freight,jdbcType=DOUBLE}, #{freightAgent,jdbcType=DOUBLE}, #{gmtModify,jdbcType=TIMESTAMP},
+        #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{modifier,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR})
+    </insert>
+
 </mapper>
