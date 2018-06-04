@@ -67,9 +67,7 @@ public interface IItemSkuService  {
 	boolean isCanDeleteSku(Long skuId);
 
 	
-	 int deleteByPrimaryKey(Long id);
-	 
-	 void deleteSkuByCode(String code);
+	void deleteById(Long id);
 	 
 	 List<ItemSkuDO> queryItemSkusForExcel();
 	 

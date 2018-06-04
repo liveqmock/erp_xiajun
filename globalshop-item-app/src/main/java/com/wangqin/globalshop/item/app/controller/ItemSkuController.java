@@ -135,7 +135,7 @@ public class ItemSkuController  {
 		result.buildIsSuccess(true);
 		result.buildMsg("更新成功");
 		iItemSkuService.updateById(itemSku);
-		return null;
+		return result;
 	}
 	
 	/**
@@ -214,7 +214,7 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	public Object delete(String code) {
+	public Object delete(Long id) {
 		JsonResult<String> result = new JsonResult<>();
 		/*
 		if(id!=null){
@@ -227,7 +227,7 @@ public class ItemSkuController  {
 		}else{
 			return result.buildIsSuccess(false).buildMsg("没有SKU id");
 		}*/
-		iItemSkuService.deleteSkuByCode(code);
+		iItemSkuService.deleteById(id);
 		result.buildIsSuccess(true);
 		return result;
 	}

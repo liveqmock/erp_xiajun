@@ -167,7 +167,7 @@ public class PackingController {
 	
 	/**
 	 * 更新level
-	 * @param packageSca
+	 * @param packageScale
 	 * @return
 	 */
 	@RequestMapping("/packageLevel/update")
@@ -192,6 +192,7 @@ public class PackingController {
 		}
 		*/
 		iPackageLevelService.updateLevelSelectiveById(packageLevel);
+		result.buildIsSuccess(true);
 		return result;
 	}
 	
@@ -217,10 +218,10 @@ public class PackingController {
 				ShippingPackingPatternDO shippingPackingPatternDO = new ShippingPackingPatternDO();
 				shippingPackingPatternDO.setCreator("admin");
 				shippingPackingPatternDO.setModifier("admin");
-				shippingPackingPatternDO.setPatternName(packageLevel.getName());
+				shippingPackingPatternDO.setName(packageLevel.getName());
 				shippingPackingPatternDO.setNameEn(packageLevel.getPackageEn());
-				shippingPackingPatternDO.setPackagingScaleNo(RandomUtils.getTimeRandom());
 				shippingPackingPatternDO.setPatternNo(RandomUtils.getTimeRandom());
+				shippingPackingPatternDO.setPackagingScaleNo(packageLevel.getPackagingScaleNo());
 				iPackageLevelService.insertPattern(shippingPackingPatternDO);
 			} else {
 				result.buildData("包装规格名称和包装规格类别英文名称不可以为空").buildIsSuccess(false);
@@ -228,7 +229,7 @@ public class PackingController {
 		} else {
 			result.buildData("错误数据").buildIsSuccess(false);
 		}
-		
+		result.buildIsSuccess(true);
 		return result;
 	}
 	

@@ -258,7 +258,7 @@ public class ItemController  {
 	        				itemSku.setModifier("admin");
 	        				itemSku.setUpc(RandomUtils.getTimeRandom());
 	        				//skuFreight(itemSku);
-	        			});
+	        			});         
 	        			itemSkuService.insertBatch(itemSkuList);
 	        			List<InventoryAddVO> inventoryList = itemSkuService.initInventory(itemSkuList);
 	        			inventoryService.insertBatchInventory(inventoryList);

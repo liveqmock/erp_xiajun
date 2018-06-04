@@ -61,4 +61,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	ItemSkuDO queryItemSku(ItemSkuDO itemSkuDO);
 
 	Integer queryItemSkuCount(ItemSkuDO itemSkuDO);
+	
+	//删除sku
+	void deleteById(Long id);
 }

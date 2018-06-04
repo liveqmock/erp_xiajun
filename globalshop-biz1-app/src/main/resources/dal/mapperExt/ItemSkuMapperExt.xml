@@ -256,10 +256,11 @@
         </foreach>
     </insert>
 
-    <update id="deleteBySkuCode" parameterType="java.lang.String">
+<!-- 删除sku -->
+    <update id="deleteById" parameterType="java.lang.Long">
     	update item_sku
     	set is_del=1
-    	where sku_code=#{skuCode}
+    	where id=#{id}
     </update>
 
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.baomidou.mybatisplus.annotations.TableField;
+
 
 public class ItemCategoryDTO {
     private Long id;
@@ -35,7 +35,7 @@ public class ItemCategoryDTO {
 
     private String modifier;
     
-    @TableField(exist = false)
+
 	private List<ItemCategoryDTO> children = new ArrayList<>();
 
     public List<ItemCategoryDTO> getChildren() {
