@@ -126,7 +126,7 @@
 		</dependency>
     </dependencies>
     <build>
-        <finalName>globalshop.war</finalName>
+        <finalName>globalshop</finalName>
         <resources>
 			<resource>
 				<directory>src/main/java</directory>
