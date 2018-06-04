@@ -14,4 +14,6 @@ public interface ItemSkuScaleDOMapper {
     int updateByPrimaryKeySelective(ItemSkuScaleDO record);
 
     int updateByPrimaryKey(ItemSkuScaleDO record);
+
+
 }

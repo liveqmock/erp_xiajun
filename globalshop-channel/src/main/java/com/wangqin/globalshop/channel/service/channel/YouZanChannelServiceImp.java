@@ -84,6 +84,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	private AdapterData addOuterItem(ItemVo item, YouzanItemCreateResult youzanItemCreateResult) {
 		AdapterData adapterData = new AdapterData();
 		String alias = youzanItemCreateResult.getItem().getAlias();// 有赞别名
+
 		Long numIid = youzanItemCreateResult.getItem().getItemId();// 有赞ID
 		// 1、保存外部商品
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
@@ -342,9 +343,9 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 					colorSet.add(itemSku.getColor());
 					colorScaleKey += itemSku.getColor();
 				}
-				if (StringUtil.isNotBlank(itemSku.getScale())) {
-					scaleSet.add(itemSku.getScale());
-					colorScaleKey += itemSku.getScale();
+				if (StringUtil.isNotBlank(itemSku.getSize())) {
+					scaleSet.add(itemSku.getSize());
+					colorScaleKey += itemSku.getSize();
 				}
 				itemSkuMap.put(colorScaleKey, itemSku);
 			}

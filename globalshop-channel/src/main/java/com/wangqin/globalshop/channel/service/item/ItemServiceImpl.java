@@ -3,11 +3,12 @@ package com.wangqin.globalshop.channel.service.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuScaleDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.common.utils.BeanUtils;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -27,16 +30,16 @@ public class ItemServiceImpl  implements IItemService {
 
 
 	@Autowired
-	ItemDOMapperExt itemDOMapperExt;
+	private ItemDOMapperExt itemDOMapperExt;
 
 	@Autowired
-	ItemSkuMapperExt itemSkuDOMapperExt;
+	private ItemSkuMapperExt itemSkuDOMapperExt;
 
 	@Autowired
-	InventoryMapperExt inventoryDOMapperExt;
+	private InventoryMapperExt inventoryDOMapperExt;
 
 	@Autowired
-	ItemSkuScaleDOMapper itemSkuScaleDOMapper;
+	private ItemSkuScaleMapperExt itemSkuScaleDOMapper;
 
 	public int deleteByPrimaryKey(Long id){
 		return itemDOMapperExt.deleteByPrimaryKey(id);
@@ -97,10 +100,17 @@ public class ItemServiceImpl  implements IItemService {
 			//库存
 			InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(),sku.getSkuCode());
 			itemSkuVo.setInventoryDO(inventoryDO);
-			itemSkuVos.add(itemSkuVo);
 
 			//规格尺寸
-			//ItemSkuScaleDO itemSkuScaleDO = itemSkuScaleDOMapper.selectByPrimaryKey();
+			List<ItemSkuScaleDO> itemSkuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
+			Map<String,String> scaleMap = new HashMap<>();
+			for(ItemSkuScaleDO scale : itemSkuScaleDOS){
+				scaleMap.put(scale.getScaleCode(),scale.getScaleValue());
+			}
+			itemSkuVo.setScaleMap(scaleMap);
+
+			itemSkuVos.add(itemSkuVo);
+
 		}
 		itemVo.setItemSkus(itemSkuVos);
 		return itemVo;
