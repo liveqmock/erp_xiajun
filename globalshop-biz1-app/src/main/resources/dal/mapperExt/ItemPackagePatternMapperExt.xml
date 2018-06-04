@@ -3,11 +3,11 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackagePatternMapperExt">
 	
 	<sql id="Base_Column_List">
-		id,pattern_name AS name
+		id,name
 	</sql>
 	
 	<sql id="Base_Column_List_Old">
-		id,pattern_name AS name,name_en AS packageEn,packaging_scale_no AS packagingScaleNo
+		id,name AS name,name_en AS packageEn,packaging_scale_no AS packagingScaleNo
 	</sql>
 	
 	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO">
@@ -18,7 +18,7 @@
         where
      		   T1.is_del=0
             <if test=" name != null and name != '' ">
-                and T1.pattern_name = #{name}
+                and T1.name = #{name}
             </if>
             <if test=" packageEn != null and packageEn != '' ">
             	and T1.name_en = #{packageEn}
@@ -80,9 +80,6 @@
       <if test="patternNo != null" >
         pattern_no,
       </if>
-      <if test="patternName != null" >
-        pattern_name,
-      </if>
       <if test="packagingScaleNo != null" >
         packaging_scale_no,
       </if>
@@ -102,9 +99,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="patternNo != null" >
         #{patternNo,jdbcType=VARCHAR},
-      </if>
-      <if test="patternName != null" >
-        #{patternName,jdbcType=VARCHAR},
       </if>
       <if test="packagingScaleNo != null" >
         #{packagingScaleNo,jdbcType=VARCHAR},
@@ -137,7 +131,7 @@
        SET
        <trim suffixOverrides="," >
             <if test=" name != null and name != '' ">
-                T1.pattern_name=#{name},
+                T1.name=#{name},
             </if>        
             <if test=" packageEn != null and packageEn  != ''">
               T1.name_en = #{packageEn},
