@@ -1,6 +1,9 @@
 package com.wangqin.globalshop.channel.service.order;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+
+import java.util.List;
 
 /**
  *
@@ -20,6 +23,8 @@ public interface ChannelIShippingOrderService {
 	public int updateByPrimaryKeySelective(ShippingOrderDO record);
 
 	public int updateByPrimaryKey(ShippingOrderDO record);
+
+	public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO);
 
 
 }

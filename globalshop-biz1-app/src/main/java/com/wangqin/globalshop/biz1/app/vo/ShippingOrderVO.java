@@ -31,6 +31,13 @@ public class ShippingOrderVO extends PageQueryVO {
 
     private String customer_no;
 
+    private Integer syncSendStatus;
+    public Integer getSyncSendStatus() {
+        return syncSendStatus;
+    }
+    public void setSyncSendStatus(Integer syncSendStatus) {
+        this.syncSendStatus = syncSendStatus;
+    }
     public String getShippingNo() {
         return shippingNo;
     }

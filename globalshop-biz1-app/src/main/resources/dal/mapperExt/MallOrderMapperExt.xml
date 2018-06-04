@@ -478,6 +478,10 @@
             and T1.channel_order_no = #{channelOrderNo}
         </if>
 
+        <if test="orderNo != null">
+            and T1.order_no = #{orderNo}
+        </if>
+
 
         <if test="shopCode != null">
             and T1.shop_code = #{shopCode}

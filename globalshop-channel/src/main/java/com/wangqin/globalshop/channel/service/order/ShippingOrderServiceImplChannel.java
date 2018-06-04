@@ -1,9 +1,13 @@
 package com.wangqin.globalshop.channel.service.order;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.IShippingOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingOrderDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  *
@@ -13,9 +17,9 @@ import org.springframework.stereotype.Service;
 @Service("shippingOrderService")
 public class ShippingOrderServiceImplChannel implements ChannelIShippingOrderService {
 
-	@Autowired ShippingOrderDOMapperExt shippingOrderDOMapperExt;
+	@Autowired IShippingOrderMapperExt shippingOrderDOMapperExt;
 
-	public ShippingOrderDOMapperExt getShippingOrderDOMapperExt() {
+	public IShippingOrderMapperExt getShippingOrderDOMapperExt() {
 		return shippingOrderDOMapperExt;
 	}
 
@@ -43,6 +47,12 @@ public class ShippingOrderServiceImplChannel implements ChannelIShippingOrderSer
 	public int updateByPrimaryKey(ShippingOrderDO record){
 		return shippingOrderDOMapperExt.updateByPrimaryKey(record);
 	}
+
+
+	public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO ShippingOrderVO){
+		return shippingOrderDOMapperExt.queryShippingOrders(ShippingOrderVO);
+	}
+
 
 
 }
