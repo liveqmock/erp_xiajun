@@ -19,6 +19,7 @@
   <sql id="Base_Column_List2" >
     id, org_id, name, address, code, icon, pid, seq, gmt_create, gmt_modify, creator,
     modifier, is_del
+
   </sql>
 
   <select id="selectByPIdNull" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO">
