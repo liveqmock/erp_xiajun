@@ -70,9 +70,9 @@ public class ItemSkuServiceImpl  implements IItemSkuService {
 	}
 
 
-	public List<ItemSkuVo> queryItemSkusForItemThirdSale(Long id){
+	public List<ItemSkuVo> queryItemSkusForItemThirdSale(String itemCode, String shopCode){
 
-		List<ItemSkuDO> itemSkuDOS =  itemSkuDOMapperExt.queryItemSkusForItemThirdSale(id);
+		List<ItemSkuDO> itemSkuDOS =  itemSkuDOMapperExt.queryItemSkusForItemThirdSale(itemCode,shopCode);
 		List<ItemSkuVo> itemSkuVos = new ArrayList<>();
 		for(ItemSkuDO itemSkuDO : itemSkuDOS){
 			ItemSkuVo vo = new ItemSkuVo();

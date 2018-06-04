@@ -330,13 +330,27 @@
         ORDER BY T1.id desc
     </select>
 
-    <select id="queryItemSkusForItemThirdSale" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">
+    <select id="queryItemSkusForItemThirdSale" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
         SELECT
-        <include refid="Base_Column_List" />, T2.quantity AS itemSkuQuantity
+        <include refid="Base_Column_List_with_table" />, T2.quantity AS itemSkuQuantity
         FROM <include refid="tableSection"/> T1 LEFT JOIN  mall_sub_order T2 on T1.sku_code= T2.sku_code
-        WHERE T1.item_code = #{itemCode} and T2.sales_name = '海狐海淘'
+        WHERE
+        1=1
+        <if test="itemCode != null">
+           and T1.item_code = #{itemCode}
+        </if>
+        <if test="shopCode != null">
+            and T2.shop_code = #{shopCode}
+        </if>
         AND T2.receiver = '地址稍后'
         AND T2.quantity >1
     </select>
+
+    <sql id="Base_Column_List_with_table" >
+        T1.id, T1.sku_code, T1.item_code, T1.item_name, T1.company_no, T1.category_code, T1.category_name, T1.upc,
+        T1.saleable, T1.purchase_price, T1.freight, T1.discount, T1.logistic_type, T1.cost_price, T1.brand_name,
+        T1.weight, T1.sku_pic, T1.package_code, T1.package_name, T1.package_en, T1.package_weight, T1.package_level_id,
+        T1.scale, model, T1.sale_type, T1.sale_price, T1.creator, T1.modifier, T1.gmt_create, T1.gmt_modify, T1.is_del
+    </sql>
 
 </mapper>

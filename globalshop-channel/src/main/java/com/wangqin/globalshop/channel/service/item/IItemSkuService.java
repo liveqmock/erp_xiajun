@@ -34,5 +34,5 @@ public interface IItemSkuService  {
 
 	public List<ItemSkuVo> queryVoList(ItemSkuDO itemSkuDO);
 
-	public List<ItemSkuVo> queryItemSkusForItemThirdSale(Long id);
+	public List<ItemSkuVo> queryItemSkusForItemThirdSale(String itemCode, String shopCode);
 }

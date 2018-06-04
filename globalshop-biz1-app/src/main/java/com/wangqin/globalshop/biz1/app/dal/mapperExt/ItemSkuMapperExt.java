@@ -37,7 +37,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	
 	List<ItemSkuDO> queryItemSkusForExcel();
 	
-	List<ItemSkuDO> queryItemSkusForItemThirdSale(Long itemId);
+	List<ItemSkuDO> queryItemSkusForItemThirdSale(@Param(value="itemCode")String itemCode, @Param(value="shopCode")String shopCode);
 	
 	/**
 	 * 根据upc获取商品信息(item_sku+inventory+virtualInv)
