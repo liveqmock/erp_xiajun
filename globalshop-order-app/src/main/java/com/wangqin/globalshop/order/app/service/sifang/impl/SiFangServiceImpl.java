@@ -119,7 +119,7 @@ public class SiFangServiceImpl implements ISiFangService {
 		
 		// 查仓库
 		String warehouseNo = erpOrderList.get(0).getWarehouseNo();
-		WarehouseDO wareHouse =  warehouseService.selectByWarehourseNo(warehouseNo);
+		WarehouseDO wareHouse =  warehouseService.selectByWarehouseNo(warehouseNo);
 		if (wareHouse == null) {
 			throw new ErpCommonException("仓库查不到 wareHouseId：" + warehouseNo);
 		}

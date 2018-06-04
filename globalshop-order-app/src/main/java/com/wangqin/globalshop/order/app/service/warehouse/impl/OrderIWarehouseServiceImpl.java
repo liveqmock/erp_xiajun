@@ -12,7 +12,7 @@ public class OrderIWarehouseServiceImpl implements OrderIWarehouseService {
 	@Autowired
 	private WarehouseDOMapperExt mapper;
 	@Override
-	public WarehouseDO selectByWarehourseNo(String warehouseNo) {
-		return mapper.selectByWarehourseNo(warehouseNo);
+	public WarehouseDO selectByWarehouseNo(String warehouseNo) {
+		return mapper.selectByWarehouseNo(warehouseNo);
 	}
 }

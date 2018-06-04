@@ -19,7 +19,7 @@ public class InventoryInoutDO {
 
     private Long quantity;
 
-    private Byte operatorType;
+    private Integer operatorType;
 
     private Date gmtCreate;
 
@@ -30,6 +30,16 @@ public class InventoryInoutDO {
     private String creator;
 
     private String modifier;
+
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Long getId() {
         return id;
@@ -95,11 +105,11 @@ public class InventoryInoutDO {
         this.quantity = quantity;
     }
 
-    public Byte getOperatorType() {
+    public Integer getOperatorType() {
         return operatorType;
     }
 
-    public void setOperatorType(Byte operatorType) {
+    public void setOperatorType(Integer operatorType) {
         this.operatorType = operatorType;
     }
 

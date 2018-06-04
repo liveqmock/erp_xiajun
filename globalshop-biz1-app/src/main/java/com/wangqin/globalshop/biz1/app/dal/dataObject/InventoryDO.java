@@ -15,17 +15,14 @@ public class InventoryDO {
 
     private String skuCode;
 
-    private Long virtualInv;
-
-    private Long lockedVirtualInv;
 
     private Long inv;
 
     private Long lockedInv;
 
-    private Long transInv;
 
-    private Long lockedTransInv;
+
+    private Long virtualInv;
 
     private Date gmtCreate;
 
@@ -37,27 +34,19 @@ public class InventoryDO {
 
     private String modifier;
 
-    /**
-     * 在途可用库存
-     * @return
-     */
-    public Long getAvailableTransInv() {
-        return this.getTransInv() - this.getLockedTransInv();
-    }
-    /**
-     * (现货)可用库存
-     * @return
-     */
-    public Long getAvailableInv() {
-        return this.getInv() - this.getLockedInv();
-    }
+/**---------------------------------------*/
+    private Long lockedVirtualInv;
+    private Long lockedTransInv;
+    private Long transInv;
+
+
 
     /**
      * (总共)可用库存
      * @return
      */
     public Long getTotalAvailableInv() {
-        return getAvailableInv()+getAvailableTransInv();
+        return this.inv+this.virtualInv-this.lockedInv;
     }
 
     public Long getId() {

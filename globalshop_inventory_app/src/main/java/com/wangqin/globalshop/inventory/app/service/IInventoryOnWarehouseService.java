@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.inventory.app.service;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
@@ -25,4 +26,8 @@ public interface IInventoryOnWarehouseService {
     void changePositionNo(InventoryOnWareHouseDO inventoryArea);
 
     InventoryOnWareHouseDO selectByNo(String inventoryAreaId);
+
+    InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
+
+    void insertInventory(InventoryDO inventory, String warehouseNo);
 }

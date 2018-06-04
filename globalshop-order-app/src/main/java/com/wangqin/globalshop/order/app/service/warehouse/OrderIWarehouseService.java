@@ -4,5 +4,5 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 
 public interface OrderIWarehouseService  {
 
-	WarehouseDO selectByWarehourseNo(String warehouseNo);
+	WarehouseDO selectByWarehouseNo(String warehouseNo);
 }

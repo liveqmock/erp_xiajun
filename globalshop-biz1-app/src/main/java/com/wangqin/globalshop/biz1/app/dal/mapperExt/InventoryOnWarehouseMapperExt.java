@@ -28,7 +28,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	 * @return
 	 */
 	InventoryOnWareHouseDO getInventoryArea(@Param("itemId") String itemId, @Param("skuId") String skuId,
-			@Param("warehourseNo") String warehourseNo, @Param("positionNo") String positionNo);
+			@Param("warehouseNo") String warehouseNo, @Param("positionNo") String positionNo);
 
 	/**
 	 * 商品型号总库存
@@ -111,5 +111,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	List<InventoryOnWareHouseDO> queryInventoryAreaForExcel(InventoryQueryVO inventoryQueryVO);
 
     InventoryOnWareHouseDO selectById(Long inventoryAreaId);
+    /**new-------------------------------------------------------------------*/
 
+	InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
 }

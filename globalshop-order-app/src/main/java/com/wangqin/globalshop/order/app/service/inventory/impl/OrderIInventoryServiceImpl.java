@@ -85,7 +85,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
             inventoryInout.setSkuCode(inventoryRecord.getSkuCode());
             inventoryInout.setQuantity(inventoryRecord.getBookedQuantity());
             inventoryInout.setInventoryOnWarehouseNo(inventoryRecord.getInventoryOnWarehouseNo());
-            inventoryInout.setOperatorType((byte) InoutOperatorType.SALE_OUT.getCode());
+            inventoryInout.setOperatorType(InoutOperatorType.SALE_OUT.getCode());
             inventoryInout.setCreator(userCreate);
             inventoryInout.setGmtCreate(new Date());
             inventoryInout.setGmtModify(new Date());
@@ -281,7 +281,7 @@ public class OrderIInventoryServiceImpl implements OrderIInventoryService {
             throw new InventoryException(String.format(
                     "data expiration exception : detailId[%d],StockStatus[%d],CalcInventory[%d],ActualInventory[%d],CalcTransInventory[%d],ActualTransInventory[%d]",
                     warehouseCollector.getErpOrder().getId(), warehouseCollector.getStockStatus(), warehouseCollector.getBooked(), availableInv,
-                    inventory.getAvailableTransInv(), availableTransInv));
+                    0, availableTransInv));
         }
 
         ErpOrderUtil.calculateStockStatus(erpOrder, warehouseCollector.getBooked()+warehouseCollector.getLastBooked(), warehouseCollector.getLastTransBooked()+warehouseCollector.getTransBooked());

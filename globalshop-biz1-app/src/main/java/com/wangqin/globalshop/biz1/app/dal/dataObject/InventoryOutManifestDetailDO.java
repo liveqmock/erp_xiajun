@@ -9,7 +9,7 @@ public class InventoryOutManifestDetailDO {
 
     private Long itemId;
 
-    private Integer quantity;
+    private Long quantity;
 
     private String itemName;
 
@@ -59,11 +59,11 @@ public class InventoryOutManifestDetailDO {
         this.itemId = itemId;
     }
 
-    public Integer getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 

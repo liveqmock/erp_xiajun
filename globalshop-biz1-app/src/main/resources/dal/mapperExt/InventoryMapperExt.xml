@@ -210,6 +210,31 @@
             </if>
         </where>
     </select>
+    <select id="queryBySkuCodeAndItemCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap"  >
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List" />
+        FROM
+        inventory T1
+        <where>
+            <if test="itemCode != null" >
+                item_code = #{itemCode}
+            </if>
+            <if test="skuCode != null" >
+                and sku_code = #{skuCode}
+            </if>
+        </where>
+    </select>
+    <select id="queryBySkuCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap"  >
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List" />
+        FROM
+        inventory T1
+        <where>
+            <if test="skuCode != null" >
+                and sku_code = #{skuCode}
+            </if>
+        </where>
+    </select>
 
 
     

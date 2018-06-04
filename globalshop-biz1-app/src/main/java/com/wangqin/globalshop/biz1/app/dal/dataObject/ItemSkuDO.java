@@ -5,19 +5,19 @@ import java.util.Date;
 public class ItemSkuDO {
     private Long id;
 
-    private String skuCode;
-
-    private String itemCode;
-
-    private String itemName;
-
     private String companyNo;
+    private String itemCode;
+    private String itemName;
+    private String skuCode;
+    private String upc;
+
+
+
 
     private String categoryCode;
 
     private String categoryName;
 
-    private String upc;
 
     private Byte saleable;
 

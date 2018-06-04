@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
@@ -14,7 +13,6 @@ import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.*;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -44,7 +42,7 @@ import java.util.Set;
 @RequestMapping("/inventory")
 public class InventoryController{
 	@Autowired
-	private IInventoryService inventoryService;
+	private InventoryService inventoryService;
 	@Autowired
 	private IInventoryOnWarehouseService inventoryAreaService;
 	@Autowired
@@ -65,7 +63,7 @@ public class InventoryController{
 	@ResponseBody
 	public Object query(String itemCode, String skuCode) {
 		if (skuCode != null) {
-			InventoryDO inventory = inventoryService.queryInventoryBySkuId(itemCode, skuCode);
+			InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(itemCode, skuCode);
 			return JsonResult.buildSuccess(inventory);
 		} else {
 			return JsonResult.buildFailed("没有SKU id");
@@ -98,27 +96,27 @@ public class InventoryController{
 		return result;
 	}
 
-	@RequestMapping("/area/transTo")
-	@ResponseBody
-	public Object transToInventory(Long inventoryAreaId, int toTrans, String positionNo) throws InventoryException {
-		if (inventoryAreaId == null) {
-			return JsonResult.buildFailed("没有inventoryArea id");
-		}
-		if(toTrans<=0){
-			return JsonResult.buildFailed("在途到仓必须为正数");
-		}
-
-		inventoryService.transToInventory(inventoryAreaId, toTrans, positionNo);
-
-		//对子订单进行库存分配
-		InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
-		try {
-			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
-		} catch (InventoryException e) {
-			e.printStackTrace();
-		}
-		return JsonResult.buildSuccess(null);
-	}
+//	@RequestMapping("/area/transTo")
+//	@ResponseBody
+//	public Object transToInventory(Long inventoryAreaId, int toTrans, String positionNo) throws InventoryException {
+//		if (inventoryAreaId == null) {
+//			return JsonResult.buildFailed("没有inventoryArea id");
+//		}
+//		if(toTrans<=0){
+//			return JsonResult.buildFailed("在途到仓必须为正数");
+//		}
+//
+//		inventoryService.transToInventory(inventoryAreaId, toTrans, positionNo);
+//
+//		//对子订单进行库存分配
+//		InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+//		try {
+//			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
+//		} catch (InventoryException e) {
+//			e.printStackTrace();
+//		}
+//		return JsonResult.buildSuccess(null);
+//	}
 
 	// ------------test------------------------
 	// http://localhost:8080/haierp1/inventory/add?itemId=73&skuId=352&warehouseId=16&positionNo=S001&inventory=10&transInv=5
@@ -127,21 +125,26 @@ public class InventoryController{
 	@ResponseBody
 	public Object add(String  itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory,
 			Long transInv) {
-		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
-		inventoryArea.setItemCode(itemCode);
-		// inventoryArea.setItemName("test");
-		inventoryArea.setSkuCode(skuCode);
-		// inventoryArea.setSkuCode("testskuCode");
-		// inventoryArea.setSkuPic(skuPic);
-		// inventoryArea.setUpc(upc);
-		inventoryArea.setInventory(inventory);
-		inventoryArea.setTransInv(transInv);
-		inventoryArea.setWarehouseNo(warehouseNo);
-		// inventoryArea.setWarehouseName(warehouseName);
-//		inventoryArea.setPositionNo(positionNo);
-		inventoryArea.setGmtCreate(new Date());
-		inventoryArea.setGmtModify(new Date());
-		inventoryAreaService.addInventoryArea(inventoryArea, InoutOperatorType.PURCHASE_IN);
+		InventoryDO inventoryDO = new InventoryDO();
+		inventoryDO.setSkuCode(skuCode);
+		inventoryDO.setItemCode(itemCode);
+		inventoryDO.setInv(inventory);
+		inventoryService.outbound(inventoryDO,warehouseNo);
+//		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
+//		inventoryArea.setItemCode(itemCode);
+//		// inventoryArea.setItemName("test");
+//		inventoryArea.setSkuCode(skuCode);
+//		// inventoryArea.setSkuCode("testskuCode");
+//		// inventoryArea.setSkuPic(skuPic);
+//		// inventoryArea.setUpc(upc);
+//		inventoryArea.setInventory(inventory);
+//		inventoryArea.setTransInv(transInv);
+//		inventoryArea.setWarehouseNo(warehouseNo);
+//		// inventoryArea.setWarehouseName(warehouseName);
+////		inventoryArea.setPositionNo(positionNo);
+//		inventoryArea.setGmtCreate(new Date());
+//		inventoryArea.setGmtModify(new Date());
+//		inventoryAreaService.addInventoryArea(inventoryArea, InoutOperatorType.PURCHASE_IN);
 		return JsonResult.buildSuccess(null);
 
 	}
@@ -150,23 +153,25 @@ public class InventoryController{
 	@ResponseBody
 	public Object lockOrder(Long orderId) throws InventoryException {
 		MallSubOrderDO order = erpOrderService.selectById(orderId);
-		return JsonResult.buildSuccess(inventoryService.lockedInventroyErpOrder(order));
+		inventoryService.order(order);
+		return JsonResult.buildSuccess(true);
 	}
 
 	@RequestMapping("/release")
 	@ResponseBody
 	public Object releaseOrder(Long orderId) throws InventoryException {
 		MallSubOrderDO order = erpOrderService.selectById(orderId);
-		return JsonResult.buildSuccess(inventoryService.releaseInventory(order));
+		inventoryService.release(order);
+		return JsonResult.buildSuccess(true);
 	}
 
-	@RequestMapping("/send")
-	@ResponseBody
-	public Object sendOrder(Long orderId) throws InventoryException {
-		MallSubOrderDO order = erpOrderService.selectById(orderId);
-		inventoryService.sendInventroyOrder(order);
-		return JsonResult.buildSuccess(null);
-	}
+//	@RequestMapping("/send")
+//	@ResponseBody
+//	public Object sendOrder(Long orderId) throws InventoryException {
+//		MallSubOrderDO order = erpOrderService.selectById(orderId);
+//		inventoryService.sendInventroyOrder(order);
+//		return JsonResult.buildSuccess(null);
+//	}
 
 	/**
 	 * 库存调整，库存盘进、盘出
@@ -176,49 +181,51 @@ public class InventoryController{
 	 */
 	@RequestMapping("/inventoryCheckIn")
 	@ResponseBody
-	public Object inventoryCheckIn(String skuCode, Long warehouseId, String positionNo, Integer quantity)
+	public Object inventoryCheckIn(String skuCode, Long warehouseId, String positionNo, Long quantity)
 			throws InventoryException {
-		// 非空校验
-		if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
-			return JsonResult.buildFailed("有空数据");
-		} else {
-			if (quantity <= 0) {
-				return	JsonResult.buildFailed("增加库存要为正数");
-			}
-			try {
-				inventoryAreaService.inventoryCheckIn(skuCode, warehouseId, positionNo, quantity);
-			} catch (ErpCommonException e) {
-				return JsonResult.buildFailed(e.getErrorMsg());
-			} catch (Exception ex) {
-				return JsonResult.buildFailed("未知异常");
-			}
-			//对子订单进行库存分配
-			erpOrderService.queryBySkuCode(skuCode);
+		inventoryService.checkIn(skuCode,warehouseId, positionNo, quantity);
+//		// 非空校验
+//		if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
+//			return JsonResult.buildFailed("有空数据");
+//		} else {
+//			if (quantity <= 0) {
+//				return	JsonResult.buildFailed("增加库存要为正数");
+//			}
+//			try {
+//				inventoryAreaService.inventoryCheckIn(skuCode, warehouseId, positionNo, quantity);
+//			} catch (ErpCommonException e) {
+//				return JsonResult.buildFailed(e.getErrorMsg());
+//			} catch (Exception ex) {
+//				return JsonResult.buildFailed("未知异常");
+//			}
+//			//对子订单进行库存分配
+//			erpOrderService.queryBySkuCode(skuCode);
 
-		}
+//		}
 		return JsonResult.buildSuccess(null);
 	}
 
 	@RequestMapping("/inventoryCheckOut")
 	@ResponseBody
-	public Object inventoryCheckOut(String inventoryAreaId, Integer quantity) throws InventoryException {
-		// 非空校验
-		if (inventoryAreaId== null ||quantity == null) {
-			return JsonResult.buildFailed("有空数据");
-		}else{
-			if (quantity <= 0) {
-				return JsonResult.buildFailed("减少的库存要为正数");
-			}
-			try {
-				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
-			} catch (Exception ex) {
-				return JsonResult.buildFailed("未知异常");
-			}
-			
-			//对子订单进行库存分配
-			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectByNo(inventoryAreaId);
-			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
-		}
+	public Object inventoryCheckOut(Long inventoryAreaId, Long quantity) throws InventoryException {
+		inventoryService.inventoryCheckOut(inventoryAreaId,quantity);
+//		// 非空校验
+//		if (inventoryAreaId== null ||quantity == null) {
+//			return JsonResult.buildFailed("有空数据");
+//		}else{
+//			if (quantity <= 0) {
+//				return JsonResult.buildFailed("减少的库存要为正数");
+//			}
+//			try {
+//				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
+//			} catch (Exception ex) {
+//				return JsonResult.buildFailed("未知异常");
+//			}
+//
+//			//对子订单进行库存分配
+//			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectByNo(inventoryAreaId);
+//			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
+//		}
 		return JsonResult.buildSuccess(null);
 	}
 	

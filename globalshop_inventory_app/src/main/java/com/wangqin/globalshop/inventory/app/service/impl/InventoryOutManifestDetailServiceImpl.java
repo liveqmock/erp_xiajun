@@ -9,7 +9,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDetailD
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailService;
-import com.wangqin.globalshop.inventory.app.service.IInventoryService;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
     @Autowired
     private InventoryOutManifestDetailDOMapperExt detailMapper;
     @Autowired
-    private IInventoryService inventoryService;
+    private InventoryService inventoryService;
 
     @Override
     public void addInventoryOut(InventoryOutManifestDO inventoryOut) {
@@ -84,16 +84,16 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
     public Set<String> inventoryCheckOutBatch(InventoryOutManifestDO inventoryOut) {
         Set<String> skuIdSet = Sets.newHashSet();
         List<InventoryOutManifestDetailDO> inventoryOutDetailList = detailMapper.selectByOutNo(inventoryOut.getInventoryOutNo());
-        String warehouseNo = inventoryOut.getWarehouseNo();
+        Long warehouseId = inventoryOut.getId();
         inventoryOutDetailList.forEach(inventoryOutDetail -> {
-            Integer quantity = inventoryOutDetail.getQuantity();
-            if (warehouseNo== null || inventoryOutDetail.getQuantity() == null) {
+            Long quantity = inventoryOutDetail.getQuantity();
+            if (warehouseId== null || inventoryOutDetail.getQuantity() == null) {
                 throw new ErpCommonException("有空数据");
             } else {
                 if (inventoryOutDetail.getQuantity() <= 0) {
                     throw new ErpCommonException("减少的库存要为正数");
                 }
-                inventoryService.inventoryCheckOut(warehouseNo, quantity);
+                inventoryService.inventoryCheckOut(warehouseId, quantity);
                 skuIdSet.add(inventoryOutDetail.getSkuCode());
             }
         });

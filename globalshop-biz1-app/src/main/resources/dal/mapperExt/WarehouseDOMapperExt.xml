@@ -187,7 +187,7 @@
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByWarehourseNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+  <select id="selectByWarehouseNo" resultMap="BaseResultMap" parameterType="java.lang.String">
       SELECT
       <include refid="Base_Column_List"/>
       FROM
