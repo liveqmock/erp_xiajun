@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.channel.service.inventory;
 
-import java.util.List;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
+
+import java.util.List;
 
 /**
  *
@@ -44,6 +44,8 @@ public interface IInventoryService  {
 	 *
 	 */
 	void lockedInventroy(InventoryServiceImpl.WarehouseCollector warehouseCollector) throws InventoryException;
+
+	public InventoryServiceImpl.WarehouseCollector selectWarehousesByErpOrder(MallSubOrderDO erpOrder) throws InventoryException;
 
 
 

@@ -123,6 +123,15 @@
 					<include>**/*.*</include>
 				</includes>
 			</resource>
+
+            <resource>
+                <directory>lib/</directory>
+                <targetPath>WEB-INF/lib</targetPath>
+                <includes>
+                    <include>**/*.jar</include>
+                </includes>
+            </resource>
+
 		</resources>
         <plugins>
             <plugin>
