@@ -23,11 +23,11 @@ import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.NumberUtil;
 import com.wangqin.globalshop.common.utils.ShiroUtil;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.service.util_service.OrderISequenceUtilService;
-import com.wangqin.globalshop.order.app.service.inventory.OrderIInventoryService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import com.wangqin.globalshop.order.app.service.util_service.OrderISequenceUtilService;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +50,11 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     @Autowired
     private IMallOrderService mallOrderService;
     @Autowired
-    private OrderIInventoryService orderInventoryService;
+    private InventoryService inventoryService;
     @Autowired
     private SequenceUtilMapperExt sequenceUtilMapperExt;
     @Autowired
     private LogisticCompanyDOMapperExt logisticCompanyMapper;
-    @Autowired
-    private OrderIInventoryService inventoryService;
     @Autowired
     private IChannelAccountService iChannelAccountService;
     @Autowired
@@ -184,7 +182,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                     erpNos.append("," + erpOrder.getShopCode());
                 }
                 //扣减库存
-                inventoryService.sendInventroyOrder(erpOrder);
+                inventoryService.ship(erpOrder);
                 //修改子订单状态
                 erpOrder.setStatus(OrderStatus.SENT.getCode());
             } else if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()) {
@@ -344,16 +342,17 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         Set<String> shippingOrderIds = Sets.newHashSet();
         List<MallSubOrderDO>  erpOrderList = mallSubOrderService.selectBatchIds(erpOrderIdList);
         for(MallSubOrderDO erpOrder : erpOrderList) {
-            if(erpOrder.getStockStatus()==StockUpStatus.STOCKUP.getCode() && erpOrder.getShippingNo()==null) {
-                //扣减库存
-                orderInventoryService.sendInventroyOrder(erpOrder);
-                //修改子订单状态
-                erpOrder.setStatus(OrderStatus.SENT.getCode());
-            } else if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()) {
-                throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getOrderNo());
-            } else {
-                throw new ErpCommonException("商品不能重复发货，子订单号：" + erpOrder.getOrderNo());
-            }
+//            if(erpOrder.getStockStatus()==StockUpStatus.STOCKUP.getCode() && erpOrder.getShippingNo()==null) {
+//                //扣减库存
+//                orderInventoryService.sendInventroyOrder(erpOrder);
+//                //修改子订单状态
+//                erpOrder.setStatus(OrderStatus.SENT.getCode());
+//            } else if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()) {
+//                throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getOrderNo());
+//            } else {
+//                throw new ErpCommonException("商品不能重复发货，子订单号：" + erpOrder.getOrderNo());
+//            }
+            inventoryService.ship(erpOrder);
             shippingOrder.setMallOrders("[" + erpOrder.getId() + "]");
             shippingOrder.setReceiver(erpOrder.getReceiver());
             shippingOrder.setReceiverState(erpOrder.getReceiverState());

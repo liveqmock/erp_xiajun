@@ -81,7 +81,11 @@ public class InventoryImpl implements InventoryService {
     public void order(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
-        if (inventoryDO.getTotalAvailableInv() >= mallSubOrderDO.getQuantity()) {
+        if (inventoryDO == null) {
+            throw new ErpCommonException("不存在该商品，下单失败");
+        }
+
+        if (inventoryDO.getInv() + inventoryDO.getLockedTransInv() - inventoryDO.getLockedInv() >= mallSubOrderDO.getQuantity()) {
             /**修改库存占用*/
             inventoryDO.setLockedInv(inventoryDO.getLockedInv() + mallSubOrderDO.getQuantity());
             mapper.updateByPrimaryKeySelective(inventoryDO);
@@ -91,6 +95,7 @@ public class InventoryImpl implements InventoryService {
 
 
     }
+
     /**
      * 取消订单
      *
@@ -106,19 +111,19 @@ public class InventoryImpl implements InventoryService {
         mapper.updateByPrimaryKeySelective(inventoryDO);
 
     }
+
     /**
      * 盘点增加
-     *
      */
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void checkIn(String skuCode, Long warehouseId, String positionNo, Long quantity) {
         /**增加实际库存*/
         InventoryDO inventoryDO = mapper.queryBySkuCode(skuCode);
-        insertInv(inventoryDO,quantity);
+        insertInv(inventoryDO, quantity);
         /**增加仓库库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByPrimaryKey(warehouseId);
-        houseDO.setInventory(houseDO.getLockedInv()+quantity);
+        houseDO.setInventory(houseDO.getLockedInv() + quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**新增流水*/
         Integer opeatory = 103;
@@ -130,11 +135,11 @@ public class InventoryImpl implements InventoryService {
     public void inventoryCheckOut(Long inventoryAreaId, Long quantity) {
         /**减少仓库库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByPrimaryKey(inventoryAreaId);
-        houseDO.setInventory(houseDO.getLockedInv()+quantity);
+        houseDO.setInventory(houseDO.getLockedInv() + quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**减少实际库存*/
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(houseDO.getSkuCode(),houseDO.getItemCode());
-        insertInv(inventoryDO,quantity);
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(houseDO.getSkuCode(), houseDO.getItemCode());
+        insertInv(inventoryDO, quantity);
 
         /**新增流水*/
         Integer opeatory = 202;
@@ -148,21 +153,18 @@ public class InventoryImpl implements InventoryService {
      */
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void ship(MallOrderDO mallOrderDO) {
-        List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(mallOrderDO.getOrderNo());
-        for (MallSubOrderDO orderDO : list) {
-            /**修改库存  和  库存占用*/
-            InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(orderDO.getSkuCode(), orderDO.getItemCode());
-            inventoryDO.setLockedInv(inventoryDO.getLockedInv() - orderDO.getQuantity());
-            inventoryDO.setInv(inventoryDO.getInv() - orderDO.getQuantity());
-            mapper.updateByPrimaryKeySelective(inventoryDO);
-            /**更新相关InventoryOnWareHouse*/
-            // TODO: 18.6.4
-            InventoryOnWareHouseDO warehouseDO = null;
-            /**生成流水*/
-            Integer opeatory = 201;
-            saveInventoryInOut(inventoryDO, warehouseDO, opeatory, inventoryDO.getInv(), "发货出库");
-        }
+    public void ship(MallSubOrderDO orderDO) {
+        /**修改库存  和  库存占用*/
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(orderDO.getSkuCode(), orderDO.getItemCode());
+        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - orderDO.getQuantity());
+        inventoryDO.setInv(inventoryDO.getInv() - orderDO.getQuantity());
+        mapper.updateByPrimaryKeySelective(inventoryDO);
+        /**更新相关InventoryOnWareHouse*/
+        // TODO: 18.6.4
+        InventoryOnWareHouseDO warehouseDO = null;
+        /**生成流水*/
+        Integer opeatory = 201;
+        saveInventoryInOut(inventoryDO, warehouseDO, opeatory, inventoryDO.getInv(), "发货出库");
         /**绑定shipping_order*/
         // TODO: 18.6.4
 

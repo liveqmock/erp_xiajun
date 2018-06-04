@@ -10,11 +10,13 @@ import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author biscuit
  * @data 2018/06/01
  */
+@Service
 public class InventoryInoutServiceImpl implements IInventoryInoutService {
 	
 	@Autowired

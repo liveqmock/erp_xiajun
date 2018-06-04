@@ -11,9 +11,11 @@ import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.order.app.service.inventory.OrderIInventoryService;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import org.apache.commons.collections.CollectionUtils;
@@ -49,7 +51,7 @@ public class MallSubOrderController {
 	@Autowired
 	private IMallSubOrderService erpOrderService;
 	@Autowired
-	private OrderIInventoryService inventoryService;
+	private InventoryService inventoryService;
 	@Autowired
 	private IShippingOrderService shippingOrderService;
 
@@ -216,11 +218,7 @@ public class MallSubOrderController {
 		}else{
 			//订单状态校验
 			if(erpOrder.getStatus()==OrderStatus.INIT.getCode()&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
-				try {
-					inventoryService.releaseInventory(erpOrder);
-				} catch (InventoryException e) {
-					return JsonResult.buildFailed("操作失败，位置错误");
-				}
+				inventoryService.release(erpOrder);
 			}else{
 				return JsonResult.buildFailed("订单状态错误");
 			}
@@ -243,11 +241,11 @@ public class MallSubOrderController {
 			return JsonResult.buildFailed("未找到订单");
 		}else{
 			JsonResult bizResult = null;
-			try {
-				bizResult = erpOrderService.lockErpOrder(erpOrder);
-			} catch (InventoryException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				bizResult = erpOrderService.lockErpOrder(erpOrder);
+//			} catch (InventoryException e) {
+//				e.printStackTrace();
+//			}
 			if(!bizResult.isSuccess()){
 					return JsonResult.buildFailed(bizResult.getMsg());
 				}
@@ -309,20 +307,16 @@ public class MallSubOrderController {
 				//批量释放库存
 				erpOrders.forEach(order->{
 						if(order.getStockStatus()!=StockUpStatus.INIT.getCode()&&order.getStockStatus()!=StockUpStatus.RELEASED.getCode()){
-							try {
-								inventoryService.releaseInventory(order);
-							} catch (InventoryException e) {
-								e.printStackTrace();
-							}
+							inventoryService.release(order);
 						}
 				});
-				//批量重新分配库存
-				erpOrders.forEach(order->{
-					try {
-						erpOrderService.lockErpOrder(order);
-					} catch (Exception e) {
-					}
-				});
+//				//批量重新分配库存
+//				erpOrders.forEach(order->{
+//					try {
+//						erpOrderService.lockErpOrder(order);
+//					} catch (Exception e) {
+//					}
+//				});
 				return JsonResult.buildSuccess(null);
 			}
 			

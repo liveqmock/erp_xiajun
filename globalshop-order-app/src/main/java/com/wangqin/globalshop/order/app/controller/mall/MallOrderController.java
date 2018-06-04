@@ -9,13 +9,12 @@ import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ParseObj2Obj;
 import com.wangqin.globalshop.common.utils.ShiroUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.order.app.service.inventory.OrderIInventoryService;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.util_service.OrderISequenceUtilService;
@@ -52,7 +51,7 @@ public class MallOrderController {
     @Autowired
     private IMallSubOrderService mallSubOrderService;
     @Autowired
-    private OrderIInventoryService inventoryService;
+    private InventoryService inventoryService;
     @RequestMapping(value = "/uuu",method = RequestMethod.POST)
     public void add1() {
         MallOrderDO mallOrderDO = mallOrderService.selectById(1L);
@@ -148,14 +147,10 @@ public class MallOrderController {
             List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
             if (CollectionUtils.isNotEmpty(erpOrders)) {
                 for (MallSubOrderDO erpOrder : erpOrders) {
-                    try {
-                        //1,释放子订单库存
-                        inventoryService.releaseInventory(erpOrder);
-                        //2,删除子订单
-                        mallSubOrderService.delete(erpOrder);
-                    } catch (InventoryException e) {
-                        e.printStackTrace();
-                    }
+                    //1,释放子订单库存
+                    inventoryService.release(erpOrder);
+                    //2,删除子订单
+                    mallSubOrderService.delete(erpOrder);
                 }
                 //3,重新生成子订单并分配库存。
                 mallOrderService.review(mallOrderVO.getOrderNo());
@@ -271,16 +266,12 @@ public class MallOrderController {
                 List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
                 if (CollectionUtils.isNotEmpty(erpOrders)) {
                     for (MallSubOrderDO erpOrder : erpOrders) {
-                        try {
-                            //1,释放子订单库存
-                            inventoryService.releaseInventory(erpOrder);
-                            //2,更改子订单状态
-                            erpOrder.setStatus( OrderStatus.CLOSE.getCode());
-                            erpOrder.setGmtModify(new Date());
-                            mallSubOrderService.update(erpOrder);
-                        } catch (InventoryException e) {
-                            e.printStackTrace();
-                        }
+                        //1,释放子订单库存
+                        inventoryService.release(erpOrder);
+                        //2,更改子订单状态
+                        erpOrder.setStatus( OrderStatus.CLOSE.getCode());
+                        erpOrder.setGmtModify(new Date());
+                        mallSubOrderService.update(erpOrder);
                     }
                 }
                 //2、更改主子订单状态

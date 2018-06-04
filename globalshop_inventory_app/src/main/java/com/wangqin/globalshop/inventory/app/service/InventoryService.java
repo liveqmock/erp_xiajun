@@ -10,7 +10,7 @@ public interface InventoryService {
     /**入库*/
     void outbound(InventoryDO inventory,String warehouseNo);
     /**发货*/
-    void ship(MallOrderDO mallOrderDO);
+    void ship(MallSubOrderDO mallSubOrderDO);
     /**下单*/
     void order(MallOrderDO mallOrderDO);
     /**下单*/

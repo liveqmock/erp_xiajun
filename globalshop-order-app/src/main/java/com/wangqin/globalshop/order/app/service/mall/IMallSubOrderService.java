@@ -40,7 +40,7 @@ public interface IMallSubOrderService {
 
     void splitErpOrder(MallSubOrderDO erpOrder, Integer splitCount) throws InventoryException;
 
-    JsonResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException;
+//    JsonResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException;
 
     List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
 

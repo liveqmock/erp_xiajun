@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOutManifestDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDetailDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
@@ -23,7 +24,7 @@ import java.util.Set;
 @Service
 public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManifestDetailService {
     @Autowired
-    private InventoryOutManifestDOMapper mapper;
+    private InventoryOutManifestDOMapperExt mapper;
     @Autowired
     private InventoryOutManifestDetailDOMapperExt detailMapper;
     @Autowired

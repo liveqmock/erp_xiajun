@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
@@ -12,9 +11,8 @@ import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.order.app.service.inventory.OrderIInventoryService;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
-import com.wangqin.globalshop.order.app.service.inventory.impl.OrderIInventoryServiceImpl;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.uitl.ErpOrderUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -37,7 +35,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Autowired
     private MallSubOrderMapperExt mallSubOrderDOMapper;
     @Autowired
-    private OrderIInventoryService inventoryService;
+    private InventoryService inventoryService;
     @Autowired
     private OrderInventoryBookingRecordService inventoryRecordService;
 
@@ -113,7 +111,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
         //备货状态清空占用库存
         if(erpOrder.getStockStatus()!= StockUpStatus.INIT.getCode()){
-            inventoryService.releaseInventory(erpOrder);
+            inventoryService.release(erpOrder);
         }
     }
 
@@ -306,40 +304,40 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         }
     }
 
-    @Override
-    public JsonResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
-        if(erpOrder.getStatus()!=OrderStatus.INIT.getCode()){
-            return JsonResult.buildFailed("订单状态错误");
-        }
-        //未备货订单
-        if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
-            if(erpOrder.getWarehouseNo()==null){
-                List<MallSubOrderDO> erpOrders = Lists.newArrayList();
-                erpOrders.add(erpOrder);
-                List<OrderIInventoryServiceImpl.WarehouseCollector> wcs = inventoryService.selectWarehousesByErpOrders(erpOrders);
-                if(CollectionUtils.isNotEmpty(wcs)){
-                    inventoryService.lockedInventroy(wcs.get(0));
-                }else{
-                    return JsonResult.buildFailed("没有库存备货失败");
-                }
-            }else{
-                return JsonResult.buildFailed("没有仓库信息");
-            }
-        }else{
-            if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.MIX_STOCKUP.getCode()&&erpOrder.getWarehouseNo()!=null){
-                OrderIInventoryServiceImpl.WarehouseCollector wc = inventoryService.selectWarehousesByErpOrder(erpOrder);
-                if(wc!=null){
-                    inventoryService.lockedInventroy(wc);
-                }else{
-                    return JsonResult.buildFailed("没有库存备货失败");
-                }
-            }else{
-                return JsonResult.buildFailed("订单备货状态错误");
-            }
-
-        }
-        return JsonResult.buildSuccess(true);
-    }
+//    @Override
+//    public JsonResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
+//        if(erpOrder.getStatus()!=OrderStatus.INIT.getCode()){
+//            return JsonResult.buildFailed("订单状态错误");
+//        }
+//        //未备货订单
+//        if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
+//            if(erpOrder.getWarehouseNo()==null){
+//                List<MallSubOrderDO> erpOrders = Lists.newArrayList();
+//                erpOrders.add(erpOrder);
+//                List<OrderIInventoryServiceImpl.WarehouseCollector> wcs = inventoryService.selectWarehousesByErpOrders(erpOrders);
+//                if(CollectionUtils.isNotEmpty(wcs)){
+//                    inventoryService.lockedInventroy(wcs.get(0));
+//                }else{
+//                    return JsonResult.buildFailed("没有库存备货失败");
+//                }
+//            }else{
+//                return JsonResult.buildFailed("没有仓库信息");
+//            }
+//        }else{
+//            if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.MIX_STOCKUP.getCode()&&erpOrder.getWarehouseNo()!=null){
+//                OrderIInventoryServiceImpl.WarehouseCollector wc = inventoryService.selectWarehousesByErpOrder(erpOrder);
+//                if(wc!=null){
+//                    inventoryService.lockedInventroy(wc);
+//                }else{
+//                    return JsonResult.buildFailed("没有库存备货失败");
+//                }
+//            }else{
+//                return JsonResult.buildFailed("订单备货状态错误");
+//            }
+//
+//        }
+//        return JsonResult.buildSuccess(true);
+//    }
 
     @Override
     public List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO) {

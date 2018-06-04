@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperE
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author biscuit
  * @data 2018/06/01
  */
+@Service
 public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseService {
 
     @Autowired
