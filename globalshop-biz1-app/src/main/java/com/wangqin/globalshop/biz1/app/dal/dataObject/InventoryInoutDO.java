@@ -17,6 +17,8 @@ public class InventoryInoutDO {
 
     private String shelfNo;
 
+    private String remark;
+
     private Long quantity;
 
     private Integer operatorType;
@@ -30,16 +32,6 @@ public class InventoryInoutDO {
     private String creator;
 
     private String modifier;
-
-    private String remark;
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 
     public Long getId() {
         return id;
@@ -95,6 +87,14 @@ public class InventoryInoutDO {
 
     public void setShelfNo(String shelfNo) {
         this.shelfNo = shelfNo == null ? null : shelfNo.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Long getQuantity() {

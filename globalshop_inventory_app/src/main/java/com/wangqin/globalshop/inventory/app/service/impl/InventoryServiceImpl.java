@@ -17,7 +17,7 @@ import java.util.List;
  * @data 2018/06/04
  */
 @Service
-public class InventoryImpl implements InventoryService {
+public class InventoryServiceImpl implements InventoryService {
     @Autowired
     private InventoryMapperExt mapper;
     @Autowired
@@ -48,6 +48,9 @@ public class InventoryImpl implements InventoryService {
         insertInv(inventory, inventory.getInv());
         invOnWarehouseService.insertInventory(inventory, warehouseNo);
         InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.selectByItemCodeAndSkuCodeAndWarehouseNo(inventory.getItemCode(), inventory.getSkuCode(), warehouseNo);
+        if (wareHouseDO == null){
+            throw new ErpCommonException("找不到对应的商品,入库失败");
+        }
         /**2根据InventoryOnWareHouseDO和InventoryDO生成流水*/
         Integer opeatory = 101;
         saveInventoryInOut(inventory, wareHouseDO, opeatory, inventory.getInv(), "采购入库");
@@ -149,7 +152,7 @@ public class InventoryImpl implements InventoryService {
     /**
      * 发货
      *
-     * @param mallOrderDO
+     * @param orderDO
      */
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -218,9 +221,15 @@ public class InventoryImpl implements InventoryService {
     private void insertInv(InventoryDO inventoryDO, Long inv) {
         InventoryDO inventory = mapper.queryBySkuCodeAndItemCode(inventoryDO.getSkuCode(), inventoryDO.getItemCode());
         if (inventory == null) {
+            inventoryDO.setCompanyNo("InventoryServiceImpl4545");
+            inventoryDO.setCreator("qweqweqweqwe");
+            inventoryDO.setModifier("zzcxzxczxc");
             mapper.insertSelective(inventoryDO);
         } else {
             inventory.setInv(inventory.getInv() + inv);
+            inventoryDO.setCreator("qweqweqweqwe");
+            inventoryDO.setModifier("zzcxzxczxc");
+            inventoryDO.setCompanyNo("InventoryServiceImpl4545");
             mapper.updateByPrimaryKeySelective(inventory);
         }
 
@@ -238,6 +247,7 @@ public class InventoryImpl implements InventoryService {
     private void saveInventoryInOut(InventoryDO inventoryDO, InventoryOnWareHouseDO wareHouseDO, Integer opeatory, Long quantity, String remark) {
         InventoryInoutDO inoutDO = new InventoryInoutDO();
         inoutDO.setCreator("当前用户");
+        inoutDO.setModifier("qwewqeqwew");
         inoutDO.setWarehouseNo(wareHouseDO.getWarehouseNo());
         inoutDO.setInventoryOnWarehouseNo(wareHouseDO.getInventoryOnWarehouseNo());
         inoutDO.setSkuCode(inventoryDO.getSkuCode());

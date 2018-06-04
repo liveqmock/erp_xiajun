@@ -17,7 +17,7 @@ public class AuthOrganizationDO {
 
     private Long pid;
 
-    private Byte seq;
+    private Integer seq;
 
     private Date gmtCreate;
 
@@ -85,11 +85,11 @@ public class AuthOrganizationDO {
         this.pid = pid;
     }
 
-    public Byte getSeq() {
+    public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(Byte seq) {
+    public void setSeq(Integer seq) {
         this.seq = seq;
     }
 

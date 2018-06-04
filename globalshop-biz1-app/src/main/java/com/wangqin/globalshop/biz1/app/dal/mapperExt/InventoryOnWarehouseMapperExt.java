@@ -113,5 +113,5 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
     InventoryOnWareHouseDO selectById(Long inventoryAreaId);
     /**new-------------------------------------------------------------------*/
 
-	InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
+	InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(@Param("itemCode")String itemCode, @Param("skuCode")String skuCode, @Param("warehouseNo")String warehouseNo);
 }

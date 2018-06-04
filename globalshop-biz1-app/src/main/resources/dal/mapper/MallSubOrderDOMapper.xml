@@ -18,17 +18,17 @@
     <result column="upc" property="upc" jdbcType="VARCHAR" />
     <result column="scale" property="scale" jdbcType="VARCHAR" />
     <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
-    <result column="logistic_type" property="logisticType" jdbcType="TINYINT" />
+    <result column="logistic_type" property="logisticType" jdbcType="INTEGER" />
     <result column="freight" property="freight" jdbcType="DOUBLE" />
     <result column="freight_real" property="freightReal" jdbcType="DOUBLE" />
     <result column="weight" property="weight" jdbcType="DOUBLE" />
     <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
     <result column="sale_price_agent" property="salePriceAgent" jdbcType="DOUBLE" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="close_reason" property="closeReason" jdbcType="VARCHAR" />
     <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
-    <result column="stock_status" property="stockStatus" jdbcType="TINYINT" />
+    <result column="stock_status" property="stockStatus" jdbcType="INTEGER" />
     <result column="shipping_order_no" property="shippingOrderNo" jdbcType="VARCHAR" />
     <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR" />
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
@@ -48,6 +48,7 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code, 
@@ -56,7 +57,7 @@
     quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no, 
     receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address, 
     telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, gmt_create, 
-    gmt_modify, creator, modifier, is_del
+    gmt_modify, creator, modifier, is_del, sub_order_no
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -87,23 +88,23 @@
       postcode, id_card, idcard_pic_front, 
       idcard_pic_reverse, memo, gmt_create, 
       gmt_modify, creator, modifier, 
-      is_del)
+      is_del, sub_order_no)
     values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{mallReturnOrderNo,jdbcType=VARCHAR}, 
       #{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{shopCode,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
       #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
       #{channelSkuCode,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
-      #{skuPic,jdbcType=VARCHAR}, #{logisticType,jdbcType=TINYINT}, #{freight,jdbcType=DOUBLE}, 
+      #{skuPic,jdbcType=VARCHAR}, #{logisticType,jdbcType=INTEGER}, #{freight,jdbcType=DOUBLE}, 
       #{freightReal,jdbcType=DOUBLE}, #{weight,jdbcType=DOUBLE}, #{salePrice,jdbcType=DOUBLE}, 
-      #{salePriceAgent,jdbcType=DOUBLE}, #{quantity,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
-      #{closeReason,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{stockStatus,jdbcType=TINYINT}, 
+      #{salePriceAgent,jdbcType=DOUBLE}, #{quantity,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{closeReason,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{stockStatus,jdbcType=INTEGER}, 
       #{shippingOrderNo,jdbcType=VARCHAR}, #{shippingNo,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
       #{receiverCountry,jdbcType=VARCHAR}, #{receiverState,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, 
       #{receiverDistrict,jdbcType=VARCHAR}, #{receiverAddress,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{postcode,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, 
       #{idcardPicReverse,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT})
+      #{isDel,jdbcType=BIT}, #{subOrderNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -247,6 +248,9 @@
       <if test="isDel != null" >
         is_del,
       </if>
+      <if test="subOrderNo != null" >
+        sub_order_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
@@ -296,7 +300,7 @@
         #{skuPic,jdbcType=VARCHAR},
       </if>
       <if test="logisticType != null" >
-        #{logisticType,jdbcType=TINYINT},
+        #{logisticType,jdbcType=INTEGER},
       </if>
       <if test="freight != null" >
         #{freight,jdbcType=DOUBLE},
@@ -317,7 +321,7 @@
         #{quantity,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=TINYINT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="closeReason != null" >
         #{closeReason,jdbcType=VARCHAR},
@@ -326,7 +330,7 @@
         #{warehouseNo,jdbcType=VARCHAR},
       </if>
       <if test="stockStatus != null" >
-        #{stockStatus,jdbcType=TINYINT},
+        #{stockStatus,jdbcType=INTEGER},
       </if>
       <if test="shippingOrderNo != null" >
         #{shippingOrderNo,jdbcType=VARCHAR},
@@ -385,6 +389,9 @@
       <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
+      <if test="subOrderNo != null" >
+        #{subOrderNo,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
@@ -436,7 +443,7 @@
         sku_pic = #{skuPic,jdbcType=VARCHAR},
       </if>
       <if test="logisticType != null" >
-        logistic_type = #{logisticType,jdbcType=TINYINT},
+        logistic_type = #{logisticType,jdbcType=INTEGER},
       </if>
       <if test="freight != null" >
         freight = #{freight,jdbcType=DOUBLE},
@@ -457,7 +464,7 @@
         quantity = #{quantity,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="closeReason != null" >
         close_reason = #{closeReason,jdbcType=VARCHAR},
@@ -466,7 +473,7 @@
         warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
       </if>
       <if test="stockStatus != null" >
-        stock_status = #{stockStatus,jdbcType=TINYINT},
+        stock_status = #{stockStatus,jdbcType=INTEGER},
       </if>
       <if test="shippingOrderNo != null" >
         shipping_order_no = #{shippingOrderNo,jdbcType=VARCHAR},
@@ -525,6 +532,9 @@
       <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
+      <if test="subOrderNo != null" >
+        sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -545,17 +555,17 @@
       upc = #{upc,jdbcType=VARCHAR},
       scale = #{scale,jdbcType=VARCHAR},
       sku_pic = #{skuPic,jdbcType=VARCHAR},
-      logistic_type = #{logisticType,jdbcType=TINYINT},
+      logistic_type = #{logisticType,jdbcType=INTEGER},
       freight = #{freight,jdbcType=DOUBLE},
       freight_real = #{freightReal,jdbcType=DOUBLE},
       weight = #{weight,jdbcType=DOUBLE},
       sale_price = #{salePrice,jdbcType=DOUBLE},
       sale_price_agent = #{salePriceAgent,jdbcType=DOUBLE},
       quantity = #{quantity,jdbcType=INTEGER},
-      status = #{status,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       close_reason = #{closeReason,jdbcType=VARCHAR},
       warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
-      stock_status = #{stockStatus,jdbcType=TINYINT},
+      stock_status = #{stockStatus,jdbcType=INTEGER},
       shipping_order_no = #{shippingOrderNo,jdbcType=VARCHAR},
       shipping_no = #{shippingNo,jdbcType=VARCHAR},
       receiver = #{receiver,jdbcType=VARCHAR},
@@ -574,7 +584,8 @@
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
+      is_del = #{isDel,jdbcType=BIT},
+      sub_order_no = #{subOrderNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

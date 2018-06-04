@@ -5,14 +5,14 @@ import java.util.Date;
 public class ItemSkuScaleDO {
     private Long id;
 
-    private String skuCode;
-
     private String itemCode;
+
+    private String skuCode;
 
     private String scaleCode;
 
     private String scaleName;
-    
+
     private String scaleValue;
 
     private Date gmtCreate;
@@ -33,20 +33,20 @@ public class ItemSkuScaleDO {
         this.id = id;
     }
 
-    public String getSkuCode() {
-        return skuCode;
-    }
-
-    public void setSkuCode(String skuCode) {
-        this.skuCode = skuCode == null ? null : skuCode.trim();
-    }
-
     public String getItemCode() {
         return itemCode;
     }
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode == null ? null : itemCode.trim();
+    }
+
+    public String getSkuCode() {
+        return skuCode;
+    }
+
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode == null ? null : skuCode.trim();
     }
 
     public String getScaleCode() {
@@ -65,16 +65,15 @@ public class ItemSkuScaleDO {
         this.scaleName = scaleName == null ? null : scaleName.trim();
     }
 
-    
     public String getScaleValue() {
-		return scaleValue;
-	}
+        return scaleValue;
+    }
 
-	public void setScaleValue(String scaleValue) {
-		this.scaleValue = scaleValue;
-	}
+    public void setScaleValue(String scaleValue) {
+        this.scaleValue = scaleValue == null ? null : scaleValue.trim();
+    }
 
-	public Date getGmtCreate() {
+    public Date getGmtCreate() {
         return gmtCreate;
     }
 

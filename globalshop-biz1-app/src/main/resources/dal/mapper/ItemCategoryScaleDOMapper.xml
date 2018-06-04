@@ -7,6 +7,7 @@
     <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
     <result column="scale_code" property="scaleCode" jdbcType="VARCHAR" />
     <result column="scale_name" property="scaleName" jdbcType="VARCHAR" />
+    <result column="scale_values" property="scaleValues" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -14,8 +15,8 @@
     <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, category_code, category_name, scale_code, scale_name, gmt_create, gmt_modify, 
-    creator, modifier, is_del
+    id, category_code, category_name, scale_code, scale_name, scale_values, gmt_create, 
+    gmt_modify, creator, modifier, is_del
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -32,13 +33,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into item_category_scale (id, category_code, category_name, 
-      scale_code, scale_name, gmt_create, 
-      gmt_modify, creator, modifier, 
-      is_del)
+      scale_code, scale_name, scale_values, 
+      gmt_create, gmt_modify, creator, 
+      modifier, is_del)
     values (#{id,jdbcType=BIGINT}, #{categoryCode,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
-      #{scaleCode,jdbcType=VARCHAR}, #{scaleName,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT})
+      #{scaleCode,jdbcType=VARCHAR}, #{scaleName,jdbcType=VARCHAR}, #{scaleValues,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryScaleDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -58,6 +59,9 @@
       </if>
       <if test="scaleName != null" >
         scale_name,
+      </if>
+      <if test="scaleValues != null" >
+        scale_values,
       </if>
       <if test="gmtCreate != null" >
         gmt_create,
@@ -88,6 +92,9 @@
       </if>
       <if test="scaleName != null" >
         #{scaleName,jdbcType=VARCHAR},
+      </if>
+      <if test="scaleValues != null" >
+        #{scaleValues,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -121,6 +128,9 @@
       <if test="scaleName != null" >
         scale_name = #{scaleName,jdbcType=VARCHAR},
       </if>
+      <if test="scaleValues != null" >
+        scale_values = #{scaleValues,jdbcType=VARCHAR},
+      </if>
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
@@ -145,6 +155,7 @@
       category_name = #{categoryName,jdbcType=VARCHAR},
       scale_code = #{scaleCode,jdbcType=VARCHAR},
       scale_name = #{scaleName,jdbcType=VARCHAR},
+      scale_values = #{scaleValues,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},

@@ -311,7 +311,7 @@ public class InventoryController{
     	        list.add(inventoryArea.getScale());					//尺码
     	        list.add(inventoryArea.getWarehouseName());			//仓库名称
 //    	        list.add(inventoryArea.getPositionNo());            //货架号
-    	        list.add(inventoryArea.getTotalAvailableInv());		//可售库存
+//    	        list.add(inventoryDO.getInv() + inventoryDO.getLockedTransInv() - inventoryDO.getLockedInv());		//可售库存
     	        list.add(inventoryArea.getInventory());				//现货库存
     	        list.add(inventoryArea.getLockedInv());				//现货占用
     	        list.add(inventoryArea.getTransInv());				//在途库存

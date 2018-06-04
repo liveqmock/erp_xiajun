@@ -26,7 +26,7 @@ public class WxAddressController {
         JsonResult<MallShippingAddressDO> result = new JsonResult<>();
         Integer addressCountInteger = mallShippingAddressDOMapperExt.countMallShippingAddressDOByOpenId(MallShippingAddressDO.getOpenId());
         if (addressCountInteger == 0) {
-            MallShippingAddressDO.setIsDefault(YesOrNoEnum.YES.getCode());
+            MallShippingAddressDO.setIsDefault((byte) YesOrNoEnum.YES.getCode());
             MallShippingAddressDO.setGmtCreate(new Date());
             MallShippingAddressDO.setGmtModify(new Date());
             mallShippingAddressDOMapperExt.insertSelective(MallShippingAddressDO);

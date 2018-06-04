@@ -14,5 +14,4 @@ public interface LogisticCompanyDOMapper {
     int updateByPrimaryKeySelective(LogisticCompanyDO record);
 
     int updateByPrimaryKey(LogisticCompanyDO record);
-
 }

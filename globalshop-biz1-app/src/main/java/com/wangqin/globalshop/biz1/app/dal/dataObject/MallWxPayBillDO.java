@@ -3,36 +3,35 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 import java.util.Date;
 
 public class MallWxPayBillDO {
+    private Long id;
 
-    private Long    id;
+    private String companyNo;
 
-    private String  companyNo;
+    private String channelNo;
 
-    private String  channelNo;
+    private String shopCode;
 
-    private String  shopCode;
+    private String wxPayTradeNo;
 
-    private String  wxPayTradeNo;
+    private String payType;
 
-    private String  payType;
-
-    private String  orderInfo;
+    private String orderInfo;
 
     private Integer status;
 
-    private String  customerNo;
+    private String customerNo;
 
-    private String  wxOpenId;
+    private String wxOpenId;
 
-    private Date    gmtCreate;
+    private Date gmtCreate;
 
-    private Date    gmtModify;
+    private Date gmtModify;
 
     private Boolean isDel;
 
-    private String  creator;
+    private String creator;
 
-    private String  modifier;
+    private String modifier;
 
     public Long getId() {
         return id;

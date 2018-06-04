@@ -13,6 +13,7 @@
     <result column="inventory" property="inventory" jdbcType="BIGINT" />
     <result column="inventory_type" property="inventoryType" jdbcType="VARCHAR" />
     <result column="operator_type" property="operatorType" jdbcType="VARCHAR" />
+    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
     <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
     <result column="position_no" property="positionNo" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
@@ -23,8 +24,8 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, order_no, sub_order_no, item_code, sku_code, quantity, booked_quantity, 
-    inventory, inventory_type, operator_type,  warehouse_id, position_no,
-    gmt_create, gmt_modify, is_del, creator, modifier
+    inventory, inventory_type, operator_type, inventory_on_warehouse_no, warehouse_id, 
+    position_no, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -43,14 +44,14 @@
     insert into inventory_booking_record (id, company_no, order_no, 
       sub_order_no, item_code, sku_code, 
       quantity, booked_quantity, inventory, 
-      inventory_type, operator_type, inventory_area_id, 
+      inventory_type, operator_type, inventory_on_warehouse_no, 
       warehouse_id, position_no, gmt_create, 
       gmt_modify, is_del, creator, 
       modifier)
     values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
       #{subOrderNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
       #{quantity,jdbcType=BIGINT}, #{bookedQuantity,jdbcType=BIGINT}, #{inventory,jdbcType=BIGINT}, 
-      #{inventoryType,jdbcType=VARCHAR}, #{operatorType,jdbcType=VARCHAR}, #{inventoryAreaId,jdbcType=BIGINT}, 
+      #{inventoryType,jdbcType=VARCHAR}, #{operatorType,jdbcType=VARCHAR}, #{inventoryOnWarehouseNo,jdbcType=VARCHAR}, 
       #{warehouseId,jdbcType=BIGINT}, #{positionNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
@@ -92,8 +93,8 @@
       <if test="operatorType != null" >
         operator_type,
       </if>
-      <if test="inventoryAreaId != null" >
-        inventory_area_id,
+      <if test="inventoryOnWarehouseNo != null" >
+        inventory_on_warehouse_no,
       </if>
       <if test="warehouseId != null" >
         warehouse_id,
@@ -149,8 +150,8 @@
       <if test="operatorType != null" >
         #{operatorType,jdbcType=VARCHAR},
       </if>
-      <if test="inventoryAreaId != null" >
-        #{inventoryAreaId,jdbcType=BIGINT},
+      <if test="inventoryOnWarehouseNo != null" >
+        #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
       </if>
       <if test="warehouseId != null" >
         #{warehouseId,jdbcType=BIGINT},
@@ -208,8 +209,8 @@
       <if test="operatorType != null" >
         operator_type = #{operatorType,jdbcType=VARCHAR},
       </if>
-      <if test="inventoryAreaId != null" >
-        inventory_area_id = #{inventoryAreaId,jdbcType=BIGINT},
+      <if test="inventoryOnWarehouseNo != null" >
+        inventory_on_warehouse_no = #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
       </if>
       <if test="warehouseId != null" >
         warehouse_id = #{warehouseId,jdbcType=BIGINT},
@@ -247,7 +248,7 @@
       inventory = #{inventory,jdbcType=BIGINT},
       inventory_type = #{inventoryType,jdbcType=VARCHAR},
       operator_type = #{operatorType,jdbcType=VARCHAR},
-      inventory_area_id = #{inventoryAreaId,jdbcType=BIGINT},
+      inventory_on_warehouse_no = #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
       warehouse_id = #{warehouseId,jdbcType=BIGINT},
       position_no = #{positionNo,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},

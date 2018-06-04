@@ -3,32 +3,31 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 import java.util.Date;
 
 public class ChannelListingItemDO {
+    private Long id;
 
-    private Long    id;
+    private String itemCode;
 
-    private String  itemCode;
+    private String channelNo;
 
-    private String  channelNo;
+    private String companyNo;
 
-    private String  companyNo;
+    private String channelItemCode;
 
-    private String  channelItemCode;
+    private String shopCode;
 
-    private String  shopCode;
-
-    private String  channelItemAlias;
+    private String channelItemAlias;
 
     private Integer status;
 
     private Boolean isDel;
 
-    private Date    gmtCreate;
+    private Date gmtCreate;
 
-    private Date    gmtModify;
+    private Date gmtModify;
 
-    private String  creator;
+    private String creator;
 
-    private String  modifier;
+    private String modifier;
 
     public Long getId() {
         return id;
@@ -75,7 +74,7 @@ public class ChannelListingItemDO {
     }
 
     public void setShopCode(String shopCode) {
-        this.shopCode = shopCode;
+        this.shopCode = shopCode == null ? null : shopCode.trim();
     }
 
     public String getChannelItemAlias() {

@@ -63,11 +63,11 @@ public class ItemDO {
 
     private Byte isSale;
 
+    private Integer saleOnYouzan;
+
+    private Integer thirdSale;
+
     private Byte wxisSale;
-
-    private Integer third_sale;
-
-    private Integer sale_on_youzan;
 
     private Byte isFind;
 
@@ -216,7 +216,7 @@ public class ItemDO {
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.country = country == null ? null : country.trim();
     }
 
     public Byte getCurrency() {
@@ -331,6 +331,22 @@ public class ItemDO {
         this.isSale = isSale;
     }
 
+    public Integer getSaleOnYouzan() {
+        return saleOnYouzan;
+    }
+
+    public void setSaleOnYouzan(Integer saleOnYouzan) {
+        this.saleOnYouzan = saleOnYouzan;
+    }
+
+    public Integer getThirdSale() {
+        return thirdSale;
+    }
+
+    public void setThirdSale(Integer thirdSale) {
+        this.thirdSale = thirdSale;
+    }
+
     public Byte getWxisSale() {
         return wxisSale;
     }
@@ -425,18 +441,5 @@ public class ItemDO {
 
     public void setDetail(String detail) {
         this.detail = detail == null ? null : detail.trim();
-    }
-
-    public Integer getThird_sale() {
-        return third_sale;
-    }
-    public void setThird_sale(Integer third_sale) {
-        this.third_sale = third_sale;
-    }
-    public Integer getSale_on_youzan() {
-        return sale_on_youzan;
-    }
-    public void setSale_on_youzan(Integer sale_on_youzan) {
-        this.sale_on_youzan = sale_on_youzan;
     }
 }

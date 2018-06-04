@@ -15,14 +15,17 @@ public class InventoryDO {
 
     private String skuCode;
 
+    private Long virtualInv;
+
+    private Long lockedVirtualInv;
 
     private Long inv;
 
     private Long lockedInv;
 
+    private Long transInv;
 
-
-    private Long virtualInv;
+    private Long lockedTransInv;
 
     private Date gmtCreate;
 
@@ -33,21 +36,6 @@ public class InventoryDO {
     private String creator;
 
     private String modifier;
-
-/**---------------------------------------*/
-    private Long lockedVirtualInv;
-    private Long lockedTransInv;
-    private Long transInv;
-
-
-
-    /**
-     * (总共)可用库存
-     * @return
-     */
-    public Long getTotalAvailableInv() {
-        return this.inv+this.virtualInv-this.lockedInv;
-    }
 
     public Long getId() {
         return id;

@@ -5,19 +5,19 @@ import java.util.Date;
 public class ItemSkuDO {
     private Long id;
 
-    private String companyNo;
-    private String itemCode;
-    private String itemName;
     private String skuCode;
-    private String upc;
 
+    private String itemCode;
 
+    private String itemName;
 
+    private String companyNo;
 
     private String categoryCode;
 
     private String categoryName;
 
+    private String upc;
 
     private Byte saleable;
 
@@ -51,6 +51,8 @@ public class ItemSkuDO {
 
     private String model;
 
+    private Integer status;
+
     private Boolean saleType;
 
     private Double salePrice;
@@ -64,8 +66,6 @@ public class ItemSkuDO {
     private Date gmtModify;
 
     private Boolean isDel;
-
-    private Integer status;
 
     private String desc;
 
@@ -261,6 +261,14 @@ public class ItemSkuDO {
         this.model = model == null ? null : model.trim();
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public Boolean getSaleType() {
         return saleType;
     }
@@ -315,14 +323,6 @@ public class ItemSkuDO {
 
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getDesc() {
