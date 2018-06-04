@@ -182,6 +182,7 @@
         <module>globalshop-channel</module>
         <module>globalshop-purchase</module>
         <module>globalshop-usercenter-app</module>
+        <module>globalshop-inventory-app</module>
     </modules>
 
 
