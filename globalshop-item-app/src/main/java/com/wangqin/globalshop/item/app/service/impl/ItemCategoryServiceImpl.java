@@ -120,6 +120,9 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 		 return categoryMapper.selectAllDTO();
 	 }
 	
+	/**
+	 * 类目树
+	 */
 	@Override
 	public List<ItemCategoryDTO> tree() {
 		List<ItemCategoryDTO> cates = selectAllDTO();

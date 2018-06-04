@@ -163,8 +163,8 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	}
 	
 	@Override
-	public int  deleteByPrimaryKey(Long id) {
-		return itemSkuMapperExt.deleteByPrimaryKey(id);
+	public void deleteById(Long id) {
+		 itemSkuMapperExt.deleteById(id);
 	}
 	
 	@Override
@@ -187,11 +187,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		itemSkuMapperExt.updateById(itemSkuUpdateVO);
 	}
 	
-	@Override
-	public void deleteSkuByCode(String code) {
-		itemSkuMapperExt.deleteBySkuCode(code);
-		inventoryService.deleteInvBySkuCode(code);;
-	}
+
 	
 }
 

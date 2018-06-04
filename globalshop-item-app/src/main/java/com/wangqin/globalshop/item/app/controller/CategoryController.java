@@ -27,7 +27,7 @@ public class CategoryController  {
 	private IItemCategoryService categoryService;
 
 	/**
-	 * 添加类目（fin)
+	 * 添加类目（fin)，提供name和pcode
 	 *
 	 * @param
 	 * @return
@@ -38,21 +38,17 @@ public class CategoryController  {
 		//category.setCategoryCode("0000000");//XiaJun，在确定了category_code的生成方式之后，再重写这一句
 		//ShiroUser shiroUser = this.getShiroUser();
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
-		/***前端请及时修改接口数据**/
-		category.setpCode("2134124212");
-		/***前端请及时修改接口数据**/
 		if (category.getpCode() == null) {//添加一级类目
-			category.setpCode("0000000000");
+			category.setpCode("00000000");
+			category.setRootCode("00000000");
 			category.setLevel(1);			
 		} else {
-			System.out.println(category.getpCode());
 			ItemCategoryDO categoryP = categoryService.queryByCategoryCode(category.getpCode());
-			System.out.println(categoryP.getName());
 			if (categoryP == null) {
 				return result.buildIsSuccess(false).buildMsg("not find parent category!");
 			} else {
 				category.setLevel(categoryP.getLevel()+1);
-				if(category.getLevel()>3){
+				if(category.getLevel() > 3){
 					return result.buildIsSuccess(false).buildMsg("不支持新增4级及以上的类目");
 				}
 				if(StringUtils.isNotEmpty(categoryP.getAllPath())){
@@ -60,7 +56,7 @@ public class CategoryController  {
 				}else{
 					category.setAllPath(categoryP.getName()+"/"+category.getName());
 				}
-				if(category.getLevel()==1){
+				if(category.getLevel() == 2){
 					category.setRootCode(categoryP.getCategoryCode());
 				}else{
 					category.setRootCode(categoryP.getRootCode());
@@ -77,7 +73,7 @@ public class CategoryController  {
 	}
 
 	/**
-	 * 修改类目(fin)
+	 * 修改类目(fin)，需要传入pCode
 	 * 
 	 * @param category
 	 * @return
@@ -88,9 +84,6 @@ public class CategoryController  {
 		//ShiroUser shiroUser = this.getShiroUser();
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
 		Long id = category.getId();
-        /**/
-		category.setpCode("2134124212");
-		/**/
 		if (id == null) {
 			return result.buildIsSuccess(false).buildMsg("category id is null!");
 		}
@@ -105,7 +98,7 @@ public class CategoryController  {
 				}else{
 					category.setAllPath(categoryP.getName()+"/"+category.getName());
 				}
-				if(category.getLevel()==1){
+				if(category.getLevel()==2){
 					category.setRootCode(categoryP.getCategoryCode());
 				}else{
 					category.setRootCode(categoryP.getRootCode());
@@ -113,8 +106,6 @@ public class CategoryController  {
 			}
 		}
 
-		/**temp**/
-		category.setCategoryCode(RandomUtils.getTimeRandom());
 		category.setModifier("admin");
 		categoryService.update(category);
 		return result.buildIsSuccess(true);
@@ -199,100 +190,5 @@ public class CategoryController  {
 		return result;
 	}
 	
-	//下面所有都未用到，不做更新
-	/************************** easy ui **********************************/
-	/**
-	 * 类目管理列表
-	 *
-	 * @return
-	 */
-	@RequestMapping("/queryTree")
-	@ResponseBody
-	public Object queryTree() {
-		return categoryService.selectAll();
-	}
-	
-	
-	 @GetMapping("/editPage")
-	 public String editPage(Model model, Long id) {
-		 ItemCategoryDO category = categoryService.findCategory(id);
-	 model.addAttribute("category", category);
-	 return "haierp/item/categoryEdit";
-	 }
 
-	 
-	
-	
-	/**
-	 * 开启一个类目生效
-	 * @return
-	 */
-	@RequestMapping("/start")
-	@ResponseBody
-	public Object startCategory(ItemCategoryDO category) {
-		JsonResult<String> result = new JsonResult<>();
-		category.setStatus(0);
-		categoryService.update(category);
-		return result.buildIsSuccess(true).buildMsg("操作成功");
-	}
-	
-	/**
-	 * 暂停使用一个类目
-	 * @return
-	 */
-	@RequestMapping("/stop")
-	@ResponseBody
-	public Object stopCategory(ItemCategoryDO category) {
-		JsonResult<String> result = new JsonResult<>();
-		category.setStatus(1);
-		categoryService.update(category);
-		return result.buildIsSuccess(true).buildMsg("操作成功");
-	}
-	
-/******************************************************************************/
-	/**
-	 *
-	 * @return
-	 */
-	@GetMapping("/manager")
-	public String manager() {
-		return "haierp/item/category";
-	}
-
-
-	/**
-	 *
-	 * @return
-	 */
-	@GetMapping("/addPage")
-	public String addPage() {
-		return "haierp/item/categoryAdd";
-	}
-
-
-
-	// /**
-	// *
-	// * @return
-	// */
-	// @GetMapping("/editPage")
-	// public String editPage(Model model, Integer id) {
-	// Category category = categoryService.findCategory(id);
-	// model.addAttribute("category", category);
-	// return "wangqin/item/categoryEdit";
-	// }
-/*
-	@RequestMapping("/edit")
-	@ResponseBody
-	public Object edit(ItemCategoryDO category) {
-		// Category categoryP =
-		// categoryService.findCategory(category.getId().intValue());
-		// categoryP.setName(category.getName());
-		// categoryP.setSeq(category.getSeq());
-		// categoryP.setPid(category.getPid());
-		// categoryP.setStatus(category.getStatus());
-		// categoryService.insertOrUpdate(categoryP);
-		categoryService.update(category);
-		return renderSuccess("添加成功！");
-	}*/
 }
