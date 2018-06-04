@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 解决Jackson 差8小时的问题
  * @author L.cm
  */
+@Primary
 @Component("jacksonObjectMapper")
 public class JacksonObjectMapper extends ObjectMapper {
 
