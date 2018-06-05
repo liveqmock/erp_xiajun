@@ -53,5 +53,5 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 
     ItemDO selectByItemCode(String itemCode);
 	
-	void updateItemById(ItemQueryVO itemQueryVO);
+	void updateByIdSelective(ItemDO itemQueryVO);
 }
