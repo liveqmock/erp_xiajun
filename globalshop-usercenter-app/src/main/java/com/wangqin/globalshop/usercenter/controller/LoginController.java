@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @description：登录退出
@@ -32,7 +31,7 @@ public class LoginController extends BaseController {
 
     @Autowired
     Cache loginCache;
-    /**
+	/**
      * 首页
      *
      * @return

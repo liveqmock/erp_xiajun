@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.TransferStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.IShippingOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.LogisticCompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
@@ -246,11 +247,15 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         // 查出outer_order
         MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
         // 通知渠道发货
-        ChannelAccountDO accountDO = iChannelAccountService.queryByChannelNo(outerOrder.getChannelNo());
+        ChannelAccountSo so = new ChannelAccountSo();
+        so.setShopCode(outerOrder.getShopCode());
+        so.setCompanyNo(outerOrder.getCompanyNo());
+        so.setChannelNo(outerOrder.getChannelNo());
+
+        ChannelAccountDO accountDO = iChannelAccountService.queryPo(so);
         try {
             ChannelFactory
-                    .getChannel(ShiroUtil.getShiroUser().getCompanyNo(),
-                            ChannelType.getChannelType(accountDO.getType()));
+                    .getChannel(accountDO).syncLogisticsOnlineConfirm(erpOrderList,shippingOrder);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

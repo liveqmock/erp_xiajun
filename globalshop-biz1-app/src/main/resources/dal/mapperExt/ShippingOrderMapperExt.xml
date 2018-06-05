@@ -92,11 +92,11 @@
                 and    <![CDATA[ gmt_create <= #{endOrderTime} ]]>
             </if>
             <if test=" syncSendStatus!=null">
-                and    <![CDATA[sync_send_status <= #{syncSendStatus} ]]>
+                and    sync_send_status = #{syncSendStatus}
             </if>
         </where>
         order by id desc
---         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+<!--&#45;&#45;         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>-->
     </select>
 
     <select id="selectBatchIds" resultMap="BaseResultMap" >

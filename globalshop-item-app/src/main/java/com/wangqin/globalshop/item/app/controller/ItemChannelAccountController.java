@@ -1,21 +1,16 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
+import com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.item.app.service.IChannelAccountServ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-
-import com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO;
-import com.wangqin.globalshop.common.shiro.ShiroUser;
-import com.wangqin.globalshop.common.shiro.ShiroUtil;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.controller.ItemChannelAccountController.ChannelInfo;
-import com.wangqin.globalshop.item.app.service.IChannelAccountServ;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ItemChannelAccountController {

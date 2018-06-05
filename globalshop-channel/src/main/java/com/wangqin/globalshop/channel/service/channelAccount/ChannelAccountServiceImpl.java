@@ -141,10 +141,7 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 
 	}
 
-	@Override
-	public ChannelAccountDO queryByChannelNo(String channelNo) {
-		return channelAccountDOMapper.queryByChannelNo(channelNo);
-	}
+
 
 	@Override
 	public ChannelAccountDO selectOne(ChannelAccountDO tmEntity) {
