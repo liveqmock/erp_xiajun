@@ -129,7 +129,7 @@ public class InventoryController{
 		inventoryDO.setSkuCode(skuCode);
 		inventoryDO.setItemCode(itemCode);
 		inventoryDO.setInv(inventory);
-		inventoryService.outbound(inventoryDO,warehouseNo);
+		inventoryService.outbound(inventoryDO,warehouseNo,positionNo);
 //		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
 //		inventoryArea.setItemCode(itemCode);
 //		// inventoryArea.setItemName("test");

@@ -29,5 +29,5 @@ public interface IInventoryOnWarehouseService {
 
     InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
 
-    void insertInventory(InventoryDO inventory, String warehouseNo);
+    InventoryOnWareHouseDO insertInventory(InventoryDO inventory, String warehouseNo,String positionNo);
 }
