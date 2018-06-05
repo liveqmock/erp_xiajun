@@ -1,47 +1,35 @@
 package com.wangqin.globalshop.model;
 
+import com.wangqin.globalshop.common.utils.JsonUtils;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.baomidou.mybatisplus.annotations.IdType;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.wangqin.globalshop.common.utils.JsonUtils;
 
 /**
  *
  * 系统日志
  *
  */
-@TableName("sys_log")
 public class SysLog implements Serializable {
 
-	@TableField(exist = false)
 	private static final long serialVersionUID = 1L;
 
 	/** 主键id */
-	@TableId(type = IdType.AUTO)
 	private Long id;
 
 	/** 登陆名 */
-	@TableField(value = "login_name")
 	private String loginName;
 
 	/** 角色名 */
-	@TableField(value = "role_name")
 	private String roleName;
 
 	/** 内容 */
-	@TableField(value = "opt_content")
 	private String optContent;
 
 	/** 客户端ip */
-	@TableField(value = "client_ip")
 	private String clientIp;
 
 	/** 创建时间 */
-	@TableField(value = "create_time")
 	private Date createTime;
 
 

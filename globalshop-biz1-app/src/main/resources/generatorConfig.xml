@@ -29,7 +29,7 @@
 
         <javaModelGenerator targetPackage="com.wangqin.globalshop.biz1.app.dal.dataObject"
                             targetProject="src/main/java">
-            <!--<property name="rootClass" value="com.wangqin.globalshop.biz1.app.dal.baseModel"/>-->
+            <property name="rootClass" value="com.wangqin.globalshop.biz1.app.dal.dataObject.BaseModel"/>
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>

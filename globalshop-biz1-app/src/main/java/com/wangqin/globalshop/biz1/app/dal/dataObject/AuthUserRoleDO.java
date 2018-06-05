@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class AuthUserRoleDO {
+public class AuthUserRoleDO extends BaseModel {
     private Long id;
 
     private Long userId;

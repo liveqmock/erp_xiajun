@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class ItemBrandDO {
+public class ItemBrandDO extends BaseModel {
     private Long id;
 
     private String brandNo;

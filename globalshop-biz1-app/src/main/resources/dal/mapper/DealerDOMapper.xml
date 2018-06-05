@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="dealer_no" property="dealerNo" jdbcType="VARCHAR" />
-    <result column="dealer_name" property="dealerName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type_code" property="typeCode" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
@@ -14,8 +14,8 @@
     <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, dealer_no, dealer_name, type_code, gmt_create, gmt_modify, creator, 
-    modifier, is_del
+    id, company_no, code, name, type_code, gmt_create, gmt_modify, creator, modifier, 
+    is_del
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,12 +31,12 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into dealer (id, company_no, dealer_no, 
-      dealer_name, type_code, gmt_create, 
+    insert into dealer (id, company_no, code, 
+      name, type_code, gmt_create, 
       gmt_modify, creator, modifier, 
       is_del)
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{dealerNo,jdbcType=VARCHAR}, 
-      #{dealerName,jdbcType=VARCHAR}, #{typeCode,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{typeCode,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{isDel,jdbcType=BIT})
   </insert>
@@ -50,11 +50,11 @@
       <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="dealerNo != null" >
-        dealer_no,
+      <if test="code != null" >
+        code,
       </if>
-      <if test="dealerName != null" >
-        dealer_name,
+      <if test="name != null" >
+        name,
       </if>
       <if test="typeCode != null" >
         type_code,
@@ -80,11 +80,11 @@
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="dealerNo != null" >
-        #{dealerNo,jdbcType=VARCHAR},
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
       </if>
-      <if test="dealerName != null" >
-        #{dealerName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="typeCode != null" >
         #{typeCode,jdbcType=VARCHAR},
@@ -112,11 +112,11 @@
       <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="dealerNo != null" >
-        dealer_no = #{dealerNo,jdbcType=VARCHAR},
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
       </if>
-      <if test="dealerName != null" >
-        dealer_name = #{dealerName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="typeCode != null" >
         type_code = #{typeCode,jdbcType=VARCHAR},
@@ -142,8 +142,8 @@
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO" >
     update dealer
     set company_no = #{companyNo,jdbcType=VARCHAR},
-      dealer_no = #{dealerNo,jdbcType=VARCHAR},
-      dealer_name = #{dealerName,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       type_code = #{typeCode,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},

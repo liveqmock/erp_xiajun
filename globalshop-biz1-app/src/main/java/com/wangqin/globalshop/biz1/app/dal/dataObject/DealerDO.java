@@ -2,14 +2,14 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class DealerDO {
+public class DealerDO extends BaseModel {
     private Long id;
 
     private String companyNo;
 
-    private String dealerNo;
+    private String code;
 
-    private String dealerName;
+    private String name;
 
     private String typeCode;
 
@@ -39,20 +39,20 @@ public class DealerDO {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
-    public String getDealerNo() {
-        return dealerNo;
+    public String getCode() {
+        return code;
     }
 
-    public void setDealerNo(String dealerNo) {
-        this.dealerNo = dealerNo == null ? null : dealerNo.trim();
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
     }
 
-    public String getDealerName() {
-        return dealerName;
+    public String getName() {
+        return name;
     }
 
-    public void setDealerName(String dealerName) {
-        this.dealerName = dealerName == null ? null : dealerName.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getTypeCode() {

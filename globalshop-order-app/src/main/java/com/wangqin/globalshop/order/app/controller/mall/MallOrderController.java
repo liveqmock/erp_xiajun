@@ -67,8 +67,7 @@ public class MallOrderController {
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
-    public Object add(String outerOrder) {
-        MallOrderVO mallOrderVO = JSON.parseObject(outerOrder, MallOrderVO.class);
+    public Object add(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
             mallOrderVO.setGmtCreate(new Date());
@@ -112,8 +111,7 @@ public class MallOrderController {
      */
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public Object update(String outerOrder) {
-        MallOrderVO mallOrderVO = JSON.parseObject(outerOrder.trim(), MallOrderVO.class);
+    public Object update(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() != null) {
             //只有状态为新建的订单才能修改
@@ -181,8 +179,7 @@ public class MallOrderController {
      */
     @RequestMapping(value = "/queryOuterOrderList",method = RequestMethod.POST)
     @ResponseBody
-    public Object queryOuterOrderList(String outerOrderQueryVO) {
-        MallOrderVO mallOrderVO = JSON.parseObject(outerOrderQueryVO.trim(), MallOrderVO.class);
+    public Object queryOuterOrderList(MallOrderVO mallOrderVO) {
         if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
             mallOrderVO.setStatus(null);
         }
@@ -325,8 +322,7 @@ public class MallOrderController {
     //主订单导出
     @RequestMapping(value = "/OuterOrderExportExcel",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<byte[]> OuterOrderExportExcel(String OuterOrderQueryVO) throws Exception {
-        MallOrderVO mallOrderVO = JSON.parseObject(OuterOrderQueryVO.trim(), MallOrderVO.class);
+    public ResponseEntity<byte[]> OuterOrderExportExcel(MallOrderVO mallOrderVO) throws Exception {
         if (mallOrderVO.getStartGmtCreate() == null || mallOrderVO.getEndGmtCreate() == null) {
             throw new ErpCommonException("必须选择创建时间段");
         }

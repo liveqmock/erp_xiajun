@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class ChannelListingItemSkuDO {
+public class ChannelListingItemSkuDO extends BaseModel {
     private Long id;
 
     private String itemCode;

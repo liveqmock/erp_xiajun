@@ -110,6 +110,9 @@ public class InventoryServiceImpl implements InventoryService {
     public void release(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
+        if (inventoryDO == null){
+            throw new ErpCommonException("找不到对应的库存");
+        }
         /**修改库存占用*/
         inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
         mapper.updateByPrimaryKeySelective(inventoryDO);

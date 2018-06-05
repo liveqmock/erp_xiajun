@@ -39,6 +39,7 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="spec" property="spec" jdbcType="VARCHAR" />
     <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
@@ -54,8 +55,8 @@
     en_name, item_short, category_name, sale_type, main_pic, brand_no, brand_name, country, 
     currency, origin, freight, weight, logistic_type, price_range, unit, source, promotion, 
     id_card, start_date, end_date, booking_date, is_sale, sale_on_youzan, third_sale, 
-    wxis_sale, is_find, status, spec, model, gmt_modify, gmt_create, is_del, creator, 
-    modifier
+    wxis_sale, is_find, status, spec, model, buyer_open_id, gmt_modify, gmt_create, is_del, 
+    creator, modifier
   </sql>
   <sql id="Blob_Column_List" >
     desc, detail
@@ -88,9 +89,10 @@
       end_date, booking_date, is_sale, 
       sale_on_youzan, third_sale, wxis_sale, 
       is_find, status, spec, 
-      model, gmt_modify, gmt_create, 
-      is_del, creator, modifier, 
-      desc, detail)
+      model, buyer_open_id, gmt_modify, 
+      gmt_create, is_del, creator, 
+      modifier, desc, detail
+      )
     values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{categoryCode,jdbcType=VARCHAR}, #{qrCodeUrl,jdbcType=VARCHAR}, #{video,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{enName,jdbcType=VARCHAR}, 
@@ -103,9 +105,10 @@
       #{endDate,jdbcType=TIMESTAMP}, #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, 
       #{saleOnYouzan,jdbcType=INTEGER}, #{thirdSale,jdbcType=INTEGER}, #{wxisSale,jdbcType=TINYINT}, 
       #{isFind,jdbcType=TINYINT}, #{status,jdbcType=INTEGER}, #{spec,jdbcType=VARCHAR}, 
-      #{model,jdbcType=VARCHAR}, #{gmtModify,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{desc,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR})
+      #{model,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=VARCHAR}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{desc,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -221,6 +224,9 @@
       </if>
       <if test="model != null" >
         model,
+      </if>
+      <if test="buyerOpenId != null" >
+        buyer_open_id,
       </if>
       <if test="gmtModify != null" >
         gmt_modify,
@@ -353,6 +359,9 @@
       </if>
       <if test="model != null" >
         #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerOpenId != null" >
+        #{buyerOpenId,jdbcType=VARCHAR},
       </if>
       <if test="gmtModify != null" >
         #{gmtModify,jdbcType=TIMESTAMP},
@@ -488,6 +497,9 @@
       <if test="model != null" >
         model = #{model,jdbcType=VARCHAR},
       </if>
+      <if test="buyerOpenId != null" >
+        buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      </if>
       <if test="gmtModify != null" >
         gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
@@ -550,6 +562,7 @@
       status = #{status,jdbcType=INTEGER},
       spec = #{spec,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},
@@ -597,6 +610,7 @@
       status = #{status,jdbcType=INTEGER},
       spec = #{spec,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},
