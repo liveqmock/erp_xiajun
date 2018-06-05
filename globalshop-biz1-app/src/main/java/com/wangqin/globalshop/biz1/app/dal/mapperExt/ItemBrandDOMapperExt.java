@@ -22,6 +22,9 @@ public interface ItemBrandDOMapperExt  extends ItemBrandDOMapper {
 		//总查询
 		List<ItemBrandDO> queryItemBrand();
 
+		//按条件查询品牌
+		List<ItemBrandDO> queryBrandSelective(ItemBrandQueryVO brandQueryVO);
+		
 	    String selectNoByName(String name);
 
         List<ItemBrandDO> queryAllBrand();
