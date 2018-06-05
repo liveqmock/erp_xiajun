@@ -4,17 +4,13 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.CaptchaUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,7 +69,7 @@ public class LoginController extends BaseController {
      * @param password 密码
      * @return {Object}
      */
-    @PostMapping("/login")
+    @RequestMapping("/login")
 //    @CsrfToken(remove = true)
     @ResponseBody
     public Object loginPost(HttpServletRequest request, String username, String password, String captcha, 
@@ -86,12 +82,12 @@ public class LoginController extends BaseController {
         if (StringUtils.isBlank(password)) {
             throw new RuntimeException("密码不能为空");
         }
-        if (StringUtils.isBlank(captcha)) {
-            throw new RuntimeException("验证码不能为空");
-        }
-        if (!CaptchaUtils.validate(request, captcha)) {
-            throw new RuntimeException("验证码错误");
-        }
+//        if (StringUtils.isBlank(captcha)) {
+//            throw new RuntimeException("验证码不能为空");
+//        }
+//        if (!CaptchaUtils.validate(request, captcha)) {
+//            throw new RuntimeException("验证码错误");
+//        }
 //        Subject user = SecurityUtils.getSubject();
 //        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 
@@ -107,7 +103,7 @@ public class LoginController extends BaseController {
             AuthUserDO user=userDOList;
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isNotBlank(sessionId)) {
-                loginCache.putEx(sessionId, username, System.currentTimeMillis() + TIMEOUT);
+                loginCache.putEx(sessionId, username, TIMEOUT);
                 AppUtil.setLoginUserId(username);
                 return renderSuccess();
             }else {

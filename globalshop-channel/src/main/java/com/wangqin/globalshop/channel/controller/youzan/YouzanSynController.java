@@ -51,11 +51,12 @@ public class YouzanSynController extends BaseController {
 	 */
 	@RequestMapping("/batchSynItemYouzan")
 	@ResponseBody
+	@Authenticated
 	public Object batchSynItemYouzan(String itemIds) {
 		JsonResult<String> result = new JsonResult<>();
 		StringBuilder sb = new StringBuilder();
 		if(StringUtils.isNotEmpty(itemIds)){
-
+			String userNo = AppUtil.getLoginUserId();
 			//String s = itemIds.replace("&quot;", "\"");
 			//List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
 
@@ -73,6 +74,7 @@ public class YouzanSynController extends BaseController {
 			List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
 
 			//List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByUserNo(AppUtil.getLoginUserId());
+
 
 			if(channelAccountList == null || channelAccountList.size() < 1){
 				return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
