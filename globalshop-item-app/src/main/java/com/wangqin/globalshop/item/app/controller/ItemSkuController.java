@@ -25,17 +25,16 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
 import com.wangqin.globalshop.item.app.service.IScaleTypeService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
 
 
 /**
@@ -64,14 +63,14 @@ public class ItemSkuController  {
 	
 	
 	/**
-	 * 添加商品
+	 * 更新sku
 	 *
 	 * @param
 	 * @return
 	 */
 	@RequestMapping("/update")
 	@ResponseBody
-	public Object update(ItemSkuUpdateVO itemSku) {
+	public Object update(ItemSkuQueryVO itemSku) {
 		itemSku.setModifier("admin");
 		itemSku.setCreator("admin");
 		JsonResult<String> result = new JsonResult<>();

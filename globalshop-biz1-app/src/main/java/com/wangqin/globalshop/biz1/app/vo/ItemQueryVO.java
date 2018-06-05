@@ -29,7 +29,7 @@ public class ItemQueryVO extends PageQueryVO{
 	
 	private String endGmt;
 	
-	private Long companyId;
+	private String companyNo;
 	
 	private String name;
 	private Date    gmtModify;
@@ -546,11 +546,12 @@ public class ItemQueryVO extends PageQueryVO{
 	public void setOwners(String owners) {
 		this.owners = owners;
 	}
-	public Long getCompanyId() {
-		return companyId;
+	
+	public String getCompanyNo() {
+		return companyNo;
 	}
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
 	}
 	public Integer getSaleOnYouzan() {
 		return saleOnYouzan;

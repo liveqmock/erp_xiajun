@@ -9,11 +9,11 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
+
 
 
 /**
- * SKU 数据控制层
+ * SKU 数据控制层，item_module use
  * @author zhulu
  *
  */
@@ -50,7 +50,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
 	ISkuDTO queryItemSkuBySkuCode(String skuCode);
 
-	void updateById(ItemSkuUpdateVO itemSkuUpdateVO);
+	void updateById(ItemSkuQueryVO itemSkuQueryVO);
 
 	void deleteBySkuCode(String skuCode);
 

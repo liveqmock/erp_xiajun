@@ -13,6 +13,7 @@ import com.wangqin.globalshop.common.utils.Money;
  *
  */
 public class ItemSkuAddVO implements Serializable {
+	
 	private String companyNo;
 	private String creator;
 	private String modifier;

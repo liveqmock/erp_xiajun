@@ -134,7 +134,7 @@
     </select>
 
     <!-- 根据id更新itemsku -->
-    <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO" >
+    <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO" >
     update item_sku
     <set >
       <if test="salePrice != null" >
@@ -168,7 +168,7 @@
 
      <select id="queryItemSkusById" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
         SELECT
-        	 T1.id as id,T1.sale_type AS saleType,T1.weight as weight,T1.sku_pic as skuPic,T1.item_id AS itemId,T1.item_name AS itemName,T1.category_id AS categoryId,T1.category_name AS categoryName,
+        	 T1.id as id,T1.sale_type AS saleType,T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,T1.category_name AS categoryName,
 			 T1.item_code AS itemCode,T1.sku_code AS skuCode,T1.upc as upc,T1.salable as salable,T1.color as color,T1.scale as scale,T1.purchase_price AS purchasePrice,T1.freight AS freight,T1.sale_price AS salePrice,T1.remark as remark,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.user_create AS userCreate,T1.user_modify AS userModify,
 			 T1.package_id as packageId,T1.package_level_id as packageLevelId,T1.package_name AS packageName,T1.package_en as packageEn,T1.package_weight as packageWeight,inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,(inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv,T1.cost_price AS costPrice,T1.discount AS discount,T1.third_sku_code AS thirdSkuCode
