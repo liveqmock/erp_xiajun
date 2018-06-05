@@ -32,8 +32,8 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     private ItemSkuMapperExt itemSkuMapper;
 
     @Override
-    public JsonPageResult<List<InventoryOnWareHouseDO>> queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
-        return null;
+    public List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
+        return mapper.queryInventoryAreas(inventoryQueryVO);
     }
 
     @Override
@@ -85,16 +85,13 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
             warehouse.setSkuPic(itemSkuDO.getSkuPic());
             warehouse.setShelfNo(positionNo);
             warehouse.setCompanyNo("InvOnWarehouseServiceImpl1321");
-            warehouse.setCreator("asdasdasdasdasd");
-            warehouse.setModifier("asdasdasdasdasdas");
             warehouse.setInventoryOnWarehouseNo("INVONWARE"+System.currentTimeMillis());
             warehouse.setInventory(inventory.getInv());
             warehouse.setSkuCode(inventory.getSkuCode());
             warehouse.setItemCode(inventory.getItemCode());
             warehouse.setWarehouseName(warehouseDO.getName());
             warehouse.setWarehouseNo(warehouseNo);
-            warehouse.setGmtCreate(new Date());
-            warehouse.setGmtModify(new Date( ));
+            warehouse.init();
             warehouse.setBatchNo("123213");
             mapper.insertSelective(warehouse);
         } else {

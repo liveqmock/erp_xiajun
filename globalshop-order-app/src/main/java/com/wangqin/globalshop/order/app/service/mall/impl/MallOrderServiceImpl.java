@@ -64,23 +64,22 @@ public class MallOrderServiceImpl implements IMallOrderService {
             outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
             outerOrderDetail.setShopCode("O" + outerOrder.getOrderNo().substring(1) + String.format("%0" + 4 + "d", i));
             i++;
-            outerOrderDetail.setGmtCreate(new Date());
-            outerOrderDetail.setGmtModify(new Date());
+            outerOrderDetail.init();
             outerOrderDetail.setCompanyNo(outerOrder.getCompanyNo());
-            // 计算运费和销售价格
-            ItemSkuDO sku = itemSkuService.selectBySkuCode(outerOrderDetail.getSkuCode());
-            if (sku != null) {
-                outerOrderDetail.setItemName(sku.getItemName());
-                outerOrderDetail.setScale(sku.getScale());
-                outerOrderDetail.setSkuCode(sku.getSkuCode());
-//                    outerOrderDetail.setChannelSkuCode(sku.getSaleable());
-                outerOrderDetail.setUpc(sku.getUpc());
-                outerOrderDetail.setItemCode(sku.getItemCode());
-                outerOrderDetail.setSkuPic(sku.getSkuPic());
-                int logisticType = sku.getLogisticType();
-                outerOrderDetail.setLogisticType(logisticType);
-                outerOrderDetail.setWeight(sku.getWeight());
-                inventoryService.order(outerOrderDetail);
+//             计算运费和销售价格
+//            ItemSkuDO sku = itemSkuService.selectBySkuCode(outerOrderDetail.getSkuCode());
+//            if (sku != null) {
+//                outerOrderDetail.setItemName(sku.getItemName());
+//                outerOrderDetail.setScale(sku.getScale());
+//                outerOrderDetail.setSkuCode(sku.getSkuCode());
+////                    outerOrderDetail.setChannelSkuCode(sku.getSaleable());
+//                outerOrderDetail.setUpc(sku.getUpc());
+//                outerOrderDetail.setItemCode(sku.getItemCode());
+//                outerOrderDetail.setSkuPic(sku.getSkuPic());
+//                int logisticType = sku.getLogisticType();
+//                outerOrderDetail.setLogisticType(logisticType);
+//                outerOrderDetail.setWeight(sku.getWeight());
+//                inventoryService.order(outerOrderDetail);
 //                //如果有虚拟库存就扣减虚拟库存
 //                InventoryDO inventory = inventoryService.queryInventoryBySkuCode(sku.getItemCode(), sku.getSkuCode());
 //                if (inventory.getVirtualInv() > 0 || inventory.getLockedVirtualInv() > 0) {
@@ -101,10 +100,11 @@ public class MallOrderServiceImpl implements IMallOrderService {
 //                    inventory.setGmtModify(new Date());
 //                    inventoryService.update(inventory);
 //                }
-            }
+//            }
             mallSubOrderDOMapper.insert(outerOrderDetail);
         }
         outerOrder.setTotalAmount(totalPrice);
+        outerOrder.init();
         mallOrderDOMapper.insertSelective(outerOrder);
 
     }
