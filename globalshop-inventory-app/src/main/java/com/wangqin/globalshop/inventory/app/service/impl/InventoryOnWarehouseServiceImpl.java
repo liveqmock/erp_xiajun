@@ -68,6 +68,10 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
         InventoryOnWareHouseDO warehouse = mapper.selectByItemCodeAndSkuCodeAndWarehouseNo(inventory.getSkuCode(), inventory.getItemCode(),warehouseNo);
         if (warehouse == null) {
             warehouse = new InventoryOnWareHouseDO();
+            warehouse.setCompanyNo("InvOnWarehouseServiceImpl1321");
+            warehouse.setCreator("asdasdasdasdasd");
+            warehouse.setModifier("asdasdasdasdasdas");
+            warehouse.setInventoryOnWarehouseNo("INVONWARE"+System.currentTimeMillis());
             warehouse.setSkuCode(inventory.getSkuCode());
             warehouse.setItemCode(inventory.getItemCode());
             warehouse.setWarehouseNo(warehouseNo);

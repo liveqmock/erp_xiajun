@@ -32,12 +32,7 @@ public interface IItemService {
 	void addItem(ItemDO item);
 	
 	
-	/**
-	 * update item 
-	 * @param item
-	 * @param itemSkuList
-	 */
-	void updateItem(ItemDO item);
+	
 	
 	/**
 	 * query item 
@@ -91,5 +86,5 @@ public interface IItemService {
 	
 	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);
 	
-	void updateItemById(ItemQueryVO itemQueryVO);
+	void updateByPrimaryKeySelective(ItemDO item);
 }

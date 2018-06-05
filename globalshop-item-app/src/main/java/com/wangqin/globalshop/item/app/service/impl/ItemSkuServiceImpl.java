@@ -16,7 +16,7 @@ import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
+
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
@@ -183,7 +183,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	}
 	
 	@Override
-	public void updateById(ItemSkuUpdateVO itemSkuUpdateVO) {
+	public void updateById(ItemSkuQueryVO itemSkuUpdateVO) {
 		itemSkuMapperExt.updateById(itemSkuUpdateVO);
 	}
 	

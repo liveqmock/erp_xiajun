@@ -9,8 +9,9 @@
     <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
     <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
     <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="quantity" property="quantity" jdbcType="BIGINT" />
-    <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
+    <result column="operator_type" property="operatorType" jdbcType="INTEGER" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
@@ -19,7 +20,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, item_code, sku_code, inventory_on_warehouse_no, warehouse_no, shelf_no, 
-    quantity, operator_type, gmt_create, gmt_modify, is_del, creator, modifier
+    remark, quantity, operator_type, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -37,14 +38,16 @@
     </selectKey>
     insert into inventory_inout (id, company_no, item_code, 
       sku_code, inventory_on_warehouse_no, warehouse_no, 
-      shelf_no, quantity, operator_type, 
-      gmt_create, gmt_modify, is_del, 
-      creator, modifier)
+      shelf_no, remark, quantity, 
+      operator_type, gmt_create, gmt_modify, 
+      is_del, creator, modifier
+      )
     values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
       #{skuCode,jdbcType=VARCHAR}, #{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
-      #{shelfNo,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, #{operatorType,jdbcType=TINYINT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+      #{shelfNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, 
+      #{operatorType,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -70,6 +73,9 @@
       </if>
       <if test="shelfNo != null" >
         shelf_no,
+      </if>
+      <if test="remark != null" >
+        remark,
       </if>
       <if test="quantity != null" >
         quantity,
@@ -113,11 +119,14 @@
       <if test="shelfNo != null" >
         #{shelfNo,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
       <if test="quantity != null" >
         #{quantity,jdbcType=BIGINT},
       </if>
       <if test="operatorType != null" >
-        #{operatorType,jdbcType=TINYINT},
+        #{operatorType,jdbcType=INTEGER},
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -157,11 +166,14 @@
       <if test="shelfNo != null" >
         shelf_no = #{shelfNo,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
       <if test="quantity != null" >
         quantity = #{quantity,jdbcType=BIGINT},
       </if>
       <if test="operatorType != null" >
-        operator_type = #{operatorType,jdbcType=TINYINT},
+        operator_type = #{operatorType,jdbcType=INTEGER},
       </if>
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -189,8 +201,9 @@
       inventory_on_warehouse_no = #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
       warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
       shelf_no = #{shelfNo,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=BIGINT},
-      operator_type = #{operatorType,jdbcType=TINYINT},
+      operator_type = #{operatorType,jdbcType=INTEGER},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},

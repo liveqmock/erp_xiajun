@@ -249,7 +249,7 @@ public class SiFangServiceImpl implements ISiFangService {
 		if (_4pxResponse.SUCCESS.equals(responseCode) || "11201".equals(responseCode)) {
 			// 预报成功
 			logger.error("shippingOrder shippingNo:" + shippingOrderNo + " 预报成功！推送给四方数据：" + jsonData);
-			shippingOrder.setTransferStatus((byte) TransferStatus.CREATED_ORDER.getValue());
+			shippingOrder.setTransferStatus( TransferStatus.CREATED_ORDER.getValue());
 			shippingOrderService.update(shippingOrder);
 
 			return message;
@@ -257,7 +257,7 @@ public class SiFangServiceImpl implements ISiFangService {
 		} else {
 			// 预报失败
 			logger.error("shippingOrder shippingNo:" + shippingOrderNo + " 预报失败！推送给四方数据：" + jsonData);
-			shippingOrder.setTransferStatus((byte) TransferStatus.PREDICT_FAILED.getValue());
+			shippingOrder.setTransferStatus( TransferStatus.PREDICT_FAILED.getValue());
 			shippingOrderService.update(shippingOrder);
 			try {
 			} catch (Exception e) {

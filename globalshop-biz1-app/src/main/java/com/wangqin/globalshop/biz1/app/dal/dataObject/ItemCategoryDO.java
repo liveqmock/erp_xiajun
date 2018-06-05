@@ -17,15 +17,15 @@ public class ItemCategoryDO {
 
     private Integer level;
 
-    private String allPath;
-
     private Integer status;
+
+    private String allPath;
 
     private Date gmtCreate;
 
     private Date gmtModify;
 
-    private Boolean isDel;
+    private Integer isDel;
 
     private String creator;
 
@@ -87,20 +87,20 @@ public class ItemCategoryDO {
         this.level = level;
     }
 
-    public String getAllPath() {
-        return allPath;
-    }
-
-    public void setAllPath(String allPath) {
-        this.allPath = allPath == null ? null : allPath.trim();
-    }
-
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getAllPath() {
+        return allPath;
+    }
+
+    public void setAllPath(String allPath) {
+        this.allPath = allPath == null ? null : allPath.trim();
     }
 
     public Date getGmtCreate() {
@@ -119,11 +119,11 @@ public class ItemCategoryDO {
         this.gmtModify = gmtModify;
     }
 
-    public Boolean getIsDel() {
+    public Integer getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(Boolean isDel) {
+    public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
 

@@ -2,13 +2,11 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuUpdateVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
 
@@ -77,5 +75,5 @@ public interface IItemSkuService  {
 	 
 	 ISkuDTO queryItemSkuBySkuCode(String skuCode);
 	 
-	 void updateById(ItemSkuUpdateVO itemSkuUpdateVO);
+	 void updateById(ItemSkuQueryVO itemSkuUpdateVO);
 }

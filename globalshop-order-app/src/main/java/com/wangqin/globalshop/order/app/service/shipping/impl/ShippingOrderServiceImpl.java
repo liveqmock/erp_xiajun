@@ -218,14 +218,14 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             }
         }
         if(shippingOrder.getStatus() == null) {
-            shippingOrder.setStatus((byte) ShippingOrderStatus.INIT.getCode());
+            shippingOrder.setStatus( ShippingOrderStatus.INIT.getCode());
         }
         shippingOrder.setShippingNo(erpNos.toString());
         shippingOrder.setShippingNo("PKG"+DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+sequenceUtilService.gainPKGSequence());
         shippingOrder.setGmtCreate(new Date());
         shippingOrder.setGmtModify(new Date());
         if (shippingOrder.getTransferStatus() == null) {
-            shippingOrder.setTransferStatus((byte) TransferStatus.UNPREDICT.getValue());
+            shippingOrder.setTransferStatus( TransferStatus.UNPREDICT.getValue());
         }
         LogisticCompanyDO comp = logisticCompanyMapper.selectByCode(shippingOrder.getLogisticCompany());
 //        // 国内物流，需要订阅快递100
@@ -334,7 +334,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 		}*/
 
         if(shippingOrder.getStatus() == null) {
-            shippingOrder.setStatus((byte) ShippingOrderStatus.INIT.getCode());
+            shippingOrder.setStatus(ShippingOrderStatus.INIT.getCode());
         }
         Date nowDate = new Date();
         Map<String, Set<String>> resultMap = new HashMap<>();

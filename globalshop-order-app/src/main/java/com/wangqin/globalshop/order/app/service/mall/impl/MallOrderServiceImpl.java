@@ -77,7 +77,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
                 outerOrderDetail.setUpc(sku.getUpc());
                 outerOrderDetail.setItemCode(sku.getItemCode());
                 outerOrderDetail.setSkuPic(sku.getSkuPic());
-                outerOrderDetail.setLogisticType(sku.getLogisticType());
+                int logisticType = sku.getLogisticType();
+                outerOrderDetail.setLogisticType(logisticType);
                 outerOrderDetail.setWeight(sku.getWeight());
                 inventoryService.order(outerOrderDetail);
 //                //如果有虚拟库存就扣减虚拟库存

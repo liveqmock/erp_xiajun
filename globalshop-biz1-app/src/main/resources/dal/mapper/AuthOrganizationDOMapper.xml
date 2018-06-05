@@ -9,7 +9,7 @@
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="icon" property="icon" jdbcType="VARCHAR" />
     <result column="pid" property="pid" jdbcType="BIGINT" />
-    <result column="seq" property="seq" jdbcType="TINYINT" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -41,7 +41,7 @@
       is_del)
     values (#{id,jdbcType=BIGINT}, #{orgId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
-      #{pid,jdbcType=BIGINT}, #{seq,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{pid,jdbcType=BIGINT}, #{seq,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{isDel,jdbcType=BIT})
   </insert>
@@ -110,7 +110,7 @@
         #{pid,jdbcType=BIGINT},
       </if>
       <if test="seq != null" >
-        #{seq,jdbcType=TINYINT},
+        #{seq,jdbcType=INTEGER},
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -151,7 +151,7 @@
         pid = #{pid,jdbcType=BIGINT},
       </if>
       <if test="seq != null" >
-        seq = #{seq,jdbcType=TINYINT},
+        seq = #{seq,jdbcType=INTEGER},
       </if>
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -179,7 +179,7 @@
       code = #{code,jdbcType=VARCHAR},
       icon = #{icon,jdbcType=VARCHAR},
       pid = #{pid,jdbcType=BIGINT},
-      seq = #{seq,jdbcType=TINYINT},
+      seq = #{seq,jdbcType=INTEGER},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},

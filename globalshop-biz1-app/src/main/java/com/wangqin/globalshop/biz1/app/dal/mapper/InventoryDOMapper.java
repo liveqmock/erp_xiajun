@@ -7,14 +7,11 @@ public interface InventoryDOMapper {
 
     int insert(InventoryDO record);
 
-
+    int insertSelective(InventoryDO record);
 
     InventoryDO selectByPrimaryKey(Long id);
 
-
+    int updateByPrimaryKeySelective(InventoryDO record);
 
     int updateByPrimaryKey(InventoryDO record);
-    /*************************new *******************/
-    int insertSelective(InventoryDO record);
-    int updateByPrimaryKeySelective(InventoryDO record);
 }

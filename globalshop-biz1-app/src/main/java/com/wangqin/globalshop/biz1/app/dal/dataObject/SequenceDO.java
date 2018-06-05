@@ -9,15 +9,15 @@ public class SequenceDO {
 
     private Integer increment;
 
-    private Boolean isDel;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
+    private String modifier;
 
     private String creator;
 
-    private String modifier;
+    private Date gmtModify;
+
+    private Date gmtCreate;
+
+    private Integer isDel;
 
     public String getName() {
         return name;
@@ -43,28 +43,12 @@ public class SequenceDO {
         this.increment = increment;
     }
 
-    public Boolean getIsDel() {
-        return isDel;
+    public String getModifier() {
+        return modifier;
     }
 
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
     }
 
     public String getCreator() {
@@ -75,11 +59,27 @@ public class SequenceDO {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    public String getModifier() {
-        return modifier;
+    public Date getGmtModify() {
+        return gmtModify;
     }
 
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+    public void setGmtModify(Date gmtModify) {
+        this.gmtModify = gmtModify;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Integer getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Integer isDel) {
+        this.isDel = isDel;
     }
 }

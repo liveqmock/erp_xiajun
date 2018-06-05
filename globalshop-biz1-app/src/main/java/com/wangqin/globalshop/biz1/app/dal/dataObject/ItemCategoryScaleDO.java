@@ -12,7 +12,7 @@ public class ItemCategoryScaleDO {
     private String scaleCode;
 
     private String scaleName;
-    
+
     private String scaleValues;
 
     private Date gmtCreate;
@@ -64,16 +64,16 @@ public class ItemCategoryScaleDO {
     public void setScaleName(String scaleName) {
         this.scaleName = scaleName == null ? null : scaleName.trim();
     }
-   
+
     public String getScaleValues() {
-		return scaleValues;
-	}
+        return scaleValues;
+    }
 
-	public void setScaleValues(String scaleValues) {
-		this.scaleValues = scaleValues;
-	}
+    public void setScaleValues(String scaleValues) {
+        this.scaleValues = scaleValues == null ? null : scaleValues.trim();
+    }
 
-	public Date getGmtCreate() {
+    public Date getGmtCreate() {
         return gmtCreate;
     }
 

@@ -212,9 +212,9 @@ public class InventoryServiceImpl  implements IInventoryService {
 
 		if(CollectionUtils.isNotEmpty(sumInventorys)){
 			InventoryOnWareHouseDO inventoryArea  = sumInventorys.get(0);
-			if(inventoryArea.getTotalAvailableInv()>0){
-				initBooked(inventoryArea, warehouseColl);
-			}
+//			if(inventoryArea.getTotalAvailableInv()>0){
+//				initBooked(inventoryArea, warehouseColl);
+//			}
 		}
 		return warehouseColl;
 	}
@@ -505,7 +505,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 		bookedRecord.setInventory(inventory.getInventory());
 		bookedRecord.setPositionNo(inventory.getShelfNo());
 		bookedRecord.setBookedQuantity(booked);
-		bookedRecord.setInventoryAreaId(inventory.getId());
+//		bookedRecord.setInventoryAreaId(inventory.getId());
 		bookedRecord.setInventoryOnWarehouseNo(inventory.getWarehouseNo());
 		bookedRecord.setQuantity(Long.valueOf(erpOrder.getQuantity()));
 		bookedRecord.setInventoryType(inventoryType);

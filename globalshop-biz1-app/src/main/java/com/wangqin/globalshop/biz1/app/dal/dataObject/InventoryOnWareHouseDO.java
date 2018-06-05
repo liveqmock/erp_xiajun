@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class InventoryOnWareHouseDO {
     private Long id;
-    
+
     private String inventoryOnWarehouseNo;
-    
+
     private String companyNo;
 
-	private String itemCode;
+    private String itemCode;
 
     private String itemName;
 
@@ -46,28 +46,6 @@ public class InventoryOnWareHouseDO {
     private String creator;
 
     private String modifier;
-    /**
-     * 在途可用库存
-     * @return
-     */
-    public Long getAvailableTransInv() {
-        return this.getTransInv() - this.getLockedTransInv();
-    }
-    /**
-     * (现货)可用库存
-     * @return
-     */
-    public Long getAvailableInv() {
-        return this.getInventory() - this.getLockedInv();
-    }
-
-    /**
-     * (总共)可用库存
-     * @return
-     */
-    public Long getTotalAvailableInv() {
-        return getAvailableInv()+getAvailableTransInv();
-    }
 
     public Long getId() {
         return id;
@@ -78,12 +56,12 @@ public class InventoryOnWareHouseDO {
     }
 
     public String getInventoryOnWarehouseNo() {
-  		return inventoryOnWarehouseNo;
-  	}
+        return inventoryOnWarehouseNo;
+    }
 
-  	public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
-  		this.inventoryOnWarehouseNo = inventoryOnWarehouseNo;
-  	}
+    public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+        this.inventoryOnWarehouseNo = inventoryOnWarehouseNo == null ? null : inventoryOnWarehouseNo.trim();
+    }
 
     public String getCompanyNo() {
         return companyNo;
@@ -98,7 +76,7 @@ public class InventoryOnWareHouseDO {
     }
 
     public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
+        this.itemCode = itemCode == null ? null : itemCode.trim();
     }
 
     public String getItemName() {
@@ -178,7 +156,7 @@ public class InventoryOnWareHouseDO {
     }
 
     public void setWarehouseNo(String warehouseNo) {
-        this.warehouseNo = warehouseNo;
+        this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
     }
 
     public String getWarehouseName() {

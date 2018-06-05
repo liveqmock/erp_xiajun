@@ -180,7 +180,7 @@ public class ItemController  {
 			}
 			
 			item.setMainPic(imgJson);
-			//detailDecoder(item);
+			
 			//对前端传来的时间进行处理
 			ItemDO newItem = new ItemDO();
 			DateFormat format= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -224,7 +224,9 @@ public class ItemController  {
 					}
 				}
 			}	
-
+			
+			newItem.setDetail(item.getDetail());
+			detailDecoder(newItem);
 			newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
 			newItem.setCategoryName(categoryService.selectByPrimaryKey(item.getCategoryId()).getName());
 			newItem.setBrandName(item.getBrand());
@@ -236,11 +238,10 @@ public class ItemController  {
 			CountryDO countryDO = new CountryDO();
 			countryDO.setId(item.getCountry());
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));
-
 			newItem.setItemCode(RandomUtils.getTimeRandom());
 			
 	        newItem.setDesc(item.getRemark());
-	        newItem.setCompanyNo(RandomUtils.getTimeRandom());      
+	        newItem.setCompanyNo("c12");      
 	        iItemService.insertItemSelective(newItem);
 	        /**插入itemsku和库存**/
 	        List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
@@ -252,7 +253,7 @@ public class ItemController  {
 	        				itemSku.setCategoryId(item.getCategoryId());
 	        				itemSku.setCategoryName(item.getCategoryName());
 	        				itemSku.setBrand(item.getBrand());
-	        				itemSku.setCompanyId(item.getCompanyId());
+	        				//itemSku.setCompanyId(item.getCompanyId());
 	        				itemSku.setCompanyNo("c12");
 	        				itemSku.setCreator("admin");
 	        				itemSku.setModifier("admin");
@@ -266,16 +267,16 @@ public class ItemController  {
 			//同步到有赞并上架
 	        		
 			if(item.getIsSale()!=null && item.getIsSale()==1) {
-				if (item.getSaleOnYouzan() == 1) {
+	
 					try {
 						//outerItemService.synItemYouzan(item.getId());
 						//ShiroUser user = ShiroUtil.getShiroUser();
 						String companyNo = "c23";
-						//ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
+						//HttpClientUtil.post(url, params)
+						//.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
 					} catch(Exception e) {
 						//logger.error("商品添加时同步到有赞：", e);
-					}
-				}				
+					}			
 			}
 						
 			//同步生成小程序的二维码
@@ -311,10 +312,10 @@ public class ItemController  {
 	public Object update(ItemQueryVO item) {
 		//logger.info("update item start");
 		JsonResult<ItemDO> result = new JsonResult<>();
-//		ItemDO oldItem = iItemService.queryItem(item.getId());
-//		if(StringUtil.isBlank(item.getDetail()) && StringUtil.isNotBlank(oldItem.getDetail())) {
-//		    return result.buildMsg("商品详情不能为空").buildIsSuccess(false);
-//		}
+		ItemDTO oldItem = iItemService.queryItemById(item.getId());
+		if(StringUtil.isBlank(item.getDetail()) && StringUtil.isNotBlank(oldItem.getDetail())) {
+		    return result.buildMsg("商品详情不能为空").buildIsSuccess(false);
+		}
 		// if haven't item id ,add item
 		if (item.getId() == null) {
 			return result.buildIsSuccess(false).buildMsg("没有Item id");
@@ -389,8 +390,6 @@ public class ItemController  {
 							
 							if(itemSku.getId()==null){
 								itemSku.setSkuCode("S" + item.getItemCode().substring(1) + String.format("%0"+4+"d", ++i));
-								itemSku.setGmtCreate(new Date());
-								itemSku.setGmtModify(new Date());
 							}
 							itemSku.setLogisticType(item.getLogisticType());
 							itemSku.setBuySite(item.getBuySite());
@@ -423,16 +422,25 @@ public class ItemController  {
 			}
 			String imgJson = ImageUtil.getImageUrl(item.getMainPic());
 			item.setMainPic(imgJson);
-			detailDecoder(item);
+			
+			//对前端传来的时间进行处理
+			ItemDO newItem = new ItemDO();
+			DateFormat format= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			try {
+				newItem.setStartDate(format.parse(item.getStartDate()));
+				newItem.setEndDate(format.parse(item.getEndDate()));
+				newItem.setBookingDate(format.parse(item.getBookingDate()));
+			} catch(Exception e) {
+				//
+			}
 			//判断是否可售
-			/*
 			if(item.getStartDate()==null || item.getEndDate()==null) {
 				item.setIsSale(0);
-			} else if(DateUtil.belongCalendar(new Date(), item.getStartDate(), DateUtil.getDateByCalculate(item.getEndDate(), Calendar.DATE, 1))) {
+			} else if(DateUtil.belongCalendar(new Date(), newItem.getStartDate(), DateUtil.getDateByCalculate(newItem.getEndDate(), Calendar.DATE, 1))) {
 				item.setIsSale(1);
 			} else {
 				item.setIsSale(0);
-			}*/
+			}
 			//编辑运费
 			if(item.getFreight()==null) {
 				item.setFreight(0.0d);
@@ -460,7 +468,24 @@ public class ItemController  {
 					}
 				}
 			}
-			iItemService.updateItemById(item);
+			
+
+			newItem.setDetail(item.getDetail());
+			detailDecoder(newItem);
+			System.out.println("detail:"+newItem.getDetail());
+			newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
+			newItem.setCategoryName(categoryService.selectByPrimaryKey(item.getCategoryId()).getName());
+			newItem.setBrandName(item.getBrand());
+			newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand()));
+			newItem.setEnName(item.getEnName());
+			newItem.setItemName(item.getName());
+			newItem.setCurrency(item.getCurrency().byteValue());
+			newItem.setIdCard(item.getIdCard().byteValue());
+			CountryDO countryDO = new CountryDO();
+			countryDO.setId(item.getCountry());
+			newItem.setCountry(countryService.queryCodeById(item.getCountry()));	
+	        newItem.setDesc(item.getRemark());    
+			iItemService.updateByPrimaryKeySelective(newItem);
 			/*
 			//修改商品授权买手
 			Map<String, Object> delMap = Maps.newHashMap();
@@ -496,7 +521,10 @@ public class ItemController  {
 		return result.buildIsSuccess(true);
 	}
 
-	private void detailDecoder(ItemQueryVO item) {
+	/*
+	 *商品详情处理 
+	 */
+	private void detailDecoder(ItemDO item) {
 		if(StringUtils.isNotBlank(item.getDetail())){
 			String detail = item.getDetail();
 			try {
@@ -723,10 +751,10 @@ public class ItemController  {
 		if (StringUtil.isNotBlank(picUrl)) {
 			if (itemId != null) {
 				System.out.println(picUrl);
-				ItemQueryVO itemQueryVO = new ItemQueryVO();
-				itemQueryVO.setId(itemId);			
-				itemQueryVO.setDimensionCodePic(picUrl);
-				iItemService.updateItemById(itemQueryVO);
+				ItemDO item = new ItemDO();
+				item.setId(itemId);			
+				item.setQrCodeUrl(picUrl);
+				iItemService.updateByPrimaryKeySelective(item);
 			}
 		}
 		return result.buildIsSuccess(true);
@@ -745,10 +773,10 @@ public class ItemController  {
 		String picUrl = iItemService.insertIntoItemDimension(itemId.toString(), "pages/item/detail", token);
 		if (StringUtil.isNotBlank(picUrl)) {
 			if (itemId != null) {
-				ItemQueryVO itemQueryVO = new ItemQueryVO();
-				itemQueryVO.setId(itemId);			
-				itemQueryVO.setDimensionCodePic(picUrl);
-				iItemService.updateItemById(itemQueryVO);
+				ItemDO item= new ItemDO();
+				item.setId(itemId);			
+				item.setQrCodeUrl(picUrl);
+				iItemService.updateByPrimaryKeySelective(item);
 			}
 		}
 		

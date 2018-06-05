@@ -78,33 +78,7 @@ public class ItemServiceImplement implements IItemService {
         // itemSku.setFreight(f);
     }
 
-    @Override
-    public void updateItem(ItemDO item) {
-        itemDOMapperExt.updateByPrimaryKey(item);
-
-        // List<ItemSkuDO> itemSkuList = item.getItemSkus();
-        List<ItemSkuDO> itemSkuListNew = new ArrayList<>(); // 新增的SKU
-        List<ItemSkuDO> itemSkuListUpdate = new ArrayList<>();// 修改的SKU
-        // 获取数据库里面的所有sku
-        /*
-         * Item itemDb = queryItem(item.getId()); List<ItemSkuDO> itemSkuListDb = itemDb.getItemSkus(); Set<Long>
-         * allSkus = new HashSet<Long>(); if(itemSkuListDb!=null&&!itemSkuListDb.isEmpty()){
-         * itemSkuListDb.forEach(itemSku->{ allSkus.add(itemSku.getId()); }); } itemSkuList.forEach(itemSku -> {
-         * if(itemSku.getId()==null){ itemSkuListNew.add(itemSku); }else{ if(!allSkus.isEmpty()){
-         * allSkus.remove(itemSku.getId()); } itemSku.setGmtModify(new Date()); itemSkuListUpdate.add(itemSku); }
-         * skuFreight(itemSku); }); if(!itemSkuListUpdate.isEmpty()){ itemSkuService.updateBatchById(itemSkuListUpdate);
-         * List<ItemSkuDO> newInvList = Lists.newArrayList(); for(ItemSkuDO itemSku:itemSkuListUpdate){ InventoryDO
-         * inventory = inventoryService.queryInventoryBySkuId(itemSku.getItemId(), itemSku.getId());
-         * if(inventory==null){ newInvList.add(itemSku); }else{ if(inventory.getVirtualInv()!=itemSku.getVirtualInv()){
-         * inventory.setVirtualInv(itemSku.getVirtualInv()); inventory.setGmtModify(new Date());
-         * inventoryService.updateById(inventory); } } } if(CollectionUtils.isNotEmpty(newInvList)){ List<InventoryDO>
-         * inventoryList = itemSkuService.initInventory(newInvList); inventoryService.insertBatch(inventoryList); } }
-         * if(!itemSkuListNew.isEmpty()){ itemSkuService.insertBatch(itemSkuListNew); List<InventoryDO> inventoryList =
-         * itemSkuService.initInventory(itemSkuListNew); inventoryService.insertBatch(inventoryList); }
-         * if(!allSkus.isEmpty()){ //itemSkuService.deleteBatchIds(new ArrayList<Long>(allSkus)); //先判断sku是否可以删除
-         * allSkus.forEach(skuId -> { itemSkuService.deleteSkuById(skuId); }); }
-         */
-    }
+   
 
     @Override
     public ItemDO queryItem(Long id) {
@@ -288,8 +262,8 @@ public class ItemServiceImplement implements IItemService {
 	}
     
 	@Override
-	public void updateItemById(ItemQueryVO itemQueryVO) {
-		itemDOMapperExt.updateItemById(itemQueryVO);
+	public void updateByPrimaryKeySelective(ItemDO item) {
+		itemDOMapperExt.updateByIdSelective(item);
 	}
 
    

@@ -3,108 +3,100 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 import java.util.Date;
 
 public class MallSubOrderDO {
+    private Long id;
 
-    private Long    id;
+    private String orderNo;
 
-    private String  orderNo;
+    private String mallReturnOrderNo;
 
-    private String  mallReturnOrderNo;
+    private String customerNo;
 
-    private String  customerNo;
+    private String openId;
 
-    private String  openId;
+    private String companyNo;
 
-    private String  companyNo;
+    private String shopCode;
 
-    private String  shopCode;
+    private String channelOrderNo;
 
+    private Date orderTime;
 
-    private String  channelOrderNo;
+    private String itemCode;
 
-    private Date    orderTime;
+    private String itemName;
 
-    private String  itemCode;
+    private String skuCode;
 
-    private String  itemName;
+    private String channelSkuCode;
 
-    private String  skuCode;
+    private String upc;
 
-    private String  channelSkuCode;
+    private String scale;
 
-    private String  upc;
+    private String skuPic;
 
-    private String  scale;
+    private Integer logisticType;
 
-    private String  skuPic;
+    private Double freight;
 
-    private Byte    logisticType;
+    private Double freightReal;
 
-    private Double  freight;
+    private Double weight;
 
-    private Double  freightReal;
+    private Double salePrice;
 
-    private Double  weight;
-
-    private Double  salePrice;
-
-    private Double  salePriceAgent;
+    private Double salePriceAgent;
 
     private Integer quantity;
 
-    private Integer    status = 0;
+    private Integer status;
 
-    private String  closeReason;
+    private String closeReason;
 
-    private String  warehouseNo;
+    private String warehouseNo;
 
-    private Integer stockStatus = 0;
+    private Integer stockStatus;
 
-    private String  shippingOrderNo;
+    private String shippingOrderNo;
 
-    private String  shippingNo;
+    private String shippingNo;
 
-    private String  receiver;
+    private String receiver;
 
-    private String  receiverCountry;
+    private String receiverCountry;
 
-    private String  receiverState;
+    private String receiverState;
 
-    private String  receiverCity;
+    private String receiverCity;
 
-    private String  receiverDistrict;
+    private String receiverDistrict;
 
-    private String  receiverAddress;
+    private String receiverAddress;
 
-    private String  telephone;
+    private String telephone;
 
-    private String  postcode;
+    private String postcode;
 
-    private String  idCard;
+    private String idCard;
 
-    private String  idcardPicFront;
+    private String idcardPicFront;
 
-    private String  idcardPicReverse;
+    private String idcardPicReverse;
 
-    private String  memo;
+    private String memo;
 
-    private Date    gmtCreate;
+    private Date gmtCreate;
 
-    private Date    gmtModify;
+    private Date gmtModify;
 
-    private String  creator;
+    private String creator;
 
-    private String  modifier;
+    private String modifier;
 
     private Boolean isDel;
 
     private String subOrderNo;
 
-    public String getSubOrderNo() {
-        return subOrderNo;
-    }
-    public void setSubOrderNo(String subOrderNo) {
-        this.subOrderNo = subOrderNo;
-    }
     public Long getId() {
         return id;
     }
@@ -169,22 +161,6 @@ public class MallSubOrderDO {
         this.channelOrderNo = channelOrderNo == null ? null : channelOrderNo.trim();
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getSkuCode() {
-        return skuCode;
-    }
-
-    public void setSkuCode(String skuCode) {
-        this.skuCode = skuCode;
-    }
-
     public Date getOrderTime() {
         return orderTime;
     }
@@ -209,6 +185,13 @@ public class MallSubOrderDO {
         this.itemName = itemName == null ? null : itemName.trim();
     }
 
+    public String getSkuCode() {
+        return skuCode;
+    }
+
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode == null ? null : skuCode.trim();
+    }
 
     public String getChannelSkuCode() {
         return channelSkuCode;
@@ -242,11 +225,11 @@ public class MallSubOrderDO {
         this.skuPic = skuPic == null ? null : skuPic.trim();
     }
 
-    public Byte getLogisticType() {
+    public Integer getLogisticType() {
         return logisticType;
     }
 
-    public void setLogisticType(Byte logisticType) {
+    public void setLogisticType(Integer logisticType) {
         this.logisticType = logisticType;
     }
 
@@ -298,6 +281,13 @@ public class MallSubOrderDO {
         this.quantity = quantity;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getCloseReason() {
         return closeReason;
@@ -473,5 +463,13 @@ public class MallSubOrderDO {
 
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
+    }
+
+    public String getSubOrderNo() {
+        return subOrderNo;
+    }
+
+    public void setSubOrderNo(String subOrderNo) {
+        this.subOrderNo = subOrderNo == null ? null : subOrderNo.trim();
     }
 }

@@ -3,8 +3,9 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOnWareHouseDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="item_code" property="itemCode" jdbcType="BIGINT" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
     <result column="item_name" property="itemName" jdbcType="VARCHAR" />
     <result column="upc" property="upc" jdbcType="VARCHAR" />
     <result column="scale" property="scale" jdbcType="VARCHAR" />
@@ -14,7 +15,7 @@
     <result column="locked_inv" property="lockedInv" jdbcType="BIGINT" />
     <result column="trans_inv" property="transInv" jdbcType="BIGINT" />
     <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT" />
-    <result column="warehouse_no" property="warehouseNo" jdbcType="BIGINT" />
+    <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
     <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
     <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
@@ -25,9 +26,9 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, item_code, item_name, upc, scale, sku_code, sku_pic, inventory, locked_inv, 
-    trans_inv, locked_trans_inv, warehouse_no, warehouse_name, shelf_no, batch_no, gmt_create, 
-    gmt_modify, is_del, creator, modifier
+    id, inventory_on_warehouse_no, company_no, item_code, item_name, upc, scale, sku_code, 
+    sku_pic, inventory, locked_inv, trans_inv, locked_trans_inv, warehouse_no, warehouse_name, 
+    shelf_no, batch_no, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -43,22 +44,22 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into inventory_on_warehouse (id, company_no, item_code, 
-      item_name, upc, scale, 
-      sku_code, sku_pic, inventory, 
-      locked_inv, trans_inv, locked_trans_inv, 
-      warehouse_no, warehouse_name, shelf_no, 
-      batch_no, gmt_create, gmt_modify, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=BIGINT}, 
-      #{itemName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
-      #{skuCode,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR}, #{inventory,jdbcType=BIGINT}, 
-      #{lockedInv,jdbcType=BIGINT}, #{transInv,jdbcType=BIGINT}, #{lockedTransInv,jdbcType=BIGINT}, 
-      #{warehouseNo,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{shelfNo,jdbcType=VARCHAR}, 
-      #{batchNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+    insert into inventory_on_warehouse (id, inventory_on_warehouse_no, company_no, 
+      item_code, item_name, upc, 
+      scale, sku_code, sku_pic, 
+      inventory, locked_inv, trans_inv, 
+      locked_trans_inv, warehouse_no, warehouse_name, 
+      shelf_no, batch_no, gmt_create, 
+      gmt_modify, is_del, creator, 
+      modifier)
+    values (#{id,jdbcType=BIGINT}, #{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+      #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, 
+      #{scale,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR}, 
+      #{inventory,jdbcType=BIGINT}, #{lockedInv,jdbcType=BIGINT}, #{transInv,jdbcType=BIGINT}, 
+      #{lockedTransInv,jdbcType=BIGINT}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
+      #{shelfNo,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -67,6 +68,9 @@
     insert into inventory_on_warehouse
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
+      <if test="inventoryOnWarehouseNo != null" >
+        inventory_on_warehouse_no,
+      </if>
       <if test="companyNo != null" >
         company_no,
       </if>
@@ -130,11 +134,14 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
+      <if test="inventoryOnWarehouseNo != null" >
+        #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
+      </if>
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
       <if test="itemCode != null" >
-        #{itemCode,jdbcType=BIGINT},
+        #{itemCode,jdbcType=VARCHAR},
       </if>
       <if test="itemName != null" >
         #{itemName,jdbcType=VARCHAR},
@@ -164,7 +171,7 @@
         #{lockedTransInv,jdbcType=BIGINT},
       </if>
       <if test="warehouseNo != null" >
-        #{warehouseNo,jdbcType=BIGINT},
+        #{warehouseNo,jdbcType=VARCHAR},
       </if>
       <if test="warehouseName != null" >
         #{warehouseName,jdbcType=VARCHAR},
@@ -195,11 +202,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
     update inventory_on_warehouse
     <set >
+      <if test="inventoryOnWarehouseNo != null" >
+        inventory_on_warehouse_no = #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
+      </if>
       <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
       <if test="itemCode != null" >
-        item_code = #{itemCode,jdbcType=BIGINT},
+        item_code = #{itemCode,jdbcType=VARCHAR},
       </if>
       <if test="itemName != null" >
         item_name = #{itemName,jdbcType=VARCHAR},
@@ -229,7 +239,7 @@
         locked_trans_inv = #{lockedTransInv,jdbcType=BIGINT},
       </if>
       <if test="warehouseNo != null" >
-        warehouse_no = #{warehouseNo,jdbcType=BIGINT},
+        warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
       </if>
       <if test="warehouseName != null" >
         warehouse_name = #{warehouseName,jdbcType=VARCHAR},
@@ -260,8 +270,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
     update inventory_on_warehouse
-    set company_no = #{companyNo,jdbcType=VARCHAR},
-      item_code = #{itemCode,jdbcType=BIGINT},
+    set inventory_on_warehouse_no = #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
       item_name = #{itemName,jdbcType=VARCHAR},
       upc = #{upc,jdbcType=VARCHAR},
       scale = #{scale,jdbcType=VARCHAR},
@@ -271,7 +282,7 @@
       locked_inv = #{lockedInv,jdbcType=BIGINT},
       trans_inv = #{transInv,jdbcType=BIGINT},
       locked_trans_inv = #{lockedTransInv,jdbcType=BIGINT},
-      warehouse_no = #{warehouseNo,jdbcType=BIGINT},
+      warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
       warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       shelf_no = #{shelfNo,jdbcType=VARCHAR},
       batch_no = #{batchNo,jdbcType=VARCHAR},

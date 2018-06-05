@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
@@ -146,6 +147,9 @@ public class ItemDTO implements Serializable{
 	
 
 	private String owners;
+	
+
+	
 	public String getSkuColor() {
 		return skuColor;
 	}

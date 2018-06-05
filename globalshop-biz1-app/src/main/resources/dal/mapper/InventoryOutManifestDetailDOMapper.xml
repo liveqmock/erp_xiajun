@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="inventory_out_no" property="inventoryOutNo" jdbcType="VARCHAR" />
-    <result column="item_id" property="itemId" jdbcType="BIGINT" />
-    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
     <result column="item_name" property="itemName" jdbcType="VARCHAR" />
     <result column="scale" property="scale" jdbcType="VARCHAR" />
     <result column="upc" property="upc" jdbcType="VARCHAR" />
@@ -20,7 +20,7 @@
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, inventory_out_no, item_id, quantity, item_name, scale, upc, sku_code, sku_pic, 
+    id, inventory_out_no, item_code, quantity, item_name, scale, upc, sku_code, sku_pic, 
     shelf_no, gmt_create, gmt_modify, is_del, creator, modifier, company_no
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -37,14 +37,14 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into inventory_out_manifest_detail (id, inventory_out_no, item_id, 
+    insert into inventory_out_manifest_detail (id, inventory_out_no, item_code, 
       quantity, item_name, scale, 
       upc, sku_code, sku_pic, 
       shelf_no, gmt_create, gmt_modify, 
       is_del, creator, modifier, 
       company_no)
-    values (#{id,jdbcType=BIGINT}, #{inventoryOutNo,jdbcType=VARCHAR}, #{itemId,jdbcType=BIGINT}, 
-      #{quantity,jdbcType=INTEGER}, #{itemName,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{inventoryOutNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{quantity,jdbcType=BIGINT}, #{itemName,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
       #{upc,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR}, 
       #{shelfNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
@@ -60,8 +60,8 @@
       <if test="inventoryOutNo != null" >
         inventory_out_no,
       </if>
-      <if test="itemId != null" >
-        item_id,
+      <if test="itemCode != null" >
+        item_code,
       </if>
       <if test="quantity != null" >
         quantity,
@@ -108,11 +108,11 @@
       <if test="inventoryOutNo != null" >
         #{inventoryOutNo,jdbcType=VARCHAR},
       </if>
-      <if test="itemId != null" >
-        #{itemId,jdbcType=BIGINT},
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
       </if>
       <if test="quantity != null" >
-        #{quantity,jdbcType=INTEGER},
+        #{quantity,jdbcType=BIGINT},
       </if>
       <if test="itemName != null" >
         #{itemName,jdbcType=VARCHAR},
@@ -158,11 +158,11 @@
       <if test="inventoryOutNo != null" >
         inventory_out_no = #{inventoryOutNo,jdbcType=VARCHAR},
       </if>
-      <if test="itemId != null" >
-        item_id = #{itemId,jdbcType=BIGINT},
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
       </if>
       <if test="quantity != null" >
-        quantity = #{quantity,jdbcType=INTEGER},
+        quantity = #{quantity,jdbcType=BIGINT},
       </if>
       <if test="itemName != null" >
         item_name = #{itemName,jdbcType=VARCHAR},
@@ -206,8 +206,8 @@
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO" >
     update inventory_out_manifest_detail
     set inventory_out_no = #{inventoryOutNo,jdbcType=VARCHAR},
-      item_id = #{itemId,jdbcType=BIGINT},
-      quantity = #{quantity,jdbcType=INTEGER},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=BIGINT},
       item_name = #{itemName,jdbcType=VARCHAR},
       scale = #{scale,jdbcType=VARCHAR},
       upc = #{upc,jdbcType=VARCHAR},

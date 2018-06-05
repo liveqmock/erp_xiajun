@@ -1,13 +1,11 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
-       
+
 import java.util.Date;
-            
+
 public class InventoryBookingRecordDO {
     private Long id;
 
     private String companyNo;
-    
-    private String inventoryOnWarehouseNo;
 
     private String orderNo;
 
@@ -27,7 +25,7 @@ public class InventoryBookingRecordDO {
 
     private String operatorType;
 
-    private Long inventoryAreaId;
+    private String inventoryOnWarehouseNo;
 
     private Long warehouseId;
 
@@ -50,16 +48,8 @@ public class InventoryBookingRecordDO {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public String getInventoryOnWarehouseNo() {
-		return inventoryOnWarehouseNo;
-	}
 
-	public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
-		this.inventoryOnWarehouseNo = inventoryOnWarehouseNo;
-	}
-
-	public String getCompanyNo() {
+    public String getCompanyNo() {
         return companyNo;
     }
 
@@ -139,12 +129,12 @@ public class InventoryBookingRecordDO {
         this.operatorType = operatorType == null ? null : operatorType.trim();
     }
 
-    public Long getInventoryAreaId() {
-        return inventoryAreaId;
+    public String getInventoryOnWarehouseNo() {
+        return inventoryOnWarehouseNo;
     }
 
-    public void setInventoryAreaId(Long inventoryAreaId) {
-        this.inventoryAreaId = inventoryAreaId;
+    public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+        this.inventoryOnWarehouseNo = inventoryOnWarehouseNo == null ? null : inventoryOnWarehouseNo.trim();
     }
 
     public Long getWarehouseId() {

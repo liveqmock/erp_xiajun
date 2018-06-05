@@ -26,6 +26,7 @@
     <result column="package_level_id" property="packageLevelId" jdbcType="VARCHAR" />
     <result column="scale" property="scale" jdbcType="VARCHAR" />
     <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="sale_type" property="saleType" jdbcType="BIT" />
     <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -33,7 +34,6 @@
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" extends="BaseResultMap" >
     <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
@@ -42,8 +42,8 @@
     id, sku_code, item_code, item_name, company_no, category_code, category_name, upc, 
     saleable, purchase_price, freight, discount, logistic_type, cost_price, brand_name, 
     weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id, 
-    scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del, 
-    status
+    scale, model, status, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, 
+    is_del
   </sql>
   <sql id="Blob_Column_List" >
     desc
@@ -72,9 +72,9 @@
       weight, sku_pic, package_code, 
       package_name, package_en, package_weight, 
       package_level_id, scale, model, 
-      sale_type, sale_price, creator, 
-      modifier, gmt_create, gmt_modify, 
-      is_del, status, desc
+      status, sale_type, sale_price, 
+      creator, modifier, gmt_create, 
+      gmt_modify, is_del, desc
       )
     values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
       #{itemName,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, 
@@ -84,9 +84,9 @@
       #{weight,jdbcType=DOUBLE}, #{skuPic,jdbcType=VARCHAR}, #{packageCode,jdbcType=VARCHAR}, 
       #{packageName,jdbcType=VARCHAR}, #{packageEn,jdbcType=VARCHAR}, #{packageWeight,jdbcType=DOUBLE}, 
       #{packageLevelId,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
-      #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{status,jdbcType=INTEGER}, #{desc,jdbcType=LONGVARCHAR}
+      #{status,jdbcType=INTEGER}, #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{desc,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
@@ -165,6 +165,9 @@
       <if test="model != null" >
         model,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
       <if test="saleType != null" >
         sale_type,
       </if>
@@ -185,9 +188,6 @@
       </if>
       <if test="isDel != null" >
         is_del,
-      </if>
-      <if test="status != null" >
-        status,
       </if>
       <if test="desc != null" >
         desc,
@@ -264,6 +264,9 @@
       <if test="model != null" >
         #{model,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
       <if test="saleType != null" >
         #{saleType,jdbcType=BIT},
       </if>
@@ -284,9 +287,6 @@
       </if>
       <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
       </if>
       <if test="desc != null" >
         #{desc,jdbcType=LONGVARCHAR},
@@ -365,6 +365,9 @@
       <if test="model != null" >
         model = #{model,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
       <if test="saleType != null" >
         sale_type = #{saleType,jdbcType=BIT},
       </if>
@@ -385,9 +388,6 @@
       </if>
       <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="desc != null" >
         desc = #{desc,jdbcType=LONGVARCHAR},
@@ -420,6 +420,7 @@
       package_level_id = #{packageLevelId,jdbcType=VARCHAR},
       scale = #{scale,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       sale_type = #{saleType,jdbcType=BIT},
       sale_price = #{salePrice,jdbcType=DOUBLE},
       creator = #{creator,jdbcType=VARCHAR},
@@ -427,7 +428,6 @@
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},
-      status = #{status,jdbcType=INTEGER},
       desc = #{desc,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -456,20 +456,14 @@
       package_level_id = #{packageLevelId,jdbcType=VARCHAR},
       scale = #{scale,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       sale_type = #{saleType,jdbcType=BIT},
       sale_price = #{salePrice,jdbcType=DOUBLE},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
-      status = #{status,jdbcType=INTEGER}
+      is_del = #{isDel,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
-  </update>
-  
-  <update id="deleteById" parameterType="java.lang.Long">
-  	update item_sku 
-  	set is_del=1
-  	where id=#{id}
   </update>
 </mapper>

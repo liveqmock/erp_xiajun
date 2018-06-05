@@ -29,7 +29,7 @@ public class MallShippingAddressDO {
 
     private String idcardPicReverse;
 
-    private Integer isDefault;
+    private Byte isDefault;
 
     private Date gmtCreate;
 
@@ -145,11 +145,11 @@ public class MallShippingAddressDO {
         this.idcardPicReverse = idcardPicReverse == null ? null : idcardPicReverse.trim();
     }
 
-    public Integer getIsDefault() {
+    public Byte getIsDefault() {
         return isDefault;
     }
 
-    public void setIsDefault(Integer isDefault) {
+    public void setIsDefault(Byte isDefault) {
         this.isDefault = isDefault;
     }
 

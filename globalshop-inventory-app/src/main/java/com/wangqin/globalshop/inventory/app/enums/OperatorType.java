@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.inventory.app.emun;
+package com.wangqin.globalshop.inventory.app.enums;
 
 public  enum OperatorType {
 		/**

@@ -3,96 +3,61 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 import java.util.Date;
 
 public class MallOrderDO {
+    private Long id;
 
-    private Long    id;
+    private String customerNo;
 
-    private String  customerNo;
+    private String orderNo;
 
-    private String  orderNo;
+    private String companyNo;
 
-    private String  companyNo;
+    private String channelNo;
 
-    private String  channelNo;
+    private String channelName;
 
-    private String  channelName;
+    private String channelOrderNo;
 
-    private String  channelOrderNo;
+    private String channelCustomerNo;
 
-    private String  channelCustomerNo;
+    private String channelType;
 
-    private String  channelType;
+    private String shopCode;
 
-    private String  shopCode;
+    private String wxPayTradeNo;
 
-    private String  wxPayTradeNo;
+    private Double totalAmount;
 
-    private Double  totalAmount;
-
-    private Double  actualAmount;
+    private Double actualAmount;
 
     private Integer payType;
 
-    private Date    orderTime;
+    private Date orderTime;
 
     private Integer status;
 
-    private String  memo;
+    private String memo;
 
-    private String  idCard;
+    private String idCard;
 
-    private String  idcardPicFront;
+    private String idcardPicFront;
 
-    private String  idcardPicReverse;
+    private String idcardPicReverse;
 
-    private Long    source;
+    private Long source;
 
-    private Double  freight;
+    private Double freight;
 
-    private Double  freightAgent;
+    private Double freightAgent;
 
-    private Date    gmtModify;
+    private Date gmtModify;
 
-    private Date    gmtCreate;
+    private Date gmtCreate;
 
     private Boolean isDel;
 
-    private String  modifier;
+    private String modifier;
 
-    private String  creator;
-
-    @Override
-    public String toString() {
-        return "MallOrderDO{" +
-                "id=" + id +
-                ", customerNo='" + customerNo + '\'' +
-                ", orderNo='" + orderNo + '\'' +
-                ", companyNo='" + companyNo + '\'' +
-                ", channelNo='" + channelNo + '\'' +
-                ", channelName='" + channelName + '\'' +
-                ", channelOrderNo='" + channelOrderNo + '\'' +
-                ", channelCustomerNo='" + channelCustomerNo + '\'' +
-                ", channelType='" + channelType + '\'' +
-                ", shopCode='" + shopCode + '\'' +
-                ", wxPayTradeNo='" + wxPayTradeNo + '\'' +
-                ", totalAmount=" + totalAmount +
-                ", actualAmount=" + actualAmount +
-                ", payType=" + payType +
-                ", orderTime=" + orderTime +
-                ", status=" + status +
-                ", memo='" + memo + '\'' +
-                ", idCard='" + idCard + '\'' +
-                ", idcardPicFront='" + idcardPicFront + '\'' +
-                ", idcardPicReverse='" + idcardPicReverse + '\'' +
-                ", source=" + source +
-                ", freight=" + freight +
-                ", freightAgent=" + freightAgent +
-                ", gmtModify=" + gmtModify +
-                ", gmtCreate=" + gmtCreate +
-                ", isDel=" + isDel +
-                ", modifier='" + modifier + '\'' +
-                ", creator='" + creator + '\'' +
-                '}';
-    }
+    private String creator;
 
     public Long getId() {
         return id;

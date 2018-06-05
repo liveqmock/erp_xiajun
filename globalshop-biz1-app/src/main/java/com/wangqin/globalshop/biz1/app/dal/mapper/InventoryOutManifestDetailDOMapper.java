@@ -14,5 +14,4 @@ public interface InventoryOutManifestDetailDOMapper {
     int updateByPrimaryKeySelective(InventoryOutManifestDetailDO record);
 
     int updateByPrimaryKey(InventoryOutManifestDetailDO record);
-
 }
