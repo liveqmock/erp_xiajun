@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class ItemDO {
+public class ItemDO extends BaseModel {
     private Long id;
 
     private String itemCode;
@@ -76,6 +76,8 @@ public class ItemDO {
     private String spec;
 
     private String model;
+
+    private String buyerOpenId;
 
     private Date gmtModify;
 
@@ -385,6 +387,14 @@ public class ItemDO {
 
     public void setModel(String model) {
         this.model = model == null ? null : model.trim();
+    }
+
+    public String getBuyerOpenId() {
+        return buyerOpenId;
+    }
+
+    public void setBuyerOpenId(String buyerOpenId) {
+        this.buyerOpenId = buyerOpenId == null ? null : buyerOpenId.trim();
     }
 
     public Date getGmtModify() {

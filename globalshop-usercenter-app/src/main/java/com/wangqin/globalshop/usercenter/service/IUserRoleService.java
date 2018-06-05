@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.usercenter.service;
 
-import com.baomidou.framework.service.ISuperService;
 
 /**
  *

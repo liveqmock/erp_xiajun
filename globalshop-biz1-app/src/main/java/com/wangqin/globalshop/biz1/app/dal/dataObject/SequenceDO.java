@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class SequenceDO {
+public class SequenceDO extends BaseModel {
     private String name;
 
     private Integer currentValue;

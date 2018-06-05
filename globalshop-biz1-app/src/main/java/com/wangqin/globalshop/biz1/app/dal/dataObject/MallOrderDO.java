@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class MallOrderDO {
+public class MallOrderDO extends BaseModel {
     private Long id;
 
     private String customerNo;

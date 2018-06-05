@@ -1,22 +1,18 @@
 package com.wangqin.globalshop.item.app.controller;
 
 
-import java.util.List;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.Util;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 
 @Controller
@@ -51,7 +47,7 @@ public class CategoryController  {
 				if(category.getLevel() > 3){
 					return result.buildIsSuccess(false).buildMsg("不支持新增4级及以上的类目");
 				}
-				if(StringUtils.isNotEmpty(categoryP.getAllPath())){
+				if(!Util.isEmpty(categoryP.getAllPath())){
 					category.setAllPath(categoryP.getAllPath()+"/"+category.getName());
 				}else{
 					category.setAllPath(categoryP.getName()+"/"+category.getName());
@@ -93,7 +89,7 @@ public class CategoryController  {
 				return result.buildIsSuccess(false).buildMsg("not find parent category!");
 			} else {
 				category.setLevel(categoryP.getLevel() + 1);
-				if(StringUtils.isNotEmpty(categoryP.getAllPath())){
+				if(!Util.isEmpty(categoryP.getAllPath())){
 					category.setAllPath(categoryP.getAllPath()+"/"+category.getName());
 				}else{
 					category.setAllPath(categoryP.getName()+"/"+category.getName());

@@ -1,12 +1,11 @@
 package com.wangqin.globalshop.channel.controller.youzan;
 
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
@@ -14,15 +13,14 @@ import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +53,10 @@ public class YouzanSynController extends BaseController {
 	public Object batchSynItemYouzan(String itemIds) {
 		JsonResult<String> result = new JsonResult<>();
 		StringBuilder sb = new StringBuilder();
-		if(StringUtils.isNotEmpty(itemIds)){
+		if(!Util.isEmpty(itemIds)){
+			String userNo = AppUtil.getLoginUserId();
+			//String s = itemIds.replace("&quot;", "\"");
+			//List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
 
 			String s = itemIds.replace("&quot;", "\"");
 			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
@@ -83,7 +84,7 @@ public class YouzanSynController extends BaseController {
 			return result.buildIsSuccess(false).buildMsg("没有商品");
 		}
 		String errorMsg = sb.toString();
-		if(StringUtils.isEmpty(errorMsg)){
+		if(!Util.isEmpty(errorMsg)){
 			return result.buildIsSuccess(true);
 		}else{
 			return result.buildIsSuccess(false).buildMsg(errorMsg);
@@ -99,7 +100,7 @@ public class YouzanSynController extends BaseController {
 	public Object batchListingYouzan(String itemIds) {
 		JsonResult<String> result = new JsonResult<>();
 		StringBuilder sb = new StringBuilder();
-		if (StringUtils.isNotEmpty(itemIds)) {
+		if (StringUtil.isNotEmpty(itemIds)) {
 			String s = itemIds.replace("&quot;", "\"");
 
 			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
@@ -151,7 +152,7 @@ public class YouzanSynController extends BaseController {
 	public Object batchDelistingYouzan(String itemIds) {
 		JsonResult<String> result = new JsonResult<>();
 		StringBuilder sb = new StringBuilder();
-		if (StringUtils.isNotEmpty(itemIds)) {
+		if (StringUtil.isNotEmpty(itemIds)) {
 			String s = itemIds.replace("&quot;", "\"");
 			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
 			});

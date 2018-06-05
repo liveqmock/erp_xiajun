@@ -1,8 +1,5 @@
 package com.wangqin.globalshop.common.enums;
 
-import com.baomidou.mybatisplus.annotations.IdType;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 
 import java.util.Date;
 
@@ -81,7 +78,6 @@ public  class InventoryRecord {
 	/**
 	 * 主键id
 	 */
-	@TableId(type = IdType.AUTO)
 	private Long id;
 	/**
 	 * 订单id
@@ -94,12 +90,10 @@ public  class InventoryRecord {
 	/**
 	 * skuCode
 	 */
-	@TableField(value = "sku_code")
 	private String skuCode;
 	/**
 	 * 购买总数量
 	 */
-	@TableField(value = "quantity")
 	private int quantity;
 
 	/**
@@ -121,7 +115,6 @@ public  class InventoryRecord {
 	 */
 	private String  operatorType;
 
-	@TableField(value = "inventory_area_id")
 	private Long inventoryAreaId;
 	/**
 	 * 仓库Id
@@ -130,12 +123,10 @@ public  class InventoryRecord {
 	/**
 	 * 仓库名称
 	 */
-	@TableField(exist = false)
 	private String warehouseName;
 	/**
 	 * 货架编号
 	 */
-	@TableField(value = "position_no")
 	private String positionNo;
 	// /**
 	// * 采购订单号
@@ -150,12 +141,10 @@ public  class InventoryRecord {
 	/**
 	 * 创建时间
 	 */
-	@TableField(value = "gmt_create")
 	private Date gmtCreate;
 	/**
 	 * 修改时间
 	 */
-	@TableField(value = "gmt_modify")
 	private Date gmtModify;
 
 	//
