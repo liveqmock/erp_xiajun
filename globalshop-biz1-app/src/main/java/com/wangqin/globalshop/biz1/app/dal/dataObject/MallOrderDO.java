@@ -29,11 +29,11 @@ public class MallOrderDO {
 
     private Double actualAmount;
 
-    private Byte payType;
+    private Integer payType;
 
     private Date orderTime;
 
-    private Byte status;
+    private Integer status;
 
     private String memo;
 
@@ -163,11 +163,11 @@ public class MallOrderDO {
         this.actualAmount = actualAmount;
     }
 
-    public Byte getPayType() {
+    public Integer getPayType() {
         return payType;
     }
 
-    public void setPayType(Byte payType) {
+    public void setPayType(Integer payType) {
         this.payType = payType;
     }
 
@@ -179,11 +179,11 @@ public class MallOrderDO {
         this.orderTime = orderTime;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

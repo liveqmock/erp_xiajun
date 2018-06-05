@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.IShippingOrderMapperExt">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR" />
+        <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
+        <result column="logistic_company" property="logisticCompany" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="transfer_status" property="transferStatus" jdbcType="TINYINT" />
+        <result column="sync_send_status" property="syncSendStatus" jdbcType="TINYINT" />
+        <result column="tpl_pkg_status" property="tplPkgStatus" jdbcType="VARCHAR" />
+        <result column="freight" property="freight" jdbcType="DOUBLE" />
+        <result column="sku_weight" property="skuWeight" jdbcType="DOUBLE" />
+        <result column="mall_orders" property="mallOrders" jdbcType="VARCHAR" />
+        <result column="shipping_printer" property="shippingPrinter" jdbcType="VARCHAR" />
+        <result column="gls_return_back" property="glsReturnBack" jdbcType="VARCHAR" />
+        <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+        <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+        <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+        <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+        <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+        <result column="memo" property="memo" jdbcType="VARCHAR" />
+        <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+        <result column="id_card_back" property="idCardBack" jdbcType="VARCHAR" />
+        <result column="id_card_front" property="idCardFront" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, shipping_no, logistic_no, logistic_company, type, status, transfer_status, sync_send_status,
+    tpl_pkg_status, freight, sku_weight, mall_orders, shipping_printer, gls_return_back,
+    receiver, receiver_state, receiver_city, receiver_district, address, telephone, postcode,
+    memo, id_card, id_card_back, id_card_front, gmt_create, gmt_modify, is_del, creator,
+    modifier
+  </sql>
+
+    <select id="queryShippingOrders" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        `shipping_order`
+        <where>
+            <if test="shippingNo!=null and shippingNo!=''">
+                shipping_no = #{shippingNo}
+            </if>
+            <!--<if test="logisticNo!=null and logisticNo!=''">-->
+                <!--and   logistic_no = #{logisticNo}-->
+            <!--</if>-->
+            <if test="logisticCompany!=null and logisticCompany!=''">
+                and   logistic_company = #{logisticCompany}
+            </if>
+            <!--<if test="erpNo!=null and erpNo!=''">-->
+                <!--and   erp_no LIKE concat('%',#{erpNo},'%')-->
+            <!--</if>-->
+            <if test="receiver!=null and receiver!=''">
+                and   receiver = #{receiver}
+            </if>
+            <if test="telephone!=null and telephone!=''">
+                and   telephone = #{telephone}
+            </if>
+            <if test="status!=null">
+                and   status = #{status}
+            </if>
+            <if test="type!=null">
+                and   type = #{type}
+            </if>
+            <if test="salesId!=null">
+                <if test = "openId == null" >
+                    and   id IN (
+                    SELECT a.order_no FROM mall_order a
+                    LEFT JOIN mall_order b ON a.order_no=b.id
+                    WHERE b.channel_no=#{salesId} AND a.order_no IS NOT NULL)
+                </if>
+                <if test = "customer_no != null" >
+                    and   id IN (
+                    SELECT a.order_no FROM mall_order a
+                    LEFT JOIN mall_order b ON a.order_no=b.id
+                    WHERE (b.channel_no = #{salesId} || b.customer_no=#{customer_no}) AND a.order_no IS NOT NULL)
+                </if>
+            </if>
+            <if test=" startOrderTime!=null">
+                and   <![CDATA[ gmt_create >= #{startOrderTime} ]]>
+            </if>
+            <if test=" endOrderTime!=null">
+                and    <![CDATA[ gmt_create <= #{endOrderTime} ]]>
+            </if>
+            <if test=" syncSendStatus!=null">
+                and    <![CDATA[sync_send_status <= #{syncSendStatus} ]]>
+            </if>
+        </where>
+        order by id desc
+--         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+
+    <select id="selectBatchIds" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        shipping_order
+        WHERE
+        id IN
+        <foreach item="item" index="index" collection="shippingOrderIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryShippingOrderCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO">
+        SELECT
+        count(1)
+        FROM
+        `shipping_order` T1
+        <where>
+            <if test="shippingNo!=null and shippingNo!=''">
+                T1.shipping_no = #{shippingNo}
+            </if>
+            <!--<if test="logisticNo!=null and logisticNo!=''">-->
+                <!--and   T1.logistic_no = #{logisticNo}-->
+            <!--</if>-->
+            <if test="logisticCompany!=null and logisticCompany!=''">
+                and   T1.logistic_company = #{logisticCompany}
+            </if>
+            <!--<if test="erpNo!=null and erpNo!=''">-->
+                <!--and   T1.erp_no LIKE concat('%',#{erpNo},'%')-->
+            <!--</if>-->
+            <if test="receiver!=null and receiver!=''">
+                and   T1.receiver = #{receiver}
+            </if>
+            <if test="telephone!=null and telephone!=''">
+                and   T1.telephone = #{telephone}
+            </if>
+            <if test="status!=null">
+                and   T1.status = #{status}
+            </if>
+            <if test="type!=null">
+                and   T1.type = #{type}
+            </if>
+            <if test="salesId!=null">
+                <if test = "openId == null" >
+                    and   T1.id IN (
+                    SELECT a.shipping_order_id FROM erp_order a
+                    LEFT JOIN outer_order b ON a.outer_order_id=b.id
+                    WHERE b.sales_id=#{salesId} AND a.shipping_order_id IS NOT NULL )
+                </if>
+                <if test = "openId != null" >
+                    and   T1.id IN (
+                    SELECT a.shipping_order_id FROM erp_order a
+                    LEFT JOIN outer_order b ON a.outer_order_id=b.id
+                    WHERE (b.sales_id = #{salesId} || b.open_id=#{openId}) AND a.shipping_order_id IS NOT NULL )
+                </if>
+            </if>
+            <if test=" startOrderTime!=null">
+                and   <![CDATA[ T1.gmt_create >= #{startOrderTime} ]]>
+            </if>
+            <if test=" endOrderTime!=null">
+                and    <![CDATA[ T1.gmt_create <= #{endOrderTime} ]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByShippingOrderPackageTime" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE 1=1
+        <if test=" startOrderTime!= null ">
+            and   <![CDATA[ gmt_create >= #{startOrderTime} ]]>
+        </if>
+        <if test=" endOrderTime != null ">
+            and    <![CDATA[ gmt_create <= #{endOrderTime} ]]>
+        </if>
+        <if test=" logisticCompany != null and logisticCompany !='' ">
+            and    <![CDATA[ logistic_company = #{logisticCompany} ]]>
+        </if>
+        ORDER BY gmt_create asc
+    </select>
+    <select id="selectByShippingNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE shipping_no = ${shippingNO}
+    </select>
+    <select id="selectCount" >
+        SELECT
+        count(*)
+        FROM shipping_order
+        WHERE id_card=${idCard} and logistic_company=${logisticCompany} and gmt_create>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+    </select>
+    <select id="selectByLogisticNo" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE  logistic_no=${logisticNo}
+    </select>
+
+    <update id="updateStatusByShippingNo" parameterType="java.lang.String">
+        UPDATE shipping_order SET status=2 WHERE logistic_no=#{logisticNo}
+    </update>
+
+</mapper>

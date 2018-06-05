@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemDOMapperExt" >
+
+    <sql id="tableSection">channel_listing_item</sql>
+
+
+
+    <sql id="commonSelectSection">
+        1 = 1
+        <if test="itemCode != null">
+            and T.item_code = #{itemCode}
+        </if>
+
+        <if test="channelNo != null">
+            and T.channel_no = #{channelNo}
+        </if>
+
+
+        <if test="companyNo != null">
+            and T.company_no = #{companyNo}
+        </if>
+
+
+        <if test="channelItemCode != null">
+            and T.channel_item_code = #{channelItemCode}
+        </if>
+
+        <if test="shopCode != null">
+            and T.shop_code = #{shopCode}
+        </if>
+
+        <if test="status != null">
+            and T.status = #{status}
+        </if>
+
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+
+
+
+    </sql>
+
+
+    <!--查询总条数 -->
+    <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelListingItemDOMapper.BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo">
+        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelListingItemDOMapper.Base_Column_List" />
+        FROM channel_listing_item T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+
+
+</mapper>

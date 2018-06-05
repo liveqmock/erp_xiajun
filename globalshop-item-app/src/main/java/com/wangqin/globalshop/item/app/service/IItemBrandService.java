@@ -17,7 +17,7 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 public interface IItemBrandService {
 
 
-    void add(ItemBrandDO itemBrand);
+    //void add(ItemBrandDO itemBrand);
       
     void addBrand(ItemBrandDO brand);
 
@@ -35,10 +35,12 @@ public interface IItemBrandService {
 	 * @param name
 	 * @return
 	 */
-	ItemBrandDO selectByName(String name);
+	String selectBrandNoByName(String name);
 	
 	ItemBrandDO selectByPrimaryKey(Long id);
 	
 	void deleteByPrimaryKey(Long id);
     
+	//插入单个品牌
+    int insertBrandSelective(ItemBrandDO brand);
 }

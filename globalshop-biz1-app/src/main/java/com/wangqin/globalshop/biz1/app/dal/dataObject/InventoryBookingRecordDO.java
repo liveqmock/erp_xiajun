@@ -25,7 +25,7 @@ public class InventoryBookingRecordDO {
 
     private String operatorType;
 
-    private Long inventoryAreaId;
+    private String inventoryOnWarehouseNo;
 
     private Long warehouseId;
 
@@ -129,12 +129,12 @@ public class InventoryBookingRecordDO {
         this.operatorType = operatorType == null ? null : operatorType.trim();
     }
 
-    public Long getInventoryAreaId() {
-        return inventoryAreaId;
+    public String getInventoryOnWarehouseNo() {
+        return inventoryOnWarehouseNo;
     }
 
-    public void setInventoryAreaId(Long inventoryAreaId) {
-        this.inventoryAreaId = inventoryAreaId;
+    public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+        this.inventoryOnWarehouseNo = inventoryOnWarehouseNo == null ? null : inventoryOnWarehouseNo.trim();
     }
 
     public Long getWarehouseId() {

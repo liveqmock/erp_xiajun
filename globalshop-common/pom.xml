@@ -287,7 +287,11 @@
 		    <artifactId>itext-asian</artifactId>
 		    <version>5.2.0</version>
 		</dependency>
-		
+		<dependency>
+		    <groupId>com.thoughtworks.xstream</groupId>
+		    <artifactId>xstream</artifactId>
+		    <version>1.4.9</version>
+		</dependency>
 		<!-- <dependency>
 			<groupId>open-sdk</groupId>
 			<artifactId>open-sdk</artifactId>
@@ -316,6 +320,26 @@
 			<artifactId>gson</artifactId>
 			<version>2.1</version>
 		</dependency>
+
+
+		<!-- youzan sdk -->
+		<dependency>
+			<groupId>open-sdk-java</groupId>
+			<artifactId>open-sdk-java</artifactId>
+			<version>2.0.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/libs/open-sdk-java-2.0.2.jar</systemPath>
+		</dependency>
+
+		<!-- taobao sdk -->
+		<dependency>
+			<groupId>com.wangqin.globalshop</groupId>
+			<artifactId>top-sdk</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/libs/top-sdk-1.0.0.jar</systemPath>
+		</dependency>
+
     </dependencies>
     <build>
         <finalName>globalshop-common</finalName>

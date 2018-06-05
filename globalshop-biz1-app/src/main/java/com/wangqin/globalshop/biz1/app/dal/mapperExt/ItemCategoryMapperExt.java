@@ -2,12 +2,9 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import java.util.List;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.impl.PublicImpl;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-
-import com.baomidou.mybatisplus.mapper.AutoMapper;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemCategoryDOMapper;
+import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 
 
 /**
@@ -19,8 +16,14 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
 
     List<ItemCategoryDO> selectByName(String categoryName);
     
- ItemCategoryDO queryByCategoryCode(String categoryCode);
+    ItemCategoryDO queryByCategoryCode(String categoryCode);
  
- List<ItemCategoryDO> selectAll();
+    List<ItemCategoryDO> selectAll();
+ 
+ 
+    List<ItemCategoryDTO> selectAllDTO();
+    
+    //插入类目
+    void insertCategorySelective(ItemCategoryDO category);
 
 }

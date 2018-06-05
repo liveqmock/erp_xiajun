@@ -35,7 +35,7 @@ public class MallSubOrderDO {
 
     private String skuPic;
 
-    private Byte logisticType;
+    private Integer logisticType;
 
     private Double freight;
 
@@ -49,13 +49,13 @@ public class MallSubOrderDO {
 
     private Integer quantity;
 
-    private Byte status;
+    private Integer status;
 
     private String closeReason;
 
     private String warehouseNo;
 
-    private Byte stockStatus;
+    private Integer stockStatus;
 
     private String shippingOrderNo;
 
@@ -94,6 +94,8 @@ public class MallSubOrderDO {
     private String modifier;
 
     private Boolean isDel;
+
+    private String subOrderNo;
 
     public Long getId() {
         return id;
@@ -223,11 +225,11 @@ public class MallSubOrderDO {
         this.skuPic = skuPic == null ? null : skuPic.trim();
     }
 
-    public Byte getLogisticType() {
+    public Integer getLogisticType() {
         return logisticType;
     }
 
-    public void setLogisticType(Byte logisticType) {
+    public void setLogisticType(Integer logisticType) {
         this.logisticType = logisticType;
     }
 
@@ -279,11 +281,11 @@ public class MallSubOrderDO {
         this.quantity = quantity;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -303,11 +305,11 @@ public class MallSubOrderDO {
         this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
     }
 
-    public Byte getStockStatus() {
+    public Integer getStockStatus() {
         return stockStatus;
     }
 
-    public void setStockStatus(Byte stockStatus) {
+    public void setStockStatus(Integer stockStatus) {
         this.stockStatus = stockStatus;
     }
 
@@ -461,5 +463,13 @@ public class MallSubOrderDO {
 
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
+    }
+
+    public String getSubOrderNo() {
+        return subOrderNo;
+    }
+
+    public void setSubOrderNo(String subOrderNo) {
+        this.subOrderNo = subOrderNo == null ? null : subOrderNo.trim();
     }
 }

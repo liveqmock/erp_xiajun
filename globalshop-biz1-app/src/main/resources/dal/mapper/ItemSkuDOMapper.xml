@@ -26,6 +26,7 @@
     <result column="package_level_id" property="packageLevelId" jdbcType="VARCHAR" />
     <result column="scale" property="scale" jdbcType="VARCHAR" />
     <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="sale_type" property="saleType" jdbcType="BIT" />
     <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -41,7 +42,8 @@
     id, sku_code, item_code, item_name, company_no, category_code, category_name, upc, 
     saleable, purchase_price, freight, discount, logistic_type, cost_price, brand_name, 
     weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id, 
-    scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del
+    scale, model, status, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, 
+    is_del
   </sql>
   <sql id="Blob_Column_List" >
     desc
@@ -70,9 +72,10 @@
       weight, sku_pic, package_code, 
       package_name, package_en, package_weight, 
       package_level_id, scale, model, 
-      sale_type, sale_price, creator, 
-      modifier, gmt_create, gmt_modify, 
-      is_del, desc)
+      status, sale_type, sale_price, 
+      creator, modifier, gmt_create, 
+      gmt_modify, is_del, desc
+      )
     values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
       #{itemName,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, 
       #{categoryName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{saleable,jdbcType=TINYINT}, 
@@ -81,9 +84,10 @@
       #{weight,jdbcType=DOUBLE}, #{skuPic,jdbcType=VARCHAR}, #{packageCode,jdbcType=VARCHAR}, 
       #{packageName,jdbcType=VARCHAR}, #{packageEn,jdbcType=VARCHAR}, #{packageWeight,jdbcType=DOUBLE}, 
       #{packageLevelId,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
-      #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{desc,jdbcType=LONGVARCHAR})
+      #{status,jdbcType=INTEGER}, #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{desc,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -160,6 +164,9 @@
       </if>
       <if test="model != null" >
         model,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="saleType != null" >
         sale_type,
@@ -256,6 +263,9 @@
       </if>
       <if test="model != null" >
         #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="saleType != null" >
         #{saleType,jdbcType=BIT},
@@ -355,6 +365,9 @@
       <if test="model != null" >
         model = #{model,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
       <if test="saleType != null" >
         sale_type = #{saleType,jdbcType=BIT},
       </if>
@@ -407,6 +420,7 @@
       package_level_id = #{packageLevelId,jdbcType=VARCHAR},
       scale = #{scale,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       sale_type = #{saleType,jdbcType=BIT},
       sale_price = #{salePrice,jdbcType=DOUBLE},
       creator = #{creator,jdbcType=VARCHAR},
@@ -442,6 +456,7 @@
       package_level_id = #{packageLevelId,jdbcType=VARCHAR},
       scale = #{scale,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       sale_type = #{saleType,jdbcType=BIT},
       sale_price = #{salePrice,jdbcType=DOUBLE},
       creator = #{creator,jdbcType=VARCHAR},

@@ -1,5 +1,4 @@
 package com.wangqin.globalshop.common.base;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,13 +11,12 @@ import org.springframework.web.bind.annotation.InitBinder;
 import com.wangqin.globalshop.common.result.Result;
 import com.wangqin.globalshop.common.utils.StringTrimEditor;
 
-
 /**
  * @description：基础 controller
- * @author：zhixuan.wang
- * @date：2015/10/1 14:51
+ * @author：zhixuan.wang @date：2015/10/1 14:51
  */
 public abstract class BaseController {
+
     // 控制器本来就是单例，这样似乎更加合理
     protected Logger logger = LogManager.getLogger(getClass());
 
@@ -27,24 +25,30 @@ public abstract class BaseController {
         /**
          * 自动转换日期类型的字段格式
          */
-//        binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
-    	binder.registerCustomEditor(Date.class, "bookingDate", new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
-    	binder.registerCustomEditor(Date.class, "startDate", new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
-    	binder.registerCustomEditor(Date.class, "endDate", new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
-    	binder.registerCustomEditor(Date.class, "orderTime", new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
+        // binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
+        // true));
+        binder.registerCustomEditor(Date.class, "bookingDate",
+                                    new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
+        binder.registerCustomEditor(Date.class, "startDate",
+                                    new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
+        binder.registerCustomEditor(Date.class, "endDate",
+                                    new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
+        binder.registerCustomEditor(Date.class, "orderTime",
+                                    new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
         binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-        
+
         /**
          * 防止XSS攻击
          */
-        //binder.registerCustomEditor(String.class, new StringEscapeEditor());
-        
-        //去除参数头尾空格
+        // binder.registerCustomEditor(String.class, new StringEscapeEditor());
+
+        // 去除参数头尾空格
         binder.registerCustomEditor(String.class, new StringTrimEditor());
     }
 
     /**
      * ajax失败
+     * 
      * @param msg 失败的消息
      * @return {Object}
      */
@@ -56,6 +60,7 @@ public abstract class BaseController {
 
     /**
      * ajax成功
+     * 
      * @return {Object}
      */
     public Object renderSuccess() {
@@ -66,6 +71,7 @@ public abstract class BaseController {
 
     /**
      * ajax成功
+     * 
      * @param msg 消息
      * @return {Object}
      */
@@ -78,6 +84,7 @@ public abstract class BaseController {
 
     /**
      * ajax成功
+     * 
      * @param obj 成功时的对象
      * @return {Object}
      */

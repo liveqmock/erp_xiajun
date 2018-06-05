@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
 import com.wangqin.globalshop.item.app.service.IFreightService;
-import com.wangqin.globalshop.item.app.service.IShippingPackingPatternService;
+import com.wangqin.globalshop.item.app.service.IItemPackagePatternService;
 
 
 
@@ -13,7 +13,7 @@ import com.wangqin.globalshop.item.app.service.IShippingPackingPatternService;
 public class FreightServiceImpl  implements IFreightService {
 	
 	@Autowired
-	private IShippingPackingPatternService iPackageLevelService;
+	private IItemPackagePatternService iPackageLevelService;
 	
 	@Override
 	public Long calculateFreight(Double itemWeight, Double packageWeight) {
@@ -29,7 +29,7 @@ public class FreightServiceImpl  implements IFreightService {
 	
 	@Override
 	public ShippingPackingPatternDO getPackageLevel(Long id) {
-		return iPackageLevelService.selectByPrimaryKey(id);
+		return null;
 	}
 
 	

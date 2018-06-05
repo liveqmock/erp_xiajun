@@ -9,7 +9,11 @@ import java.util.Date;
  */
 public class ItemSkuQueryVO extends PageQueryVO{
 
+	private Long id;
 	
+	private Long itemId;
+	
+	private Long lockedVirtualInv;
 	/**
 	 * 商品编码
 	 */
@@ -80,7 +84,14 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	
 	private String buySite;
 	
-	private Long companyId;
+	private float salePrice;
+	private String scale;
+
+	private Double weight;
+
+	private String skuPic;
+	private String creator;
+	private String modifier;
 
 	public String getItemCode() {
 		return itemCode;
@@ -205,11 +216,80 @@ public class ItemSkuQueryVO extends PageQueryVO{
 		this.buySite = buySite;
 	}
 
-	public Long getCompanyId() {
-		return companyId;
+
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
+	public void setId(Long id) {
+		this.id = id;
 	}
+
+	public Long getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
+	}
+
+	public Long getLockedVirtualInv() {
+		return lockedVirtualInv;
+	}
+
+	public void setLockedVirtualInv(Long lockedVirtualInv) {
+		this.lockedVirtualInv = lockedVirtualInv;
+	}
+
+	public float getSalePrice() {
+		return salePrice;
+	}
+
+	public void setSalePrice(float salePrice) {
+		this.salePrice = salePrice;
+	}
+
+	public String getScale() {
+		return scale;
+	}
+
+	public void setScale(String scale) {
+		this.scale = scale;
+	}
+
+	public Double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
+
+	public String getSkuPic() {
+		return skuPic;
+	}
+
+	public void setSkuPic(String skuPic) {
+		this.skuPic = skuPic;
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public String getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
+	}
+	
+	
+	
 }

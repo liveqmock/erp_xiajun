@@ -6,11 +6,14 @@ import org.apache.ibatis.annotations.Param;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
+import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 
 
+
 /**
- * SKU 数据控制层
+ * SKU 数据控制层，item_module use
  * @author zhulu
  *
  */
@@ -18,7 +21,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
 	Integer queryItemSkusCount(ItemSkuQueryVO itemSkuQueryVO);
 	
-	List<ItemSkuDO> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO);
+	List<ISkuDTO> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO);
 	
 	List<ItemSkuDO> queryItemSkusById(@Param(value="itemId") Long itemId,@Param(value="skuId") Long skuId );
 	
@@ -34,7 +37,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	
 	List<ItemSkuDO> queryItemSkusForExcel();
 	
-	List<ItemSkuDO> queryItemSkusForItemThirdSale(Long itemId);
+	List<ItemSkuDO> queryItemSkusForItemThirdSale(@Param(value="itemCode")String itemCode, @Param(value="shopCode")String shopCode);
 	
 	/**
 	 * 根据upc获取商品信息(item_sku+inventory+virtualInv)
@@ -42,4 +45,23 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	 * @return
 	 */
 	List<ItemSkuDO> queryItemSkusByUpc(String upc);
+
+	void insertBatch(List<ItemSkuAddVO> skuList);
+
+	ISkuDTO queryItemSkuBySkuCode(String skuCode);
+
+	void updateById(ItemSkuQueryVO itemSkuQueryVO);
+
+	void deleteBySkuCode(String skuCode);
+
+    ItemSkuDO queryItemBySkuCode(@Param("skuCode") String skuCode);
+
+    List<ItemSkuDO> queryItemSkuList(ItemSkuDO skuSo);
+
+	ItemSkuDO queryItemSku(ItemSkuDO itemSkuDO);
+
+	Integer queryItemSkuCount(ItemSkuDO itemSkuDO);
+	
+	//删除sku
+	void deleteById(Long id);
 }

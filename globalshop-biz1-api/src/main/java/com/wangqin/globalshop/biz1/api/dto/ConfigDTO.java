@@ -1,9 +1,8 @@
 package com.wangqin.globalshop.biz1.api.dto;
 
-import lombok.Data;
-
-import java.io.Serializable;
 import java.util.Date;
+
+import lombok.Data;
 
 /**
  * Created by Patrick on 15/12/2017.

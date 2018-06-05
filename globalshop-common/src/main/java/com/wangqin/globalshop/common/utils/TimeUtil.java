@@ -26,6 +26,8 @@ public class TimeUtil {
     public static String       DEFAULT_DATE_NO_SEPRATOR_FORMAT = "yyyyMMddHHmmss";
     /** yyyyMMdd */
     public static final String DEFAULT_DAY_NO_SEPRATOR_FORMAT  = "yyyyMMdd";
+    /** yyMMdd */
+    public static final String DEFAULT_DATE_NO_SEPRATORS_FORMAT = "yyMMdd";
     /** dd/MM/yyyy */
     public static final String DEFAULT_SLASH_FORMAT            = "dd/MM/yyyy";
 

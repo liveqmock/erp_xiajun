@@ -15,9 +15,9 @@
     <result column="wx_pay_trade_no" property="wxPayTradeNo" jdbcType="VARCHAR" />
     <result column="total_amount" property="totalAmount" jdbcType="DOUBLE" />
     <result column="actual_amount" property="actualAmount" jdbcType="DOUBLE" />
-    <result column="pay_type" property="payType" jdbcType="TINYINT" />
+    <result column="pay_type" property="payType" jdbcType="INTEGER" />
     <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
     <result column="id_card" property="idCard" jdbcType="VARCHAR" />
     <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR" />
@@ -65,8 +65,8 @@
       #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, 
       #{channelOrderNo,jdbcType=VARCHAR}, #{channelCustomerNo,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR}, 
       #{shopCode,jdbcType=VARCHAR}, #{wxPayTradeNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DOUBLE}, 
-      #{actualAmount,jdbcType=DOUBLE}, #{payType,jdbcType=TINYINT}, #{orderTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=TINYINT}, #{memo,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{actualAmount,jdbcType=DOUBLE}, #{payType,jdbcType=INTEGER}, #{orderTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
       #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, #{source,jdbcType=BIGINT}, 
       #{freight,jdbcType=DOUBLE}, #{freightAgent,jdbcType=DOUBLE}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{modifier,jdbcType=VARCHAR}, 
@@ -200,13 +200,13 @@
         #{actualAmount,jdbcType=DOUBLE},
       </if>
       <if test="payType != null" >
-        #{payType,jdbcType=TINYINT},
+        #{payType,jdbcType=INTEGER},
       </if>
       <if test="orderTime != null" >
         #{orderTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=TINYINT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="memo != null" >
         #{memo,jdbcType=VARCHAR},
@@ -286,13 +286,13 @@
         actual_amount = #{actualAmount,jdbcType=DOUBLE},
       </if>
       <if test="payType != null" >
-        pay_type = #{payType,jdbcType=TINYINT},
+        pay_type = #{payType,jdbcType=INTEGER},
       </if>
       <if test="orderTime != null" >
         order_time = #{orderTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="memo != null" >
         memo = #{memo,jdbcType=VARCHAR},
@@ -347,9 +347,9 @@
       wx_pay_trade_no = #{wxPayTradeNo,jdbcType=VARCHAR},
       total_amount = #{totalAmount,jdbcType=DOUBLE},
       actual_amount = #{actualAmount,jdbcType=DOUBLE},
-      pay_type = #{payType,jdbcType=TINYINT},
+      pay_type = #{payType,jdbcType=INTEGER},
       order_time = #{orderTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       memo = #{memo,jdbcType=VARCHAR},
       id_card = #{idCard,jdbcType=VARCHAR},
       idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},

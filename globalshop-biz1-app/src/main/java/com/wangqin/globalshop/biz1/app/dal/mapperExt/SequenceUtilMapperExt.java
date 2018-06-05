@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import com.baomidou.mybatisplus.mapper.AutoMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapper.SequenceDOMapper;
 
 

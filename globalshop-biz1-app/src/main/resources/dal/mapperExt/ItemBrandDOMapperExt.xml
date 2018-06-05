@@ -4,14 +4,15 @@
 <!-- 通用查询结果列 -->
 	<sql id="Base_Column_List">
 		T1.id,T1.name,T1.name_china AS nameChina,T1.name_alias AS nameAlias,
-		T1.seq,T1.user_create AS userCreate,T1.user_modify AS userModify,T1.gmt_create AS gmtCreate, T1.gmt_modify AS gmtModify
+		T1.seq,T1.creator AS userCreate,T1.modifier AS userModify,T1.gmt_create AS gmtCreate, T1.gmt_modify AS gmtModify
 	</sql>
 
 	<!--查询总条数 -->
 	<select id="queryBrandCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
 		SELECT COUNT(*) 
-		FROM brand T1 
-		WHERE 1=1 
+		FROM item_brand T1 
+		WHERE 
+		T1.is_del = 0
 		<if test=" name != null and name != '' ">
 			and T1.name LIKE concat('%',#{name},'%')
         </if>
@@ -23,8 +24,8 @@
 	<!--分页查询 -->
 	<select id="queryBrands" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
 		SELECT <include refid="Base_Column_List" /> 
-		FROM brand T1 
-		WHERE 1=1 
+		FROM item_brand T1 
+		WHERE is_del=0
 		<if test=" name != null and name != '' ">
 			and T1.name LIKE concat('%',#{name},'%')
         </if>
@@ -40,14 +41,67 @@
 	<select id="queryAllBrand" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
 		SELECT 
 		concat(name,"->",IFNULL(name_china, "")) as name 
-		FROM brand
-		WHERE 1=1
+		FROM item_brand
+		WHERE is_del=0
 	</select>
 
-	<select id="selectByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
+	<select id="selectNoByName" resultType="java.lang.String" parameterType="java.lang.String">
 		SELECT 
-		<include refid="Base_Column_List" />
-		FROM brand T1 
-		WHERE name = #{name}
+		T1.brand_no
+		FROM item_brand T1 
+		WHERE T1.name = #{name}
+		AND T1.is_del=0
 	</select>
+	
+	<insert id="insertBrandSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+    insert into item_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="brandNo != null" >
+        brand_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nameChina != null" >
+        name_china,
+      </if>
+      <if test="nameAlias != null" >
+        name_alias,
+      </if>
+      <if test="seq != null" >
+        seq,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="brandNo != null" >
+        #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameChina != null" >
+        #{nameChina,jdbcType=VARCHAR},
+      </if>
+      <if test="nameAlias != null" >
+        #{nameAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
 </mapper>

@@ -1,23 +1,31 @@
 package com.wangqin.globalshop.common.utils;
 
+import java.util.ResourceBundle;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+
 /**
  * 读取系统配置信息
  * 
- * @author Sivan
+ * @author Robin 2014年7月15日 上午11:42:50
  */
-
 public final class ResourceUtil {
+
+    private final static Log      log = LogFactory.getLog(ResourceUtil.class);
 
     private static ResourceBundle system;
     static {
         try {
-            system = ResourceBundle.getBundle("/config/application");
+            system = ResourceBundle.getBundle("systemConfig");
         } catch (Exception e) {
-            System.out.println("application.properties Not Found,");
+            log.error("systemConfig.properties Not Found,", e);
         }
     }
 
     /**
+     * 读取systemConfig.properties文件里面的值
      * 
      * @param key
      * @return
@@ -52,7 +60,6 @@ public final class ResourceUtil {
         }
         return msg;
     }
-
     public static String getChatDomain() {
         String msg = null;
         try {
@@ -112,7 +119,6 @@ public final class ResourceUtil {
         }
         return msg;
     }
-
     public static String getStyleDomain(String msg) {
         try {
             if (StringUtils.isNotBlank(msg)) {

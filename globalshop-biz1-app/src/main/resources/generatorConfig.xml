@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <classPathEntry
-            location="/Users/jieyingxiong/.m2/repository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar"/>
+            location="E:\mavenJar\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
 
@@ -29,6 +29,7 @@
 
         <javaModelGenerator targetPackage="com.wangqin.globalshop.biz1.app.dal.dataObject"
                             targetProject="src/main/java">
+            <!--<property name="rootClass" value="com.wangqin.globalshop.biz1.app.dal.baseModel"/>-->
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -41,6 +42,7 @@
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="com.wangqin.globalshop.biz1.app.dal.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
+            <!--<property name="rootInterface" value="com.wangqin.globalshop.biz1.app.dal.mapper.BaseMapper"/>-->
         </javaClientGenerator>
 
         <table tableName="auth_organization"  domainObjectName="AuthOrganizationDO"   enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
@@ -121,6 +123,11 @@
         <table tableName="channel_account" domainObjectName="ChannelAccountDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" >
           <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+
+        <table tableName="channel_account_config" domainObjectName="ChannelAccountConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+            <generatedKey column="id" sqlStatement="MySql"/>
         </table>
 
         <table tableName="channel_listing_item" domainObjectName="ChannelListingItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
@@ -331,6 +338,22 @@
         </table>
 
         <table tableName="shipping_track_polling_yuntong" domainObjectName="ShippingTrackPollingYuntongDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+          <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+        <table tableName="site_msg" domainObjectName="SiteMsgDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+          <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+        <table tableName="site_msg_read" domainObjectName="SiteMsgReadDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+          <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+        <table tableName="sys_log" domainObjectName="SysLogDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+          <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+        <table tableName="warehouse" domainObjectName="WarehouseDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" >
           <generatedKey column="id" sqlStatement="MySql"/>
         </table>

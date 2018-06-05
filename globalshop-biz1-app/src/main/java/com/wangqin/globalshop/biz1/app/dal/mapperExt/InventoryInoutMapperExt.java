@@ -1,0 +1,19 @@
+package com.wangqin.globalshop.biz1.app.dal.mapperExt;
+
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryInoutDOMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
+
+
+public interface InventoryInoutMapperExt extends InventoryInoutDOMapper {
+
+Integer queryInventoryInoutCount(InventoryQueryVO inventoryQueryVO);
+	
+	List<InventoryInoutVO> queryInventoryInouts(InventoryQueryVO inventoryQueryVO);
+	
+	Integer countTodayInInventoryItemNum(@Param("typeList")List<Integer> typeList,@Param("today")Date today);
+}

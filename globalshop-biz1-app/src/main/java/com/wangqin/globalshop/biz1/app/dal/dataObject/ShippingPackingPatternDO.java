@@ -7,8 +7,6 @@ public class ShippingPackingPatternDO {
 
     private String patternNo;
 
-    private String patternName;
-
     private String packagingScaleNo;
 
     private String name;
@@ -39,14 +37,6 @@ public class ShippingPackingPatternDO {
 
     public void setPatternNo(String patternNo) {
         this.patternNo = patternNo == null ? null : patternNo.trim();
-    }
-
-    public String getPatternName() {
-        return patternName;
-    }
-
-    public void setPatternName(String patternName) {
-        this.patternName = patternName == null ? null : patternName.trim();
     }
 
     public String getPackagingScaleNo() {

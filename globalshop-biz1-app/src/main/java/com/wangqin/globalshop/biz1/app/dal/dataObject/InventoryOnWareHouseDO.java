@@ -5,9 +5,11 @@ import java.util.Date;
 public class InventoryOnWareHouseDO {
     private Long id;
 
+    private String inventoryOnWarehouseNo;
+
     private String companyNo;
 
-    private Long itemCode;
+    private String itemCode;
 
     private String itemName;
 
@@ -27,7 +29,7 @@ public class InventoryOnWareHouseDO {
 
     private Long lockedTransInv;
 
-    private Long warehouseNo;
+    private String warehouseNo;
 
     private String warehouseName;
 
@@ -53,6 +55,14 @@ public class InventoryOnWareHouseDO {
         this.id = id;
     }
 
+    public String getInventoryOnWarehouseNo() {
+        return inventoryOnWarehouseNo;
+    }
+
+    public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+        this.inventoryOnWarehouseNo = inventoryOnWarehouseNo == null ? null : inventoryOnWarehouseNo.trim();
+    }
+
     public String getCompanyNo() {
         return companyNo;
     }
@@ -61,12 +71,12 @@ public class InventoryOnWareHouseDO {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
-    public Long getItemCode() {
+    public String getItemCode() {
         return itemCode;
     }
 
-    public void setItemCode(Long itemCode) {
-        this.itemCode = itemCode;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode == null ? null : itemCode.trim();
     }
 
     public String getItemName() {
@@ -141,12 +151,12 @@ public class InventoryOnWareHouseDO {
         this.lockedTransInv = lockedTransInv;
     }
 
-    public Long getWarehouseNo() {
+    public String getWarehouseNo() {
         return warehouseNo;
     }
 
-    public void setWarehouseNo(Long warehouseNo) {
-        this.warehouseNo = warehouseNo;
+    public void setWarehouseNo(String warehouseNo) {
+        this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
     }
 
     public String getWarehouseName() {

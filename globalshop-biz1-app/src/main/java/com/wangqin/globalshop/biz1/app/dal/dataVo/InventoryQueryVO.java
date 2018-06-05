@@ -1,0 +1,120 @@
+package com.wangqin.globalshop.biz1.app.dal.dataVo;
+
+/**
+ * 库存分页查询参数
+ * 
+ * @author liuhui
+ *
+ */
+public class InventoryQueryVO extends PageQueryVO {
+
+	
+	private String warehouseNo;
+	
+	private String skuCode;
+	
+	private String upc;
+	
+	private String itemName;
+
+	private Integer operatorType;
+	
+	private String shelfNo;
+	
+	private String orderBy;
+	
+	private String sort;
+	
+	private String buySite;
+	
+	private String companyNo;
+
+	public String getCompanyNo() {
+		return companyNo;
+	}
+
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
+
+    
+
+
+
+	public String getWarehouseNo() {
+		return warehouseNo;
+	}
+
+	public void setWarehouseNo(String warehouseNo) {
+		this.warehouseNo = warehouseNo;
+	}
+
+	public String getShelfNo() {
+		return shelfNo;
+	}
+
+	public void setShelfNo(String shelfNo) {
+		this.shelfNo = shelfNo;
+	}
+
+	public Integer getOperatorType() {
+		return operatorType;
+	}
+
+	public void setOperatorType(Integer operatorType) {
+		this.operatorType = operatorType;
+	}
+
+
+
+	public String getSkuCode() {
+		return skuCode;
+	}
+
+	public void setSkuCode(String skuCode) {
+		this.skuCode = skuCode;
+	}
+
+	public String getUpc() {
+		return upc;
+	}
+
+	public void setUpc(String upc) {
+		this.upc = upc;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public String getBuySite() {
+		return buySite;
+	}
+
+	public void setBuySite(String buySite) {
+		this.buySite = buySite;
+	}
+
+
+	
+}

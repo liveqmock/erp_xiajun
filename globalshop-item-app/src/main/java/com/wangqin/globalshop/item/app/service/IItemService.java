@@ -4,8 +4,8 @@ package com.wangqin.globalshop.item.app.service;
 import java.util.List;
 import java.util.Map;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
@@ -19,8 +19,10 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
 public interface IItemService {
 
-	ItemDO queryItemByItemCode(String itemCode);
 	
+	//插入单个商品
+	int insertItemSelective(ItemDO item);
+		
 	ItemDO selectByPrimaryKey(Long id);
 	/**
 	 * add item 
@@ -30,12 +32,7 @@ public interface IItemService {
 	void addItem(ItemDO item);
 	
 	
-	/**
-	 * update item 
-	 * @param item
-	 * @param itemSkuList
-	 */
-	void updateItem(ItemDO item);
+	
 	
 	/**
 	 * query item 
@@ -49,8 +46,9 @@ public interface IItemService {
 	 * @param itemQueryVO
 	 * @return
 	 */
-	JsonPageResult<List<ItemDO>> queryItems(ItemQueryVO itemQueryVO);
+	JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO);
 	
+    ItemDTO queryItemById(Long id);
 	
 	/**
 	 * 通过ID查询多个商品
@@ -84,6 +82,9 @@ public interface IItemService {
 
 	Integer sumNewItemNumByDate(Integer days);
 	
-	Integer sumNewItemNumByMonth(Integer months);	
-    
+	Integer sumNewItemNumByMonth(Integer months);
+	
+	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);
+	
+	void updateByPrimaryKeySelective(ItemDO item);
 }

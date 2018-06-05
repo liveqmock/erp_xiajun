@@ -1,21 +1,32 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+
 import java.util.List;
 import java.util.Map;
 
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 
 
-public interface ItemDOMapperExt extends ItemDOMapper{
+/**
+ * Create by 777 on 2018/5/25
+ */
+public interface ItemDOMapperExt extends ItemDOMapper {
+
+	//插入单个商品
+	int insertItemSelective(ItemDO item);
+	
+	public List<ItemDO> selectBatchIds(List<Long> idList);
+
+	public void updateBatchById(List<ItemDO> itemDOList);
 
     Integer queryItemsCount(ItemQueryVO itemQueryVO);
 	
-	List<ItemDO> queryItems(ItemQueryVO itemQueryVO);
+	List<ItemDTO> queryItems(ItemQueryVO itemQueryVO);
 	
+	ItemDTO queryItemById(Long id);
 	/**
 	 * 2017-04-04, jc
 	 * query all itemCode and id
@@ -39,4 +50,8 @@ public interface ItemDOMapperExt extends ItemDOMapper{
 	Integer sumNewItemNumByMonth(Integer months);
 	
 	ItemDO queryItemByItemCode(String itemCode);
+
+    ItemDO selectByItemCode(String itemCode);
+	
+	void updateByIdSelective(ItemDO itemQueryVO);
 }

@@ -17,9 +17,11 @@ public class InventoryInoutDO {
 
     private String shelfNo;
 
+    private String remark;
+
     private Long quantity;
 
-    private Byte operatorType;
+    private Integer operatorType;
 
     private Date gmtCreate;
 
@@ -87,6 +89,14 @@ public class InventoryInoutDO {
         this.shelfNo = shelfNo == null ? null : shelfNo.trim();
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
     public Long getQuantity() {
         return quantity;
     }
@@ -95,11 +105,11 @@ public class InventoryInoutDO {
         this.quantity = quantity;
     }
 
-    public Byte getOperatorType() {
+    public Integer getOperatorType() {
         return operatorType;
     }
 
-    public void setOperatorType(Byte operatorType) {
+    public void setOperatorType(Integer operatorType) {
         this.operatorType = operatorType;
     }
 

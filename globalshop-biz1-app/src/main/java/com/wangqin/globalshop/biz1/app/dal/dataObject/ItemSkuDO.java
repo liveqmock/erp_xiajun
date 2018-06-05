@@ -51,6 +51,8 @@ public class ItemSkuDO {
 
     private String model;
 
+    private Integer status;
+
     private Boolean saleType;
 
     private Double salePrice;
@@ -257,6 +259,14 @@ public class ItemSkuDO {
 
     public void setModel(String model) {
         this.model = model == null ? null : model.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Boolean getSaleType() {

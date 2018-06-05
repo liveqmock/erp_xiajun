@@ -17,6 +17,10 @@ public class LogisticCompanyDO {
 
     private String codeInYouzan;
 
+    private String nameInKuaidi100;
+
+    private String codeInKuaidi100;
+
     private String nameInPdd;
 
     private String codeInPdd;
@@ -89,6 +93,22 @@ public class LogisticCompanyDO {
 
     public void setCodeInYouzan(String codeInYouzan) {
         this.codeInYouzan = codeInYouzan == null ? null : codeInYouzan.trim();
+    }
+
+    public String getNameInKuaidi100() {
+        return nameInKuaidi100;
+    }
+
+    public void setNameInKuaidi100(String nameInKuaidi100) {
+        this.nameInKuaidi100 = nameInKuaidi100 == null ? null : nameInKuaidi100.trim();
+    }
+
+    public String getCodeInKuaidi100() {
+        return codeInKuaidi100;
+    }
+
+    public void setCodeInKuaidi100(String codeInKuaidi100) {
+        this.codeInKuaidi100 = codeInKuaidi100 == null ? null : codeInKuaidi100.trim();
     }
 
     public String getNameInPdd() {

@@ -33,7 +33,7 @@ public class ItemDO {
 
     private String brandName;
 
-    private Byte country;
+    private String country;
 
     private Byte currency;
 
@@ -63,11 +63,15 @@ public class ItemDO {
 
     private Byte isSale;
 
+    private Integer saleOnYouzan;
+
+    private Integer thirdSale;
+
     private Byte wxisSale;
 
     private Byte isFind;
 
-    private Byte status;
+    private Integer status;
 
     private String spec;
 
@@ -207,12 +211,12 @@ public class ItemDO {
         this.brandName = brandName == null ? null : brandName.trim();
     }
 
-    public Byte getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(Byte country) {
-        this.country = country;
+    public void setCountry(String country) {
+        this.country = country == null ? null : country.trim();
     }
 
     public Byte getCurrency() {
@@ -327,6 +331,22 @@ public class ItemDO {
         this.isSale = isSale;
     }
 
+    public Integer getSaleOnYouzan() {
+        return saleOnYouzan;
+    }
+
+    public void setSaleOnYouzan(Integer saleOnYouzan) {
+        this.saleOnYouzan = saleOnYouzan;
+    }
+
+    public Integer getThirdSale() {
+        return thirdSale;
+    }
+
+    public void setThirdSale(Integer thirdSale) {
+        this.thirdSale = thirdSale;
+    }
+
     public Byte getWxisSale() {
         return wxisSale;
     }
@@ -343,11 +363,11 @@ public class ItemDO {
         this.isFind = isFind;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

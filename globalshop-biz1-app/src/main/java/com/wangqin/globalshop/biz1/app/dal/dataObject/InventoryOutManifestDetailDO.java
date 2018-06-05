@@ -7,9 +7,9 @@ public class InventoryOutManifestDetailDO {
 
     private String inventoryOutNo;
 
-    private Long itemId;
+    private String itemCode;
 
-    private Integer quantity;
+    private Long quantity;
 
     private String itemName;
 
@@ -51,19 +51,19 @@ public class InventoryOutManifestDetailDO {
         this.inventoryOutNo = inventoryOutNo == null ? null : inventoryOutNo.trim();
     }
 
-    public Long getItemId() {
-        return itemId;
+    public String getItemCode() {
+        return itemCode;
     }
 
-    public void setItemId(Long itemId) {
-        this.itemId = itemId;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode == null ? null : itemCode.trim();
     }
 
-    public Integer getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 

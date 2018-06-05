@@ -1,13 +1,21 @@
 package com.wangqin.globalshop.web.filter;
 
-import com.wangqin.globalshop.common.utils.LogWorker;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import java.io.IOException;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+
+import org.springframework.stereotype.Component;
+
+import com.wangqin.globalshop.common.utils.LogWorker;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by Patrick on 2018/5/15.

@@ -17,7 +17,7 @@
     <result column="main_pic" property="mainPic" jdbcType="VARCHAR" />
     <result column="brand_no" property="brandNo" jdbcType="VARCHAR" />
     <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
-    <result column="country" property="country" jdbcType="TINYINT" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
     <result column="currency" property="currency" jdbcType="TINYINT" />
     <result column="origin" property="origin" jdbcType="VARCHAR" />
     <result column="freight" property="freight" jdbcType="DOUBLE" />
@@ -32,9 +32,11 @@
     <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
     <result column="booking_date" property="bookingDate" jdbcType="TIMESTAMP" />
     <result column="is_sale" property="isSale" jdbcType="TINYINT" />
+    <result column="sale_on_youzan" property="saleOnYouzan" jdbcType="INTEGER" />
+    <result column="third_sale" property="thirdSale" jdbcType="INTEGER" />
     <result column="wxis_sale" property="wxisSale" jdbcType="TINYINT" />
     <result column="is_find" property="isFind" jdbcType="TINYINT" />
-    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="spec" property="spec" jdbcType="VARCHAR" />
     <result column="model" property="model" jdbcType="VARCHAR" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
@@ -51,8 +53,9 @@
     id, item_code, company_no, category_code, qr_code_url, video, subtitle, item_name, 
     en_name, item_short, category_name, sale_type, main_pic, brand_no, brand_name, country, 
     currency, origin, freight, weight, logistic_type, price_range, unit, source, promotion, 
-    id_card, start_date, end_date, booking_date, is_sale, wxis_sale, is_find, status, 
-    spec, model, gmt_modify, gmt_create, is_del, creator, modifier
+    id_card, start_date, end_date, booking_date, is_sale, sale_on_youzan, third_sale, 
+    wxis_sale, is_find, status, spec, model, gmt_modify, gmt_create, is_del, creator, 
+    modifier
   </sql>
   <sql id="Blob_Column_List" >
     desc, detail
@@ -83,26 +86,26 @@
       price_range, unit, source, 
       promotion, id_card, start_date, 
       end_date, booking_date, is_sale, 
-      wxis_sale, is_find, status, 
-      spec, model, gmt_modify, 
-      gmt_create, is_del, creator, 
-      modifier, desc, detail
-      )
+      sale_on_youzan, third_sale, wxis_sale, 
+      is_find, status, spec, 
+      model, gmt_modify, gmt_create, 
+      is_del, creator, modifier, 
+      desc, detail)
     values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{categoryCode,jdbcType=VARCHAR}, #{qrCodeUrl,jdbcType=VARCHAR}, #{video,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{enName,jdbcType=VARCHAR}, 
       #{itemShort,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, #{saleType,jdbcType=TINYINT}, 
       #{mainPic,jdbcType=VARCHAR}, #{brandNo,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
-      #{country,jdbcType=TINYINT}, #{currency,jdbcType=TINYINT}, #{origin,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{currency,jdbcType=TINYINT}, #{origin,jdbcType=VARCHAR}, 
       #{freight,jdbcType=DOUBLE}, #{weight,jdbcType=DOUBLE}, #{logisticType,jdbcType=TINYINT}, 
       #{priceRange,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
       #{promotion,jdbcType=VARCHAR}, #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, 
       #{endDate,jdbcType=TIMESTAMP}, #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, 
-      #{wxisSale,jdbcType=TINYINT}, #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{desc,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR}
-      )
+      #{saleOnYouzan,jdbcType=INTEGER}, #{thirdSale,jdbcType=INTEGER}, #{wxisSale,jdbcType=TINYINT}, 
+      #{isFind,jdbcType=TINYINT}, #{status,jdbcType=INTEGER}, #{spec,jdbcType=VARCHAR}, 
+      #{model,jdbcType=VARCHAR}, #{gmtModify,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{desc,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -198,6 +201,12 @@
       <if test="isSale != null" >
         is_sale,
       </if>
+      <if test="saleOnYouzan != null" >
+        sale_on_youzan,
+      </if>
+      <if test="thirdSale != null" >
+        third_sale,
+      </if>
       <if test="wxisSale != null" >
         wxis_sale,
       </if>
@@ -280,7 +289,7 @@
         #{brandName,jdbcType=VARCHAR},
       </if>
       <if test="country != null" >
-        #{country,jdbcType=TINYINT},
+        #{country,jdbcType=VARCHAR},
       </if>
       <if test="currency != null" >
         #{currency,jdbcType=TINYINT},
@@ -324,6 +333,12 @@
       <if test="isSale != null" >
         #{isSale,jdbcType=TINYINT},
       </if>
+      <if test="saleOnYouzan != null" >
+        #{saleOnYouzan,jdbcType=INTEGER},
+      </if>
+      <if test="thirdSale != null" >
+        #{thirdSale,jdbcType=INTEGER},
+      </if>
       <if test="wxisSale != null" >
         #{wxisSale,jdbcType=TINYINT},
       </if>
@@ -331,7 +346,7 @@
         #{isFind,jdbcType=TINYINT},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=TINYINT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="spec != null" >
         #{spec,jdbcType=VARCHAR},
@@ -408,7 +423,7 @@
         brand_name = #{brandName,jdbcType=VARCHAR},
       </if>
       <if test="country != null" >
-        country = #{country,jdbcType=TINYINT},
+        country = #{country,jdbcType=VARCHAR},
       </if>
       <if test="currency != null" >
         currency = #{currency,jdbcType=TINYINT},
@@ -452,6 +467,12 @@
       <if test="isSale != null" >
         is_sale = #{isSale,jdbcType=TINYINT},
       </if>
+      <if test="saleOnYouzan != null" >
+        sale_on_youzan = #{saleOnYouzan,jdbcType=INTEGER},
+      </if>
+      <if test="thirdSale != null" >
+        third_sale = #{thirdSale,jdbcType=INTEGER},
+      </if>
       <if test="wxisSale != null" >
         wxis_sale = #{wxisSale,jdbcType=TINYINT},
       </if>
@@ -459,7 +480,7 @@
         is_find = #{isFind,jdbcType=TINYINT},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="spec != null" >
         spec = #{spec,jdbcType=VARCHAR},
@@ -507,7 +528,7 @@
       main_pic = #{mainPic,jdbcType=VARCHAR},
       brand_no = #{brandNo,jdbcType=VARCHAR},
       brand_name = #{brandName,jdbcType=VARCHAR},
-      country = #{country,jdbcType=TINYINT},
+      country = #{country,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=TINYINT},
       origin = #{origin,jdbcType=VARCHAR},
       freight = #{freight,jdbcType=DOUBLE},
@@ -522,9 +543,11 @@
       end_date = #{endDate,jdbcType=TIMESTAMP},
       booking_date = #{bookingDate,jdbcType=TIMESTAMP},
       is_sale = #{isSale,jdbcType=TINYINT},
+      sale_on_youzan = #{saleOnYouzan,jdbcType=INTEGER},
+      third_sale = #{thirdSale,jdbcType=INTEGER},
       wxis_sale = #{wxisSale,jdbcType=TINYINT},
       is_find = #{isFind,jdbcType=TINYINT},
-      status = #{status,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       spec = #{spec,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
@@ -552,7 +575,7 @@
       main_pic = #{mainPic,jdbcType=VARCHAR},
       brand_no = #{brandNo,jdbcType=VARCHAR},
       brand_name = #{brandName,jdbcType=VARCHAR},
-      country = #{country,jdbcType=TINYINT},
+      country = #{country,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=TINYINT},
       origin = #{origin,jdbcType=VARCHAR},
       freight = #{freight,jdbcType=DOUBLE},
@@ -567,9 +590,11 @@
       end_date = #{endDate,jdbcType=TIMESTAMP},
       booking_date = #{bookingDate,jdbcType=TIMESTAMP},
       is_sale = #{isSale,jdbcType=TINYINT},
+      sale_on_youzan = #{saleOnYouzan,jdbcType=INTEGER},
+      third_sale = #{thirdSale,jdbcType=INTEGER},
       wxis_sale = #{wxisSale,jdbcType=TINYINT},
       is_find = #{isFind,jdbcType=TINYINT},
-      status = #{status,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       spec = #{spec,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},

@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
     <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-    <result column="platform_type" property="platformType" jdbcType="TINYINT" />
+    <result column="platform_type" property="platformType" jdbcType="INTEGER" />
     <result column="channel_item_sku_code" property="channelItemSkuCode" jdbcType="VARCHAR" />
     <result column="channel_item_code" property="channelItemCode" jdbcType="VARCHAR" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
@@ -37,7 +37,7 @@
       is_del, gmt_create, gmt_modify, 
       creator, modifier)
     values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{platformType,jdbcType=TINYINT}, #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, 
+      #{platformType,jdbcType=INTEGER}, #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, 
       #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
@@ -88,7 +88,7 @@
         #{skuCode,jdbcType=VARCHAR},
       </if>
       <if test="platformType != null" >
-        #{platformType,jdbcType=TINYINT},
+        #{platformType,jdbcType=INTEGER},
       </if>
       <if test="channelItemSkuCode != null" >
         #{channelItemSkuCode,jdbcType=VARCHAR},
@@ -123,7 +123,7 @@
         sku_code = #{skuCode,jdbcType=VARCHAR},
       </if>
       <if test="platformType != null" >
-        platform_type = #{platformType,jdbcType=TINYINT},
+        platform_type = #{platformType,jdbcType=INTEGER},
       </if>
       <if test="channelItemSkuCode != null" >
         channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
@@ -153,7 +153,7 @@
     update channel_listing_item_sku
     set item_code = #{itemCode,jdbcType=VARCHAR},
       sku_code = #{skuCode,jdbcType=VARCHAR},
-      platform_type = #{platformType,jdbcType=TINYINT},
+      platform_type = #{platformType,jdbcType=INTEGER},
       channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
       channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
       is_del = #{isDel,jdbcType=BIT},

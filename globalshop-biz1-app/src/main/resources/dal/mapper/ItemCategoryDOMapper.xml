@@ -7,18 +7,18 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="p_code" property="pCode" jdbcType="VARCHAR" />
     <result column="root_code" property="rootCode" jdbcType="VARCHAR" />
-    <result column="seq" property="seq" jdbcType="TINYINT" />
-    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="all_path" property="allPath" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="TINYINT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="is_del" property="isDel" jdbcType="INTEGER" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, category_code, name, p_code, root_code, seq, level, all_path, status, gmt_create, 
+    id, category_code, name, p_code, root_code, seq, level, status, all_path, gmt_create, 
     gmt_modify, is_del, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -37,13 +37,13 @@
     </selectKey>
     insert into item_category (id, category_code, name, 
       p_code, root_code, seq, 
-      level, all_path, status, 
+      level, status, all_path, 
       gmt_create, gmt_modify, is_del, 
       creator, modifier)
     values (#{id,jdbcType=BIGINT}, #{categoryCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{pCode,jdbcType=VARCHAR}, #{rootCode,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, 
-      #{level,jdbcType=TINYINT}, #{allPath,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
+      #{pCode,jdbcType=VARCHAR}, #{rootCode,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, 
+      #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{allPath,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" >
@@ -71,11 +71,11 @@
       <if test="level != null" >
         level,
       </if>
-      <if test="allPath != null" >
-        all_path,
-      </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="allPath != null" >
+        all_path,
       </if>
       <if test="gmtCreate != null" >
         gmt_create,
@@ -108,16 +108,16 @@
         #{rootCode,jdbcType=VARCHAR},
       </if>
       <if test="seq != null" >
-        #{seq,jdbcType=TINYINT},
+        #{seq,jdbcType=INTEGER},
       </if>
       <if test="level != null" >
-        #{level,jdbcType=TINYINT},
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="allPath != null" >
         #{allPath,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=TINYINT},
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -126,7 +126,7 @@
         #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
+        #{isDel,jdbcType=INTEGER},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -152,16 +152,16 @@
         root_code = #{rootCode,jdbcType=VARCHAR},
       </if>
       <if test="seq != null" >
-        seq = #{seq,jdbcType=TINYINT},
+        seq = #{seq,jdbcType=INTEGER},
       </if>
       <if test="level != null" >
-        level = #{level,jdbcType=TINYINT},
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="allPath != null" >
         all_path = #{allPath,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
       </if>
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -170,7 +170,7 @@
         gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
+        is_del = #{isDel,jdbcType=INTEGER},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -187,13 +187,13 @@
       name = #{name,jdbcType=VARCHAR},
       p_code = #{pCode,jdbcType=VARCHAR},
       root_code = #{rootCode,jdbcType=VARCHAR},
-      seq = #{seq,jdbcType=TINYINT},
-      level = #{level,jdbcType=TINYINT},
+      seq = #{seq,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
       all_path = #{allPath,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
+      is_del = #{isDel,jdbcType=INTEGER},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

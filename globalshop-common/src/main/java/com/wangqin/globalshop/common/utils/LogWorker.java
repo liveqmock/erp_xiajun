@@ -1,7 +1,8 @@
 package com.wangqin.globalshop.common.utils;
 
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * @author  patrick

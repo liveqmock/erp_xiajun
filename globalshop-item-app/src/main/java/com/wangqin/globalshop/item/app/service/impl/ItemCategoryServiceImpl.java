@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemCategoryMapperExt;
+import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 import com.wangqin.globalshop.common.utils.Tree;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 
@@ -30,10 +31,13 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 		return categoryMapper.selectAll();
 	}
 	
+	//插入类目
 	@Override
-	 public void deleteByPrimaryKey(Long id) {
-		 categoryMapper.deleteByPrimaryKey(id);
-	 }
+	public void insertCategorySelective(ItemCategoryDO category) {
+    	category.setCreator("admin");
+    	category.setModifier("admin");
+    	categoryMapper.insertCategorySelective(category);
+    }
 
 	
 
@@ -59,7 +63,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 
 	@Override
 	public void insert(ItemCategoryDO category) {
-		categoryMapper.insert(category);		
+		categoryMapper.insertSelective(category);	
 	}
 
 	@Override
@@ -74,10 +78,13 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 	@Override
 	public void update(ItemCategoryDO category) {
 		// TODO Auto-generated method stub
-		categoryMapper.updateByPrimaryKey(category);
+		categoryMapper.updateByPrimaryKeySelective(category);
 	}
 
-	
+	@Override
+	public ItemCategoryDO selectByPrimaryKey(Long id) {
+		return categoryMapper.selectByPrimaryKey(id);
+	}
 
 	
 
@@ -107,32 +114,48 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 	}
 */
 	
+	
 	@Override
-	public List<ItemCategoryDO> tree() {
-	/*	List<ItemCategoryDO> cates = selectAll();
-		List<ItemCategoryDO> cateListlevel1 = new ArrayList<>();
+	public List<ItemCategoryDTO> selectAllDTO() {
+		 return categoryMapper.selectAllDTO();
+	 }
+	
+	/**
+	 * 类目树
+	 */
+	@Override
+	public List<ItemCategoryDTO> tree() {
+		List<ItemCategoryDTO> cates = selectAllDTO();
+		List<ItemCategoryDTO> cateListlevel1 = new ArrayList<>();
 		if(cates!=null&&!cates.isEmpty()){
-			Map<Long,ItemCategoryDO> categoryLevel1 = new HashMap<>();
-			Map<Long,ItemCategoryDO> categoryLevel2 = new HashMap<>();
+			Map<String,ItemCategoryDTO> categoryLevel1 = new HashMap<>();
+			Map<String,ItemCategoryDTO> categoryLevel2 = new HashMap<>();
 			cates.forEach(cate->{
 				if(cate.getLevel()==1){
-					categoryLevel1.put(cate.getId(), cate);
+					categoryLevel1.put(cate.getCategoryCode(), cate);
 					cateListlevel1.add(cate);
 				}else if(cate.getLevel()==2){
-					categoryLevel2.put(cate.getId(), cate);
+					categoryLevel2.put(cate.getCategoryCode(), cate);
 				}
 			});
 			cates.forEach(cate->{
 				if(cate.getLevel()==3){
-					ItemCategoryDO category = categoryLevel2.get(cate.getPid());
+					ItemCategoryDTO category = categoryLevel2.get(cate.getpCode());
 					category.getChildren().add(cate);
 				} else if(cate.getLevel()==2){
-					ItemCategoryDO category = categoryLevel1.get(cate.getPid());
+					ItemCategoryDTO category = categoryLevel1.get(cate.getpCode());
 					category.getChildren().add(cate);
 				}
 			});
 		}
-		return cateListlevel1;*/
-		return null;
+
+		return cateListlevel1;
+	}
+
+	@Override
+	public void deleteById(ItemCategoryDO category) {
+		category.setIsDel(1);
+		categoryMapper.updateByPrimaryKeySelective(category);
+		
 	}
 }

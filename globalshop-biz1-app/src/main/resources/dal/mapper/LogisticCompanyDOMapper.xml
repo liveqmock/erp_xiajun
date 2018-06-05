@@ -9,6 +9,8 @@
     <result column="code_in_jd" property="codeInJd" jdbcType="VARCHAR" />
     <result column="name_in_youzan" property="nameInYouzan" jdbcType="VARCHAR" />
     <result column="code_in_youzan" property="codeInYouzan" jdbcType="VARCHAR" />
+    <result column="name_in_kuaidi100" property="nameInKuaidi100" jdbcType="VARCHAR" />
+    <result column="code_in_kuaidi100" property="codeInKuaidi100" jdbcType="VARCHAR" />
     <result column="name_in_pdd" property="nameInPdd" jdbcType="VARCHAR" />
     <result column="code_in_pdd" property="codeInPdd" jdbcType="VARCHAR" />
     <result column="name_in_taobao" property="nameInTaobao" jdbcType="VARCHAR" />
@@ -20,9 +22,9 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_pdd, 
-    code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, 
-    modifier
+    id, name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, 
+    code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, 
+    gmt_create, gmt_modify, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -40,16 +42,18 @@
     </selectKey>
     insert into logistic_company (id, name, code, 
       name_in_jd, code_in_jd, name_in_youzan, 
-      code_in_youzan, name_in_pdd, code_in_pdd, 
-      name_in_taobao, code_in_taobao, is_del, 
-      gmt_create, gmt_modify, creator, 
-      modifier)
+      code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, 
+      name_in_pdd, code_in_pdd, name_in_taobao, 
+      code_in_taobao, is_del, gmt_create, 
+      gmt_modify, creator, modifier
+      )
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{nameInJd,jdbcType=VARCHAR}, #{codeInJd,jdbcType=VARCHAR}, #{nameInYouzan,jdbcType=VARCHAR}, 
-      #{codeInYouzan,jdbcType=VARCHAR}, #{nameInPdd,jdbcType=VARCHAR}, #{codeInPdd,jdbcType=VARCHAR}, 
-      #{nameInTaobao,jdbcType=VARCHAR}, #{codeInTaobao,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+      #{codeInYouzan,jdbcType=VARCHAR}, #{nameInKuaidi100,jdbcType=VARCHAR}, #{codeInKuaidi100,jdbcType=VARCHAR}, 
+      #{nameInPdd,jdbcType=VARCHAR}, #{codeInPdd,jdbcType=VARCHAR}, #{nameInTaobao,jdbcType=VARCHAR}, 
+      #{codeInTaobao,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -75,6 +79,12 @@
       </if>
       <if test="codeInYouzan != null" >
         code_in_youzan,
+      </if>
+      <if test="nameInKuaidi100 != null" >
+        name_in_kuaidi100,
+      </if>
+      <if test="codeInKuaidi100 != null" >
+        code_in_kuaidi100,
       </if>
       <if test="nameInPdd != null" >
         name_in_pdd,
@@ -123,6 +133,12 @@
       </if>
       <if test="codeInYouzan != null" >
         #{codeInYouzan,jdbcType=VARCHAR},
+      </if>
+      <if test="nameInKuaidi100 != null" >
+        #{nameInKuaidi100,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInKuaidi100 != null" >
+        #{codeInKuaidi100,jdbcType=VARCHAR},
       </if>
       <if test="nameInPdd != null" >
         #{nameInPdd,jdbcType=VARCHAR},
@@ -174,6 +190,12 @@
       <if test="codeInYouzan != null" >
         code_in_youzan = #{codeInYouzan,jdbcType=VARCHAR},
       </if>
+      <if test="nameInKuaidi100 != null" >
+        name_in_kuaidi100 = #{nameInKuaidi100,jdbcType=VARCHAR},
+      </if>
+      <if test="codeInKuaidi100 != null" >
+        code_in_kuaidi100 = #{codeInKuaidi100,jdbcType=VARCHAR},
+      </if>
       <if test="nameInPdd != null" >
         name_in_pdd = #{nameInPdd,jdbcType=VARCHAR},
       </if>
@@ -212,6 +234,8 @@
       code_in_jd = #{codeInJd,jdbcType=VARCHAR},
       name_in_youzan = #{nameInYouzan,jdbcType=VARCHAR},
       code_in_youzan = #{codeInYouzan,jdbcType=VARCHAR},
+      name_in_kuaidi100 = #{nameInKuaidi100,jdbcType=VARCHAR},
+      code_in_kuaidi100 = #{codeInKuaidi100,jdbcType=VARCHAR},
       name_in_pdd = #{nameInPdd,jdbcType=VARCHAR},
       code_in_pdd = #{codeInPdd,jdbcType=VARCHAR},
       name_in_taobao = #{nameInTaobao,jdbcType=VARCHAR},
