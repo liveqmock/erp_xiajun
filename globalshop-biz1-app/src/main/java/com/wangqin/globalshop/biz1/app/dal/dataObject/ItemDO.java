@@ -89,7 +89,7 @@ public class ItemDO extends BaseModel {
 
     private String modifier;
 
-    private String desc;
+    private String remark;
 
     private String detail;
 
@@ -437,12 +437,12 @@ public class ItemDO extends BaseModel {
         this.modifier = modifier == null ? null : modifier.trim();
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public String getDetail() {
