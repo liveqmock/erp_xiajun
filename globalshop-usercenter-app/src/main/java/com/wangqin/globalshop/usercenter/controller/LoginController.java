@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginController extends BaseController {
 
     public static final String SESSION_ID = "SessionID";
+
+    public static final String COMPANY_NO = "CompanyNO_";
+
     private static long  TIMEOUT=30*60*1000;
     @Autowired
     IUserService userService;
@@ -104,7 +107,9 @@ public class LoginController extends BaseController {
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isNotBlank(sessionId)) {
                 loginCache.putEx(sessionId, username, TIMEOUT);
+                loginCache.putEx(COMPANY_NO+sessionId,user.getCompanyNo(),TIMEOUT);
                 AppUtil.setLoginUserId(username);
+                AppUtil.setCompanyNo(user.getCompanyNo());
                 return renderSuccess();
             }else {
                 return renderError("sessionId不存在");
@@ -148,6 +153,9 @@ public class LoginController extends BaseController {
         String sessionId = (String) request.getAttribute(SESSION_ID);
         loginCache.remove(sessionId);
         AppUtil.removeLoginUserId();
+
+        loginCache.remove(COMPANY_NO+sessionId);
+        AppUtil.removeCompanyNo();
         return renderSuccess();
     }
 
