@@ -240,7 +240,7 @@ public class ItemController  {
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));
 			newItem.setItemCode(RandomUtils.getTimeRandom());
 			
-	        newItem.setDesc(item.getRemark());
+	        newItem.setRemark(item.getRemark());
 	        newItem.setCompanyNo("c12");     
 	        newItem.setMainPic(item.getMainPic());
 	        iItemService.insertItemSelective(newItem);
@@ -487,7 +487,7 @@ public class ItemController  {
 			CountryDO countryDO = new CountryDO();
 			countryDO.setId(item.getCountry());
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));	
-	        newItem.setDesc(item.getRemark());   
+	        newItem.setRemark(item.getRemark());
 	        newItem.setMainPic(item.getMainPic());
 			iItemService.updateByPrimaryKeySelective(newItem);
 			/*

@@ -67,7 +67,7 @@ public class ItemSkuDO extends BaseModel {
 
     private Boolean isDel;
 
-    private String desc;
+    private String remark;
 
     public Long getId() {
         return id;
@@ -325,11 +325,11 @@ public class ItemSkuDO extends BaseModel {
         this.isDel = isDel;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }

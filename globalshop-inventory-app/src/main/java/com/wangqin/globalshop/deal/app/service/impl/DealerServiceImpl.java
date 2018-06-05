@@ -25,10 +25,7 @@ public class DealerServiceImpl implements IDealerService {
     @Override
     public void insert(DealerDO seller) {
         seller.setCompanyNo("1231");
-        seller.setCreator("asdasd");
-        seller.setGmtCreate(new Date());
-        seller.setGmtModify(new Date());
-        seller.setModifier("12312");
+        seller.init();
         mapper.insertSelective(seller);
     }
 }

@@ -6,28 +6,27 @@ package com.wangqin.globalshop.biz1.app.dal.dataVo;
  * @author liuhui
  *
  */
-public class InventoryQueryVO extends PageQueryVO {
-
-	
+public class InventoryQueryVO  {
+	/**配合前端*/
+	private Long warehouseid;
+	/**配合前端*/
 	private String warehouseNo;
-	
-	private String skuCode;
-	
-	private String upc;
-	
-	private String itemName;
-
-	private Integer operatorType;
-	
-	private String shelfNo;
-	
-	private String orderBy;
-	
-	private String sort;
-	
-	private String buySite;
-	
 	private String companyNo;
+	private String skuCode;
+	private String upc;
+	private String itemName;
+	private String itemCode;
+	private String positionNo;
+	private String buySite;
+	private Integer pageIndex;
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
 
 	public String getCompanyNo() {
 		return companyNo;
@@ -37,9 +36,13 @@ public class InventoryQueryVO extends PageQueryVO {
 		this.companyNo = companyNo;
 	}
 
-    
+	public Long getWarehouseid() {
+		return warehouseid;
+	}
 
-
+	public void setWarehouseid(Long warehouseid) {
+		this.warehouseid = warehouseid;
+	}
 
 	public String getWarehouseNo() {
 		return warehouseNo;
@@ -48,24 +51,6 @@ public class InventoryQueryVO extends PageQueryVO {
 	public void setWarehouseNo(String warehouseNo) {
 		this.warehouseNo = warehouseNo;
 	}
-
-	public String getShelfNo() {
-		return shelfNo;
-	}
-
-	public void setShelfNo(String shelfNo) {
-		this.shelfNo = shelfNo;
-	}
-
-	public Integer getOperatorType() {
-		return operatorType;
-	}
-
-	public void setOperatorType(Integer operatorType) {
-		this.operatorType = operatorType;
-	}
-
-
 
 	public String getSkuCode() {
 		return skuCode;
@@ -91,20 +76,12 @@ public class InventoryQueryVO extends PageQueryVO {
 		this.itemName = itemName;
 	}
 
-	public String getOrderBy() {
-		return orderBy;
+	public String getPositionNo() {
+		return positionNo;
 	}
 
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
-	}
-
-	public String getSort() {
-		return sort;
-	}
-
-	public void setSort(String sort) {
-		this.sort = sort;
+	public void setPositionNo(String positionNo) {
+		this.positionNo = positionNo;
 	}
 
 	public String getBuySite() {
@@ -115,6 +92,11 @@ public class InventoryQueryVO extends PageQueryVO {
 		this.buySite = buySite;
 	}
 
+	public Integer getPageIndex() {
+		return pageIndex;
+	}
 
-	
+	public void setPageIndex(Integer pageIndex) {
+		this.pageIndex = pageIndex;
+	}
 }

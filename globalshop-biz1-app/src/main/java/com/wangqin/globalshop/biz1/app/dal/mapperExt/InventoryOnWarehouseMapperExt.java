@@ -2,8 +2,8 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOnWareHouseDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -65,8 +65,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 
 	Integer queryInventoryAreaCount(InventoryQueryVO inventoryQueryVO);
 
-	List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
-	
+
 	/**
 	 * 
 	 * @param id 主键
@@ -112,6 +111,6 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 
     InventoryOnWareHouseDO selectById(Long inventoryAreaId);
     /**new-------------------------------------------------------------------*/
-
+	List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
 	InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(@Param("itemCode")String itemCode, @Param("skuCode")String skuCode, @Param("warehouseNo")String warehouseNo);
 }

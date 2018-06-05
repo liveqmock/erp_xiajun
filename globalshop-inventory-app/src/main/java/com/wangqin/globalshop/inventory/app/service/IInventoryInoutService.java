@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.inventory.app.service;
 
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 
 import java.util.List;
@@ -12,5 +12,5 @@ import java.util.List;
 public interface IInventoryInoutService {
     Integer queryInventoryInoutCount(InventoryQueryVO inventoryQueryVO);
 
-    List<InventoryInoutVO> queryInventoryInouts(InventoryQueryVO inventoryQueryVO);
+    List<InventoryInoutDO> queryInventoryInouts(InventoryQueryVO inventoryQueryVO);
 }
