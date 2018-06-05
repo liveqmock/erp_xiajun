@@ -20,7 +20,7 @@ public class ScaleTypeService implements IScaleTypeService{
 	
 	@Autowired
 	private ItemScaleMapperExt itemScaleMapperExt;
-	
+	//这里暂时作废
 	@Override
 	public List<ScaleType> scaleTypeList() {
 		List<ScaleType> scaleTypeList = itemScaleTypeMapperExt.queryAllScaleType();
