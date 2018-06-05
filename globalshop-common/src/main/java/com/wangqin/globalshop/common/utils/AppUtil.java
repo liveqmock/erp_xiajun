@@ -12,6 +12,24 @@ public class AppUtil {
 
     private static ThreadLocal<String>  CURRENT_ACCOUNT_USERNAME = new ThreadLocal<String>();
 
+
+    //存储当前用户的companyNo
+    private static ThreadLocal<String> CURRENT_COMPANY_NO          = new ThreadLocal<String>();
+
+    public static String getCompanyNo() {
+        return CURRENT_COMPANY_NO.get();
+    }
+    public static void setCompanyNo(String currentCompanyNo) {
+        CURRENT_COMPANY_NO.set(currentCompanyNo);
+    }
+
+    /**
+     * 删除当前登录用户的userId，在请求处理完成之后删除，一般不要随便调用这个方法
+     */
+    public static void removeCompanyNo() {
+        CURRENT_COMPANY_NO.remove();
+    }
+
     /**
      * 取得当前登录者的userId，未登录鉴权请求无法取到
      * 
