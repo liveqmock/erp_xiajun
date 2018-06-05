@@ -68,21 +68,21 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     public int deleteById(Long id) {
-        return 0;
+        return organizationMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public int updateSelectiveById(AuthOrganizationDO organization) {
-        return 0;
+        return organizationMapper.updateByPrimaryKey(organization);
     }
 
     @Override
     public int insert(AuthOrganizationDO organization) {
-        return 0;
+        return organizationMapper.insert(organization);
     }
 
     @Override
     public AuthOrganizationDO selectById(Long id) {
-        return null;
+        return organizationMapper.selectByPrimaryKey(id);
     }
 }
