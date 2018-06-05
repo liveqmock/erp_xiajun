@@ -230,11 +230,9 @@
      SELECT
         <include refid="Base_Column_List" />
         FROM
-            item_sku T1
+            item_sku
         where
-          <if test=" skuCode!= null">
-            T1.sku_code = #{skuCode}
-          </if>
+           sku_code = #{skuCode}
 </select>
 
 

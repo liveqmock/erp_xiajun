@@ -3,6 +3,7 @@ package com.wangqin.globalshop.app;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import org.junit.Test;
@@ -64,6 +65,22 @@ public class AppTest
                 orderDO.setSkuCode("123");
                 orderDO.setOrderNo("111");
                 System.out.println(JSON.toJSON(orderDO));
+
+        }
+        @Test
+        public void testGetJson() {
+                WarehouseDO warehouseDO = new WarehouseDO();
+                warehouseDO.setCompanyNo("4645");
+                warehouseDO.setWarehouseNo("44447897797978");
+                warehouseDO.setAddress("qweqwe");
+                warehouseDO.setContactPerson("Fffwess");
+                warehouseDO.setCreator("CZG");
+                warehouseDO.setDeliveryPriority(456);
+                warehouseDO.setGmtCreate(new Date());
+                warehouseDO.setGmtModify(new Date());
+                warehouseDO.setIsDel(false);
+                warehouseDO.setModifier("asdasdasd");
+                System.out.println(JSON.toJSON(warehouseDO));
 
         }
 }
