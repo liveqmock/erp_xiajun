@@ -157,9 +157,28 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
         AuthUserDO authUserDO = authUserDOMapperExt.selectByLoginName(userNo);
 
 		ChannelAccountSo so = new ChannelAccountSo();
-		so.setType(ChannelType.YouZan.getValue());
 		so.setCompanyNo(authUserDO.getCompanyNo());
 		so.setStatus(0);
+		resultList = channelAccountDOMapper.queryPoList(so);
+		return resultList;
+	}
+
+	/**
+	 * 根据客户NO，和平台，获取所有该平台下的店铺
+	 * @param companyNo
+	 * @param channelType
+	 * @return
+	 */
+	@Override
+	public List<ChannelAccountDO> searchCAListByComNoChType(String companyNo,ChannelType channelType){
+		List<ChannelAccountDO> resultList = new ArrayList<>();
+		if(EasyUtil.isStringEmpty(companyNo)){
+			return resultList;
+		}
+		ChannelAccountSo so = new ChannelAccountSo();
+		so.setCompanyNo(companyNo);
+		so.setStatus(0);
+		so.setType(channelType.getValue());
 		resultList = channelAccountDOMapper.queryPoList(so);
 		return resultList;
 	}

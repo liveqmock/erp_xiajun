@@ -58,21 +58,10 @@ public class YouzanSynController extends BaseController {
 			//String s = itemIds.replace("&quot;", "\"");
 			//List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
 
-			List<Long> idList = new ArrayList<>();
-			String[] itemIdstr = itemIds.split(",");
-			for(String id : itemIdstr){
-				idList.add(Long.valueOf(id));
-			}
+			String s = itemIds.replace("&quot;", "\"");
+			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
 
-			ChannelAccountSo so = new ChannelAccountSo();
-			so.setType(ChannelType.YouZan.getValue());
-			//so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
-			so.setCompanyNo(1+"");
-			so.setStatus(0);
-			List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
-
-			//List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByUserNo(AppUtil.getLoginUserId());
-
+			List<ChannelAccountDO>	channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getCompanyNo(),ChannelType.YouZan);
 
 			if(channelAccountList == null || channelAccountList.size() < 1){
 				return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
@@ -114,25 +103,12 @@ public class YouzanSynController extends BaseController {
 		if (StringUtil.isNotEmpty(itemIds)) {
 			String s = itemIds.replace("&quot;", "\"");
 
-
-//			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
-//			});
-
-			List<Long> idList = new ArrayList<>();
-			String[] itemIdstr = itemIds.split(",");
-			for(String id : itemIdstr){
-				idList.add(Long.valueOf(id));
-			}
-
+			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+			});
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
 
-				ChannelAccountSo so = new ChannelAccountSo();
-				so.setType(ChannelType.YouZan.getValue());
-				//so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
-				so.setCompanyNo(1+"");
-				so.setStatus(0);
-				List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
+				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getCompanyNo(),ChannelType.YouZan);
 
 				if(channelAccountList == null || channelAccountList.size() < 1){
 					return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
@@ -178,27 +154,12 @@ public class YouzanSynController extends BaseController {
 		StringBuilder sb = new StringBuilder();
 		if (StringUtil.isNotEmpty(itemIds)) {
 			String s = itemIds.replace("&quot;", "\"");
-
-
-//			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
-//			});
-
-
-			List<Long> idList = new ArrayList<>();
-			String[] itemIdstr = itemIds.split(",");
-			for(String id : itemIdstr){
-				idList.add(Long.valueOf(id));
-			}
+			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+			});
 
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
-
-				ChannelAccountSo so = new ChannelAccountSo();
-				so.setType(ChannelType.YouZan.getValue());
-				//so.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
-				so.setCompanyNo(1+"");
-				so.setStatus(0);
-				List<ChannelAccountDO> channelAccountList = channelAccountService.queryPoList(so);
+				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getCompanyNo(),ChannelType.YouZan);
 
                 if(channelAccountList == null || channelAccountList.size() < 1){
 					sb.append("未找到第三方渠道，不存在或已停用");

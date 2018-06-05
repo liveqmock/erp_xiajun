@@ -71,6 +71,7 @@ public class ChannelFactory {
 	 * @return
 	 * @throws Exception
 	 */
+	@Deprecated
 	synchronized static public IChannelService getChannel(String companyNo, ChannelType channelType) throws Exception {
 		String keyStr = companyNo + "_" + channelType ;
 		IChannelService service = channelMap.get(keyStr);
