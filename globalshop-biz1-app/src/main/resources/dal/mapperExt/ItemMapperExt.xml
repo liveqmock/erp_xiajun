@@ -510,10 +510,10 @@
              and   <![CDATA[  T1.end_date = #{endDate} ]]>
             </if>
             <if test="hasInventory > 0">
-            	<![CDATA[and T3.inv > 0 ]]>
+            	and <![CDATA[ T3.inv > 0 ]]>
             </if>
             <if test="hasVirtualInventory > 0">
-           		<![CDATA[and T3.virtual_inv > 0 ]]>
+           	and	<![CDATA[ T3.virtual_inv > 0 ]]>
             </if>
 		order by T1.gmt_modify desc;
            
