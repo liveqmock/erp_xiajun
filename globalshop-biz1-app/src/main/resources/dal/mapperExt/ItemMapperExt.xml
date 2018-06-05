@@ -17,7 +17,7 @@
         T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
         main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
         en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
-        unit,source,promotion,T1.id_card AS idCard,T1.start_date AS startDate,
+        unit,source,promotion,T1.id_card AS idCard,T1.detail,T1.start_date AS startDate,
         T1.end_date AS endDate,T1.is_sale AS isSale,T1.logistic_type as logisticType,
         T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.creator AS userCreate,
         T1.modifier AS userModify 
@@ -260,6 +260,137 @@
     </trim>
   </insert>
   
+  <!-- 更新 -->
+   <update id="updateByIdSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
+    update item
+    <set >
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null" >
+        category_code = #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeUrl != null" >
+        qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="video != null" >
+        video = #{video,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="enName != null" >
+        en_name = #{enName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemShort != null" >
+        item_short = #{itemShort,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="saleType != null" >
+        sale_type = #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="mainPic != null" >
+        main_pic = #{mainPic,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNo != null" >
+        brand_no = #{brandNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=TINYINT},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=TINYINT},
+      </if>
+      <if test="origin != null" >
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null" >
+        freight = #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="logisticType != null" >
+        logistic_type = #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="priceRange != null" >
+        price_range = #{priceRange,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="promotion != null" >
+        promotion = #{promotion,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=TINYINT},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bookingDate != null" >
+        booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSale != null" >
+        is_sale = #{isSale,jdbcType=TINYINT},
+      </if>
+      <if test="wxisSale != null" >
+        wxis_sale = #{wxisSale,jdbcType=TINYINT},
+      </if>
+      <if test="isFind != null" >
+        is_find = #{isFind,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="spec != null" >
+        spec = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        `detail` = #{detail},
+      </if>
+      <if test="desc != null" >
+        `desc` = #{desc},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
     <!-- 根据条件查询商品总数量(fin)-->
 	<select id="queryItemsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
         SELECT
@@ -389,29 +520,7 @@
     </select>
     
     
-     <!-- 按条件修改商品(fin) -->
-    <update id="updateItemById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
-       UPDATE item T1
-       SET
-       <trim suffixOverrides="," >
-            <if test=" name != null and name != '' ">
-                T1.item_name=#{name},
-            </if>        
-            <if test=" brand != null and brand != ''">
-              T1.brand_name = #{brand},
-            </if>
-            <if test=" startDate!= null ">
-                T1.start_date = #{startDate},
-            </if>
-            <if test=" endDate!= null ">
-           		T1.end_date = #{endDate},
-            </if>
-            <if test=" dimensionCodePic!= null ">
-           		T1.qr_code_url = #{dimensionCodePic},
-            </if>
-         </trim>
-           where id=#{id}
-    </update>
+    
     
     <!-- 根据id查询单个商品，修改时使用(fin) -->
     <select id="queryItemById" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO" parameterType="java.lang.Long">
