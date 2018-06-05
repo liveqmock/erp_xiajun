@@ -68,7 +68,8 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                 //redis 缓存尝试取
                 String userId = (String) loginCache.get(sessionId);
                 if (userId != null) {
-                    AppUtil.setLoginUserId(userId);
+                    //TODO 获取companyNo？
+                    AppUtil.setLoginUser(userId,"");
                     return true;
                 }
             }catch (Exception e){

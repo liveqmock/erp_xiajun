@@ -104,7 +104,7 @@ public class LoginController extends BaseController {
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isNotBlank(sessionId)) {
                 loginCache.putEx(sessionId, username, TIMEOUT);
-                AppUtil.setLoginUserId(username);
+                AppUtil.setLoginUser(username,user.getCompanyNo());
                 return renderSuccess();
             }else {
                 return renderError("sessionId不存在");
