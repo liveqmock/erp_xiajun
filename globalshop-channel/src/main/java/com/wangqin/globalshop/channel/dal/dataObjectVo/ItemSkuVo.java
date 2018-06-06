@@ -52,11 +52,19 @@ public class ItemSkuVo extends ItemSkuDO{
 	 * @return
 	 */
 	public String getColor(){
-		return scaleMap.get(scale_color).getScaleValue();
+		if(scaleMap.get(scale_color) ==null){
+            return null;
+		}else {
+			return scaleMap.get(scale_color).getScaleValue();
+		}
 	}
 
 	public String getSize(){
-		return scaleMap.get(scale_size).getScaleValue();
+		if(scaleMap.get(scale_size) == null){
+			return null;
+		}else {
+			return scaleMap.get(scale_size).getScaleValue();
+		}
 	}
 	/**
 	 * 获取其他规格属性
