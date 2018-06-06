@@ -12,6 +12,7 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.channel.ChannelFactory;
 import com.wangqin.globalshop.item.app.service.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
@@ -35,7 +36,6 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/item")
-@Authenticated
 public class ItemController  {
 
 	@Autowired
@@ -276,8 +276,8 @@ public class ItemController  {
 					try {
 						//outerItemService.synItemYouzan(item.getId());
 						//ShiroUser user = ShiroUtil.getShiroUser();
-//						String companyNo = ShiroUtil.getCompanyNo();
-//						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
+						String companyNo = AppUtil.getLoginUserCompanyNo();
+						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
 					} catch(Exception e) {
 						//logger.error("商品添加时同步到有赞：", e);
 					}			
