@@ -1,13 +1,13 @@
 package com.wangqin.globalshop.deal.app.service.impl;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.DealerTypeDOMapperExt;
-import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.DealerTypeDOMapperExt;
+import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
 
 /**
  * @author biscuit
