@@ -376,4 +376,17 @@ public class ItemSkuController  {
 		return result.buildData(scaleTypeList).buildIsSuccess(true);
 	}
     
+	
+
+	@RequestMapping("/saleable")
+	@ResponseBody
+	public Object getSaleAble() {
+		JsonResult<List<ItemSkuDO>> result = new JsonResult<>();
+		List<ItemSkuDO> skuList = iItemSkuService.querySaleableSkus();
+		if(0 == skuList.size()) {
+			result.buildIsSuccess(false).buildMsg("无可售商品");
+		}
+		result.buildData(skuList).buildIsSuccess(true);
+		return result;
+	}
 }
