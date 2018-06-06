@@ -301,7 +301,8 @@ public class ItemController  {
 					try {
 						//outerItemService.synItemYouzan(item.getId());
 						//ShiroUser user = ShiroUtil.getShiroUser();
-						String companyNo = AppUtil.getCompanyNo();
+					    //TODO
+						String companyNo ="11";
 						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
 					} catch(Exception e) {
 						//logger.error("商品添加时同步到有赞：", e);
