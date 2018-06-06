@@ -24,11 +24,7 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
 
     @Override
     public void insert(DealerTypeDO sellerType) {
-        sellerType.setCreator("当前用户");
-        sellerType.setModifier("adasda");
-        sellerType.setGmtCreate(new Date());
-        sellerType.setGmtModify(new Date());
-
+        sellerType.init();
         mapper.insertSelective(sellerType);
     }
 }

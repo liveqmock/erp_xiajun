@@ -47,7 +47,7 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" extends="BaseResultMap" >
-    <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
     <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -59,7 +59,7 @@
     creator, modifier
   </sql>
   <sql id="Blob_Column_List" >
-    desc, detail
+    remark, detail
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
@@ -91,7 +91,7 @@
       is_find, status, spec, 
       model, buyer_open_id, gmt_modify, 
       gmt_create, is_del, creator, 
-      modifier, desc, detail
+      modifier, remark, detail
       )
     values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{categoryCode,jdbcType=VARCHAR}, #{qrCodeUrl,jdbcType=VARCHAR}, #{video,jdbcType=VARCHAR}, 
@@ -107,7 +107,7 @@
       #{isFind,jdbcType=TINYINT}, #{status,jdbcType=INTEGER}, #{spec,jdbcType=VARCHAR}, 
       #{model,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=VARCHAR}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{desc,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      #{modifier,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
@@ -243,8 +243,8 @@
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="desc != null" >
-        desc,
+      <if test="remark != null" >
+        remark,
       </if>
       <if test="detail != null" >
         detail,
@@ -378,8 +378,8 @@
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null" >
-        #{desc,jdbcType=LONGVARCHAR},
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
       </if>
       <if test="detail != null" >
         #{detail,jdbcType=LONGVARCHAR},
@@ -515,8 +515,8 @@
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null" >
-        desc = #{desc,jdbcType=LONGVARCHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=LONGVARCHAR},
       </if>
       <if test="detail != null" >
         detail = #{detail,jdbcType=LONGVARCHAR},
@@ -568,7 +568,7 @@
       is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
-      desc = #{desc,jdbcType=LONGVARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>

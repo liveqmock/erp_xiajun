@@ -292,4 +292,27 @@
         AND sku_code = #{skuCode}
         AND warehouse_no=#{warehouseNo}
     </select>
+    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        <where>
+            <if test="warehouseNo!=null and warehouseNo!=''">
+                and warehouse_no = #{warehouseNo}
+            </if>
+            <if test="companyNo!=null and companyNo!=''">
+                and company_no = #{companyNo}
+            </if>
+            <if test="skuCode!=null and skuCode!=''">
+                and sku_code = #{skuCode}
+            </if>
+            <if test="itemName!=null and itemName!=''">
+                and item_name = #{itemName}
+            </if>
+            <if test="positionNo!=null and positionNo!=''">
+                and shelf_no = #{positionNo}
+            </if>
+        </where>
+    </select>
 </mapper>
