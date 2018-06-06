@@ -3,9 +3,32 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
     <context:annotation-config/>
-
+	<!-- cache使用的redis配置 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="minIdle" value="${redis.minIdle}" />
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+	</bean>
+	<bean id="cacheRedis" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory">
+			<bean
+				class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+				p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"
+				p:pool-config-ref="jedisPoolConfig" />
+		</property>
+	</bean>
+    <bean id="cacheTemplate" class="com.wangqin.globalshop.common.redis.RedisCacheTemplate"
+		abstract="true">
+		<property name="cacheRedis" ref="cacheRedis" />
+	</bean>
+	<bean id="loginCache" parent="cacheTemplate">
+		<property name="prefix" value="login" />
+		<property name="expiry" value="86400" />
+	</bean>
 </beans>
