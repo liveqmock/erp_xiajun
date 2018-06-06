@@ -18,6 +18,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 	            <mvc:mapping path="/**" />
+			    <mvc:exclude-mapping path="/login" />
 	            <bean class="com.wangqin.globalshop.biz1.app.aop.SessionInterceptor">
 	                    <property name="sessionIDName" value="SessionID" />
 	                    <property name="domain" value="" />
