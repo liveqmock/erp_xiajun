@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.usercenter.service.impl;
+﻿package com.wangqin.globalshop.usercenter.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,12 +73,20 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     public int updateSelectiveById(AuthOrganizationDO organization) {
+    	organization.init();
         return organizationMapper.updateByPrimaryKey(organization);
     }
 
     @Override
     public int insert(AuthOrganizationDO organization) {
+    	organization.init();
+    	organization.setIsDel(true);;
         return organizationMapper.insert(organization);
+    }
+    public static void main(String[] args) {
+    	AuthOrganizationDO a =new AuthOrganizationDO();
+    	a.init();
+    	System.out.println(a.getModifier());
     }
 
     @Override
