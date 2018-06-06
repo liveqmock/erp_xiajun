@@ -96,16 +96,6 @@
 			<artifactId>log4j-jcl</artifactId>
 			<version>${log4j2.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j2.version}</version>
-		</dependency>
-		<dependency>
-		  <groupId>ch.qos.logback</groupId>
-		  <artifactId>logback-classic</artifactId>
-		  <version>1.2.3</version>
-		</dependency>
 		<!-- log4j2 end -->
 		<!-- Spring begin -->
 		<dependency>
