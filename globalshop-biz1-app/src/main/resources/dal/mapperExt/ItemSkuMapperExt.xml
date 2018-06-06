@@ -280,9 +280,9 @@
      SELECT
         <include refid="Base_Column_List" />
         FROM
-            item_sku
+            item_sku T1
         where
-           sku_code = #{skuCode}
+           T1.sku_code = #{skuCode}
 </select>
 
 

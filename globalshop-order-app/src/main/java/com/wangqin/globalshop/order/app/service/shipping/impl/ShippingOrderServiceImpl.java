@@ -20,10 +20,7 @@ import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.NumberUtil;
-import com.wangqin.globalshop.common.utils.ShiroUtil;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
@@ -33,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -83,28 +81,29 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         MultiDeliveryFormDTO multiDeliveryFormDTO = new MultiDeliveryFormDTO();
 
         String s = orderId.replace("&quot;", "\"");
-        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
+        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+        });
         List<MallSubOrderDO> mallSubOrderList = mallSubOrderMapper.queryByOrderId(erpOrderIdList);
         List<MallSubOrderDO> totalMallSubOrderList = new ArrayList<>();
-        String receiver=null;
-        String telephone=null;
-        String addressDetail=null;
+        String receiver = null;
+        String telephone = null;
+        String addressDetail = null;
         Set<Long> erpOrderIdSet = Sets.newHashSet();
 
         Double skuWeight = 0D;
         Double totalSalePrice = 0D;
-        for(MallSubOrderDO mallSubOrder : mallSubOrderList) {
-            if(mallSubOrder.getStockStatus()==null || (mallSubOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode() && mallSubOrder.getStockStatus()!=StockUpStatus.PREPARE.getCode())) {
+        for (MallSubOrderDO mallSubOrder : mallSubOrderList) {
+            if (mallSubOrder.getStockStatus() == null || (mallSubOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode() && mallSubOrder.getStockStatus() != StockUpStatus.PREPARE.getCode())) {
                 throw new ErpCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
             }
-            if(StringUtils.isBlank(mallSubOrder.getReceiver()) || StringUtils.isBlank(mallSubOrder.getTelephone()) || StringUtils.isBlank(mallSubOrder.getReceiverState()) || StringUtils.isBlank(mallSubOrder.getReceiverCity()) || StringUtils.isBlank(mallSubOrder.getReceiverDistrict())) {
+            if (StringUtils.isBlank(mallSubOrder.getReceiver()) || StringUtils.isBlank(mallSubOrder.getTelephone()) || StringUtils.isBlank(mallSubOrder.getReceiverState()) || StringUtils.isBlank(mallSubOrder.getReceiverCity()) || StringUtils.isBlank(mallSubOrder.getReceiverDistrict())) {
                 throw new ErpCommonException("收货人地址不能为空：" + mallSubOrder.getId());
             }
-            if(mallSubOrder.getWeight()!=null) {
-                skuWeight += mallSubOrder.getWeight()*mallSubOrder.getQuantity();
+            if (mallSubOrder.getWeight() != null) {
+                skuWeight += mallSubOrder.getWeight() * mallSubOrder.getQuantity();
             }
-            totalSalePrice += mallSubOrder.getSalePrice()*mallSubOrder.getQuantity();
-            if(StringUtils.isBlank(receiver)) {
+            totalSalePrice += mallSubOrder.getSalePrice() * mallSubOrder.getQuantity();
+            if (StringUtils.isBlank(receiver)) {
                 receiver = mallSubOrder.getReceiver();
                 telephone = mallSubOrder.getTelephone();
                 addressDetail = mallSubOrder.getReceiverAddress();
@@ -118,10 +117,10 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 multiDeliveryFormDTO.setPostcode(mallSubOrder.getPostcode());
                 multiDeliveryFormDTO.setRemark(mallSubOrder.getMemo());
                 multiDeliveryFormDTO.setAddressDetail(mallSubOrder.getReceiverAddress());
-            } else if(!receiver.equals(mallSubOrder.getReceiver()) || !telephone.equals(mallSubOrder.getTelephone()) || !addressDetail.equals(mallSubOrder.getReceiverAddress())) {
+            } else if (!receiver.equals(mallSubOrder.getReceiver()) || !telephone.equals(mallSubOrder.getTelephone()) || !addressDetail.equals(mallSubOrder.getReceiverAddress())) {
                 multiDeliveryFormDTO.setInfo("子订单收货信息不一致，请注意核对！");
             }
-            if(erpOrderIdSet.contains(mallSubOrder.getId())) {
+            if (erpOrderIdSet.contains(mallSubOrder.getId())) {
                 continue;
             }
 
@@ -136,14 +135,14 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             // tjErpOrder.setStockStatus(erpOrder.getStockStatus()); //备货状态：已备货
             // tjErpOrder.setWarehouseId(erpOrder.getWarehouseId()); //相同仓库
             List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectByOrderNo(mallSubOrder.getOrderNo());
-            for(int i=0; i<selErpOrderList.size(); i++) {
-                MallSubOrderDO selErpOrder= selErpOrderList.get(i);
+            for (int i = 0; i < selErpOrderList.size(); i++) {
+                MallSubOrderDO selErpOrder = selErpOrderList.get(i);
                 //不在同一仓库的情况，不用考虑
-                if(selErpOrder.getWarehouseNo()!=null && selErpOrder.getWarehouseNo()!=mallSubOrder.getWarehouseNo()) {
+                if (selErpOrder.getWarehouseNo() != null && selErpOrder.getWarehouseNo() != mallSubOrder.getWarehouseNo()) {
                     continue;
                 }
                 //在同一仓库的或者未备货的
-                if(!erpOrderIdSet.contains(selErpOrder.getId())) {
+                if (!erpOrderIdSet.contains(selErpOrder.getId())) {
                     String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(selErpOrder.getOrderNo());
                     // TODO: 18.5.28 Biscuits
                     /* selErpOrder.setPositionNo(positionNoStr);*/
@@ -170,14 +169,15 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         String erpOrderIds = shippingOrder.getMallOrders();
         StringBuffer erpNos = new StringBuffer();
         String s = erpOrderIds.replace("&quot;", "\"");
-        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
+        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+        });
 
-        List<MallSubOrderDO>  erpOrderList = mallSubOrderService.selectBatchIds(erpOrderIdList);
+        List<MallSubOrderDO> erpOrderList = mallSubOrderService.selectBatchIds(erpOrderIdList);
         double skuWeight = 0.0D;
-        for(MallSubOrderDO erpOrder : erpOrderList) {
-            if((erpOrder.getStockStatus()==StockUpStatus.STOCKUP.getCode() || erpOrder.getStockStatus()==StockUpStatus.PREPARE.getCode()) && erpOrder.getShippingNo()==null) {
+        for (MallSubOrderDO erpOrder : erpOrderList) {
+            if ((erpOrder.getStockStatus() == StockUpStatus.STOCKUP.getCode() || erpOrder.getStockStatus() == StockUpStatus.PREPARE.getCode()) && erpOrder.getShippingNo() == null) {
                 //拼接erp_no
-                if(erpNos.length() < 1) {
+                if (erpNos.length() < 1) {
                     erpNos.append(erpOrder.getShopCode());
                 } else {
                     erpNos.append("," + erpOrder.getShopCode());
@@ -186,47 +186,47 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 inventoryService.ship(erpOrder);
                 //修改子订单状态
                 erpOrder.setStatus(OrderStatus.SENT.getCode());
-            } else if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()) {
+            } else if (erpOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode()) {
                 throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getShopCode());
             } else {
                 throw new ErpCommonException("商品不能重复发货，子订单号：" + erpOrder.getShopCode());
             }
-            if(erpOrder.getWeight() != null) {
-                skuWeight += erpOrder.getWeight()*erpOrder.getQuantity();
+            if (erpOrder.getWeight() != null) {
+                skuWeight += erpOrder.getWeight() * erpOrder.getQuantity();
             }
         }
-        if(skuWeight > 0) {
-            shippingOrder.setSkuWeight(skuWeight);	//包裹里面的sku的重量(磅)
+        if (skuWeight > 0) {
+            shippingOrder.setSkuWeight(skuWeight);    //包裹里面的sku的重量(磅)
             double totalWeight = 0D;
-            if(shippingOrder.getSkuWeight()+0.33 < 1) {	//不足1磅的按1磅计
+            if (shippingOrder.getSkuWeight() + 0.33 < 1) {    //不足1磅的按1磅计
                 totalWeight = 1;
             } else {
-                totalWeight = Math.ceil((shippingOrder.getSkuWeight()+0.33)*10);
-                totalWeight = totalWeight/10;
+                totalWeight = Math.ceil((shippingOrder.getSkuWeight() + 0.33) * 10);
+                totalWeight = totalWeight / 10;
             }
-            if(shippingOrder.getLogisticCompany().equals("邮客")) {
-                if(shippingOrder.getType() == 6) {	//邮客食品线
-                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*2.2));
-                } else if(shippingOrder.getType() == 7) {	//邮客奶粉线(包邮)
+            if (shippingOrder.getLogisticCompany().equals("邮客")) {
+                if (shippingOrder.getType() == 6) {    //邮客食品线
+                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 2.2));
+                } else if (shippingOrder.getType() == 7) {    //邮客奶粉线(包邮)
                     shippingOrder.setFreight(0D);
                 } else {
-                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*3.5));
+                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.5));
                 }
-            } else if(shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType()==4) {
-                shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*3.7));
-            } else if(shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType()==5) {
-                shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*4.2));
+            } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 4) {
+                shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.7));
+            } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 5) {
+                shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 4.2));
             }
         }
-        if(shippingOrder.getStatus() == null) {
-            shippingOrder.setStatus( ShippingOrderStatus.INIT.getCode());
+        if (shippingOrder.getStatus() == null) {
+            shippingOrder.setStatus(ShippingOrderStatus.INIT.getCode());
         }
         shippingOrder.setShippingNo(erpNos.toString());
-        shippingOrder.setShippingNo("PKG"+DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+sequenceUtilService.gainPKGSequence());
+        shippingOrder.setShippingNo("PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence());
         shippingOrder.setGmtCreate(new Date());
         shippingOrder.setGmtModify(new Date());
         if (shippingOrder.getTransferStatus() == null) {
-            shippingOrder.setTransferStatus( TransferStatus.UNPREDICT.getValue());
+            shippingOrder.setTransferStatus(TransferStatus.UNPREDICT.getValue());
         }
         LogisticCompanyDO comp = logisticCompanyMapper.selectByCode(shippingOrder.getLogisticCompany());
 //        // 国内物流，需要订阅快递100
@@ -236,7 +236,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         shippingOrderMapper.insert(shippingOrder);
 
         Set<String> mainIds = Sets.newHashSet();
-        for(MallSubOrderDO erpOrder : erpOrderList) {
+        for (MallSubOrderDO erpOrder : erpOrderList) {
             erpOrder.setShippingNo(shippingOrder.getShippingNo());
             erpOrder.setShippingNo(shippingOrder.getShippingNo());
             mainIds.add(erpOrder.getOrderNo());
@@ -255,7 +255,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         ChannelAccountDO accountDO = iChannelAccountService.queryPo(so);
         try {
             ChannelFactory
-                    .getChannel(accountDO).syncLogisticsOnlineConfirm(erpOrderList,shippingOrder);
+                    .getChannel(accountDO).syncLogisticsOnlineConfirm(erpOrderList, shippingOrder);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -268,13 +268,14 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public List<MallSubOrderDO> queryShippingOrderDetail(String mallOrders) {
-        if(StringUtil.isBlank(mallOrders)) {
+        if (StringUtil.isBlank(mallOrders)) {
             throw new ErpCommonException("子订单号为空");
         }
         String s = mallOrders.replace("&quot;", "\"");
-        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
+        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+        });
         List<MallSubOrderDO> ErpOrderList = mallSubOrderMapper.queryByOrderId(erpOrderIdList);
-        ErpOrderList.forEach(erpOrder ->{
+        ErpOrderList.forEach(erpOrder -> {
             //在同一仓库的或者未备货的
             String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(erpOrder.getOrderNo());
             // TODO: 18.5.28 Biscuits
@@ -285,7 +286,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public void updateOuterstatus(Set<String> mainIds) {
-        for(String mainId:mainIds){
+        for (String mainId : mainIds) {
             if (mainId != null) {
                 MallOrderDO outerOrder = mallOrderService.selectByOrderNo(mainId);
                 if (outerOrder != null) {
@@ -296,9 +297,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                     int initCount = 0;
                     int sentCount = 0;
                     int closeCount = 0;
-                    if(totalCount > 0) {
-                        for(int i=0; i<totalCount; i++) {
-                            switch(erpOrderList.get(i).getStatus()) {
+                    if (totalCount > 0) {
+                        for (int i = 0; i < totalCount; i++) {
+                            switch (erpOrderList.get(i).getStatus()) {
                                 case 0:
                                     initCount++;
                                     break;
@@ -311,14 +312,14 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                             }
                         }
                     }
-                    if(closeCount == totalCount) {	//主订单关闭
+                    if (closeCount == totalCount) {    //主订单关闭
                         outerOrder.setStatus(OrderStatus.CLOSE.getCode());
-                    } else if((closeCount+sentCount) == totalCount) {	//全部发货
+                    } else if ((closeCount + sentCount) == totalCount) {    //全部发货
                         outerOrder.setStatus(OrderStatus.SENT.getCode());
-                    } else if(sentCount > 0) {	//部分发货
-                        outerOrder.setStatus( OrderStatus.PART_SENT.getCode());
+                    } else if (sentCount > 0) {    //部分发货
+                        outerOrder.setStatus(OrderStatus.PART_SENT.getCode());
                     } else {
-                        outerOrder.setStatus( OrderStatus.INIT.getCode());
+                        outerOrder.setStatus(OrderStatus.INIT.getCode());
                     }
                     outerOrder.setGmtModify(new Date());
                     mallOrderService.updateById(outerOrder);
@@ -333,20 +334,21 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     public Map<String, Set<String>> batchDelivery(ShippingOrderDO shippingOrder) throws InventoryException {
         String erpOrderIds = shippingOrder.getMallOrders();
         String s = erpOrderIds.replace("&quot;", "\"");
-        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
-		/*if(shippingOrder.getIsBatch()==0 && erpOrderIdList.size()>1) {
-			throw new ErpCommonException("此操作仅为一个子订单发货，而您选中了多个子订单！");
+        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+        });
+        /*if(shippingOrder.getIsBatch()==0 && erpOrderIdList.size()>1) {
+            throw new ErpCommonException("此操作仅为一个子订单发货，而您选中了多个子订单！");
 		}*/
 
-        if(shippingOrder.getStatus() == null) {
+        if (shippingOrder.getStatus() == null) {
             shippingOrder.setStatus(ShippingOrderStatus.INIT.getCode());
         }
         Date nowDate = new Date();
         Map<String, Set<String>> resultMap = new HashMap<>();
         Set<String> mainIds = Sets.newHashSet();
         Set<String> shippingOrderIds = Sets.newHashSet();
-        List<MallSubOrderDO>  erpOrderList = mallSubOrderService.selectBatchIds(erpOrderIdList);
-        for(MallSubOrderDO erpOrder : erpOrderList) {
+        List<MallSubOrderDO> erpOrderList = mallSubOrderService.selectBatchIds(erpOrderIdList);
+        for (MallSubOrderDO erpOrder : erpOrderList) {
 //            if(erpOrder.getStockStatus()==StockUpStatus.STOCKUP.getCode() && erpOrder.getShippingNo()==null) {
 //                //扣减库存
 //                orderInventoryService.sendInventroyOrder(erpOrder);
@@ -369,30 +371,30 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             shippingOrder.setMemo(erpOrder.getMemo());
             shippingOrder.setAddress(erpOrder.getReceiverAddress());
             shippingOrder.setShippingNo(erpOrder.getOrderNo());
-            shippingOrder.setShippingNo("PKG"+ DateUtil.formatDate(nowDate, DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+sequenceUtilMapperExt.gainPKGSequence());
-            if(erpOrder.getWeight() != null) {
-                double skuWeight = erpOrder.getWeight()*erpOrder.getQuantity();
-                shippingOrder.setSkuWeight(skuWeight);	//包裹里面的sku的重量(磅)
+            shippingOrder.setShippingNo("PKG" + DateUtil.formatDate(nowDate, DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilMapperExt.gainPKGSequence());
+            if (erpOrder.getWeight() != null) {
+                double skuWeight = erpOrder.getWeight() * erpOrder.getQuantity();
+                shippingOrder.setSkuWeight(skuWeight);    //包裹里面的sku的重量(磅)
                 double totalWeight = 0D;
-                if(shippingOrder.getSkuWeight()+0.33 < 1) {	//不足1磅的按1磅计
+                if (shippingOrder.getSkuWeight() + 0.33 < 1) {    //不足1磅的按1磅计
                     totalWeight = 1;
                 } else {
-                    totalWeight = Math.ceil((shippingOrder.getSkuWeight()+0.33)*10);
-                    totalWeight = totalWeight/10;
+                    totalWeight = Math.ceil((shippingOrder.getSkuWeight() + 0.33) * 10);
+                    totalWeight = totalWeight / 10;
                 }
 
-                if(shippingOrder.getLogisticCompany().equals("邮客")) {
-                    if(shippingOrder.getType() == 6) {	//邮客食品线
-                        shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*2.2));
-                    } else if(shippingOrder.getType() == 7) {	//邮客奶粉线(包邮)
+                if (shippingOrder.getLogisticCompany().equals("邮客")) {
+                    if (shippingOrder.getType() == 6) {    //邮客食品线
+                        shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 2.2));
+                    } else if (shippingOrder.getType() == 7) {    //邮客奶粉线(包邮)
                         shippingOrder.setFreight(0D);
                     } else {
-                        shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*3.5));
+                        shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.5));
                     }
-                } else if(shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType()==4) {
-                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*3.7));
-                } else if(shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType()==5) {
-                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight*4.2));
+                } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 4) {
+                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.7));
+                } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 5) {
+                    shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 4.2));
                 }
             }
             shippingOrder.setGmtCreate(nowDate);
@@ -401,7 +403,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
             // 对接邮客、运通快递
             if (shippingOrder.getLogisticCompany() != null
-                && (shippingOrder.getLogisticCompany().equals("邮客") || shippingOrder.getLogisticCompany().equals("运通快递")
+                    && (shippingOrder.getLogisticCompany().equals("邮客") || shippingOrder.getLogisticCompany().equals("运通快递")
                     || shippingOrder.getLogisticCompany().equals("4PX")
                     || shippingOrder.getLogisticCompany().equals("联邦转运"))) {
                 shippingOrderIds.add(shippingOrder.getId().toString());
@@ -459,7 +461,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public int selectCount(String idCard, String logisticCompany) {
-        return shippingOrderMapper.selectCount(idCard,logisticCompany);
+        return shippingOrderMapper.selectCount(idCard, logisticCompany);
     }
 
     @Override
@@ -475,6 +477,77 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     @Override
     public void updateStatusByShippingNo(String logisticNo) {
         shippingOrderMapper.updateStatusByShippingNo(logisticNo);
+    }
+
+    @Transactional(rollbackFor = ErpCommonException.class)
+    @Override
+    public void ship(String erpOrderId) {
+        ShippingOrderDO shippingOrder = new ShippingOrderDO();
+        String shippingNo = "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence();
+        StringBuffer erpNos = new StringBuffer();
+        String s = erpOrderId.replace("&quot;", "\"");
+        List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+        });
+        List<MallSubOrderDO> list = mallSubOrderService.selectBatchIds(erpOrderIdList);
+        double skuWeight = 0.0D;
+        for (MallSubOrderDO erpOrder : list) {
+            /**如果没有订单号  则认为是没有发货*/
+            if (Util.isEmpty(erpOrder.getShippingNo())) {
+                /**物流出库*/
+                erpOrder.setStatus(OrderStatus.SENT.getCode());
+                erpOrder.setShippingNo(shippingNo);
+                inventoryService.ship(erpOrder);
+                /**拼接erp*/
+                erpNos.append(erpOrder.getShopCode()).append(",");
+            }else {
+                throw new ErpCommonException("不能重复发货");
+            }
+            if (erpOrder.getWeight() != null) {
+                skuWeight += erpOrder.getWeight() * erpOrder.getQuantity();
+            }
+            mallSubOrderMapper.updateByPrimaryKeySelective(erpOrder);
+        }
+        shippingOrder.setSkuWeight(skuWeight);
+        // TODO: 18.6.6 绑定物流
+//        if(skuWeight > 0) {
+//            shippingOrder.setSkuWeight(skuWeight);	//包裹里面的sku的重量(磅)
+//            double totalWeight = 0D;
+//            if(shippingOrder.getSkuWeight()+0.33 < 1) {	//不足1磅的按1磅计
+//                totalWeight = 1;
+//            } else {
+//                totalWeight = Math.ceil((shippingOrder.getSkuWeight()+0.33)*10);
+//                totalWeight = totalWeight/10;
+//            }
+//        }
+        String erpStr = erpNos.toString();
+        erpStr = erpStr.substring(0, erpStr.length() - 1);
+        shippingOrder.init();
+        shippingOrder.setStatus(ShippingOrderStatus.INIT.getCode());
+        shippingOrder.setShippingNo(erpStr);
+        shippingOrder.setShippingNo(shippingNo);
+        shippingOrder.setTransferStatus( TransferStatus.UNPREDICT.getValue());
+        shippingOrderMapper.insertSelective(shippingOrder);
+
+//
+//        // 有赞
+//        // 查出outer_order
+//        MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
+//        // 通知渠道发货
+//        ChannelAccountSo so = new ChannelAccountSo();
+//        so.setShopCode(outerOrder.getShopCode());
+//        so.setCompanyNo(outerOrder.getCompanyNo());
+//        so.setChannelNo(outerOrder.getChannelNo());
+//
+//        ChannelAccountDO accountDO = iChannelAccountService.queryPo(so);
+//        try {
+//            ChannelFactory
+//                    .getChannel(accountDO).syncLogisticsOnlineConfirm(erpOrderList,shippingOrder);
+//        } catch (Exception e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+
+
     }
 
 

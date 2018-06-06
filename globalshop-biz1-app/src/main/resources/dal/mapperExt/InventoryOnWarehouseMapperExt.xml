@@ -2,33 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt">
 
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
-        <result column="item_code" property="itemCode" jdbcType="BIGINT"/>
-        <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
-        <result column="upc" property="upc" jdbcType="VARCHAR"/>
-        <result column="scale" property="scale" jdbcType="VARCHAR"/>
-        <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
-        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR"/>
-        <result column="inventory" property="inventory" jdbcType="BIGINT"/>
-        <result column="locked_inv" property="lockedInv" jdbcType="BIGINT"/>
-        <result column="trans_inv" property="transInv" jdbcType="BIGINT"/>
-        <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT"/>
-        <result column="warehouse_no" property="warehouseNo" jdbcType="BIGINT"/>
-        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
-        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
-        <result column="batch_no" property="batchNo" jdbcType="VARCHAR"/>
-        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
-        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
-        <result column="is_del" property="isDel" jdbcType="BIT"/>
-        <result column="creator" property="creator" jdbcType="VARCHAR"/>
-        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="scale" property="scale" jdbcType="VARCHAR" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+        <result column="inventory" property="inventory" jdbcType="BIGINT" />
+        <result column="locked_inv" property="lockedInv" jdbcType="BIGINT" />
+        <result column="trans_inv" property="transInv" jdbcType="BIGINT" />
+        <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT" />
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+        <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     </resultMap>
-    <sql id="Base_Column_List">
-    id, company_no, item_code, item_name, upc, scale, sku_code, sku_pic, inventory, locked_inv,
-    trans_inv, locked_trans_inv, warehouse_no, warehouse_name, shelf_no, batch_no, gmt_create,
-    gmt_modify, is_del, creator, modifier
+    <sql id="Base_Column_List" >
+    id, inventory_on_warehouse_no, company_no, item_code, item_name, upc, scale, sku_code,
+    sku_pic, inventory, locked_inv, trans_inv, locked_trans_inv, warehouse_no, warehouse_name,
+    shelf_no, batch_no, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
 
     <!--<select id="getInventoryArea" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
@@ -318,7 +319,7 @@
         </where>
     </select>
     <select id="getINvOnWarehouseListOfShip"
-            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
+            resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -326,6 +327,16 @@
         WHERE
         sku_code = #{skuCode}
         and shelf_no = #{companyNo}
+        ORDER BY inventory ASC
+    </select>
+    <select id="selectBySkuCode"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        WHERE
+        sku_code = #{skuCode}
         ORDER BY inventory ASC
     </select>
 </mapper>

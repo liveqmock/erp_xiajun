@@ -14,4 +14,6 @@ public interface ShippingTrackDOMapperExt extends ShippingTrackDOMapper {
     int selectCountByShippingOrderNo(String shippingOrderNo);
 
     List<ShippingTrackDO> selectByShippingOrderNoList(String selShippingTrack);
+
+    List<ShippingTrackDO> selectShippingTrackListByLogisticNo(String logisticNo);
 }

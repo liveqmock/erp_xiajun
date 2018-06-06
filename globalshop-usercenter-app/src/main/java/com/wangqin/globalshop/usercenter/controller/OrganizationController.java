@@ -89,6 +89,7 @@ public class OrganizationController extends BaseController {
      * @return
      */
     @GetMapping("/editPage")
+
     public String editPage(HttpServletRequest request, Long id) {
         AuthOrganizationDO organization = organizationService.selectById(id);
         request.setAttribute("organization", organization);

@@ -23,7 +23,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Autowired
     private AuthOrganizationDOMapperExt organizationMapper;
-    
+
     @Override
     public List<Tree> selectTree() {
         List<Tree> trees = new ArrayList<Tree>();
@@ -73,12 +73,20 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     public int updateSelectiveById(AuthOrganizationDO organization) {
+    	organization.init();
         return organizationMapper.updateByPrimaryKey(organization);
     }
 
     @Override
     public int insert(AuthOrganizationDO organization) {
+    	organization.init();
+    	organization.setIsDel(true);;
         return organizationMapper.insert(organization);
+    }
+    public static void main(String[] args) {
+    	AuthOrganizationDO a =new AuthOrganizationDO();
+    	a.init();
+    	System.out.println(a.getModifier());
     }
 
     @Override
