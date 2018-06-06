@@ -1,24 +1,25 @@
 package com.wangqin.globalshop.mall.controller;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.MallWxCustomerTrackDOMapper;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallCustomerDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
-import net.sf.json.JSONObject;
+import java.util.Date;
+
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.MallWxCustomerTrackDOMapper;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallCustomerDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.HttpClientUtil;
+
+import net.sf.json.JSONObject;
 
 @Controller("wxLoginController")
 @RequestMapping("/wx")
-public class LoginController extends BaseController {
+public class LoginController {
 
     // private static final String WXAPPID = "wxeb4a1f63dd17d0ce";
     // private static final String WXAPPSECRET = "65afbfc5d50f34e5078c36dc59256836";

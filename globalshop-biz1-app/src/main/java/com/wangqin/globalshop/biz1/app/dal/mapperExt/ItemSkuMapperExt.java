@@ -64,4 +64,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	
 	//删除sku
 	void deleteById(Long id);
+	
+	//查询可售的sku
+	List<ItemSkuDO> querySaleableSkus();
 }
