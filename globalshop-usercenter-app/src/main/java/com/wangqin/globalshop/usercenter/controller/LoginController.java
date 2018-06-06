@@ -37,6 +37,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @GetMapping("/")
+//    @RequestMapping("/w")
     public String index() {
         return "redirect:/web";
     }
@@ -48,6 +49,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @GetMapping("/web")
+//    @RequestMapping("/web")
     public String index(Model model) {
         return "web";
     }
@@ -109,7 +111,8 @@ public class LoginController extends BaseController {
             if (StringUtils.isNotBlank(sessionId)) {
                 loginCache.putEx(sessionId, username, TIMEOUT);
                 loginCache.putEx(COMPANY_NO+sessionId,user.getCompanyNo(),TIMEOUT);
-                AppUtil.setLoginUser(username,user.getCompanyNo());
+                AppUtil.setLoginUserId(username);
+                AppUtil.setCompanyNo(user.getCompanyNo());
                 return renderSuccess();
             }else {
                 return renderError("sessionId不存在");
@@ -155,6 +158,7 @@ public class LoginController extends BaseController {
         AppUtil.removeLoginUserId();
 
         loginCache.remove(COMPANY_NO+sessionId);
+        AppUtil.removeCompanyNo();
         return renderSuccess();
     }
 
