@@ -111,8 +111,7 @@ public class LoginController extends BaseController {
             if (StringUtils.isNotBlank(sessionId)) {
                 loginCache.putEx(sessionId, username, TIMEOUT);
                 loginCache.putEx(COMPANY_NO+sessionId,user.getCompanyNo(),TIMEOUT);
-                AppUtil.setLoginUserId(username);
-                AppUtil.setCompanyNo(user.getCompanyNo());
+                AppUtil.setLoginUser(username,user.getCompanyNo());
                 return renderSuccess();
             }else {
                 return renderError("sessionId不存在");
@@ -158,7 +157,7 @@ public class LoginController extends BaseController {
         AppUtil.removeLoginUserId();
 
         loginCache.remove(COMPANY_NO+sessionId);
-        AppUtil.removeCompanyNo();
+        AppUtil.removeLoginUserId();
         return renderSuccess();
     }
 
