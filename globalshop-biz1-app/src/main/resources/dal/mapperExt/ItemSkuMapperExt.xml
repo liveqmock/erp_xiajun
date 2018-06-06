@@ -44,6 +44,17 @@
         weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id,
         scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del
     </sql>
+    
+    <!-- 查询可售的sku -->
+     <select id="querySaleableSkus" resultMap="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+        SELECT
+        	 <include refid="Base_Column_List" /> 
+        FROM
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
+        where
+           T1.is_del=0
+             AND ((inv.inv+inv.virtual_inv-locked_inv) > 0)
+    </select>
 
 	<select id="queryItemSkusCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
         SELECT
