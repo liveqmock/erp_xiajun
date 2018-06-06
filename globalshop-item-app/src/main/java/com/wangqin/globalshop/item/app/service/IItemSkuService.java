@@ -2,9 +2,9 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
@@ -27,7 +27,7 @@ public interface IItemSkuService  {
 	 * @param itemSkuList
 	 * @return
 	 */
-	List<InventoryAddVO> initInventory(List<ItemSkuAddVO> itemSkuList);
+	List<InventoryDO> initInventory(List<ItemSkuAddVO> itemSkuList);
 	
 	/**
 	 * 新增SKU

@@ -1,19 +1,16 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
-import com.wangqin.globalshop.biz1.app.vo.*;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.item.app.service.*;
-import net.sf.json.JSONObject;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +18,38 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.ImageUtil;
+import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.item.app.channel.ChannelFactory;
+import com.wangqin.globalshop.item.app.service.IBuyerService;
+import com.wangqin.globalshop.item.app.service.ICountryService;
+import com.wangqin.globalshop.item.app.service.IItemBrandService;
+import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+
+import net.sf.json.JSONObject;
 
 /**
  * 商品处理器
@@ -35,6 +59,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/item")
+@Authenticated
 public class ItemController  {
 
 	@Autowired
@@ -262,19 +287,17 @@ public class ItemController  {
 	        				//skuFreight(itemSku);
 	        			});         
 	        			itemSkuService.insertBatch(itemSkuList);
-	        			List<InventoryAddVO> inventoryList = itemSkuService.initInventory(itemSkuList);
-	        			inventoryService.insertBatchInventory(inventoryList);
+	        			List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
+	        			//inventoryService.insertBatchInventory(inventoryList);
 	        		}
-			//同步到有赞并上架
 	        		
-			if(item.getIsSale()!=null && item.getIsSale()==1) {
-	
+			//同步到有赞并上架  		
+			if(item.getIsSale()!=null && item.getIsSale()==1) {	
 					try {
 						//outerItemService.synItemYouzan(item.getId());
 						//ShiroUser user = ShiroUtil.getShiroUser();
-						String companyNo = "c23";
-						//HttpClientUtil.post(url, params)
-						//.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
+						String companyNo = AppUtil.getCompanyNo();
+						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
 					} catch(Exception e) {
 						//logger.error("商品添加时同步到有赞：", e);
 					}			
@@ -709,6 +732,7 @@ public class ItemController  {
 	@ResponseBody
 	public Object queryItemList(ItemQueryVO itemQueryVO) {
 		//logger.info("itemsPush start");
+		System.out.println("testa");
 		JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
 		EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
 		jsonResult.setTotal(result.getTotalCount());
@@ -718,6 +742,7 @@ public class ItemController  {
 	//	if(roles.contains("cgpm")){
 	//		jsonResult.setProductRoler(true);
 	//	}
+		System.out.println("testb");
 		return jsonResult.buildIsSuccess(true);
 	}
 	
