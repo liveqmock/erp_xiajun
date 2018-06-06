@@ -1,4 +1,4 @@
-﻿package com.wangqin.globalshop.usercenter.service.impl;
+package com.wangqin.globalshop.usercenter.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Autowired
     private AuthOrganizationDOMapperExt organizationMapper;
-    
+
     @Override
     public List<Tree> selectTree() {
         List<Tree> trees = new ArrayList<Tree>();
