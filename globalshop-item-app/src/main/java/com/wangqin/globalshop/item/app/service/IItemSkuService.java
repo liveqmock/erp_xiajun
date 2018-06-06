@@ -76,4 +76,7 @@ public interface IItemSkuService  {
 	 ISkuDTO queryItemSkuBySkuCode(String skuCode);
 	 
 	 void updateById(ItemSkuQueryVO itemSkuUpdateVO);
+	 
+	 //查询可售的sku
+	 List<ItemSkuDO> querySaleableSkus();
 }
