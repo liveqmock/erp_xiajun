@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class BuyerReceiptDO {
+public class BuyerReceiptDO extends BaseModel {
     private Long id;
 
     private String buyerTaskNo;

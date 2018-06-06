@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
@@ -11,7 +10,6 @@ import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ParseObj2Obj;
 import com.wangqin.globalshop.common.utils.ShiroUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -52,32 +50,16 @@ public class MallOrderController {
     private IMallSubOrderService mallSubOrderService;
     @Autowired
     private InventoryService inventoryService;
-    @RequestMapping(value = "/uuu",method = RequestMethod.POST)
-    public void add1() {
-        MallOrderDO mallOrderDO = mallOrderService.selectById(1L);
-        List<MallSubOrderDO> list = mallSubOrderService.selectByOrderNo(mallOrderDO.getOrderNo());
-        MallOrderVO mallOrderVO = new MallOrderVO();
-        ParseObj2Obj.parseObj2Obj(mallOrderDO,mallOrderVO);
-        mallOrderVO.setOuterOrderDetails(list);
-        mallOrderDO.setCompanyNo("海狐");
-        System.out.println(JSON.toJSON(mallOrderVO));
-    }
     /**
      * 增加订单
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
-    public Object add(String outerOrder) {
-        MallOrderVO mallOrderVO = JSON.parseObject(outerOrder, MallOrderVO.class);
+    public Object add(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
-            mallOrderVO.setGmtCreate(new Date());
-            mallOrderVO.setGmtModify(new Date());
-//			ShiroUser shiroUser = this.getShiroUser();
-//			outerOrder.setUserCreate(shiroUser.getLoginName());
             Long ordSequence = sequenceUtilService.gainORDSequence();
             mallOrderVO.setOrderNo("P" + String.format("%0" + 2 + "d", mallOrderVO.getChannelNo()) + String.format("%0" + 4 + "d", mallOrderVO.getChannelName()) + "D" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+ordSequence );//系统自动生成
-//
 //			//订单详情
             String outerOrderDetailList = mallOrderVO.getOrderDetailList();
             if (StringUtils.isNotBlank(outerOrderDetailList)) {
@@ -93,11 +75,10 @@ public class MallOrderController {
             mallOrderVO.setCompanyNo("MallOrderController86");
             //创建外部订单
             mallOrderService.addOuterOrder(mallOrderVO);
-            if (mallOrderVO.getStatus() == null || mallOrderVO.getStatus() == 0) {
-                //生成子订单并配货
-                mallOrderService.review(mallOrderVO.getOrderNo());
-            }
-
+//            if (mallOrderVO.getStatus() == null || mallOrderVO.getStatus() == 0) {
+//                //生成子订单并配货
+//                mallOrderService.review(mallOrderVO.getOrderNo());
+//            }
             result.buildIsSuccess(true);
         } else {
             result.buildData("错误数据").buildIsSuccess(false);
@@ -112,8 +93,7 @@ public class MallOrderController {
      */
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public Object update(String outerOrder) {
-        MallOrderVO mallOrderVO = JSON.parseObject(outerOrder.trim(), MallOrderVO.class);
+    public Object update(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() != null) {
             //只有状态为新建的订单才能修改
@@ -181,8 +161,7 @@ public class MallOrderController {
      */
     @RequestMapping(value = "/queryOuterOrderList",method = RequestMethod.POST)
     @ResponseBody
-    public Object queryOuterOrderList(String outerOrderQueryVO) {
-        MallOrderVO mallOrderVO = JSON.parseObject(outerOrderQueryVO.trim(), MallOrderVO.class);
+    public Object queryOuterOrderList(MallOrderVO mallOrderVO) {
         if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
             mallOrderVO.setStatus(null);
         }
@@ -325,8 +304,7 @@ public class MallOrderController {
     //主订单导出
     @RequestMapping(value = "/OuterOrderExportExcel",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<byte[]> OuterOrderExportExcel(String OuterOrderQueryVO) throws Exception {
-        MallOrderVO mallOrderVO = JSON.parseObject(OuterOrderQueryVO.trim(), MallOrderVO.class);
+    public ResponseEntity<byte[]> OuterOrderExportExcel(MallOrderVO mallOrderVO) throws Exception {
         if (mallOrderVO.getStartGmtCreate() == null || mallOrderVO.getEndGmtCreate() == null) {
             throw new ErpCommonException("必须选择创建时间段");
         }

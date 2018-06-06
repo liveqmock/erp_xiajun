@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class ShippingTrackPolling4pxDO {
+public class ShippingTrackPolling4pxDO extends BaseModel {
     private Integer id;
 
     private String deliveryNo;

@@ -6,6 +6,12 @@
     <sql id="Base_Column_List">
 		 id,name,name_en AS enName,packaging_scale_no AS packagingScaleNo
 	</sql>
+	
+	<!-- 2.0过度通用查询结果列-->
+    <sql id="Base_Column_List_2">
+		 T1.id,T1.packaging_scale_no AS packagingScaleNo,T1.name,T1.name_en AS nameEn,
+		 T1.weight,T1.size_level AS sizeLevel
+	</sql>
 
     <!--  
 	<select id="queryPackageScalesCount" resultType="java.lang.Integer">
@@ -125,6 +131,25 @@
 
 
           order by T1.id 
+    </select>
+    
+    <!-- 按条件查scale -->
+     <select id="queryScaleListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingScaleDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO">
+        SELECT
+        	 <include refid="Base_Column_List_2" />
+        FROM
+            `shipping_packing_scale` T1
+        where
+             T1.is_del=0
+            <if test=" name != null and name != '' ">
+                and T1.name = #{name}
+            </if>
+            <if test=" nameEn != null and nameEn != '' ">
+                and T1.name_en = #{nameEn}
+            </if>
+            <if test=" packagingScaleNo != null and packagingScaleNo != '' ">
+                and T1.packaging_scale_no = #{packagingScaleNo}
+            </if>
     </select>
 
 </mapper>

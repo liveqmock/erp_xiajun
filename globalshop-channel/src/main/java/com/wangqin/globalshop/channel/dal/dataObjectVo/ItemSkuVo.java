@@ -2,6 +2,7 @@ package com.wangqin.globalshop.channel.dal.dataObjectVo;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class ItemSkuVo extends ItemSkuDO{
 	private static final String scale_size = "size";
 
 	//颜色尺寸等规格
-	private Map<String,String> scaleMap = new HashMap<>();
+	private Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
 
 
 	//库存等
@@ -40,10 +41,10 @@ public class ItemSkuVo extends ItemSkuDO{
 	public void setInventoryDO(InventoryDO inventoryDO) {
 		this.inventoryDO = inventoryDO;
 	}
-	public Map<String, String> getScaleMap() {
+	public Map<String, ItemSkuScaleDO> getScaleMap() {
 		return scaleMap;
 	}
-	public void setScaleMap(Map<String, String> scaleMap) {
+	public void setScaleMap(Map<String, ItemSkuScaleDO> scaleMap) {
 		this.scaleMap = scaleMap;
 	}
 	/**
@@ -51,11 +52,28 @@ public class ItemSkuVo extends ItemSkuDO{
 	 * @return
 	 */
 	public String getColor(){
-		return scaleMap.get(scale_color);
+		return scaleMap.get(scale_color).getScaleValue();
 	}
 
 	public String getSize(){
-		return scaleMap.get(scale_size);
+		return scaleMap.get(scale_size).getScaleValue();
+	}
+	/**
+	 * 获取其他规格属性
+	 * @return
+	 */
+	public String getOtherScale(){
+		String otherScale = "";
+		for(String scaleKey : scaleMap.keySet()){
+			if(!scale_color.equalsIgnoreCase(scaleKey) && !scale_size.equalsIgnoreCase(scaleKey)){
+				if("".equalsIgnoreCase(otherScale)){
+					otherScale += scaleMap.get(scaleKey).getScaleName()+":"+scaleMap.get(scaleKey).getScaleValue();
+				}else {
+					otherScale += ","+scaleMap.get(scaleKey).getScaleName()+":"+scaleMap.get(scaleKey).getScaleValue();
+				}
+			}
+		}
+		return  otherScale;
 	}
 
 	public Long getTotalAvailableInv(){

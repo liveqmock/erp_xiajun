@@ -204,7 +204,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 						itemSkusDetail.put("skuCode", itemSku.getSkuCode());
 						itemSkusDetail.put("upc", itemSku.getUpc());
 						itemSkusDetail.put("color", itemSku.getColor());
-						itemSkusDetail.put("scale", itemSku.getScale());
+						itemSkusDetail.put("scale", itemSku.getSize());
 						itemSkusDetail.put("weight", itemSku.getWeight());
 						if(itemRequestType.contentEquals("0")) {	//代理
 							InventoryDO inventory = inventoryService.queryInventoryByCode(item.getItemCode(), itemSku.getSkuCode());

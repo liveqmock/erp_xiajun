@@ -110,6 +110,9 @@ public class InventoryServiceImpl implements InventoryService {
     public void release(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
+        if (inventoryDO == null){
+            throw new ErpCommonException("找不到对应的库存");
+        }
         /**修改库存占用*/
         inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
         mapper.updateByPrimaryKeySelective(inventoryDO);
@@ -230,14 +233,11 @@ public class InventoryServiceImpl implements InventoryService {
             inventoryDO.setItemName(itemSkuDO.getItemName());
             inventoryDO.setUpc(itemSkuDO.getUpc());
             inventoryDO.setCompanyNo("InventoryServiceImpl4545");
-            inventoryDO.setCreator("qweqweqweqwe");
-            inventoryDO.setModifier("zzcxzxczxc");
+            inventoryDO.init();
             mapper.insertSelective(inventoryDO);
         } else {
             inventory.setInv(inventory.getInv() + inv);
-            inventoryDO.setCreator("qweqweqweqwe");
-            inventoryDO.setModifier("zzcxzxczxc");
-            inventoryDO.setCompanyNo("InventoryServiceImpl4545");
+            inventory.setGmtModify(new Date());
             mapper.updateByPrimaryKeySelective(inventory);
         }
 
@@ -254,9 +254,6 @@ public class InventoryServiceImpl implements InventoryService {
      */
     private void saveInventoryInOut(InventoryDO inventoryDO, InventoryOnWareHouseDO wareHouseDO, Integer opeatory, Long quantity, String remark) {
         InventoryInoutDO inoutDO = new InventoryInoutDO();
-
-        inoutDO.setCreator("当前用户");
-        inoutDO.setModifier("qwewqeqwew");
         /****inventory***/
         inoutDO.setSkuCode(inventoryDO.getSkuCode());
         inoutDO.setItemCode(inventoryDO.getItemCode());
@@ -267,8 +264,7 @@ public class InventoryServiceImpl implements InventoryService {
         inoutDO.setShelfNo(wareHouseDO.getShelfNo());
         inoutDO.setInventoryOnWarehouseNo(wareHouseDO.getInventoryOnWarehouseNo());
         /*******/
-        inoutDO.setGmtCreate(new Date());
-        inoutDO.setGmtModify(new Date());
+        inoutDO.init();
         inoutDO.setOperatorType(opeatory);
         inoutDO.setQuantity(quantity);
         inoutDO.setRemark(remark);

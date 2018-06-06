@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class InventoryBookingRecordDO {
+public class InventoryBookingRecordDO extends BaseModel {
     private Long id;
 
     private String companyNo;

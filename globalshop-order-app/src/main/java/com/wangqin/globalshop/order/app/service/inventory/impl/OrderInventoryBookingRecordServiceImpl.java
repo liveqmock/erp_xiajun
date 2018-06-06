@@ -2,7 +2,6 @@ package com.wangqin.globalshop.order.app.service.inventory.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
-import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

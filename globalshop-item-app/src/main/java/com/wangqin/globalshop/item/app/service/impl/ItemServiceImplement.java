@@ -258,6 +258,10 @@ public class ItemServiceImplement implements IItemService {
 
 	@Override
 	public List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO) {
+		List<ItemDTO> list = itemDOMapperExt.queryItems(itemQueryVO);
+		for(ItemDTO item:list) {
+			item.setCategoryId(337L);
+		}
 		return itemDOMapperExt.queryItems(itemQueryVO);
 	}
     

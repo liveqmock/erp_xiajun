@@ -1,20 +1,19 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
-import java.util.List;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.PageInfo;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.wangqin.globalshop.common.utils.StringUtils;
+import java.util.List;
 
 
 /**
@@ -108,10 +107,10 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     public void selectDataGrid(PageInfo pageInfo) {
-        Page<UserVo> page = new Page<UserVo>(pageInfo.getNowpage(), pageInfo.getSize());
+//        Page<UserVo> page = new Page<UserVo>(pageInfo.getNowpage(), pageInfo.getSize());
 //        List<UserVo> list = userMapper.selectUserVoPage(page, pageInfo.getCondition());
 //        pageInfo.setRows(list);
-        pageInfo.setTotal(page.getTotal());
+//        pageInfo.setTotal(page.getTotal());
     }
 
     @Override

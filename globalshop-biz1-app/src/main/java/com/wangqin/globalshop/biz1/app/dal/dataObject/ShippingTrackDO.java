@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class ShippingTrackDO {
+public class ShippingTrackDO extends BaseModel {
     private Long id;
 
     private String shippingOrderNo;

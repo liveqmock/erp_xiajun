@@ -1,11 +1,13 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BaseModel;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.inventory.app.service.IWarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +40,13 @@ public class WarehouseServiceImpl implements IWarehouseService {
 	}
 
 	@Override
-	public void addWarehouse(WarehouseDO warehouse) {
+	public void addWarehouse(String name) {
+		WarehouseDO warehouse = new WarehouseDO();
+		warehouse.setName(name);
+		warehouse.setWarehouseNo("WARE"+System.currentTimeMillis());
+		warehouse.init();
+		warehouse.setContactPerson("person");
+		warehouse.setCompanyNo("4565646645");
 		mapper.insertSelective(warehouse);
 	}
 
@@ -55,5 +63,10 @@ public class WarehouseServiceImpl implements IWarehouseService {
 	@Override
 	public List<WarehouseDO> queryWarehouses(String companyNo) {
 		return mapper.selectByCompanyNo(companyNo);
+	}
+
+	@Override
+	public List<WarehouseDO> list() {
+		return mapper.list();
 	}
 }

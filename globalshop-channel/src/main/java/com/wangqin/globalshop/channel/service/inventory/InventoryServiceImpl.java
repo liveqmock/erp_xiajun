@@ -200,7 +200,7 @@ public class InventoryServiceImpl  implements IInventoryService {
 		for(InventoryBookingRecordDO inventoryRecord:inventoryRecords){
 			if(inventoryRecord.getInventoryType()==InventoryRecord.InventoryType.TRANS_INV){
 				lastTransBooked = inventoryRecord.getBookedQuantity();
-			} else if(inventoryRecord.getInventoryType()==InventoryRecord.InventoryType.INVENTORY){
+			} else if(inventoryRecord.getInventoryType()== InventoryRecord.InventoryType.INVENTORY){
 				lastBooked = inventoryRecord.getBookedQuantity();
 			}
 		}

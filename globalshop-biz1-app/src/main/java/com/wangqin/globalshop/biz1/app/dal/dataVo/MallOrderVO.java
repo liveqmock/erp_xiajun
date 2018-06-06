@@ -37,6 +37,7 @@ public class MallOrderVO extends MallOrderDO {
     private Double actualAmount;
 
     private Integer payType;
+    private Integer pageSize;
 
     private Date orderTime;
 
@@ -74,6 +75,14 @@ public class MallOrderVO extends MallOrderDO {
      * 订单结束时间
      */
     private Date endGmtCreate;
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public String getOrderDetailList() {
         return orderDetailList;

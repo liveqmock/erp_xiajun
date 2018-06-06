@@ -3,9 +3,9 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.DealerTypeDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="type_code" property="typeCode" jdbcType="VARCHAR" />
-    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
@@ -13,7 +13,7 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, type_code, type_name, desc, gmt_create, gmt_modify, is_del, creator, modifier
+    id, code, name, remark, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,12 +29,12 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into dealer_type (id, type_code, type_name, 
-      desc, gmt_create, gmt_modify, 
+    insert into dealer_type (id, code, name, 
+      remark, gmt_create, gmt_modify, 
       is_del, creator, modifier
       )
-    values (#{id,jdbcType=BIGINT}, #{typeCode,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, 
-      #{desc,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
       )
   </insert>
@@ -45,14 +45,14 @@
     insert into dealer_type
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
-      <if test="typeCode != null" >
-        type_code,
+      <if test="code != null" >
+        code,
       </if>
-      <if test="typeName != null" >
-        type_name,
+      <if test="name != null" >
+        name,
       </if>
-      <if test="desc != null" >
-        desc,
+      <if test="remark != null" >
+        remark,
       </if>
       <if test="gmtCreate != null" >
         gmt_create,
@@ -72,14 +72,14 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
-      <if test="typeCode != null" >
-        #{typeCode,jdbcType=VARCHAR},
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
       </if>
-      <if test="typeName != null" >
-        #{typeName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null" >
-        #{desc,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -101,14 +101,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO" >
     update dealer_type
     <set >
-      <if test="typeCode != null" >
-        type_code = #{typeCode,jdbcType=VARCHAR},
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
       </if>
-      <if test="typeName != null" >
-        type_name = #{typeName,jdbcType=VARCHAR},
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null" >
-        desc = #{desc,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -130,9 +130,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO" >
     update dealer_type
-    set type_code = #{typeCode,jdbcType=VARCHAR},
-      type_name = #{typeName,jdbcType=VARCHAR},
-      desc = #{desc,jdbcType=VARCHAR},
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},

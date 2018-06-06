@@ -1,12 +1,10 @@
 package com.wangqin.globalshop.usercenter.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.baomidou.framework.service.ISuperService;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.common.utils.PageInfo;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Role 表数据服务层接口

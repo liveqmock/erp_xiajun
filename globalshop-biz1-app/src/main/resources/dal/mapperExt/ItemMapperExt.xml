@@ -13,7 +13,7 @@
     </sql>
     <!-- 2.0版通用查询结果列,xiajun-->
     <sql id="Base_Column_List_2">
-        T1.id,T1.item_name AS name,T1.status, T1.desc AS remark,T1.spec,T1.model,
+        T1.id,T1.item_name AS name,T1.status, T1.remark AS remark,T1.spec,T1.model,
         T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
         main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
         en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
@@ -135,8 +135,8 @@
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="desc != null" >
-        `desc`,
+      <if test="remark != null" >
+        `remark`,
       </if>
       <if test="detail != null" >
         detail,
@@ -251,8 +251,8 @@
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null" >
-        #{desc},
+      <if test="remark != null" >
+        #{remark},
       </if>
       <if test="detail != null" >
         #{detail},
@@ -384,8 +384,8 @@
       <if test="detail != null" >
         `detail` = #{detail},
       </if>
-      <if test="desc != null" >
-        `desc` = #{desc},
+      <if test="remark != null" >
+        `remark` = #{remark},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -510,10 +510,10 @@
              and   <![CDATA[  T1.end_date = #{endDate} ]]>
             </if>
             <if test="hasInventory > 0">
-            	<![CDATA[and T3.inv > 0 ]]>
+            	and <![CDATA[ T3.inv > 0 ]]>
             </if>
             <if test="hasVirtualInventory > 0">
-           		<![CDATA[and T3.virtual_inv > 0 ]]>
+           	and	<![CDATA[ T3.virtual_inv > 0 ]]>
             </if>
 		order by T1.gmt_modify desc;
            

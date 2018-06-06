@@ -23,14 +23,14 @@ public class WarehouseController{
 	 * @param
 	 * @return
 	 */
-	@RequestMapping(value = "/add",method= RequestMethod.POST)
+	@RequestMapping(value = "/add")
 	@ResponseBody
-	public Object add(@RequestBody WarehouseDO warehouse) {
-		if(warehouse == null){
+	public Object add(String name) {
+		if(name == null){
 			return JsonResult.buildFailed("新增仓库对象不能为空");
 		}
-		warehouseService.addWarehouse(warehouse);
-		return JsonResult.buildSuccess(null);
+		warehouseService.addWarehouse(name);
+		return JsonResult.buildSuccess(true);
 	}
 
 	/**
@@ -73,7 +73,8 @@ public class WarehouseController{
 	@GetMapping("/queryWarehouses")
 	@ResponseBody
 	public Object queryWarehouses() {
-		List<WarehouseDO> list = warehouseService.queryWarehouses(ShiroUtil.getShiroUser().getCompanyNo());
+//		List<WarehouseDO> list = warehouseService.queryWarehouses(ShiroUtil.getShiroUser().getCompanyNo());
+		List<WarehouseDO> list = warehouseService.list();
 		return JsonResult.buildSuccess(list);
 	}
 }
