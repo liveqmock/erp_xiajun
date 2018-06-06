@@ -60,7 +60,6 @@ import net.sf.json.JSONObject;
  */
 @Controller
 @RequestMapping("/item")
-@Authenticated
 public class ItemController  {
 
 	@Autowired
