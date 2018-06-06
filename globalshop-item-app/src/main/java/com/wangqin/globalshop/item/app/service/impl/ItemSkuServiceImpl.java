@@ -69,21 +69,19 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	 * 初始化库存信息，添加商品时用
 	 */
 	@Override
-	public List<InventoryAddVO> initInventory(List<ItemSkuAddVO> itemSkuList) {
-		List<InventoryAddVO> inventoryList = null;
+	public List<InventoryDO> initInventory(List<ItemSkuAddVO> itemSkuList) {
+		List<InventoryDO> inventoryList = null;
 		if (CollectionUtils.isNotEmpty(itemSkuList)) {
-			inventoryList = Lists.transform(itemSkuList, new Function<ItemSkuAddVO, InventoryAddVO>() {
+			inventoryList = Lists.transform(itemSkuList, new Function<ItemSkuAddVO, InventoryDO>() {
 				@Override
-				public InventoryAddVO apply(ItemSkuAddVO itemSku) {
+				public InventoryDO apply(ItemSkuAddVO itemSku) {
 					// 初始化库存信息
-					InventoryAddVO inventory = new InventoryAddVO();
-					inventory.setCompanyNo(itemSku.getCompanyNo());
+					InventoryDO inventory = new InventoryDO();
 					inventory.setItemName(itemSku.getItemName());
-				    inventory.setCreator("admin");
-				    inventory.setModifier("admin");
 				    inventory.setItemCode(itemSku.getItemCode());
 					inventory.setSkuCode(itemSku.getSkuCode());
 					inventory.setUpc(itemSku.getUpc());
+					inventory.setVirtualInv(Long.valueOf(itemSku.getVirtualInv()));
 					return inventory;
 				}
 			});

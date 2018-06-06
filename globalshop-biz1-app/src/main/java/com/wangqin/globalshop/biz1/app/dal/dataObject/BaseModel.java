@@ -7,21 +7,20 @@ import java.util.Date;
  * @data 2018/06/05
  */
 public class BaseModel {
-   private Boolean isDel;
+    private Boolean isDel;
+    private Date gmtCreate;
 
-   private Date gmtCreate;
+    private Date gmtModify;
 
-   private Date gmtModify;
+    private String creator;
 
-   private String creator;
+    private String modifier;
 
-   private String modifier;
-
-    public Boolean getDel() {
+    public Boolean getIsDel() {
         return isDel;
     }
 
-    public void setDel(Boolean del) {
+    public void setIsDel(Boolean del) {
         isDel = del;
     }
 
@@ -56,10 +55,11 @@ public class BaseModel {
     public void setModifier(String modifier) {
         this.modifier = modifier;
     }
-    public void init(){
+
+    public void init() {
         this.setModifier("11111");
         this.setCreator("222222");
-        this.setDel(false);
+        this.setIsDel(false);
         Date date = new Date();
         this.setGmtCreate(date);
         this.setGmtModify(date);

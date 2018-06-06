@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author biscuit
@@ -29,4 +30,6 @@ public interface IInventoryOnWarehouseService {
     InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
 
     InventoryOnWareHouseDO insertInventory(InventoryDO inventory, String warehouseNo,String positionNo);
+
+    Map<InventoryOnWareHouseDO,Long> ship(InventoryDO inventoryDO, Long quantity);
 }

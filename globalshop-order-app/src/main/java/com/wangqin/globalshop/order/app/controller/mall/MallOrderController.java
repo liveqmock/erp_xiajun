@@ -50,27 +50,28 @@ public class MallOrderController {
     private IMallSubOrderService mallSubOrderService;
     @Autowired
     private InventoryService inventoryService;
+
     /**
      * 增加订单
      */
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Object add(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
             Long ordSequence = sequenceUtilService.gainORDSequence();
-            mallOrderVO.setOrderNo("P" + String.format("%0" + 2 + "d", mallOrderVO.getChannelNo()) + String.format("%0" + 4 + "d", mallOrderVO.getChannelName()) + "D" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+ordSequence );//系统自动生成
+            mallOrderVO.setOrderNo("P" + String.format("%0" + 2 + "d", mallOrderVO.getChannelNo()) + String.format("%0" + 4 + "d", mallOrderVO.getChannelName()) + "D" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + ordSequence);//系统自动生成
 //			//订单详情
-            String outerOrderDetailList = mallOrderVO.getOrderDetailList();
-            if (StringUtils.isNotBlank(outerOrderDetailList)) {
-                String s = outerOrderDetailList.replace("&quot;", "\"");
-                List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
-                });
-                mallOrderVO.setOuterOrderDetails(outerOrderDetails);
-                if (CollectionUtils.isEmpty(outerOrderDetails)) {
-                    return JsonResult.buildFailed("没有商品信息");
-                }
+            String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
+//            if (StringUtils.isNotBlank(outerOrderDetailList)) {
+            String s = outerOrderDetailList.replace("&quot;", "\"");
+            List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
+            });
+            mallOrderVO.setOuterOrderDetails(outerOrderDetails);
+            if (CollectionUtils.isEmpty(outerOrderDetails)) {
+                return JsonResult.buildFailed("没有商品信息");
             }
+//            }
             /**注入部门no*/
             mallOrderVO.setCompanyNo("MallOrderController86");
             //创建外部订单
@@ -91,7 +92,7 @@ public class MallOrderController {
     /**
      * 更新订单
      */
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public Object update(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
@@ -148,9 +149,9 @@ public class MallOrderController {
      */
     @RequestMapping("/query")
     @ResponseBody
-    public Object query(Long id) {
+    public Object query(String orderNo) {
         JsonResult<MallOrderDO> result = new JsonResult<>();
-        MallOrderDO outerOrder = mallOrderService.selectById(id);
+        MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
         return result.buildData(outerOrder).buildIsSuccess(true);
     }
 
@@ -159,7 +160,7 @@ public class MallOrderController {
      *
      * @return
      */
-    @RequestMapping(value = "/queryOuterOrderList",method = RequestMethod.POST)
+    @RequestMapping(value = "/queryOuterOrderList", method = RequestMethod.POST)
     @ResponseBody
     public Object queryOuterOrderList(MallOrderVO mallOrderVO) {
         if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
@@ -184,7 +185,7 @@ public class MallOrderController {
 //                outerOrderQueryVO.setOpenId(seller.getOpenId());
 //            }
 //        }
-        JsonResult<List<MallOrderDO>> result =new JsonResult<>();
+        JsonResult<List<MallOrderDO>> result = new JsonResult<>();
         List<MallOrderDO> list = mallOrderService.queryOuterOrderList(mallOrderVO);
         result.setData(list);
 //        if (roles.contains("irhdaili")) {
@@ -234,7 +235,7 @@ public class MallOrderController {
                 //查询是否有发货的订单，有的话订单不能修改
                 MallSubOrderDO erpOrderQuery = new MallSubOrderDO();
                 erpOrderQuery.setOrderNo(outerOrder.getOrderNo());
-                erpOrderQuery.setStatus( OrderStatus.SENT.getCode());
+                erpOrderQuery.setStatus(OrderStatus.SENT.getCode());
                 int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
                 if (sendOrder > 0) {
                     return errorMsg.add("第" + i + "条有子订单发货不能关闭");
@@ -248,13 +249,13 @@ public class MallOrderController {
                         //1,释放子订单库存
                         inventoryService.release(erpOrder);
                         //2,更改子订单状态
-                        erpOrder.setStatus( OrderStatus.CLOSE.getCode());
+                        erpOrder.setStatus(OrderStatus.CLOSE.getCode());
                         erpOrder.setGmtModify(new Date());
                         mallSubOrderService.update(erpOrder);
                     }
                 }
                 //2、更改主子订单状态
-                outerOrder.setStatus( OrderStatus.CLOSE.getCode());
+                outerOrder.setStatus(OrderStatus.CLOSE.getCode());
                 outerOrder.setGmtModify(new Date());
                 mallOrderService.updateById(outerOrder);
             }
@@ -302,7 +303,7 @@ public class MallOrderController {
     }
 
     //主订单导出
-    @RequestMapping(value = "/OuterOrderExportExcel",method = RequestMethod.POST)
+    @RequestMapping(value = "/OuterOrderExportExcel", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<byte[]> OuterOrderExportExcel(MallOrderVO mallOrderVO) throws Exception {
         if (mallOrderVO.getStartGmtCreate() == null || mallOrderVO.getEndGmtCreate() == null) {
@@ -366,7 +367,7 @@ public class MallOrderController {
             outerOrderList.forEach((outerOrder) -> {
                 mallOrderService.review(outerOrder.getOrderNo());
 
-                outerOrder.setStatus( 0);
+                outerOrder.setStatus(0);
                 mallOrderService.updateById(outerOrder);
             });
         }

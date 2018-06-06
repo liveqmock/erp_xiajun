@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service("kuaidi100Service")
+@Service
 public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 	
 	// logger

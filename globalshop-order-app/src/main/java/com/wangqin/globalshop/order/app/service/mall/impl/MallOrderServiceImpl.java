@@ -1,17 +1,18 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +56,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void addOuterOrder(MallOrderVO outerOrder) {
         List<MallSubOrderDO> outerOrderDetails = outerOrder.getOuterOrderDetails();
         Double totalPrice = 0.0;
@@ -66,6 +68,13 @@ public class MallOrderServiceImpl implements IMallOrderService {
             i++;
             outerOrderDetail.init();
             outerOrderDetail.setCompanyNo(outerOrder.getCompanyNo());
+            outerOrderDetail.setReceiver(outerOrder.getReceiver());
+            outerOrderDetail.setReceiverDistrict(outerOrder.getReceiverDistrict());
+            outerOrderDetail.setReceiverCity(outerOrder.getReceiverCity());
+            outerOrderDetail.setReceiverState(outerOrder.getReceiverState());
+            outerOrderDetail.setReceiverAddress(outerOrder.getAddressDetail());
+            outerOrderDetail.setTelephone(outerOrder.getTelephone());
+            outerOrderDetail.setStatus(0);
 //             计算运费和销售价格
 //            ItemSkuDO sku = itemSkuService.selectBySkuCode(outerOrderDetail.getSkuCode());
 //            if (sku != null) {
@@ -101,9 +110,13 @@ public class MallOrderServiceImpl implements IMallOrderService {
 //                    inventoryService.update(inventory);
 //                }
 //            }
+            inventoryService.order(outerOrderDetail);
             mallSubOrderDOMapper.insert(outerOrderDetail);
         }
+        //根据当前用户获取shopcode
+        outerOrder.setShopCode("SHiiii");
         outerOrder.setTotalAmount(totalPrice);
+        outerOrder.setActualAmount(0.0);
         outerOrder.init();
         mallOrderDOMapper.insertSelective(outerOrder);
 
