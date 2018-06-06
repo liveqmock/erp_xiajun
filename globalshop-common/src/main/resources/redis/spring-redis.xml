@@ -13,7 +13,6 @@
                 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
                 http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
     
-    <context:property-placeholder location="classpath:/props/config-dev.properties" file-encoding="utf-8" ignore-unresolvable="true"/>
 	<!-- cache使用的redis配置 -->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxIdle" value="${redis.maxIdle}" />
