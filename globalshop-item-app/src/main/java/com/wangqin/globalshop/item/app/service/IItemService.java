@@ -21,7 +21,7 @@ public interface IItemService {
 
 	
 	//插入单个商品
-	int insertItemSelective(ItemDO item);
+	Long insertItemSelective(ItemDO item);
 		
 	ItemDO selectByPrimaryKey(Long id);
 	/**
@@ -87,4 +87,6 @@ public interface IItemService {
 	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);
 	
 	void updateByPrimaryKeySelective(ItemDO item);
+	
+	Long queryIdByItemCode(String itemCode);
 }

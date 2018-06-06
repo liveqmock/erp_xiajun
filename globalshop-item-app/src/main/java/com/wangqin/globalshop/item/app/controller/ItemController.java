@@ -1,6 +1,12 @@
 package com.wangqin.globalshop.item.app.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.tools.ant.taskdefs.condition.Http;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.google.gson.Gson;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
@@ -32,16 +39,15 @@ import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.ImageUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.channel.ChannelFactory;
 import com.wangqin.globalshop.item.app.service.IBuyerService;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
@@ -266,43 +272,47 @@ public class ItemController  {
 			CountryDO countryDO = new CountryDO();
 			countryDO.setId(item.getCountry());
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));
-			newItem.setItemCode(RandomUtils.getTimeRandom());
+			String itemCode = RandomUtils.getTimeRandom();
+			newItem.setItemCode(itemCode);
 			
 	        newItem.setRemark(item.getRemark());
-	        newItem.setCompanyNo("c12");     
+	        newItem.setCompanyNo("1");     
 	        newItem.setMainPic(item.getMainPic());
 	        iItemService.insertItemSelective(newItem);
 	        /**插入itemsku和库存**/
 	        List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
 	        		if (itemSkuList != null && !itemSkuList.isEmpty()) {
 	        			itemSkuList.forEach(itemSku -> {
-	        				itemSku.setItemCode(item.getItemCode());
-	        				itemSku.setItemName(item.getName());
-	        				itemSku.setItemId(item.getId());
-	        				itemSku.setCategoryId(item.getCategoryId());
-	        				itemSku.setCategoryName(item.getCategoryName());
-	        				itemSku.setBrand(item.getBrand());
+	        				itemSku.setItemCode(newItem.getItemCode());
+	        				itemSku.setItemName(newItem.getItemName());
+	        				itemSku.setItemId(newItem.getId());
+	        				//itemSku.setCategoryId(newItem.getCategoryId());
+	        				itemSku.setCategoryName(newItem.getCategoryName());
+	        				itemSku.setBrand(newItem.getBrandName());
 	        				//itemSku.setCompanyId(item.getCompanyId());
 	        				itemSku.setCompanyNo("c12");
 	        				itemSku.setCreator("admin");
 	        				itemSku.setModifier("admin");
 	        				itemSku.setUpc(RandomUtils.getTimeRandom());
+	        				System.out.println("销售价格："+itemSku.getSalePrice());
+	        				itemSku.setSalePrice(itemSku.getSalePrice());
 	        				//skuFreight(itemSku);
 	        			});         
 	        			itemSkuService.insertBatch(itemSkuList);
 	        			List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
 	        			//inventoryService.insertBatchInventory(inventoryList);
-	        			invService.outbound(inventoryList);
+	        			//invService.outbound(inventoryList);
 	        		}
 	        		
 			//同步到有赞并上架  		
 			if(item.getIsSale()!=null && item.getIsSale()==1) {	
 					try {
+						Long currentItemId = iItemService.queryIdByItemCode(itemCode);
+						System.out.println("可售商品");
+						System.out.println(currentItemId);
 						//outerItemService.synItemYouzan(item.getId());
 						//ShiroUser user = ShiroUtil.getShiroUser();
-					    //TODO
-						String companyNo ="11";
-						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
+						sendPost("http://localhost:8000/youzanSyn/batchSynItemYouzan?itemIds=["+currentItemId.toString()+"]","");
 					} catch(Exception e) {
 						//logger.error("商品添加时同步到有赞：", e);
 					}			
@@ -833,5 +843,65 @@ public class ItemController  {
 	}
 	
 	
+	 /**
+     * 向指定 URL 发送POST方法的请求
+     * 
+     * @param url
+     *            发送请求的 URL
+     * @param param
+     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @return 所代表远程资源的响应结果
+     */
+    public static String sendPost(String url, String param) {
+        PrintWriter out = null;
+        BufferedReader in = null;
+        String result = "";
+        try {
+            URL realUrl = new URL(url);
+            // 打开和URL之间的连接
+            URLConnection conn = realUrl.openConnection();
+            // 设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // 获取URLConnection对象对应的输出流
+            out = new PrintWriter(conn.getOutputStream());
+            // 发送请求参数
+            out.print(param);
+            // flush输出流的缓冲
+            out.flush();
+            // 定义BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送 POST 请求出现异常！"+e);
+            e.printStackTrace();
+        }
+        //使用finally块来关闭输出流、输入流
+        finally{
+            try{
+                if(out!=null){
+                    out.close();
+                }
+                if(in!=null){
+                    in.close();
+                }
+            }
+            catch(IOException ex){
+                ex.printStackTrace();
+            }
+        }
+        System.out.println("返回值："+result);
+        return result;
+    }    
+
 	
 }

@@ -292,14 +292,14 @@
             LAST_INSERT_ID()
         </selectKey>
         insert into item_sku
-        (sku_code,item_code,item_name,company_no,upc,creator,modifier)
+        (sku_code,item_code,item_name,company_no,upc,creator,modifier,sale_price)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
             separator=",">
             (
             #{wdSolr.skuCode},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
-            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier}
+            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice}
             )
         </foreach>
     </insert>

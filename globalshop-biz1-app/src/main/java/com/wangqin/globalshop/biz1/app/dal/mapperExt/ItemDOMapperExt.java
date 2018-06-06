@@ -16,7 +16,7 @@ import java.util.Map;
 public interface ItemDOMapperExt extends ItemDOMapper {
 
 	//插入单个商品
-	int insertItemSelective(ItemDO item);
+	Long insertItemSelective(ItemDO item);
 	
 	public List<ItemDO> selectBatchIds(List<Long> idList);
 
@@ -54,4 +54,6 @@ public interface ItemDOMapperExt extends ItemDOMapper {
     ItemDO selectByItemCode(String itemCode);
 	
 	void updateByIdSelective(ItemDO itemQueryVO);
+	
+	Long queryIdByItemCode(String itemCode);
 }

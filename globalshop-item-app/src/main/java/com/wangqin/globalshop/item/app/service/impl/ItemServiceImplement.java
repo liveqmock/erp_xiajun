@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
@@ -48,7 +49,7 @@ public class ItemServiceImplement implements IItemService {
 
     //插入单个商品
     @Override
-    public int insertItemSelective(ItemDO item) {
+    public Long insertItemSelective(ItemDO item) {
     	item.setCreator("admin");
     	item.setModifier("admin");
     	return itemDOMapperExt.insertItemSelective(item);
@@ -270,5 +271,9 @@ public class ItemServiceImplement implements IItemService {
 		itemDOMapperExt.updateByIdSelective(item);
 	}
 
+	@Override
+	public Long queryIdByItemCode(String itemCode) {
+		return itemDOMapperExt.queryIdByItemCode(itemCode);
+	}
    
 }
