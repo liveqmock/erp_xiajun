@@ -868,9 +868,9 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		MallOrderDO p = new MallOrderDO();
 		p.setChannelOrderNo(TradeDetail.getTid());
 		if (outerOrderMapper.queryPoCount(p) > 0) {
-			logger.error("有赞订单已经存在 tid:" + TradeDetail.getTid());
+			logger.error("有赞订单已经存在 tid" + TradeDetail.getTid());
 			//生产时，直接return，测试时，进行插入
-			//return;
+			return;
 		}
 
 		// 如果有赞订单还不存在，继续
