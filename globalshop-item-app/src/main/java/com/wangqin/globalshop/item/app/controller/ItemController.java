@@ -293,7 +293,7 @@ public class ItemController  {
 	        			itemSkuService.insertBatch(itemSkuList);
 	        			List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
 	        			//inventoryService.insertBatchInventory(inventoryList);
-	        			invService.outbound(inventoryList);
+	        			//invService.outbound(inventoryList);
 	        		}
 	        		
 			//同步到有赞并上架  		
