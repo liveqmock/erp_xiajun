@@ -44,6 +44,21 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                              Object handler) throws Exception {
         // 通过注解方式鉴权
         Boolean isJump = true;
+        String uri = request.getRequestURI();
+        //设置不拦截的对象
+        String[] noFilters = new String[] {  "js",
+                "images", "css", "/login" };
+        boolean beFilter = true;
+        for (String s : noFilters) {
+            if (uri.indexOf(s) != -1) {
+                beFilter = false;
+                break;
+            }
+        }
+        if (beFilter == false) {
+            return super.preHandle(request, response, handler);
+        }
+
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Authenticated authenticate = handlerMethod.getMethodAnnotation(Authenticated.class);
