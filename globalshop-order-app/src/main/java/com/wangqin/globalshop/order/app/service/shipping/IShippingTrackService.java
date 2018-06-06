@@ -22,4 +22,6 @@ public interface IShippingTrackService {
     void update(ShippingTrackDO selectOne);
 
     int selectCount(ShippingTrackDO selShippingTrack);
+
+    List<ShippingTrackDO> selectShippingTrackListByLogisticNo(String logisticNo);
 }
