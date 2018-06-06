@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.AuthOrganizationDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthOrganizationDOMapperExt;
 import com.wangqin.globalshop.common.result.Tree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 import com.wangqin.globalshop.usercenter.service.IOrganizationService;
 
 /**

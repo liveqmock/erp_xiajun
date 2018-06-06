@@ -15,6 +15,8 @@ import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +49,8 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 		// localExpressMap.put("海狐联邦转运", "167");
 		// localExpressMap.put("GLS", "167");
 	}
+	@Autowired
+	private InventoryService inventoryService;
 
 	public TaobaoChannelServiceImpl(ChannelAccountDO channelAccount) {
 		super(channelAccount);
@@ -193,39 +197,39 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 
 			outerOrderDetails.add(outerOrderDetail);
 
-			// 如果有虚拟库存就扣减虚拟库存
-			ItemSkuDO tjItemSku = new ItemSkuDO();
-			tjItemSku.setSkuCode(order.getSkuNo());
-			ItemSkuDO itemSku = itemSkuService.queryPo(tjItemSku);
-			if (itemSku != null) {
-				InventoryDO inventory = inventoryService.queryInventoryByCode(itemSku.getItemCode(), itemSku.getSkuCode());
-				if (inventory.getVirtualInv() > 0) {
-					Long totalAvailableInv= inventory.getInv()-inventory.getLockedInv()+inventory.getTransInv()-inventory.getLockedTransInv();
-					Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
-					virtualInv = virtualInv > 0 ? virtualInv : 0;
-					// 如果虚拟库存小于等于可售库存，虚拟库存清零
-					virtualInv = virtualInv > totalAvailableInv ? virtualInv : 0;
-
-					// 如果虚拟占用库存大于零，有赞下单不应该减少虚拟预扣
-					/*
-					 * if(inventory.getLockedVirtualInv() > 0) { int lockedVirtualInv =
-					 * inventory.getLockedVirtualInv() - outerOrderDetail.getQuantity();
-					 * lockedVirtualInv = lockedVirtualInv>0 ? lockedVirtualInv : 0;
-					 * inventory.setLockedVirtualInv(lockedVirtualInv); }
-					 */
-					inventory.setVirtualInv(virtualInv);
-					inventory.setGmtModify(new Date());
-					inventoryService.updateByPrimaryKey(inventory);
-				}
-			}
+//			// 如果有虚拟库存就扣减虚拟库存
+//			ItemSkuDO tjItemSku = new ItemSkuDO();
+//			tjItemSku.setSkuCode(order.getSkuNo());
+//			ItemSkuDO itemSku = itemSkuService.queryPo(tjItemSku);
+//			if (itemSku != null) {
+//				InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(itemSku.getItemCode(), itemSku.getSkuCode());
+//				if (inventory.getVirtualInv() > 0) {
+//					Long totalAvailableInv= inventory.getInv()-inventory.getLockedInv()+inventory.getTransInv()-inventory.getLockedTransInv();
+//					Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
+//					virtualInv = virtualInv > 0 ? virtualInv : 0;
+//					// 如果虚拟库存小于等于可售库存，虚拟库存清零
+//					virtualInv = virtualInv > totalAvailableInv ? virtualInv : 0;
+//
+//					// 如果虚拟占用库存大于零，有赞下单不应该减少虚拟预扣
+//					/*
+//					 * if(inventory.getLockedVirtualInv() > 0) { int lockedVirtualInv =
+//					 * inventory.getLockedVirtualInv() - outerOrderDetail.getQuantity();
+//					 * lockedVirtualInv = lockedVirtualInv>0 ? lockedVirtualInv : 0;
+//					 * inventory.setLockedVirtualInv(lockedVirtualInv); }
+//					 */
+//					inventory.setVirtualInv(virtualInv);
+//					inventory.setGmtModify(new Date());
+					inventoryService.order(outerOrderDetail);
+//				}
+//			}
 		}
 		mallSubOrderService.insertBatch(outerOrderDetails); // 添加子订单
 
 		if (outOrderIdList.size() > 0) {
 			// 把商品详情更新到主订单明细里面
 			outerOrderDetailMapper.updateOuterOrderDetailByItemSku(outOrderIdList);
-			// 生成子订单并配货
-			outerOrderService.reviewByIdList(outOrderIdList);
+//			// 生成子订单并配货
+//			outerOrderService.reviewByIdList(outOrderIdList);
 		}
 	}
 	

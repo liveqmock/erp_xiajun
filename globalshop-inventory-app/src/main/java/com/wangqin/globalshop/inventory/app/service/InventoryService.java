@@ -19,6 +19,8 @@ public interface InventoryService {
     void order(MallOrderDO mallOrderDO);
     /**下单*/
     void order(MallSubOrderDO mallSubOrderDO);
+    /**第三方下单*/
+    void order(List<MallSubOrderDO> outerOrderDetails);
     /**退货*/
     void returns(MallReturnOrderDO mallReturnOrderDO);
     /**出库单出库*/
@@ -31,4 +33,5 @@ public interface InventoryService {
     void checkIn(String skuCode, Long warehouseId, String positionNo, Long quantity);
 
     void inventoryCheckOut(Long inventoryAreaId, Long quantity);
+
 }

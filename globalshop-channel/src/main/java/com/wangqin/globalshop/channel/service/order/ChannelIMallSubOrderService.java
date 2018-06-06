@@ -1,9 +1,6 @@
 package com.wangqin.globalshop.channel.service.order;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.common.utils.BizResult;
 
 import java.util.List;
 
@@ -14,25 +11,25 @@ import java.util.List;
  */
 public interface ChannelIMallSubOrderService {
 
-	public void splithaihuErpOrder(String outerOrderDetailList, String channelOrderNo, ChannelAccountDO channelAccount) throws InventoryException;
+//	void splithaihuErpOrder(String outerOrderDetailList, String channelOrderNo, ChannelAccountDO channelAccount) throws InventoryException;
 
 
-	BizResult lockErpOrder(MallSubOrderDO erpOrder)throws InventoryException;
+//	lt lockErpOrder(MallSubOrderDO erpOrder)throws InventoryException;
 
 
-	public int deleteByPrimaryKey(Long id);
+	int deleteByPrimaryKey(Long id);
 
-	public int insert(MallSubOrderDO record);
+	int insert(MallSubOrderDO record);
 
-	public int insertSelective(MallSubOrderDO record);
+	int insertSelective(MallSubOrderDO record);
 
-	public MallSubOrderDO selectByPrimaryKey(Long id);
+	MallSubOrderDO selectByPrimaryKey(Long id);
 
-	public int updateByPrimaryKeySelective(MallSubOrderDO record);
+	int updateByPrimaryKeySelective(MallSubOrderDO record);
 
-	public int updateByPrimaryKey(MallSubOrderDO record);
+	int updateByPrimaryKey(MallSubOrderDO record);
 
-	public void insertBatch(List<MallSubOrderDO> outerOrderDetails);
+	void insertBatch(List<MallSubOrderDO> outerOrderDetails);
 
 
 }

@@ -15,12 +15,12 @@ import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.service.inventory.ErpOrderUtil;
 import com.wangqin.globalshop.channel.service.inventory.IInventoryBookingRecordChannelService;
-import com.wangqin.globalshop.channel.service.inventory.IInventoryService;
-import com.wangqin.globalshop.channel.service.inventory.InventoryServiceImpl;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.BizResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.inventory.app.service.impl.InventoryServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 	private IInventoryBookingRecordChannelService iInventoryBookingRecordChannelService;
 
 	@Autowired
-	private IInventoryService iInventoryService;
+	private InventoryService iInventoryService;
 
 
 	public int deleteByPrimaryKey(Long id){
@@ -74,45 +74,45 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 	public int updateByPrimaryKey(MallSubOrderDO record){
 		return mallSubOrderDOMapperExt.updateByPrimaryKeySelective(record);
 	}
-	/**
-	 * 海狐拆单，只是针对一个商品拆单，不会出现多个商品混合拆单
-	 * @param outerOrderDetailList
-	 * @param tartgetNO
-	 * @param channelAccount
-	 */
-	public void splithaihuErpOrder(String outerOrderDetailList, String tartgetNO, ChannelAccountDO channelAccount) throws InventoryException{
-		String s = outerOrderDetailList.replace("&quot;", "\"");
-		List<OuterOrderDetail> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<OuterOrderDetail>>(){
-		});
-		if (CollectionUtils.isNotEmpty(outerOrderDetails)) {
-			for (OuterOrderDetail outerOrderDetail : outerOrderDetails) {
-
-				MallSubOrderDO mallSubOrderSo = new MallSubOrderDO();
-				mallSubOrderSo.setShopCode(channelAccount.getShopCode());
-				mallSubOrderSo.setSkuCode(outerOrderDetail.getSkuCode());
-				mallSubOrderSo.setQuantity(outerOrderDetail.getQuantity());
-
-				MallSubOrderDO erpOrder = mallSubOrderDOMapperExt.queryHaihuErpOrders(mallSubOrderSo);
-				if (erpOrder == null) {
-					throw new ErpCommonException("拆单数量不能超过订单数量,或订单状态不对");
-				}
-				this.splitErpOrder(erpOrder, outerOrderDetail.getQuantity());
-				erpOrder.setReceiver("海狐海淘");
-				erpOrder.setTelephone("18868810546");
-				erpOrder.setReceiverState("浙江省");
-				erpOrder.setReceiverCity("杭州市");
-				erpOrder.setReceiverDistrict("西湖区");
-				erpOrder.setReceiverAddress("西斗门路9号福地创业园二期四栋二层");
-				erpOrder.setCreator("海狐拆单");
-				erpOrder.setChannelOrderNo(tartgetNO);
-				this.mallSubOrderDOMapperExt.updateByPrimaryKeySelective(erpOrder);
-
-			}
-
-		} else {
-			throw new ErpCommonException("拆单明细不能为空");
-		}
-	}
+//	/**
+//	 * 海狐拆单，只是针对一个商品拆单，不会出现多个商品混合拆单
+//	 * @param outerOrderDetailList
+//	 * @param tartgetNO
+//	 * @param channelAccount
+//	 */
+//	public void splithaihuErpOrder(String outerOrderDetailList, String tartgetNO, ChannelAccountDO channelAccount) throws InventoryException{
+//		String s = outerOrderDetailList.replace("&quot;", "\"");
+//		List<OuterOrderDetail> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<OuterOrderDetail>>(){
+//		});
+//		if (CollectionUtils.isNotEmpty(outerOrderDetails)) {
+//			for (OuterOrderDetail outerOrderDetail : outerOrderDetails) {
+//
+//				MallSubOrderDO mallSubOrderSo = new MallSubOrderDO();
+//				mallSubOrderSo.setShopCode(channelAccount.getShopCode());
+//				mallSubOrderSo.setSkuCode(outerOrderDetail.getSkuCode());
+//				mallSubOrderSo.setQuantity(outerOrderDetail.getQuantity());
+//
+//				MallSubOrderDO erpOrder = mallSubOrderDOMapperExt.queryHaihuErpOrders(mallSubOrderSo);
+//				if (erpOrder == null) {
+//					throw new ErpCommonException("拆单数量不能超过订单数量,或订单状态不对");
+//				}
+//				this.splitErpOrder(erpOrder, outerOrderDetail.getQuantity());
+//				erpOrder.setReceiver("海狐海淘");
+//				erpOrder.setTelephone("18868810546");
+//				erpOrder.setReceiverState("浙江省");
+//				erpOrder.setReceiverCity("杭州市");
+//				erpOrder.setReceiverDistrict("西湖区");
+//				erpOrder.setReceiverAddress("西斗门路9号福地创业园二期四栋二层");
+//				erpOrder.setCreator("海狐拆单");
+//				erpOrder.setChannelOrderNo(tartgetNO);
+//				this.mallSubOrderDOMapperExt.updateByPrimaryKeySelective(erpOrder);
+//
+//			}
+//
+//		} else {
+//			throw new ErpCommonException("拆单明细不能为空");
+//		}
+//	}
 
 
 	public void insertBatch(List<MallSubOrderDO> outerOrderDetails){
@@ -329,40 +329,40 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 
 
 
-	@Override
-	public BizResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException{
-		if(erpOrder.getStatus()!=OrderStatus.INIT.getCode()){
-			return BizResult.buildFailed("订单状态错误");
-		}
-		//未备货订单
-		if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
-			if(erpOrder.getWarehouseNo()==null){
-				List<MallSubOrderDO> erpOrders = Lists.newArrayList();
-				erpOrders.add(erpOrder);
-				List<InventoryServiceImpl.WarehouseCollector> wcs = iInventoryService.selectWarehousesByErpOrders(erpOrders);
-				if(CollectionUtils.isNotEmpty(wcs)){
-					iInventoryService.lockedInventroy(wcs.get(0));
-				}else{
-					return BizResult.buildFailed("没有库存备货失败");
-				}
-			}else{
-				return BizResult.buildFailed("没有仓库信息");
-			}
-		}else{
-			if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.MIX_STOCKUP.getCode()&&erpOrder.getWarehouseNo()!=null){
-				InventoryServiceImpl.WarehouseCollector wc = iInventoryService.selectWarehousesByErpOrder(erpOrder);
-				if(wc!=null){
-					iInventoryService.lockedInventroy(wc);
-				}else{
-					return BizResult.buildFailed("没有库存备货失败");
-				}
-			}else{
-				return BizResult.buildFailed("订单备货状态错误");
-			}
-
-		}
-		return BizResult.buildSuccess();
-	}
+//	@Override
+//	public BizResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException{
+//		if(erpOrder.getStatus()!=OrderStatus.INIT.getCode()){
+//			return BizResult.buildFailed("订单状态错误");
+//		}
+//		//未备货订单
+//		if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
+//			if(erpOrder.getWarehouseNo()==null){
+//				List<MallSubOrderDO> erpOrders = Lists.newArrayList();
+//				erpOrders.add(erpOrder);
+//				List<InventoryServiceImpl.WarehouseCollector> wcs = iInventoryService.selectWarehousesByErpOrders(erpOrders);
+//				if(CollectionUtils.isNotEmpty(wcs)){
+//					iInventoryService.lockedInventroy(wcs.get(0));
+//				}else{
+//					return BizResult.buildFailed("没有库存备货失败");
+//				}
+//			}else{
+//				return BizResult.buildFailed("没有仓库信息");
+//			}
+//		}else{
+//			if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.MIX_STOCKUP.getCode()&&erpOrder.getWarehouseNo()!=null){
+//				InventoryServiceImpl.WarehouseCollector wc = iInventoryService.selectWarehousesByErpOrder(erpOrder);
+//				if(wc!=null){
+//					iInventoryService.lockedInventroy(wc);
+//				}else{
+//					return BizResult.buildFailed("没有库存备货失败");
+//				}
+//			}else{
+//				return BizResult.buildFailed("订单备货状态错误");
+//			}
+//
+//		}
+//		return BizResult.buildSuccess();
+//	}
 
 
 

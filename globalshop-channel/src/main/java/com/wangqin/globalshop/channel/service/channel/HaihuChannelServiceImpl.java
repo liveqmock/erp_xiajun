@@ -7,9 +7,8 @@ import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
 import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
@@ -23,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -56,8 +55,8 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 			Object result = pullOrderTwo(request);
 			respose.getWriter().write(new Gson().toJson(result));
 		} else if (url.contains("haihupullOrder")) {
-			Object result = pullOrder(request);
-			respose.getWriter().write(new Gson().toJson(result));
+//			Object result = pullOrder(request);
+//			respose.getWriter().write(new Gson().toJson(result));
 		}
 	}
 
@@ -207,7 +206,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 						itemSkusDetail.put("scale", itemSku.getSize());
 						itemSkusDetail.put("weight", itemSku.getWeight());
 						if(itemRequestType.contentEquals("0")) {	//代理
-							InventoryDO inventory = inventoryService.queryInventoryByCode(item.getItemCode(), itemSku.getSkuCode());
+							InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(item.getItemCode(), itemSku.getSkuCode());
 							Long totalAvailableInv= inventory.getInv()-inventory.getLockedInv()+inventory.getTransInv()-inventory.getLockedTransInv();
 							itemSkusDetail.put("itemskuQuantity", totalAvailableInv);
 
@@ -245,57 +244,57 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 		return result;
 	}	
 
-	/**
-     * 海狐推送订单拆单
-     * @param request
-     * haihupullOrder
-     * @return
-     */
-	public Object pullOrder(HttpServletRequest request) {
-		JsonResult<List<Map<String, Object>>> result = new JsonResult<>();
-		InputStream in;
-		try {
-			in = request.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String jsonStr = br.readLine();
-			System.out.println(jsonStr);
-			JSONObject param = JSONObject.fromObject(jsonStr);
-			String timeStamp = param.getString("timeStamp");
-			String targetNo = param.getString("targetNo");
-			String sign = param.getString("sign");
-			String outerOrderDetailListString = param.getString("outerOrderDetailList");
-			String mysign = Md5Util.getMD5("enteCode=haihuhaitao&timeStamp=" + timeStamp);
-			this.logger.error("我方签名: " + mysign);
-			this.logger.error("海狐签名: " + sign);
-			this.logger.error("海狐推单参数: " + param);
-			OuterOrder outerOrder = new OuterOrder();
-			outerOrder.setOrderDetailList(outerOrderDetailListString);
-			if (mysign.equalsIgnoreCase(sign)) {
-				String outerOrderDetailList = outerOrder.getOrderDetailList();
-				if (StringUtils.isNotBlank(outerOrderDetailList)) {
-					try {
-						mallSubOrderService.splithaihuErpOrder(outerOrderDetailList, targetNo, channelAccount);
-					} catch (InventoryException e) {
-						this.logger.error("",e);
-						result.buildMsg("库存记录错误："+e.getMessage()).buildIsSuccess(false);
-					} catch (ErpCommonException e) {
-						this.logger.error("",e);
-						result.buildMsg("库存记录错误:"+e.getErrorCode()+" "+e.getErrorMsg()).buildIsSuccess(false);
-					}
-				} else {
-					result.buildMsg("参数信息不对").buildIsSuccess(false);
-				}
-				result.buildMsg("推单成功").buildIsSuccess(true);
-			} else {
-				result.buildMsg("拒绝访问").buildIsSuccess(false);
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			this.logger.error("读取流异常" + e1);
-		}
-
-		return result;
-	}
+//	/**
+//     * 海狐推送订单拆单
+//     * @param request
+//     * haihupullOrder
+//     * @return
+//     */
+//	public Object pullOrder(HttpServletRequest request) {
+//		JsonResult<List<Map<String, Object>>> result = new JsonResult<>();
+//		InputStream in;
+//		try {
+//			in = request.getInputStream();
+//			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//			String jsonStr = br.readLine();
+//			System.out.println(jsonStr);
+//			JSONObject param = JSONObject.fromObject(jsonStr);
+//			String timeStamp = param.getString("timeStamp");
+//			String targetNo = param.getString("targetNo");
+//			String sign = param.getString("sign");
+//			String outerOrderDetailListString = param.getString("outerOrderDetailList");
+//			String mysign = Md5Util.getMD5("enteCode=haihuhaitao&timeStamp=" + timeStamp);
+//			this.logger.error("我方签名: " + mysign);
+//			this.logger.error("海狐签名: " + sign);
+//			this.logger.error("海狐推单参数: " + param);
+//			OuterOrder outerOrder = new OuterOrder();
+//			outerOrder.setOrderDetailList(outerOrderDetailListString);
+//			if (mysign.equalsIgnoreCase(sign)) {
+//				String outerOrderDetailList = outerOrder.getOrderDetailList();
+//				if (StringUtils.isNotBlank(outerOrderDetailList)) {
+//					try {
+////						mallSubOrderService.splithaihuErpOrder(outerOrderDetailList, targetNo, channelAccount);
+//					} catch (InventoryException e) {
+//						this.logger.error("",e);
+//						result.buildMsg("库存记录错误："+e.getMessage()).buildIsSuccess(false);
+//					} catch (ErpCommonException e) {
+//						this.logger.error("",e);
+//						result.buildMsg("库存记录错误:"+e.getErrorCode()+" "+e.getErrorMsg()).buildIsSuccess(false);
+//					}
+//				} else {
+//					result.buildMsg("参数信息不对").buildIsSuccess(false);
+//				}
+//				result.buildMsg("推单成功").buildIsSuccess(true);
+//			} else {
+//				result.buildMsg("拒绝访问").buildIsSuccess(false);
+//			}
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//			this.logger.error("读取流异常" + e1);
+//		}
+//
+//		return result;
+//	}
     /**
      * 海狐推送订单
      * @param request
@@ -409,30 +408,31 @@ public class HaihuChannelServiceImpl extends AbstractChannelService {
 
 
 					outerOrderDetailList.add(outerOrderDetailTemp);
-					//如果有虚拟库存就扣减虚拟库存
-					ItemSkuDO tjItemSku = new ItemSkuDO();
-					tjItemSku.setSkuCode(outerOrderDetail.getSkuCode());
-					ItemSkuDO itemSku = itemSkuService.queryPo(tjItemSku);
-					if(itemSku != null) {
-						InventoryDO inventory = inventoryService.queryInventoryByCode(itemSku.getItemCode(), itemSku.getSkuCode());
-						if(inventory.getVirtualInv()>0) {
-							Long totalAvailableInv= inventory.getInv()-inventory.getLockedInv()+inventory.getTransInv()-inventory.getLockedTransInv();
-							Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
-							virtualInv = virtualInv>0 ? virtualInv : 0;
-							//如果虚拟库存小于等于可售库存，虚拟库存清零
-							virtualInv = virtualInv>totalAvailableInv ? virtualInv : 0;
-							inventory.setVirtualInv(virtualInv);
-							inventory.setGmtModify(new Date());
-							inventoryService.updateByPrimaryKey(inventory);
-						}
-					}
+					inventoryService.order(outerOrderDetailList);
+//					//如果有虚拟库存就扣减虚拟库存
+//					ItemSkuDO tjItemSku = new ItemSkuDO();
+//					tjItemSku.setSkuCode(outerOrderDetail.getSkuCode());
+//					ItemSkuDO itemSku = itemSkuService.queryPo(tjItemSku);
+//					if(itemSku != null) {
+//						InventoryDO inventory = inventoryService.queryInventoryByCode(itemSku.getItemCode(), itemSku.getSkuCode());
+//						if(inventory.getVirtualInv()>0) {
+//							Long totalAvailableInv= inventory.getInv()-inventory.getLockedInv()+inventory.getTransInv()-inventory.getLockedTransInv();
+//							Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
+//							virtualInv = virtualInv>0 ? virtualInv : 0;
+//							//如果虚拟库存小于等于可售库存，虚拟库存清零
+//							virtualInv = virtualInv>totalAvailableInv ? virtualInv : 0;
+//							inventory.setVirtualInv(virtualInv);
+//							inventory.setGmtModify(new Date());
+//							inventoryService.updateByPrimaryKey(inventory);
+//						}
+//					}
 				}
 				mallSubOrderService.insertBatch(outerOrderDetailList);				//添加子订单
 				if(outOrderIdList.size() > 0) {
 	    			//把商品详情更新到主订单明细里面
 	    			outerOrderDetailMapper.updateOuterOrderDetailByItemSku(outOrderIdList);
 	    			//生成子订单并配货
-					outerOrderService.reviewByIdList(outOrderIdList);
+//					outerOrderService.reviewByIdList(outOrderIdList);
 	    		}
 				result.buildMsg("推单成功").buildIsSuccess(true);
 			} else {

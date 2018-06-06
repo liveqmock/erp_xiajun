@@ -133,6 +133,20 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     /**
+     * 下单
+     *
+     * @param outerOrderDetails
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void order(List<MallSubOrderDO> outerOrderDetails) {
+        for (MallSubOrderDO detail : outerOrderDetails) {
+            order(detail);
+        }
+
+    }
+
+    /**
      * 取消订单
      *
      * @param mallSubOrderDO
