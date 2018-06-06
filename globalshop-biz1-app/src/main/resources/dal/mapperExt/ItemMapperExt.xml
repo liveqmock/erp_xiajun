@@ -23,6 +23,12 @@
         T1.modifier AS userModify 
     </sql>
     
+ 
+ 	<select id="queryIdByItemCode" parameterType="java.lang.String" resultType="java.lang.Long">
+ 	select id from item
+ 	where item_code = #{itemCode}
+ 	</select>
+ 	
     <!-- 插入单个商品 -->
     <insert id="insertItemSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
     insert into item
