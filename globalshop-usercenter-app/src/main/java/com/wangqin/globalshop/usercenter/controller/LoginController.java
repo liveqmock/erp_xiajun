@@ -2,6 +2,7 @@ package com.wangqin.globalshop.usercenter.controller;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.csrf.CsrfToken;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
@@ -56,14 +57,14 @@ public class LoginController extends BaseController {
      * @return {String}
      */
     @GetMapping("/login")
-//    @CsrfToken(create = true)
-//    public String login() {
-//        logger.info("GET请求登录");
+    @CsrfToken(create = true)
+    public String login() {
+        logger.info("GET请求登录");
 //        if (SecurityUtils.getSubject().isAuthenticated()) {
 //            return "redirect:/web";
 //        }
-//        return "login";
-//    }
+        return "login";
+    }
 
     /**
      * POST 登录 shiro 写法
