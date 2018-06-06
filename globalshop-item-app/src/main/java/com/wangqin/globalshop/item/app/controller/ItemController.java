@@ -40,6 +40,7 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.channel.ChannelFactory;
 import com.wangqin.globalshop.item.app.service.IBuyerService;
 import com.wangqin.globalshop.item.app.service.ICountryService;
@@ -64,6 +65,9 @@ public class ItemController  {
 
 	@Autowired
 	private IItemService iItemService;
+	
+	@Autowired
+	private InventoryService invService;
 	
 	@Autowired
 	private IItemSkuService itemSkuService;
@@ -289,6 +293,7 @@ public class ItemController  {
 	        			itemSkuService.insertBatch(itemSkuList);
 	        			List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
 	        			//inventoryService.insertBatchInventory(inventoryList);
+	        			invService.outbound(inventoryList);
 	        		}
 	        		
 			//同步到有赞并上架  		

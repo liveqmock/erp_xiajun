@@ -77,13 +77,11 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 				public InventoryDO apply(ItemSkuAddVO itemSku) {
 					// 初始化库存信息
 					InventoryDO inventory = new InventoryDO();
-					inventory.setCompanyNo(itemSku.getCompanyNo());
 					inventory.setItemName(itemSku.getItemName());
-				    inventory.setCreator("admin");
-				    inventory.setModifier("admin");
 				    inventory.setItemCode(itemSku.getItemCode());
 					inventory.setSkuCode(itemSku.getSkuCode());
 					inventory.setUpc(itemSku.getUpc());
+					inventory.setVirtualInv(Long.valueOf(itemSku.getVirtualInv()));
 					return inventory;
 				}
 			});
