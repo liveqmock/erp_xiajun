@@ -60,7 +60,7 @@ public class YouzanSynController extends BaseController {
 			String s = itemIds.replace("&quot;", "\"");
 			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
 
-			List<ChannelAccountDO>	channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getCompanyNo(),ChannelType.YouZan);
+			List<ChannelAccountDO>	channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getLoginUserCompanyNo(),ChannelType.YouZan);
 
 			if(channelAccountList == null || channelAccountList.size() < 1){
 				return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
@@ -107,7 +107,7 @@ public class YouzanSynController extends BaseController {
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
 
-				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getCompanyNo(),ChannelType.YouZan);
+				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getLoginUserCompanyNo(),ChannelType.YouZan);
 
 				if(channelAccountList == null || channelAccountList.size() < 1){
 					return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
@@ -158,7 +158,7 @@ public class YouzanSynController extends BaseController {
 
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
-				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getCompanyNo(),ChannelType.YouZan);
+				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getLoginUserCompanyNo(),ChannelType.YouZan);
 
                 if(channelAccountList == null || channelAccountList.size() < 1){
 					sb.append("未找到第三方渠道，不存在或已停用");
