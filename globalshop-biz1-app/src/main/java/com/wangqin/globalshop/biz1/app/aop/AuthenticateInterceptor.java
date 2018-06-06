@@ -67,18 +67,23 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
             sessionId = CookieUtil.getCookieValue(request, sessionIDName);
         }
         if (StringUtils.isNotBlank(sessionId)) {
-            try {
-                // redis 缓存尝试取
-                String userId = (String) loginCache.get(sessionId);
-                String companyNo = (String) loginCache.get(COMPANY_NO + sessionId);
-                if (userId != null) {
-                    AppUtil.setLoginUser(userId, companyNo);
-                    return true;
+            if(!request.getRequestURI().equalsIgnoreCase("/login")) {
+                try {
+                    // redis 缓存尝试取
+                    String userId = (String) loginCache.get(sessionId);
+                    String companyNo = (String) loginCache.get(COMPANY_NO + sessionId);
+                    if (userId != null) {
+                        AppUtil.setLoginUser(userId, companyNo);
+                        return true;
+                    }
+                } catch (Exception e) {
+                    LogWorker.log(log, "从Cache获取session异常，跳转登录页面", "");
+                    response.setStatus(302);
+                    return false;
                 }
-            } catch (Exception e) {
-                LogWorker.log(log, "从Cache获取session异常，跳转登录页面", "");
-                response.setStatus(302);
-                return false;
+            }else
+            {
+                isJump=false;
             }
         }
         if (isJump) {
@@ -92,7 +97,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
-        AppUtil.removeLoginUserId();
+//        AppUtil.removeLoginUserId();
         super.postHandle(request, response, handler, modelAndView);
     }
 
