@@ -178,7 +178,7 @@ public class RoleController extends BaseController {
     @ResponseBody
     public Object resCodes() {
         JsonResult<Set<String>> result = new JsonResult<>();
-        //AppUtil.getLoginUserId()
+//        AppUtil.getLoginUserId();
         // 读取用户的url和角色
         return result.buildData(roleService.queryUserResCodes(AppUtil.getLoginUserId())).buildIsSuccess(true);
     }

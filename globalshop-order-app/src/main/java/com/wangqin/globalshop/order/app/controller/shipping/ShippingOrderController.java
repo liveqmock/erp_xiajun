@@ -1,23 +1,35 @@
 package com.wangqin.globalshop.order.app.controller.shipping;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
-
-import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.common.enums.OrderStatus;
+import com.wangqin.globalshop.common.enums.StockUpStatus;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.PicModel;
+import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
+import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
+import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import com.wangqin.globalshop.order.app.service.sifang.ISiFangService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,44 +44,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.Barcode128;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
-import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
-import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
-import com.wangqin.globalshop.common.enums.OrderStatus;
-import com.wangqin.globalshop.common.enums.StockUpStatus;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.PicModel;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.*;
+import java.util.List;
 
 /**
  * @author biscuits
@@ -177,15 +158,16 @@ public class ShippingOrderController {
     @RequestMapping("/multiDeliveryForm")
     @ResponseBody
     public Object multiDeliveryForm(String erpOrderId) throws InventoryException {
-        JsonResult<MultiDeliveryFormDTO> result = new JsonResult<>();
+        JsonResult result = new JsonResult();
+        shippingOrderService.ship(erpOrderId);
 
-        try {
-            result.setData(shippingOrderService.queryByOrderId(erpOrderId));
-            result.buildIsSuccess(true);
-        } catch (ErpCommonException e) {
-            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
-        }
-        return result;
+//        try {
+//            result.setData(shippingOrderService.queryByOrderId(erpOrderId));
+//            result.buildIsSuccess(true);
+//        } catch (ErpCommonException e) {
+//            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+//        }
+        return result.buildMsg("发货成功").buildIsSuccess(true);
     }
 
     // 合单发货(将多个子订单合并成一个包裹)
