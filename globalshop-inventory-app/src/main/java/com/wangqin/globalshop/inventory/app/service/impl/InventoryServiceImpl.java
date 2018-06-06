@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author biscuit
@@ -56,6 +57,23 @@ public class InventoryServiceImpl implements InventoryService {
         Integer opeatory = 101;
         saveInventoryInOut(inventory, wareHouseDO, opeatory, inventory.getInv(), "采购入库");
 
+
+    }
+
+    /**
+     * 预售入库
+     *
+     * @param list
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void outbound(List<InventoryDO> list) {
+        for (InventoryDO aDo : list) {
+            /**1增加库存库存*/
+            aDo.setCompanyNo("InventoryServiceImpl4545");
+            aDo.init();
+            mapper.insertSelective(aDo);
+        }
 
     }
 
@@ -169,17 +187,16 @@ public class InventoryServiceImpl implements InventoryService {
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(orderDO.getSkuCode(), orderDO.getItemCode());
         inventoryDO.setLockedInv(inventoryDO.getLockedInv() - orderDO.getQuantity());
         inventoryDO.setInv(inventoryDO.getInv() - orderDO.getQuantity());
+        // TODO: 18.6.5 如果库存足够  -实际 如果库存不够  -虚拟
         mapper.updateByPrimaryKeySelective(inventoryDO);
         /**更新相关InventoryOnWareHouse*/
-        // TODO: 18.6.4
-        InventoryOnWareHouseDO warehouseDO = null;
+        /**发货*/
+        Map<InventoryOnWareHouseDO,Long> map = invOnWarehouseService.ship(inventoryDO, Long.valueOf(orderDO.getQuantity()));
         /**生成流水*/
         Integer opeatory = 201;
-        saveInventoryInOut(inventoryDO, warehouseDO, opeatory, inventoryDO.getInv(), "发货出库");
-        /**绑定shipping_order*/
-        // TODO: 18.6.4
-
-
+        for (InventoryOnWareHouseDO houseDO : map.keySet()) {
+            saveInventoryInOut(inventoryDO, houseDO, opeatory, map.get(houseDO), "发货出库");
+        }
     }
 
     /**
@@ -204,7 +221,30 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void outOfStorehouse(InventoryOutManifestDO outManifestDO) {
+//        outManifestMapper
+        List<InventoryOutManifestDetailDO> list = outManifestDetailDOMapper.selectByOutNo(outManifestDO.getInventoryOutNo());
+        outOfWarehouse(list);
+    }
 
+    private void outOfWarehouse(List<InventoryOutManifestDetailDO> list) {
+        for (InventoryOutManifestDetailDO aDo : list) {
+            /**修改库存*/
+            InventoryDO inventory = mapper.queryBySkuCodeAndItemCode(aDo.getSkuCode(), aDo.getItemCode());
+            long inv = inventory.getInv() - aDo.getQuantity();
+            if (inv<0){
+                throw new ErpCommonException("库存不足，出库失败");
+            }
+            inventory.setInv(inv);
+            inventory.setGmtModify(new Date());
+            mapper.updateByPrimaryKeySelective(inventory);
+            /**分库存*/
+            Map<InventoryOnWareHouseDO,Long> map = invOnWarehouseService.ship(inventory, Long.valueOf(aDo.getQuantity()));
+            /**生成流水*/
+            Integer opeatory = 201;
+            for (InventoryOnWareHouseDO houseDO : map.keySet()) {
+                saveInventoryInOut(inventory, houseDO, opeatory, map.get(houseDO), "出库单出库");
+            }
+        }
     }
 
     /**

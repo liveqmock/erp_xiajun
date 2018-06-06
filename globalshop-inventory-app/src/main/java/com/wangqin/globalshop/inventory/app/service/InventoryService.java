@@ -2,6 +2,8 @@ package com.wangqin.globalshop.inventory.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 
+import java.util.List;
+
 /**
  * @author biscuit
  * @data 2018/06/04
@@ -9,6 +11,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 public interface InventoryService {
     /**入库*/
     void outbound(InventoryDO inventory,String warehouseNo,String positionNo);
+    /**超售入库*/
+    void outbound(List<InventoryDO> list);
     /**发货*/
     void ship(MallSubOrderDO mallSubOrderDO);
     /**下单*/

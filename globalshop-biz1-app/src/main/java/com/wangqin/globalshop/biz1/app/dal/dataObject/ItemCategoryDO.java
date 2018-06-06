@@ -25,7 +25,7 @@ public class ItemCategoryDO extends BaseModel {
 
     private Date gmtModify;
 
-    private Integer isDel;
+    private Boolean isDel;
 
     private String creator;
 
@@ -119,11 +119,11 @@ public class ItemCategoryDO extends BaseModel {
         this.gmtModify = gmtModify;
     }
 
-    public Integer getIsDel() {
+    public Boolean getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(Integer isDel) {
+    public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
     }
 

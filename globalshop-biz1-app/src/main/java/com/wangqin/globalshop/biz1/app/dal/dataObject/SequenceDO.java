@@ -17,7 +17,7 @@ public class SequenceDO extends BaseModel {
 
     private Date gmtCreate;
 
-    private Integer isDel;
+    private Boolean isDel;
 
     public String getName() {
         return name;
@@ -75,11 +75,11 @@ public class SequenceDO extends BaseModel {
         this.gmtCreate = gmtCreate;
     }
 
-    public Integer getIsDel() {
+    public Boolean getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(Integer isDel) {
+    public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
     }
 }

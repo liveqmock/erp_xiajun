@@ -15,7 +15,7 @@ public class SiteMsgReadDO extends BaseModel {
 
     private Date gmtModified;
 
-    private Byte isDel;
+    private Boolean isDel;
 
     private Long senderId;
 
@@ -73,11 +73,11 @@ public class SiteMsgReadDO extends BaseModel {
         this.gmtModified = gmtModified;
     }
 
-    public Byte getIsDel() {
+    public Boolean getIsDel() {
         return isDel;
     }
 
-    public void setIsDel(Byte isDel) {
+    public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
     }
 

@@ -154,7 +154,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 
 	@Override
 	public void deleteById(ItemCategoryDO category) {
-		category.setIsDel(1);
+		category.setIsDel(true);
 		categoryMapper.updateByPrimaryKeySelective(category);
 		
 	}

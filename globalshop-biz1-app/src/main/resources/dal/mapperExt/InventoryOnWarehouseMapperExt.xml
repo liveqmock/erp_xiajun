@@ -2,297 +2,299 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt">
 
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
-        <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-        <result column="item_code" property="itemCode" jdbcType="BIGINT" />
-        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
-        <result column="upc" property="upc" jdbcType="VARCHAR" />
-        <result column="scale" property="scale" jdbcType="VARCHAR" />
-        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
-        <result column="inventory" property="inventory" jdbcType="BIGINT" />
-        <result column="locked_inv" property="lockedInv" jdbcType="BIGINT" />
-        <result column="trans_inv" property="transInv" jdbcType="BIGINT" />
-        <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT" />
-        <result column="warehouse_no" property="warehouseNo" jdbcType="BIGINT" />
-        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
-        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
-        <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-        <result column="is_del" property="isDel" jdbcType="BIT" />
-        <result column="creator" property="creator" jdbcType="VARCHAR" />
-        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="item_code" property="itemCode" jdbcType="BIGINT"/>
+        <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+        <result column="upc" property="upc" jdbcType="VARCHAR"/>
+        <result column="scale" property="scale" jdbcType="VARCHAR"/>
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR"/>
+        <result column="inventory" property="inventory" jdbcType="BIGINT"/>
+        <result column="locked_inv" property="lockedInv" jdbcType="BIGINT"/>
+        <result column="trans_inv" property="transInv" jdbcType="BIGINT"/>
+        <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT"/>
+        <result column="warehouse_no" property="warehouseNo" jdbcType="BIGINT"/>
+        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
+        <result column="batch_no" property="batchNo" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
     </resultMap>
-    <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
     id, company_no, item_code, item_name, upc, scale, sku_code, sku_pic, inventory, locked_inv,
     trans_inv, locked_trans_inv, warehouse_no, warehouse_name, shelf_no, batch_no, gmt_create,
     gmt_modify, is_del, creator, modifier
   </sql>
 
     <!--<select id="getInventoryArea" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
-        <!--SELECT-->
-        <!--<include refid="inventoryAreaResultMapping"/>-->
-        <!--FROM-->
-        <!--inventory_area T1-->
-        <!--<where>-->
-            <!--<if test="itemId != null">-->
-                <!--item_id = #{itemId}-->
-            <!--</if>-->
-            <!--<if test="skuId != null">-->
-                <!--and sku_id = #{skuId}-->
-            <!--</if>-->
-            <!--<if test="warehouseId != null">-->
-                <!--and warehouse_id = #{warehouseId}-->
-            <!--</if>-->
-            <!--<if test="positionNo != null">-->
-                <!--and position_no = #{positionNo}-->
-            <!--</if>-->
-        <!--</where>-->
+    <!--SELECT-->
+    <!--<include refid="inventoryAreaResultMapping"/>-->
+    <!--FROM-->
+    <!--inventory_area T1-->
+    <!--<where>-->
+    <!--<if test="itemId != null">-->
+    <!--item_id = #{itemId}-->
+    <!--</if>-->
+    <!--<if test="skuId != null">-->
+    <!--and sku_id = #{skuId}-->
+    <!--</if>-->
+    <!--<if test="warehouseId != null">-->
+    <!--and warehouse_id = #{warehouseId}-->
+    <!--</if>-->
+    <!--<if test="positionNo != null">-->
+    <!--and position_no = #{positionNo}-->
+    <!--</if>-->
+    <!--</where>-->
     <!--</select>-->
     <!--<select id="selectById" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
-        <!--SELECT-->
-        <!--<include refid="inventoryAreaResultMapping"/>-->
-        <!--FROM-->
-        <!--inventory_on_warehouse T1-->
-        <!--WHERE T1.id = ${inventoryAreaId}-->
+    <!--SELECT-->
+    <!--<include refid="inventoryAreaResultMapping"/>-->
+    <!--FROM-->
+    <!--inventory_on_warehouse T1-->
+    <!--WHERE T1.id = ${inventoryAreaId}-->
     <!--</select>-->
     <!---->
 
     <!--<select id="sumInventoryBySkuId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
-        <!--SELECT-->
-        <!--item_id AS itemId,sku_id AS skuId,sum(locked_inv) as lockedInv,sum(inventory) as inventory,sum(trans_inv) AS-->
-        <!--transInv,sum(locked_trans_inv) AS lockedTransInv-->
-        <!--FROM-->
-        <!--inventory_area T1-->
-        <!--<where>-->
-            <!--<if test="itemId != null">-->
-                <!--item_id = #{itemId}-->
-            <!--</if>-->
-            <!--<if test="skuId != null">-->
-                <!--and sku_id = #{skuId}-->
-            <!--</if>-->
-        <!--</where>-->
+    <!--SELECT-->
+    <!--item_id AS itemId,sku_id AS skuId,sum(locked_inv) as lockedInv,sum(inventory) as inventory,sum(trans_inv) AS-->
+    <!--transInv,sum(locked_trans_inv) AS lockedTransInv-->
+    <!--FROM-->
+    <!--inventory_area T1-->
+    <!--<where>-->
+    <!--<if test="itemId != null">-->
+    <!--item_id = #{itemId}-->
+    <!--</if>-->
+    <!--<if test="skuId != null">-->
+    <!--and sku_id = #{skuId}-->
+    <!--</if>-->
+    <!--</where>-->
 
-        <!--GROUP BY-->
-        <!--item_id ,sku_id-->
+    <!--GROUP BY-->
+    <!--item_id ,sku_id-->
     <!--</select>-->
 
     <!--<select id="sumInventoryBySkuIdGroupbyWarehouse"-->
-            <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
-        <!--SELECT-->
-        <!--item_code AS itemCode,sku_code AS skuCode,T1.warehouse_no AS warehouseNo,sum(locked_inv) as-->
-        <!--lockedInv,sum(inventory) as inventory,sum(trans_inv) AS transInv,sum(locked_trans_inv) AS lockedTransInv-->
-        <!--FROM-->
-        <!--inventory_on_warehouse T1-->
-        <!--LEFT JOIN warehouse T2 ON T1.warehouse_no=T2.warehouse_no-->
-        <!--<where>-->
-            <!--<if test="itemCode != null">-->
-                <!--and T1.item_code = #{itemCode}-->
-            <!--</if>-->
-            <!--<if test="skuCode != null">-->
-                <!--and T1.sku_code = #{skuCode}-->
-            <!--</if>-->
-            <!--<if test="warehouseNo != null">-->
-                <!--and T1.warehouse_no = #{warehouseNo}-->
-            <!--</if>-->
-        <!--</where>-->
-        <!--GROUP BY-->
-        <!--T1.item_code ,T1.sku_code ,T1.warehouse_no-->
+    <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
+    <!--SELECT-->
+    <!--item_code AS itemCode,sku_code AS skuCode,T1.warehouse_no AS warehouseNo,sum(locked_inv) as-->
+    <!--lockedInv,sum(inventory) as inventory,sum(trans_inv) AS transInv,sum(locked_trans_inv) AS lockedTransInv-->
+    <!--FROM-->
+    <!--inventory_on_warehouse T1-->
+    <!--LEFT JOIN warehouse T2 ON T1.warehouse_no=T2.warehouse_no-->
+    <!--<where>-->
+    <!--<if test="itemCode != null">-->
+    <!--and T1.item_code = #{itemCode}-->
+    <!--</if>-->
+    <!--<if test="skuCode != null">-->
+    <!--and T1.sku_code = #{skuCode}-->
+    <!--</if>-->
+    <!--<if test="warehouseNo != null">-->
+    <!--and T1.warehouse_no = #{warehouseNo}-->
+    <!--</if>-->
+    <!--</where>-->
+    <!--GROUP BY-->
+    <!--T1.item_code ,T1.sku_code ,T1.warehouse_no-->
     <!--</select>-->
 
     <!--<select id="queryInventoryAreaByWarehouse"-->
-            <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
-        <!--SELECT-->
-        <!--<include refid="inventoryAreaResultMapping"/>-->
-        <!--FROM-->
-        <!--inventory_on_warehouse T1-->
-        <!--<where>-->
-            <!--<if test="itemId != null">-->
-                <!--T1.item_code = #{itemId}-->
-            <!--</if>-->
-            <!--<if test="skuId != null">-->
-                <!--and sku_code = #{skuId}-->
-            <!--</if>-->
-            <!--<if test="warehouseId != null">-->
-                <!--and warehouse_no = #{warehouseId}-->
-            <!--</if>-->
-        <!--</where>-->
+    <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
+    <!--SELECT-->
+    <!--<include refid="inventoryAreaResultMapping"/>-->
+    <!--FROM-->
+    <!--inventory_on_warehouse T1-->
+    <!--<where>-->
+    <!--<if test="itemId != null">-->
+    <!--T1.item_code = #{itemId}-->
+    <!--</if>-->
+    <!--<if test="skuId != null">-->
+    <!--and sku_code = #{skuId}-->
+    <!--</if>-->
+    <!--<if test="warehouseId != null">-->
+    <!--and warehouse_no = #{warehouseId}-->
+    <!--</if>-->
+    <!--</where>-->
     <!--</select>-->
 
     <!--<select id="queryInventoryAreaCount" resultType="java.lang.Integer"-->
-            <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
-        <!--SELECT-->
-        <!--count(1)-->
-        <!--FROM-->
-        <!--inventory_area T1-->
-        <!--LEFT JOIN item T2 on T1.item_id=T2.id-->
-        <!--WHERE (inventory>0 OR trans_inv>0)-->
-        <!--<if test="itemName!=null and itemName!=''">-->
-            <!--and T1.item_name LIKE concat('%',#{itemName},'%')-->
-        <!--</if>-->
-        <!--<if test="skuCode!=null and skuCode!=''">-->
-            <!--and T1.sku_code = #{skuCode}-->
-        <!--</if>-->
-        <!--<if test="upc!=null and upc!=''">-->
-            <!--and T1.upc = #{upc}-->
-        <!--</if>-->
-        <!--<if test="warehouseId != null">-->
-            <!--and T1.warehouse_id = #{warehouseId}-->
-        <!--</if>-->
-        <!--<if test="positionNo != null and positionNo!=''">-->
-            <!--and T1.position_no = #{positionNo}-->
-        <!--</if>-->
-        <!--<if test="buySite != null and buySite!=''">-->
-            <!--and T2.buy_site = #{buySite}-->
-        <!--</if>-->
-        <!--<if test="companyId != null ">-->
-            <!--and T2.company_id = #{companyId}-->
-        <!--</if>-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--SELECT-->
+    <!--count(1)-->
+    <!--FROM-->
+    <!--inventory_area T1-->
+    <!--LEFT JOIN item T2 on T1.item_id=T2.id-->
+    <!--WHERE (inventory>0 OR trans_inv>0)-->
+    <!--<if test="itemName!=null and itemName!=''">-->
+    <!--and T1.item_name LIKE concat('%',#{itemName},'%')-->
+    <!--</if>-->
+    <!--<if test="skuCode!=null and skuCode!=''">-->
+    <!--and T1.sku_code = #{skuCode}-->
+    <!--</if>-->
+    <!--<if test="upc!=null and upc!=''">-->
+    <!--and T1.upc = #{upc}-->
+    <!--</if>-->
+    <!--<if test="warehouseId != null">-->
+    <!--and T1.warehouse_id = #{warehouseId}-->
+    <!--</if>-->
+    <!--<if test="positionNo != null and positionNo!=''">-->
+    <!--and T1.position_no = #{positionNo}-->
+    <!--</if>-->
+    <!--<if test="buySite != null and buySite!=''">-->
+    <!--and T2.buy_site = #{buySite}-->
+    <!--</if>-->
+    <!--<if test="companyId != null ">-->
+    <!--and T2.company_id = #{companyId}-->
+    <!--</if>-->
     <!--</select>-->
 
     <!--<select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"-->
-            <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
-        <!--SELECT-->
-        <!--<include refid="inventoryAreaResultMapping"/>-->
-        <!--,T2.buy_site As buySite,T3.sale_price As salePrice-->
-        <!--FROM-->
-        <!--inventory_area T1-->
-        <!--LEFT JOIN item T2 on T1.item_id=T2.id-->
-        <!--LEFT JOIN item_sku T3 on T1.sku_id=T3.id-->
-        <!--WHERE (inventory>0 OR trans_inv>0)-->
-        <!--<if test="warehouseId != null">-->
-            <!--and T1.warehouse_id = #{warehouseId}-->
-        <!--</if>-->
-        <!--<if test="positionNo != null and positionNo!=''">-->
-            <!--and T1.position_no = #{positionNo}-->
-        <!--</if>-->
-        <!--<if test="itemName!=null and itemName!=''">-->
-            <!--and T1.item_name LIKE concat('%',#{itemName},'%')-->
-        <!--</if>-->
-        <!--<if test="skuCode!=null and skuCode!=''">-->
-            <!--and T1.sku_code = #{skuCode}-->
-        <!--</if>-->
-        <!--<if test="upc!=null and upc!=''">-->
-            <!--and T1.upc = #{upc}-->
-        <!--</if>-->
-        <!--<if test="buySite != null and buySite!=''">-->
-            <!--and T2.buy_site = #{buySite}-->
-        <!--</if>-->
-        <!--<if test="companyId != null ">-->
-            <!--and T2.company_id = #{companyId}-->
-        <!--</if>-->
-        <!--<choose>-->
-            <!--<when test="orderBy!=null and sort!=null">-->
-                <!--order by ${orderBy} ${sort}-->
-            <!--</when>-->
-            <!--<otherwise>-->
-                <!--<![CDATA[ order by T1.inventory desc ]]>-->
-            <!--</otherwise>-->
-        <!--</choose>-->
-        <!--<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--SELECT-->
+    <!--<include refid="inventoryAreaResultMapping"/>-->
+    <!--,T2.buy_site As buySite,T3.sale_price As salePrice-->
+    <!--FROM-->
+    <!--inventory_area T1-->
+    <!--LEFT JOIN item T2 on T1.item_id=T2.id-->
+    <!--LEFT JOIN item_sku T3 on T1.sku_id=T3.id-->
+    <!--WHERE (inventory>0 OR trans_inv>0)-->
+    <!--<if test="warehouseId != null">-->
+    <!--and T1.warehouse_id = #{warehouseId}-->
+    <!--</if>-->
+    <!--<if test="positionNo != null and positionNo!=''">-->
+    <!--and T1.position_no = #{positionNo}-->
+    <!--</if>-->
+    <!--<if test="itemName!=null and itemName!=''">-->
+    <!--and T1.item_name LIKE concat('%',#{itemName},'%')-->
+    <!--</if>-->
+    <!--<if test="skuCode!=null and skuCode!=''">-->
+    <!--and T1.sku_code = #{skuCode}-->
+    <!--</if>-->
+    <!--<if test="upc!=null and upc!=''">-->
+    <!--and T1.upc = #{upc}-->
+    <!--</if>-->
+    <!--<if test="buySite != null and buySite!=''">-->
+    <!--and T2.buy_site = #{buySite}-->
+    <!--</if>-->
+    <!--<if test="companyId != null ">-->
+    <!--and T2.company_id = #{companyId}-->
+    <!--</if>-->
+    <!--<choose>-->
+    <!--<when test="orderBy!=null and sort!=null">-->
+    <!--order by ${orderBy} ${sort}-->
+    <!--</when>-->
+    <!--<otherwise>-->
+    <!--<![CDATA[ order by T1.inventory desc ]]>-->
+    <!--</otherwise>-->
+    <!--</choose>-->
+    <!--<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>-->
 
     <!--</select>-->
 
     <!--<select id="queryInventoryAreaForExcel"-->
-            <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"-->
-            <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
-        <!--SELECT T2.sku_code AS skuCode,T2.item_name AS itemName,T2.sku_pic AS skuPic,T2.brand,T2.upc,T2.color,T2.scale,-->
-        <!--T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.inventory,T1.locked_inv AS-->
-        <!--lockedInv,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T2.sale_price AS salePrice-->
-        <!--FROM inventory_area T1-->
-        <!--LEFT JOIN item_sku T2 ON T1.sku_id=T2.id-->
-        <!--WHERE (inventory>0 OR trans_inv>0)-->
-        <!--<if test="warehouseId != null">-->
-            <!--and T1.warehouse_id = #{warehouseId}-->
-        <!--</if>-->
-        <!--<if test="positionNo != null and positionNo!=''">-->
-            <!--and T1.position_no = #{positionNo}-->
-        <!--</if>-->
-        <!--<if test="itemName!=null and itemName!=''">-->
-            <!--and T1.item_name LIKE concat('%',#{itemName},'%')-->
-        <!--</if>-->
-        <!--<if test="skuCode!=null and skuCode!=''">-->
-            <!--and T1.sku_code = #{skuCode}-->
-        <!--</if>-->
-        <!--<if test="upc!=null and upc!=''">-->
-            <!--and T1.upc = #{upc}-->
-        <!--</if>-->
-        <!--<if test="companyId != null ">-->
-            <!--and T2.company_id = #{companyId}-->
-        <!--</if>-->
-        <!--order by T1.inventory desc-->
+    <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--SELECT T2.sku_code AS skuCode,T2.item_name AS itemName,T2.sku_pic AS skuPic,T2.brand,T2.upc,T2.color,T2.scale,-->
+    <!--T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.inventory,T1.locked_inv AS-->
+    <!--lockedInv,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T2.sale_price AS salePrice-->
+    <!--FROM inventory_area T1-->
+    <!--LEFT JOIN item_sku T2 ON T1.sku_id=T2.id-->
+    <!--WHERE (inventory>0 OR trans_inv>0)-->
+    <!--<if test="warehouseId != null">-->
+    <!--and T1.warehouse_id = #{warehouseId}-->
+    <!--</if>-->
+    <!--<if test="positionNo != null and positionNo!=''">-->
+    <!--and T1.position_no = #{positionNo}-->
+    <!--</if>-->
+    <!--<if test="itemName!=null and itemName!=''">-->
+    <!--and T1.item_name LIKE concat('%',#{itemName},'%')-->
+    <!--</if>-->
+    <!--<if test="skuCode!=null and skuCode!=''">-->
+    <!--and T1.sku_code = #{skuCode}-->
+    <!--</if>-->
+    <!--<if test="upc!=null and upc!=''">-->
+    <!--and T1.upc = #{upc}-->
+    <!--</if>-->
+    <!--<if test="companyId != null ">-->
+    <!--and T2.company_id = #{companyId}-->
+    <!--</if>-->
+    <!--order by T1.inventory desc-->
     <!--</select>-->
 
     <!--<update id="updateTransToInventoryArea">-->
-    		<!--<![CDATA[-->
+    <!--<![CDATA[-->
 
-	    <!--UPDATE-->
-	    		<!--inventory_on_warehouse-->
-	    	<!--SET-->
-			<!--inventory = inventory + #{toTrans},-->
-			<!--trans_inv = trans_inv - #{toTrans},-->
-			<!--locked_inv = locked_inv + #{lockedTransToInv},-->
-			<!--locked_trans_inv = locked_trans_inv - #{lockedTransToInv}-->
-	    <!--WHERE  -->
-	    		<!--id = #{id} and trans_inv - #{toTrans} >= 0 and locked_trans_inv = #{lockedTransInv}-->
+    <!--UPDATE-->
+    <!--inventory_on_warehouse-->
+    <!--SET-->
+    <!--inventory = inventory + #{toTrans},-->
+    <!--trans_inv = trans_inv - #{toTrans},-->
+    <!--locked_inv = locked_inv + #{lockedTransToInv},-->
+    <!--locked_trans_inv = locked_trans_inv - #{lockedTransToInv}-->
+    <!--WHERE  -->
+    <!--id = #{id} and trans_inv - #{toTrans} >= 0 and locked_trans_inv = #{lockedTransInv}-->
 
-        <!--]]>-->
-	<!--</update>-->
+    <!--]]>-->
+    <!--</update>-->
 
     <!--<update id="updateInventoryAreaCheck">-->
-    		<!--<![CDATA[-->
+    <!--<![CDATA[-->
 
-	    <!--UPDATE-->
-	    		<!--inventory_on_warehouse-->
-	    	<!--SET-->
-			<!--inventory = inventory - #{toCheck}-->
-	    <!--WHERE  -->
-	    		<!--id = #{id} and inventory = #{inventory} and inventory - #{toCheck} >= 0-->
+    <!--UPDATE-->
+    <!--inventory_on_warehouse-->
+    <!--SET-->
+    <!--inventory = inventory - #{toCheck}-->
+    <!--WHERE  -->
+    <!--id = #{id} and inventory = #{inventory} and inventory - #{toCheck} >= 0-->
 
-        <!--]]>-->
-	<!--</update>-->
+    <!--]]>-->
+    <!--</update>-->
 
     <!--<update id="updateInventoryAreaTransCheck">-->
-    		<!--<![CDATA[-->
+    <!--<![CDATA[-->
 
-	    <!--UPDATE-->
-	    		<!--inventory_on_warehouse-->
-	    	<!--SET-->
-			<!--trans_inv = trans_inv - #{toCheck}-->
-	    <!--WHERE  -->
-	    		<!--id = #{id} and trans_inv = #{transInv} and trans_inv - #{toCheck} >= 0-->
+    <!--UPDATE-->
+    <!--inventory_on_warehouse-->
+    <!--SET-->
+    <!--trans_inv = trans_inv - #{toCheck}-->
+    <!--WHERE  -->
+    <!--id = #{id} and trans_inv = #{transInv} and trans_inv - #{toCheck} >= 0-->
 
-        <!--]]>-->
-	<!--</update>-->
+    <!--]]>-->
+    <!--</update>-->
 
     <!--<update id="updateInventoryAreaAddInventory">-->
-    		<!--<![CDATA[-->
+    <!--<![CDATA[-->
 
-	    <!--UPDATE-->
-	    		<!--inventory_on_warehouse-->
-	    	<!--SET-->
-			<!--inventory = inventory + #{toAdd}-->
-	    <!--WHERE  -->
-	    		<!--id = #{id} and inventory = #{inventory} -->
+    <!--UPDATE-->
+    <!--inventory_on_warehouse-->
+    <!--SET-->
+    <!--inventory = inventory + #{toAdd}-->
+    <!--WHERE  -->
+    <!--id = #{id} and inventory = #{inventory} -->
 
-        <!--]]>-->
-	<!--</update>-->
+    <!--]]>-->
+    <!--</update>-->
 
     <!--<update id="updateUpcForInventoryArea" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">-->
-		<!--UPDATE inventory_area SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}-->
+    <!--UPDATE inventory_area SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}-->
     <!--</update>-->
-    <select id="selectByItemCodeAndSkuCodeAndWarehouseNo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
+    <select id="selectByItemCodeAndSkuCodeAndWarehouseNo"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
         inventory_on_warehouse
-        WHERE  item_code = #{itemCode}
+        WHERE item_code = #{itemCode}
         AND sku_code = #{skuCode}
         AND warehouse_no=#{warehouseNo}
     </select>
-    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -314,5 +316,16 @@
                 and shelf_no = #{positionNo}
             </if>
         </where>
+    </select>
+    <select id="getINvOnWarehouseListOfShip"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        WHERE
+        sku_code = #{skuCode}
+        and shelf_no = #{companyNo}
+        ORDER BY inventory ASC
     </select>
 </mapper>
