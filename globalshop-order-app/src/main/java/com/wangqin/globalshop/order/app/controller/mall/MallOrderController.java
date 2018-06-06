@@ -150,9 +150,16 @@ public class MallOrderController {
     @RequestMapping("/query")
     @ResponseBody
     public Object query(String orderNo) {
-        JsonResult<MallOrderDO> result = new JsonResult<>();
-        MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
-        return result.buildData(outerOrder).buildIsSuccess(true);
+        if (orderNo == null){
+            JsonResult<List<MallOrderDO>> result = new JsonResult<>();
+            List<MallOrderDO> outerOrder = mallOrderService.list();
+            return result.buildData(outerOrder).buildIsSuccess(true);
+        }else {
+            JsonResult<MallOrderDO> result = new JsonResult<>();
+            MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
+            return result.buildData(outerOrder).buildIsSuccess(true);
+        }
+
     }
 
     /**

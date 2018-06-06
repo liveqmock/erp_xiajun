@@ -2,7 +2,6 @@ package com.wangqin.globalshop.order.app.service.mall;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.exception.InventoryException;
 
@@ -32,7 +31,7 @@ public interface IMallSubOrderService {
 
     List<MallSubOrderDO> selectUnClosedByOrderNo(String orderNo);
 
-    JsonResult<List<MallSubOrderDO>> queryErpOrders(MallSubOrderVO erpOrderQueryVO);
+    List<MallSubOrderDO> queryErpOrders(MallSubOrderVO erpOrderQueryVO);
 
     MallSubOrderDO selectById(Long id);
 
@@ -51,4 +50,5 @@ public interface IMallSubOrderService {
      */
     int selectCountWithStateAndOrderNo(MallSubOrderDO erpOrderQuery);
 
+    List<MallSubOrderDO> list();
 }

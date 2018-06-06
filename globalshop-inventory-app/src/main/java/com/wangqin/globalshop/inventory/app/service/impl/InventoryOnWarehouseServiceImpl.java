@@ -109,7 +109,11 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     @Transactional(rollbackFor = ErpCommonException.class)
     public Map<InventoryOnWareHouseDO, Long> ship(InventoryDO inventoryDO, Long quantity) {
         //按照升序获得所有和该商品相关  该公司的记录
-        List<InventoryOnWareHouseDO> list = mapper.getINvOnWarehouseListOfShip(inventoryDO.getSkuCode(), inventoryDO.getCompanyNo());
+        List<InventoryOnWareHouseDO> list = mapper.selectBySkuCode(inventoryDO.getSkuCode());
+        if (list.size()==0){
+            throw new ErpCommonException("找不到相关商品库存");
+        }
+//        List<InventoryOnWareHouseDO> list = mapper.getINvOnWarehouseListOfShip(inventoryDO.getSkuCode(), inventoryDO.getCompanyNo());
         Map<InventoryOnWareHouseDO, Long> map = chooseWarehouse(list, quantity);
         for (InventoryOnWareHouseDO inventoryOnWareHouseDO : map.keySet()) {
             inventoryOnWareHouseDO.setInventory(inventoryOnWareHouseDO.getInventory()-map.get(inventoryOnWareHouseDO));

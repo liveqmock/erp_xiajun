@@ -47,6 +47,9 @@ public interface IShippingOrderService {
     ShippingOrderDO selectOne(ShippingOrderDO order);
 
     void updateStatusByShippingNo(String logisticNo);
+//    -------------------------------------------------
+
+    void ship(String erpOrderId);
 
 
 //	MultiDeliveryFormDTO queryByErpOrderId(String erpOrderId);

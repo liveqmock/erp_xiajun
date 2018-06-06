@@ -64,4 +64,10 @@ public class BaseModel {
         this.setGmtCreate(date);
         this.setGmtModify(date);
     }
+
+    public void update() {
+        this.setModifier("11111");
+        Date date = new Date();
+        this.setGmtModify(date);
+    }
 }

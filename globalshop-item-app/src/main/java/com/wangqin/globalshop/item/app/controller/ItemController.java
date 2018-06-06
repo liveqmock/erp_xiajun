@@ -1,16 +1,19 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.*;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,39 +21,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
-import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ImageUtil;
-import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.common.utils.StringUtils;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.channel.ChannelFactory;
-import com.wangqin.globalshop.item.app.service.IBuyerService;
-import com.wangqin.globalshop.item.app.service.ICountryService;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
-import com.wangqin.globalshop.item.app.service.IItemCategoryService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
-
-import net.sf.json.JSONObject;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 商品处理器
@@ -301,8 +276,8 @@ public class ItemController  {
 					try {
 						//outerItemService.synItemYouzan(item.getId());
 						//ShiroUser user = ShiroUtil.getShiroUser();
-						String companyNo = AppUtil.getCompanyNo();
-						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
+//						String companyNo = ShiroUtil.getCompanyNo();
+//						ChannelFactory.getChannel(companyNo, ChannelType.YouZan).createItem(item.getId());
 					} catch(Exception e) {
 						//logger.error("商品添加时同步到有赞：", e);
 					}			

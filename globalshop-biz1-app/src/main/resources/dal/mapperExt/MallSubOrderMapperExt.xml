@@ -267,6 +267,12 @@
         `mall_sub_order`
         WHERE sku_code=#{skuCode}
     </select>
+    <select id="list" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_sub_order`
+    </select>
 
 
 
@@ -359,6 +365,15 @@
             and T1.quantity >= #{quantity}
         </if>
         LIMIT 0,1
+    </select>
+    <select id="selectBatchIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mall_sub_order
+        WHERE id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

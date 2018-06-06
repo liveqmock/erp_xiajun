@@ -522,6 +522,13 @@
         WHERE
         <include refid="commonSelectSection"/>
     </select>
+    <!--查询总条数 -->
+    <select id="list" resultMap="BaseResultMap"
+    >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mall_order
+    </select>
 
     <!-- -->
     <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"

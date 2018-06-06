@@ -57,8 +57,7 @@ public class MallSubOrderController {
 
 	@RequestMapping(value = "/query",method = RequestMethod.POST)
 	@ResponseBody
-	public Object query(String erpOrderQueryVO) {
-		MallSubOrderVO mallSubOrderVO = JSON.parseObject(erpOrderQueryVO, MallSubOrderVO.class);
+	public Object query(MallSubOrderVO mallSubOrderVO) {
 		JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();
 		if(mallSubOrderVO.getEndGmtCreate()!=null) {
 			String endGmtCreateStr = DateUtil.ymdFormat(mallSubOrderVO.getEndGmtCreate());
@@ -66,30 +65,13 @@ public class MallSubOrderController {
 			mallSubOrderVO.setEndGmtCreate(endGmtCreate);
 		}
 
-		mallSubOrderVO.setCompanyNo("MallSUbOrderController?JLJLJJLJ");
-		
-//		//如果是代理
-//		ShiroUser shiroUser = this.getShiroUser();
-//		Set<String> roles = shiroUser.getRoles();
-//		if(roles.contains("irhdaili")) {
-//			String[] logingNameArr = shiroUser.getLoginName().split("_");
-//			if(logingNameArr.length<2 || StringUtils.isBlank(logingNameArr[1])) {
-//				throw new ErpCommonException("用户权限异常");
-//			}
-//			erpOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
-//			Seller seller = sellerService.selectById(erpOrderQueryVO.getSalesId());
-//			if(seller.getOpenId()!=null) {
-//				erpOrderQueryVO.setOpenId(seller.getOpenId());
-//			}
-//		}
-		result = erpOrderService.queryErpOrders(mallSubOrderVO);
-//		if(roles.contains("irhdaili")) {
-//			result.setAgentRoler(true);
-//		}
+//		mallSubOrderVO.setCompanyNo("MallSUbOrderController?JLJLJJLJ");
+
+		result .buildData(erpOrderService.queryErpOrders(mallSubOrderVO));
 		result.setSuccess(true);
 		return result;
 	}
-	
+
 	@RequestMapping("/queryById")
 	@ResponseBody
 	public Object queryById(Long id) {

@@ -33,4 +33,6 @@ public interface IMallOrderService  {
     List<MallOrderDO> selectByStatus(byte b);
 
     void addMallOrderDO(MallOrderDO mallOrderDO);
+
+    List<MallOrderDO> list();
 }

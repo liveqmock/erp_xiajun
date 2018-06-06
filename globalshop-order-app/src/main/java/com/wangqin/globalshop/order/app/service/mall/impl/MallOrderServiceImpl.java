@@ -242,4 +242,9 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     }
 
+    @Override
+    public List<MallOrderDO> list() {
+        return mallOrderDOMapper.list();
+    }
+
 }

@@ -118,8 +118,7 @@ public class InventoryController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public Object add(String itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory,
-                      Long transInv) {
+    public Object add(String itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory) {
         InventoryDO inventoryDO = new InventoryDO();
         inventoryDO.setSkuCode(skuCode);
         inventoryDO.setItemCode(itemCode);

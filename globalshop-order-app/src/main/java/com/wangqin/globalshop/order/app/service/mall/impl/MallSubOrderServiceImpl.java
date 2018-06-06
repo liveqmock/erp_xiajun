@@ -83,19 +83,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    public JsonResult<List<MallSubOrderDO>> queryErpOrders(MallSubOrderVO erpOrderQueryVO) {
-        JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();
-        // 1、查询总的记录数量
-        Integer totalCount = mallSubOrderDOMapper.queryErpOrdersCount(erpOrderQueryVO);
-        // 2、查询分页记录
-        if (totalCount != null && totalCount != 0L) {
-            List<MallSubOrderDO> erpOrders = mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
-            result.setData(erpOrders);
-        } else {
-            List<MallSubOrderDO> erpOrders = new ArrayList<>();
-            result.setData(erpOrders);
-        }
-        return result;
+    public List<MallSubOrderDO> queryErpOrders(MallSubOrderVO erpOrderQueryVO) {
+        return mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
     }
 
     @Override
@@ -347,5 +336,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     public int selectCountWithStateAndOrderNo(MallSubOrderDO erpOrderQuery) {
         return mallSubOrderDOMapper.findAlreadyShipped(erpOrderQuery.getOrderNo());
+    }
+
+    @Override
+    public List<MallSubOrderDO> list() {
+        return mallSubOrderDOMapper.list();
+
     }
 }
