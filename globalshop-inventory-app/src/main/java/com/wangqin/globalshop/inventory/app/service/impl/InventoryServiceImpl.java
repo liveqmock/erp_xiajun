@@ -19,6 +19,8 @@ import java.util.List;
 @Service
 public class InventoryServiceImpl implements InventoryService {
     @Autowired
+    private ItemSkuMapperExt itemSkuMapper;
+    @Autowired
     private InventoryMapperExt mapper;
     @Autowired
     private MallSubOrderMapperExt mallSubOrderMapper;
@@ -41,13 +43,12 @@ public class InventoryServiceImpl implements InventoryService {
      * @param warehouseNo
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public void outbound(InventoryDO inventory, String warehouseNo) {
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void outbound(InventoryDO inventory, String warehouseNo,String positionNo) {
 
         /**1增加库存库存*/
         insertInv(inventory, inventory.getInv());
-        invOnWarehouseService.insertInventory(inventory, warehouseNo);
-        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.selectByItemCodeAndSkuCodeAndWarehouseNo(inventory.getItemCode(), inventory.getSkuCode(), warehouseNo);
+        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, warehouseNo,positionNo);
         if (wareHouseDO == null){
             throw new ErpCommonException("找不到对应的商品,入库失败");
         }
@@ -65,7 +66,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallOrderDO
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void order(MallOrderDO mallOrderDO) {
         /**判断可售库存是否满足*/
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(mallOrderDO.getOrderNo());
@@ -80,7 +81,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallSubOrderDO
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void order(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
@@ -105,10 +106,13 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallSubOrderDO
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void release(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
+        if (inventoryDO == null){
+            throw new ErpCommonException("找不到对应的库存");
+        }
         /**修改库存占用*/
         inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
         mapper.updateByPrimaryKeySelective(inventoryDO);
@@ -119,7 +123,7 @@ public class InventoryServiceImpl implements InventoryService {
      * 盘点增加
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void checkIn(String skuCode, Long warehouseId, String positionNo, Long quantity) {
         /**增加实际库存*/
         InventoryDO inventoryDO = mapper.queryBySkuCode(skuCode);
@@ -134,7 +138,11 @@ public class InventoryServiceImpl implements InventoryService {
 
     }
 
+    /**
+     * 盘点减少
+     */
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void inventoryCheckOut(Long inventoryAreaId, Long quantity) {
         /**减少仓库库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByPrimaryKey(inventoryAreaId);
@@ -155,7 +163,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param orderDO
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(MallSubOrderDO orderDO) {
         /**修改库存  和  库存占用*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(orderDO.getSkuCode(), orderDO.getItemCode());
@@ -180,7 +188,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallReturnOrderDO
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void returns(MallReturnOrderDO mallReturnOrderDO) {
         /**修改库存*/
         /**更新相关Inventory*/
@@ -194,7 +202,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param outManifestDO
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void outOfStorehouse(InventoryOutManifestDO outManifestDO) {
 
     }
@@ -221,15 +229,15 @@ public class InventoryServiceImpl implements InventoryService {
     private void insertInv(InventoryDO inventoryDO, Long inv) {
         InventoryDO inventory = mapper.queryBySkuCodeAndItemCode(inventoryDO.getSkuCode(), inventoryDO.getItemCode());
         if (inventory == null) {
+            ItemSkuDO itemSkuDO = itemSkuMapper.queryItemBySkuCode(inventoryDO.getSkuCode());
+            inventoryDO.setItemName(itemSkuDO.getItemName());
+            inventoryDO.setUpc(itemSkuDO.getUpc());
             inventoryDO.setCompanyNo("InventoryServiceImpl4545");
-            inventoryDO.setCreator("qweqweqweqwe");
-            inventoryDO.setModifier("zzcxzxczxc");
+            inventoryDO.init();
             mapper.insertSelective(inventoryDO);
         } else {
             inventory.setInv(inventory.getInv() + inv);
-            inventoryDO.setCreator("qweqweqweqwe");
-            inventoryDO.setModifier("zzcxzxczxc");
-            inventoryDO.setCompanyNo("InventoryServiceImpl4545");
+            inventory.setGmtModify(new Date());
             mapper.updateByPrimaryKeySelective(inventory);
         }
 
@@ -246,17 +254,19 @@ public class InventoryServiceImpl implements InventoryService {
      */
     private void saveInventoryInOut(InventoryDO inventoryDO, InventoryOnWareHouseDO wareHouseDO, Integer opeatory, Long quantity, String remark) {
         InventoryInoutDO inoutDO = new InventoryInoutDO();
-        inoutDO.setCreator("当前用户");
-        inoutDO.setModifier("qwewqeqwew");
-        inoutDO.setWarehouseNo(wareHouseDO.getWarehouseNo());
-        inoutDO.setInventoryOnWarehouseNo(wareHouseDO.getInventoryOnWarehouseNo());
+        /****inventory***/
         inoutDO.setSkuCode(inventoryDO.getSkuCode());
-        inoutDO.setGmtCreate(new Date());
-        inoutDO.setOperatorType(opeatory);
-        inoutDO.setQuantity(quantity);
         inoutDO.setItemCode(inventoryDO.getItemCode());
         inoutDO.setCompanyNo(inventoryDO.getCompanyNo());
+        /****warehouse***/
+        inoutDO.setInventoryOnWarehouseNo(wareHouseDO.getInventoryOnWarehouseNo());
+        inoutDO.setWarehouseNo(wareHouseDO.getWarehouseNo());
         inoutDO.setShelfNo(wareHouseDO.getShelfNo());
+        inoutDO.setInventoryOnWarehouseNo(wareHouseDO.getInventoryOnWarehouseNo());
+        /*******/
+        inoutDO.init();
+        inoutDO.setOperatorType(opeatory);
+        inoutDO.setQuantity(quantity);
         inoutDO.setRemark(remark);
         inoutMapper.insertSelective(inoutDO);
     }

@@ -8,7 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
  */
 public interface InventoryService {
     /**入库*/
-    void outbound(InventoryDO inventory,String warehouseNo);
+    void outbound(InventoryDO inventory,String warehouseNo,String positionNo);
     /**发货*/
     void ship(MallSubOrderDO mallSubOrderDO);
     /**下单*/
@@ -20,9 +20,8 @@ public interface InventoryService {
     /**出库单出库*/
     void outOfStorehouse(InventoryOutManifestDO outManifestDO);
 
-
     InventoryDO selectByItemCodeAndSkuCode(String itemCode, String skuCode);
-
+    /**释放占用*/
     void release(MallSubOrderDO order);
 
     void checkIn(String skuCode, Long warehouseId, String positionNo, Long quantity);

@@ -187,7 +187,11 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		itemSkuMapperExt.updateById(itemSkuUpdateVO);
 	}
 	
-
+	 //查询可售的sku 
+	@Override
+	public List<ItemSkuDO> querySaleableSkus() {
+		return itemSkuMapperExt.querySaleableSkus();
+	}
 	
 }
 

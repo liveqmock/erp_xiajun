@@ -34,7 +34,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.text.ParseException;
 import java.util.*;
 
 @Channel(type = ChannelType.YouZan)
@@ -84,6 +83,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	private AdapterData addOuterItem(ItemVo item, YouzanItemCreateResult youzanItemCreateResult) {
 		AdapterData adapterData = new AdapterData();
 		String alias = youzanItemCreateResult.getItem().getAlias();// 有赞别名
+
 		Long numIid = youzanItemCreateResult.getItem().getItemId();// 有赞ID
 		// 1、保存外部商品
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
@@ -342,9 +342,9 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 					colorSet.add(itemSku.getColor());
 					colorScaleKey += itemSku.getColor();
 				}
-				if (StringUtil.isNotBlank(itemSku.getScale())) {
-					scaleSet.add(itemSku.getScale());
-					colorScaleKey += itemSku.getScale();
+				if (StringUtil.isNotBlank(itemSku.getSize())) {
+					scaleSet.add(itemSku.getSize());
+					colorScaleKey += itemSku.getSize();
 				}
 				itemSkuMap.put(colorScaleKey, itemSku);
 			}
@@ -728,21 +728,22 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 	@Override
 	public void syncOrder() {
 		// 交易状态更新的结束时间,值为当前时间
-		//Date endUpdate = new Date();
+		Date endUpdate = new Date();
 		// 交易状态更新的开始时间,值为当前时间的1个小时前，因为定时任务设置为半个小时,这样每个订单会有2次抓取机会
-		//Date startUpdate = DateUtil.getDateByCalculate(endUpdate, Calendar.HOUR_OF_DAY, -1);
+		Date startUpdate = DateUtil.getDateByCalculate(endUpdate, Calendar.HOUR_OF_DAY, -1);
 
 
-		String startTime = "2018-05-02 10:33:00";
-		String endTime = "2018-05-03 19:33:00";
-		Date startUpdate = null;
-		Date endUpdate = null;
-		try {
-			 startUpdate = DateUtil.convertStr2Date(startTime,DateUtil.formateStr19);
-			 endUpdate = DateUtil.convertStr2Date(endTime,DateUtil.formateStr19);
-		}catch (ParseException e){
-			logger.info("");
-		}
+		//String startTime = "2018-05-02 10:33:00";
+		//String endTime = "2018-05-03 19:33:00";
+
+//		Date startUpdate = null;
+//		Date endUpdate = null;
+//		try {
+//			 startUpdate = DateUtil.convertStr2Date(startTime,DateUtil.formateStr19);
+//			 endUpdate = DateUtil.convertStr2Date(endTime,DateUtil.formateStr19);
+//		}catch (ParseException e){
+//			logger.info("");
+//		}
 
 
 
@@ -867,9 +868,9 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
 		MallOrderDO p = new MallOrderDO();
 		p.setChannelOrderNo(TradeDetail.getTid());
 		if (outerOrderMapper.queryPoCount(p) > 0) {
-			logger.error("有赞订单已经存在 tid:" + TradeDetail.getTid());
+			logger.error("有赞订单已经存在 tid" + TradeDetail.getTid());
 			//生产时，直接return，测试时，进行插入
-			//return;
+			return;
 		}
 
 		// 如果有赞订单还不存在，继续

@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class SiteMsgReadDO {
+public class SiteMsgReadDO extends BaseModel {
     private Long id;
 
     private Long siteMsgId;

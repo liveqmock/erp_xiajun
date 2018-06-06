@@ -6,9 +6,7 @@ import com.wangqin.globalshop.common.utils.ShiroUtil;
 import com.wangqin.globalshop.inventory.app.service.IWarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,14 +23,14 @@ public class WarehouseController{
 	 * @param
 	 * @return
 	 */
-	@RequestMapping("/add")
+	@RequestMapping(value = "/add")
 	@ResponseBody
-	public Object add(WarehouseDO warehouse) {
-		if(warehouse == null){
+	public Object add(String name) {
+		if(name == null){
 			return JsonResult.buildFailed("新增仓库对象不能为空");
 		}
-		warehouseService.addWarehouse(warehouse);
-		return JsonResult.buildSuccess(null);
+		warehouseService.addWarehouse(name);
+		return JsonResult.buildSuccess(true);
 	}
 
 	/**
@@ -75,7 +73,8 @@ public class WarehouseController{
 	@GetMapping("/queryWarehouses")
 	@ResponseBody
 	public Object queryWarehouses() {
-		List<WarehouseDO> list = warehouseService.queryWarehouses(ShiroUtil.getShiroUser().getCompanyNo());
+//		List<WarehouseDO> list = warehouseService.queryWarehouses(ShiroUtil.getShiroUser().getCompanyNo());
+		List<WarehouseDO> list = warehouseService.list();
 		return JsonResult.buildSuccess(list);
 	}
 }

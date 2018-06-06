@@ -3,9 +3,6 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.baomidou.mybatisplus.annotations.IdType;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 
 /**
  * 
@@ -13,10 +10,8 @@ import com.baomidou.mybatisplus.annotations.TableId;
  *
  */
 public class ScaleType {
-	@TableId(type = IdType.AUTO)
 	private Long id;//类型id
 	private String type;//名称
-	@TableField(exist = false)
 	private List<Scale> scaleList = new ArrayList<>();
 	public Long getId() {
 		return id;

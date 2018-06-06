@@ -4,7 +4,6 @@ import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
-import com.wangqin.globalshop.common.utils.JsonPageResult;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @data 2018/06/01
  */
 public interface IInventoryOnWarehouseService {
-    JsonPageResult<List<InventoryOnWareHouseDO>> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
+    List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
 
     InventoryOnWareHouseDO selectById(Long inventoryAreaId);
 
@@ -29,5 +28,5 @@ public interface IInventoryOnWarehouseService {
 
     InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
 
-    void insertInventory(InventoryDO inventory, String warehouseNo);
+    InventoryOnWareHouseDO insertInventory(InventoryDO inventory, String warehouseNo,String positionNo);
 }

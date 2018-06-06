@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackagePatternMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackageScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
@@ -68,5 +69,10 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 	@Override
 	public List<ItemPackageScaleDTO> queryScaleList(ShippingPackingScaleQueryVO scaleVO) {
 		return packageScaleMapperExt.queryScaleList(scaleVO);
+	}
+	
+	@Override
+	public List<ShippingPackingScaleDO> queryScaleListSelective(ShippingPackingScaleQueryVO shippingPackingScaleQueryVO) {
+		return packageScaleMapperExt.queryScaleListSelective(shippingPackingScaleQueryVO);
 	}
 }

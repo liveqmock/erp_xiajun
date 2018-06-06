@@ -117,7 +117,7 @@
         mall_sub_order
         WHERE
         id IN
-        <foreach item="item" index="index" collection="erpOrderIdList" open="(" separator="," close=")">
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
     </select>

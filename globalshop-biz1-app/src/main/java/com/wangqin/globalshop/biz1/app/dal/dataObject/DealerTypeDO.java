@@ -2,14 +2,14 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class DealerTypeDO {
+public class DealerTypeDO extends BaseModel {
     private Long id;
 
-    private String typeCode;
+    private String code;
 
-    private String typeName;
+    private String name;
 
-    private String desc;
+    private String remark;
 
     private Date gmtCreate;
 
@@ -29,28 +29,28 @@ public class DealerTypeDO {
         this.id = id;
     }
 
-    public String getTypeCode() {
-        return typeCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode == null ? null : typeCode.trim();
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getName() {
+        return name;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName == null ? null : typeName.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Date getGmtCreate() {

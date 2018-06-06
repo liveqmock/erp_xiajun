@@ -7,6 +7,10 @@ public class ShippingPackingScaleQueryVO {
 	private Long id;
 	
 	private String packagingScaleNo;
+	
+	private String name;
+	
+	private String nameEn;
 
 	public Long getId() {
 		return id;
@@ -22,6 +26,22 @@ public class ShippingPackingScaleQueryVO {
 
 	public void setPackagingScaleNo(String packagingScaleNo) {
 		this.packagingScaleNo = packagingScaleNo;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getNameEn() {
+		return nameEn;
+	}
+
+	public void setNameEn(String nameEn) {
+		this.nameEn = nameEn;
 	}
 	
 	

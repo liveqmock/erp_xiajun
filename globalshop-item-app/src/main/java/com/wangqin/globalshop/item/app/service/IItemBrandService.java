@@ -43,4 +43,6 @@ public interface IItemBrandService {
     
 	//插入单个品牌
     int insertBrandSelective(ItemBrandDO brand);
+    
+  
 }

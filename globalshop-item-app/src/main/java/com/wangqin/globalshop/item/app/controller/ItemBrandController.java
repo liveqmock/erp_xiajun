@@ -34,24 +34,12 @@ public class ItemBrandController {
 	@ResponseBody
 	public Object add(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		//brand.setName("mingzi");
-		//brand.setNameChina("中文名");
-		//brand.setNameAlias("别名");
 		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
 		brand.setCreator("admin");
 		brand.setModifier("admin");
-		// if (brand.getId() != null) {
-		// return result.buildMsg("新增品牌ID有值").buildIsSuccess(false);
-		// }
-		// if(StringUtil.isBlank(brand.getName())) {
-		// return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
-		// }
-		/**
-		 * @author XiaJun，禁止重复品牌提交，英文名重复即视为重复
-		 */
-		// if(itemBrandService.selectByName(brand.getName()) != null) {
-		// return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
-		// }
+		 if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
+		 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+		 }
 		itemBrandService.insertBrandSelective(brand);
 		return result.buildIsSuccess(true);
 	}
@@ -81,12 +69,9 @@ public class ItemBrandController {
 	@ResponseBody
 	public Object update(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		/*if (brand.getId() == null) {
-			return result.buildMsg("新增品牌ID为空").buildIsSuccess(false);
-		}
 		if (StringUtil.isBlank(brand.getName())) {
 			return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
-		}*/
+		}
 		itemBrandService.updateBrand(brand);
 		return result.buildIsSuccess(true);
 	}

@@ -36,6 +36,8 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
     @Resource
     private Cache  loginCache;
 
+    public static final String COMPANY_NO = "CompanyNO_";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
@@ -67,8 +69,9 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
             try {
                 //redis 缓存尝试取
                 String userId = (String) loginCache.get(sessionId);
+                String companyNo = (String) loginCache.get(COMPANY_NO+sessionId);
                 if (userId != null) {
-                    AppUtil.setLoginUserId(userId);
+                    AppUtil.setLoginUser(userId,companyNo);
                     return true;
                 }
             }catch (Exception e){

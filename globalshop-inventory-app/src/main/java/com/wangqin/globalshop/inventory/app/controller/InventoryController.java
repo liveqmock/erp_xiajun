@@ -2,7 +2,6 @@ package com.wangqin.globalshop.inventory.app.controller;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
@@ -12,7 +11,6 @@ import com.wangqin.globalshop.common.shiro.ShiroUser;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.*;
-import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -34,67 +32,64 @@ import java.util.Set;
 
 /**
  * 库存处理器
- * 
- * @author liuhui
  *
+ * @author liuhui
  */
 @Controller
 @RequestMapping("/inventory")
-public class InventoryController{
-	@Autowired
-	private InventoryService inventoryService;
-	@Autowired
-	private IInventoryOnWarehouseService inventoryAreaService;
-	@Autowired
-	private InventoryBookingRecordService inventoryRecordService;
-	@Autowired
-	private IInventoryInoutService inventoryInoutService;
-	@Autowired
-	private IWarehouseService warehouseService;
-	@Autowired
-	private IInventoryOutManifestDetailService inventoryOutService;
-	@Autowired
-	private ISequenceUtilService sequenceUtilService;
-	@Autowired
-	private InventoryIMallSubOrderService erpOrderService;
+public class InventoryController {
+    @Autowired
+    private InventoryService inventoryService;
+    @Autowired
+    private IInventoryOnWarehouseService inventoryAreaService;
+    @Autowired
+    private InventoryBookingRecordService inventoryRecordService;
+    @Autowired
+    private IInventoryInoutService inventoryInoutService;
+    @Autowired
+    private IWarehouseService warehouseService;
+    @Autowired
+    private IInventoryOutManifestDetailService inventoryOutService;
+    @Autowired
+    private ISequenceUtilService sequenceUtilService;
+    @Autowired
+    private InventoryIMallSubOrderService erpOrderService;
 
-	
-	@RequestMapping("/query")
-	@ResponseBody
-	public Object query(String itemCode, String skuCode) {
-		if (skuCode != null) {
-			InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(itemCode, skuCode);
-			return JsonResult.buildSuccess(inventory);
-		} else {
-			return JsonResult.buildFailed("没有SKU id");
-		}
-	}
 
-	@RequestMapping("/area/queryList")
-	@ResponseBody
-	public Object queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
-		JsonPageResult<List<InventoryOnWareHouseDO>> result = new JsonPageResult<>();
-		try {
-			if(StringUtil.isNotBlank(inventoryQueryVO.getOrderBy())) {
-				String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getOrderBy());
-				inventoryQueryVO.setOrderBy(orderBy);
-			}
-			try {
-				inventoryQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
-			} catch (Exception e) {				
-			}
-			result = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
-			result.buildIsSuccess(true);
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(String itemCode, String skuCode) {
+        if (skuCode != null) {
+            InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(itemCode, skuCode);
+            return JsonResult.buildSuccess(inventory);
+        } else {
+            return JsonResult.buildFailed("没有SKU id");
+        }
+    }
+
+    @RequestMapping("/area/queryList")
+    @ResponseBody
+    public Object queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
+        JsonResult<List<InventoryOnWareHouseDO>> result = new JsonResult<>();
+        try {
+            if (StringUtil.isNotBlank(inventoryQueryVO.getBuySite())) {
+                String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getBuySite());
+                inventoryQueryVO.setBuySite(orderBy);
+            }
+//				inventoryQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+            List<InventoryOnWareHouseDO> list = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
+            result.buildData(list);
+            result.buildIsSuccess(true);
 //			ShiroUser shiroUser = this.getShiroUser();
 //			Set<String> roles = shiroUser.getRoles();
 //			if(roles.contains("irhdaili")){
 //				result.setAgentRoler(true);
 //			}
-		} catch (Exception e) {
-			result.buildIsSuccess(false);
-		}
-		return result;
-	}
+        } catch (Exception e) {
+            result.buildIsSuccess(false);
+        }
+        return result;
+    }
 
 //	@RequestMapping("/area/transTo")
 //	@ResponseBody
@@ -118,18 +113,18 @@ public class InventoryController{
 //		return JsonResult.buildSuccess(null);
 //	}
 
-	// ------------test------------------------
-	// http://localhost:8080/haierp1/inventory/add?itemId=73&skuId=352&warehouseId=16&positionNo=S001&inventory=10&transInv=5
+    // ------------test------------------------
+    // http://localhost:8080/haierp1/inventory/add?itemId=73&skuId=352&warehouseId=16&positionNo=S001&inventory=10&transInv=5
 
-	@RequestMapping("/add")
-	@ResponseBody
-	public Object add(String  itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory,
-			Long transInv) {
-		InventoryDO inventoryDO = new InventoryDO();
-		inventoryDO.setSkuCode(skuCode);
-		inventoryDO.setItemCode(itemCode);
-		inventoryDO.setInv(inventory);
-		inventoryService.outbound(inventoryDO,warehouseNo);
+    @RequestMapping("/add")
+    @ResponseBody
+    public Object add(String itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory,
+                      Long transInv) {
+        InventoryDO inventoryDO = new InventoryDO();
+        inventoryDO.setSkuCode(skuCode);
+        inventoryDO.setItemCode(itemCode);
+        inventoryDO.setInv(inventory);
+        inventoryService.outbound(inventoryDO, warehouseNo, positionNo);
 //		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
 //		inventoryArea.setItemCode(itemCode);
 //		// inventoryArea.setItemName("test");
@@ -145,25 +140,25 @@ public class InventoryController{
 //		inventoryArea.setGmtCreate(new Date());
 //		inventoryArea.setGmtModify(new Date());
 //		inventoryAreaService.addInventoryArea(inventoryArea, InoutOperatorType.PURCHASE_IN);
-		return JsonResult.buildSuccess(null);
+        return JsonResult.buildSuccess(null);
 
-	}
+    }
 
-	@RequestMapping("/lock")
-	@ResponseBody
-	public Object lockOrder(Long orderId) throws InventoryException {
-		MallSubOrderDO order = erpOrderService.selectById(orderId);
-		inventoryService.order(order);
-		return JsonResult.buildSuccess(true);
-	}
+    @RequestMapping("/lock")
+    @ResponseBody
+    public Object lockOrder(Long orderId) throws InventoryException {
+        MallSubOrderDO order = erpOrderService.selectById(orderId);
+        inventoryService.order(order);
+        return JsonResult.buildSuccess(true);
+    }
 
-	@RequestMapping("/release")
-	@ResponseBody
-	public Object releaseOrder(Long orderId) throws InventoryException {
-		MallSubOrderDO order = erpOrderService.selectById(orderId);
-		inventoryService.release(order);
-		return JsonResult.buildSuccess(true);
-	}
+    @RequestMapping("/release")
+    @ResponseBody
+    public Object releaseOrder(Long orderId) throws InventoryException {
+        MallSubOrderDO order = erpOrderService.selectById(orderId);
+        inventoryService.release(order);
+        return JsonResult.buildSuccess(true);
+    }
 
 //	@RequestMapping("/send")
 //	@ResponseBody
@@ -173,17 +168,17 @@ public class InventoryController{
 //		return JsonResult.buildSuccess(null);
 //	}
 
-	/**
-	 * 库存调整，库存盘进、盘出
-	 * 
-	 * @return
-	 * @throws InventoryException
-	 */
-	@RequestMapping("/inventoryCheckIn")
-	@ResponseBody
-	public Object inventoryCheckIn(String skuCode, Long warehouseId, String positionNo, Long quantity)
-			throws InventoryException {
-		inventoryService.checkIn(skuCode,warehouseId, positionNo, quantity);
+    /**
+     * 库存调整，库存盘进、盘出
+     *
+     * @return
+     * @throws InventoryException
+     */
+    @RequestMapping("/inventoryCheckIn")
+    @ResponseBody
+    public Object inventoryCheckIn(String skuCode, Long warehouseId, String positionNo, Long quantity)
+            throws InventoryException {
+        inventoryService.checkIn(skuCode, warehouseId, positionNo, quantity);
 //		// 非空校验
 //		if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
 //			return JsonResult.buildFailed("有空数据");
@@ -202,13 +197,13 @@ public class InventoryController{
 //			erpOrderService.queryBySkuCode(skuCode);
 
 //		}
-		return JsonResult.buildSuccess(null);
-	}
+        return JsonResult.buildSuccess(null);
+    }
 
-	@RequestMapping("/inventoryCheckOut")
-	@ResponseBody
-	public Object inventoryCheckOut(Long inventoryAreaId, Long quantity) throws InventoryException {
-		inventoryService.inventoryCheckOut(inventoryAreaId,quantity);
+    @RequestMapping("/inventoryCheckOut")
+    @ResponseBody
+    public Object inventoryCheckOut(Long inventoryAreaId, Long quantity) throws InventoryException {
+        inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
 //		// 非空校验
 //		if (inventoryAreaId== null ||quantity == null) {
 //			return JsonResult.buildFailed("有空数据");
@@ -226,225 +221,235 @@ public class InventoryController{
 //			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectByNo(inventoryAreaId);
 //			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
 //		}
-		return JsonResult.buildSuccess(null);
-	}
-	
-	@RequestMapping("/record/queryList")
-	@ResponseBody
-	public Object queryInventoryRecords(Long id) {
-		JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
-		try {
-			InventoryBookingRecordDO inventoryRecordList =  inventoryRecordService.queryById(id);
-			result.setData(inventoryRecordList);
-			result.buildIsSuccess(true);
-		} catch (Exception e) {
-			result.buildIsSuccess(false);
-		}
-		return result;
-	}
-	
-	/**
-	 * 出入库流水明细
-	 * @return
-	 */
-	@RequestMapping("/queryInventoryInout")
-	@ResponseBody
-	public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-		JsonPageResult<List<InventoryInoutVO>> result = new JsonPageResult<>();
-		try {
-			Integer count =  inventoryInoutService.queryInventoryInoutCount(inventoryQueryVO);
-			if(count!=null&&count!=0L){
+        return JsonResult.buildSuccess(null);
+    }
+
+    @RequestMapping("/record/queryList")
+    @ResponseBody
+    public Object queryInventoryRecords(Long id) {
+        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
+        try {
+            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
+            result.setData(inventoryRecordList);
+            result.buildIsSuccess(true);
+        } catch (Exception e) {
+            result.buildIsSuccess(false);
+        }
+        return result;
+    }
+
+    /**
+     * 出入库流水明细
+     *
+     * @return
+     */
+    @RequestMapping("/queryInventoryInout")
+    @ResponseBody
+    public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
+        JsonResult<List<InventoryInoutDO>> result = new JsonResult<>();
+        try {
+//			Integer count =  inventoryInoutService.queryInventoryInoutCount(inventoryQueryVO);
+//			if(count!=null&&count!=0L){
 //				result.buildPage(count, inventoryQueryVO);
-				List<InventoryInoutVO> inventoryInoutVOS = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
-				if(CollectionUtils.isNotEmpty(inventoryInoutVOS)){
-					inventoryInoutVOS.forEach(inout->
-					inout.setWarehouseName(warehouseService.getWarehouseById(inout.getId()).getName())
-							);
-				}
-				result.setData(inventoryInoutVOS);
-			}
-			result.buildIsSuccess(true);
-		} catch (Exception e) {
-			result.buildIsSuccess(false);
-		}
-		return result;
-	}
-	
-	/**
-	 * 导出excel
-	 */
-	@RequestMapping("/inventoryAreaExport")
+//            ItemSkuDO item = itemSkuService.selectItemByItemCode(inventoryQueryVO.getItemName());
+            List<InventoryInoutDO> list = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
+//            list.forEach(inout ->
+//                    inout.setWarehouseName(warehouseService.selectByWarehouseNo(inout.getWarehouseNo()))
+//            );
+            result.setData(list);
+//			}
+            result.buildIsSuccess(true);
+        } catch (Exception e) {
+            result.buildIsSuccess(false);
+        }
+        return result;
+    }
+
+    /**
+     * 导出excel
+     */
+    @RequestMapping("/inventoryAreaExport")
     public ResponseEntity<byte[]> inventoryAreaExport(InventoryQueryVO inventoryQueryVO) throws Exception {
-    	List<List<Object>> rowDatas = new ArrayList<>();
-    	List<InventoryOnWareHouseDO> inventoryAreaList = inventoryAreaService.queryInventoryAreaForExcel(inventoryQueryVO);
-    	if(inventoryAreaList != null) {
-    		Double totalSalePrice = 0.0D;
-    		for (InventoryOnWareHouseDO inventoryArea : inventoryAreaList) {
-    			List<Object> list = new ArrayList<>();
-    			
-    			list.add(inventoryArea.getSkuCode());		//SKU CODE
-    			list.add(inventoryArea.getItemName());		//Item Name
-    			//sku图片
-    			String skuPic = inventoryArea.getSkuPic();
-    			if(StringUtil.isNotBlank(skuPic)) {
-    				PicModel pm = HaiJsonUtils.toBean(skuPic, PicModel.class);
-        			String imgSrc = pm.getPicList().get(0).getUrl();
-        			String imgType = imgSrc.substring(imgSrc.lastIndexOf(".") + 1).toUpperCase();
-        			if(imgSrc.contains("aliyuncs.com")) {
-        				imgSrc += "?x-oss-process=image/resize,m_lfit,h_100,w_100";
-        			} else {
-        				imgSrc = imgSrc.replaceAll("Resource", "Thumbnail");
-        			}
-        			//System.out.println(imgSrc);
-        			URL url = new URL(imgSrc);
-        			BufferedImage image = ImageIO.read(url);
-        			ByteArrayOutputStream output = new ByteArrayOutputStream();
-        	        ImageIO.write(image, imgType, output);
-        	        output.flush();
-        	        list.add(output.toByteArray());
-        	        output.close();
-    			} else {
-    				list.add(null);
-    			}
-    			
-    	        list.add(inventoryArea.getUpc());					//UPC
-    	        list.add(inventoryArea.getScale());					//尺码
-    	        list.add(inventoryArea.getWarehouseName());			//仓库名称
+        List<List<Object>> rowDatas = new ArrayList<>();
+        List<InventoryOnWareHouseDO> inventoryAreaList = inventoryAreaService.queryInventoryAreaForExcel(inventoryQueryVO);
+        if (inventoryAreaList != null) {
+            Double totalSalePrice = 0.0D;
+            for (InventoryOnWareHouseDO inventoryArea : inventoryAreaList) {
+                List<Object> list = new ArrayList<>();
+
+                list.add(inventoryArea.getSkuCode());        //SKU CODE
+                list.add(inventoryArea.getItemName());        //Item Name
+                //sku图片
+                String skuPic = inventoryArea.getSkuPic();
+                if (StringUtil.isNotBlank(skuPic)) {
+                    PicModel pm = HaiJsonUtils.toBean(skuPic, PicModel.class);
+                    String imgSrc = pm.getPicList().get(0).getUrl();
+                    String imgType = imgSrc.substring(imgSrc.lastIndexOf(".") + 1).toUpperCase();
+                    if (imgSrc.contains("aliyuncs.com")) {
+                        imgSrc += "?x-oss-process=image/resize,m_lfit,h_100,w_100";
+                    } else {
+                        imgSrc = imgSrc.replaceAll("Resource", "Thumbnail");
+                    }
+                    //System.out.println(imgSrc);
+                    URL url = new URL(imgSrc);
+                    BufferedImage image = ImageIO.read(url);
+                    ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    ImageIO.write(image, imgType, output);
+                    output.flush();
+                    list.add(output.toByteArray());
+                    output.close();
+                } else {
+                    list.add(null);
+                }
+
+                list.add(inventoryArea.getUpc());                    //UPC
+                list.add(inventoryArea.getScale());                    //尺码
+                list.add(inventoryArea.getWarehouseName());            //仓库名称
 //    	        list.add(inventoryArea.getPositionNo());            //货架号
 //    	        list.add(inventoryDO.getInv() + inventoryDO.getLockedTransInv() - inventoryDO.getLockedInv());		//可售库存
-    	        list.add(inventoryArea.getInventory());				//现货库存
-    	        list.add(inventoryArea.getLockedInv());				//现货占用
-    	        list.add(inventoryArea.getTransInv());				//在途库存
-    	        list.add(inventoryArea.getLockedTransInv());		//在途占用
+                list.add(inventoryArea.getInventory());                //现货库存
+                list.add(inventoryArea.getLockedInv());                //现货占用
+                list.add(inventoryArea.getTransInv());                //在途库存
+                list.add(inventoryArea.getLockedTransInv());        //在途占用
 
-    			rowDatas.add(list);
-    		}
-    		List<Object> list = new ArrayList<>();
-    		list.add("库存总金额：");
-    		list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");list.add("");
-    		list.add(totalSalePrice);
-    		rowDatas.add(list);
-    	}
-    	ExcelHelper excelHelper = new ExcelHelper();
-    	String[] columnTitles = new String[]{"SKU CODE", "商品名称", "商品图片", "UPC", "品牌", "颜色", "尺码", "仓库名称", "货架号", "可售库存", "现货库存", "现货占用", "在途库存", "在途占用", "销售价格"};
-    	Integer[] columnWidth = new Integer[]{25, 30, 10, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
-    	excelHelper.setInventoryAreaToSheet("inventoryArea", columnTitles, rowDatas, columnWidth);
-    	//excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
-    	
-    	ResponseEntity<byte[]> filebyte = null;
-    	ByteArrayOutputStream  out = excelHelper.writeToByteArrayOutputStream();
-    	HttpHeaders headers = new HttpHeaders();
-    	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-    	String fileName = "库存统计报表(" + DateUtil.formatDate(new Date(), "yyyyMMdd") + ").xlsx";
+                rowDatas.add(list);
+            }
+            List<Object> list = new ArrayList<>();
+            list.add("库存总金额：");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add("");
+            list.add(totalSalePrice);
+            rowDatas.add(list);
+        }
+        ExcelHelper excelHelper = new ExcelHelper();
+        String[] columnTitles = new String[]{"SKU CODE", "商品名称", "商品图片", "UPC", "品牌", "颜色", "尺码", "仓库名称", "货架号", "可售库存", "现货库存", "现货占用", "在途库存", "在途占用", "销售价格"};
+        Integer[] columnWidth = new Integer[]{25, 30, 10, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
+        excelHelper.setInventoryAreaToSheet("inventoryArea", columnTitles, rowDatas, columnWidth);
+        //excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
+
+        ResponseEntity<byte[]> filebyte = null;
+        ByteArrayOutputStream out = excelHelper.writeToByteArrayOutputStream();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        String fileName = "库存统计报表(" + DateUtil.formatDate(new Date(), "yyyyMMdd") + ").xlsx";
         headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("utf-8"), "ISO8859-1"));
-        
+
         filebyte = new ResponseEntity<byte[]>(out.toByteArray(), headers, HttpStatus.OK);
         out.close();
         excelHelper.close();
         return filebyte;
     }
-    
+
     /**
      * 修改货架号
+     *
      * @param inventoryAreaId
      * @param positionNo
      * @return
      */
     @RequestMapping("/changePositionNo")
-	@ResponseBody
+    @ResponseBody
     public Object changePositionNo(Long inventoryAreaId, String positionNo) {
-    	if(StringUtil.isBlank(positionNo)) {
-    		return JsonResult.buildFailed("货架号不能为空！");
-    	}
-		InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
-    	if(inventoryArea.getInventory()>0 || inventoryArea.getLockedInv()>0) {
-    		return JsonResult.buildFailed("此库存已有现货库存，不能更改货架号！");
-    	} else {
+        if (StringUtil.isBlank(positionNo)) {
+            return JsonResult.buildFailed("货架号不能为空！");
+        }
+        InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+        if (inventoryArea.getInventory() > 0 || inventoryArea.getLockedInv() > 0) {
+            return JsonResult.buildFailed("此库存已有现货库存，不能更改货架号！");
+        } else {
 //    		inventoryArea.setPositionNo(positionNo);
-    		inventoryAreaService.changePositionNo(inventoryArea);
-    		return JsonResult.buildSuccess(null);
-    	}
+            inventoryAreaService.changePositionNo(inventoryArea);
+            return JsonResult.buildSuccess(null);
+        }
     }
-    
-   /**
-    * 添加出库单
-    *
-    */
+
+    /**
+     * 添加出库单
+     */
     @RequestMapping("/inventoryOutAdd")
-	@ResponseBody
+    @ResponseBody
     public Object inventoryOutAdd(InventoryOutManifestDO inventoryOut) {
-    	JsonResult<String> result = new JsonResult<>();
-		initInventoryOut(inventoryOut);
-		inventoryOut.setStatus(GeneralStatus.INIT.getCode());
-		
-		inventoryOutService.addInventoryOut(inventoryOut);
-		return result.buildIsSuccess(true);
+        JsonResult<String> result = new JsonResult<>();
+        initInventoryOut(inventoryOut);
+        inventoryOut.setStatus(GeneralStatus.INIT.getCode());
+
+        inventoryOutService.addInventoryOut(inventoryOut);
+        return result.buildIsSuccess(true);
     }
-    
+
     /**
      * 查询单个出库单
-     *
      */
     @RequestMapping("/inventoryOutQuery")
     @ResponseBody
     public Object inventoryOutQuery(Long id) {
-   	 JsonResult<InventoryOutManifestDO> result = new JsonResult<>();
-   	 if (id != null) {
-		 InventoryOutManifestDO inventoryOut = inventoryOutService.queryInventoryOut(id);
-			if (inventoryOut == null) {
-				result.buildIsSuccess(false).buildMsg("没有找到InventoryOut");
-			}
-			result.setData(inventoryOut);
-			return result.buildIsSuccess(true);
-		} else {
-			return result.buildIsSuccess(false).buildMsg("没有Item id");
-		}
+        JsonResult<InventoryOutManifestDO> result = new JsonResult<>();
+        if (id != null) {
+            InventoryOutManifestDO inventoryOut = inventoryOutService.queryInventoryOut(id);
+            if (inventoryOut == null) {
+                result.buildIsSuccess(false).buildMsg("没有找到InventoryOut");
+            }
+            result.setData(inventoryOut);
+            return result.buildIsSuccess(true);
+        } else {
+            return result.buildIsSuccess(false).buildMsg("没有Item id");
+        }
     }
-    
+
     /**
      * 修改出库单
-     *
      */
     @RequestMapping("/inventoryOutUpdate")
- 	@ResponseBody
-	public Object inventoryOutUpdate(InventoryOutManifestDO inventoryOut) {
-     	JsonResult<String> result = new JsonResult<>();
-     	if(inventoryOut.getId()==null) {
-			return result.buildIsSuccess(false).buildMsg("没有ID");
-		} else {
-			InventoryOutManifestDO io = inventoryOutService.selectById(inventoryOut.getId());
-			if(io==null || io.getStatus()!=GeneralStatus.INIT.getCode()) {
-				return result.buildIsSuccess(false).buildMsg("状态不对");
-			}
-		}
-     	initInventoryOut(inventoryOut);
-     	inventoryOut.setStatus(GeneralStatus.INIT.getCode());
- 		inventoryOutService.updateInventoryOut(inventoryOut);
- 		return result.buildIsSuccess(true);
-     }
-    
+    @ResponseBody
+    public Object inventoryOutUpdate(InventoryOutManifestDO inventoryOut) {
+        JsonResult<String> result = new JsonResult<>();
+        if (inventoryOut.getId() == null) {
+            return result.buildIsSuccess(false).buildMsg("没有ID");
+        } else {
+            InventoryOutManifestDO io = inventoryOutService.selectById(inventoryOut.getId());
+            if (io == null || io.getStatus() != GeneralStatus.INIT.getCode()) {
+                return result.buildIsSuccess(false).buildMsg("状态不对");
+            }
+        }
+        initInventoryOut(inventoryOut);
+        inventoryOut.setStatus(GeneralStatus.INIT.getCode());
+        inventoryOutService.updateInventoryOut(inventoryOut);
+        return result.buildIsSuccess(true);
+    }
+
     public void initInventoryOut(InventoryOutManifestDO inventoryOut) {
-    	ShiroUser su = null;
-		try {
+        ShiroUser su = null;
+        try {
 //			 su = this.getShiroUser();
-		} catch (Exception e) {
-			throw new ErpCommonException("没有登入");
-		}
+        } catch (Exception e) {
+            throw new ErpCommonException("没有登入");
+        }
 //		final Long loginId = su.getId();
 //		final String loginName = su.getName();
-		Date nowDate = new Date();
+        Date nowDate = new Date();
 
-		if(inventoryOut.getId() == null) {	//新增
-			//出库单号
-			String invOutNo = "IOUT" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDD) + "U" + String.format("%0"+4+"d", "inventoryControllerJJJJ") + sequenceUtilService.gainINVOUTSequence();
-			inventoryOut.setInventoryOutNo(invOutNo);
+        if (inventoryOut.getId() == null) {    //新增
+            //出库单号
+            String invOutNo = "IOUT" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDD) + "U" + String.format("%0" + 4 + "d", "inventoryControllerJJJJ") + sequenceUtilService.gainINVOUTSequence();
+            inventoryOut.setInventoryOutNo(invOutNo);
 //			inventoryOut.setUserCreate(loginName);
-			inventoryOut.setGmtCreate(nowDate);
-			inventoryOut.setGmtModify(nowDate);
-		} else {
+            inventoryOut.setGmtCreate(nowDate);
+            inventoryOut.setGmtModify(nowDate);
+        } else {
 //			inventoryOut.setUserModify(loginName);
-	 		inventoryOut.setGmtModify(nowDate);
-		}
+            inventoryOut.setGmtModify(nowDate);
+        }
 
 //    	if(!StringUtils.isEmpty(inventoryOut.getInventoryOutDetailListStr())) {
 //			String s = inventoryOut.getInventoryOutDetailListStr().replace("&quot;", "\"");
@@ -469,80 +474,81 @@ public class InventoryController{
 ////			inventoryOut.setInventoryOutDetailList(details);
 //		}
     }
-     
-	/**
-	 * 查询出库单列表
-	 *
-	 */
-	@RequestMapping("/inventoryOutQueryList")
-  	@ResponseBody
-  	public Object inventoryOutQueryList(InventoryOutVO inventoryOutVO) {
-		JsonPageResult<List<InventoryOutManifestDO>> result = new JsonPageResult<>();
-		try{
-			result = inventoryOutService.inventoryOutQueryList(inventoryOutVO);
-			result.buildIsSuccess(true);
-		}catch(Exception e){
-			e.printStackTrace();
-			result.buildIsSuccess(false);
-		}
-		return result;
-	}
-	
-	/**
-	 *确认出库,区分新增出库和修改出库，逻辑不同
-	 * @param
-	 * @return
-	 */
-	@RequestMapping("/inventoryOutConfirm")
-	@ResponseBody
-	public Object inventoryOutConfirm(InventoryOutManifestDO inventoryOut) throws InventoryException {
-		JsonResult<String> result = new JsonResult<>();
-		Set<String> skuIdSet = null;
-		if(inventoryOut.getId()==null) {	//新增出库
-			initInventoryOut(inventoryOut);
-			inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
-			skuIdSet = inventoryOutService.addInventoryOutConfirm(inventoryOut);
-		} else {
-			if(inventoryOut.getId()==null) {
-				return result.buildIsSuccess(false).buildMsg("没有ID");
-			} else {
-				InventoryOutManifestDO io = inventoryOutService.selectById(inventoryOut.getId());
-				if(io==null || io.getStatus()!=GeneralStatus.INIT.getCode()) {
-					return result.buildIsSuccess(false).buildMsg("状态不对");
-				}
-			}
-	     	initInventoryOut(inventoryOut);
-	     	inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
-	     	skuIdSet = inventoryOutService.updateInventoryOutConfirm(inventoryOut);
-		}
-		//对子订单进行库存分配
-		if(skuIdSet!=null && !skuIdSet.isEmpty()) {
-			for(String skuId:skuIdSet) {
-					erpOrderService.lockErpOrderBySkuId(skuId);
-			}
-		}
-		return result.buildIsSuccess(true);
-	}
-	
-	/**
-	 *删除出库单
-	 * @param
-	 * @return
-	 */
-	@RequestMapping("/inventoryOutDelete")
-	@ResponseBody
-	public Object inventoryOutDelete(Long id){
-		JsonResult<String> result = new JsonResult<>();
-		
-		try{
-			inventoryOutService.deleteInventoryOutById(id);
-			return result.buildIsSuccess(true);
-		}catch(ErpCommonException e){
-			return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
-		}catch(Exception ex){
-			return result.buildIsSuccess(false).buildMsg("未知异常");
-		}
-	}
+
+    /**
+     * 查询出库单列表
+     */
+    @RequestMapping("/inventoryOutQueryList")
+    @ResponseBody
+    public Object inventoryOutQueryList(InventoryOutVO inventoryOutVO) {
+        JsonPageResult<List<InventoryOutManifestDO>> result = new JsonPageResult<>();
+        try {
+            result = inventoryOutService.inventoryOutQueryList(inventoryOutVO);
+            result.buildIsSuccess(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildIsSuccess(false);
+        }
+        return result;
+    }
+
+    /**
+     * 确认出库,区分新增出库和修改出库，逻辑不同
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/inventoryOutConfirm")
+    @ResponseBody
+    public Object inventoryOutConfirm(InventoryOutManifestDO inventoryOut) throws InventoryException {
+        JsonResult<String> result = new JsonResult<>();
+        Set<String> skuIdSet = null;
+        if (inventoryOut.getId() == null) {    //新增出库
+            initInventoryOut(inventoryOut);
+            inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
+            skuIdSet = inventoryOutService.addInventoryOutConfirm(inventoryOut);
+        } else {
+            if (inventoryOut.getId() == null) {
+                return result.buildIsSuccess(false).buildMsg("没有ID");
+            } else {
+                InventoryOutManifestDO io = inventoryOutService.selectById(inventoryOut.getId());
+                if (io == null || io.getStatus() != GeneralStatus.INIT.getCode()) {
+                    return result.buildIsSuccess(false).buildMsg("状态不对");
+                }
+            }
+            initInventoryOut(inventoryOut);
+            inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
+            skuIdSet = inventoryOutService.updateInventoryOutConfirm(inventoryOut);
+        }
+        //对子订单进行库存分配
+        if (skuIdSet != null && !skuIdSet.isEmpty()) {
+            for (String skuId : skuIdSet) {
+                erpOrderService.lockErpOrderBySkuId(skuId);
+            }
+        }
+        return result.buildIsSuccess(true);
+    }
+
+    /**
+     * 删除出库单
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/inventoryOutDelete")
+    @ResponseBody
+    public Object inventoryOutDelete(Long id) {
+        JsonResult<String> result = new JsonResult<>();
+
+        try {
+            inventoryOutService.deleteInventoryOutById(id);
+            return result.buildIsSuccess(true);
+        } catch (ErpCommonException e) {
+            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (Exception ex) {
+            return result.buildIsSuccess(false).buildMsg("未知异常");
+        }
+    }
 //	/**
 //	 * 备货商品列表查询
 //	 * @param inventoryQueryVO

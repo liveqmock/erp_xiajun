@@ -36,7 +36,7 @@
     <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" extends="BaseResultMap" >
-    <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, sku_code, item_code, item_name, company_no, category_code, category_name, upc, 
@@ -46,7 +46,7 @@
     is_del
   </sql>
   <sql id="Blob_Column_List" >
-    desc
+    remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
@@ -74,7 +74,7 @@
       package_level_id, scale, model, 
       status, sale_type, sale_price, 
       creator, modifier, gmt_create, 
-      gmt_modify, is_del, desc
+      gmt_modify, is_del, remark
       )
     values (#{id,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
       #{itemName,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, 
@@ -86,7 +86,7 @@
       #{packageLevelId,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{desc,jdbcType=LONGVARCHAR}
+      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{remark,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
@@ -189,8 +189,8 @@
       <if test="isDel != null" >
         is_del,
       </if>
-      <if test="desc != null" >
-        desc,
+      <if test="remark != null" >
+        remark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -288,8 +288,8 @@
       <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
-      <if test="desc != null" >
-        #{desc,jdbcType=LONGVARCHAR},
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -389,8 +389,8 @@
       <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
-      <if test="desc != null" >
-        desc = #{desc,jdbcType=LONGVARCHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -428,7 +428,7 @@
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=BIT},
-      desc = #{desc,jdbcType=LONGVARCHAR}
+      remark = #{remark,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >

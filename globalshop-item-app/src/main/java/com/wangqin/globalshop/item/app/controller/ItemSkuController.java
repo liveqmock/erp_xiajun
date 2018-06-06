@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
@@ -172,8 +171,8 @@ public class ItemSkuController  {
 				tjItemSku.setSkuCode(null);
 				tjItemSku.setUpc(code);
 				
-				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
-				entityWrapper.setEntity(tjItemSku);
+//				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
+//				entityWrapper.setEntity(tjItemSku);
 				//itemSkuList = iItemSkuService.selectList(entityWrapper);
 			}
 			result.setData(itemSkuList);
@@ -377,4 +376,17 @@ public class ItemSkuController  {
 		return result.buildData(scaleTypeList).buildIsSuccess(true);
 	}
     
+	
+
+	@RequestMapping("/saleable")
+	@ResponseBody
+	public Object getSaleAble() {
+		JsonResult<List<ItemSkuDO>> result = new JsonResult<>();
+		List<ItemSkuDO> skuList = iItemSkuService.querySaleableSkus();
+		if(0 == skuList.size()) {
+			result.buildIsSuccess(false).buildMsg("无可售商品");
+		}
+		result.buildData(skuList).buildIsSuccess(true);
+		return result;
+	}
 }

@@ -78,30 +78,33 @@ public class PackingController {
 	@ResponseBody
 	public Object add(ItemPackageScaleDTO packageScale) {
 		JsonResult<String> result = new JsonResult<>();
-		/**
 		if (null == packageScale.getId()) {
 			if ((StringUtils.isNotBlank(packageScale.getName())) 
 					&& (StringUtils.isNotBlank(packageScale.getEnName()))) {
 
 				//Check Name or En_Name is unique
-				Integer count1 = iPackageScaleService.queryPackageScalesCount(packageScale.getName(), null);
-				Integer count2 = iPackageScaleService.queryPackageScalesCount(null, packageScale.getEnName());
+				ShippingPackingScaleQueryVO scaleQueryNameVO = new ShippingPackingScaleQueryVO();
+				scaleQueryNameVO.setName(packageScale.getName());
+				Integer count1 = shippingPackingScaleService.queryScaleListSelective(scaleQueryNameVO).size();
+				
+				ShippingPackingScaleQueryVO scaleQueryNameEnVO = new ShippingPackingScaleQueryVO();
+				scaleQueryNameEnVO.setNameEn(packageScale.getEnName());
+				Integer count2 = shippingPackingScaleService.queryScaleListSelective(scaleQueryNameEnVO).size();
 				if ((count1 > 0) || (count2 > 0)) {
 					result.buildData("包装规格名称或英文名称不可以重复").buildIsSuccess(false);
 				} else {
-					result.buildIsSuccess(iPackageScaleService.insert(packageScale));
+					packageScale.setCreator("admin");
+					packageScale.setModifier("admin");
+					packageScale.setPackagingScaleNo(RandomUtils.getTimeRandom());
+					shippingPackingScaleService.insertPackageScale(packageScale);
+					result.buildIsSuccess(true);
 				}
 			} else {
 				result.buildData("包装规格名称或英文名称不可以为空").buildIsSuccess(false);
 			}
 		} else {
 			result.buildData("错误数据").buildIsSuccess(false);
-		}**/
-		packageScale.setCreator("admin");
-		packageScale.setModifier("admin");
-		packageScale.setPackagingScaleNo(RandomUtils.getTimeRandom());
-		shippingPackingScaleService.insertPackageScale(packageScale);
-		result.buildIsSuccess(true);
+		}
 		return result;
 	}
 	

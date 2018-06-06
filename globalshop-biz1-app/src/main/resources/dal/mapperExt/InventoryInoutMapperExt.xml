@@ -50,35 +50,29 @@
         	</if>
     </select>
     
-    <select id="queryInventoryInouts" resultType="com.wangqin.globalshop.biz1.app.vo.InventoryInoutVO" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+    <select id="queryInventoryInouts" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
 		SELECT
-        		T1.id AS id, T1.sku_code AS skuCode,T1.`warehouse_no` AS warehouseNo,T1.`shelf_no` AS shelfNo,T1.`operator_type` AS operatorType,
-				T2.`item_name` AS itemName,T2.`upc` AS upc, T2.`sku_pic` AS skuPic,T1.`quantity` AS quantity ,T1.`gmt_create` AS gmtCreate
+			<include refid="Base_Column_List"/>
         FROM
-            inventory_inout T1 ,item_sku T2
-        WHERE  1=1 
-        		and T1.sku_code=T2.sku_code
-       		<if test="itemName!=null and itemName!=''">
-       			and T2.item_name LIKE concat('%',#{itemName},'%')
-       		</if>
-       		<if test="skuCode!=null and skuCode!=''">
-       			and T1.sku_code = #{skuCode} 
-       		</if>
-       		<if test="upc!=null and upc!=''">
-       			and T2.upc = #{upc} 
-       		</if>
-       		<if test="warehouseId != null">
-        			and T1.warehouse_no = #{warehouseNo}	
-        	</if>
-        	<if test="positionNo != null">
-        			and T1.shelf_no = #{shelfNo}	
-        	</if>
-        	<if test="operatorType != null">
-        			and T1.operator_type = #{operatorType}	
-        	</if>
-          order by T1.gmt_create desc
-          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-            
+            inventory_inout
+		<where>
+			<if test="warehouseNo!=null and warehouseNo!=''">
+				and warehouse_no = #{warehouseNo}
+			</if>
+			<if test="companyNo!=null and companyNo!=''">
+				and company_no = #{companyNo}
+			</if>
+			<if test="skuCode!=null and skuCode!=''">
+				and sku_code = #{skuCode}
+			</if>
+			<if test="itemName!=null and itemName!=''">
+				and item_name = #{itemName}
+			</if>
+			<if test="positionNo!=null and positionNo!=''">
+				and shelf_no = #{positionNo}
+			</if>
+		</where>
+
     </select>
     
     <!-- 查询 入库商品数,XiaJun-->

@@ -12,11 +12,13 @@ public interface IWarehouseService {
 
     WarehouseDO getWarehouseById(Long warehouseId);
 
-	void addWarehouse(WarehouseDO warehouse);
+	void addWarehouse(String name);
 
 	void updateWarehouse(WarehouseDO warehouse);
 
 	Object selectById(Long id);
 
 	List<WarehouseDO> queryWarehouses(String companyNo);
+
+	List<WarehouseDO> list();
 }

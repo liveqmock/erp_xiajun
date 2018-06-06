@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class CountryDO {
+public class CountryDO extends BaseModel {
     private Integer id;
 
     private String name;

@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class MallWxBannerDO {
+public class MallWxBannerDO extends BaseModel {
     private Integer id;
 
     private String companyNo;

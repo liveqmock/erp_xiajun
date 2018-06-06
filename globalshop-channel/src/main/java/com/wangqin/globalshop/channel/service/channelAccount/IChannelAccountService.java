@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.channel.service.channelAccount;
 
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
 
@@ -29,9 +30,11 @@ public interface IChannelAccountService {
 
 	public void createOrupdateAccount4Taobao(String shopCode, String cookie);
 
-    ChannelAccountDO queryByChannelNo(String channelNo);
 	public ChannelAccountDO selectOne(ChannelAccountDO tmEntity);
 
 	public List<ChannelAccountDO> searchCAListByUserNo(String userNo);
+
+	public List<ChannelAccountDO> searchCAListByComNoChType(String companyNo,ChannelType channelType);
+
 
 }

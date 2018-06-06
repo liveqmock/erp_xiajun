@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class MallShippingAddressDO {
+public class MallShippingAddressDO extends BaseModel {
     private Integer id;
 
     private String channelNo;

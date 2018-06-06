@@ -240,8 +240,9 @@ public class ItemController  {
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));
 			newItem.setItemCode(RandomUtils.getTimeRandom());
 			
-	        newItem.setDesc(item.getRemark());
-	        newItem.setCompanyNo("c12");      
+	        newItem.setRemark(item.getRemark());
+	        newItem.setCompanyNo("c12");     
+	        newItem.setMainPic(item.getMainPic());
 	        iItemService.insertItemSelective(newItem);
 	        /**插入itemsku和库存**/
 	        List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
@@ -348,6 +349,7 @@ public class ItemController  {
 			String skuList = item.getSkuList();
 			Double minPrice = null;
 			Double maxPrice = null;
+			/**
 			if (StringUtils.isNotBlank(skuList)) {
 				Integer i = 0;
 				//Integer i = itemSkuService.queryMaxSkuCodeIndex(item.getId());
@@ -420,6 +422,7 @@ public class ItemController  {
 			}  else {
 				item.setPriceRange(minPrice.toString() + "-" + maxPrice.toString());
 			}
+			**/
 			String imgJson = ImageUtil.getImageUrl(item.getMainPic());
 			item.setMainPic(imgJson);
 			
@@ -484,7 +487,8 @@ public class ItemController  {
 			CountryDO countryDO = new CountryDO();
 			countryDO.setId(item.getCountry());
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));	
-	        newItem.setDesc(item.getRemark());    
+	        newItem.setRemark(item.getRemark());
+	        newItem.setMainPic(item.getMainPic());
 			iItemService.updateByPrimaryKeySelective(newItem);
 			/*
 			//修改商品授权买手

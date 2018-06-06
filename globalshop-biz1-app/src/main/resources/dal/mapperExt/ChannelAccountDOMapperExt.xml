@@ -115,4 +115,20 @@
         where t = #{id,jdbcType=BIGINT}
     </select>
 
+
+
+    <!-- -->
+    <select id="queryChannelAccountList" resultMap="BaseResultMap"
+    >
+        SELECT  <include refid="Base_Column_List2" />
+        FROM channel_account T
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T.id desc
+    </select>
+
+
+
+
+
 </mapper>

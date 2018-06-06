@@ -36,14 +36,64 @@
         <result column="is_del" property="isDel" jdbcType="BIT" />
     </resultMap>
     <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" extends="BaseResultMap" >
-        <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
+        <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
     </resultMap>
+    
+    <resultMap id="SaleableMap" type="com.wangqin.globalshop.biz1.app.dto.InventoryItemSkuDTO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+        <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="saleable" property="saleable" jdbcType="TINYINT" />
+        <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+        <result column="freight" property="freight" jdbcType="BIGINT" />
+        <result column="discount" property="discount" jdbcType="DOUBLE" />
+        <result column="logistic_type" property="logisticType" jdbcType="TINYINT" />
+        <result column="cost_price" property="costPrice" jdbcType="DOUBLE" />
+        <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+        <result column="weight" property="weight" jdbcType="DOUBLE" />
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+        <result column="package_code" property="packageCode" jdbcType="VARCHAR" />
+        <result column="package_name" property="packageName" jdbcType="VARCHAR" />
+        <result column="package_en" property="packageEn" jdbcType="VARCHAR" />
+        <result column="package_weight" property="packageWeight" jdbcType="DOUBLE" />
+        <result column="package_level_id" property="packageLevelId" jdbcType="VARCHAR" />
+        <result column="scale" property="scale" jdbcType="VARCHAR" />
+        <result column="model" property="model" jdbcType="VARCHAR" />
+        <result column="sale_type" property="saleType" jdbcType="BIT" />
+        <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
+        <result column="virtual_inv" property="virtualInv" jdbcType="BIGINT" />
+    </resultMap>
+    
     <sql id="Base_Column_List" >
-        id, sku_code, item_code, item_name, company_no, category_code, category_name, upc,
-        saleable, purchase_price, freight, discount, logistic_type, cost_price, brand_name,
-        weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id,
-        scale, model, sale_type, sale_price, creator, modifier, gmt_create, gmt_modify, is_del
+        T1.id,  T1.sku_code,  T1.item_code,  T1.item_name,  T1.company_no,  T1.category_code, 
+         T1.category_name,  T1.upc,T1.saleable,  T1.purchase_price,  T1.freight, 
+          T1.discount,  T1.logistic_type,  T1.cost_price,  T1.brand_name,
+         T1.weight,  T1.sku_pic,  T1.package_code,  T1.package_name,  T1.package_en, 
+         T1.package_weight,  T1.package_level_id,
+         T1.scale,  T1.model,  T1.sale_type,  T1.sale_price,  T1.creator,  T1.modifier,
+          T1.gmt_create,  T1.gmt_modify,  T1.is_del
     </sql>
+    
+    <!-- 查询可售的sku -->
+     <select id="querySaleableSkus" resultMap="SaleableMap" >
+        SELECT
+        	 <include refid="Base_Column_List" />,inv.virtual_inv AS virtualInv
+        FROM
+            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
+        where
+           T1.is_del=0
+             AND ((IFNULL(inv.inv,0)+IFNULL(inv.virtual_inv,0)-IFNULL(locked_inv,0)) > 0)
+    </select>
 
 	<select id="queryItemSkusCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
         SELECT
@@ -230,11 +280,9 @@
      SELECT
         <include refid="Base_Column_List" />
         FROM
-            item_sku T1
+            item_sku
         where
-          <if test=" skuCode!= null">
-            T1.sku_code = #{skuCode}
-          </if>
+           sku_code = #{skuCode}
 </select>
 
 

@@ -1,10 +1,9 @@
 package com.wangqin.globalshop.usercenter.service;
 
-import java.util.List;
-
-import com.baomidou.framework.service.ISuperService;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.common.result.Tree;
+
+import java.util.List;
 //import com.wangqin.globalshop.usercenter.app.commons.result.Tree;
 
 /**
