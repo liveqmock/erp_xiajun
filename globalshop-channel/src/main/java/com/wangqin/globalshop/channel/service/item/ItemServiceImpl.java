@@ -103,9 +103,9 @@ public class ItemServiceImpl  implements IItemService {
 
 			//规格尺寸
 			List<ItemSkuScaleDO> itemSkuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
-			Map<String,String> scaleMap = new HashMap<>();
+			Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
 			for(ItemSkuScaleDO scale : itemSkuScaleDOS){
-				scaleMap.put(scale.getScaleCode(),scale.getScaleValue());
+				scaleMap.put(scale.getScaleCode(),scale);
 			}
 			itemSkuVo.setScaleMap(scaleMap);
 
