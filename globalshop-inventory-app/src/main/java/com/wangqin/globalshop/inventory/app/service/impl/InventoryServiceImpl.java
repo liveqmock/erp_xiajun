@@ -118,7 +118,7 @@ public class InventoryServiceImpl implements InventoryService {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
         if (inventoryDO == null) {
-            throw new ErpCommonException("不存在该商品，下单失败");
+            throw new ErpCommonException("库存不足，下单失败");
         }
 
         if (inventoryDO.getInv() + inventoryDO.getVirtualInv() - inventoryDO.getLockedInv() >= mallSubOrderDO.getQuantity()) {

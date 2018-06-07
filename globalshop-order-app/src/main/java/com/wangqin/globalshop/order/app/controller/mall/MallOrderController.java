@@ -52,6 +52,17 @@ public class MallOrderController {
     private InventoryService inventoryService;
 
     /**
+     * 主页
+     */
+    @RequestMapping("/index")
+    @ResponseBody
+    public Object index() {
+        JsonResult<List<MallOrderDO>> result = new JsonResult<>();
+        List<MallOrderDO> outerOrder = mallOrderService.list();
+        return result.buildData(outerOrder).buildIsSuccess(true);
+    }
+
+    /**
      * 增加订单
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -150,17 +161,18 @@ public class MallOrderController {
     @RequestMapping("/query")
     @ResponseBody
     public Object query(String orderNo) {
-        if (orderNo == null){
+        if (orderNo == null) {
             JsonResult<List<MallOrderDO>> result = new JsonResult<>();
             List<MallOrderDO> outerOrder = mallOrderService.list();
             return result.buildData(outerOrder).buildIsSuccess(true);
-        }else {
+        } else {
             JsonResult<MallOrderDO> result = new JsonResult<>();
             MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
             return result.buildData(outerOrder).buildIsSuccess(true);
         }
 
     }
+
 
     /**
      * 批量调价查询订单
@@ -206,10 +218,10 @@ public class MallOrderController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Object delete(Long id) {
+    public Object delete(String orderNo) {
         JsonResult<String> result = new JsonResult<>();
         try {
-            MallOrderDO outerOrder = mallOrderService.selectById(id);
+            MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
             if (outerOrder == null || outerOrder.getStatus() != OrderStatus.CLOSE.getCode()) {
                 return JsonResult.buildFailed("先关闭才能删除订单");
             }
@@ -227,6 +239,7 @@ public class MallOrderController {
     @RequestMapping("/close")
     @ResponseBody
     public Object close(String orderIds) {
+        JsonResult result = new JsonResult();
         List<String> errorMsg = Lists.newArrayList();
         int i = 0;
         if (StringUtils.isNotBlank(orderIds)) {
@@ -245,22 +258,22 @@ public class MallOrderController {
                 erpOrderQuery.setStatus(OrderStatus.SENT.getCode());
                 int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
                 if (sendOrder > 0) {
-                    return errorMsg.add("第" + i + "条有子订单发货不能关闭");
+                    return result.buildMsg("第" + i + "条有子订单发货不能关闭").buildIsSuccess(false);
                 }
                 //1、释放子订单库存
 //                EntityWrapper<ErpOrder> entityWrapper = new EntityWrapper<>();
 //                entityWrapper.where("outer_order_id = {0} ", outerOrder.getId());
-                List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
-                if (CollectionUtils.isNotEmpty(erpOrders)) {
-                    for (MallSubOrderDO erpOrder : erpOrders) {
-                        //1,释放子订单库存
-                        inventoryService.release(erpOrder);
-                        //2,更改子订单状态
-                        erpOrder.setStatus(OrderStatus.CLOSE.getCode());
-                        erpOrder.setGmtModify(new Date());
-                        mallSubOrderService.update(erpOrder);
-                    }
-                }
+//                List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
+//                if (CollectionUtils.isNotEmpty(erpOrders)) {
+//                    for (MallSubOrderDO erpOrder : erpOrders) {
+//                        //1,释放子订单库存
+//                        inventoryService.release(erpOrder);
+//                        //2,更改子订单状态
+//                        erpOrder.setStatus(OrderStatus.CLOSE.getCode());
+//                        erpOrder.setGmtModify(new Date());
+//                        mallSubOrderService.update(erpOrder);
+//                    }
+//                }
                 //2、更改主子订单状态
                 outerOrder.setStatus(OrderStatus.CLOSE.getCode());
                 outerOrder.setGmtModify(new Date());
@@ -271,13 +284,13 @@ public class MallOrderController {
                 for (String a : errorMsg) {
                     rmsg.append(a);
                 }
-                return JsonResult.buildFailed(rmsg.toString());
+                return result.buildIsSuccess(false).buildMsg(rmsg.toString());
             } else {
-                return JsonResult.buildSuccess(null);
+                return result.buildIsSuccess(true);
             }
 
         } else {
-            return JsonResult.buildFailed("没有订单ID");
+            return result.buildMsg("没有订单ID").buildIsSuccess(false);
         }
     }
 

@@ -62,7 +62,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         Double totalPrice = 0.0;
         int i = 0;
         for (MallSubOrderDO outerOrderDetail : outerOrderDetails) {
-            totalPrice+=outerOrderDetail.getSalePrice()*outerOrderDetail.getQuantity();
+            totalPrice += outerOrderDetail.getSalePrice() * outerOrderDetail.getQuantity();
             outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
             outerOrderDetail.setShopCode("O" + outerOrder.getOrderNo().substring(1) + String.format("%0" + 4 + "d", i));
             i++;
@@ -167,28 +167,20 @@ public class MallOrderServiceImpl implements IMallOrderService {
         List<MallOrderDO> outerOrders;
         outerOrderQueryVO.setCompanyNo("MallOrderServiceImplYYYYYY");
 //        outerOrderQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
-        // 1、查询总的记录数量
-        Integer totalCount = mallOrderDOMapper.queryOuterOrdersCount(outerOrderQueryVO);
-        // 2、查询分页记录
-        if (totalCount != null && totalCount != 0L) {
-            outerOrders = mallOrderDOMapper.queryOuterOrders(outerOrderQueryVO);
-            if (CollectionUtils.isNotEmpty(outerOrders)) {
-                for (MallOrderDO order : outerOrders) {
-                    MallSubOrderDO erpOrder = new MallSubOrderDO();
-                    erpOrder.setOrderNo(order.getOrderNo());
-                    //设置子订单数
-//                    order.setCountOfSubOrder(mallSubOrderDOMapper.selectCount(erpOrder));
-                }
-            }
-        } else {
-            outerOrders = new ArrayList<>();
-        }
+        outerOrders = mallOrderDOMapper.queryOuterOrders(outerOrderQueryVO);
         return outerOrders;
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void delete(MallOrderDO outerOrder) {
-        mallOrderDOMapper.deleteByPrimaryKey(outerOrder.getId());
+        List<MallSubOrderDO> mallSubOrderDOList = mallSubOrderDOMapper.selectByOrderNo(outerOrder.getOrderNo());
+        for (MallSubOrderDO mallSubOrderDO : mallSubOrderDOList) {
+            mallSubOrderDO.setIsDel(true);
+            mallSubOrderDOMapper.updateByPrimaryKeySelective(mallSubOrderDO);
+        }
+        outerOrder.setIsDel(true);
+        mallOrderDOMapper.updateByPrimaryKey(outerOrder);
     }
 
 //    @Override
