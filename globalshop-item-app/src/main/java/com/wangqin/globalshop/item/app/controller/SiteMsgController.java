@@ -109,8 +109,8 @@ public class SiteMsgController extends BaseController {
 //			result.buildIsSuccess(true);
 //		}
     	JsonPageResult<String> result = new JsonPageResult<>();
-		result.buildMsg("无相关状态站内信");
-		result.buildIsSuccess(false);
+		//result.buildMsg("无相关状态站内信");
+		result.buildIsSuccess(true);
 		return result;
 	}
     
