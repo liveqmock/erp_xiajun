@@ -25,7 +25,7 @@ public class FindItemController {
 	@Autowired
 	private IFindItemService findItemService;
 	/**
-	 * 商品查询管理主列表
+	 * 商品查询主列表
 	 * @return
 	 */
 	@RequestMapping("/queryFindItemList")
