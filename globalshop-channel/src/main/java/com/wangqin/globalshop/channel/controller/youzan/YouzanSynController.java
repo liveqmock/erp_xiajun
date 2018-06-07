@@ -8,10 +8,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -83,7 +83,7 @@ public class YouzanSynController extends BaseController {
 			return result.buildIsSuccess(false).buildMsg("没有商品");
 		}
 		String errorMsg = sb.toString();
-		if(!Util.isEmpty(errorMsg)){
+		if(Util.isEmpty(errorMsg)){
 			return result.buildIsSuccess(true);
 		}else{
 			return result.buildIsSuccess(false).buildMsg(errorMsg);

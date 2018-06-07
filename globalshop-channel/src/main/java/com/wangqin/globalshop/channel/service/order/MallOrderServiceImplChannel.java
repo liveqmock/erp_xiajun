@@ -9,7 +9,6 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,7 +13,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;

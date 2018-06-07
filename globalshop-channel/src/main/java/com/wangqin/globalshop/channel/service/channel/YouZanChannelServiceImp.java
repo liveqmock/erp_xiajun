@@ -7,11 +7,11 @@ import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.constants.enums.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.dal.youzan.*;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGet;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
+import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
@@ -571,7 +571,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
     }
 
     /**
-     * 发货反馈,
+     * 发货反馈,可以根据子订单进行发货
      *
      * @param orderList
      * @param shippingOrder
@@ -601,7 +601,7 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
                 youzanLogisticsOnlineConfirmParams.setTid(tid);
                 youzanLogisticsOnlineConfirmParams.setOutStype(expressType);
                 youzanLogisticsOnlineConfirmParams.setOutSid(logisticNo);
-                // youzanLogisticsOnlineConfirmParams.setOids("1440273929715322794");
+                youzanLogisticsOnlineConfirmParams.setOids(order.getChannelSubOrderNo());
 
                 YouzanLogisticsOnlineConfirm youzanLogisticsOnlineConfirm = new YouzanLogisticsOnlineConfirm();
                 youzanLogisticsOnlineConfirm.setAPIParams(youzanLogisticsOnlineConfirmParams);
@@ -958,6 +958,9 @@ public class YouZanChannelServiceImp extends AbstractChannelService implements I
             outerOrderDetail.setCreator("系统");
             outerOrderDetail.setModifier("系统");
             outerOrderDetail.setChannelOrderNo(outerOrder.getChannelOrderNo());
+
+            //有赞有子订单号
+            outerOrderDetail.setChannelSubOrderNo(String.valueOf(tradeOrder.getOid()));
 
             outerOrderDetails.add(outerOrderDetail);
 
