@@ -9,11 +9,11 @@ import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.dal.youzan.PicModel;
+import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.utils.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Channel(type=ChannelType.HaiHu)
-public class HaihuChannelServiceImpl extends AbstractChannelService {
+public class HaihuChannelServiceImpl extends AbstractChannelService implements IChannelService{
 	
 	protected Logger logger = LogManager.getLogger(getClass());
 

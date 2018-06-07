@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.channel.service.item;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemSkuVo;
+import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 
 import java.util.List;
 

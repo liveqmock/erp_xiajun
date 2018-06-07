@@ -1,14 +1,13 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import java.text.ParseException;
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
+import java.text.ParseException;
+import java.util.List;
 
 public interface IChannelService {
 	

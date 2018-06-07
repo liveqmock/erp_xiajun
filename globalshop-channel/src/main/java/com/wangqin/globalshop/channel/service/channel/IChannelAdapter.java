@@ -3,7 +3,7 @@ package com.wangqin.globalshop.channel.service.channel;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 
 /**
  * 渠道适配接口

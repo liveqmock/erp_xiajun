@@ -97,6 +97,13 @@ public class MallSubOrderDO extends BaseModel {
 
     private String subOrderNo;
 
+    private String channelSubOrderNo;
+    public String getChannelSubOrderNo() {
+        return channelSubOrderNo;
+    }
+    public void setChannelSubOrderNo(String channelSubOrderNo) {
+        this.channelSubOrderNo = channelSubOrderNo;
+    }
     public Long getId() {
         return id;
     }
