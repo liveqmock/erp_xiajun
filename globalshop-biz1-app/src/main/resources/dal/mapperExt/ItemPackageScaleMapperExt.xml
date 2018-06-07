@@ -151,5 +151,11 @@
                 and T1.packaging_scale_no = #{packagingScaleNo}
             </if>
     </select>
+    
+    <select id="queryNoById" parameterType="java.lang.Long" resultType="java.lang.String">
+    	select 
+    	packaging_scale_no from shipping_packing_scale 
+    	where id = #{id}
+    </select>
 
 </mapper>
