@@ -46,7 +46,7 @@ public class ItemCategoryDTO {
 	}
 	
 	public String getValue(){
-		return this.id+"";
+		return this.categoryCode+"";
 	}
 	
 	public String getLabel(){

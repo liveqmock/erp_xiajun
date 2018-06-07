@@ -561,7 +561,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     private void updateMallOrderStats(MallOrderDO orderDO) {
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
         for (MallSubOrderDO aDo : list) {
-            if (!OrderStatus.SENT.equals(aDo.getStatus())){
+            if (OrderStatus.SENT.getCode()!=aDo.getStatus()){
                 orderDO.setStatus(OrderStatus.PART_SENT.getCode());
                 return;
             }

@@ -49,6 +49,7 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+    <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code, 
@@ -57,7 +58,7 @@
     quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no, 
     receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address, 
     telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, gmt_create, 
-    gmt_modify, creator, modifier, is_del, sub_order_no
+    gmt_modify, creator, modifier, is_del, sub_order_no, channel_sub_order_no
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -88,7 +89,8 @@
       postcode, id_card, idcard_pic_front, 
       idcard_pic_reverse, memo, gmt_create, 
       gmt_modify, creator, modifier, 
-      is_del, sub_order_no)
+      is_del, sub_order_no, channel_sub_order_no
+      )
     values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{mallReturnOrderNo,jdbcType=VARCHAR}, 
       #{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{shopCode,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
@@ -104,7 +106,8 @@
       #{postcode,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, 
       #{idcardPicReverse,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{subOrderNo,jdbcType=VARCHAR})
+      #{isDel,jdbcType=BIT}, #{subOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -251,6 +254,9 @@
       <if test="subOrderNo != null" >
         sub_order_no,
       </if>
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
@@ -391,6 +397,9 @@
       </if>
       <if test="subOrderNo != null" >
         #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSubOrderNo != null" >
+        #{channelSubOrderNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -535,6 +544,9 @@
       <if test="subOrderNo != null" >
         sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
       </if>
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -585,7 +597,8 @@
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       is_del = #{isDel,jdbcType=BIT},
-      sub_order_no = #{subOrderNo,jdbcType=VARCHAR}
+      sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -134,6 +134,9 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
                 return result;
             }
         }
+        if (list.size() == 1){
+            throw new ErpCommonException("库存不足 发货失败");
+        }
         Long num = 0L;
         for (int i = list.size(); i > 0; i--) {
             num += list.get(i - 1).getInventory();

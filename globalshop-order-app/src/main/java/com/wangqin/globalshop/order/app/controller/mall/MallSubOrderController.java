@@ -4,15 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -35,10 +36,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author liuhui
@@ -387,5 +385,18 @@ public class MallSubOrderController {
         excelHelper.close();
         return filebyte;
     }
-	
+    @RequestMapping("/listChoice")
+	private Object listChoice(Long id){
+		JsonResult<Map<String, String>> result = new JsonResult();
+		MallSubOrderDO subOrder = erpOrderService.selectById(id);
+		InventoryDO aDo = inventoryService.selectByItemCodeAndSkuCode(subOrder.getItemCode(), subOrder.getSkuCode());
+		Map<String, String> map = new HashMap<>();
+		map.put("orderNo",subOrder.getOrderNo());
+		map.put("skuCode",subOrder.getSkuCode());
+		result.setData(map);
+		result.setSuccess(true);
+		return result;
+
+	}
+
 }
