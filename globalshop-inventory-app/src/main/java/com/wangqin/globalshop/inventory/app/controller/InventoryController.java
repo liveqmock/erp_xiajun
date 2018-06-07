@@ -549,27 +549,6 @@ public class InventoryController {
         }
     }
 //	/**
-//	 * 备货商品列表查询
-//	 * @param inventoryQueryVO
-//	 * @return
-//	 */
-//	@RequestMapping("/stockWarehouse")
-//	@ResponseBody
-//	public Object querystockWarehouse(InventoryQueryVO inventoryQueryVO) {
-//		JsonPageResult<List<InventoryStock>> result = new JsonPageResult<>();
-//		try {
-//			if(StringUtil.isNotBlank(inventoryQueryVO.getOrderBy())) {
-//				String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getOrderBy());
-//				inventoryQueryVO.setOrderBy(orderBy);
-//			}
-//			result = inventoryStockService.queryInventoryStock(inventoryQueryVO);
-//			result.buildIsSuccess(true);
-//		} catch (Exception e) {
-//			result.buildIsSuccess(false);
-//		}
-//		return result;
-//	}
-//	/**
 //	 * 盘出到备货仓
 //	 * @param inventoryAreaId
 //	 * @param quantity
