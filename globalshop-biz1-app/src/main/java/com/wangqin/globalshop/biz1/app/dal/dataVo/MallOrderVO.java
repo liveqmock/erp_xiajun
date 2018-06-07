@@ -15,6 +15,7 @@ public class MallOrderVO extends MallOrderDO {
     private String idCard;
     private String platformType;
     private String receiverState;
+    
     private Integer payType;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date endGmtCreate;
@@ -22,6 +23,7 @@ public class MallOrderVO extends MallOrderDO {
     private Date startGmtCreate;
     private String outerOrderDetailList;
     //-----------做显示----------------
+    private Long id;
     private String orderNo;
     private String dealerName;
     private String shopCode;

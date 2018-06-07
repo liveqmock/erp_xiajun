@@ -527,6 +527,7 @@
            SELECT
                 DISTINCT
                 t1.order_no orderNo,
+                t1.id id,
                 t1.channel_order_no channelOrderNo,
                  t1.dealer_name dealerName,
                  t1.shop_code shopCode,
