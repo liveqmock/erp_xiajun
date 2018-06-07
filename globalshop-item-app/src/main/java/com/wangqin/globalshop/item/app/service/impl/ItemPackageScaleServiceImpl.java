@@ -75,4 +75,9 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 	public List<ShippingPackingScaleDO> queryScaleListSelective(ShippingPackingScaleQueryVO shippingPackingScaleQueryVO) {
 		return packageScaleMapperExt.queryScaleListSelective(shippingPackingScaleQueryVO);
 	}
+	
+	@Override
+	public String queryNoById(Long id) {
+		return packageScaleMapperExt.queryNoById(id);
+	}
 }

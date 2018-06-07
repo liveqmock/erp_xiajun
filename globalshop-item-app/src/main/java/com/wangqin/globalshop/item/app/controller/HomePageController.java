@@ -524,8 +524,8 @@ public class HomePageController extends BaseController {
 //			result.buildData(orderList);
 //			result.buildIsSuccess(true);	
 //		}
-		result.buildIsSuccess(false);
-		result.buildMsg("今日无发货订单");
+		result.buildIsSuccess(true);
+		//result.buildMsg("");
 		return result;
 	}
 	
