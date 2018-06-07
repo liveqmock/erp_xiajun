@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface DealerDOMapperExt extends DealerDOMapper {
     List<DealerDO> list();
+
+    DealerDO selectByCode(String code);
 }

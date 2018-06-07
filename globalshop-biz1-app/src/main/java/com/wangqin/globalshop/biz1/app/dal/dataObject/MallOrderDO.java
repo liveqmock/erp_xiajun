@@ -5,6 +5,10 @@ import java.util.Date;
 public class MallOrderDO extends BaseModel {
     private Long id;
 
+    private String dealerCode;
+
+    private String dealerName;
+
     private String customerNo;
 
     private String orderNo;
@@ -65,6 +69,22 @@ public class MallOrderDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDealerCode() {
+        return dealerCode;
+    }
+
+    public void setDealerCode(String dealerCode) {
+        this.dealerCode = dealerCode == null ? null : dealerCode.trim();
+    }
+
+    public String getDealerName() {
+        return dealerName;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName == null ? null : dealerName.trim();
     }
 
     public String getCustomerNo() {

@@ -19,4 +19,6 @@ public interface IDealerService{
     List<DealerDO> list();
 
     void insert(DealerDO seller);
+
+    DealerDO selectByCode(String dealerCode);
 }

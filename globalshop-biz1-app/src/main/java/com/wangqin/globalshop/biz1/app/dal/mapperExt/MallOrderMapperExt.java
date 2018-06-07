@@ -61,5 +61,5 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
 
 	void insertMallOrder(MallOrderDO mallOrderDO);
 
-    List<MallOrderDO> list();
+    List<MallOrderVO> list();
 }

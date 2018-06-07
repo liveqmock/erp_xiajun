@@ -57,8 +57,8 @@ public class MallOrderController {
     @RequestMapping("/index")
     @ResponseBody
     public Object index() {
-        JsonResult<List<MallOrderDO>> result = new JsonResult<>();
-        List<MallOrderDO> outerOrder = mallOrderService.list();
+        JsonResult<List<MallOrderVO>> result = new JsonResult<>();
+        List<MallOrderVO> outerOrder = mallOrderService.list();
         return result.buildData(outerOrder).buildIsSuccess(true);
     }
 
@@ -161,12 +161,10 @@ public class MallOrderController {
     @RequestMapping("/query")
     @ResponseBody
     public Object query(String orderNo) {
-        if (orderNo == null) {
-            JsonResult<List<MallOrderDO>> result = new JsonResult<>();
-            List<MallOrderDO> outerOrder = mallOrderService.list();
-            return result.buildData(outerOrder).buildIsSuccess(true);
-        } else {
             JsonResult<MallOrderDO> result = new JsonResult<>();
+        if (orderNo == null) {
+            return result.buildMsg("参数丢失").buildIsSuccess(true);
+        } else {
             MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
             return result.buildData(outerOrder).buildIsSuccess(true);
         }
@@ -182,9 +180,9 @@ public class MallOrderController {
     @RequestMapping(value = "/queryOuterOrderList", method = RequestMethod.POST)
     @ResponseBody
     public Object queryOuterOrderList(MallOrderVO mallOrderVO) {
-        if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
-            mallOrderVO.setStatus(null);
-        }
+//        if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
+//            mallOrderVO.setStatus(null);
+//        }
         if (mallOrderVO.getEndGmtCreate() != null) {
             String endGmtCreateStr = DateUtil.ymdFormat(mallOrderVO.getEndGmtCreate());
             Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");

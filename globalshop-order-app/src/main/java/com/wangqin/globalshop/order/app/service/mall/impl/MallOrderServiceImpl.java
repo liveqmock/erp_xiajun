@@ -1,11 +1,13 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
@@ -30,6 +32,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
     private OrderItemSkuService itemSkuService;
     @Autowired
     private InventoryService inventoryService;
+    @Autowired
+    private IDealerService iDealerService;
     @Autowired
     private MallSubOrderMapperExt mallSubOrderDOMapper;
     @Autowired
@@ -60,11 +64,14 @@ public class MallOrderServiceImpl implements IMallOrderService {
     public void addOuterOrder(MallOrderVO outerOrder) {
         List<MallSubOrderDO> outerOrderDetails = outerOrder.getOuterOrderDetails();
         Double totalPrice = 0.0;
+        String shopCode = "O" + outerOrder.getOrderNo().substring(1) ;
+        DealerDO deal =  iDealerService.selectByCode(outerOrder.getDealerCode());
+
         int i = 0;
         for (MallSubOrderDO outerOrderDetail : outerOrderDetails) {
             totalPrice += outerOrderDetail.getSalePrice() * outerOrderDetail.getQuantity();
             outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
-            outerOrderDetail.setShopCode("O" + outerOrder.getOrderNo().substring(1) + String.format("%0" + 4 + "d", i));
+            outerOrderDetail.setShopCode(shopCode+i);
             i++;
             outerOrderDetail.init();
             outerOrderDetail.setCompanyNo(outerOrder.getCompanyNo());
@@ -113,8 +120,11 @@ public class MallOrderServiceImpl implements IMallOrderService {
             inventoryService.order(outerOrderDetail);
             mallSubOrderDOMapper.insert(outerOrderDetail);
         }
+
+        outerOrder.setDealerName(deal.getName());
         //根据当前用户获取shopcode
-        outerOrder.setShopCode("SHiiii");
+        outerOrder.setShopCode(shopCode);
+        outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
         outerOrder.setActualAmount(0.0);
         outerOrder.init();
@@ -235,7 +245,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     }
 
     @Override
-    public List<MallOrderDO> list() {
+    public List<MallOrderVO> list() {
         return mallOrderDOMapper.list();
     }
 
