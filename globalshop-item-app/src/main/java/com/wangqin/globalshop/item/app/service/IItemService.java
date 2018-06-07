@@ -39,7 +39,7 @@ public interface IItemService {
 	 * @param item
 	 * @param itemSkuList
 	 */
-	ItemDO queryItem(Long id);
+	ItemDO queryIte(Long id);
 	
 	/**
 	 * 按照条件分页查询商品
