@@ -65,7 +65,7 @@ public class LoginController extends BaseController {
 //        if (SecurityUtils.getSubject().isAuthenticated()) {
 //            return "redirect:/web";
 //        }
-        return "login";
+        return "index";
     }
 
     /**
