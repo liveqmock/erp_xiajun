@@ -86,7 +86,7 @@ public class HaiLoginController extends BaseController {
      *
      * @return {Result}
      */
-    @PostMapping("/logout")
+    @PostMapping("/haiLogin/logout")
     @ResponseBody
     public Object logout(HttpServletRequest request) {
         logger.info("登出");

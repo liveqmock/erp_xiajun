@@ -28,4 +28,9 @@ public class DealerServiceImpl implements IDealerService {
         seller.init();
         mapper.insertSelective(seller);
     }
+
+    @Override
+    public DealerDO selectByCode(String code) {
+        return mapper.selectByCode(code);
+    }
 }
