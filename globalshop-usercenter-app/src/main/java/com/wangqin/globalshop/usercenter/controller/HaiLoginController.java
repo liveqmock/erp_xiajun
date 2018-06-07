@@ -5,14 +5,7 @@ import com.wangqin.globalshop.common.csrf.CsrfToken;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -53,36 +46,38 @@ public class HaiLoginController extends BaseController {
     public Object loginPost(HttpServletRequest request, String username, String password,
                             @RequestParam(value = "rememberMe", defaultValue = "1") Integer rememberMe) {
         logger.info("POST请求登录");
-        // 改为全部抛出异常，避免ajax csrf token被刷新
-        if (StringUtils.isBlank(username)) {
-            throw new RuntimeException("用户名不能为空");
-        }
-        if (StringUtils.isBlank(password)) {
-            throw new RuntimeException("密码不能为空");
-        }
-        Subject user = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        // 设置记住密码
-        token.setRememberMe(1 == rememberMe);
-        JsonResult<String> result = new JsonResult<>();
-        try {
-            user.login(token);
-            return result.buildIsSuccess(true);
-        } catch (UnknownAccountException e) {
-        	e.printStackTrace();
-        	return result.buildData("账号不存在！").buildIsSuccess(false);
-//            throw new RuntimeException("账号不存在！", e);
-        } catch (DisabledAccountException e) {
-//            throw new RuntimeException("账号未启用！", e);
-        	e.printStackTrace();
-        	return result.buildData("账号未启用！").buildIsSuccess(false);
-        } catch (IncorrectCredentialsException e) {
-//            throw new RuntimeException("密码错误！", e);
-            e.printStackTrace();
-        	return result.buildData("密码错误！").buildIsSuccess(false);
-        } catch (Throwable e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+        JsonResult<Object> jsonResult = new JsonResult<>();
+        return jsonResult.buildIsSuccess(true);
+//        // 改为全部抛出异常，避免ajax csrf token被刷新
+//        if (StringUtils.isBlank(username)) {
+//            throw new RuntimeException("用户名不能为空");
+//        }
+//        if (StringUtils.isBlank(password)) {
+//            throw new RuntimeException("密码不能为空");
+//        }
+//        Subject user = SecurityUtils.getSubject();
+//        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+//        // 设置记住密码
+//        token.setRememberMe(1 == rememberMe);
+//        JsonResult<String> result = new JsonResult<>();
+//        try {
+//            user.login(token);
+//            return result.buildIsSuccess(true);
+//        } catch (UnknownAccountException e) {
+//        	e.printStackTrace();
+//        	return result.buildData("账号不存在！").buildIsSuccess(false);
+////            throw new RuntimeException("账号不存在！", e);
+//        } catch (DisabledAccountException e) {
+////            throw new RuntimeException("账号未启用！", e);
+//        	e.printStackTrace();
+//        	return result.buildData("账号未启用！").buildIsSuccess(false);
+//        } catch (IncorrectCredentialsException e) {
+////            throw new RuntimeException("密码错误！", e);
+//            e.printStackTrace();
+//        	return result.buildData("密码错误！").buildIsSuccess(false);
+//        } catch (Throwable e) {
+//            throw new RuntimeException(e.getMessage(), e);
+//        }
     }
 	
 	
