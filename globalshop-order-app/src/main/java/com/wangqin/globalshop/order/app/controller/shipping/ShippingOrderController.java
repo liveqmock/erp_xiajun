@@ -816,30 +816,30 @@ public class ShippingOrderController {
             return result.buildIsSuccess(false).buildMsg("未知异常");
         }
     }
+//
+//    /**
+//     * 运通接口测试
+//     *
+//     * @param id
+//     * @return
+//     */
+//    @RequestMapping("/yuntongTest")
+//    public void queryLogisticCompany(Long id) {
+//        // yunTongService.createOrder(4800l);
+//    }
 
-    /**
-     * 运通接口测试
-     * 
-     * @param id
-     * @return
-     */
-    @RequestMapping("/yuntongTest")
-    public void queryLogisticCompany(Long id) {
-        // yunTongService.createOrder(4800l);
-    }
-
-    /**
-     * 邮客接口测试
-     */
-    @RequestMapping("/youkeTest")
-    public void youkeTest() {
-        // youkeService.createOrder(2l);
-        // youkeService.inboundStatus("PKG17062502002910007");
-        // youkeService.orderStatus("1739255020");
-        // EntityWrapper<ShippingOrderDO> entityWrapper = new EntityWrapper<>();
-        ShippingOrderDO Order = shippingOrderService.selectByShippingNO("PKG17062710132810022");
-        // haihuService.returnPackageNo(Order);
-    }
+//    /**
+//     * 邮客接口测试
+//     */
+//    @RequestMapping("/youkeTest")
+//    public void youkeTest() {
+//        // youkeService.createOrder(2l);
+//        // youkeService.inboundStatus("PKG17062502002910007");
+//        // youkeService.orderStatus("1739255020");
+//        // EntityWrapper<ShippingOrderDO> entityWrapper = new EntityWrapper<>();
+//        ShippingOrderDO Order = shippingOrderService.selectByShippingNO("PKG17062710132810022");
+//        // haihuService.returnPackageNo(Order);
+//    }
 
     /**
      * 批量订正主订单状态

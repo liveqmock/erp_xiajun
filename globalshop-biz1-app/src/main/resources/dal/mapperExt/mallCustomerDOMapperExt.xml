@@ -7,4 +7,9 @@
     from mall_customer
     where open_id = #{openId}
   </select>
+	<select id="selectByRole" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallCustomerDOMapper.BaseResultMap">
+    select
+    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallCustomerDOMapper.Base_Column_List" />
+    from mall_customer
+  </select>
 </mapper>

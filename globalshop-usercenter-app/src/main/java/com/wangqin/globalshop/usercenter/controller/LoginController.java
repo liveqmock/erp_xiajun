@@ -58,7 +58,7 @@ public class LoginController extends BaseController {
      * GET 登录
      * @return {String}
      */
-    @GetMapping("/login")
+    @GetMapping("/haiLogin/login")
     @CsrfToken(create = true)
     public String login() {
         logger.info("GET请求登录");
