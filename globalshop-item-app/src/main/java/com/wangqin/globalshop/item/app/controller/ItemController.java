@@ -1,32 +1,6 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.tools.ant.taskdefs.condition.Http;
-import org.eclipse.jetty.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.gson.Gson;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
@@ -35,23 +9,9 @@ import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
-import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
-import com.wangqin.globalshop.common.utils.ImageUtil;
-import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.IBuyerService;
-import com.wangqin.globalshop.item.app.service.ICountryService;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
-import com.wangqin.globalshop.item.app.service.IItemCategoryService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
-
+import com.wangqin.globalshop.item.app.service.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -60,7 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -309,7 +271,7 @@ public class ItemController  {
 	        			itemSkuService.insertBatch(itemSkuList);
 	        			List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
 	        			//inventoryService.insertBatchInventory(inventoryList);
-	        			//invService.outbound(inventoryList);
+	        			invService.outbound(inventoryList);
 	        		}
 	        		
 			//同步到有赞并上架  		

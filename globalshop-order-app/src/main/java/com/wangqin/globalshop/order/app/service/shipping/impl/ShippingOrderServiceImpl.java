@@ -506,7 +506,13 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 skuWeight += erpOrder.getWeight() * erpOrder.getQuantity();
             }
             mallSubOrderMapper.updateByPrimaryKeySelective(erpOrder);
+            /**更新主订单的状态*/
+            MallOrderDO orderDO = mallOrderService.selectByOrderNo(erpOrder.getOrderNo());
+            updateMallOrderStats(orderDO);
+            mallOrderService.updateById(orderDO);
+
         }
+
         shippingOrder.setSkuWeight(skuWeight);
         // TODO: 18.6.6 绑定物流
 //        if(skuWeight > 0) {
@@ -547,6 +553,18 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //            e.printStackTrace();
 //        }
 
+
+    }
+
+    private void updateMallOrderStats(MallOrderDO orderDO) {
+        List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
+        for (MallSubOrderDO aDo : list) {
+            if (!OrderStatus.SENT.equals(aDo.getStatus())){
+                orderDO.setStatus(OrderStatus.PART_SENT.getCode());
+                return;
+            }
+        }
+        orderDO.setStatus(OrderStatus.SENT.getCode());
 
     }
 
