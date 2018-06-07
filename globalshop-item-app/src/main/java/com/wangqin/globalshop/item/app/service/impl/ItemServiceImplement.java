@@ -82,7 +82,7 @@ public class ItemServiceImplement implements IItemService {
    
 
     @Override
-    public ItemDO queryItem(Long id) {
+    public ItemDO queryIte(Long id) {
         if (id == null) {
             throw new RuntimeException("the item id is null");
         }
