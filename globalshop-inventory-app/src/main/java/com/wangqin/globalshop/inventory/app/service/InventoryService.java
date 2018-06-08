@@ -22,7 +22,7 @@ public interface InventoryService {
     /**第三方下单*/
     void order(List<MallSubOrderDO> outerOrderDetails);
     /**退货*/
-    void returns(MallReturnOrderDO mallReturnOrderDO);
+    void returns(MallSubOrderDO mallReturnOrderDO,Long inv);
     /**出库单出库*/
     void outOfStorehouse(InventoryOutManifestDO outManifestDO);
 

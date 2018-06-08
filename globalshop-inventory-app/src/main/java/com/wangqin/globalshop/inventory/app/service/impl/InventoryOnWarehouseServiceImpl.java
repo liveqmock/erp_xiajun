@@ -76,7 +76,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     }
 
     @Override
-    public InventoryOnWareHouseDO insertInventory(InventoryDO inventory, String warehouseNo, String positionNo) {
+    public InventoryOnWareHouseDO insertInventory(InventoryDO inventory,Long inv, String warehouseNo, String positionNo) {
 
         InventoryOnWareHouseDO warehouse = mapper.selectByItemCodeAndSkuCodeAndWarehouseNo(inventory.getSkuCode(), inventory.getItemCode(), warehouseNo);
         if (warehouse == null) {
@@ -90,7 +90,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
             warehouse.setShelfNo(positionNo);
             warehouse.setCompanyNo("InvOnWarehouseServiceImpl1321");
             warehouse.setInventoryOnWarehouseNo("INVONWARE" + System.currentTimeMillis());
-            warehouse.setInventory(inventory.getInv());
+            warehouse.setInventory(inv);
             warehouse.setSkuCode(inventory.getSkuCode());
             warehouse.setItemCode(inventory.getItemCode());
             warehouse.setWarehouseName(warehouseDO.getName());
@@ -99,7 +99,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
             warehouse.setBatchNo("123213");
             mapper.insertSelective(warehouse);
         } else {
-            warehouse.setInventory(warehouse.getInventory() + inventory.getInv());
+            warehouse.setInventory(warehouse.getInventory() + inv);
             mapper.updateByPrimaryKeySelective(warehouse);
         }
         return warehouse;
@@ -125,8 +125,6 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     private Map<InventoryOnWareHouseDO, Long> chooseWarehouse(List<InventoryOnWareHouseDO> list, Long quantity) {
         //        有限找刚好够分配的记录
         //如果不存在   则向前找  尽量从少的仓库发货
-        //更新
-        //将更新的返回出去
         Map<InventoryOnWareHouseDO, Long> result = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getInventory() >= quantity) {
@@ -137,18 +135,18 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
         if (list.size() == 1){
             throw new ErpCommonException("库存不足 发货失败");
         }
-        Long num = 0L;
-        for (int i = list.size(); i > 0; i--) {
-            num += list.get(i - 1).getInventory();
-            if(num < quantity){
-                result.put(list.get(i), list.get(i).getInventory());
-            }
-            else  {
-                result.put(list.get(i), list.get(i).getInventory()+ quantity - num );
-                return result;
-            }
-
-        }
+//        Long num = 0L;
+//        for (int i = list.size(); i > 0; i--) {
+//            num += list.get(i - 1).getInventory();
+//            if(num < quantity){
+//                result.put(list.get(i), list.get(i).getInventory());
+//            }
+//            else  {
+//                result.put(list.get(i), list.get(i).getInventory()+ quantity - num );
+//                return result;
+//            }
+//
+//        }
         throw new ErpCommonException("发货失败");
 
     }

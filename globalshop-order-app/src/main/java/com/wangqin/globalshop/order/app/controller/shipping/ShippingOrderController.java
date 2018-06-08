@@ -9,13 +9,13 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
-import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -59,9 +59,9 @@ import java.util.List;
 public class ShippingOrderController {
 
     @Autowired
-    private IShippingOrderService    shippingOrderService;
+    private IShippingOrderService shippingOrderService;
     @Autowired
-    private IMallSubOrderService     mallSubOrderService;
+    private IMallSubOrderService mallSubOrderService;
     @Autowired
     private ISiFangService siFangService;
     @Autowired
@@ -153,14 +153,13 @@ public class ShippingOrderController {
     @ResponseBody
     public Object multiDeliveryForm(String erpOrderId) throws InventoryException {
         JsonResult result = new JsonResult();
-        shippingOrderService.ship(erpOrderId);
-
-//        try {
-//            result.setData(shippingOrderService.queryByOrderId(erpOrderId));
-//            result.buildIsSuccess(true);
-//        } catch (ErpCommonException e) {
-//            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
-//        }
+//        shippingOrderService.ship(erpOrderId);
+        try {
+            result.setData(shippingOrderService.queryByOrderId(erpOrderId));
+            result.buildIsSuccess(true);
+        } catch (ErpCommonException e) {
+            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+        }
         return result.buildMsg("发货成功").buildIsSuccess(true);
     }
 
@@ -169,73 +168,15 @@ public class ShippingOrderController {
     @ResponseBody
     public Object multiDelivery(ShippingOrderDO shippingOrder) throws InventoryException {
         JsonResult<String> result = new JsonResult<>();
-        if (StringUtils.isNotBlank(shippingOrder.getMallOrders())) {
-            // ShiroUser shiroUser = this.getShiroUser();
-            // shippingOrder.setUserCreate(shiroUser.getLoginName());
+        try {
+            shippingOrderService.ship(shippingOrder);
 
-            if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐")) {
-                List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
-                if (ErpOrderList.size() > 1) {
-                    throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
-                }
-                if (ErpOrderList.get(0).getQuantity() > 1) {
-                    throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
-                }
-                if (StringUtils.isEmpty(ErpOrderList.get(0).getIdCard())) {
-                    throw new ErpCommonException("海狐物流发货单号缺少身份证信息");
-                }
-            }
-            try {
-                Set<String> mainIds = shippingOrderService.multiDelivery(shippingOrder);
-                // 更新主订单发货状态
-                if (CollectionUtils.isNotEmpty(mainIds)) {
-                    shippingOrderService.updateOuterstatus(mainIds);
-                }
-                // //对接邮客
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("邮客")) {
-                // youkeService.createOrder(shippingOrder.getId());
-                // }
-                // //对接运通快递
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("运通快递")) {
-                // yunTongService.createOrder(shippingOrder.getId());
-                // }
-                // //对接海狐
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐")) {
-                // haihuService.createOrder(shippingOrder.getId());
-                // }
-                // //对接海狐联邦转运
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")) {
-                // haihuService.returnPackageNo(shippingOrder);
-                //
-                // }
-                // //对接美国转运四方
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX")) {
-                // siFangService.createOrder(shippingOrder.getId());
-                // }
-                // //对接联邦
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("联邦转运")) {
-                // fadRoadService.createOrder(shippingOrder.getId());
-                // }
-                // //直接选择顺丰或者韵达快递补全status = 4特殊国内物流轨迹
-                // if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("顺丰")||
-                // shippingOrder.getLogisticCompany().equals("韵达"))) {
-                // ShippingTrack shippingTrack = new ShippingTrack();
-                // shippingTrack.setGmtCreate(new Date());
-                // shippingTrack.setGmtModify(new Date());
-                // shippingTrack.setStatus(4);
-                // shippingTrack.setLogisticNo(shippingOrder.getLogisticNo());
-                // shippingTrack.setInlandExpressId(shippingOrder.getLogisticCompany());
-                // shippingTrack.setInlandExpressNo(shippingOrder.getLogisticNo());
-                // shippingTrack.setShippingNo(shippingOrder.getShippingNo());
-                // shippingTrackMapper.insert(shippingTrack);
-                // }
-                result.buildIsSuccess(true);
-            } catch (ErpCommonException e) {
-                result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
-            }
-        } else {
-            result.buildMsg("错误数据").buildIsSuccess(false);
+
+            result.buildIsSuccess(true);
+        } catch (ErpCommonException e) {
+            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
         }
+
         return result;
     }
 
@@ -258,9 +199,9 @@ public class ShippingOrderController {
                     throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getShopCode());
                 }
                 if (StringUtils.isBlank(erpOrder.getReceiver()) || StringUtils.isBlank(erpOrder.getTelephone())
-                    || StringUtils.isBlank(erpOrder.getReceiverState())
-                    || StringUtils.isBlank(erpOrder.getReceiverCity())
-                    || StringUtils.isBlank(erpOrder.getReceiverDistrict())) {
+                        || StringUtils.isBlank(erpOrder.getReceiverState())
+                        || StringUtils.isBlank(erpOrder.getReceiverCity())
+                        || StringUtils.isBlank(erpOrder.getReceiverDistrict())) {
                     throw new ErpCommonException("收货人地址不能为空：" + erpOrder.getShopCode());
                 }
                 MallSubOrderDO tjErpOrder = new MallSubOrderDO();
@@ -280,7 +221,7 @@ public class ShippingOrderController {
                     MallSubOrderDO selErpOrder = selErpOrderList.get(i);
                     // 不在同一仓库的情况，不用考虑
                     if (selErpOrder.getWarehouseNo() != null
-                        && selErpOrder.getWarehouseNo() != erpOrder.getWarehouseNo()) {
+                            && selErpOrder.getWarehouseNo() != erpOrder.getWarehouseNo()) {
                         continue;
                     }
                     // 在同一个仓库，已备货
@@ -417,7 +358,7 @@ public class ShippingOrderController {
             // yunTongService.createOrder(shippingOrder.getId());
             // } else
             if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("4PX")
-                && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接4PX
+                    && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接4PX
                 message = siFangService.createOrder(shippingOrder.getShippingNo());
             }
             // else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")
@@ -428,7 +369,7 @@ public class ShippingOrderController {
             // fadRoadService.createOrder(shippingOrder.getId());
             // }
             else if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐")
-                     && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接海狐
+                    && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接海狐
                 List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
                 if (ErpOrderList.size() > 1) {
                     throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
@@ -440,7 +381,7 @@ public class ShippingOrderController {
                     haihuService.createOrder(shippingOrder.getId());
                 }
             } else if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")
-                       && StringUtil.isBlank(shippingOrder.getLogisticNo())) {
+                    && StringUtil.isBlank(shippingOrder.getLogisticNo())) {
                 haihuService.returnPackageNo(shippingOrder);
             }
             // else if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("顺丰")||
@@ -525,7 +466,7 @@ public class ShippingOrderController {
         lineParagraph.setSpacingBefore(0);
         lineParagraph.setSpacingAfter(2);
         // =========虚线end===================
-        float[] tableWidths = { 0.65f, 0.27f, 0.08f };
+        float[] tableWidths = {0.65f, 0.27f, 0.08f};
 
         String s = shippingOrderIds.replace("&quot;", "\"");
         List<Long> shippingOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
@@ -553,7 +494,7 @@ public class ShippingOrderController {
 
             // ===地址start
             Paragraph addressParagraph = new Paragraph("姓名：" + shippingOrder.getReceiver() + "   电话："
-                                                       + shippingOrder.getTelephone(), FontChinese_18);
+                    + shippingOrder.getTelephone(), FontChinese_18);
             addressParagraph.setLeading(22);
             addressParagraph.setSpacingBefore(5);
             document.add(addressParagraph);
@@ -684,11 +625,11 @@ public class ShippingOrderController {
             }
         }
         ExcelHelper excelHelper = new ExcelHelper();
-        String[] columnTitles = new String[] { "SKU编号", "商品名称", "商品图片", "颜色", "尺码", "品牌", "商品条码", "发货数量", "发货时间", "销售员",
-                                               "子订单编号", "小程序客户", "收件人", "手机", "省", "市", "区", "详细地址", "仓库", "包裹号",
-                                               "物流公司", "渠道方式", "物流单号", "发货方式" };
-        Integer[] columnWidth = new Integer[] { 25, 25, 15, 20, 20, 20, 20, 20, 20, 20, 25, 20, 20, 20, 20, 20, 20, 20,
-                                                20, 25, 20, 20, 20, 20 };
+        String[] columnTitles = new String[]{"SKU编号", "商品名称", "商品图片", "颜色", "尺码", "品牌", "商品条码", "发货数量", "发货时间", "销售员",
+                "子订单编号", "小程序客户", "收件人", "手机", "省", "市", "区", "详细地址", "仓库", "包裹号",
+                "物流公司", "渠道方式", "物流单号", "发货方式"};
+        Integer[] columnWidth = new Integer[]{25, 25, 15, 20, 20, 20, 20, 20, 20, 20, 25, 20, 20, 20, 20, 20, 20, 20,
+                20, 25, 20, 20, 20, 20};
 
         excelHelper.setShippingOrderToSheet("Shipping Order", columnTitles, rowDatas, columnWidth);
         // excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
@@ -742,9 +683,9 @@ public class ShippingOrderController {
             }
         }
         ExcelHelper excelHelper = new ExcelHelper();
-        String[] columnTitles = new String[] { "包裹单号", "物流公司", "预估物流费用", "商品净重(磅)", "收货人", "省", "市", "区", "详细地址",
-                                               "联系电话", "身份证", "创建者", "创建时间" };
-        Integer[] columnWidth = new Integer[] { 25, 25, 15, 20, 20, 20, 20, 20, 25, 20, 25, 20, 20 };
+        String[] columnTitles = new String[]{"包裹单号", "物流公司", "预估物流费用", "商品净重(磅)", "收货人", "省", "市", "区", "详细地址",
+                "联系电话", "身份证", "创建者", "创建时间"};
+        Integer[] columnWidth = new Integer[]{25, 25, 15, 20, 20, 20, 20, 20, 25, 20, 25, 20, 20};
         excelHelper.setShippingOrderPackageToSheet("Shipping Order Detail", columnTitles, rowDatas, columnWidth);
         // excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
 
@@ -773,8 +714,8 @@ public class ShippingOrderController {
         erpOrderList.forEach(erpOrder -> {
             // 拼邮、备货状态(已备货)、子订单状态(新建)
             if (erpOrder.getLogisticType() != null && erpOrder.getLogisticType() == 1
-                && erpOrder.getStockStatus() == StockUpStatus.STOCKUP.getCode()
-                && erpOrder.getStatus() == OrderStatus.INIT.getCode()) {
+                    && erpOrder.getStockStatus() == StockUpStatus.STOCKUP.getCode()
+                    && erpOrder.getStatus() == OrderStatus.INIT.getCode()) {
                 erpOrder.setStockStatus(StockUpStatus.PREPARE.getCode());
                 mallSubOrderService.update(erpOrder);
             } else {
@@ -888,7 +829,7 @@ public class ShippingOrderController {
 
     /**
      * 邮客接口测试
-     * 
+     *
      * @throws ParseException
      */
     @RequestMapping("/FadroadTest")
@@ -899,7 +840,7 @@ public class ShippingOrderController {
 
     /**
      * 完整物流轨迹详情展示
-     * 
+     *
      * @param shippingNo
      * @return
      */
@@ -980,7 +921,7 @@ public class ShippingOrderController {
 
     class CustomDashedLineSeparator extends DottedLineSeparator {
 
-        protected float dash  = 5;
+        protected float dash = 5;
         protected float phase = 2.5f;
 
         public float getDash() {

@@ -7,7 +7,6 @@ import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -37,6 +36,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.*;
+
+import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
 
 /**
  * @author liuhui
@@ -114,7 +115,7 @@ public class MallSubOrderController {
 				if(erpOrder==null){
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
- 					if( OrderStatus.INIT.getCode() == erpOrder.getStatus()){
+ 					if( ORDER_SATUTS_INIT == erpOrder.getStatus()){
 						try{
 							if(StringUtil.isNotBlank(closeReason)) {
 								erpOrder.setCloseReason(closeReason);
@@ -165,7 +166,7 @@ public class MallSubOrderController {
 			if(erpOrder.getQuantity()==1){
 				return JsonResult.buildFailed("一个商品不能拆分");
 			}
-			if(erpOrder.getStatus()==OrderStatus.INIT.getCode()){
+			if(erpOrder.getStatus()==ORDER_SATUTS_INIT){
 				try{
 					if(splitCount>=erpOrder.getQuantity()){
 						return JsonResult.buildFailed("拆单数量不能超过订单数量");
@@ -197,7 +198,7 @@ public class MallSubOrderController {
 			return JsonResult.buildFailed("未找到订单");
 		}else{
 			//订单状态校验
-			if(erpOrder.getStatus()==OrderStatus.INIT.getCode()&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
+			if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
 				inventoryService.release(erpOrder);
 			}else{
 				return JsonResult.buildFailed("订单状态错误");
@@ -255,7 +256,7 @@ public class MallSubOrderController {
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
 					erpOrders.add(erpOrder);
-					if(erpOrder.getStatus()==OrderStatus.INIT.getCode()){
+					if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())){
 						if(skuCode==null){
 							skuCode = erpOrder.getSkuCode();
 						}else{
@@ -355,7 +356,7 @@ public class MallSubOrderController {
     	        list.add(erpOrder.getQuantity());	//销售数量
     	        list.add(erpOrder.getSalePrice());	//销售价格
     	        list.add(erpOrder.getQuantity()*erpOrder.getSalePrice());               //销售总价
-    	        list.add(OrderStatus.of(erpOrder.getStatus()).getDescription());		//订单状态
+    	        list.add(erpOrder.getStatus());		//订单状态
     	        list.add(StockUpStatus.of(erpOrder.getStockStatus()).getDescription());	//备货状态
     	        list.add(DateUtil.ymdFormat(erpOrder.getOrderTime()));					//创建时间
     	        list.add(erpOrder.getReceiver());	//收件人

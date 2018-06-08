@@ -49,7 +49,7 @@ public interface IShippingOrderService {
     void updateStatusByShippingNo(String logisticNo);
 //    -------------------------------------------------
 
-    void ship(String erpOrderId);
+    void ship(ShippingOrderDO erpOrderId);
 
 
 //	MultiDeliveryFormDTO queryByErpOrderId(String erpOrderId);

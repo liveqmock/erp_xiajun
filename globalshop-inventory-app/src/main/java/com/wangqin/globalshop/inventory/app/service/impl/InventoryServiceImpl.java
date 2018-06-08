@@ -47,18 +47,18 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void outbound(InventoryDO inventory, String warehouseNo, String positionNo) {
-        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, warehouseNo, positionNo);
         Long inv = inventory.getInv();
+        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, inv, warehouseNo, positionNo);
         inventory = mapper.queryBySkuCodeAndItemCode(inventory.getSkuCode(), inventory.getItemCode());
         /**1增加实际库存*/
         inventory.setInv(inventory.getInv() + inv);
         inventory.update();
         /**减少虚拟库存  保证可售不变*/
         Long virtualInv = inventory.getVirtualInv();
-        if (virtualInv !=0){
-            if (virtualInv < inv){
+        if (virtualInv != 0) {
+            if (virtualInv < inv) {
                 inventory.setVirtualInv(0L);
-            }else {
+            } else {
                 inventory.setVirtualInv(virtualInv - inv);
             }
         }
@@ -73,6 +73,35 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     }
+
+    /**
+     * 退货
+     *
+     * @param orderDO
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void returns(MallSubOrderDO orderDO, Long inv) {
+        /**修改库存*/
+        InventoryDO inventory = mapper.queryBySkuCode(orderDO.getSkuCode());
+        if (inventory == null) {
+            throw new ErpCommonException("找不到相关库存");
+        }
+        inventory.setInv(inventory.getInv() + inv);
+        inventory.update();
+        mapper.updateByPrimaryKeySelective(inventory);
+        /**更新相关Inventory*/
+        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseMapperExt.selectByItemCodeAndSkuCodeAndWarehouseNo(orderDO.getItemCode(), orderDO.getSkuCode(), orderDO.getWarehouseNo());
+        if (wareHouseDO == null) {
+            throw new ErpCommonException("找不到相关库存");
+        }
+        wareHouseDO.update();
+        invOnWarehouseMapperExt.updateByPrimaryKeySelective(wareHouseDO);
+        /**修改流水*/
+        Integer opeatory = 102;
+        saveInventoryInOut(inventory, wareHouseDO, opeatory, inv, "退货入库");
+    }
+
 
     /**
      * 预售入库
@@ -225,21 +254,11 @@ public class InventoryServiceImpl implements InventoryService {
         /**生成流水*/
         Integer opeatory = 201;
         for (InventoryOnWareHouseDO houseDO : map.keySet()) {
+            orderDO.setWarehouseNo(houseDO.getWarehouseNo());
+            orderDO.update();
+            mallSubOrderMapper.updateByPrimaryKeySelective(orderDO);
             saveInventoryInOut(inventoryDO, houseDO, opeatory, map.get(houseDO), "发货出库");
         }
-    }
-
-    /**
-     * 退货
-     *
-     * @param mallReturnOrderDO
-     */
-    @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
-    public void returns(MallReturnOrderDO mallReturnOrderDO) {
-        /**修改库存*/
-        /**更新相关Inventory*/
-        /**修改流水*/
     }
 
 
@@ -307,7 +326,7 @@ public class InventoryServiceImpl implements InventoryService {
             mapper.insertSelective(inventoryDO);
         } else {
             inventory.setInv(inventory.getInv() + inv);
-            inventory.setGmtModify(new Date());
+            inventory.update();
             mapper.updateByPrimaryKeySelective(inventory);
         }
 
