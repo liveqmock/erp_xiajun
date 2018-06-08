@@ -118,6 +118,18 @@ public class CategoryController  {
 	public Object delete(ItemCategoryDO category) {
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
 		Long id = category.getId();
+		
+		
+		int categoryCodeCount = categoryService.countRelativeItem(categoryService.selectByPrimaryKey(category.getId()).getCategoryCode());
+		if(categoryCodeCount > 0) {
+			return result.buildIsSuccess(false).buildMsg("错误，该类目已关联商品");
+		}
+		int categoryCountByPcode = categoryService.queryChildCategoryCountByCategoryCode(categoryService.selectByPrimaryKey(category.getId()).getCategoryCode());
+		if(categoryCountByPcode > 0) {
+			return result.buildIsSuccess(false).buildMsg("错误，删除失败");
+		}
+	
+		
 		if (id == null) {
 			return result.buildIsSuccess(false).buildMsg("category id is null!");
 		}

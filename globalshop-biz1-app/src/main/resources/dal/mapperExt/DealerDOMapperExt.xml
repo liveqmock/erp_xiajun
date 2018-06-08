@@ -14,15 +14,17 @@
     <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, code, name, type_code, gmt_create, gmt_modify, creator, 
-    modifier, is_del
+    id, company_no AS companyNo, code, name, type_code AS typeCode, gmt_create AS gmtCreate, gmt_modify AS gmtModify, creator, 
+    modifier, is_del AS isDel
   </sql>
   <select id="list" resultMap="BaseResultMap">
-    SELECT <include refid="Base_Column_List"/>
+    SELECT 
+    <include refid="Base_Column_List"/>
     FROM dealer
   </select>
   <select id="selectByCode" resultMap="BaseResultMap">
-    SELECT <include refid="Base_Column_List"/>
+    SELECT 
+    <include refid="Base_Column_List"/>
     FROM dealer
     WHERE code = #{code}
   </select>

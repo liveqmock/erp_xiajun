@@ -114,4 +114,26 @@
       AND T1.category_code = #{categoryCode}
 	</where>
 	</select>
+	
+	<!-- 张子阳写 -->
+	<select id="countRelativeItem" parameterType="java.lang.String" resultType="int">
+	SELECT
+	COUNT(*)
+	FROM item T1
+	<where>
+		T1.category_code = #{categoryCode}
+		AND T1.is_del=0
+	</where>
+	</select>
+	
+	<select id="queryCategoryCountByPcode" parameterType="java.lang.String" resultType="int">
+	SELECT
+	COUNT(*)
+	FROM item_category T1
+	<where>
+		T1.p_code = #{categoryCode}
+		AND T1.is_del=0
+	</where>
+	</select>
+	<!-- 张子阳写 -->
 </mapper>
