@@ -1,46 +1,34 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class MallReturnOrderDO extends BaseModel {
     private Long id;
-
     private String orderNo;
-
     private Long outerOrderNo;
-
     private String subOrderNo;
-
     private Byte status;
-
     private String returnReason;
-
     private String returnReasonDetail;
-
     private Integer returnQuantity;
-
     private Double returnPrice;
-
     private Byte isCivil;
-
     private Byte isCheckin;
-
     private String customerOpenId;
-
     private String telephone;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date receiveTime;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date returnPayTime;
-
-    private String desc;
+    private String remark;
 
     private Integer returnRefer;
 
     private String proofImg;
 
     private Integer returnType;
-
     private Date gmtCreate;
 
     private Date gmtModify;
@@ -171,12 +159,12 @@ public class MallReturnOrderDO extends BaseModel {
         this.returnPayTime = returnPayTime;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Integer getReturnRefer() {

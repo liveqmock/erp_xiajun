@@ -29,7 +29,7 @@ public interface IInventoryOnWarehouseService {
 
     InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
 
-    InventoryOnWareHouseDO insertInventory(InventoryDO inventory, String warehouseNo,String positionNo);
+    InventoryOnWareHouseDO insertInventory(InventoryDO inventory,Long inv, String warehouseNo,String positionNo);
 
     Map<InventoryOnWareHouseDO,Long> ship(InventoryDO inventoryDO, Long quantity);
 }

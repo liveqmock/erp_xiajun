@@ -17,7 +17,7 @@
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
     <result column="return_pay_time" property="returnPayTime" jdbcType="TIMESTAMP" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="return_refer" property="returnRefer" jdbcType="INTEGER" />
     <result column="proof_img" property="proofImg" jdbcType="VARCHAR" />
     <result column="return_type" property="returnType" jdbcType="INTEGER" />
@@ -30,7 +30,7 @@
   <sql id="Base_Column_List" >
     id, order_no, outer_order_no, sub_order_no, status, return_reason, return_reason_detail, 
     return_quantity, return_price, is_civil, is_checkin, customer_open_id, telephone, 
-    receive_time, return_pay_time, desc, return_refer, proof_img, return_type, gmt_create, 
+    receive_time, return_pay_time, remark, return_refer, proof_img, return_type, gmt_create, 
     gmt_modify, is_del, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -52,7 +52,7 @@
       return_reason_detail, return_quantity, return_price, 
       is_civil, is_checkin, customer_open_id, 
       telephone, receive_time, return_pay_time, 
-      desc, return_refer, proof_img, 
+      remark, return_refer, proof_img, 
       return_type, gmt_create, gmt_modify, 
       is_del, creator, modifier
       )
@@ -61,7 +61,7 @@
       #{returnReasonDetail,jdbcType=VARCHAR}, #{returnQuantity,jdbcType=INTEGER}, #{returnPrice,jdbcType=DOUBLE}, 
       #{isCivil,jdbcType=TINYINT}, #{isCheckin,jdbcType=TINYINT}, #{customerOpenId,jdbcType=VARCHAR}, 
       #{telephone,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, #{returnPayTime,jdbcType=TIMESTAMP}, 
-      #{desc,jdbcType=VARCHAR}, #{returnRefer,jdbcType=INTEGER}, #{proofImg,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{returnRefer,jdbcType=INTEGER}, #{proofImg,jdbcType=VARCHAR}, 
       #{returnType,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
       )
@@ -115,8 +115,8 @@
       <if test="returnPayTime != null" >
         return_pay_time,
       </if>
-      <if test="desc != null" >
-        desc,
+      <if test="remark != null" >
+        remark,
       </if>
       <if test="returnRefer != null" >
         return_refer,
@@ -187,8 +187,8 @@
       <if test="returnPayTime != null" >
         #{returnPayTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="desc != null" >
-        #{desc,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="returnRefer != null" >
         #{returnRefer,jdbcType=INTEGER},
@@ -261,8 +261,8 @@
       <if test="returnPayTime != null" >
         return_pay_time = #{returnPayTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="desc != null" >
-        desc = #{desc,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="returnRefer != null" >
         return_refer = #{returnRefer,jdbcType=INTEGER},
@@ -307,7 +307,7 @@
       telephone = #{telephone,jdbcType=VARCHAR},
       receive_time = #{receiveTime,jdbcType=TIMESTAMP},
       return_pay_time = #{returnPayTime,jdbcType=TIMESTAMP},
-      desc = #{desc,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
       return_refer = #{returnRefer,jdbcType=INTEGER},
       proof_img = #{proofImg,jdbcType=VARCHAR},
       return_type = #{returnType,jdbcType=INTEGER},

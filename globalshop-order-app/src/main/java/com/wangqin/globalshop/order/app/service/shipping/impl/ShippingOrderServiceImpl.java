@@ -3,7 +3,7 @@ package com.wangqin.globalshop.order.app.service.shipping.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderStatus;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.TransferStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
@@ -16,7 +16,6 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -33,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
+import static com.wangqin.globalshop.order.app.comm.Constant.*;
 
 /**
  * @author biscuit
@@ -93,9 +94,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         Double skuWeight = 0D;
         Double totalSalePrice = 0D;
         for (MallSubOrderDO mallSubOrder : mallSubOrderList) {
-            if (mallSubOrder.getStockStatus() == null || (mallSubOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode() && mallSubOrder.getStockStatus() != StockUpStatus.PREPARE.getCode())) {
-                throw new ErpCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
-            }
+//            if (mallSubOrder.getStockStatus() == null || (mallSubOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode() && mallSubOrder.getStockStatus() != StockUpStatus.PREPARE.getCode())) {
+//                throw new ErpCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
+//            }
             if (StringUtils.isBlank(mallSubOrder.getReceiver()) || StringUtils.isBlank(mallSubOrder.getTelephone()) || StringUtils.isBlank(mallSubOrder.getReceiverState()) || StringUtils.isBlank(mallSubOrder.getReceiverCity()) || StringUtils.isBlank(mallSubOrder.getReceiverDistrict())) {
                 throw new ErpCommonException("收货人地址不能为空：" + mallSubOrder.getId());
             }
@@ -124,40 +125,40 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 continue;
             }
 
-            //搜索同一收货人的子订单
-            MallSubOrderDO tjErpOrder = new MallSubOrderDO();
-            tjErpOrder.setReceiver(mallSubOrder.getReceiver());
-            tjErpOrder.setTelephone(mallSubOrder.getTelephone());
-            tjErpOrder.setReceiverState(mallSubOrder.getReceiverState());
-            tjErpOrder.setReceiverCity(mallSubOrder.getReceiverCity());
-            tjErpOrder.setReceiverDistrict(mallSubOrder.getReceiverDistrict());
-            tjErpOrder.setStatus(0); // 订单状态：新建
-            // tjErpOrder.setStockStatus(erpOrder.getStockStatus()); //备货状态：已备货
-            // tjErpOrder.setWarehouseId(erpOrder.getWarehouseId()); //相同仓库
-            List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectByOrderNo(mallSubOrder.getOrderNo());
-            for (int i = 0; i < selErpOrderList.size(); i++) {
-                MallSubOrderDO selErpOrder = selErpOrderList.get(i);
-                //不在同一仓库的情况，不用考虑
-                if (selErpOrder.getWarehouseNo() != null && selErpOrder.getWarehouseNo() != mallSubOrder.getWarehouseNo()) {
-                    continue;
-                }
-                //在同一仓库的或者未备货的
-                if (!erpOrderIdSet.contains(selErpOrder.getId())) {
-                    String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(selErpOrder.getOrderNo());
-                    // TODO: 18.5.28 Biscuits
-                    /* selErpOrder.setPositionNo(positionNoStr);*/
-                    totalMallSubOrderList.add(selErpOrder);
-                    erpOrderIdSet.add(selErpOrder.getId());
-                }
-            }
+//            //搜索同一收货人的子订单
+//            MallSubOrderDO tjErpOrder = new MallSubOrderDO();
+//            tjErpOrder.setReceiver(mallSubOrder.getReceiver());
+//            tjErpOrder.setTelephone(mallSubOrder.getTelephone());
+//            tjErpOrder.setReceiverState(mallSubOrder.getReceiverState());
+//            tjErpOrder.setReceiverCity(mallSubOrder.getReceiverCity());
+//            tjErpOrder.setReceiverDistrict(mallSubOrder.getReceiverDistrict());
+//            tjErpOrder.setStatus(0); // 订单状态：新建
+//            // tjErpOrder.setStockStatus(erpOrder.getStockStatus()); //备货状态：已备货
+//            // tjErpOrder.setWarehouseId(erpOrder.getWarehouseId()); //相同仓库
+//            List<MallSubOrderDO> selErpOrderList = mallSubOrderService.selectByOrderNo(mallSubOrder.getOrderNo());
+//            for (int i = 0; i < selErpOrderList.size(); i++) {
+//                MallSubOrderDO selErpOrder = selErpOrderList.get(i);
+//                //不在同一仓库的情况，不用考虑
+//                if (selErpOrder.getWarehouseNo() != null && selErpOrder.getWarehouseNo() != mallSubOrder.getWarehouseNo()) {
+//                    continue;
+//                }
+//                //在同一仓库的或者未备货的
+//                if (!erpOrderIdSet.contains(selErpOrder.getId())) {
+//                    String positionNoStr = mallSubOrderMapper.selectPositionNoByOrderId(selErpOrder.getOrderNo());
+//                    // TODO: 18.5.28 Biscuits
+//                    /* selErpOrder.setPositionNo(positionNoStr);*/
+//                    totalMallSubOrderList.add(selErpOrder);
+//                    erpOrderIdSet.add(selErpOrder.getId());
+//                }
+//            }
         }
-        Collections.sort(totalMallSubOrderList, new Comparator<MallSubOrderDO>() {
-            @Override
-            public int compare(MallSubOrderDO o1, MallSubOrderDO o2) {
-                return o2.getStockStatus().compareTo(o1.getStockStatus());
-            }
-
-        });
+//        Collections.sort(totalMallSubOrderList, new Comparator<MallSubOrderDO>() {
+//            @Override
+//            public int compare(MallSubOrderDO o1, MallSubOrderDO o2) {
+//                return o2.getStockStatus().compareTo(o1.getStockStatus());
+//            }
+//
+//        });
         multiDeliveryFormDTO.setSkuWeight(skuWeight);
         multiDeliveryFormDTO.setTotalSalePrice(totalSalePrice);
         multiDeliveryFormDTO.setMallSubOrderList(totalMallSubOrderList);
@@ -219,7 +220,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             }
         }
         if (shippingOrder.getStatus() == null) {
-            shippingOrder.setStatus(ShippingOrderStatus.INIT.getCode());
+            shippingOrder.setStatus(SHIP_INIT);
         }
         shippingOrder.setShippingNo(erpNos.toString());
         shippingOrder.setShippingNo("PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence());
@@ -341,7 +342,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 		}*/
 
         if (shippingOrder.getStatus() == null) {
-            shippingOrder.setStatus(ShippingOrderStatus.INIT.getCode());
+            shippingOrder.setStatus(SHIP_INIT);
         }
         Date nowDate = new Date();
         Map<String, Set<String>> resultMap = new HashMap<>();
@@ -481,29 +482,48 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Transactional(rollbackFor = ErpCommonException.class)
     @Override
-    public void ship(String erpOrderId) {
-        ShippingOrderDO shippingOrder = new ShippingOrderDO();
+    public void ship(ShippingOrderDO shippingOrder) {
         String shippingNo = "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence();
         StringBuffer erpNos = new StringBuffer();
-        String s = erpOrderId.replace("&quot;", "\"");
+        String s = shippingOrder.getMallOrders().replace("&quot;", "\"");
         List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
         });
         List<MallSubOrderDO> list = mallSubOrderService.selectBatchIds(erpOrderIdList);
-        double skuWeight = 0.0D;
+//        if (list.size() > 1) {
+//            throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
+//        }
+//        if (list.get(0).getQuantity() > 1) {
+//            throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
+//        }
+//        if (org.apache.commons.lang.StringUtils.isEmpty(list.get(0).getIdCard())) {
+//            throw new ErpCommonException("海狐物流发货单号缺少身份证信息");
+//        }
+//
+//         //对接海狐
+//         if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐")) {
+//         haihuService.createOrder(shippingOrder.getId());
+//         }
+//         //对接海狐联邦转运
+//         if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")) {
+//         haihuService.returnPackageNo(shippingOrder);
+//
+//         }
+//         //对接美国转运四方
+//         if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX")) {
+//         siFangService.createOrder(shippingOrder.getId());
+//         }
+//
         for (MallSubOrderDO erpOrder : list) {
             /**如果没有订单号  则认为是没有发货*/
             if (Util.isEmpty(erpOrder.getShippingNo())) {
                 /**物流出库*/
-                erpOrder.setStatus(OrderStatus.SENT.getCode());
+                erpOrder.setStatus(ORDER_SATUTS_SENT);
                 erpOrder.setShippingNo(shippingNo);
                 inventoryService.ship(erpOrder);
                 /**拼接erp*/
                 erpNos.append(erpOrder.getShopCode()).append(",");
             }else {
                 throw new ErpCommonException("不能重复发货");
-            }
-            if (erpOrder.getWeight() != null) {
-                skuWeight += erpOrder.getWeight() * erpOrder.getQuantity();
             }
             mallSubOrderMapper.updateByPrimaryKeySelective(erpOrder);
             /**更新主订单的状态*/
@@ -513,7 +533,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
         }
 
-        shippingOrder.setSkuWeight(skuWeight);
+
         // TODO: 18.6.6 绑定物流
 //        if(skuWeight > 0) {
 //            shippingOrder.setSkuWeight(skuWeight);	//包裹里面的sku的重量(磅)
@@ -528,7 +548,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         String erpStr = erpNos.toString();
         erpStr = erpStr.substring(0, erpStr.length() - 1);
         shippingOrder.init();
-        shippingOrder.setStatus(ShippingOrderStatus.INIT.getCode());
+        shippingOrder.setStatus(SHIP_INIT);
         shippingOrder.setShippingNo(erpStr);
         shippingOrder.setShippingNo(shippingNo);
         shippingOrder.setTransferStatus( TransferStatus.UNPREDICT.getValue());
@@ -561,12 +581,12 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     private void updateMallOrderStats(MallOrderDO orderDO) {
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
         for (MallSubOrderDO aDo : list) {
-            if (OrderStatus.SENT.getCode()!=aDo.getStatus()){
-                orderDO.setStatus(OrderStatus.PART_SENT.getCode());
+            if (ORDER_SATUTS_SENT .equals(aDo.getStatus())){
+                orderDO.setStatus(ORDER_SATUTS_PART_SENT);
                 return;
             }
         }
-        orderDO.setStatus(OrderStatus.SENT.getCode());
+        orderDO.setStatus(ORDER_SATUTS_SENT);
 
     }
 

@@ -13,6 +13,10 @@ public class ShippingPackingPatternDO {
 
     private String nameEn;
 
+    private Double weight;
+
+    private Integer packageLevel;
+
     private Boolean isDel;
 
     private Date gmtCreate;
@@ -61,6 +65,22 @@ public class ShippingPackingPatternDO {
 
     public void setNameEn(String nameEn) {
         this.nameEn = nameEn == null ? null : nameEn.trim();
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Integer getPackageLevel() {
+        return packageLevel;
+    }
+
+    public void setPackageLevel(Integer packageLevel) {
+        this.packageLevel = packageLevel;
     }
 
     public Boolean getIsDel() {
