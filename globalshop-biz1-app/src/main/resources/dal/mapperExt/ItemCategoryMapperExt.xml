@@ -126,7 +126,7 @@
 	</where>
 	</select>
 	
-	<select id="queryCategoryCountByPcode" parameterType="java.lang.String" resultType="int">
+	<select id="queryChildCategoryCountByCategoryCode" parameterType="java.lang.String" resultType="int">
 	SELECT
 	COUNT(*)
 	FROM item_category T1
