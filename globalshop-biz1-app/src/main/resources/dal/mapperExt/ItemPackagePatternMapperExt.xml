@@ -90,11 +90,12 @@
       <if test="nameEn != null" >
         name_en,
       </if>
-      <if test="weight != null" >
-        weight,
-      </if>
+     
       <if test="packageLevel != null" >
         package_level,
+      </if>
+       <if test="weight != null" >
+        weight,
       </if>
       <if test="creator != null" >
         creator,
@@ -116,18 +117,20 @@
       <if test="nameEn != null" >
         #{nameEn,jdbcType=VARCHAR},
       </if>
+       <if test="packageLevel != null" >
+        #{packageLevel},
+      </if>
+       <if test="weight != null" >
+        #{weight},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-       <if test="weight != null" >
-        weight,
-      </if>
-      <if test="packageLevel != null" >
-        package_level,
-      </if>
+      
+     
     </trim>
   </insert>
   
