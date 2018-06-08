@@ -158,4 +158,17 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 		categoryMapper.updateByPrimaryKeySelective(category);
 		
 	}
+	
+	@Override
+	public int countRelativeItem(String categoryCode) {
+		// TODO Auto-generated method stub
+		return categoryMapper.countRelativeItem(categoryCode);
+	}
+
+	@Override
+	public int queryChildCategoryCountByCategoryCode(String categoryCode) {
+		// TODO Auto-generated method stub
+		return categoryMapper.queryChildCategoryCountByCategoryCode(categoryCode);
+	}
+	
 }
