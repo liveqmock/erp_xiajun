@@ -227,6 +227,8 @@ public class PackingController {
 				shippingPackingPatternDO.setName(packageLevel.getName());
 				shippingPackingPatternDO.setNameEn(packageLevel.getPackageEn());
 				shippingPackingPatternDO.setPatternNo(RandomUtils.getTimeRandom());
+				shippingPackingPatternDO.setPackageLevel(packageLevel.getPackageLevel());
+				shippingPackingPatternDO.setWeight(packageLevel.getWeight());
 				//shippingPackingPatternDO.setPackagingScaleNo(packageLevel.getPackagingScaleNo());
 				String packagingScaleNo = shippingPackingScaleService.queryNoById(packageLevel.getPackageId());
 				shippingPackingPatternDO.setPackagingScaleNo(packagingScaleNo);
