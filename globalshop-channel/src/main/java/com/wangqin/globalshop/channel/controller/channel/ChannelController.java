@@ -45,7 +45,7 @@ public class ChannelController extends BaseController {
     public Object add(ChannelDO channel) {
         JsonResult<String> result = new JsonResult<>();
 
-		channel.setChannelNo(channel.getName());
+		//channel.setChannelNo(channel.getName());
 		channel.setIsDel(false);
 		channel.setGmtCreate(new Date());
 		channel.setGmtModify(new Date());
@@ -62,7 +62,7 @@ public class ChannelController extends BaseController {
 	public Object update(ChannelDO channel) {
 		JsonResult<String> result = new JsonResult<>();
 
-		channel.setChannelNo(channel.getName());
+		//channel.setChannelNo(channel.getName());
 		channel.setIsDel(false);
 		channel.setGmtCreate(new Date());
 		channel.setGmtModify(new Date());
