@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -131,10 +132,11 @@ public class ItemController  {
 			//重新设置商品名称
 			item.setName(nameNew.toString());
 
-			ItemCategoryDO category = categoryService.selectByPrimaryKey(item.getCategoryId());
-			String categoryCode = category.getCategoryCode();
-			if(category!=null && categoryCode!=null){
-				item.setCategoryName(category.getName());
+			//ItemCategoryDO category = categoryService.selectByPrimaryKey(item.getCategoryId());
+			//String categoryCode = category.getCategoryCode();
+			String categoryCode = item.getCategoryCode();
+			if(categoryCode != null){
+				item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
 			}else{
 				return result.buildMsg("没有找到类目").buildIsSuccess(false);
 			}
@@ -261,8 +263,9 @@ public class ItemController  {
 			
 			newItem.setDetail(item.getDetail());
 			detailDecoder(newItem);
-			newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
-			newItem.setCategoryName(categoryService.selectByPrimaryKey(item.getCategoryId()).getName());
+			//newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
+			newItem.setCategoryName(item.getCategoryName());
+			newItem.setCategoryCode(categoryCode);
 			newItem.setBrandName(item.getBrand());
 			newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand()));
 			newItem.setEnName(item.getEnName());
@@ -293,7 +296,6 @@ public class ItemController  {
 	        				itemSku.setCompanyNo("c12");
 	        				itemSku.setCreator("admin");
 	        				itemSku.setModifier("admin");
-	        				itemSku.setUpc(RandomUtils.getTimeRandom());
 	        				System.out.println("销售价格："+itemSku.getSalePrice());
 	        				itemSku.setSalePrice(itemSku.getSalePrice());
 	        				//skuFreight(itemSku);
