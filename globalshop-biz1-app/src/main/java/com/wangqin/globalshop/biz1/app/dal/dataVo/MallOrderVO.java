@@ -13,7 +13,7 @@ public class MallOrderVO extends MallOrderDO {
     private List<MallSubOrderDO> outerOrderDetails;
     private String dealerCode;
     private String idCard;
-    private String platformType;s
+    private String platformType;
     private String receiverState;
     
     private Integer payType;
