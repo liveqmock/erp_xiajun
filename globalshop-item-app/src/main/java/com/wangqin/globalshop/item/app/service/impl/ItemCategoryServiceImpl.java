@@ -143,7 +143,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 					ItemCategoryDTO category = categoryLevel2.get(cate.getpCode());
 					category.getChildren().add(cate);
 				} else if(cate.getLevel()==2){
-					ItemCategoryDTO category = categoryLevel1.get(cate.getpCode());
+					ItemCategoryDTO category = categoryLevel1.get(cate.getpCode());				
 					category.getChildren().add(cate);
 				}
 			});

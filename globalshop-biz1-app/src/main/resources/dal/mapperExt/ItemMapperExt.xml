@@ -502,13 +502,14 @@
             <if test=" owners != null and owners != '' ">
               and  T1.owners LIKE concat('%',#{owners},'%')
             </if>
-             -->
+            
             <if test=" startGmt!= null ">
              and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
             </if>
             <if test=" endGmt != null ">
             and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
             </if>
+             -->
             <if test=" startDate!= null ">
              and   <![CDATA[  T1.start_date = #{startDate} ]]>
             </if>
@@ -636,7 +637,7 @@
 	AND is_del=0;
 	</where>
 	</select>
-
-
+	
+	
     
 </mapper>

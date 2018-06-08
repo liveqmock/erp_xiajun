@@ -67,4 +67,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	
 	//查询可售的sku
 	List<ItemSkuDO> querySaleableSkus();
+	
+	Integer queryItemCountByUpc(String upc);
 }

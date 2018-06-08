@@ -17,17 +17,29 @@ import java.util.List;
 public interface ChannelCommonService {
 
 	// 同步商品
-	public void createItem(Long itemId);
+	public void createItem(String companyNo, Long itemId);
+
+	/**
+	 * 发货，支持全部渠道
+	 * @param erpOrderList
+	 * @param shippingOrder
+	 */
+	void syncLogistics2Channel(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder);
+
+
 
 	//public void syncItem(Long itemId);
+
 	//public void syncItem(HttpServletRequest request, HttpServletResponse respose) throws Exception;
 
 	// 上架
 	//public void syncListingItem(Long itemId);
+
 	//public void syncListingItem(ItemVo item);
 
 	// 下架
 	//public void syncDelistingItem(Long itemId);
+
 	//public void syncDelistingItem(ItemVo item);
 	// 下架售罄商品
 	//public void syncDelistingSaleOutItems();
@@ -42,7 +54,6 @@ public interface ChannelCommonService {
 	//public Object syncOrder(Object data);
 
 	//public void syncOrder() throws ParseException;
-	//public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception;
 
-	void syncLogistics2Channel(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder);
+	//public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception;
 }

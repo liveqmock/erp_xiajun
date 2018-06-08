@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.channel.service.channel;
 
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
@@ -33,23 +34,23 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 
 	/**
-	 * 上新接口
+	 * 上新接口：暂时只支持有赞
 	 * @param itemId
 	 */
-	public void createItem(Long itemId){
-
-		String shopCode = "40661654";
-
-		ChannelAccountSo so = new ChannelAccountSo();
-		so.setShopCode(shopCode);
-		ChannelAccountDO channelAccount =channelAccountService.queryPo(so);
-		if(channelAccount == null){
-			throw  new ErpCommonException("channel_account,shopCode: "+shopCode+" 不存在");
+	public void createItem(String companyNo, Long itemId){
+		if(EasyUtil.isStringEmpty(companyNo) || itemId == null || itemId < 0){
+			throw  new ErpCommonException("companyNo或itemId为空，"+companyNo+";"+itemId);
 		}
-		try {
-			ChannelFactory.getChannel(channelAccount).createItem(itemId);
-		}catch (Exception e){
-			logger.error("",e);
+		List<ChannelAccountDO> channelAccountList =channelAccountService.searchCAListByComNoChType(companyNo,ChannelType.YouZan);
+		if(EasyUtil.isListEmpty(channelAccountList)){
+			throw  new ErpCommonException("channel_account,companyNo: "+companyNo+" 无账号存在");
+		}
+		for (ChannelAccountDO channelAccount : channelAccountList) {
+			try {
+				ChannelFactory.getChannel(channelAccount).createItem(itemId);
+			}catch (Exception e){
+				logger.error("",e);
+			}
 		}
 	}
 
