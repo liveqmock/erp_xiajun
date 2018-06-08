@@ -401,5 +401,12 @@
         T1.weight, T1.sku_pic, T1.package_code, T1.package_name, T1.package_en, T1.package_weight, T1.package_level_id,
         T1.scale, model, T1.sale_type, T1.sale_price, T1.creator, T1.modifier, T1.gmt_create, T1.gmt_modify, T1.is_del
     </sql>
+    
+    <select id="queryItemCountByUpc" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM `item_sku`
+		where upc=#{upc}
+		AND is_del=0
+	</select>
 
 </mapper>

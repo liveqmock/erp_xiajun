@@ -132,6 +132,12 @@ public class ItemSkuController  {
 		//}
 		result.buildIsSuccess(true);
 		result.buildMsg("更新成功");
+		//检测upc是否重复
+		if(0 < iItemSkuService.queryItemCountByUpc(itemSku.getUpc())) {
+			result.buildIsSuccess(false);
+			result.buildMsg("upc不可以重复，请再次输入");
+			return result;
+		}
 		iItemSkuService.updateById(itemSku);
 		return result;
 	}

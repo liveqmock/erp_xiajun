@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class ItemQueryVO extends PageQueryVO{
 
+	private String categoryCode;
+	
 	private Integer hasInventory;
 	
     private Integer hasVirtualInventory;
@@ -594,6 +596,12 @@ public class ItemQueryVO extends PageQueryVO{
 	}
 	public void setEndGmt(String endGmt) {
 		this.endGmt = endGmt;
+	}
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 	
 	
