@@ -23,6 +23,9 @@ public class ItemPackagePatternDTO extends PageQueryVO{
 		
 		private String modifier;
 		
+		private Integer packageLevel;
+		
+		private Double weight;
 		
 		
 		public Long getPackageId() {
@@ -67,6 +70,18 @@ public class ItemPackagePatternDTO extends PageQueryVO{
 		public void setPackageEn(String packageEn) {
 			this.packageEn = packageEn;
 		}
+		public Integer getPackageLevel() {
+			return packageLevel;
+		}
+		public void setPackageLevel(Integer packageLevel) {
+			this.packageLevel = packageLevel;
+		}
+		public Double getWeight() {
+			return weight;
+		}
+		public void setWeight(Double weight) {
+			this.weight = weight;
+		}
 		
-	
+		
 }
