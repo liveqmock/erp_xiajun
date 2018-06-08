@@ -11,7 +11,7 @@
     <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
     <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
     <result column="contact_url" property="contactUrl" jdbcType="VARCHAR" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -19,7 +19,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, channel_no, gmt_create, name, type, contact_mobile, contact_name, contact_email, 
-    contact_url, desc, is_del, gmt_modify, creator, modifier
+    contact_url, remark, is_del, gmt_modify, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -38,12 +38,12 @@
     insert into channel (id, channel_no, gmt_create, 
       name, type, contact_mobile, 
       contact_name, contact_email, contact_url, 
-      desc, is_del, gmt_modify, 
+      remark, is_del, gmt_modify, 
       creator, modifier)
     values (#{id,jdbcType=BIGINT}, #{channelNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{contactMobile,jdbcType=VARCHAR}, 
       #{contactName,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{contactUrl,jdbcType=VARCHAR}, 
-      #{desc,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelDO" >
@@ -77,8 +77,8 @@
       <if test="contactUrl != null" >
         contact_url,
       </if>
-      <if test="desc != null" >
-        desc,
+      <if test="remark != null" >
+        remark,
       </if>
       <if test="isDel != null" >
         is_del,
@@ -119,8 +119,8 @@
       <if test="contactUrl != null" >
         #{contactUrl,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null" >
-        #{desc,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
@@ -163,8 +163,8 @@
       <if test="contactUrl != null" >
         contact_url = #{contactUrl,jdbcType=VARCHAR},
       </if>
-      <if test="desc != null" >
-        desc = #{desc,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
@@ -191,7 +191,7 @@
       contact_name = #{contactName,jdbcType=VARCHAR},
       contact_email = #{contactEmail,jdbcType=VARCHAR},
       contact_url = #{contactUrl,jdbcType=VARCHAR},
-      desc = #{desc,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
       is_del = #{isDel,jdbcType=BIT},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
