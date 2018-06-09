@@ -40,7 +40,7 @@ public class HaiLoginController extends BaseController {
      * @param password 密码
      * @return {Object}
      */
-    @PostMapping("/haiLogin/login")
+    @PostMapping({"/haiLogin/login","/login"})
 //    @RequestMapping("/login")
     @ResponseBody
     public Object loginPost(HttpServletRequest request, String username, String password, String captcha,
