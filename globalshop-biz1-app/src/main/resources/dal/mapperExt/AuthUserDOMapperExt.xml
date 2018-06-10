@@ -29,6 +29,27 @@
     modifier
   </sql>
 
+  <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.vo.authority.UserQueryVO">
+    <id column="id" property="id" jdbcType="BIGINT"/>
+    <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="password" property="password" jdbcType="VARCHAR"/>
+    <result column="sex" property="sex" jdbcType="TINYINT"/>
+    <result column="age" property="age" jdbcType="TINYINT"/>
+    <result column="user_type" property="userType" jdbcType="TINYINT"/>
+    <result column="status" property="status" jdbcType="TINYINT"/>
+    <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+
+    <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+
+    <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+      <id column="roleId" property="id"/>
+      <result column="roleName" property="name"/>
+    </collection>
+  </resultMap>
+
   <resultMap id="userVoResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
     <id column="id" property="id" jdbcType="BIGINT"/>
     <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
@@ -40,7 +61,7 @@
     <result column="user_type" property="userType" jdbcType="TINYINT"/>
     <result column="status" property="status" jdbcType="TINYINT"/>
     <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
     <result column="phone" property="phone" jdbcType="VARCHAR"/>
     <!-- <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/> -->
 
