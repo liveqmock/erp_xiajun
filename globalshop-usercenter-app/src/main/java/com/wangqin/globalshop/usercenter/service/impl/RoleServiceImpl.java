@@ -53,28 +53,31 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public void insert(AuthRoleDO role) {
+    public int insert(AuthRoleDO role) {
+        role.init();
+        role.setIsDel(true);;
+        return roleMapper.insert(role);
 
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public int deleteById(Long id) {
+        return roleMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public AuthRoleDO selectById(Long id) {
-        return null;
+        return roleMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public void updateSelectiveById(AuthRoleDO role) {
-
+    public int updateSelectiveById(AuthRoleDO role) {
+        role.init();
+        return roleMapper.updateByPrimaryKey(role);
     }
 
     @Override
     public Set<String> queryUserResCodes(String loginName) {
-
         Map<String, Set<String>> resourceMap = roleMapper.selectResourceMapByUserId(loginName);
         Set<String> urls = resourceMap.get("urls");
         Set<String> roles = resourceMap.get("roles");

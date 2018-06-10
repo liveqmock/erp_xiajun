@@ -3,6 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="user_no" property="userNo" jdbcType="VARCHAR" />
     <result column="login_name" property="loginName" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -16,7 +17,6 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="wx_user_id" property="wxUserId" jdbcType="BIGINT" />
     <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
@@ -24,9 +24,9 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_no, login_name, name, password, sex, age, phone, user_type, status, organization_id, 
-    create_time, wx_user_id, email, company_no, is_del, gmt_create, gmt_modify, creator, 
-    modifier
+    id, company_no, user_no, login_name, name, password, sex, age, phone, user_type, 
+    status, organization_id, create_time, wx_user_id, email, is_del, gmt_create, gmt_modify, 
+    creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -42,20 +42,20 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into auth_user (id, user_no, login_name, 
-      name, password, sex, 
-      age, phone, user_type, 
+    insert into auth_user (id, company_no, user_no, 
+      login_name, name, password, 
+      sex, age, phone, user_type, 
       status, organization_id, create_time, 
-      wx_user_id, email, company_no, 
-      is_del, gmt_create, gmt_modify, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{userNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
-      #{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, 
+      wx_user_id, email, is_del, 
+      gmt_create, gmt_modify, creator, 
+      modifier)
+    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, 
+      #{loginName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{organizationId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+      #{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -64,6 +64,9 @@
     insert into auth_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
+      <if test="companyNo != null" >
+        company_no,
+      </if>
       <if test="userNo != null" >
         user_no,
       </if>
@@ -103,9 +106,6 @@
       <if test="email != null" >
         email,
       </if>
-      <if test="companyNo != null" >
-        company_no,
-      </if>
       <if test="isDel != null" >
         is_del,
       </if>
@@ -124,6 +124,9 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="userNo != null" >
         #{userNo,jdbcType=VARCHAR},
       </if>
@@ -163,9 +166,6 @@
       <if test="email != null" >
         #{email,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null" >
-        #{companyNo,jdbcType=VARCHAR},
-      </if>
       <if test="isDel != null" >
         #{isDel,jdbcType=BIT},
       </if>
@@ -186,6 +186,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
     update auth_user
     <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="userNo != null" >
         user_no = #{userNo,jdbcType=VARCHAR},
       </if>
@@ -225,9 +228,6 @@
       <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null" >
-        company_no = #{companyNo,jdbcType=VARCHAR},
-      </if>
       <if test="isDel != null" >
         is_del = #{isDel,jdbcType=BIT},
       </if>
@@ -248,7 +248,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
     update auth_user
-    set user_no = #{userNo,jdbcType=VARCHAR},
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      user_no = #{userNo,jdbcType=VARCHAR},
       login_name = #{loginName,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
@@ -261,7 +262,6 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       wx_user_id = #{wxUserId,jdbcType=BIGINT},
       email = #{email,jdbcType=VARCHAR},
-      company_no = #{companyNo,jdbcType=VARCHAR},
       is_del = #{isDel,jdbcType=BIT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},

@@ -1,12 +1,10 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -98,6 +96,9 @@ public class UserController extends BaseController {
         if (list != null ) {
             return renderError("用户名已存在!");
         }
+        String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+        userVo.setUserNo(userNo);
+        userVo.setCompanyNo("0");
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.insertByVo(userVo);
         return renderSuccess("添加成功");
@@ -130,7 +131,7 @@ public class UserController extends BaseController {
      * @param userVo
      * @return
      */
-    @RequestMapping("/edit")
+    @PostMapping("/edit")
     @ResponseBody
     public Object edit(UserVo userVo) {
         AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());

@@ -94,6 +94,7 @@ public class OrganizationController extends BaseController {
         String org_id=String.format("%1$09d",RandomUtils.nextInt(1000000000));
         authOrganizationDO.setOrgId(org_id);
         authOrganizationDO.setCode(org_id);
+        authOrganizationDO.setCompanyNo("0");
         organizationService.insert(authOrganizationDO);
         return renderSuccess("添加成功！");
     }

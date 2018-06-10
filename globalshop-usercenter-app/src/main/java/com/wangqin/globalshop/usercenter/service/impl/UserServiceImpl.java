@@ -13,6 +13,7 @@ import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,19 +46,28 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
+//    @Transactional
     public void insertByVo(UserVo userVo) {
         AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
 //        user.setCreateTime(new Date());
-        userMapper.insert(user);
+        user.init();
+        user.setSex(userVo.getSex().byteValue());
+        user.setAge(userVo.getAge().byteValue());
+        user.setUserType(userVo.getUserType().byteValue());
+        user.setStatus(userVo.getStatus().byteValue());
+        user.setIsDel(false);
+        userMapper.insertSelective(user);
         
         Long id = user.getId();
         String[] roles = userVo.getRoleIds().split(",");
         AuthUserRoleDO userRole = new AuthUserRoleDO();
 
         for (String string : roles) {
+            userRole.init();
+            userRole.setCompanyNo(userVo.getCompanyNo());
             userRole.setUserId(id);
             userRole.setRoleId(Long.valueOf(string));
-            userRoleMapper.insert(userRole);
+            userRoleMapper.insertSelective(userRole);
         }
     }
 

@@ -82,11 +82,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
     	organization.setIsDel(true);;
         return organizationMapper.insert(organization);
     }
-    public static void main(String[] args) {
-    	AuthOrganizationDO a =new AuthOrganizationDO();
-    	a.init();
-    	System.out.println(a.getModifier());
-    }
 
     @Override
     public AuthOrganizationDO selectById(Long id) {

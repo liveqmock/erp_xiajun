@@ -9,9 +9,12 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,7 +94,17 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Object add(AuthRoleDO role) {
+    public Object add(AuthRoleDO role, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+                System.out.println(error.getDefaultMessage());
+            }
+            return null;
+        }
+        role.setRoleId((long)RandomUtils.nextInt(1000000000));
+        role.setCompanyNo("0");
+//        role.setStatus(Byte.valueOf("0"));
         roleService.insert(role);
         return renderSuccess("添加成功！");
     }
@@ -129,7 +142,7 @@ public class RoleController extends BaseController {
      * @param role
      * @return
      */
-    @RequestMapping("/edit")
+    @PostMapping("/edit")
     @ResponseBody
     public Object edit(AuthRoleDO role) {
         roleService.updateSelectiveById(role);

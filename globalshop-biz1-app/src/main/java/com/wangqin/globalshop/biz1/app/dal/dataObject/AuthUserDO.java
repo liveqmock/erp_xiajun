@@ -5,6 +5,8 @@ import java.util.Date;
 public class AuthUserDO extends BaseModel {
     private Long id;
 
+    private String companyNo;
+
     private String userNo;
 
     private String loginName;
@@ -31,8 +33,6 @@ public class AuthUserDO extends BaseModel {
 
     private String email;
 
-    private String companyNo;
-
     private Boolean isDel;
 
     private Date gmtCreate;
@@ -49,6 +49,14 @@ public class AuthUserDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getUserNo() {
@@ -153,14 +161,6 @@ public class AuthUserDO extends BaseModel {
 
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
-    }
-
-    public String getCompanyNo() {
-        return companyNo;
-    }
-
-    public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public Boolean getIsDel() {
