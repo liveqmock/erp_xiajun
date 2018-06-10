@@ -41,6 +41,8 @@ public class UserQueryVO extends PageQueryVO {
 
 	private Date createTime;
 
+	private Date gmtCreate;
+
 	private String phone;
 
 	private List<AuthRoleDO> rolesList;
@@ -130,6 +132,14 @@ public class UserQueryVO extends PageQueryVO {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
 	}
 
 	public String getPhone() {
