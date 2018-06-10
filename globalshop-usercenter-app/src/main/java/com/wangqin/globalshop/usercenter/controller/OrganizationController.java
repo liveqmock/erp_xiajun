@@ -3,13 +3,18 @@ package com.wangqin.globalshop.usercenter.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.usercenter.service.IOrganizationService;
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +40,7 @@ public class OrganizationController extends BaseController {
      */
     @GetMapping(value = "/manager")
     public String manager() {
-        return "admin/organization";
+        return "admin/authOrganizationDO";
     }
 
     /**
@@ -73,14 +78,23 @@ public class OrganizationController extends BaseController {
     /**
      * 添加部门
      *
-     * @param organization
+     * @param authOrganizationDO
      * @return
      */
-    @RequestMapping("/add")
+    @PostMapping("/add")
     @ResponseBody
-    public Object add(AuthOrganizationDO organization) {
-//        organization.setCreateTime(new Date());
-        organizationService.insert(organization);
+    public Object add(@Valid AuthOrganizationDO authOrganizationDO, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+                System.out.println(error.getDefaultMessage());
+            }
+            return null;
+        }
+        String org_id=String.format("%1$09d",RandomUtils.nextInt(1000000000));
+        authOrganizationDO.setOrgId(org_id);
+        authOrganizationDO.setCode(org_id);
+        organizationService.insert(authOrganizationDO);
         return renderSuccess("添加成功！");
     }
 
@@ -92,10 +106,9 @@ public class OrganizationController extends BaseController {
      * @return
      */
     @GetMapping("/editPage")
-
     public String editPage(HttpServletRequest request, Long id) {
         AuthOrganizationDO organization = organizationService.selectById(id);
-        request.setAttribute("organization", organization);
+        request.setAttribute("authOrganizationDO", organization);
         return "admin/organizationEdit";
     }
 
@@ -105,7 +118,7 @@ public class OrganizationController extends BaseController {
      * @param organization
      * @return
      */
-    @RequestMapping("/edit")
+    @PostMapping("/edit")
     @ResponseBody
     public Object edit(AuthOrganizationDO organization) {
         organizationService.updateSelectiveById(organization);
@@ -118,7 +131,7 @@ public class OrganizationController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     @ResponseBody
     public Object delete(Long id) {
         organizationService.deleteById(id);
