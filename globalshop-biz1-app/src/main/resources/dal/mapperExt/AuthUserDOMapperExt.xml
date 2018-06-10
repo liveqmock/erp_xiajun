@@ -154,7 +154,94 @@
     </where>
   </select>
 
-  
+
+  <select id="queryUsersCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+    SELECT
+    count(1)
+    FROM
+    `auth_user` t
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      t.name = #{name}
+    </if>
+    <if test=" organizationId != null ">
+      t.organization_id = #{organizationId}
+    </if>
+    <if test=" startTime != null ">
+      <![CDATA[ and t.gmt_create >= #{startTime} ]]>
+    </if>
+    <if test=" endTime != null ">
+      <![CDATA[ and t.gmt_create <= #{endTime} ]]>
+    </if>
+
+  </select>
+
+  <select id="queryUserQueryVOById" resultMap="userQueryVOResultMap" parameterType="java.lang.Long">
+    SELECT
+    t.id,
+    login_name,
+    t.`name`,
+    `password`,
+    sex,
+    age,
+    user_type,
+    t.`status`,
+    organization_id,
+    t.gmt_create,
+    phone,
+    s.`name` AS organizationName,
+    o.id AS roleId,
+    o.`name` AS roleName
+    FROM
+    auth_user t
+    LEFT JOIN auth_user_role r ON t.id = r.user_id
+    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_organization s ON s.id = t.organization_id
+    <where>
+      t.id = #{id}
+    </where>
+  </select>
+
+  <select id="queryUserQueryVOList" resultMap="userQueryVOResultMap"  parameterType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+    SELECT
+    t.id,
+    login_name,
+    t.`name`,
+    `password`,
+    sex,
+    age,
+    user_type,
+    t.`status`,
+    organization_id,
+    t.gmt_create,
+    phone,
+    s.`name` AS organizationName,
+    o.id AS roleId,
+    o.`name` AS roleName
+    FROM
+    auth_user t
+    LEFT JOIN auth_user_role r ON t.id = r.user_id
+    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_organization s ON s.id = t.organization_id
+    <where>
+      1=1
+      <if test=" name != null and name != '' ">
+        t.name = #{name}
+      </if>
+      <if test=" organizationId != null ">
+        t.organization_id = #{organizationId}
+      </if>
+      <if test=" startTime != null ">
+        <![CDATA[ and t.gmt_create >= #{startTime} ]]>
+      </if>
+      <if test=" endTime != null ">
+        <![CDATA[ and t.gmt_create <= #{endTime} ]]>
+      </if>
+    </where>
+    order by t.gmt_create desc
+    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+  </select>
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
     <!--delete from auth_user-->
     <!--where id = #{id,jdbcType=BIGINT}-->

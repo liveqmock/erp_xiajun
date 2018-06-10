@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -173,6 +175,38 @@ public class RoleController extends BaseController {
         roleService.updateRoleResource(id, resourceIds);
         return renderSuccess("授权成功！");
     }
+
+
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(Long id) {
+        JsonResult<AuthRoleDO> result = new JsonResult<>();
+
+        return result.buildData(roleService.selectById(id)).buildIsSuccess(true);
+    }
+
+    @RequestMapping("/queryList")
+    @ResponseBody
+    public Object queryList(RoleQueryVO roleQueryVO) {
+        JsonPageResult<List<AuthRoleDO>> result = roleService.queryRoleList(roleQueryVO);
+
+        return result.buildIsSuccess(true);
+    }
+
+//    /**
+//     * 授权页面页面根据角色查询资源
+//     *
+//     * @param id
+//     * @return
+//     */
+//    @RequestMapping("/queryResourceIdListByRoleId")
+//    @ResponseBody
+//    public Object findResourceByRoleId(Long id) {
+//        JsonResult<List<Long>> result = new JsonResult<List<Long>>();
+//        List<Long> resources = roleService.queryResourceIdListByRoleId(id);
+//        result.buildData(resources);
+//        return result;
+//    }
 
     @RequestMapping("/resCodes")
     @ResponseBody

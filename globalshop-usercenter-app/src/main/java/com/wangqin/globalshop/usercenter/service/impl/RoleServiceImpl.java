@@ -13,6 +13,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleResourceDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.usercenter.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -151,4 +153,23 @@ public class RoleServiceImpl implements IRoleService {
 //        return resourceMap;
 //    }
 
+
+    @Override
+    public JsonPageResult<List<AuthRoleDO>> queryRoleList(RoleQueryVO roleQueryVO) {
+        JsonPageResult<List<AuthRoleDO>> result = new JsonPageResult<>();
+
+        Integer totalCount = roleMapper.queryRolesCount(roleQueryVO);
+
+        if ((null != totalCount) && (0L != totalCount)) {
+            result.buildPage(totalCount, roleQueryVO);
+
+            List<AuthRoleDO> roles = roleMapper.queryRoleQueryList(roleQueryVO);
+            result.setData(roles);
+        } else {
+            List<AuthRoleDO> roles = new ArrayList<>();
+            result.setData(roles);
+        }
+
+        return result;
+    }
 }

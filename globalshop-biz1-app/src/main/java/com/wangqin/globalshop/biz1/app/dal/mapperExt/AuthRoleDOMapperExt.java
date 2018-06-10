@@ -3,6 +3,8 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -32,4 +34,10 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
 
     List<Long>  selectResourceIdListByRoleId( Long id);
 
+    List<Long> queryResourceIdListByRoleId(@Param("id") Long id);
+
+
+    Integer queryRolesCount(RoleQueryVO roleQueryVO);
+
+    List<AuthRoleDO> queryRoleQueryList(RoleQueryVO roleQueryVO);
 }

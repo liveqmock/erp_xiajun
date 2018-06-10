@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
 
 import java.util.List;
@@ -30,5 +32,7 @@ public interface IRoleService {//extends ISuperService<AuthRoleDO>
     AuthRoleDO selectById(Long id);
 
     void updateSelectiveById(AuthRoleDO role);
+
+    JsonPageResult<List<AuthRoleDO>> queryRoleList(RoleQueryVO roleQueryVO);
 
 }

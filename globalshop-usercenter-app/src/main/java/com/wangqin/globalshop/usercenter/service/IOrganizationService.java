@@ -1,7 +1,9 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
+import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 import com.wangqin.globalshop.common.result.Tree;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 
 import java.util.List;
 //import com.wangqin.globalshop.usercenter.app.commons.result.Tree;
@@ -25,6 +27,8 @@ public interface IOrganizationService {//extends ISuperService<AuthOrganizationD
 
     AuthOrganizationDO selectById(Long id);
 
+
+    JsonPageResult<List<AuthOrganizationDO>> queryOrganizationList(OrganizationQueryVO organizationQueryVO);
 //        organizationService.deleteById(id);
 //        organizationService.updateSelectiveById(organization);
 //        organizationService.insert(organization);

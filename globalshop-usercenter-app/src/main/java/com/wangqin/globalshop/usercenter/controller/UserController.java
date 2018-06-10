@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -188,4 +189,18 @@ public class UserController extends BaseController {
         return renderSuccess("删除成功！");
     }
 
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(Long id) {
+        JsonResult<UserQueryVO> result = new JsonResult<>();
+
+        return result.buildData(userService.queryVoById(id)).buildIsSuccess(true);
+    }
+
+    @RequestMapping("/queryList")
+    @ResponseBody
+    public Object queryList(UserQueryVO userQueryVO) {
+        JsonPageResult<List<UserQueryVO>> result = userService.queryUserQueryVOList(userQueryVO);
+        return result.buildIsSuccess(true);
+    }
 }

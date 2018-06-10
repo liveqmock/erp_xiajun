@@ -4,15 +4,17 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -136,4 +138,27 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //    	return userMapper.selectUserIds();
 //    }
 
+    @Override
+    public UserQueryVO queryVoById(Long id) {
+        return userMapper.queryUserQueryVOById(id);
+    }
+
+    @Override
+    public JsonPageResult<List<UserQueryVO>> queryUserQueryVOList(UserQueryVO userQueryVO) {
+        JsonPageResult<List<UserQueryVO>> userResult = new JsonPageResult<>();
+
+        Integer totalCount = userMapper.queryUsersCount(userQueryVO);
+
+        if ((null != totalCount) && (0L != totalCount)) {
+            userResult.buildPage(totalCount, userQueryVO);
+
+            List<UserQueryVO> users = userMapper.queryUserQueryVOList(userQueryVO);
+            userResult.setData(users);
+        } else {
+            List<UserQueryVO> users = new ArrayList<>();
+            userResult.setData(users);
+        }
+
+        return userResult;
+    }
 }

@@ -1,10 +1,13 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.wangqin.globalshop.common.utils.JsonPageResult;
+import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.usercenter.service.IOrganizationService;
+import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -120,5 +123,21 @@ public class OrganizationController extends BaseController {
     public Object delete(Long id) {
         organizationService.deleteById(id);
         return renderSuccess("删除成功！");
+    }
+
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(Long id) {
+        JsonResult<AuthOrganizationDO> result = new JsonResult<>();
+
+        return result.buildData(organizationService.selectById(id)).buildIsSuccess(true);
+    }
+
+    @RequestMapping("/queryList")
+    @ResponseBody
+    public Object queryList(OrganizationQueryVO organizationQueryVO) {
+        JsonPageResult<List<AuthOrganizationDO>> result = organizationService.queryOrganizationList(organizationQueryVO);
+
+        return result.buildIsSuccess(true);
     }
 }

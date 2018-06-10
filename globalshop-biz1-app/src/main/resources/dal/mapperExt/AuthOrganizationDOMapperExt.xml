@@ -39,6 +39,57 @@
     <include refid="Base_Column_List2"/>
     from auth_organization order by seq
   </select>
+
+  <select id="queryOrganizationsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO">
+    SELECT
+    count(1)
+    FROM
+    `auth_organization` T1
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      and T1.name = #{name}
+    </if>
+    <if test=" code != null and code != '' ">
+      and T1.code = #{code}
+    </if>
+    <if test=" pid != null  ">
+      and T1.pid = #{pid}
+    </if>
+    <if test=" startGmt != null ">
+      and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+    </if>
+    <if test=" endGmt != null ">
+      and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+    </if>
+
+  </select>
+
+  <select id="queryOrganizationQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO" parameterType="com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO">
+    SELECT
+    <include refid="Base_Column_List2" />
+    FROM
+    `auth_organization` T1
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      and T1.name = #{name}
+    </if>
+    <if test=" code != null and code != '' ">
+      and T1.code = #{code}
+    </if>
+    <if test=" pid != null  ">
+      and T1.pid = #{pid}
+    </if>
+    <if test=" startGmt != null ">
+      and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+    </if>
+    <if test=" endGmt != null ">
+      and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+    </if>
+    order by T1.gmt_create desc
+    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+  </select>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->
     <!--select -->
     <!--<include refid="Base_Column_List" />-->

@@ -2,6 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthOrganizationDOMapper;
+import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface AuthOrganizationDOMapperExt extends AuthOrganizationDOMapper {
 
     List<AuthOrganizationDO> selectList();
 
+
+    Integer queryOrganizationsCount(OrganizationQueryVO organizationQueryVO);
+
+    List<AuthOrganizationDO> queryOrganizationQueryList(OrganizationQueryVO organizationQueryVO);
 }
