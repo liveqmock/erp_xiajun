@@ -51,12 +51,12 @@ public class JDAccountInfoController {
 
 		// 下面要获取token
 		String url = "https://oauth.jd.com/oauth/token?grant_type=authorization_code&client_id=" + "96C38E0AAAA47520B6211D32A5A14EDE" + "&client_secret=" + "758ae3185aec4822aa5593fda0aa9b98"
-				+ "&scope=read&redirect_uri=" + "http://test.buyer007.cn/jd/accountInfo" + "&code=" + tokenCode + "&state="
+				+ "&scope=read&redirect_uri=http://" + "test.buyer007.cn/jd/accountInfo" + "&code=" + tokenCode + "&state="
 				+ state;
 		URL uri = new URL(url);
 
 
-		insertIntoChannelAccount4Test(url,null,state);
+		//insertIntoChannelAccount4Test(url,null,state);
 
 		HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
 		conn.setRequestProperty("Accept-Charset", "utf-8");
