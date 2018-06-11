@@ -31,3 +31,17 @@ globalshop-common/.classpath
 globalshop-item-app/.classpath
 globalshop-mall/.classpath
 globalshop-web/.classpath
+globalshop-web/src/main/resources/rebel.xml
+globalshop-usercenter-app/src/main/resources/rebel.xml
+globalshop-purchase/src/main/resources/rebel.xml
+globalshop-channel/src/main/resources/rebel.xml
+globalshop-channel-api/src/main/resources/rebel.xml
+globalshop-order-app/src/main/resources/rebel.xml
+globalshop-mall/src/main/resources/rebel.xml
+globalshop-item-app/src/main/resources/rebel.xml
+globalshop-inventory-app/src/main/resources/rebel.xml
+globalshop-common/src/main/resources/rebel.xml
+globalshop-biz1-app/src/main/resources/rebel.xml
+globalshop-biz1-api/src/main/resources/rebel.xml
+rebel.xml
+globalshop-biz1-app/src/main/resources/generatorConfig.xml
