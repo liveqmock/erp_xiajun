@@ -20,10 +20,7 @@
   <select id="list" resultMap="BaseResultMap">
     SELECT 
     <include refid="Base_Column_List"/>
-    FROM dealer D1
-    <where>
-    	D1.is_del = 0
-    </where>
+    FROM dealer
   </select>
   <select id="selectByCode" resultMap="BaseResultMap">
     SELECT 
