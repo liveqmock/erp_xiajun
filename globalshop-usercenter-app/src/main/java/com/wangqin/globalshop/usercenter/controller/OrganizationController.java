@@ -1,14 +1,11 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
+import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
+import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.usercenter.service.IOrganizationService;
-import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @description：部门管理
@@ -94,7 +92,6 @@ public class OrganizationController extends BaseController {
         String org_id=String.format("%1$09d",RandomUtils.nextInt(1000000000));
         authOrganizationDO.setOrgId(org_id);
         authOrganizationDO.setCode(org_id);
-        authOrganizationDO.setCompanyNo("0");
         organizationService.insert(authOrganizationDO);
         return renderSuccess("添加成功！");
     }

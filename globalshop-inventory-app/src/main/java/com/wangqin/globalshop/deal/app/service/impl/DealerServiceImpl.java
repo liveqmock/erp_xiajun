@@ -24,7 +24,6 @@ public class DealerServiceImpl implements IDealerService {
 
     @Override
     public void insert(DealerDO seller) {
-        seller.setCompanyNo("1231");
         seller.init();
         mapper.insertSelective(seller);
     }
@@ -33,4 +32,24 @@ public class DealerServiceImpl implements IDealerService {
     public DealerDO selectByCode(String code) {
         return mapper.selectByCode(code);
     }
+
+	@Override
+	public DealerDO selectByPrimaryKey(Long id) {
+		// TODO Auto-generated method stub
+		return mapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public void deleteByDealer(DealerDO seller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateByDealer(DealerDO seller) {
+		// TODO Auto-generated method stub
+		seller.setIsDel(true);
+		mapper.updateByPrimaryKeySelective(seller);
+		
+	}
 }

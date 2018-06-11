@@ -284,15 +284,24 @@
     <!--<update id="updateUpcForInventoryArea" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">-->
     <!--UPDATE inventory_area SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}-->
     <!--</update>-->
-    <select id="selectByItemCodeAndSkuCodeAndWarehouseNo"
+    <select id="selectByCompanyNoAndSkuCodeAndWarehouseNo"
             resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
         inventory_on_warehouse
-        WHERE item_code = #{itemCode}
+        WHERE company_no = #{companyNo}
         AND sku_code = #{skuCode}
         AND warehouse_no=#{warehouseNo}
+    </select>
+    <select id="selectByCompanyNoAndSkuCode"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        WHERE company_no = #{companyNo}
+        AND sku_code = #{skuCode}
     </select>
     <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
@@ -315,6 +324,9 @@
             </if>
             <if test="positionNo!=null and positionNo!=''">
                 and shelf_no = #{positionNo}
+            </if>
+            <if test="companyNo!=null and companyNo!=''">
+                and company_no = #{companyNo}
             </if>
         </where>
     </select>

@@ -208,6 +208,10 @@
       <include refid="Base_Column_List"/>
       FROM
       warehouse
+    WHERE 1=1
+    <if test="companyNo!=null and companyNo!=''">
+      and company_no=#{companyNo}
+    </if>
   </select>
 
 
