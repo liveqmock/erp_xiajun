@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdShopOauthDOMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,7 +69,10 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 		JdShopOauthDO existShopOauth = jdShopOauthDOMapperExt.searchShopOauth(so);
 
 		if(existShopOauth == null){
-			jdShopOauthDOMapperExt.insert(jdShopOauthDO);
+			jdShopOauthDO.setGmtCreate(new Date());
+			jdShopOauthDO.setIsDel(false);
+			jdShopOauthDO.setVersion(0L);
+			jdShopOauthDOMapperExt.insertSelective(jdShopOauthDO);
 		}else {
 			existShopOauth.setAccessToken(jdShopOauthDO.getAccessToken());
 			existShopOauth.setRefreshToken(jdShopOauthDO.getRefreshToken());

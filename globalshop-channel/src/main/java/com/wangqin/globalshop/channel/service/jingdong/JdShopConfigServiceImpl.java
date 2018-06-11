@@ -98,7 +98,10 @@ public class JdShopConfigServiceImpl implements JdShopConfigService {
 			existShopConfig.setShopCode(shopConde);
 			existShopConfig.setConfigKey(key);
 			existShopConfig.setConfigValue(value);
-			jdShopConfigDOMapperExt.insert(existShopConfig);
+			existShopConfig.setGmtCreate(new Date());
+			existShopConfig.setVersion(0L);
+			existShopConfig.setIsDel(false);
+			jdShopConfigDOMapperExt.insertSelective(existShopConfig);
 		}
 
 	}
