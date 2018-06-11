@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry
+            location="../../mysql-connector-java-5.1.44.jar"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <!--去除注释  -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://47.98.164.133/haidb2new"
+                        userId="root" password="Tfbtech123@">
+        </jdbcConnection>
+        <!--默认false
+           Java type resolver will always use java.math.BigDecimal if the database column is of type DECIMAL or NUMERIC.
+         -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.wangqin.globalshop.biz1.app.dal.dataObject"
+                            targetProject="src/main/java">
+            <!--<property name="rootClass" value="com.wangqin.globalshop.biz1.app.dal.baseModel"/>-->
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="dal/mapper"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.wangqin.globalshop.biz1.app.dal.mapper" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <!--<property name="rootInterface" value="com.wangqin.globalshop.biz1.app.dal.mapper.BaseMapper"/>-->
+        </javaClientGenerator>
+
+        <!--<table tableName="auth_organization"  domainObjectName="AuthOrganizationDO"   enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false">-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="auth_resource" domainObjectName="AuthResourceDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="auth_role" domainObjectName="AuthRoleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="auth_role_resource" domainObjectName="AuthRoleResourceDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="auth_user_role" domainObjectName="AuthUserRoleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer" domainObjectName="BuyerDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer_entry_manifest" domainObjectName="BuyerEntryManifestDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer_receipt" domainObjectName="BuyerReceiptDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer_receipt_detail" domainObjectName="BuyerReceiptDetailDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer_storage" domainObjectName="BuyerStorageDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer_storage_detail" domainObjectName="BuyerStorageDetailDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer_task" domainObjectName="BuyerTaskDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="buyer_task_detail" domainObjectName="BuyerTaskDetailDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="channel" domainObjectName="ChannelDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="channel_account" domainObjectName="ChannelAccountDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="channel_account_config" domainObjectName="ChannelAccountConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="channel_listing_item" domainObjectName="ChannelListingItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="channel_listing_item_sku" domainObjectName="ChannelListingItemSkuDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="channel_sale_price" domainObjectName="ChannelSalePriceDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="channel_session" domainObjectName="ChannelSessionDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="company" domainObjectName="CompanyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="country" domainObjectName="CountryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="dealer" domainObjectName="DealerDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="dealer_type" domainObjectName="DealerTypeDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="inventory" domainObjectName="InventoryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="inventory_booking_record" domainObjectName="InventoryBookingRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="inventory_inout" domainObjectName="InventoryInoutDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="inventory_on_warehouse" domainObjectName="InventoryOnWareHouseDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="inventory_out_manifest" domainObjectName="InventoryOutManifestDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="inventory_out_manifest_detail" domainObjectName="InventoryOutManifestDetailDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+
+        <!--<table tableName="item" domainObjectName="ItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="item_brand" domainObjectName="ItemBrandDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="item_category" domainObjectName="ItemCategoryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="item_category_scale" domainObjectName="ItemCategoryScaleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="item_comment" domainObjectName="ItemCommentDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="item_find" domainObjectName="ItemFindDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="item_sku" domainObjectName="ItemSkuDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="item_sku_scale" domainObjectName="ItemSkuScaleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="logistic_category_mapping" domainObjectName="LogisticCategoryMappingDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="logistic_company" domainObjectName="LogisticCompanyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_customer" domainObjectName="MallCustomerDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_order" domainObjectName="MallOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_return_order" domainObjectName="MallReturnOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_shipping_address" domainObjectName="MallShippingAddressDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_shopping_cart" domainObjectName="MallShippingCartDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_sub_order" domainObjectName="MallSubOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_wx_banner" domainObjectName="MallWxBannerDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_wx_customer_track" domainObjectName="MallWxCustomerTrackDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_wx_item_snapshot" domainObjectName="MallWxItemSnapshotDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_wx_pay_bill" domainObjectName="MallWxPayBillDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="mall_wx_special_page" domainObjectName="MallWxSpecialPageDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="react_version" domainObjectName="ReactVersionDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" />-->
+
+        <!--<table tableName="sequence" domainObjectName="SequenceDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" />-->
+
+        <!--<table tableName="shipping_order" domainObjectName="ShippingOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="shipping_packaging_pattern" domainObjectName="ShippingPackingPatternDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="shipping_packaging_scale" domainObjectName="ShippingPackingScaleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="shipping_track" domainObjectName="ShippingTrackDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="shipping_track_polling_4px" domainObjectName="ShippingTrackPolling4pxDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="shipping_track_polling_yuntong" domainObjectName="ShippingTrackPollingYuntongDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+    </context>
+</generatorConfiguration>

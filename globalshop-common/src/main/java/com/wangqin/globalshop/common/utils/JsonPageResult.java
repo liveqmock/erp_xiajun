@@ -75,14 +75,17 @@ public class JsonPageResult<T> extends JsonResult<T> {
 	}
 
 	// 重写父类方法
+	@Override
 	public JsonPageResult<T> buildData(T data) {
 		this.data = data;
 		return this;
 	}
+	@Override
 	public JsonPageResult<T> buildIsSuccess(boolean success) {
 		this.success = success;
 		return this;
 	}
+	@Override
 	public JsonPageResult<T> buildMsg(String msg) {
 		this.msg = msg;
 		return this;

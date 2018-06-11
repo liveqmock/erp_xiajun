@@ -3,6 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleResourceDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="role_id" property="roleId" jdbcType="BIGINT" />
     <result column="resource_id" property="resourceId" jdbcType="BIGINT" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
@@ -12,7 +13,7 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, role_id, resource_id, is_del, gmt_create, gmt_modify, creator, modifier
+    id, company_no, role_id, resource_id, is_del, gmt_create, gmt_modify, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -28,12 +29,14 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into auth_role_resource (id, role_id, resource_id, 
-      is_del, gmt_create, gmt_modify, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{resourceId,jdbcType=BIGINT}, 
-      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into auth_role_resource (id, company_no, role_id, 
+      resource_id, is_del, gmt_create, 
+      gmt_modify, creator, modifier
+      )
+    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{roleId,jdbcType=BIGINT}, 
+      #{resourceId,jdbcType=BIGINT}, #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -42,6 +45,9 @@
     insert into auth_role_resource
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
+      <if test="companyNo != null" >
+        company_no,
+      </if>
       <if test="roleId != null" >
         role_id,
       </if>
@@ -66,6 +72,9 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="roleId != null" >
         #{roleId,jdbcType=BIGINT},
       </if>
@@ -92,6 +101,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO" >
     update auth_role_resource
     <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="roleId != null" >
         role_id = #{roleId,jdbcType=BIGINT},
       </if>
@@ -118,7 +130,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO" >
     update auth_role_resource
-    set role_id = #{roleId,jdbcType=BIGINT},
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=BIGINT},
       resource_id = #{resourceId,jdbcType=BIGINT},
       is_del = #{isDel,jdbcType=BIT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},

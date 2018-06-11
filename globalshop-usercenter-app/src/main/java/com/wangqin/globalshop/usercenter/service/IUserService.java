@@ -1,8 +1,12 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
+
+import java.util.List;
 
 /**
  *
@@ -26,6 +30,12 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
     void selectDataGrid(PageInfo pageInfo);
 
     void deleteUserById(String userNo);
+
+
+
+    UserQueryVO queryVoById(Long id);
+
+    JsonPageResult<List<UserQueryVO>> queryUserQueryVOList(UserQueryVO userQueryVO);
 
 //    void updateSelectiveById(AuthUserDO user);
     

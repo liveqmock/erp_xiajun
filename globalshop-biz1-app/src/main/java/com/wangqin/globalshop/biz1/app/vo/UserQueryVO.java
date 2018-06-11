@@ -1,31 +1,30 @@
-package com.wangqin.globalshop.usercenter.vo;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+package com.wangqin.globalshop.biz1.app.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.common.utils.JsonUtils;
+
+
+import com.wangqin.globalshop.common.utils.PageQueryVO;
+import java.util.Date;
+import java.util.List;
 
 /**
- * @description：UserVo
- * @author：zhixuan.wang
- * @date：2015/10/1 14:51
+ * 
+ * Title: UserQueryVO.java
+ * Description: 
+ *
+ * @author jc
+ * Apr 17, 2017
+ *
  */
-public class UserVo implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	private Long id;
+public class UserQueryVO extends PageQueryVO {
 
-	private String userNo;
+	private Long id;
 
 	private String loginName;
 
 	private String name;
-
-	private String companyNo;
 
 	@JsonIgnore
 	private String password;
@@ -42,6 +41,8 @@ public class UserVo implements Serializable {
 
 	private Date createTime;
 
+	private Date gmtCreate;
+
 	private String phone;
 
 	private List<AuthRoleDO> rolesList;
@@ -50,8 +51,8 @@ public class UserVo implements Serializable {
 
 	private String roleIds;
 
-	private Date createdateStart;
-	private Date createdateEnd;
+	private Date startTime;
+	private Date endTime;
 
 	public Long getId() {
 		return id;
@@ -59,14 +60,6 @@ public class UserVo implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getUserNo() {
-		return userNo;
-	}
-
-	public void setUserNo(String userNo) {
-		this.userNo = userNo;
 	}
 
 	public String getLoginName() {
@@ -91,14 +84,6 @@ public class UserVo implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password == null ? null : password.trim();
-	}
-
-	public String getCompanyNo() {
-		return companyNo;
-	}
-
-	public void setCompanyNo(String companyNo) {
-		this.companyNo = companyNo;
 	}
 
 	public Integer getSex() {
@@ -149,6 +134,14 @@ public class UserVo implements Serializable {
 		this.createTime = createTime;
 	}
 
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+
 	public String getPhone() {
 		return phone;
 	}
@@ -181,22 +174,22 @@ public class UserVo implements Serializable {
 		this.roleIds = roleIds;
 	}
 
-	public Date getCreatedateStart() {
-		return createdateStart;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setCreatedateStart(Date createdateStart) {
-		this.createdateStart = createdateStart;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
-	public Date getCreatedateEnd() {
-		return createdateEnd;
+	public Date getEndTime() {
+		return endTime;
 	}
 
-	public void setCreatedateEnd(Date createdateEnd) {
-		this.createdateEnd = createdateEnd;
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
-	
+
 	/**
 	 * 比较vo和数据库中的用户是否同一个user，采用id比较
 	 * @param user 用户
@@ -213,8 +206,9 @@ public class UserVo implements Serializable {
 		return id.equals(userId);
 	}
 
-	@Override
-	public String toString() {
-		return JsonUtils.toJson(this);
-	}
+//	@Override
+//	public String toString() {
+//		return JsonUtils.toJson(this);
+//	}
+
 }

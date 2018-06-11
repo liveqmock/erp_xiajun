@@ -10,9 +10,10 @@
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, role_id, is_del, gmt_create, gmt_modify, creator, modifier
+    id, user_id, role_id, is_del, gmt_create, gmt_modify, creator, modifier, company_no
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -30,10 +31,12 @@
     </selectKey>
     insert into auth_user_role (id, user_id, role_id, 
       is_del, gmt_create, gmt_modify, 
-      creator, modifier)
+      creator, modifier, company_no
+      )
     values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, 
       #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
@@ -63,6 +66,9 @@
       <if test="modifier != null" >
         modifier,
       </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{id,jdbcType=BIGINT},
@@ -86,6 +92,9 @@
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -113,6 +122,9 @@
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -124,7 +136,8 @@
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      modifier = #{modifier,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

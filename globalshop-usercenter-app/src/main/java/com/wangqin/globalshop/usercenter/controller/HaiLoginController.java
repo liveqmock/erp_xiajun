@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CookieUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
@@ -40,7 +41,7 @@ public class HaiLoginController extends BaseController {
      * @param password 密码
      * @return {Object}
      */
-    @PostMapping("/haiLogin/login")
+    @PostMapping({"/haiLogin/login","/login"})
 //    @RequestMapping("/login")
     @ResponseBody
     public Object loginPost(HttpServletRequest request, String username, String password, String captcha,
@@ -62,14 +63,13 @@ public class HaiLoginController extends BaseController {
             //只会有一个，多了需要检查数据库约束
             AuthUserDO user = userDOList;
             String sessionId = (String) request.getAttribute(SESSION_ID);
-            if (StringUtils.isNotBlank(sessionId)) {
+            if (StringUtils.isBlank(sessionId)) {
+                    sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+            }
                 loginCache.putEx(sessionId, username, TIMEOUT);
                 loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
                 AppUtil.setLoginUser(username, user.getCompanyNo());
                 return renderSuccess();
-            } else {
-                return renderError("sessionId不存在");
-            }
 
         }
     }

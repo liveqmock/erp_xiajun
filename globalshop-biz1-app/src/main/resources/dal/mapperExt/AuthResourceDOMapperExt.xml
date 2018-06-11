@@ -29,6 +29,58 @@
     <include refid="Base_Column_List2"/>
     from auth_resource
   </select>
+
+  <select id="queryResourcesCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO">
+    SELECT
+    count(1)
+    FROM
+    `resource` T1
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      and T1.name = #{name}
+    </if>
+    <if test=" pid != null ">
+      and T1.pid = #{pid}
+    </if>
+    <if test=" resourceType != null ">
+      and T1.resource_type = #{resourceType}
+    </if>
+    <if test=" startGmt != null ">
+      and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+    </if>
+    <if test=" endGmt != null ">
+      and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+    </if>
+
+  </select>
+
+  <select id="queryResourceQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO">
+    SELECT
+    <include refid="Base_Column_List2" />
+    FROM
+    `resource` T1
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      and T1.name = #{name}
+    </if>
+    <if test=" pid != null ">
+      and T1.pid = #{pid}
+    </if>
+    <if test=" resourceType != null ">
+      and T1.resource_type = #{resourceType}
+    </if>
+    <if test=" startGmt != null ">
+      and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+    </if>
+    <if test=" endGmt != null ">
+      and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+    </if>
+    order by T1.gmt_create desc
+    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+  </select>
+
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->
     <!--select -->
     <!--<include refid="Base_Column_List" />-->

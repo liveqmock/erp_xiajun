@@ -227,9 +227,12 @@ public class PackingController {
 				shippingPackingPatternDO.setName(packageLevel.getName());
 				shippingPackingPatternDO.setNameEn(packageLevel.getPackageEn());
 				shippingPackingPatternDO.setPatternNo(RandomUtils.getTimeRandom());
+				shippingPackingPatternDO.setPackageLevel(packageLevel.getPackageLevel());
+				shippingPackingPatternDO.setWeight(packageLevel.getWeight());
 				//shippingPackingPatternDO.setPackagingScaleNo(packageLevel.getPackagingScaleNo());
 				String packagingScaleNo = shippingPackingScaleService.queryNoById(packageLevel.getPackageId());
 				shippingPackingPatternDO.setPackagingScaleNo(packagingScaleNo);
+				
 				iPackageLevelService.insertPattern(shippingPackingPatternDO);
 			} else {
 				result.buildData("包装规格名称和包装规格类别英文名称不可以为空").buildIsSuccess(false);
