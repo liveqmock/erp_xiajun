@@ -2,11 +2,14 @@ package com.wangqin.globalshop.channel.controller.taobao;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.dal.JingDong.JingdongOauth;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
+import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/jd")
@@ -72,13 +77,26 @@ public class JDAccountInfoController {
 		shopOauth.setGmtModify(new Date());//授权时间
 		shopOauth.setExpiresTime(new Date(jdOauthResponse.getTime() + jdOauthResponse.getExpires_in() * 1000));
 		shopOauth.setRefreshToken(jdOauthResponse.getRefresh_token());
+
+
+		//组装channelShop
+		ChannelShopDO channelShop = new ChannelShopDO();
+		channelShop.setChannelNo(String.valueOf(ChannelType.JingDong.getValue()));
+		channelShop.setCompanyNo(state);
+		channelShop.setShopCode(jdOauthResponse.getUid());
+		channelShop.setShopName(jdOauthResponse.getUser_nick());
+		channelShop.setExpiresTime(shopOauth.getExpiresTime());
+
+
 		try {
 			//创建或更新jd_shop_oauth
 			jdShopOauthService.createOrUpdateShopOauth(ChannelType.JingDong,shopOauth);
 			//创建或更新jd_shop_config
 			jdShopConfigService.initShopConfig(ChannelType.JingDong,shopOauth);
 			//下发创建或更新  channel_shop
-
+			Map<String,String> pram = new HashMap<>();
+			pram.put("channelShop",JSON.toJSONString(channelShop));
+			HttpClientUtil.post("http://test.buyer007.cn/channelshop/addOrupdate",pram);
 		} catch (Exception e) {
 			return result.buildIsSuccess(false).buildMsg("失败,jsonStr:" + jsonStr+"  "+e.getMessage());
 		}
@@ -94,6 +112,8 @@ public class JDAccountInfoController {
 		}
 		return baos.toString(charset);
 	}
+
+
 
 
 
@@ -127,7 +147,27 @@ public class JDAccountInfoController {
 //
 //	}
 //
-	
+	@RequestMapping("/shoptest")
+	public void shoptest(String state, String jsonStr){
+
+		JingdongOauth jdOauthResponse = JSON.parseObject(jsonStr, JingdongOauth.class);
+
+		ChannelShopDO channelShop = new ChannelShopDO();
+		channelShop.setChannelNo(String.valueOf(ChannelType.JingDong.getValue()));
+		channelShop.setCompanyNo(state);
+		channelShop.setShopCode(jdOauthResponse.getUid());
+		channelShop.setShopName(jdOauthResponse.getUser_nick());
+		channelShop.setExpiresTime(new Date());
+
+		Map<String,String> pram = new HashMap<>();
+		pram.put("channelShop",JSON.toJSONString(channelShop));
+		try {
+			JSONObject json = HttpClientUtil.post("http://localhost:8100/channelshop/addOrupdate",pram);
+		}catch (Exception e){
+
+		}
+
+	}
 
 
 }
