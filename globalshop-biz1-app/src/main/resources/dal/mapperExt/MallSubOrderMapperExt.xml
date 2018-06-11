@@ -235,6 +235,9 @@
             <if test="warehouseNo!=null and warehouseNo!=''">
                 and warehouse_no = #{warehouseNo}
             </if>
+            <if test="companyNo!=null and companyNo!=''">
+                and company_no = #{companyNo}
+            </if>
             <if test="logisticType!=null and logisticType!=''">
                 and logistic_type = #{logisticType}
             </if>
