@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.dataVo;
+import com.wangqin.globalshop.common.utils.PageQueryVO;
 
-public class WxPurchaseUserVO extends PageQueryVO{
+public class BuyerVO extends PageQueryVO{
 
 	private Long companyId;
 
