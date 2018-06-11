@@ -85,7 +85,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
     @Override
     public List<MallSubOrderDO> queryErpOrders(MallSubOrderVO erpOrderQueryVO) {
-        return mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
+        erpOrderQueryVO.init();
+            return mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
     }
 
     @Override

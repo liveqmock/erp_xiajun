@@ -55,7 +55,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public int insert(AuthRoleDO role) {
         role.init();
-        role.setIsDel(true);;
+        role.setIsDel(true);
         return roleMapper.insert(role);
 
     }

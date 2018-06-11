@@ -11,6 +11,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
 
     @Override
     public List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
+        inventoryQueryVO.init();
         return mapper.queryInventoryAreas(inventoryQueryVO);
     }
 
@@ -71,14 +73,14 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
 
     //---------------------------------------------------------------new ----------------------------------
     @Override
-    public InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo) {
-        return mapper.selectByItemCodeAndSkuCodeAndWarehouseNo(itemCode, skuCode, warehouseNo);
+    public InventoryOnWareHouseDO selectByCompanyNoAndSkuCodeAndWarehouseNo(String companyNo, String skuCode, String warehouseNo) {
+        return mapper.selectByCompanyNoAndSkuCodeAndWarehouseNo(companyNo, skuCode, warehouseNo);
     }
 
     @Override
     public InventoryOnWareHouseDO insertInventory(InventoryDO inventory,Long inv, String warehouseNo, String positionNo) {
-
-        InventoryOnWareHouseDO warehouse = mapper.selectByItemCodeAndSkuCodeAndWarehouseNo(inventory.getSkuCode(), inventory.getItemCode(), warehouseNo);
+        inventory.initCompany();
+        InventoryOnWareHouseDO warehouse = mapper.selectByCompanyNoAndSkuCodeAndWarehouseNo(inventory.getCompanyNo(),inventory.getSkuCode(), warehouseNo);
         if (warehouse == null) {
             WarehouseDO warehouseDO = warehouseMapper.selectByWarehouseNo(warehouseNo);
             ItemSkuDO itemSkuDO = itemSkuMapper.queryItemBySkuCode(inventory.getSkuCode());
@@ -88,7 +90,6 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
             warehouse.setScale(itemSkuDO.getScale());
             warehouse.setSkuPic(itemSkuDO.getSkuPic());
             warehouse.setShelfNo(positionNo);
-            warehouse.setCompanyNo("InvOnWarehouseServiceImpl1321");
             warehouse.setInventoryOnWarehouseNo("INVONWARE" + System.currentTimeMillis());
             warehouse.setInventory(inv);
             warehouse.setSkuCode(inventory.getSkuCode());
@@ -121,6 +122,12 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
         }
         return map;
     }
+
+    @Override
+    public List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(String companyNo, String skuCode) {
+        return mapper.selectByCompanyNoAndSkuCode(companyNo, skuCode);
+    }
+
     /**Map   Long的意思是需要出的*/
     private Map<InventoryOnWareHouseDO, Long> chooseWarehouse(List<InventoryOnWareHouseDO> list, Long quantity) {
         //        有限找刚好够分配的记录

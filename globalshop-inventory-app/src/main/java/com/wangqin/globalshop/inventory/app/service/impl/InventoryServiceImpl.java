@@ -91,7 +91,7 @@ public class InventoryServiceImpl implements InventoryService {
         inventory.update();
         mapper.updateByPrimaryKeySelective(inventory);
         /**更新相关Inventory*/
-        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseMapperExt.selectByItemCodeAndSkuCodeAndWarehouseNo(orderDO.getItemCode(), orderDO.getSkuCode(), orderDO.getWarehouseNo());
+        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNo(orderDO.getCompanyNo(), orderDO.getSkuCode(), orderDO.getWarehouseNo());
         if (wareHouseDO == null) {
             throw new ErpCommonException("找不到相关库存");
         }
@@ -113,7 +113,6 @@ public class InventoryServiceImpl implements InventoryService {
     public void outbound(List<InventoryDO> list) {
         for (InventoryDO aDo : list) {
             /**1增加库存库存*/
-            aDo.setCompanyNo("InventoryServiceImpl4545");
             aDo.init();
             mapper.insertSelective(aDo);
         }
@@ -321,7 +320,6 @@ public class InventoryServiceImpl implements InventoryService {
             ItemSkuDO itemSkuDO = itemSkuMapper.queryItemBySkuCode(inventoryDO.getSkuCode());
             inventoryDO.setItemName(itemSkuDO.getItemName());
             inventoryDO.setUpc(itemSkuDO.getUpc());
-            inventoryDO.setCompanyNo("InventoryServiceImpl4545");
             inventoryDO.init();
             mapper.insertSelective(inventoryDO);
         } else {

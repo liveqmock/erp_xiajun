@@ -25,4 +25,8 @@ public interface InventoryBookingRecordService {
     void updateSelectiveById(InventoryBookingRecordDO inventoryRecord);
 
     List<InventoryBookingRecordDO> sumInventoryCheckRecord(Long id, String transInv, List<Integer> integers);
+
+    List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(String companyNo, String skuCode);
+
+    List<InventoryOnWareHouseDO> selectByCompanyNo(String s);
 }

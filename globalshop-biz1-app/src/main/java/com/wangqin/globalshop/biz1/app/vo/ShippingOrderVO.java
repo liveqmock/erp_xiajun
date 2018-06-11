@@ -1,12 +1,14 @@
 package com.wangqin.globalshop.biz1.app.vo;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+
 import java.util.Date;
 
 /**
  * @author biscuit
  * @data 2018/05/28
  */
-public class ShippingOrderVO extends PageQueryVO {
+public class ShippingOrderVO extends ShippingOrderDO {
     /**包裹号*/
     private String shippingNo;
 //    /**物流单号*/
@@ -24,6 +26,7 @@ public class ShippingOrderVO extends PageQueryVO {
     //发货时间
     private Date startOrderTime;
     private Date endOrderTime;
+    private String companyNo;
     /**
      * 销售ID
      */
@@ -32,72 +35,63 @@ public class ShippingOrderVO extends PageQueryVO {
     private String customer_no;
 
     private Integer syncSendStatus;
-    public Integer getSyncSendStatus() {
-        return syncSendStatus;
-    }
-    public void setSyncSendStatus(Integer syncSendStatus) {
-        this.syncSendStatus = syncSendStatus;
-    }
+
+    @Override
     public String getShippingNo() {
         return shippingNo;
     }
 
+    @Override
     public void setShippingNo(String shippingNo) {
         this.shippingNo = shippingNo;
     }
 
-//    public String getLogisticNo() {
-//        return logisticNo;
-//    }
-//
-//    public void setLogisticNo(String logisticNo) {
-//        this.logisticNo = logisticNo;
-//    }
-
+    @Override
     public String getLogisticCompany() {
         return logisticCompany;
     }
 
+    @Override
     public void setLogisticCompany(String logisticCompany) {
         this.logisticCompany = logisticCompany;
     }
 
-//    public String getErpNo() {
-//        return erpNo;
-//    }
-//
-//    public void setErpNo(String erpNo) {
-//        this.erpNo = erpNo;
-//    }
-
+    @Override
     public String getReceiver() {
         return receiver;
     }
 
+    @Override
     public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 
+    @Override
     public String getTelephone() {
         return telephone;
     }
 
+    @Override
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
 
+    @Override
     public Integer getStatus() {
         return status;
     }
 
+    @Override
     public void setStatus(Integer status) {
         this.status = status;
     }
 
+    @Override
     public Integer getType() {
         return type;
     }
 
+    @Override
     public void setType(Integer type) {
         this.type = type;
     }
@@ -118,6 +112,16 @@ public class ShippingOrderVO extends PageQueryVO {
         this.endOrderTime = endOrderTime;
     }
 
+    @Override
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    @Override
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo;
+    }
+
     public Integer getSalesId() {
         return salesId;
     }
@@ -134,4 +138,13 @@ public class ShippingOrderVO extends PageQueryVO {
         this.customer_no = customer_no;
     }
 
+    @Override
+    public Integer getSyncSendStatus() {
+        return syncSendStatus;
+    }
+
+    @Override
+    public void setSyncSendStatus(Integer syncSendStatus) {
+        this.syncSendStatus = syncSendStatus;
+    }
 }

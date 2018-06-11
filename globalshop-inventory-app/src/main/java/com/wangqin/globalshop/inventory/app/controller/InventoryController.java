@@ -1,9 +1,11 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -54,6 +56,8 @@ public class InventoryController {
     private ISequenceUtilService sequenceUtilService;
     @Autowired
     private InventoryIMallSubOrderService erpOrderService;
+    @Autowired
+    private MallSubOrderMapperExt mallSubOrderMapper;
 
 
     @RequestMapping("/query")
@@ -226,15 +230,36 @@ public class InventoryController {
     @RequestMapping("/record/queryList")
     @ResponseBody
     public Object queryInventoryRecords(Long id) {
-        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
-        try {
-            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
-            result.setData(inventoryRecordList);
-            result.buildIsSuccess(true);
-        } catch (Exception e) {
-            result.buildIsSuccess(false);
-        }
-        return result;
+        JsonResult<Object> result = new JsonResult<>();
+        MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(id);
+        orderDO.initCompany();
+        List<InventoryOnWareHouseDO> inventoryOnWareHouseDO = inventoryRecordService.selectByCompanyNoAndSkuCode(orderDO.getCompanyNo(), orderDO.getSkuCode());
+        return result.buildIsSuccess(true).buildData(inventoryOnWareHouseDO);
+//        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
+//        try {
+//            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
+//            result.setData(inventoryRecordList);
+//            result.buildIsSuccess(true);
+//        } catch (Exception e) {
+//            result.buildIsSuccess(false);
+//        }
+//        return result;
+    }
+    @RequestMapping("stockWarehouse")
+    @ResponseBody
+    public Object stockWarehouse() {
+        JsonResult<List<InventoryOnWareHouseDO>> result = new JsonResult<>();
+        List<InventoryOnWareHouseDO> inventoryOnWareHouseDO = inventoryRecordService.selectByCompanyNo("3");
+        return result.buildIsSuccess(true).buildData(inventoryOnWareHouseDO);
+//        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
+//        try {
+//            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
+//            result.setData(inventoryRecordList);
+//            result.buildIsSuccess(true);
+//        } catch (Exception e) {
+//            result.buildIsSuccess(false);
+//        }
+//        return result;
     }
 
     /**

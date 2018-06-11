@@ -24,7 +24,6 @@ public class DealerServiceImpl implements IDealerService {
 
     @Override
     public void insert(DealerDO seller) {
-        seller.setCompanyNo("1231");
         seller.init();
         mapper.insertSelective(seller);
     }

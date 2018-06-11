@@ -1,9 +1,12 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.*;
-
-import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.usercenter.service.IUserService;
+import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,11 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.usercenter.service.IUserService;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
-import com.wangqin.globalshop.usercenter.vo.UserVo;
+import java.util.*;
 
 /**
  * @description：用户管理
@@ -98,9 +97,27 @@ public class UserController extends BaseController {
         }
         String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
         userVo.setUserNo(userNo);
-        userVo.setCompanyNo("0");
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.insertByVo(userVo);
+        return renderSuccess("添加成功");
+    }
+    /**
+     * 修改用户信息
+     *
+     * @param userVo
+     * @return
+     */
+    @PostMapping("/update")
+    @ResponseBody
+    public Object update(UserVo userVo) {
+        AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());
+        if (list != null ) {
+            return renderError("用户名已存在!");
+        }
+        String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+        userVo.setUserNo(userNo);
+        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
+        userService.updateByVo(userVo);
         return renderSuccess("添加成功");
     }
 

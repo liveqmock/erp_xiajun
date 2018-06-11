@@ -79,7 +79,7 @@ public class ShippingOrderController {
      * @param shippingOrderDo 前台界面传输过来的
      */
     public Object query(ShippingOrderVO shippingOrderVO) {
-        JsonResult<List<ShippingOrderDO>> result;
+        JsonResult<List<ShippingOrderDO>> result = new JsonResult<>();
         if (shippingOrderVO.getStartOrderTime() != null) {
             String startOrderTimeStr = DateUtil.ymdFormat(shippingOrderVO.getStartOrderTime());
             Date startOrderTime = DateUtil.parseDate(startOrderTimeStr + " 00:00:00");
@@ -104,10 +104,11 @@ public class ShippingOrderController {
         // shippingOrderQueryVO.setOpenId(seller.getOpenId());
         // }
         // }
-        result = shippingOrderService.queryShippingOrders(shippingOrderVO);
+        List<ShippingOrderDO> list = shippingOrderService.queryShippingOrders(shippingOrderVO);
         // if(roles.contains("irhdaili")) {
         // result.setAgentRoler(true);
         // }
+        result.buildData(list);
         result.setSuccess(true);
         return result;
     }

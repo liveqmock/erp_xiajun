@@ -1,14 +1,13 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.utils.PageInfo;
+import com.wangqin.globalshop.usercenter.service.IRoleService;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.utils.PageInfo;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
-import com.wangqin.globalshop.usercenter.service.IRoleService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @description：权限管理
@@ -87,6 +86,27 @@ public class RoleController extends BaseController {
     }
 
     /**
+     * 修改权限
+     *
+     * @param role
+     * @return
+     */
+    @PostMapping("/update")
+    @ResponseBody
+    public Object update(AuthRoleDO role, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+                System.out.println(error.getDefaultMessage());
+            }
+            return null;
+        }
+        role.setRoleId((long)RandomUtils.nextInt(1000000000));
+//        role.setStatus(Byte.valueOf("0"));
+        roleService.updateSelectiveById(role);
+        return renderSuccess("更新成功！");
+    }
+    /**
      * 添加权限
      *
      * @param role
@@ -103,7 +123,6 @@ public class RoleController extends BaseController {
             return null;
         }
         role.setRoleId((long)RandomUtils.nextInt(1000000000));
-        role.setCompanyNo("0");
 //        role.setStatus(Byte.valueOf("0"));
         roleService.insert(role);
         return renderSuccess("添加成功！");

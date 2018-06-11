@@ -23,12 +23,9 @@ public class AppTest
                 MallOrderVO mallOrderVO = new MallOrderVO();
                 mallOrderVO.setActualAmount(32.23);
                 mallOrderVO.setCustomerNo("customerNo");
-                mallOrderVO.setCompanyNo("company");
                 mallOrderVO.setShopCode("shop_code");
                 mallOrderVO.setChannelOrderNo("channel_order_no");
                 mallOrderVO.setOrderTime(new Date());
-                mallOrderVO.setModifier("修改者");
-                mallOrderVO.setCreator("创建者");
                 mallOrderVO.setTotalAmount(999.1);//总金额
                 mallOrderVO.setPayType(1);//支付方式
                 mallOrderVO.setChannelCustomerNo("bunengweikong");

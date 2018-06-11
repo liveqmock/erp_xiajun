@@ -51,6 +51,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
 //        user.setCreateTime(new Date());
         user.init();
+        user.setName(userVo.getName());
         user.setSex(userVo.getSex().byteValue());
         user.setAge(userVo.getAge().byteValue());
         user.setUserType(userVo.getUserType().byteValue());
@@ -81,6 +82,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     @Override
     public void updateByVo(UserVo userVo) {
         AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
+        user.update();
+        user.setSex(userVo.getSex().byteValue());
+        user.setAge(userVo.getAge().byteValue());
+        user.setUserType(userVo.getUserType().byteValue());
+        user.setStatus(userVo.getStatus().byteValue());
+        user.setIsDel(false);
         if (StringUtils.isBlank(user.getPassword())) {
             user.setPassword(null);
         }

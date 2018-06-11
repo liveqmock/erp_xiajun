@@ -79,7 +79,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
     @Override
     public int insert(AuthOrganizationDO organization) {
     	organization.init();
-    	organization.setIsDel(true);;
         return organizationMapper.insert(organization);
     }
 

@@ -94,6 +94,9 @@
             <if test=" syncSendStatus!=null">
                 and    sync_send_status = #{syncSendStatus}
             </if>
+            <if test="companyNo!=null">
+                and company_no = #{companyNo}
+            </if>
         </where>
         order by id desc
 <!--&#45;&#45;         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>-->

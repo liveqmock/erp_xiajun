@@ -34,5 +34,5 @@ public interface IMallOrderService  {
 
     void addMallOrderDO(MallOrderDO mallOrderDO);
 
-    List<MallOrderVO> list();
+    List<MallOrderVO> list(MallOrderVO vo);
 }

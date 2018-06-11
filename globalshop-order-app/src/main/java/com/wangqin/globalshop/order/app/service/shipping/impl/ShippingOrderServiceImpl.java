@@ -61,20 +61,10 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     private OrderISequenceUtilService sequenceUtilService;
 
     @Override
-    public JsonPageResult<List<ShippingOrderDO>> queryShippingOrders(ShippingOrderVO shippingOrderVO) {
-        JsonPageResult<List<ShippingOrderDO>> shippingOrderResult = new JsonPageResult<>();
-        // 1、查询总的记录数量
-        Integer totalCount = shippingOrderMapper.queryShippingOrderCount(shippingOrderVO);
-        // 2、查询分页记录
-        if (totalCount != null && totalCount != 0L) {
-            shippingOrderResult.buildPage(totalCount, shippingOrderVO);
-            List<ShippingOrderDO> shippingOrders = shippingOrderMapper.queryShippingOrders(shippingOrderVO);
-            shippingOrderResult.setData(shippingOrders);
-        } else {
-            List<ShippingOrderDO> shippingOrders = new ArrayList<>();
-            shippingOrderResult.setData(shippingOrders);
-        }
-        return shippingOrderResult;
+    public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO) {
+        shippingOrderVO.init();
+        List<ShippingOrderDO> shippingOrders = shippingOrderMapper.queryShippingOrders(shippingOrderVO);
+        return shippingOrders;
     }
 
     @Override
@@ -485,7 +475,11 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     public void ship(ShippingOrderDO shippingOrder) {
         String shippingNo = "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence();
         StringBuffer erpNos = new StringBuffer();
-        String s = shippingOrder.getMallOrders().replace("&quot;", "\"");
+        String mallOrders = shippingOrder.getMallOrders();
+        if (Util.isEmpty(mallOrders)){
+            throw new ErpCommonException("无法获取子订单id");
+        }
+        String s = mallOrders.replace("&quot;", "\"");
         List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
         });
         List<MallSubOrderDO> list = mallSubOrderService.selectBatchIds(erpOrderIdList);
@@ -522,7 +516,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 inventoryService.ship(erpOrder);
                 /**拼接erp*/
                 erpNos.append(erpOrder.getShopCode()).append(",");
-            }else {
+            } else {
                 throw new ErpCommonException("不能重复发货");
             }
             mallSubOrderMapper.updateByPrimaryKeySelective(erpOrder);
@@ -551,7 +545,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         shippingOrder.setStatus(SHIP_INIT);
         shippingOrder.setShippingNo(erpStr);
         shippingOrder.setShippingNo(shippingNo);
-        shippingOrder.setTransferStatus( TransferStatus.UNPREDICT.getValue());
+        shippingOrder.setTransferStatus(TransferStatus.UNPREDICT.getValue());
         shippingOrderMapper.insertSelective(shippingOrder);
 
 //
@@ -574,14 +568,12 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //        }
 
 
-
-
     }
 
     private void updateMallOrderStats(MallOrderDO orderDO) {
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
         for (MallSubOrderDO aDo : list) {
-            if (ORDER_SATUTS_SENT .equals(aDo.getStatus())){
+            if (ORDER_SATUTS_SENT.equals(aDo.getStatus())) {
                 orderDO.setStatus(ORDER_SATUTS_PART_SENT);
                 return;
             }
