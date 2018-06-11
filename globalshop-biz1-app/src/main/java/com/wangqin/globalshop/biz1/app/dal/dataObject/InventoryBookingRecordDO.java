@@ -27,7 +27,7 @@ public class InventoryBookingRecordDO extends BaseModel {
 
     private String inventoryOnWarehouseNo;
 
-    private String warehouseNo;
+    private Long warehouseId;
 
     private String positionNo;
 
@@ -49,14 +49,12 @@ public class InventoryBookingRecordDO extends BaseModel {
         this.id = id;
     }
 
-    @Override
     public String getCompanyNo() {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo;
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getOrderNo() {
@@ -64,7 +62,7 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
     public String getSubOrderNo() {
@@ -72,7 +70,7 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setSubOrderNo(String subOrderNo) {
-        this.subOrderNo = subOrderNo;
+        this.subOrderNo = subOrderNo == null ? null : subOrderNo.trim();
     }
 
     public String getItemCode() {
@@ -80,7 +78,7 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
+        this.itemCode = itemCode == null ? null : itemCode.trim();
     }
 
     public String getSkuCode() {
@@ -88,7 +86,7 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setSkuCode(String skuCode) {
-        this.skuCode = skuCode;
+        this.skuCode = skuCode == null ? null : skuCode.trim();
     }
 
     public Long getQuantity() {
@@ -120,7 +118,7 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setInventoryType(String inventoryType) {
-        this.inventoryType = inventoryType;
+        this.inventoryType = inventoryType == null ? null : inventoryType.trim();
     }
 
     public String getOperatorType() {
@@ -128,7 +126,7 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setOperatorType(String operatorType) {
-        this.operatorType = operatorType;
+        this.operatorType = operatorType == null ? null : operatorType.trim();
     }
 
     public String getInventoryOnWarehouseNo() {
@@ -136,15 +134,15 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
-        this.inventoryOnWarehouseNo = inventoryOnWarehouseNo;
+        this.inventoryOnWarehouseNo = inventoryOnWarehouseNo == null ? null : inventoryOnWarehouseNo.trim();
     }
 
-    public String getWarehouseNo() {
-        return warehouseNo;
+    public Long getWarehouseId() {
+        return warehouseId;
     }
 
-    public void setWarehouseNo(String warehouseNo) {
-        this.warehouseNo = warehouseNo;
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public String getPositionNo() {
@@ -152,55 +150,46 @@ public class InventoryBookingRecordDO extends BaseModel {
     }
 
     public void setPositionNo(String positionNo) {
-        this.positionNo = positionNo;
+        this.positionNo = positionNo == null ? null : positionNo.trim();
     }
 
-    @Override
     public Date getGmtCreate() {
         return gmtCreate;
     }
 
-    @Override
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
     }
 
-    @Override
     public Date getGmtModify() {
         return gmtModify;
     }
 
-    @Override
     public void setGmtModify(Date gmtModify) {
         this.gmtModify = gmtModify;
     }
 
+    public Boolean getIsDel() {
+        return isDel;
+    }
 
-    @Override
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
+    }
+
     public String getCreator() {
         return creator;
     }
 
-    @Override
     public void setCreator(String creator) {
-        this.creator = creator;
+        this.creator = creator == null ? null : creator.trim();
     }
 
-    @Override
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
-        this.modifier = modifier;
-    }
-    @Override
-    public Boolean getIsDel() {
-        return isDel;
-    }
-    @Override
-    public void setIsDel(Boolean del) {
-        isDel = del;
+        this.modifier = modifier == null ? null : modifier.trim();
     }
 }

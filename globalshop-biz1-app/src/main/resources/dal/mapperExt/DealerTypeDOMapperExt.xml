@@ -18,9 +18,6 @@
   <select id="list" resultMap="BaseResultMap" >
     SELECT
     <include refid="Base_Column_List"/>
-    FROM dealer_type D1
-    <where>
-    	D1.is_del = 0
-    </where>
+    FROM dealer_type
 </select>
 </mapper>

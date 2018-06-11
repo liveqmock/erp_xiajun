@@ -2,9 +2,7 @@ package com.wangqin.globalshop.biz1.app.constants.enums;
 
 public enum AccountConfigKey {
 		
-	LAST_TRADES_GET_TIME(1,"LAST_TRADES_GET_TIME"),//上一次订单同步时间
-
-	LAST_ITEM_GET_TIME(2,"LAST_ITEM_GET_TIME");//上一次订单同步时间
+	LAST_TRADES_GET_TIME(1,"LAST_TRADES_GET_TIME");//上一次订单同步时间	
 	
 	 private int code;
 	 private String description;
