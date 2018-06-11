@@ -21,4 +21,12 @@ public interface IDealerService{
     void insert(DealerDO seller);
 
     DealerDO selectByCode(String dealerCode);
+    
+    
+    //软删除销售
+    void deleteByDealer(DealerDO seller);
+    
+    DealerDO selectByPrimaryKey(Long id);
+    
+    void updateByDealer(DealerDO seller);
 }

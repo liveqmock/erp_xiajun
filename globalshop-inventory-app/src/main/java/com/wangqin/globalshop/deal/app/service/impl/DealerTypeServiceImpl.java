@@ -18,6 +18,11 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
     @Autowired
     private DealerTypeDOMapperExt mapper;
     @Override
+	public DealerTypeDO selectByPrimaryKey(Long id) {
+		// TODO Auto-generated method stub
+		return mapper.selectByPrimaryKey(id);
+	}
+    @Override
     public List<DealerTypeDO> list() {
         return mapper.list();
     }
@@ -27,4 +32,25 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
         sellerType.init();
         mapper.insertSelective(sellerType);
     }
+
+	@Override
+	public DealerTypeDO findDealerType(Long id) {
+		// TODO Auto-generated method stub
+		return mapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public void update(DealerTypeDO dealerType) {
+		// TODO Auto-generated method stub
+		mapper.updateByPrimaryKeySelective(dealerType);
+	}
+
+	@Override
+	public void deleteById(DealerTypeDO dealerType) {
+		// TODO Auto-generated method stub
+		dealerType.setIsDel(true);
+		mapper.updateByPrimaryKeySelective(dealerType);
+	}
+
+	
 }
