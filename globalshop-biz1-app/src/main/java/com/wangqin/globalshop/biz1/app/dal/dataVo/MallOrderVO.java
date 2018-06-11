@@ -39,5 +39,4 @@ public class MallOrderVO extends MallOrderDO {
     private String creator;
     private String remark;
     private String addressDetail;
-
 }

@@ -1,14 +1,12 @@
 package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-
 /**
  * 库存分页查询参数
  * 
  * @author liuhui
  *
  */
-public class InventoryQueryVO extends InventoryDO {
+public class InventoryQueryVO  {
 	/**配合前端*/
 	private Long warehouseid;
 	/**配合前端*/

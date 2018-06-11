@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryBookingRecordDOMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,8 +15,4 @@ public interface InventoryBookingRecordDOMapperExt extends InventoryBookingRecor
     List<InventoryBookingRecordDO> sumBookedByInventoryType(String orderNo);
 
     List<InventoryBookingRecordDO> queryByOnWarehouseNoAndInventoryType(String inventoryOnWarehouseNo, String inventoryType);
-
-    List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(@Param("companyNo")String companyNo, @Param("skuCode")String skuCode);
-
-    List<InventoryOnWareHouseDO> selectByCompanyNo(String companyNo);
 }
