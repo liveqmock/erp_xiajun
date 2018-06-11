@@ -1,9 +1,13 @@
 package com.wangqin.globalshop.channel.controller.taobao;
 
+import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.channel.service.channelAccountConfig.IChannelAccountConfigService;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
+import com.wangqin.globalshop.channel.dal.JingDong.JingdongOauth;
+import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
+import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +24,10 @@ import java.util.Date;
 public class JDAccountInfoController {
 			
 	@Autowired
-	IChannelAccountService channelAccountService;
+	private JdShopOauthService jdShopOauthService;
 
 	@Autowired
-	IChannelAccountConfigService channelAccountConfigService;
+	private JdShopConfigService jdShopConfigService;
 						
 
 
@@ -47,9 +51,13 @@ public class JDAccountInfoController {
 
 		// 下面要获取token
 		String url = "https://oauth.jd.com/oauth/token?grant_type=authorization_code&client_id=" + "96C38E0AAAA47520B6211D32A5A14EDE" + "&client_secret=" + "758ae3185aec4822aa5593fda0aa9b98"
-				+ "&scope=read&redirect_uri=http://" + "http://test.buyer007.cn/jd/accountInfo" + "&code=" + tokenCode + "&state="
+				+ "&scope=read&redirect_uri=" + "http://test.buyer007.cn/jd/accountInfo" + "&code=" + tokenCode + "&state="
 				+ state;
 		URL uri = new URL(url);
+
+
+		insertIntoChannelAccount4Test(url,null,state);
+
 		HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
 		conn.setRequestProperty("Accept-Charset", "utf-8");
 		conn.setRequestMethod("POST");
@@ -58,30 +66,34 @@ public class JDAccountInfoController {
 		String jsonStr = inputStream2String(is, conn.getContentType());
 		System.out.println("jsonStr");
 
+		insertIntoChannelAccount4Test(url,jsonStr,state);
 
-		ChannelAccountDO channelAccount = new ChannelAccountDO();
 
-		//渠道信息
-		channelAccount.setChannelId(Long.valueOf(ChannelType.JingDong.getValue()));
-		channelAccount.setChannelNo(ChannelType.JingDong.getValue()+"");
-		channelAccount.setType(ChannelType.JingDong.getValue());
-		channelAccount.setChannelName(ChannelType.JingDong.getName());
 
-		//company信息，所属域
-		channelAccount.setCompanyNo(state);
+		JingdongOauth jdOauthResponse = JSON.parseObject(jsonStr, JingdongOauth.class);
 
-		//授权信息
-		channelAccount.setShopCode(code);
-		channelAccount.setShopName(code);
-		channelAccount.setCookie(jsonStr);
+		JdShopOauthDO shopOauth = new JdShopOauthDO();
 
-		//其他信息配置
-		channelAccount.setStatus(0);//0正常，1关闭
-		channelAccount.setIsDel(false);
-		channelAccount.setCreator("-1");
-		channelAccount.setGmtCreate(new Date());
+		//shopOauth.setGmtCreate(new Date());
+		shopOauth.setChannelNo(String.valueOf(ChannelType.JingDong.getValue()));
+		shopOauth.setCompanyNo(state);
 
-		channelAccountService.insert(channelAccount);
+		shopOauth.setShopCode(jdOauthResponse.getUid());
+		shopOauth.setAccessToken(jdOauthResponse.getAccess_token());
+
+		shopOauth.setGmtModify(new Date());//授权时间
+		shopOauth.setExpiresTime(new Date(jdOauthResponse.getTime() + jdOauthResponse.getExpires_in() * 1000));
+		shopOauth.setRefreshToken(jdOauthResponse.getRefresh_token());
+
+
+		//创建或更新jd_shop_oauth
+		jdShopOauthService.createOrUpdateShopOauth(ChannelType.JingDong,shopOauth);
+
+		//创建或更新jd_shop_config
+		jdShopConfigService.initShopConfig(ChannelType.JingDong,shopOauth);
+
+		//下发创建或更新  channel_shop
+
 
 
 	}
@@ -97,9 +109,38 @@ public class JDAccountInfoController {
 	}
 
 
-	
 
-	
+	@Autowired
+	private ChannelAccountDOMapperExt channelAccountDOMapper;
+
+
+	private void insertIntoChannelAccount4Test(String url, String  jsonStr, String state){
+
+		ChannelAccountDO channelAccount = new ChannelAccountDO();
+
+		//渠道信息
+		channelAccount.setChannelId(Long.valueOf(ChannelType.JingDong.getValue()));
+		channelAccount.setChannelNo(ChannelType.JingDong.getValue()+"");
+		channelAccount.setType(ChannelType.JingDong.getValue());
+		channelAccount.setChannelName(ChannelType.JingDong.getName());
+
+		//company信息，所属域
+		channelAccount.setCompanyNo(state);
+
+		//授权信息
+		channelAccount.setShopCode(state);
+		channelAccount.setShopName(url);
+		channelAccount.setCookie(jsonStr);
+
+		//其他信息配置
+		channelAccount.setStatus(0);//0正常，1关闭
+		channelAccount.setIsDel(false);
+		channelAccount.setCreator("-1");
+		channelAccount.setGmtCreate(new Date());
+
+		channelAccountDOMapper.insert(channelAccount);
+
+	}
 	
 	
 

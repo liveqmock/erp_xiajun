@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdShopOauthDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="version" property="version" jdbcType="BIGINT" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+    <result column="expires_time" property="expiresTime" jdbcType="TIMESTAMP" />
+    <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR" />
+    <result column="refresh_exprires_time" property="refreshExpriresTime" jdbcType="TIMESTAMP" />
+    <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+    <result column="appsecret_key" property="appsecretKey" jdbcType="VARCHAR" />
+    <result column="access_key" property="accessKey" jdbcType="VARCHAR" />
+    <result column="access_value" property="accessValue" jdbcType="VARCHAR" />
+    <result column="server_url" property="serverUrl" jdbcType="VARCHAR" />
+    <result column="token_url" property="tokenUrl" jdbcType="VARCHAR" />
+    <result column="open" property="open" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, gmt_create, gmt_modify, version, is_del, creator, modifier, channel_no, company_no, 
+    shop_code, access_token, expires_time, refresh_token, refresh_exprires_time, app_key, 
+    appsecret_key, access_key, access_value, server_url, token_url, open
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from jd_shop_oauth
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from jd_shop_oauth
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_shop_oauth (id, gmt_create, gmt_modify, 
+      version, is_del, creator, 
+      modifier, channel_no, company_no, 
+      shop_code, access_token, expires_time, 
+      refresh_token, refresh_exprires_time, app_key, 
+      appsecret_key, access_key, access_value, 
+      server_url, token_url, open
+      )
+    values (#{id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=BIGINT}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+      #{shopCode,jdbcType=VARCHAR}, #{accessToken,jdbcType=VARCHAR}, #{expiresTime,jdbcType=TIMESTAMP}, 
+      #{refreshToken,jdbcType=VARCHAR}, #{refreshExpriresTime,jdbcType=TIMESTAMP}, #{appKey,jdbcType=VARCHAR}, 
+      #{appsecretKey,jdbcType=VARCHAR}, #{accessKey,jdbcType=VARCHAR}, #{accessValue,jdbcType=VARCHAR}, 
+      #{serverUrl,jdbcType=VARCHAR}, #{tokenUrl,jdbcType=VARCHAR}, #{open,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_shop_oauth
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="accessToken != null" >
+        access_token,
+      </if>
+      <if test="expiresTime != null" >
+        expires_time,
+      </if>
+      <if test="refreshToken != null" >
+        refresh_token,
+      </if>
+      <if test="refreshExpriresTime != null" >
+        refresh_exprires_time,
+      </if>
+      <if test="appKey != null" >
+        app_key,
+      </if>
+      <if test="appsecretKey != null" >
+        appsecret_key,
+      </if>
+      <if test="accessKey != null" >
+        access_key,
+      </if>
+      <if test="accessValue != null" >
+        access_value,
+      </if>
+      <if test="serverUrl != null" >
+        server_url,
+      </if>
+      <if test="tokenUrl != null" >
+        token_url,
+      </if>
+      <if test="open != null" >
+        open,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=BIGINT},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null" >
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresTime != null" >
+        #{expiresTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshToken != null" >
+        #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshExpriresTime != null" >
+        #{refreshExpriresTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appKey != null" >
+        #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appsecretKey != null" >
+        #{appsecretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="accessKey != null" >
+        #{accessKey,jdbcType=VARCHAR},
+      </if>
+      <if test="accessValue != null" >
+        #{accessValue,jdbcType=VARCHAR},
+      </if>
+      <if test="serverUrl != null" >
+        #{serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenUrl != null" >
+        #{tokenUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="open != null" >
+        #{open,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO" >
+    update jd_shop_oauth
+    <set >
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=BIGINT},
+      </if>
+      <if test="isDel != null" >
+        is_del = #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null" >
+        access_token = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresTime != null" >
+        expires_time = #{expiresTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshToken != null" >
+        refresh_token = #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshExpriresTime != null" >
+        refresh_exprires_time = #{refreshExpriresTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appKey != null" >
+        app_key = #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appsecretKey != null" >
+        appsecret_key = #{appsecretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="accessKey != null" >
+        access_key = #{accessKey,jdbcType=VARCHAR},
+      </if>
+      <if test="accessValue != null" >
+        access_value = #{accessValue,jdbcType=VARCHAR},
+      </if>
+      <if test="serverUrl != null" >
+        server_url = #{serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenUrl != null" >
+        token_url = #{tokenUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="open != null" >
+        open = #{open,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO" >
+    update jd_shop_oauth
+    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=BIGINT},
+      is_del = #{isDel,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      access_token = #{accessToken,jdbcType=VARCHAR},
+      expires_time = #{expiresTime,jdbcType=TIMESTAMP},
+      refresh_token = #{refreshToken,jdbcType=VARCHAR},
+      refresh_exprires_time = #{refreshExpriresTime,jdbcType=TIMESTAMP},
+      app_key = #{appKey,jdbcType=VARCHAR},
+      appsecret_key = #{appsecretKey,jdbcType=VARCHAR},
+      access_key = #{accessKey,jdbcType=VARCHAR},
+      access_value = #{accessValue,jdbcType=VARCHAR},
+      server_url = #{serverUrl,jdbcType=VARCHAR},
+      token_url = #{tokenUrl,jdbcType=VARCHAR},
+      open = #{open,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
