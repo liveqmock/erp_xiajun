@@ -8,8 +8,10 @@ package com.wangqin.globalshop.biz1.app.constants.enums;
 public enum ChannelType {
 	YouZan(1,"有赞"),
 	HaiHu(2,"海狐海淘"),
-	TaoBao(3,"淘宝");
-	
+	TaoBao(3,"淘宝"),
+
+	JingDong(4,"京东");
+
 	private int value;
 	private String name;
 	

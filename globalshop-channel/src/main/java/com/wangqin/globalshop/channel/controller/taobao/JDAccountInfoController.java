@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +28,7 @@ public class JDAccountInfoController {
 
 
 	@RequestMapping("/accountInfo")
-	public void accountInfo(String code, String state) throws IOException, ServletException {
+	public void accountInfo(String code, String state) throws IOException{
 
 		// 用来获取token的CODE
 		String tokenCode = code;
@@ -48,7 +47,7 @@ public class JDAccountInfoController {
 
 		// 下面要获取token
 		String url = "https://oauth.jd.com/oauth/token?grant_type=authorization_code&client_id=" + "96C38E0AAAA47520B6211D32A5A14EDE" + "&client_secret=" + "758ae3185aec4822aa5593fda0aa9b98"
-				+ "&scope=read&redirect_uri=http://" + "https://erp.buyer007.cn" + "&code=" + tokenCode + "&state="
+				+ "&scope=read&redirect_uri=http://" + "http://test.buyer007.cn/jd/accountInfo" + "&code=" + tokenCode + "&state="
 				+ state;
 		URL uri = new URL(url);
 		HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
@@ -63,10 +62,10 @@ public class JDAccountInfoController {
 		ChannelAccountDO channelAccount = new ChannelAccountDO();
 
 		//渠道信息
-		channelAccount.setChannelId(Long.valueOf(ChannelType.TaoBao.getValue()));
-		channelAccount.setChannelNo(ChannelType.TaoBao.getValue()+"");
-		channelAccount.setType(ChannelType.TaoBao.getValue());
-		channelAccount.setChannelName(ChannelType.TaoBao.getName());
+		channelAccount.setChannelId(Long.valueOf(ChannelType.JingDong.getValue()));
+		channelAccount.setChannelNo(ChannelType.JingDong.getValue()+"");
+		channelAccount.setType(ChannelType.JingDong.getValue());
+		channelAccount.setChannelName(ChannelType.JingDong.getName());
 
 		//company信息，所属域
 		channelAccount.setCompanyNo(state);
