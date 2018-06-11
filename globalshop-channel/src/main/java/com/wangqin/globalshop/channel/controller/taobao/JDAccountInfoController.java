@@ -134,9 +134,7 @@ public class JDAccountInfoController {
 
 		//其他信息配置
 		channelAccount.setStatus(0);//0正常，1关闭
-		channelAccount.setIsDel(false);
-		channelAccount.setCreator("-1");
-		channelAccount.setGmtCreate(new Date());
+		channelAccount.init();
 
 		channelAccountDOMapper.insert(channelAccount);
 
