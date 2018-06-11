@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <classPathEntry
-            location="../../mysql-connector-java-5.1.44.jar"/>
+            location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
 
@@ -341,6 +341,43 @@
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
         <!--<generatedKey column="id" sqlStatement="MySql"/>-->
         <!--</table>-->
+
+        <!--<table tableName="channel_shop" domainObjectName="ChannelShopDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="jd_item" domainObjectName="JdItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+
+        <!--<table tableName="jd_item_oprerate" domainObjectName="JdItemOperateDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="jd_logistic" domainObjectName="JdLogisticDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="jd_order" domainObjectName="JdOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="jd_shop_oauth" domainObjectName="JdShopOauthDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="jd_shop_config" domainObjectName="JdShopConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--</table>-->
+
 
     </context>
 </generatorConfiguration>

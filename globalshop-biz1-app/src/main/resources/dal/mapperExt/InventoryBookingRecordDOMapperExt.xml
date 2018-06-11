@@ -1,50 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
-    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
-    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
-    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-    <result column="quantity" property="quantity" jdbcType="BIGINT" />
-    <result column="booked_quantity" property="bookedQuantity" jdbcType="BIGINT" />
-    <result column="inventory" property="inventory" jdbcType="BIGINT" />
-    <result column="inventory_type" property="inventoryType" jdbcType="VARCHAR" />
-    <result column="operator_type" property="operatorType" jdbcType="VARCHAR" />
-    <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
-    <result column="position_no" property="positionNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR"/>
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
+        <result column="quantity" property="quantity" jdbcType="BIGINT"/>
+        <result column="booked_quantity" property="bookedQuantity" jdbcType="BIGINT"/>
+        <result column="inventory" property="inventory" jdbcType="BIGINT"/>
+        <result column="inventory_type" property="inventoryType" jdbcType="VARCHAR"/>
+        <result column="operator_type" property="operatorType" jdbcType="VARCHAR"/>
+        <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT"/>
+        <result column="position_no" property="positionNo" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, company_no, order_no, sub_order_no, item_code, sku_code, quantity, booked_quantity, 
     inventory, inventory_type, operator_type,  warehouse_id, position_no,
     gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
-  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    SELECT
-    <include refid="Base_Column_List" />
-    FROM inventory_booking_record
-    WHERE order_no = #{orderNo}
-  </select>
+    <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_booking_record
+        WHERE order_no = #{orderNo}
+    </select>
 
-  <select id="selectBySubOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="selectBySubOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_booking_record
+        WHERE sub_order_no = #{subOrderNo}
+    </select>
+    <select id="queryByOnWarehouseNoAndInventoryType" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_booking_record
+        WHERE inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
+        AND inventory_type = #{inventoryType}
+    </select>
+    <select id="selectByCompanyNoAndSkuCode" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO" parameterType="java.lang.String">
     SELECT
-    <include refid="Base_Column_List" />
-    FROM inventory_booking_record
-    WHERE sub_order_no = #{subOrderNo}
+     DISTINCT
+         t2.warehouse_no warehouseNo,
+         t1.order_no orderNo,
+         t1.sub_order_no subOrderNo,
+         t1.sku_code skuCode,
+         t3.name warehouseName,
+         t1.quantity quantity,
+         t2.inventory inventory,
+         t2.shelf_no positionNo
+        FROM mall_sub_order t1, inventory_on_warehouse t2,warehouse t3
+                WHERE t1.company_no = t2.company_no AND t3.warehouse_no=t2.warehouse_no
+                AND t1.sku_code=#{skuCode}
+                AND  t1.company_no=#{companyNo}
   </select>
-  <select id="queryByOnWarehouseNoAndInventoryType" resultMap="BaseResultMap"  >
-    SELECT
-    <include refid="Base_Column_List" />
-    FROM inventory_booking_record
-    WHERE inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
-    AND  inventory_type = #{inventoryType}
+    <select id="selectByCompanyNo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO" parameterType="java.lang.String">
+        SELECT
+                  DISTINCT
+                  t1.item_name itemName,
+                  t1.sku_pic skuPic,
+                  t1.upc upc,
+                  t2.warehouse_no warehouseNo,
+                  t1.order_no orderNo,
+                  t1.sub_order_no subOrderNo,
+                  t1.sku_code skuCode,
+                  t3.name warehouseName,
+                  t1.quantity quantity,
+                  t2.inventory inventory,
+                  t2.shelf_no positionNo
+                FROM mall_sub_order t1, inventory_on_warehouse t2,warehouse t3
+                WHERE t1.company_no = t2.company_no AND t3.warehouse_no=t2.warehouse_no
+                AND  t1.company_no=#{companyNo}
   </select>
 
 </mapper>
