@@ -76,7 +76,7 @@
     
     <sql id="Base_Column_List" >
         T1.id,  T1.sku_code,  T1.item_code,  T1.item_name,  T1.company_no,  T1.category_code, 
-         T1.category_name,  T1.upc,T1.saleable,  T1.purchase_price,  T1.freight, 
+         T1.category_name,  T1.upc, T1.saleable,  T1.purchase_price,  T1.freight, 
           T1.discount,  T1.logistic_type,  T1.cost_price,  T1.brand_name,
          T1.weight,  T1.sku_pic,  T1.package_code,  T1.package_name,  T1.package_en, 
          T1.package_weight,  T1.package_level_id,
@@ -130,7 +130,7 @@
         SELECT
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
-        	 T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,
+        	 T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,T1.sku_code AS skuCode,
              inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
 			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
