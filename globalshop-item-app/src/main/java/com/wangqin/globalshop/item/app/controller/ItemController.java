@@ -65,7 +65,7 @@ import net.sf.json.JSONObject;
  */
 @Controller
 @RequestMapping("/item")
-@Authenticated
+//@Authenticated
 public class ItemController  {
 
 	@Autowired
@@ -115,7 +115,8 @@ public class ItemController  {
 	@RequestMapping("/add")
 	@ResponseBody
 	public Object add(ItemQueryVO item) {
-		item.setCompanyNo("12");
+		//item.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		item.setCompanyNo("1");
 		//logger.info("add item start");
 		JsonResult<ItemDO> result = new JsonResult<>();
 		if (item.getId() == null) {
@@ -766,6 +767,7 @@ public class ItemController  {
 	public Object queryItemList(ItemQueryVO itemQueryVO) {
 		//logger.info("itemsPush start");
 		System.out.println("testa");
+		itemQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
 		EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
 		jsonResult.setTotal(result.getTotalCount());
