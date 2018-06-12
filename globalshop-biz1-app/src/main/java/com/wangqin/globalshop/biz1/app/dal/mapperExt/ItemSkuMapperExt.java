@@ -69,4 +69,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	List<ItemSkuDO> querySaleableSkus();
 	
 	Integer queryItemCountByUpc(String upc);
+	
+	List<ItemSkuDO> querySkuListByItemCode(String itemCode);
 }
