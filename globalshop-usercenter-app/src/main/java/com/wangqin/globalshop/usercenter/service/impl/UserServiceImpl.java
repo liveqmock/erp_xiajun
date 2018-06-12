@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
@@ -20,7 +21,9 @@ import java.util.List;
 
 
 /**
+ *
  * AuthUserDO 表数据服务层接口实现类
+ *
  */
 @Service
 public class UserServiceImpl implements IUserService { //extends SuperServiceImpl<AuthUserDOMapperExt, AuthUserDO>
@@ -30,7 +33,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Autowired
     private AuthUserRoleDOMapperExt userRoleMapper;
-
+    
     @Override
     public AuthUserDO selectByLoginName(String userNo) {
 //        AuthUserDO user = new AuthUserDO();
@@ -47,26 +50,31 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //    @Transactional
     public void insertByVo(UserVo userVo) {
         AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
-//        user.setCreateTime(new Date());
         user.init();
         user.setName(userVo.getName());
         user.setSex(userVo.getSex().byteValue());
         user.setAge(userVo.getAge().byteValue());
         user.setUserType(userVo.getUserType().byteValue());
         user.setStatus(userVo.getStatus().byteValue());
-        userMapper.insertSelective(user);
+        user.setIsDel(false);
+        userMapper.insertByNoId(user);
 
+    }
+    
+    @Override
+	public void insertByUserVo(UserVo userVo) {
+		// TODO Auto-generated method stub
+		AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
         Long id = user.getId();
         String[] roles = userVo.getRoleIds().split(",");
         AuthUserRoleDO userRole = new AuthUserRoleDO();
-        userRole.init();
         for (String string : roles) {
-            userRole.setCompanyNo(userVo.getCompanyNo());
+            userRole.init();
             userRole.setUserId(id);
             userRole.setRoleId(Long.valueOf(string));
-            userRoleMapper.insertSelective(userRole);
+            userRoleMapper.insertByNoId(userRole);
         }
-    }
+	}
 
     @Override
     public UserVo selectVoById(String loginName) {
@@ -88,7 +96,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
             user.setPassword(null);
         }
         userMapper.updateByPrimaryKey(user);
-
+        
 //        Long id = userVo.getId();
         List<AuthUserRoleDO> userRoles = userRoleMapper.selectByLoginName(userVo.getLoginName());
         if (userRoles != null && !userRoles.isEmpty()) {
@@ -129,14 +137,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
-    public void deleteUserById(String userNo) {
-        userMapper.deleteByLoginName(userNo);
-        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByLoginName(userNo);
-        if (userRoles != null && !userRoles.isEmpty()) {
-            for (AuthUserRoleDO userRole : userRoles) {
-                userRoleMapper.deleteByPrimaryKey(userRole.getId());
-            }
-        }
+    public void deleteUserById(Long id) {
+    	
+        userMapper.deleteByPrimaryKey(id);
+        
+        
+        
     }
 
 //	@Override
@@ -145,7 +151,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //		columnMap.put("organization_id", 7);
 //		return userMapper.selectByMap(columnMap);
 //	}
-
+	
 //	@Override
 //    public List<Long> selectUserIds() {
 //    	return userMapper.selectUserIds();
@@ -174,4 +180,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
         return userResult;
     }
+
+	@Override
+	public AuthUserDO selectUserVoByUserNo(String userNo) {
+		// TODO Auto-generated method stub
+		return userMapper.selectUserVoByUserNo(userNo);
+	}
+
+	
 }

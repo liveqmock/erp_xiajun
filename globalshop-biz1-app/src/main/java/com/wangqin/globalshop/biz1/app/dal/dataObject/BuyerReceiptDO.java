@@ -6,7 +6,6 @@ public class BuyerReceiptDO extends BaseModel {
     private Long id;
 
     private String buyerTaskNo;
-    private String companyNo;
 
     private String receiptNo;
 
@@ -52,16 +51,6 @@ public class BuyerReceiptDO extends BaseModel {
 
     public void setReceiptNo(String receiptNo) {
         this.receiptNo = receiptNo == null ? null : receiptNo.trim();
-    }
-
-    @Override
-    public String getCompanyNo() {
-        return companyNo;
-    }
-
-    @Override
-    public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo;
     }
 
     public Double getTotalPrice() {

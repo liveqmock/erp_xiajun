@@ -63,6 +63,7 @@
     </selectKey>
     insert into auth_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
       <if test="companyNo != null" >
         company_no,
       </if>
@@ -122,6 +123,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>

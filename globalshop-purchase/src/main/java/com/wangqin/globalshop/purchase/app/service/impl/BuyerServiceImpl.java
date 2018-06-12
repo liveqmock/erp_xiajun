@@ -19,6 +19,6 @@ public class BuyerServiceImpl implements IBuyerService {
     private BuyerMapperExt mapper;
     @Override
     public List<BuyerDO> list() {
-        return mapper.list(AppUtil.getLoginUserCompanyNo());
+        return null/*mapper.list(AppUtil.getLoginUserCompanyNo())*/;
     }
 }

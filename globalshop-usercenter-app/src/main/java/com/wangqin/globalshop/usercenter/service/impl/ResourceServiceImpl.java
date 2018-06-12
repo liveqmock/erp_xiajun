@@ -53,8 +53,7 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 
     @Override
     public int insert(AuthResourceDO resourceDO) {
-        resourceDO.init();
-        return resourceMapper.insertSelective(resourceDO);
+        return 0;
     }
 
     @Override
