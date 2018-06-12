@@ -26,8 +26,7 @@ public class ScaleTypeService implements IScaleTypeService{
 		List<ScaleTypeDO> scaleTypeList = itemScaleTypeMapperExt.queryAllScaleType();
 		for(ScaleTypeDO s:scaleTypeList) {
 			List<ScaleDO> scaleList = itemScaleMapperExt.queryScalesByTypeId(s.getId());
-			throw new ErpCommonException("这行代码有问题");
-//			s.setScaleList(scaleList);
+			s.setScaleList(scaleList);
 		}
 		return scaleTypeList;
 	}
