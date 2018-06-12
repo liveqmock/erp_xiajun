@@ -81,4 +81,6 @@ public interface IItemSkuService  {
 	 List<ItemSkuDO> querySaleableSkus();
 	 
 	 Integer queryItemCountByUpc(String upc);
+	 
+	 List<ItemSkuDO> querySkuListByItemCode(String itemCode);
 }

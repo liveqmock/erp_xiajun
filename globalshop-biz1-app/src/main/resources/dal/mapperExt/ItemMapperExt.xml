@@ -438,18 +438,13 @@
               and  T1.owners LIKE concat('%',#{owners},'%')
             </if>
              -->
-            <if test=" startGmt!= null ">
-             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
-            </if>
-            <if test=" endGmt != null ">
-            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
-            </if>
-            <if test=" startDate!= null ">
-             and   <![CDATA[  T1.start_date = #{startDate} ]]>
-            </if>
-            <if test=" endDate!= null ">
-             and   <![CDATA[  T1.end_date = #{endDate} ]]>
-            </if>
+            <if test=" startDate!= null and endDate!= null">           	
+             	and  (
+             			(<![CDATA[  T1.start_date >= #{startDate} ]]> and <![CDATA[  T1.start_date <= #{endDate} ]]>)
+             			or   
+             			(<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
+             		 )
+            </if>           
             <if test="hasInventory > 0">
             	<![CDATA[and T3.inv > 0 ]]>
             </if>
@@ -501,21 +496,14 @@
            
             <if test=" owners != null and owners != '' ">
               and  T1.owners LIKE concat('%',#{owners},'%')
-            </if>
-            
-            <if test=" startGmt!= null ">
-             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
-            </if>
-            <if test=" endGmt != null ">
-            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
-            </if>
-             -->
-            <if test=" startDate!= null ">
-             and   <![CDATA[  T1.start_date = #{startDate} ]]>
-            </if>
-            <if test=" endDate!= null ">
-             and   <![CDATA[  T1.end_date = #{endDate} ]]>
-            </if>
+            </if>-->
+            <if test=" startDate!= null and endDate!= null">           	
+             	and  (
+             			(<![CDATA[  T1.start_date >= #{startDate} ]]> and <![CDATA[  T1.start_date <= #{endDate} ]]>)
+             			or   
+             			(<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
+             		 )
+            </if>  
             <if test="hasInventory > 0">
             	and <![CDATA[ T3.inv > 0 ]]>
             </if>

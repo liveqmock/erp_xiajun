@@ -409,4 +409,11 @@
 		AND is_del=0
 	</select>
 
+<!-- 根据itemCode查询sku列表 -->
+     <select id="querySkuListByItemCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+     	select  <include refid="Base_Column_List" />
+     	from item_sku T1
+     	where T1.item_code = #{itemCode}
+     	and T1.is_del=0
+     </select>
 </mapper>
