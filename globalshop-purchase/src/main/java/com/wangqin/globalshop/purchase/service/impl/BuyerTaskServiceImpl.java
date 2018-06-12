@@ -21,8 +21,8 @@ public class BuyerTaskServiceImpl //extends SuperServiceImpl<TaskPurchaseMapper,
 
 	@Autowired
 	private BuyerTaskDOMapperExt buyerTaskDOMapper;
-	@Autowired
-	private IReceiptService receiptService;
+//	@Autowired
+//	private IReceiptService receiptService;
 	
 	@Override
 	public List<BuyerTaskDO> queryTaskPurchaseBySubTask(Long subTaskId) {
