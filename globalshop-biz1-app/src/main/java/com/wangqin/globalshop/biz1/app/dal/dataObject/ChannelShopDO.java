@@ -19,7 +19,7 @@ public class ChannelShopDO {
 
     private String channelNo;
 
-    private Integer companyNo;
+    private String companyNo;
 
     private String shopName;
 
@@ -95,11 +95,11 @@ public class ChannelShopDO {
         this.channelNo = channelNo == null ? null : channelNo.trim();
     }
 
-    public Integer getCompanyNo() {
+    public String getCompanyNo() {
         return companyNo;
     }
 
-    public void setCompanyNo(Integer companyNo) {
+    public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo;
     }
 
