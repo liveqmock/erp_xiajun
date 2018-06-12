@@ -47,15 +47,15 @@ public class JdShopConfigServiceImpl implements JdShopConfigService {
 		return jdShopConfigDOMapperExt.updateByPrimaryKey(record);
 	}
 
-	public JdShopConfigDO searchShopOauth(JdShopConfigDO JdShopConfigDO){
+	public JdShopConfigDO searchShopConfig(JdShopConfigDO JdShopConfigDO){
 		return jdShopConfigDOMapperExt.searchShopConfig(JdShopConfigDO);
 	}
 
-	public List<JdShopConfigDO> searchShopOauthList(JdShopConfigDO jdShopConfigDO){
+	public List<JdShopConfigDO> searchShopConfigList(JdShopConfigDO jdShopConfigDO){
 		return jdShopConfigDOMapperExt.searchShopConfigList(jdShopConfigDO);
 	}
 
-	public Long searchShopOauthCount(JdShopConfigDO jdShopConfigDO){
+	public Long searchShopConfigCount(JdShopConfigDO jdShopConfigDO){
 		return jdShopConfigDOMapperExt.searchShopConfigCount(jdShopConfigDO);
 	}
 

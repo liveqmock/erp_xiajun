@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class ChannelShopDO {
+public class JdItemOperateDO {
     private Long id;
 
     private Date gmtCreate;
@@ -19,17 +19,19 @@ public class ChannelShopDO {
 
     private String channelNo;
 
-    private String companyNo;
-
-    private String shopName;
-
     private String shopCode;
 
-    private Date expiresTime;
+    private String itemCode;
 
-    private String proxyUrl;
+    private String syncStatus;
 
-    private Boolean open;
+    private String sendStatus;
+
+    private String operateType;
+
+    private String errorMassge;
+
+    private String itemJson;
 
     public Long getId() {
         return id;
@@ -95,22 +97,6 @@ public class ChannelShopDO {
         this.channelNo = channelNo == null ? null : channelNo.trim();
     }
 
-    public String getCompanyNo() {
-        return companyNo;
-    }
-
-    public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo == null ? null : companyNo.trim();
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName == null ? null : shopName.trim();
-    }
-
     public String getShopCode() {
         return shopCode;
     }
@@ -119,27 +105,51 @@ public class ChannelShopDO {
         this.shopCode = shopCode == null ? null : shopCode.trim();
     }
 
-    public Date getExpiresTime() {
-        return expiresTime;
+    public String getItemCode() {
+        return itemCode;
     }
 
-    public void setExpiresTime(Date expiresTime) {
-        this.expiresTime = expiresTime;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode == null ? null : itemCode.trim();
     }
 
-    public String getProxyUrl() {
-        return proxyUrl;
+    public String getSyncStatus() {
+        return syncStatus;
     }
 
-    public void setProxyUrl(String proxyUrl) {
-        this.proxyUrl = proxyUrl == null ? null : proxyUrl.trim();
+    public void setSyncStatus(String syncStatus) {
+        this.syncStatus = syncStatus == null ? null : syncStatus.trim();
     }
 
-    public Boolean getOpen() {
-        return open;
+    public String getSendStatus() {
+        return sendStatus;
     }
 
-    public void setOpen(Boolean open) {
-        this.open = open;
+    public void setSendStatus(String sendStatus) {
+        this.sendStatus = sendStatus == null ? null : sendStatus.trim();
+    }
+
+    public String getOperateType() {
+        return operateType;
+    }
+
+    public void setOperateType(String operateType) {
+        this.operateType = operateType == null ? null : operateType.trim();
+    }
+
+    public String getErrorMassge() {
+        return errorMassge;
+    }
+
+    public void setErrorMassge(String errorMassge) {
+        this.errorMassge = errorMassge == null ? null : errorMassge.trim();
+    }
+
+    public String getItemJson() {
+        return itemJson;
+    }
+
+    public void setItemJson(String itemJson) {
+        this.itemJson = itemJson == null ? null : itemJson.trim();
     }
 }

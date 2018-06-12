@@ -12,6 +12,7 @@ import com.wangqin.globalshop.common.utils.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class JDAccountInfoController {
 
 
 	@RequestMapping("/accountInfo")
+	@ResponseBody
 	public Object accountInfo(String code, String state) throws IOException{
 		JsonResult<String> result = new JsonResult<>();
 		// 用来获取token的CODE
@@ -76,6 +78,11 @@ public class JDAccountInfoController {
 		shopOauth.setGmtModify(new Date());//授权时间
 		shopOauth.setExpiresTime(new Date(jdOauthResponse.getTime() + jdOauthResponse.getExpires_in() * 1000));
 		shopOauth.setRefreshToken(jdOauthResponse.getRefresh_token());
+
+		shopOauth.setServerUrl("https://api.jd.com/routerjson");
+		shopOauth.setAppKey("96C38E0AAAA47520B6211D32A5A14EDE");
+		shopOauth.setAppsecretKey("758ae3185aec4822aa5593fda0aa9b98");
+		shopOauth.setTokenUrl("https://oauth.jd.com/oauth/token");
 
 
 		//组装channelShop
