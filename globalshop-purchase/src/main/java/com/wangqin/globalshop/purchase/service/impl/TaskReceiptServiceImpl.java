@@ -2,7 +2,7 @@
 //
 //import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO;
 //import com.wangqin.globalshop.biz1.app.dal.dataVo.TaskReceiptQueryVO;
-//import com.wangqin.globalshop.biz1.app.dal.mapper.BuyerReceiptDOMapper;
+//import com.wangqin.globalshop.biz1.app.dal.mapper.BuyerReceiptDOMapperExt;
 //import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 //import com.wangqin.globalshop.common.utils.JsonPageResult;
 //import com.wangqin.globalshop.common.utils.PicModel;
@@ -17,7 +17,7 @@
 //public class TaskReceiptServiceImpl //extends SuperServiceImpl<TaskReceiptMapper, BuyerReceiptDO>
 //		implements ITaskReceiptService {
 //	@Autowired
-//	BuyerReceiptDOMapper buyerReceiptDOMapper;
+//	BuyerReceiptDOMapperExt buyerReceiptDOMapper;
 //
 //	@Override
 //	public JsonPageResult<List<BuyerReceiptDO>> queryTaskReceipt(TaskReceiptQueryVO taskReceiptQueryVO) {
