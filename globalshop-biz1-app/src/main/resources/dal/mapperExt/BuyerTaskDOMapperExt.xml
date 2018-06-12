@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt" >
+  <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="owner_no" property="ownerNo" jdbcType="VARCHAR" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="buyer_open_id" property="buyerOpenId" jdbcType="BIGINT" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT" />
+    <result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List2" >
+    id, buyer_task_no, title, owner_no, desc, start_time, end_time, status, gmt_create, 
+    gmt_modify, buyer_open_id, buyer_name, purchase_commission_mode, purchase_commission_str, 
+    is_del, creator, modifier
+  </sql>
+
+
+  <select id="queryReceiptCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.ReceiptQueryVO">
+    SELECT COUNT(*) FROM (SELECT
+    T1.`task_daily_id`
+    FROM
+    `buyer_task_receipt` T1
+    <where>
+      <if test="receiptNo!=null and receiptNo!=''">
+        and T1.receipt_no = #{receiptNo}
+      </if>
+      <if test=" startGmtCreate!= null ">
+        and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
+      </if>
+      <if test=" endGmtCreate != null ">
+        and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
+      </if>
+    </where>
+    GROUP BY T1.`task_daily_id`,T1.`batch_num`) temp;
+  </select>
+
+  <select id="queryReceipt" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.ReceiptQueryVO">
+    SELECT
+    T1.`task_daily_id`,MAX(T3.task_title) as taskTitle, MAX(T1.id) as id, MAX(T1.`receipt_no`) as receiptNo ,MAX(T1.`gmt_create`) as gmtCreate,SUM(T2.`quantity`) as quantity,SUM(T2.`trans_quantity`) as transQuantity,SUM(T2.`quantity`*T2.`price`) as totalPrice,SUM(T2.`trans_quantity`*T2.`price`) as transTotalPrice
+    FROM
+    `buyer_task_receipt` T1
+    left join buyer_task T3 on T1.task_daily_id=T3.id
+    <where>
+      <if test="receiptNo!=null and receiptNo!=''">
+        and T1.receipt_no = #{receiptNo}
+      </if>
+      <if test=" startGmtCreate!= null ">
+        and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
+      </if>
+      <if test=" endGmtCreate != null ">
+        and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
+      </if>
+    </where>
+    GROUP BY T1.`task_daily_id`,T1.`batch_num`
+    ORDER BY id desc
+    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+  </select>
+</mapper>
