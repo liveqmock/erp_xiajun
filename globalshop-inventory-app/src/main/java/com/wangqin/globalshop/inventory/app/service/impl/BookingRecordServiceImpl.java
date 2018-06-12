@@ -68,6 +68,16 @@ public class BookingRecordServiceImpl implements InventoryBookingRecordService {
 	}
 
 	@Override
+	public List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(String companyNo, String skuCode) {
+		return mapper.selectByCompanyNoAndSkuCode(companyNo,skuCode);
+	}
+
+	@Override
+	public List<InventoryOnWareHouseDO> selectByCompanyNo(String companyNo) {
+		return mapper.selectByCompanyNo(companyNo);
+	}
+
+	@Override
 	public List<InventoryOnWareHouseDO> sumInventoryBySkuIdGroupbyWarehouse(String itemCode, String skuCode, Object o) {
 		// TODO Auto-generated method stub
 		return null;

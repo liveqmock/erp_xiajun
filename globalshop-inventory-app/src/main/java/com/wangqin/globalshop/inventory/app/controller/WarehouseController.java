@@ -72,9 +72,9 @@ public class WarehouseController{
 	 */
 	@GetMapping("/queryWarehouses")
 	@ResponseBody
-	public Object queryWarehouses() {
+	public Object queryWarehouses(WarehouseDO warehouseDO) {
 //		List<WarehouseDO> list = warehouseService.queryWarehouses(ShiroUtil.getShiroUser().getCompanyNo());
-		List<WarehouseDO> list = warehouseService.list();
+		List<WarehouseDO> list = warehouseService.list(warehouseDO);
 		return JsonResult.buildSuccess(list);
 	}
 }

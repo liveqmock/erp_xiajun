@@ -522,7 +522,7 @@
         WHERE
         <include refid="commonSelectSection"/>
     </select>
-    <select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO"
+    <select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO"
     >
            SELECT
                 DISTINCT
@@ -544,6 +544,9 @@
                  t1.memo remark
                FROM mall_order t1, mall_sub_order t2
                WHERE t1.order_no = t2.order_no AND t1.is_del != '1'
+               <if test="companyNo!=null and companyNo!=''">
+                   AND t1.company_no = #{companyNo}
+               </if>
     </select>
 
     <!-- -->

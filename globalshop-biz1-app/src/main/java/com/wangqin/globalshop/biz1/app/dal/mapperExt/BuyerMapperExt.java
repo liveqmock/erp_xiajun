@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface BuyerMapperExt extends BuyerDOMapper{
 
-	//Integer queryWxPurchaseUserCount(WxPurchaseUserVO wxPurchaseUserVO);
+	//Integer queryWxPurchaseUserCount(BuyerVO wxPurchaseUserVO);
 	
-	//List<WxPurchaseUser> queryWxPurchaseUser(WxPurchaseUserVO wxPurchaseUserVO);
+	//List<WxPurchaseUser> queryWxPurchaseUser(BuyerVO wxPurchaseUserVO);
 	
 	List<BuyerDO> queryAllBuyers();
 }

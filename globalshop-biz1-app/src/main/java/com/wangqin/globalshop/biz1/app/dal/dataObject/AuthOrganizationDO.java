@@ -5,6 +5,8 @@ import java.util.Date;
 public class AuthOrganizationDO extends BaseModel {
     private Long id;
 
+    private String companyNo;
+
     private String orgId;
 
     private String name;
@@ -35,6 +37,14 @@ public class AuthOrganizationDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getOrgId() {

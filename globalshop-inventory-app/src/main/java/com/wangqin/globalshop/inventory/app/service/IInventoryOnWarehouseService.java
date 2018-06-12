@@ -27,9 +27,11 @@ public interface IInventoryOnWarehouseService {
 
     InventoryOnWareHouseDO selectByNo(String inventoryAreaId);
 
-    InventoryOnWareHouseDO selectByItemCodeAndSkuCodeAndWarehouseNo(String itemCode, String skuCode, String warehouseNo);
+    InventoryOnWareHouseDO selectByCompanyNoAndSkuCodeAndWarehouseNo(String companyNo, String skuCode, String warehouseNo);
 
     InventoryOnWareHouseDO insertInventory(InventoryDO inventory,Long inv, String warehouseNo,String positionNo);
 
     Map<InventoryOnWareHouseDO,Long> ship(InventoryDO inventoryDO, Long quantity);
+
+    List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(String companyNo, String skuCode);
 }

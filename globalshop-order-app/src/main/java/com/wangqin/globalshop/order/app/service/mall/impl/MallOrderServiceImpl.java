@@ -7,6 +7,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
@@ -66,7 +67,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         Double totalPrice = 0.0;
         String shopCode = "O" + outerOrder.getOrderNo().substring(1) ;
         DealerDO deal =  iDealerService.selectByCode(outerOrder.getDealerCode());
-
+        outerOrder.init();
         int i = 0;
         for (MallSubOrderDO outerOrderDetail : outerOrderDetails) {
             totalPrice += outerOrderDetail.getSalePrice() * outerOrderDetail.getQuantity();
@@ -82,41 +83,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
             outerOrderDetail.setReceiverAddress(outerOrder.getAddressDetail());
             outerOrderDetail.setTelephone(outerOrder.getTelephone());
             outerOrderDetail.setStatus(0);
-//             计算运费和销售价格
-//            ItemSkuDO sku = itemSkuService.selectBySkuCode(outerOrderDetail.getSkuCode());
-//            if (sku != null) {
-//                outerOrderDetail.setItemName(sku.getItemName());
-//                outerOrderDetail.setScale(sku.getScale());
-//                outerOrderDetail.setSkuCode(sku.getSkuCode());
-////                    outerOrderDetail.setChannelSkuCode(sku.getSaleable());
-//                outerOrderDetail.setUpc(sku.getUpc());
-//                outerOrderDetail.setItemCode(sku.getItemCode());
-//                outerOrderDetail.setSkuPic(sku.getSkuPic());
-//                int logisticType = sku.getLogisticType();
-//                outerOrderDetail.setLogisticType(logisticType);
-//                outerOrderDetail.setWeight(sku.getWeight());
-//                inventoryService.order(outerOrderDetail);
-//                //如果有虚拟库存就扣减虚拟库存
-//                InventoryDO inventory = inventoryService.queryInventoryBySkuCode(sku.getItemCode(), sku.getSkuCode());
-//                if (inventory.getVirtualInv() > 0 || inventory.getLockedVirtualInv() > 0) {
-//                    Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
-//                    virtualInv = virtualInv > 0 ? virtualInv : 0;
-//                    //可售库存 = 现货库存 - 现货占用 + 在途库存- 在途占用
-//                    Long totalAvailableInv = inventory.getInv() - inventory.getLockedInv() + inventory.getTransInv() - inventory.getLockedTransInv();
-//                    //如果虚拟库存小于等于可售库存，虚拟库存清零
-//                    virtualInv = virtualInv > totalAvailableInv ? virtualInv : 0;
-//
-//                    //如果虚拟占用库存大于零
-//                    if (inventory.getLockedVirtualInv() > 0) {
-//                        Long lockedVirtualInv = inventory.getLockedVirtualInv() - outerOrderDetail.getQuantity();
-//                        lockedVirtualInv = lockedVirtualInv > 0 ? lockedVirtualInv : 0;
-//                        inventory.setLockedVirtualInv(lockedVirtualInv);
-//                    }
-//                    inventory.setVirtualInv(virtualInv);
-//                    inventory.setGmtModify(new Date());
-//                    inventoryService.update(inventory);
-//                }
-//            }
             inventoryService.order(outerOrderDetail);
             mallSubOrderDOMapper.insert(outerOrderDetail);
         }
@@ -127,7 +93,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
         outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
         outerOrder.setActualAmount(0.0);
-        outerOrder.init();
         mallOrderDOMapper.insertSelective(outerOrder);
 
     }
@@ -175,7 +140,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     @Override
     public List<MallOrderDO> queryOuterOrderList(MallOrderVO outerOrderQueryVO) {
         List<MallOrderDO> outerOrders;
-        outerOrderQueryVO.setCompanyNo("MallOrderServiceImplYYYYYY");
+        outerOrderQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 //        outerOrderQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
         outerOrders = mallOrderDOMapper.queryOuterOrders(outerOrderQueryVO);
         return outerOrders;
@@ -245,8 +210,9 @@ public class MallOrderServiceImpl implements IMallOrderService {
     }
 
     @Override
-    public List<MallOrderVO> list() {
-        return mallOrderDOMapper.list();
+    public List<MallOrderVO> list(MallOrderVO vo) {
+        vo.init();
+        return mallOrderDOMapper.list(vo);
     }
 
 }

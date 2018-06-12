@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import com.wangqin.globalshop.common.utils.AppUtil;
+
 import java.util.Date;
 
 /**
@@ -15,6 +17,15 @@ public class BaseModel {
     private String creator;
 
     private String modifier;
+    private String companyNo;
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo;
+    }
 
     public Boolean getIsDel() {
         return isDel;
@@ -57,16 +68,20 @@ public class BaseModel {
     }
 
     public void init() {
-        this.setModifier("11111");
-        this.setCreator("222222");
+        this.setModifier("biscuits");
+        this.setCreator("biscuits");
         this.setIsDel(false);
         Date date = new Date();
         this.setGmtCreate(date);
         this.setGmtModify(date);
+        this.setCompanyNo("3");
+    }
+    public void initCompany() {
+        this.setCompanyNo("3");
     }
 
     public void update() {
-        this.setModifier("11111");
+        this.setModifier(AppUtil.getLoginUserId());
         Date date = new Date();
         this.setGmtModify(date);
     }

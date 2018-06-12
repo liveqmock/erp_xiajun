@@ -57,9 +57,9 @@ public class MallOrderController {
      */
     @RequestMapping("/index")
     @ResponseBody
-    public Object index() {
+    public Object index(MallOrderVO vo) {
         JsonResult<List<MallOrderVO>> result = new JsonResult<>();
-        List<MallOrderVO> outerOrder = mallOrderService.list();
+        List<MallOrderVO> outerOrder = mallOrderService.list(vo);
         return result.buildData(outerOrder).buildIsSuccess(true);
     }
 
@@ -82,7 +82,6 @@ public class MallOrderController {
                 return JsonResult.buildFailed("没有商品信息");
             }
             /**注入部门no*/
-            mallOrderVO.setCompanyNo("MallOrderController86");
             //创建外部订单
             mallOrderService.addOuterOrder(mallOrderVO);
         } else {

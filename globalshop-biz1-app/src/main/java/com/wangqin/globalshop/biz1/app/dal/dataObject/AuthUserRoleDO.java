@@ -19,6 +19,8 @@ public class AuthUserRoleDO extends BaseModel {
 
     private String modifier;
 
+    private String companyNo;
+
     public Long getId() {
         return id;
     }
@@ -81,5 +83,13 @@ public class AuthUserRoleDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 }

@@ -6,6 +6,34 @@
         T1.id,T1.open_id as openId,T1.union_id as unionId,T1.nick_name as nickName,
         T1.gender,T1.city,T1.province,T1.country   
     </sql>
+
+	<resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<result column="union_id" property="unionId" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR" />
+		<result column="gender" property="gender" jdbcType="INTEGER" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="country" property="country" jdbcType="VARCHAR" />
+		<result column="referer" property="referer" jdbcType="BIGINT" />
+		<result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT" />
+		<result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
+		<result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP" />
+		<result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+		<result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+		<result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+		<result column="is_del" property="isDel" jdbcType="BIT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="modifier" property="modifier" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List2" >
+		id, company_no, open_id, union_id, nick_name, head_protrait_url, gender, city, province,
+		country, referer, purchase_commission_mode, purchase_commission_str, first_login_time,
+		last_login_time, gmt_create, gmt_modify, is_del, creator, modifier
+	</sql>
     <!-- 通用查询结果列
     <sql id="Base_Column_List">
         T1.id,T1.open_id as openId,T1.union_id as unionId,T1.nick_name as nickName,T1.gender,T1.city,T1.province,T1.country,T1.avatar_url as avatarUrl,T1.refer,
@@ -16,22 +44,23 @@
         T1.gmt_modify as gmtModify
     </sql>
 
-	<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="com.wangqin.vo.WxPurchaseUserVO">
-	    SELECT COUNT(*) FROM wx_purchase_user T1 WHERE T1.power_code !=0
-	</select>
-	
-	<select id="queryWxPurchaseUser" resultType="com.wangqin.model.WxPurchaseUser">
-	    SELECT <include refid="Base_Column_List" /> FROM wx_purchase_user T1 WHERE T1.power_code !=0 
-	     <if test="companyId != null ">
-            		and T1.company_id = #{companyId}
-         </if>
-	</select>
 	-->
+	<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerVO">
+		SELECT COUNT(*) FROM buyer T1 WHERE T1.power_code !=0
+	</select>
+
+	<select id="queryWxPurchaseUser" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
+		SELECT <include refid="Base_Column_List2" /> FROM buyer T1 WHERE T1.power_code !=0
+		<if test="companyId != null ">
+			and T1.company_no = #{companyNo}
+		</if>
+	</select>
 	<select id="queryAllBuyers" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
 		select <include refid="Base_Column_List" />
 		FROM `buyer` T1
 	    <where>
 	      T1.is_del=0
 	    </where>
-	</select>	
+	</select>
+
 </mapper>

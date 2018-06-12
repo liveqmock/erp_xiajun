@@ -105,6 +105,46 @@
     AND s.url IS  NOT  NULL
     ORDER BY seq
   </select>
+
+
+  <select id="queryRolesCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO">
+    SELECT
+    count(1)
+    FROM
+    `auth_role` T1
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      and T1.name = #{name}
+    </if>
+    <if test=" seq != null ">
+      and T1.seq = #{seq}
+    </if>
+    <if test=" status != null ">
+      and T1.status = #{status}
+    </if>
+
+  </select>
+
+  <select id="queryRoleQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO">
+    SELECT
+    <include refid="Base_Column_List2" />
+    FROM
+    `auth_role` T1
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      and T1.name = #{name}
+    </if>
+    <if test=" seq != null ">
+      and T1.seq = #{seq}
+    </if>
+    <if test=" status != null ">
+      and T1.status = #{status}
+    </if>
+    order by T1.name desc
+    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+  </select>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->
     <!--select -->
     <!--<include refid="Base_Column_List" />-->

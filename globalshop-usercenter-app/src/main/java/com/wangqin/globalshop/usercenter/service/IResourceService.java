@@ -29,6 +29,11 @@ public interface IResourceService {//extends ISuperService<AuthResourceDO>
 
     int deleteById(Long id);
 
+
+    List<AuthResourceDO> queryResourceList();
+
+    List<AuthResourceDO> queryResourceTree(Long pid);
+
     /**
      * 获取当前用户的所有资源码
      *

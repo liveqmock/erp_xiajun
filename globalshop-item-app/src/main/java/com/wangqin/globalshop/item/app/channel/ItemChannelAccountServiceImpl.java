@@ -100,7 +100,6 @@ public class ItemChannelAccountServiceImpl  implements IItemChannelAccountServic
 			channelAccount.setChannelName(ChannelType.TaoBao.getName());
 
 			//company信息，所属域
-			channelAccount.setCompanyNo(1+"");
 
 			//授权信息
 			channelAccount.setShopCode(shopCode);
@@ -109,10 +108,7 @@ public class ItemChannelAccountServiceImpl  implements IItemChannelAccountServic
 
 			//其他信息配置
 			channelAccount.setStatus(0);//0正常，1关闭
-			channelAccount.setIsDel(false);
-			channelAccount.setCreator("-1");
-			channelAccount.setGmtCreate(new Date());
-
+			channelAccount.init();
 			channelAccountDOMapper.insert(channelAccount);
 		}else {
 
@@ -123,7 +119,6 @@ public class ItemChannelAccountServiceImpl  implements IItemChannelAccountServic
 			channelAccount.setChannelName(ChannelType.TaoBao.getName());
 
 			//company信息，所属域
-			channelAccount.setCompanyNo(1+"");
 
 			//授权信息
 			channelAccount.setShopCode(shopCode);
@@ -132,9 +127,7 @@ public class ItemChannelAccountServiceImpl  implements IItemChannelAccountServic
 
 			//其他信息配置
 			channelAccount.setStatus(0);//0正常，1关闭
-			channelAccount.setIsDel(false);
-			channelAccount.setModifier("-1");
-			channelAccount.setGmtModify(new Date());
+			channelAccount.init();
 
 			channelAccountDOMapper.updateByPrimaryKey(channelAccount);
 		}

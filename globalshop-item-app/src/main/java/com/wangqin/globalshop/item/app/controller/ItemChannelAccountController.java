@@ -2,6 +2,7 @@ package com.wangqin.globalshop.item.app.controller;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IChannelAccountServ;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class ItemChannelAccountController {
 		//	return result.buildIsSuccess(false);
 		//}
 
-		channelAccountVO.setCompanyNo("1");//temp
+		channelAccountVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());//temp
 		List<ChannelAccountDO> accountList = channelAccountServ.queryChannelAccountList(channelAccountVO);
 		List<ChannelInfo> list = new ArrayList<ChannelInfo>();
 		accountList.forEach((account) -> {
