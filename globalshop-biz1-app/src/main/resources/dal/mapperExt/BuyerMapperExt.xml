@@ -62,5 +62,11 @@
 	      T1.is_del=0
 	    </where>
 	</select>
+	<select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
+		select <include refid="Base_Column_List" />
+		FROM `buyer` T1
+		WHERE
+	      T1.is_del=0 AND company_no=#{companyNo}
+	</select>
 
 </mapper>

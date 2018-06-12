@@ -6,7 +6,7 @@
     <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="owner_no" property="ownerNo" jdbcType="VARCHAR" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
@@ -21,50 +21,15 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List2" >
-    id, buyer_task_no, title, owner_no, desc, start_time, end_time, status, gmt_create, 
-    gmt_modify, buyer_open_id, buyer_name, purchase_commission_mode, purchase_commission_str, 
-    is_del, creator, modifier
-  </sql>
-
-
-  <select id="queryReceiptCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.ReceiptQueryVO">
-    SELECT COUNT(*) FROM (SELECT
-    T1.`task_daily_id`
-    FROM
-    `buyer_task_receipt` T1
-    <where>
-      <if test="receiptNo!=null and receiptNo!=''">
-        and T1.receipt_no = #{receiptNo}
-      </if>
-      <if test=" startGmtCreate!= null ">
-        and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
-      </if>
-      <if test=" endGmtCreate != null ">
-        and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
-      </if>
-    </where>
-    GROUP BY T1.`task_daily_id`,T1.`batch_num`) temp;
+  id, buyer_task_no, title, owner_no, remark, start_time, end_time, status, gmt_create,
+  gmt_modify, buyer_open_id, buyer_name, purchase_commission_mode, purchase_commission_str,
+  is_del, creator, modifier
+</sql>
+  <select id="list" resultMap="BaseResultMap2" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO">
+    SELECT <include refid="Base_Column_List2"/>
+    FROM buyer_task
+    WHERE
+    company_no = #{companyNo}
   </select>
 
-  <select id="queryReceipt" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.ReceiptQueryVO">
-    SELECT
-    T1.`task_daily_id`,MAX(T3.task_title) as taskTitle, MAX(T1.id) as id, MAX(T1.`receipt_no`) as receiptNo ,MAX(T1.`gmt_create`) as gmtCreate,SUM(T2.`quantity`) as quantity,SUM(T2.`trans_quantity`) as transQuantity,SUM(T2.`quantity`*T2.`price`) as totalPrice,SUM(T2.`trans_quantity`*T2.`price`) as transTotalPrice
-    FROM
-    `buyer_task_receipt` T1
-    left join buyer_task T3 on T1.task_daily_id=T3.id
-    <where>
-      <if test="receiptNo!=null and receiptNo!=''">
-        and T1.receipt_no = #{receiptNo}
-      </if>
-      <if test=" startGmtCreate!= null ">
-        and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
-      </if>
-      <if test=" endGmtCreate != null ">
-        and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
-      </if>
-    </where>
-    GROUP BY T1.`task_daily_id`,T1.`batch_num`
-    ORDER BY id desc
-    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-  </select>
 </mapper>
