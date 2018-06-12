@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
-public class JdOrderDO {
+public class JdLogisticsDO {
     private Long id;
 
     private Date gmtCreate;
@@ -21,15 +21,17 @@ public class JdOrderDO {
 
     private String shopCode;
 
-    private String sendStatus;
-
-    private Date orderModifyTime;
-
-    private String errorMassge;
-
     private String channelOrderNo;
 
-    private String orderJson;
+    private String channelSubOrderNo;
+
+    private String sendStatus;
+
+    private String logisticCode;
+
+    private String logisticName;
+
+    private String logisticNo;
 
     public Long getId() {
         return id;
@@ -103,30 +105,6 @@ public class JdOrderDO {
         this.shopCode = shopCode == null ? null : shopCode.trim();
     }
 
-    public String getSendStatus() {
-        return sendStatus;
-    }
-
-    public void setSendStatus(String sendStatus) {
-        this.sendStatus = sendStatus == null ? null : sendStatus.trim();
-    }
-
-    public Date getOrderModifyTime() {
-        return orderModifyTime;
-    }
-
-    public void setOrderModifyTime(Date orderModifyTime) {
-        this.orderModifyTime = orderModifyTime;
-    }
-
-    public String getErrorMassge() {
-        return errorMassge;
-    }
-
-    public void setErrorMassge(String errorMassge) {
-        this.errorMassge = errorMassge == null ? null : errorMassge.trim();
-    }
-
     public String getChannelOrderNo() {
         return channelOrderNo;
     }
@@ -135,11 +113,43 @@ public class JdOrderDO {
         this.channelOrderNo = channelOrderNo == null ? null : channelOrderNo.trim();
     }
 
-    public String getOrderJson() {
-        return orderJson;
+    public String getChannelSubOrderNo() {
+        return channelSubOrderNo;
     }
 
-    public void setOrderJson(String orderJson) {
-        this.orderJson = orderJson == null ? null : orderJson.trim();
+    public void setChannelSubOrderNo(String channelSubOrderNo) {
+        this.channelSubOrderNo = channelSubOrderNo == null ? null : channelSubOrderNo.trim();
+    }
+
+    public String getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(String sendStatus) {
+        this.sendStatus = sendStatus == null ? null : sendStatus.trim();
+    }
+
+    public String getLogisticCode() {
+        return logisticCode;
+    }
+
+    public void setLogisticCode(String logisticCode) {
+        this.logisticCode = logisticCode == null ? null : logisticCode.trim();
+    }
+
+    public String getLogisticName() {
+        return logisticName;
+    }
+
+    public void setLogisticName(String logisticName) {
+        this.logisticName = logisticName == null ? null : logisticName.trim();
+    }
+
+    public String getLogisticNo() {
+        return logisticNo;
+    }
+
+    public void setLogisticNo(String logisticNo) {
+        this.logisticNo = logisticNo == null ? null : logisticNo.trim();
     }
 }

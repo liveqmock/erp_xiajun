@@ -353,12 +353,12 @@
         <!--</table>-->
 
 
-        <!--<table tableName="jd_item_oprerate" domainObjectName="JdItemOperateDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--<table tableName="jd_item_operate" domainObjectName="JdItemOperateDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
             <!--<generatedKey column="id" sqlStatement="MySql"/>-->
         <!--</table>-->
 
-        <!--<table tableName="jd_logistic" domainObjectName="JdLogisticDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--<table tableName="jd_logistics" domainObjectName="JdLogisticsDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
             <!--<generatedKey column="id" sqlStatement="MySql"/>-->
         <!--</table>-->

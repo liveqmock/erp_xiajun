@@ -17,6 +17,8 @@ public class JdItemDO {
 
     private String modifier;
 
+    private String channelNo;
+
     private String shopCode;
 
     private String sendStatus;
@@ -83,6 +85,14 @@ public class JdItemDO {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getChannelNo() {
+        return channelNo;
+    }
+
+    public void setChannelNo(String channelNo) {
+        this.channelNo = channelNo == null ? null : channelNo.trim();
     }
 
     public String getShopCode() {
