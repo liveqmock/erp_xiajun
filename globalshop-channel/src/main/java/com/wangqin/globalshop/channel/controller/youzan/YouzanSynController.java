@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/youzanSyn")
-//@Authenticated
+@Authenticated
 public class YouzanSynController extends BaseController {
 	
 	@Autowired

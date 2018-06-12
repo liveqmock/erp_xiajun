@@ -10,7 +10,7 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
-    <result column="company_no" property="companyNo" jdbcType="INTEGER" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
     <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
     <result column="expires_time" property="expiresTime" jdbcType="TIMESTAMP" />
@@ -42,7 +42,7 @@
       proxy_url, open)
     values (#{id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{version,jdbcType=BIGINT}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=INTEGER}, 
+      #{modifier,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{shopName,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{expiresTime,jdbcType=TIMESTAMP}, 
       #{proxyUrl,jdbcType=VARCHAR}, #{open,jdbcType=BIT})
   </insert>
@@ -117,7 +117,7 @@
         #{channelNo,jdbcType=VARCHAR},
       </if>
       <if test="companyNo != null" >
-        #{companyNo,jdbcType=INTEGER},
+        #{companyNo,jdbcType=VARCHAR},
       </if>
       <if test="shopName != null" >
         #{shopName,jdbcType=VARCHAR},
@@ -161,7 +161,7 @@
         channel_no = #{channelNo,jdbcType=VARCHAR},
       </if>
       <if test="companyNo != null" >
-        company_no = #{companyNo,jdbcType=INTEGER},
+        company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
       <if test="shopName != null" >
         shop_name = #{shopName,jdbcType=VARCHAR},
@@ -190,7 +190,7 @@
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       channel_no = #{channelNo,jdbcType=VARCHAR},
-      company_no = #{companyNo,jdbcType=INTEGER},
+      company_no = #{companyNo,jdbcType=VARCHAR},
       shop_name = #{shopName,jdbcType=VARCHAR},
       shop_code = #{shopCode,jdbcType=VARCHAR},
       expires_time = #{expiresTime,jdbcType=TIMESTAMP},

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdOrderDOMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdLogisticsDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
@@ -11,53 +11,50 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
     <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
-    <result column="send_status" property="sendStatus" jdbcType="VARCHAR" />
-    <result column="order_modify_time" property="orderModifyTime" jdbcType="TIMESTAMP" />
-    <result column="error_massge" property="errorMassge" jdbcType="VARCHAR" />
     <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" extends="BaseResultMap" >
-    <result column="order_json" property="orderJson" jdbcType="LONGVARCHAR" />
+    <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
+    <result column="send_status" property="sendStatus" jdbcType="VARCHAR" />
+    <result column="logistic_code" property="logisticCode" jdbcType="VARCHAR" />
+    <result column="logistic_name" property="logisticName" jdbcType="VARCHAR" />
+    <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, gmt_create, gmt_modify, version, is_del, creator, modifier, channel_no, shop_code, 
-    send_status, order_modify_time, error_massge, channel_order_no
+    channel_order_no, channel_sub_order_no, send_status, logistic_code, logistic_name, 
+    logistic_no
   </sql>
-  <sql id="Blob_Column_List" >
-    order_json
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from jd_order
+    from jd_logistics
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from jd_order
+    delete from jd_logistics
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into jd_order (id, gmt_create, gmt_modify, 
+    insert into jd_logistics (id, gmt_create, gmt_modify, 
       version, is_del, creator, 
       modifier, channel_no, shop_code, 
-      send_status, order_modify_time, error_massge, 
-      channel_order_no, order_json)
+      channel_order_no, channel_sub_order_no, send_status, 
+      logistic_code, logistic_name, logistic_no
+      )
     values (#{id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
       #{version,jdbcType=BIGINT}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
-      #{sendStatus,jdbcType=VARCHAR}, #{orderModifyTime,jdbcType=TIMESTAMP}, #{errorMassge,jdbcType=VARCHAR}, 
-      #{channelOrderNo,jdbcType=VARCHAR}, #{orderJson,jdbcType=LONGVARCHAR})
+      #{channelOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, 
+      #{logisticCode,jdbcType=VARCHAR}, #{logisticName,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into jd_order
+    insert into jd_logistics
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
       <if test="gmtCreate != null" >
@@ -84,20 +81,23 @@
       <if test="shopCode != null" >
         shop_code,
       </if>
-      <if test="sendStatus != null" >
-        send_status,
-      </if>
-      <if test="orderModifyTime != null" >
-        order_modify_time,
-      </if>
-      <if test="errorMassge != null" >
-        error_massge,
-      </if>
       <if test="channelOrderNo != null" >
         channel_order_no,
       </if>
-      <if test="orderJson != null" >
-        order_json,
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no,
+      </if>
+      <if test="sendStatus != null" >
+        send_status,
+      </if>
+      <if test="logisticCode != null" >
+        logistic_code,
+      </if>
+      <if test="logisticName != null" >
+        logistic_name,
+      </if>
+      <if test="logisticNo != null" >
+        logistic_no,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -126,25 +126,28 @@
       <if test="shopCode != null" >
         #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="sendStatus != null" >
-        #{sendStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="orderModifyTime != null" >
-        #{orderModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="errorMassge != null" >
-        #{errorMassge,jdbcType=VARCHAR},
-      </if>
       <if test="channelOrderNo != null" >
         #{channelOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderJson != null" >
-        #{orderJson,jdbcType=LONGVARCHAR},
+      <if test="channelSubOrderNo != null" >
+        #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendStatus != null" >
+        #{sendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticCode != null" >
+        #{logisticCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticName != null" >
+        #{logisticName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null" >
+        #{logisticNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
-    update jd_order
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+    update jd_logistics
     <set >
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -170,26 +173,29 @@
       <if test="shopCode != null" >
         shop_code = #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="sendStatus != null" >
-        send_status = #{sendStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="orderModifyTime != null" >
-        order_modify_time = #{orderModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="errorMassge != null" >
-        error_massge = #{errorMassge,jdbcType=VARCHAR},
-      </if>
       <if test="channelOrderNo != null" >
         channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderJson != null" >
-        order_json = #{orderJson,jdbcType=LONGVARCHAR},
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendStatus != null" >
+        send_status = #{sendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticCode != null" >
+        logistic_code = #{logisticCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticName != null" >
+        logistic_name = #{logisticName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null" >
+        logistic_no = #{logisticNo,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
-    update jd_order
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+    update jd_logistics
     set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       version = #{version,jdbcType=BIGINT},
@@ -198,27 +204,12 @@
       modifier = #{modifier,jdbcType=VARCHAR},
       channel_no = #{channelNo,jdbcType=VARCHAR},
       shop_code = #{shopCode,jdbcType=VARCHAR},
-      send_status = #{sendStatus,jdbcType=VARCHAR},
-      order_modify_time = #{orderModifyTime,jdbcType=TIMESTAMP},
-      error_massge = #{errorMassge,jdbcType=VARCHAR},
       channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
-      order_json = #{orderJson,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
-    update jd_order
-    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      version = #{version,jdbcType=BIGINT},
-      is_del = #{isDel,jdbcType=BIT},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      channel_no = #{channelNo,jdbcType=VARCHAR},
-      shop_code = #{shopCode,jdbcType=VARCHAR},
+      channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
       send_status = #{sendStatus,jdbcType=VARCHAR},
-      order_modify_time = #{orderModifyTime,jdbcType=TIMESTAMP},
-      error_massge = #{errorMassge,jdbcType=VARCHAR},
-      channel_order_no = #{channelOrderNo,jdbcType=VARCHAR}
+      logistic_code = #{logisticCode,jdbcType=VARCHAR},
+      logistic_name = #{logisticName,jdbcType=VARCHAR},
+      logistic_no = #{logisticNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
