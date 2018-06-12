@@ -11,7 +11,9 @@ public class BuyerTaskDO extends BaseModel {
 
     private String ownerNo;
 
-    private String desc;
+    private String companyNo;
+
+    private String remark;
 
     private Date startTime;
 
@@ -69,12 +71,20 @@ public class BuyerTaskDO extends BaseModel {
         this.ownerNo = ownerNo == null ? null : ownerNo.trim();
     }
 
-    public String getDesc() {
-        return desc;
+    public String getCompanyNo() {
+        return companyNo;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Date getStartTime() {

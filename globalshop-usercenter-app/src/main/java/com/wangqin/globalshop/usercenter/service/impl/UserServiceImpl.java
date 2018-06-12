@@ -20,9 +20,7 @@ import java.util.List;
 
 
 /**
- *
  * AuthUserDO 表数据服务层接口实现类
- *
  */
 @Service
 public class UserServiceImpl implements IUserService { //extends SuperServiceImpl<AuthUserDOMapperExt, AuthUserDO>
@@ -32,7 +30,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Autowired
     private AuthUserRoleDOMapperExt userRoleMapper;
-    
+
     @Override
     public AuthUserDO selectByLoginName(String userNo) {
 //        AuthUserDO user = new AuthUserDO();
@@ -56,15 +54,13 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         user.setAge(userVo.getAge().byteValue());
         user.setUserType(userVo.getUserType().byteValue());
         user.setStatus(userVo.getStatus().byteValue());
-        user.setIsDel(false);
         userMapper.insertSelective(user);
-        
+
         Long id = user.getId();
         String[] roles = userVo.getRoleIds().split(",");
         AuthUserRoleDO userRole = new AuthUserRoleDO();
-
+        userRole.init();
         for (String string : roles) {
-            userRole.init();
             userRole.setCompanyNo(userVo.getCompanyNo());
             userRole.setUserId(id);
             userRole.setRoleId(Long.valueOf(string));
@@ -92,7 +88,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
             user.setPassword(null);
         }
         userMapper.updateByPrimaryKey(user);
-        
+
 //        Long id = userVo.getId();
         List<AuthUserRoleDO> userRoles = userRoleMapper.selectByLoginName(userVo.getLoginName());
         if (userRoles != null && !userRoles.isEmpty()) {
@@ -149,7 +145,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //		columnMap.put("organization_id", 7);
 //		return userMapper.selectByMap(columnMap);
 //	}
-	
+
 //	@Override
 //    public List<Long> selectUserIds() {
 //    	return userMapper.selectUserIds();

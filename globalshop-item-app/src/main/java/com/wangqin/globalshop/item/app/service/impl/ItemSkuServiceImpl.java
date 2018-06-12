@@ -196,5 +196,10 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		return itemSkuMapperExt.queryItemCountByUpc(upc);
 	}
 	
+	@Override
+	public List<ItemSkuDO> querySkuListByItemCode(String itemCode) {
+		return itemSkuMapperExt.querySkuListByItemCode(itemCode);
+	}
+	
 }
 

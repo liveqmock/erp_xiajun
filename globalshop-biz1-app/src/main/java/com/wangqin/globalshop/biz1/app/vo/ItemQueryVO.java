@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class ItemQueryVO extends PageQueryVO{
 
+	
 	private String categoryCode;
 	
 	private Integer hasInventory;

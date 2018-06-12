@@ -13,7 +13,7 @@
     </sql>
     <!-- 2.0版通用查询结果列,xiajun-->
     <sql id="Base_Column_List_2">
-        T1.id,T1.item_name AS name,T1.status, T1.remark AS remark,T1.spec,T1.model,
+        T1.id,T1.item_name AS name,T1.status, T1.spec,T1.model,
         T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
         main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
         en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
@@ -416,6 +416,9 @@
             <if test=" itemCode != null and itemCode != '' ">
                and T1.item_code = #{itemCode}
             </if>
+            <if test=" companyNo != null and companyNo != '' ">
+                and T1.company_no = #{companyNo}
+            </if>
             <!--  
              <if test=" enName != null and enName != '' ">
               and  T1.en_name LIKE concat('%',#{enName},'%')
@@ -438,18 +441,13 @@
               and  T1.owners LIKE concat('%',#{owners},'%')
             </if>
              -->
-            <if test=" startGmt!= null ">
-             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
-            </if>
-            <if test=" endGmt != null ">
-            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
-            </if>
-            <if test=" startDate!= null ">
-             and   <![CDATA[  T1.start_date = #{startDate} ]]>
-            </if>
-            <if test=" endDate!= null ">
-             and   <![CDATA[  T1.end_date = #{endDate} ]]>
-            </if>
+            <if test=" startDate!= null and endDate!= null">           	
+             	and  (
+             			(<![CDATA[  T1.start_date >= #{startDate} ]]> and <![CDATA[  T1.start_date <= #{endDate} ]]>)
+             			or   
+             			(<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
+             		 )
+            </if>           
             <if test="hasInventory > 0">
             	<![CDATA[and T3.inv > 0 ]]>
             </if>
@@ -481,6 +479,9 @@
             <if test=" itemCode != null and itemCode != '' ">
                and T1.item_code = #{itemCode}
             </if>
+            <if test=" companyNo != null and companyNo != '' ">
+                and T1.company_no = #{companyNo}
+            </if>
             <!--  
              <if test=" enName != null and enName != '' ">
               and  T1.en_name LIKE concat('%',#{enName},'%')
@@ -501,21 +502,14 @@
            
             <if test=" owners != null and owners != '' ">
               and  T1.owners LIKE concat('%',#{owners},'%')
-            </if>
-            
-            <if test=" startGmt!= null ">
-             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
-            </if>
-            <if test=" endGmt != null ">
-            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
-            </if>
-             -->
-            <if test=" startDate!= null ">
-             and   <![CDATA[  T1.start_date = #{startDate} ]]>
-            </if>
-            <if test=" endDate!= null ">
-             and   <![CDATA[  T1.end_date = #{endDate} ]]>
-            </if>
+            </if>-->
+            <if test=" startDate!= null and endDate!= null">           	
+             	and  (
+             			(<![CDATA[  T1.start_date >= #{startDate} ]]> and <![CDATA[  T1.start_date <= #{endDate} ]]>)
+             			or   
+             			(<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
+             		 )
+            </if>  
             <if test="hasInventory > 0">
             	and <![CDATA[ T3.inv > 0 ]]>
             </if>

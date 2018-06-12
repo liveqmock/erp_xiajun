@@ -1,31 +1,61 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.*;
-import net.sf.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.ImageUtil;
+import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.IBuyerService;
+import com.wangqin.globalshop.item.app.service.ICountryService;
+import com.wangqin.globalshop.item.app.service.IItemBrandService;
+import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+
+import net.sf.json.JSONObject;
 
 /**
  * 商品处理器
@@ -35,6 +65,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/item")
+//@Authenticated
 public class ItemController  {
 
 	@Autowired
@@ -84,6 +115,8 @@ public class ItemController  {
 	@RequestMapping("/add")
 	@ResponseBody
 	public Object add(ItemQueryVO item) {
+		//item.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		item.setCompanyNo("1");
 		//logger.info("add item start");
 		JsonResult<ItemDO> result = new JsonResult<>();
 		if (item.getId() == null) {
@@ -104,7 +137,6 @@ public class ItemController  {
 			item.setName(nameNew.toString());
 
 			//ItemCategoryDO category = categoryService.selectByPrimaryKey(item.getCategoryId());
-			//String categoryCode = category.getCategoryCode();
 			String categoryCode = item.getCategoryCode();
 			if(categoryCode != null){
 				item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
@@ -263,15 +295,25 @@ public class ItemController  {
 	        				//itemSku.setCategoryId(newItem.getCategoryId());
 	        				itemSku.setCategoryName(newItem.getCategoryName());
 	        				itemSku.setBrand(newItem.getBrandName());
-							itemSku.setModifier(AppUtil.getLoginUserId());
-							itemSku.setCreator(AppUtil.getLoginUserId());
+	        				//if(null == AppUtil.getLoginUserId()) {
+	        					///itemSku.setModifier("xiajun");
+	        					//itemSku.setCreator("xiajun");
+	        				//} else {
+	        					itemSku.setModifier(AppUtil.getLoginUserId());
+								itemSku.setCreator(AppUtil.getLoginUserId());
+	        				//}							
 							Date date = new Date();
 							itemSku.setGmtCreate(date);
 							itemSku.setGmtModify(date);
-							itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+							//if(null == AppUtil.getLoginUserCompanyNo()) {
+								//itemSku.setCompanyNo("1");
+							//} else {
+								itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+							//}
+							
 
 	        				//itemSku.setCompanyId(item.getCompanyId());
-	        				System.out.println("销售价格："+itemSku.getSalePrice());
+	        				//System.out.println("销售价格："+itemSku.getSalePrice());
 	        				itemSku.setSalePrice(itemSku.getSalePrice());
 	        				//skuFreight(itemSku);
 	        			});         
@@ -363,9 +405,9 @@ public class ItemController  {
 		}
 
 			String skuList = item.getSkuList();
+			System.out.println("skuList:"+skuList);
 			Double minPrice = null;
 			Double maxPrice = null;
-			/**
 			if (StringUtils.isNotBlank(skuList)) {
 				Integer i = 0;
 				//Integer i = itemSkuService.queryMaxSkuCodeIndex(item.getId());
@@ -438,7 +480,6 @@ public class ItemController  {
 			}  else {
 				item.setPriceRange(minPrice.toString() + "-" + maxPrice.toString());
 			}
-			**/
 			String imgJson = ImageUtil.getImageUrl(item.getMainPic());
 			item.setMainPic(imgJson);
 			
@@ -569,8 +610,7 @@ public class ItemController  {
 		JsonResult<ItemDTO> result = new JsonResult<>();
 		// if haven't item id ,add item
 		if (id != null) {
-			ItemQueryVO itemQueryVO = new ItemQueryVO();
-			ItemDTO item = iItemService.queryItemListSelective(itemQueryVO).get(0);
+			ItemDTO item = iItemService.queryItemById(id);
 			if (item == null) {
 				result.buildIsSuccess(false).buildMsg("没有找到Item");
 			}
@@ -637,7 +677,7 @@ public class ItemController  {
 	}
 
 	/**
-	@RequestMapping("/queryItems")
+	@RequestMapping("/quersyItems")
 	@ResponseBody
 	public Object queryItems(ItemQueryVO itemQueryVO) {
 		//logger.info("queryItems item start");
@@ -727,6 +767,7 @@ public class ItemController  {
 	public Object queryItemList(ItemQueryVO itemQueryVO) {
 		//logger.info("itemsPush start");
 		System.out.println("testa");
+		itemQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
 		EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
 		jsonResult.setTotal(result.getTotalCount());

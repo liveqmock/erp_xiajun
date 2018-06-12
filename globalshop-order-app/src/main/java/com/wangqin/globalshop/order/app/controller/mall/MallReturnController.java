@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/erpReturnOrder")
+@Authenticated
 public class MallReturnController {
 	@Autowired
 	private IMallReturnOrderService erpReturnOrderService;

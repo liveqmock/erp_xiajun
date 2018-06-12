@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
@@ -8,6 +9,8 @@ import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.*;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -119,9 +122,29 @@ public class ItemServiceImplement implements IItemService {
         return itemResult;
     }
     
+    /**
+     * 根据id查询商品，商品编辑使用(fin)
+     */
     @Override
     public ItemDTO queryItemById(Long id) {
-    	return itemDOMapperExt.queryItemById(id);
+    	//return itemDOMapperExt.queryItemById(id);
+    	if(null == id){
+			throw new RuntimeException("商品的id不能为空");
+		}
+		ItemDTO item = itemDOMapperExt.queryItemById(id);
+		if(item!=null){
+			List<ItemSkuDO> itemSkus = itemSkuService.querySkuListByItemCode(item.getItemCode());
+			//查询分渠道销售价格
+//			itemSkus.forEach(sku -> {
+//				if(ChannelSaleType.DIFFERENT.getValue() == sku.getSaleMode()) {
+//					sku.setChannelSalePriceList(channelSalePriceService.queryPriceListBySkuCode(sku.getSkuCode()));
+//				}
+//			});
+			if(itemSkus!=null){
+				item.setItemSkus(itemSkus);
+			}
+		}
+		return item;
     }
 
     @Override

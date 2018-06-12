@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt" >
+  <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="owner_no" property="ownerNo" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="buyer_open_id" property="buyerOpenId" jdbcType="BIGINT" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT" />
+    <result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List2" >
+  id, buyer_task_no, title, owner_no, remark, start_time, end_time, status, gmt_create,
+  gmt_modify, buyer_open_id, buyer_name, purchase_commission_mode, purchase_commission_str,
+  is_del, creator, modifier
+</sql>
+  <select id="list" resultMap="BaseResultMap2" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO">
+    SELECT <include refid="Base_Column_List2"/>
+    FROM buyer_task
+    WHERE
+    company_no = #{companyNo}
+  </select>
+
+</mapper>

@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.controller.shipping;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/shipping")
+@Authenticated
 public class ShippingTrackController {
 	@Autowired
 	private IShippingTrackService shippingTrackService;

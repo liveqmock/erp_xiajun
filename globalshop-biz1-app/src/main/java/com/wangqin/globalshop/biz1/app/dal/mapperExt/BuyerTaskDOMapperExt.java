@@ -12,4 +12,5 @@ public interface BuyerTaskDOMapperExt extends BuyerTaskDOMapper {
     int updateBatchById(List<BuyerTaskDO> taskList);
     List<BuyerTaskDO> queryTaskPurchaseList(TaskPurchaseVO tpVO);
 
+    List<BuyerTaskDO> list(BuyerTaskDO buyerTask);
 }

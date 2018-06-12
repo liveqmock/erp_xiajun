@@ -96,7 +96,7 @@ public class ItemBrandController {
 	}
 
 	/**
-	 * 分页查询(fin)
+	 * 分页查询(fin)，用在品牌管理部分
 	 */
 	@RequestMapping("/queryBrands")
 	@ResponseBody
