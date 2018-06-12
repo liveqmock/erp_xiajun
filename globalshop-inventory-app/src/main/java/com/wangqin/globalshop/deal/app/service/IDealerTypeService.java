@@ -30,4 +30,7 @@ public interface IDealerTypeService {
     
     //删除销售类别
     void deleteById(DealerTypeDO dealerType);
+    
+    int countRelativeDealerType(String typeCode);
+    
 }

@@ -25,7 +25,7 @@ public class DealerServiceImpl implements IDealerService {
     @Override
     public void insert(DealerDO seller) {
         seller.init();
-        mapper.insertSelective(seller);
+        mapper.insertNoId(seller);
     }
 
     @Override
@@ -42,13 +42,13 @@ public class DealerServiceImpl implements IDealerService {
 	@Override
 	public void deleteByDealer(DealerDO seller) {
 		// TODO Auto-generated method stub
-		
+		seller.setIsDel(true);
+		mapper.updateByPrimaryKeySelective(seller);
 	}
 
 	@Override
 	public void updateByDealer(DealerDO seller) {
 		// TODO Auto-generated method stub
-		seller.setIsDel(true);
 		mapper.updateByPrimaryKeySelective(seller);
 		
 	}

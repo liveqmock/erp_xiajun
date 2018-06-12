@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.deal.app.controller;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
@@ -19,7 +18,6 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/sellerType")
-@Authenticated
 public class DealerTypeController {
 
     @Autowired
@@ -94,6 +92,15 @@ public class DealerTypeController {
    
     	JsonResult<DealerTypeDO> result = new JsonResult<>();
     	//需要判断该类别下有没有销售管理
+    	DealerTypeDO sellerTypeCode = iSellerTypeService.selectByPrimaryKey(sellerType.getId());
+    	String typeCode = sellerTypeCode.getCode();
+    	
+    	int count = iSellerTypeService.countRelativeDealerType(typeCode);
+    	
+    	if(count > 0) {
+    		return result.buildIsSuccess(false).buildMsg("错误，该类别下存在有销售");
+    	}
+    	
     	iSellerTypeService.deleteById(sellerType);
         return result.buildIsSuccess(true);
     }
