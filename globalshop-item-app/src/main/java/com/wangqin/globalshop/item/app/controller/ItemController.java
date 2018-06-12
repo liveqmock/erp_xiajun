@@ -84,6 +84,7 @@ public class ItemController  {
 	@RequestMapping("/add")
 	@ResponseBody
 	public Object add(ItemQueryVO item) {
+		item.setCompanyNo("12");
 		//logger.info("add item start");
 		JsonResult<ItemDO> result = new JsonResult<>();
 		if (item.getId() == null) {
@@ -104,7 +105,6 @@ public class ItemController  {
 			item.setName(nameNew.toString());
 
 			//ItemCategoryDO category = categoryService.selectByPrimaryKey(item.getCategoryId());
-			//String categoryCode = category.getCategoryCode();
 			String categoryCode = item.getCategoryCode();
 			if(categoryCode != null){
 				item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
@@ -263,15 +263,25 @@ public class ItemController  {
 	        				//itemSku.setCategoryId(newItem.getCategoryId());
 	        				itemSku.setCategoryName(newItem.getCategoryName());
 	        				itemSku.setBrand(newItem.getBrandName());
-							itemSku.setModifier(AppUtil.getLoginUserId());
-							itemSku.setCreator(AppUtil.getLoginUserId());
+	        				if(null == AppUtil.getLoginUserId()) {
+	        					itemSku.setModifier("xiajun");
+	        					itemSku.setCreator("xiajun");
+	        				} else {
+	        					itemSku.setModifier(AppUtil.getLoginUserId());
+								itemSku.setCreator(AppUtil.getLoginUserId());
+	        				}							
 							Date date = new Date();
 							itemSku.setGmtCreate(date);
 							itemSku.setGmtModify(date);
-							itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+							if(null == AppUtil.getLoginUserCompanyNo()) {
+								itemSku.setCompanyNo("1");
+							} else {
+								itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+							}
+							
 
 	        				//itemSku.setCompanyId(item.getCompanyId());
-	        				System.out.println("销售价格："+itemSku.getSalePrice());
+	        				//System.out.println("销售价格："+itemSku.getSalePrice());
 	        				itemSku.setSalePrice(itemSku.getSalePrice());
 	        				//skuFreight(itemSku);
 	        			});         
