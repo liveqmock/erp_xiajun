@@ -44,7 +44,6 @@
     </selectKey>
     insert into auth_user_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="userId != null" >
         user_id,
       </if>
@@ -71,7 +70,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
       </if>
