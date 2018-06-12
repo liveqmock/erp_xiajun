@@ -11,15 +11,11 @@
     <result column="icon" property="icon" jdbcType="VARCHAR" />
     <result column="pid" property="pid" jdbcType="BIGINT" />
     <result column="seq" property="seq" jdbcType="INTEGER" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, org_id, name, address, code, icon, pid, seq, gmt_create, gmt_modify, 
-    creator, modifier, is_del
+    id, company_no, org_id, name, address, code, icon, pid, seq, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -32,27 +28,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into auth_organization (id, company_no, org_id, 
-      name, address, code, 
-      icon, pid, seq, gmt_create, 
-      gmt_modify, creator, modifier, 
-      is_del)
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{icon,jdbcType=VARCHAR}, #{pid,jdbcType=BIGINT}, #{seq,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT})
+    insert into auth_organization (company_no, org_id, name, 
+      address, code, icon, 
+      pid, seq, creator, modifier
+      )
+    values (#{companyNo,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+      #{pid,jdbcType=BIGINT}, #{seq,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into auth_organization
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="companyNo != null" >
         company_no,
       </if>
@@ -77,24 +70,14 @@
       <if test="seq != null" >
         seq,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
@@ -119,20 +102,11 @@
       <if test="seq != null" >
         #{seq,jdbcType=INTEGER},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -163,20 +137,11 @@
       <if test="seq != null" >
         seq = #{seq,jdbcType=INTEGER},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -191,11 +156,8 @@
       icon = #{icon,jdbcType=VARCHAR},
       pid = #{pid,jdbcType=BIGINT},
       seq = #{seq,jdbcType=INTEGER},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
+      modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -469,11 +469,8 @@ public class InventoryController {
             String invOutNo = "IOUT" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDD) + "U" + String.format("%0" + 4 + "d", "inventoryControllerJJJJ") + sequenceUtilService.gainINVOUTSequence();
             inventoryOut.setInventoryOutNo(invOutNo);
 //			inventoryOut.setUserCreate(loginName);
-            inventoryOut.setGmtCreate(nowDate);
-            inventoryOut.setGmtModify(nowDate);
         } else {
 //			inventoryOut.setUserModify(loginName);
-            inventoryOut.setGmtModify(nowDate);
         }
 
 //    	if(!StringUtils.isEmpty(inventoryOut.getInventoryOutDetailListStr())) {

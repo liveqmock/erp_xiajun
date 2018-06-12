@@ -10,15 +10,12 @@
     <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
     <result column="channel_item_alias" property="channelItemAlias" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, item_code, channel_no, company_no, channel_item_code, shop_code, channel_item_alias, 
-    status, is_del, gmt_create, gmt_modify, creator, modifier
+    status, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,27 +28,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into channel_listing_item (id, item_code, channel_no, 
-      company_no, channel_item_code, shop_code, 
-      channel_item_alias, status, is_del, 
-      gmt_create, gmt_modify, creator, 
-      modifier)
-    values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, 
-      #{companyNo,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
-      #{channelItemAlias,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{isDel,jdbcType=BIT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+    insert into channel_listing_item (item_code, channel_no, company_no, 
+      channel_item_code, shop_code, channel_item_alias, 
+      status, creator, modifier
+      )
+    values (#{itemCode,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+      #{channelItemCode,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{channelItemAlias,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into channel_listing_item
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="itemCode != null" >
         item_code,
       </if>
@@ -73,15 +67,6 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -90,7 +75,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="itemCode != null" >
         #{itemCode,jdbcType=VARCHAR},
       </if>
@@ -111,15 +95,6 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -153,15 +128,6 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -180,9 +146,6 @@
       shop_code = #{shopCode,jdbcType=VARCHAR},
       channel_item_alias = #{channelItemAlias,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

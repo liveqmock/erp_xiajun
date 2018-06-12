@@ -283,7 +283,6 @@ public class InventoryServiceImpl implements InventoryService {
                 throw new ErpCommonException("库存不足，出库失败");
             }
             inventory.setInv(inv);
-            inventory.setGmtModify(new Date());
             mapper.updateByPrimaryKeySelective(inventory);
             /**分库存*/
             Map<InventoryOnWareHouseDO, Long> map = invOnWarehouseService.ship(inventory, Long.valueOf(aDo.getQuantity()));

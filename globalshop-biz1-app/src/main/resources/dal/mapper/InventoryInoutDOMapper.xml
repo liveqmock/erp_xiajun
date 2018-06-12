@@ -12,15 +12,12 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="quantity" property="quantity" jdbcType="BIGINT" />
     <result column="operator_type" property="operatorType" jdbcType="INTEGER" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, item_code, sku_code, inventory_on_warehouse_no, warehouse_no, shelf_no, 
-    remark, quantity, operator_type, gmt_create, gmt_modify, is_del, creator, modifier
+    remark, quantity, operator_type, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -33,24 +30,20 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into inventory_inout (id, company_no, item_code, 
-      sku_code, inventory_on_warehouse_no, warehouse_no, 
-      shelf_no, remark, quantity, 
-      operator_type, gmt_create, gmt_modify, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
-      #{skuCode,jdbcType=VARCHAR}, #{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
-      #{shelfNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, 
-      #{operatorType,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+    insert into inventory_inout (company_no, item_code, sku_code, 
+      inventory_on_warehouse_no, warehouse_no, shelf_no, 
+      remark, quantity, operator_type, 
+      creator, modifier)
+    values (#{companyNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{shelfNo,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, #{operatorType,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into inventory_inout
@@ -81,15 +74,6 @@
       </if>
       <if test="operatorType != null" >
         operator_type,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
       </if>
       <if test="creator != null" >
         creator,
@@ -125,15 +109,6 @@
       </if>
       <if test="operatorType != null" >
         #{operatorType,jdbcType=INTEGER},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -173,15 +148,6 @@
       <if test="operatorType != null" >
         operator_type = #{operatorType,jdbcType=INTEGER},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -202,9 +168,6 @@
       remark = #{remark,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=BIGINT},
       operator_type = #{operatorType,jdbcType=INTEGER},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

@@ -1,17 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
-public class JdShopConfigDO {
+public class JdShopConfigDO extends BaseModel {
     private Long id;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
     private Long version;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -33,36 +25,12 @@ public class JdShopConfigDO {
         this.id = id;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public Long getVersion() {
         return version;
     }
 
     public void setVersion(Long version) {
         this.version = version;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

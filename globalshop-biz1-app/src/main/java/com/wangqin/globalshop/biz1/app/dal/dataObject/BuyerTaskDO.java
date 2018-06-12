@@ -21,10 +21,6 @@ public class BuyerTaskDO extends BaseModel {
 
     private Integer status;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
     private Long buyerOpenId;
 
     private String buyerName;
@@ -32,8 +28,6 @@ public class BuyerTaskDO extends BaseModel {
     private Long purchaseCommissionMode;
 
     private String purchaseCommissionStr;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -111,22 +105,6 @@ public class BuyerTaskDO extends BaseModel {
         this.status = status;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public Long getBuyerOpenId() {
         return buyerOpenId;
     }
@@ -157,14 +135,6 @@ public class BuyerTaskDO extends BaseModel {
 
     public void setPurchaseCommissionStr(String purchaseCommissionStr) {
         this.purchaseCommissionStr = purchaseCommissionStr == null ? null : purchaseCommissionStr.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

@@ -8,15 +8,11 @@
     <result column="name_china" property="nameChina" jdbcType="VARCHAR" />
     <result column="name_alias" property="nameAlias" jdbcType="VARCHAR" />
     <result column="seq" property="seq" jdbcType="TINYINT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, brand_no, name, name_china, name_alias, seq, gmt_create, gmt_modify, is_del, 
-    creator, modifier
+    id, brand_no, name, name_china, name_alias, seq, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,25 +25,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into item_brand (id, brand_no, name, 
-      name_china, name_alias, seq, 
-      gmt_create, gmt_modify, is_del, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{brandNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{nameChina,jdbcType=VARCHAR}, #{nameAlias,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into item_brand (brand_no, name, name_china, 
+      name_alias, seq, creator, 
+      modifier)
+    values (#{brandNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{nameChina,jdbcType=VARCHAR}, 
+      #{nameAlias,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into item_brand
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="brandNo != null" >
         brand_no,
       </if>
@@ -63,15 +56,6 @@
       <if test="seq != null" >
         seq,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -80,7 +64,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="brandNo != null" >
         #{brandNo,jdbcType=VARCHAR},
       </if>
@@ -95,15 +78,6 @@
       </if>
       <if test="seq != null" >
         #{seq,jdbcType=TINYINT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -131,15 +105,6 @@
       <if test="seq != null" >
         seq = #{seq,jdbcType=TINYINT},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -156,9 +121,6 @@
       name_china = #{nameChina,jdbcType=VARCHAR},
       name_alias = #{nameAlias,jdbcType=VARCHAR},
       seq = #{seq,jdbcType=TINYINT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

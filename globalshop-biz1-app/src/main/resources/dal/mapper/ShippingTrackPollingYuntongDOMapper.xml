@@ -8,15 +8,12 @@
     <result column="inland_trans_company_name" property="inlandTransCompanyName" jdbcType="VARCHAR" />
     <result column="current_status" property="currentStatus" jdbcType="VARCHAR" />
     <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, waybill_no, inland_trans_code, inland_trans_company_name, current_status, status_time, 
-    gmt_create, gmt_modify, is_del, creator, modifier
+    creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,27 +26,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_track_polling_yuntong (id, waybill_no, inland_trans_code, 
-      inland_trans_company_name, current_status, 
-      status_time, gmt_create, gmt_modify, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{waybillNo,jdbcType=VARCHAR}, #{inlandTransCode,jdbcType=VARCHAR}, 
-      #{inlandTransCompanyName,jdbcType=VARCHAR}, #{currentStatus,jdbcType=VARCHAR}, 
-      #{statusTime,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+    insert into shipping_track_polling_yuntong (waybill_no, inland_trans_code, inland_trans_company_name, 
+      current_status, status_time, creator, 
+      modifier)
+    values (#{waybillNo,jdbcType=VARCHAR}, #{inlandTransCode,jdbcType=VARCHAR}, #{inlandTransCompanyName,jdbcType=VARCHAR}, 
+      #{currentStatus,jdbcType=VARCHAR}, #{statusTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPollingYuntongDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into shipping_track_polling_yuntong
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="waybillNo != null" >
         waybill_no,
       </if>
@@ -65,15 +57,6 @@
       <if test="statusTime != null" >
         status_time,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -82,7 +65,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="waybillNo != null" >
         #{waybillNo,jdbcType=VARCHAR},
       </if>
@@ -97,15 +79,6 @@
       </if>
       <if test="statusTime != null" >
         #{statusTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -133,15 +106,6 @@
       <if test="statusTime != null" >
         status_time = #{statusTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -158,9 +122,6 @@
       inland_trans_company_name = #{inlandTransCompanyName,jdbcType=VARCHAR},
       current_status = #{currentStatus,jdbcType=VARCHAR},
       status_time = #{statusTime,jdbcType=TIMESTAMP},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

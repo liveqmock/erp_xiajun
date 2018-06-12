@@ -53,12 +53,6 @@ public class MallOrderDO extends BaseModel {
 
     private Double freightAgent;
 
-    private Date gmtModify;
-
-    private Date gmtCreate;
-
-    private Boolean isDel;
-
     private String modifier;
 
     private String creator;
@@ -261,30 +255,6 @@ public class MallOrderDO extends BaseModel {
 
     public void setFreightAgent(Double freightAgent) {
         this.freightAgent = freightAgent;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getModifier() {

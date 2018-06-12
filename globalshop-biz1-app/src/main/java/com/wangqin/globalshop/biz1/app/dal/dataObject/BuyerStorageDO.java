@@ -9,6 +9,8 @@ public class BuyerStorageDO extends BaseModel {
 
     private String warehouseNo;
 
+    private String companyNo;
+
     private String warehouseName;
 
     private String buyerName;
@@ -19,17 +21,11 @@ public class BuyerStorageDO extends BaseModel {
 
     private String buyerTaskNo;
 
-    private Date gmtCreate;
-
     private Byte storageType;
 
     private Date entryDate;
 
-    private Date gmtModify;
-
     private String memo;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -57,6 +53,14 @@ public class BuyerStorageDO extends BaseModel {
 
     public void setWarehouseNo(String warehouseNo) {
         this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getWarehouseName() {
@@ -99,14 +103,6 @@ public class BuyerStorageDO extends BaseModel {
         this.buyerTaskNo = buyerTaskNo == null ? null : buyerTaskNo.trim();
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
     public Byte getStorageType() {
         return storageType;
     }
@@ -123,28 +119,12 @@ public class BuyerStorageDO extends BaseModel {
         this.entryDate = entryDate;
     }
 
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public String getMemo() {
         return memo;
     }
 
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

@@ -11,15 +11,9 @@ public class SiteMsgReadDO extends BaseModel {
 
     private Byte readStatus;
 
-    private Date gmtCreate;
-
     private Date gmtModified;
 
-    private Boolean isDel;
-
     private Long senderId;
-
-    private Date gmtModify;
 
     private String creator;
 
@@ -57,14 +51,6 @@ public class SiteMsgReadDO extends BaseModel {
         this.readStatus = readStatus;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
     public Date getGmtModified() {
         return gmtModified;
     }
@@ -73,28 +59,12 @@ public class SiteMsgReadDO extends BaseModel {
         this.gmtModified = gmtModified;
     }
 
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
     public Long getSenderId() {
         return senderId;
     }
 
     public void setSenderId(Long senderId) {
         this.senderId = senderId;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

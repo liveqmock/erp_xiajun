@@ -3,7 +3,6 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.SiteMsgDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.SiteMsgDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
@@ -11,14 +10,12 @@
     <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
     <result column="send_type" property="sendType" jdbcType="INTEGER" />
     <result column="category" property="category" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, gmt_create, gmt_modified, title, content, status, send_time, send_type, category, 
-    is_del, gmt_modify, creator, modifier
+    id, gmt_modified, title, content, status, send_time, send_type, category, creator, 
+    modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,30 +28,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SiteMsgDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into site_msg (id, gmt_create, gmt_modified, 
-      title, content, status, 
-      send_time, send_type, category, 
-      is_del, gmt_modify, creator, 
-      modifier)
-    values (#{id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{sendTime,jdbcType=TIMESTAMP}, #{sendType,jdbcType=INTEGER}, #{category,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+    insert into site_msg (gmt_modified, title, content, 
+      status, send_time, send_type, 
+      category, creator, modifier
+      )
+    values (#{gmtModified,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{sendType,jdbcType=INTEGER}, 
+      #{category,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SiteMsgDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into site_msg
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
       <if test="gmtModified != null" >
         gmt_modified,
       </if>
@@ -76,12 +67,6 @@
       <if test="category != null" >
         category,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -90,10 +75,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
       <if test="gmtModified != null" >
         #{gmtModified,jdbcType=TIMESTAMP},
       </if>
@@ -115,12 +96,6 @@
       <if test="category != null" >
         #{category,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -132,9 +107,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SiteMsgDO" >
     update site_msg
     <set >
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
       <if test="gmtModified != null" >
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       </if>
@@ -156,12 +128,6 @@
       <if test="category != null" >
         category = #{category,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -173,16 +139,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SiteMsgDO" >
     update site_msg
-    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+    set gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
       send_type = #{sendType,jdbcType=INTEGER},
       category = #{category,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

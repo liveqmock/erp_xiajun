@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleTypeDO;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
@@ -376,8 +376,8 @@ public class ItemSkuController  {
 	@RequestMapping("/scaleTypeList")
 	@ResponseBody
 	public Object scaleTypeList() {
-		JsonResult<List<ScaleType>> result = new JsonResult<>();
-		List<ScaleType> scaleTypeList= scaleTypeService.scaleTypeList();
+		JsonResult<List<ScaleTypeDO>> result = new JsonResult<>();
+		List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
 		
 		return result.buildData(scaleTypeList).buildIsSuccess(true);
 	}

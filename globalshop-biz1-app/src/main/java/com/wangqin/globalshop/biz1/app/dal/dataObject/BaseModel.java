@@ -9,23 +9,14 @@ import java.util.Date;
  * @data 2018/06/05
  */
 public class BaseModel {
-    private Boolean isDel;
-    private Date gmtCreate;
-
-    private Date gmtModify;
+    protected Boolean isDel;
+    protected Date gmtCreate;
+    protected Date gmtModify;
 
     private String creator;
 
     private String modifier;
     private String companyNo;
-
-    public String getCompanyNo() {
-        return companyNo;
-    }
-
-    public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo;
-    }
 
     public Boolean getIsDel() {
         return isDel;
@@ -51,29 +42,22 @@ public class BaseModel {
         this.gmtModify = gmtModify;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
     public void setCreator(String creator) {
         this.creator = creator;
-    }
-
-    public String getModifier() {
-        return modifier;
     }
 
     public void setModifier(String modifier) {
         this.modifier = modifier;
     }
 
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo;
+    }
+
     public void init() {
         this.setModifier(AppUtil.getLoginUserId());
         this.setCreator(AppUtil.getLoginUserId());
         this.setIsDel(false);
-        Date date = new Date();
-        this.setGmtCreate(date);
-        this.setGmtModify(date);
         this.setCompanyNo(AppUtil.getLoginUserCompanyNo());
     }
     public void initCompany() {
@@ -82,7 +66,5 @@ public class BaseModel {
 
     public void update() {
         this.setModifier(AppUtil.getLoginUserId());
-        Date date = new Date();
-        this.setGmtModify(date);
     }
 }

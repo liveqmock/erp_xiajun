@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class ItemCategoryDO extends BaseModel {
     private Long id;
 
@@ -20,12 +18,6 @@ public class ItemCategoryDO extends BaseModel {
     private Integer status;
 
     private String allPath;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -101,30 +93,6 @@ public class ItemCategoryDO extends BaseModel {
 
     public void setAllPath(String allPath) {
         this.allPath = allPath == null ? null : allPath.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

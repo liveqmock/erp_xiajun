@@ -14,20 +14,17 @@
     <result column="upc" property="upc" jdbcType="VARCHAR" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
     <result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
     <result column="item_code" property="itemCode" jdbcType="BIGINT" />
     <result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price, 
-    currency, upc, quantity, trans_quantity, gmt_modify, purchase_storage_no, gmt_create, 
-    buyer_task_detail_no, item_code, sku_buysite, is_del, creator, modifier
+    currency, upc, quantity, trans_quantity, purchase_storage_no, buyer_task_detail_no, 
+    item_code, sku_buysite, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -40,33 +37,28 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into buyer_storage_detail (id, storage_no, warehouse_no, 
-      warehouse_name, shelf_no, sku_code, 
-      price, total_price, currency, 
-      upc, quantity, trans_quantity, 
-      gmt_modify, purchase_storage_no, gmt_create, 
+    insert into buyer_storage_detail (storage_no, warehouse_no, warehouse_name, 
+      shelf_no, sku_code, price, 
+      total_price, currency, upc, 
+      quantity, trans_quantity, purchase_storage_no, 
       buyer_task_detail_no, item_code, sku_buysite, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
-      #{warehouseName,jdbcType=VARCHAR}, #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DOUBLE}, #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=TINYINT}, 
-      #{upc,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{transQuantity,jdbcType=INTEGER}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{purchaseStorageNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      creator, modifier)
+    values (#{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
+      #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
+      #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=TINYINT}, #{upc,jdbcType=VARCHAR}, 
+      #{quantity,jdbcType=INTEGER}, #{transQuantity,jdbcType=INTEGER}, #{purchaseStorageNo,jdbcType=VARCHAR}, 
       #{buyerTaskDetailNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=BIGINT}, #{skuBuysite,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into buyer_storage_detail
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="storageNo != null" >
         storage_no,
       </if>
@@ -100,14 +92,8 @@
       <if test="transQuantity != null" >
         trans_quantity,
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
       </if>
       <if test="buyerTaskDetailNo != null" >
         buyer_task_detail_no,
@@ -118,9 +104,6 @@
       <if test="skuBuysite != null" >
         sku_buysite,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -129,7 +112,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="storageNo != null" >
         #{storageNo,jdbcType=VARCHAR},
       </if>
@@ -163,14 +145,8 @@
       <if test="transQuantity != null" >
         #{transQuantity,jdbcType=INTEGER},
       </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="purchaseStorageNo != null" >
         #{purchaseStorageNo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="buyerTaskDetailNo != null" >
         #{buyerTaskDetailNo,jdbcType=VARCHAR},
@@ -180,9 +156,6 @@
       </if>
       <if test="skuBuysite != null" >
         #{skuBuysite,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -228,14 +201,8 @@
       <if test="transQuantity != null" >
         trans_quantity = #{transQuantity,jdbcType=INTEGER},
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="buyerTaskDetailNo != null" >
         buyer_task_detail_no = #{buyerTaskDetailNo,jdbcType=VARCHAR},
@@ -245,9 +212,6 @@
       </if>
       <if test="skuBuysite != null" >
         sku_buysite = #{skuBuysite,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -271,13 +235,10 @@
       upc = #{upc,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
       trans_quantity = #{transQuantity,jdbcType=INTEGER},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       buyer_task_detail_no = #{buyerTaskDetailNo,jdbcType=VARCHAR},
       item_code = #{itemCode,jdbcType=BIGINT},
       sku_buysite = #{skuBuysite,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

@@ -79,12 +79,6 @@ public class ItemDO extends BaseModel {
 
     private String buyerOpenId;
 
-    private Date gmtModify;
-
-    private Date gmtCreate;
-
-    private Boolean isDel;
-
     private String creator;
 
     private String modifier;
@@ -395,30 +389,6 @@ public class ItemDO extends BaseModel {
 
     public void setBuyerOpenId(String buyerOpenId) {
         this.buyerOpenId = buyerOpenId == null ? null : buyerOpenId.trim();
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

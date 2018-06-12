@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class SysLogDO extends BaseModel {
     private Long id;
 
@@ -14,10 +12,6 @@ public class SysLogDO extends BaseModel {
     private String clientIp;
 
     private String result;
-
-    private Boolean isDel;
-
-    private Date gmtCreate;
 
     private String creator;
 
@@ -69,22 +63,6 @@ public class SysLogDO extends BaseModel {
 
     public void setResult(String result) {
         this.result = result == null ? null : result.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
     }
 
     public String getCreator() {

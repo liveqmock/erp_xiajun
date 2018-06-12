@@ -1,13 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class ChannelDO extends BaseModel {
     private Long id;
 
     private String channelNo;
-
-    private Date gmtCreate;
 
     private String name;
 
@@ -22,10 +18,6 @@ public class ChannelDO extends BaseModel {
     private String contactUrl;
 
     private String remark;
-
-    private Boolean isDel;
-
-    private Date gmtModify;
 
     private String creator;
 
@@ -45,14 +37,6 @@ public class ChannelDO extends BaseModel {
 
     public void setChannelNo(String channelNo) {
         this.channelNo = channelNo == null ? null : channelNo.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
     }
 
     public String getName() {
@@ -109,22 +93,6 @@ public class ChannelDO extends BaseModel {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

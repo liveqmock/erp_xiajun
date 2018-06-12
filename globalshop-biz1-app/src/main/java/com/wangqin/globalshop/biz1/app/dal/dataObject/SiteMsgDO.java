@@ -5,8 +5,6 @@ import java.util.Date;
 public class SiteMsgDO extends BaseModel {
     private Long id;
 
-    private Date gmtCreate;
-
     private Date gmtModified;
 
     private String title;
@@ -21,10 +19,6 @@ public class SiteMsgDO extends BaseModel {
 
     private String category;
 
-    private Boolean isDel;
-
-    private Date gmtModify;
-
     private String creator;
 
     private String modifier;
@@ -35,14 +29,6 @@ public class SiteMsgDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
     }
 
     public Date getGmtModified() {
@@ -99,22 +85,6 @@ public class SiteMsgDO extends BaseModel {
 
     public void setCategory(String category) {
         this.category = category == null ? null : category.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

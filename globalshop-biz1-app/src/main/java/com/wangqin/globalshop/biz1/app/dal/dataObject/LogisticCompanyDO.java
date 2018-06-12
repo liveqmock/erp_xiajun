@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class LogisticCompanyDO extends BaseModel {
     private Long id;
 
@@ -28,12 +26,6 @@ public class LogisticCompanyDO extends BaseModel {
     private String nameInTaobao;
 
     private String codeInTaobao;
-
-    private Boolean isDel;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
 
     private String creator;
 
@@ -141,30 +133,6 @@ public class LogisticCompanyDO extends BaseModel {
 
     public void setCodeInTaobao(String codeInTaobao) {
         this.codeInTaobao = codeInTaobao == null ? null : codeInTaobao.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

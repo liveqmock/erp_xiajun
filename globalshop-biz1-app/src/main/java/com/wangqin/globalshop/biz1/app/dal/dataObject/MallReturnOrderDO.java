@@ -1,27 +1,38 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 public class MallReturnOrderDO extends BaseModel {
     private Long id;
+
     private String orderNo;
+
     private Long outerOrderNo;
+
     private String subOrderNo;
+
     private Byte status;
+
     private String returnReason;
+
     private String returnReasonDetail;
+
     private Integer returnQuantity;
+
     private Double returnPrice;
+
     private Byte isCivil;
+
     private Byte isCheckin;
+
     private String customerOpenId;
+
     private String telephone;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+
     private Date receiveTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+
     private Date returnPayTime;
+
     private String remark;
 
     private Integer returnRefer;
@@ -29,11 +40,6 @@ public class MallReturnOrderDO extends BaseModel {
     private String proofImg;
 
     private Integer returnType;
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -189,30 +195,6 @@ public class MallReturnOrderDO extends BaseModel {
 
     public void setReturnType(Integer returnType) {
         this.returnType = returnType;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

@@ -27,9 +27,6 @@
     <result column="source" property="source" jdbcType="BIGINT" />
     <result column="freight" property="freight" jdbcType="DOUBLE" />
     <result column="freight_agent" property="freightAgent" jdbcType="DOUBLE" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
@@ -37,8 +34,7 @@
     id, dealer_code, dealer_name, customer_no, order_no, company_no, channel_no, channel_name, 
     channel_order_no, channel_customer_no, channel_type, shop_code, wx_pay_trade_no, 
     total_amount, actual_amount, pay_type, order_time, status, memo, id_card, idcard_pic_front, 
-    idcard_pic_reverse, source, freight, freight_agent, gmt_modify, gmt_create, is_del, 
-    modifier, creator
+    idcard_pic_reverse, source, freight, freight_agent, modifier, creator
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -51,39 +47,34 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_order (id, dealer_code, dealer_name, 
-      customer_no, order_no, company_no, 
-      channel_no, channel_name, channel_order_no, 
-      channel_customer_no, channel_type, shop_code, 
-      wx_pay_trade_no, total_amount, actual_amount, 
-      pay_type, order_time, status, 
-      memo, id_card, idcard_pic_front, 
-      idcard_pic_reverse, source, freight, 
-      freight_agent, gmt_modify, gmt_create, 
-      is_del, modifier, creator
-      )
-    values (#{id,jdbcType=BIGINT}, #{dealerCode,jdbcType=VARCHAR}, #{dealerName,jdbcType=VARCHAR}, 
-      #{customerNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
-      #{channelNo,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, 
-      #{channelCustomerNo,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
-      #{wxPayTradeNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DOUBLE}, #{actualAmount,jdbcType=DOUBLE}, 
-      #{payType,jdbcType=INTEGER}, #{orderTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{memo,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, 
-      #{idcardPicReverse,jdbcType=VARCHAR}, #{source,jdbcType=BIGINT}, #{freight,jdbcType=DOUBLE}, 
-      #{freightAgent,jdbcType=DOUBLE}, #{gmtModify,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
-      )
+    insert into mall_order (dealer_code, dealer_name, customer_no, 
+      order_no, company_no, channel_no, 
+      channel_name, channel_order_no, channel_customer_no, 
+      channel_type, shop_code, wx_pay_trade_no, 
+      total_amount, actual_amount, pay_type, 
+      order_time, status, memo, 
+      id_card, idcard_pic_front, idcard_pic_reverse, 
+      source, freight, freight_agent, 
+      modifier, creator)
+    values (#{dealerCode,jdbcType=VARCHAR}, #{dealerName,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
+      #{orderNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, 
+      #{channelName,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{channelCustomerNo,jdbcType=VARCHAR}, 
+      #{channelType,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{wxPayTradeNo,jdbcType=VARCHAR}, 
+      #{totalAmount,jdbcType=DOUBLE}, #{actualAmount,jdbcType=DOUBLE}, #{payType,jdbcType=INTEGER}, 
+      #{orderTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, 
+      #{source,jdbcType=BIGINT}, #{freight,jdbcType=DOUBLE}, #{freightAgent,jdbcType=DOUBLE}, 
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="dealerCode != null" >
         dealer_code,
       </if>
@@ -156,15 +147,6 @@
       <if test="freightAgent != null" >
         freight_agent,
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="modifier != null" >
         modifier,
       </if>
@@ -173,7 +155,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="dealerCode != null" >
         #{dealerCode,jdbcType=VARCHAR},
       </if>
@@ -245,15 +226,6 @@
       </if>
       <if test="freightAgent != null" >
         #{freightAgent,jdbcType=DOUBLE},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
@@ -338,15 +310,6 @@
       <if test="freightAgent != null" >
         freight_agent = #{freightAgent,jdbcType=DOUBLE},
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
@@ -382,9 +345,6 @@
       source = #{source,jdbcType=BIGINT},
       freight = #{freight,jdbcType=DOUBLE},
       freight_agent = #{freightAgent,jdbcType=DOUBLE},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

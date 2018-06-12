@@ -6,7 +6,6 @@
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="company_name" property="companyName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
     <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
@@ -15,18 +14,15 @@
     <result column="im" property="im" jdbcType="VARCHAR" />
     <result column="service_time" property="serviceTime" jdbcType="VARCHAR" />
     <result column="force_idcard_upload" property="forceIdcardUpload" jdbcType="INTEGER" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" extends="BaseResultMap" >
     <result column="intro" property="intro" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, company_name, status, gmt_create, gmt_modified, shop_name, logo_url, 
-    force_idcard, tel, im, service_time, force_idcard_upload, gmt_modify, creator, modifier, 
-    is_del
+    id, company_no, company_name, status, gmt_modified, shop_name, logo_url, force_idcard, 
+    tel, im, service_time, force_idcard_upload, creator, modifier
   </sql>
   <sql id="Blob_Column_List" >
     intro
@@ -44,31 +40,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into company (id, company_no, company_name, 
-      status, gmt_create, gmt_modified, 
-      shop_name, logo_url, force_idcard, 
-      tel, im, service_time, 
-      force_idcard_upload, gmt_modify, creator, 
-      modifier, is_del, intro
-      )
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{shopName,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, #{forceIdcard,jdbcType=INTEGER}, 
-      #{tel,jdbcType=VARCHAR}, #{im,jdbcType=VARCHAR}, #{serviceTime,jdbcType=VARCHAR}, 
-      #{forceIdcardUpload,jdbcType=INTEGER}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, #{intro,jdbcType=LONGVARCHAR}
-      )
+    insert into company (company_no, company_name, status, 
+      gmt_modified, shop_name, logo_url, 
+      force_idcard, tel, im, 
+      service_time, force_idcard_upload, creator, 
+      modifier, intro)
+    values (#{companyNo,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{shopName,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, 
+      #{forceIdcard,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, #{im,jdbcType=VARCHAR}, 
+      #{serviceTime,jdbcType=VARCHAR}, #{forceIdcardUpload,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{intro,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into company
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="companyNo != null" >
         company_no,
       </if>
@@ -77,9 +68,6 @@
       </if>
       <if test="status != null" >
         status,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
       </if>
       <if test="gmtModified != null" >
         gmt_modified,
@@ -105,24 +93,17 @@
       <if test="forceIdcardUpload != null" >
         force_idcard_upload,
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="intro != null" >
         intro,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
@@ -131,9 +112,6 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtModified != null" >
         #{gmtModified,jdbcType=TIMESTAMP},
@@ -159,17 +137,11 @@
       <if test="forceIdcardUpload != null" >
         #{forceIdcardUpload,jdbcType=INTEGER},
       </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="intro != null" >
         #{intro,jdbcType=LONGVARCHAR},
@@ -187,9 +159,6 @@
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtModified != null" >
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
@@ -215,17 +184,11 @@
       <if test="forceIdcardUpload != null" >
         force_idcard_upload = #{forceIdcardUpload,jdbcType=INTEGER},
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
       <if test="intro != null" >
         intro = #{intro,jdbcType=LONGVARCHAR},
@@ -238,7 +201,6 @@
     set company_no = #{companyNo,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       shop_name = #{shopName,jdbcType=VARCHAR},
       logo_url = #{logoUrl,jdbcType=VARCHAR},
@@ -247,10 +209,8 @@
       im = #{im,jdbcType=VARCHAR},
       service_time = #{serviceTime,jdbcType=VARCHAR},
       force_idcard_upload = #{forceIdcardUpload,jdbcType=INTEGER},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
       intro = #{intro,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -259,7 +219,6 @@
     set company_no = #{companyNo,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       shop_name = #{shopName,jdbcType=VARCHAR},
       logo_url = #{logoUrl,jdbcType=VARCHAR},
@@ -268,10 +227,8 @@
       im = #{im,jdbcType=VARCHAR},
       service_time = #{serviceTime,jdbcType=VARCHAR},
       force_idcard_upload = #{forceIdcardUpload,jdbcType=INTEGER},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
+      modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

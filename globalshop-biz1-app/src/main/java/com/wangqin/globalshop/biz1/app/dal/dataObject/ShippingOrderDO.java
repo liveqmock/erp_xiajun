@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class ShippingOrderDO extends BaseModel {
     private Long id;
 
@@ -29,6 +27,8 @@ public class ShippingOrderDO extends BaseModel {
 
     private String shippingPrinter;
 
+    private String companyNo;
+
     private String glsReturnBack;
 
     private String receiver;
@@ -52,12 +52,6 @@ public class ShippingOrderDO extends BaseModel {
     private String idCardBack;
 
     private String idCardFront;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -169,6 +163,14 @@ public class ShippingOrderDO extends BaseModel {
         this.shippingPrinter = shippingPrinter == null ? null : shippingPrinter.trim();
     }
 
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
+    }
+
     public String getGlsReturnBack() {
         return glsReturnBack;
     }
@@ -263,30 +265,6 @@ public class ShippingOrderDO extends BaseModel {
 
     public void setIdCardFront(String idCardFront) {
         this.idCardFront = idCardFront == null ? null : idCardFront.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

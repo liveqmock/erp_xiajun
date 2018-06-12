@@ -10,15 +10,12 @@
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="contact_person" property="contactPerson" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, warehouse_no, name, company_no, delivery_priority, address, tel, contact_person, 
-    gmt_create, gmt_modify, is_del, creator, modifier
+    creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,27 +28,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into warehouse (id, warehouse_no, name, 
-      company_no, delivery_priority, address, 
-      tel, contact_person, gmt_create, 
-      gmt_modify, is_del, creator, 
-      modifier)
-    values (#{id,jdbcType=BIGINT}, #{warehouseNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{companyNo,jdbcType=VARCHAR}, #{deliveryPriority,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
-      #{tel,jdbcType=VARCHAR}, #{contactPerson,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+    insert into warehouse (warehouse_no, name, company_no, 
+      delivery_priority, address, tel, 
+      contact_person, creator, modifier
+      )
+    values (#{warehouseNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+      #{deliveryPriority,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{contactPerson,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into warehouse
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="warehouseNo != null" >
         warehouse_no,
       </if>
@@ -73,15 +67,6 @@
       <if test="contactPerson != null" >
         contact_person,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -90,7 +75,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="warehouseNo != null" >
         #{warehouseNo,jdbcType=VARCHAR},
       </if>
@@ -111,15 +95,6 @@
       </if>
       <if test="contactPerson != null" >
         #{contactPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -153,15 +128,6 @@
       <if test="contactPerson != null" >
         contact_person = #{contactPerson,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -180,9 +146,6 @@
       address = #{address,jdbcType=VARCHAR},
       tel = #{tel,jdbcType=VARCHAR},
       contact_person = #{contactPerson,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

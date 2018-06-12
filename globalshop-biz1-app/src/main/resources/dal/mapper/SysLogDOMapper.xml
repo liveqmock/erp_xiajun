@@ -8,15 +8,13 @@
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="client_ip" property="clientIp" jdbcType="VARCHAR" />
     <result column="result" property="result" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.SysLogDO" extends="BaseResultMap" >
     <result column="opt_content" property="optContent" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, log_no, login_name, role_name, client_ip, result, is_del, gmt_create, creator
+    id, log_no, login_name, role_name, client_ip, result, creator
   </sql>
   <sql id="Blob_Column_List" >
     opt_content
@@ -34,25 +32,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SysLogDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sys_log (id, log_no, login_name, 
-      role_name, client_ip, result, 
-      is_del, gmt_create, creator, 
+    insert into sys_log (log_no, login_name, role_name, 
+      client_ip, result, creator, 
       opt_content)
-    values (#{id,jdbcType=BIGINT}, #{logNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
-      #{roleName,jdbcType=VARCHAR}, #{clientIp,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+    values (#{logNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
+      #{clientIp,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{optContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SysLogDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into sys_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="logNo != null" >
         log_no,
       </if>
@@ -68,12 +63,6 @@
       <if test="result != null" >
         result,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -82,7 +71,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="logNo != null" >
         #{logNo,jdbcType=VARCHAR},
       </if>
@@ -97,12 +85,6 @@
       </if>
       <if test="result != null" >
         #{result,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -130,12 +112,6 @@
       <if test="result != null" >
         result = #{result,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -152,8 +128,6 @@
       role_name = #{roleName,jdbcType=VARCHAR},
       client_ip = #{clientIp,jdbcType=VARCHAR},
       result = #{result,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       opt_content = #{optContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
@@ -165,8 +139,6 @@
       role_name = #{roleName,jdbcType=VARCHAR},
       client_ip = #{clientIp,jdbcType=VARCHAR},
       result = #{result,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>

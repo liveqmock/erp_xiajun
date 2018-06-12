@@ -11,20 +11,17 @@
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="buyer_open_id" property="buyerOpenId" jdbcType="BIGINT" />
     <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
     <result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT" />
     <result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_task_no, title, owner_no, company_no, remark, start_time, end_time, status, 
-    gmt_create, gmt_modify, buyer_open_id, buyer_name, purchase_commission_mode, purchase_commission_str, 
-    is_del, creator, modifier
+    buyer_open_id, buyer_name, purchase_commission_mode, purchase_commission_str, creator, 
+    modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -37,31 +34,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into buyer_task (id, buyer_task_no, title, 
-      owner_no, company_no, remark, 
-      start_time, end_time, status, 
-      gmt_create, gmt_modify, buyer_open_id, 
+    insert into buyer_task (buyer_task_no, title, owner_no, 
+      company_no, remark, start_time, 
+      end_time, status, buyer_open_id, 
       buyer_name, purchase_commission_mode, purchase_commission_str, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{buyerTaskNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{ownerNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{buyerOpenId,jdbcType=BIGINT}, 
+      creator, modifier)
+    values (#{buyerTaskNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{ownerNo,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{buyerOpenId,jdbcType=BIGINT}, 
       #{buyerName,jdbcType=VARCHAR}, #{purchaseCommissionMode,jdbcType=BIGINT}, #{purchaseCommissionStr,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into buyer_task
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="buyerTaskNo != null" >
         buyer_task_no,
       </if>
@@ -86,12 +78,6 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="buyerOpenId != null" >
         buyer_open_id,
       </if>
@@ -104,9 +90,6 @@
       <if test="purchaseCommissionStr != null" >
         purchase_commission_str,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -115,7 +98,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="buyerTaskNo != null" >
         #{buyerTaskNo,jdbcType=VARCHAR},
       </if>
@@ -140,12 +122,6 @@
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="buyerOpenId != null" >
         #{buyerOpenId,jdbcType=BIGINT},
       </if>
@@ -157,9 +133,6 @@
       </if>
       <if test="purchaseCommissionStr != null" >
         #{purchaseCommissionStr,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -196,12 +169,6 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="buyerOpenId != null" >
         buyer_open_id = #{buyerOpenId,jdbcType=BIGINT},
       </if>
@@ -213,9 +180,6 @@
       </if>
       <if test="purchaseCommissionStr != null" >
         purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -236,13 +200,10 @@
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       buyer_open_id = #{buyerOpenId,jdbcType=BIGINT},
       buyer_name = #{buyerName,jdbcType=VARCHAR},
       purchase_commission_mode = #{purchaseCommissionMode,jdbcType=BIGINT},
       purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class AuthRoleResourceDO extends BaseModel {
     private Long id;
 
@@ -10,12 +8,6 @@ public class AuthRoleResourceDO extends BaseModel {
     private Long roleId;
 
     private Long resourceId;
-
-    private Boolean isDel;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
 
     private String creator;
 
@@ -51,30 +43,6 @@ public class AuthRoleResourceDO extends BaseModel {
 
     public void setResourceId(Long resourceId) {
         this.resourceId = resourceId;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

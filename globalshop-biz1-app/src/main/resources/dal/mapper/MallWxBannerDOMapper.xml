@@ -6,7 +6,6 @@
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
@@ -14,14 +13,12 @@
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
     <result column="special_page_no" property="specialPageNo" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, type, picture_url, gmt_create, gmt_modified, start_time, end_time, 
-    status, url, item_code, special_page_no, is_del, gmt_modify, creator, modifier
+    id, company_no, type, picture_url, gmt_modified, start_time, end_time, status, url, 
+    item_code, special_page_no, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -34,29 +31,26 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxBannerDO" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_wx_banner (id, company_no, type, 
-      picture_url, gmt_create, gmt_modified, 
-      start_time, end_time, status, 
-      url, item_code, special_page_no, 
-      is_del, gmt_modify, creator, 
-      modifier)
-    values (#{id,jdbcType=INTEGER}, #{companyNo,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{pictureUrl,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT}, 
-      #{url,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{specialPageNo,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+    insert into mall_wx_banner (company_no, type, picture_url, 
+      gmt_modified, start_time, end_time, 
+      status, url, item_code, 
+      special_page_no, creator, modifier
+      )
+    values (#{companyNo,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{pictureUrl,jdbcType=VARCHAR}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=BIT}, #{url,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{specialPageNo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxBannerDO" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_wx_banner
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="companyNo != null" >
         company_no,
       </if>
@@ -65,9 +59,6 @@
       </if>
       <if test="pictureUrl != null" >
         picture_url,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
       </if>
       <if test="gmtModified != null" >
         gmt_modified,
@@ -90,12 +81,6 @@
       <if test="specialPageNo != null" >
         special_page_no,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -104,7 +89,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=INTEGER},
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
@@ -113,9 +97,6 @@
       </if>
       <if test="pictureUrl != null" >
         #{pictureUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtModified != null" >
         #{gmtModified,jdbcType=TIMESTAMP},
@@ -138,12 +119,6 @@
       <if test="specialPageNo != null" >
         #{specialPageNo,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -163,9 +138,6 @@
       </if>
       <if test="pictureUrl != null" >
         picture_url = #{pictureUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtModified != null" >
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
@@ -188,12 +160,6 @@
       <if test="specialPageNo != null" >
         special_page_no = #{specialPageNo,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -208,7 +174,6 @@
     set company_no = #{companyNo,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       picture_url = #{pictureUrl,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
@@ -216,8 +181,6 @@
       url = #{url,jdbcType=VARCHAR},
       item_code = #{itemCode,jdbcType=VARCHAR},
       special_page_no = #{specialPageNo,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

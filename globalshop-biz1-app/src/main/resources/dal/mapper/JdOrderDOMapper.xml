@@ -3,10 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdOrderDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="version" property="version" jdbcType="BIGINT" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
@@ -20,8 +17,8 @@
     <result column="order_json" property="orderJson" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, gmt_create, gmt_modify, version, is_del, creator, modifier, channel_no, shop_code, 
-    send_status, order_modify_time, error_massge, channel_order_no
+    id, version, creator, modifier, channel_no, shop_code, send_status, order_modify_time, 
+    error_massge, channel_order_no
   </sql>
   <sql id="Blob_Column_List" >
     order_json
@@ -39,38 +36,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into jd_order (id, gmt_create, gmt_modify, 
-      version, is_del, creator, 
-      modifier, channel_no, shop_code, 
-      send_status, order_modify_time, error_massge, 
-      channel_order_no, order_json)
-    values (#{id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{version,jdbcType=BIGINT}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
-      #{sendStatus,jdbcType=VARCHAR}, #{orderModifyTime,jdbcType=TIMESTAMP}, #{errorMassge,jdbcType=VARCHAR}, 
-      #{channelOrderNo,jdbcType=VARCHAR}, #{orderJson,jdbcType=LONGVARCHAR})
+    insert into jd_order (version, creator, modifier, 
+      channel_no, shop_code, send_status, 
+      order_modify_time, error_massge, channel_order_no, 
+      order_json)
+    values (#{version,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, 
+      #{orderModifyTime,jdbcType=TIMESTAMP}, #{errorMassge,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, 
+      #{orderJson,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into jd_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="version != null" >
         version,
-      </if>
-      <if test="isDel != null" >
-        is_del,
       </if>
       <if test="creator != null" >
         creator,
@@ -101,18 +86,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="version != null" >
         #{version,jdbcType=BIGINT},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -146,17 +121,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
     update jd_order
     <set >
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="version != null" >
         version = #{version,jdbcType=BIGINT},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -190,10 +156,7 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
     update jd_order
-    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      version = #{version,jdbcType=BIGINT},
-      is_del = #{isDel,jdbcType=BIT},
+    set version = #{version,jdbcType=BIGINT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       channel_no = #{channelNo,jdbcType=VARCHAR},
@@ -207,10 +170,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO" >
     update jd_order
-    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      version = #{version,jdbcType=BIGINT},
-      is_del = #{isDel,jdbcType=BIT},
+    set version = #{version,jdbcType=BIGINT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       channel_no = #{channelNo,jdbcType=VARCHAR},

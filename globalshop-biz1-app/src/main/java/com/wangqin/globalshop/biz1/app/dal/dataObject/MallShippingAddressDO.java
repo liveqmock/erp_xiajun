@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class MallShippingAddressDO extends BaseModel {
     private Integer id;
 
@@ -30,12 +28,6 @@ public class MallShippingAddressDO extends BaseModel {
     private String idcardPicReverse;
 
     private Byte isDefault;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -151,30 +143,6 @@ public class MallShippingAddressDO extends BaseModel {
 
     public void setIsDefault(Byte isDefault) {
         this.isDefault = isDefault;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

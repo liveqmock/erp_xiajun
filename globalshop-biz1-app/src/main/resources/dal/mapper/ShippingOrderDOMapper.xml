@@ -15,6 +15,7 @@
     <result column="sku_weight" property="skuWeight" jdbcType="DOUBLE" />
     <result column="mall_orders" property="mallOrders" jdbcType="VARCHAR" />
     <result column="shipping_printer" property="shippingPrinter" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="gls_return_back" property="glsReturnBack" jdbcType="VARCHAR" />
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
     <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
@@ -27,19 +28,15 @@
     <result column="id_card" property="idCard" jdbcType="VARCHAR" />
     <result column="id_card_back" property="idCardBack" jdbcType="VARCHAR" />
     <result column="id_card_front" property="idCardFront" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="logistic_type" property="logisticType" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, shipping_no, logistic_no, logistic_company, type, status, transfer_status, sync_send_status, 
-    tpl_pkg_status, freight, sku_weight, mall_orders, shipping_printer, gls_return_back, 
+    tpl_pkg_status, freight, sku_weight, mall_orders, shipping_printer, company_no, gls_return_back, 
     receiver, receiver_state, receiver_city, receiver_district, address, telephone, postcode, 
-    memo, id_card, id_card_back, id_card_front, gmt_create, gmt_modify, is_del, creator, 
-    modifier, logistic_type
+    memo, id_card, id_card_back, id_card_front, creator, modifier, logistic_type
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -52,39 +49,36 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_order (id, shipping_no, logistic_no, 
-      logistic_company, type, status, 
-      transfer_status, sync_send_status, tpl_pkg_status, 
-      freight, sku_weight, mall_orders, 
-      shipping_printer, gls_return_back, receiver, 
+    insert into shipping_order (shipping_no, logistic_no, logistic_company, 
+      type, status, transfer_status, 
+      sync_send_status, tpl_pkg_status, freight, 
+      sku_weight, mall_orders, shipping_printer, 
+      company_no, gls_return_back, receiver, 
       receiver_state, receiver_city, receiver_district, 
       address, telephone, postcode, 
       memo, id_card, id_card_back, 
-      id_card_front, gmt_create, gmt_modify, 
-      is_del, creator, modifier, 
+      id_card_front, creator, modifier, 
       logistic_type)
-    values (#{id,jdbcType=BIGINT}, #{shippingNo,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR}, 
-      #{logisticCompany,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{transferStatus,jdbcType=INTEGER}, #{syncSendStatus,jdbcType=INTEGER}, #{tplPkgStatus,jdbcType=VARCHAR}, 
-      #{freight,jdbcType=DOUBLE}, #{skuWeight,jdbcType=DOUBLE}, #{mallOrders,jdbcType=VARCHAR}, 
-      #{shippingPrinter,jdbcType=VARCHAR}, #{glsReturnBack,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
+    values (#{shippingNo,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR}, #{logisticCompany,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{transferStatus,jdbcType=INTEGER}, 
+      #{syncSendStatus,jdbcType=INTEGER}, #{tplPkgStatus,jdbcType=VARCHAR}, #{freight,jdbcType=DOUBLE}, 
+      #{skuWeight,jdbcType=DOUBLE}, #{mallOrders,jdbcType=VARCHAR}, #{shippingPrinter,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=VARCHAR}, #{glsReturnBack,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
       #{receiverState,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, #{receiverDistrict,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, 
       #{memo,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{idCardBack,jdbcType=VARCHAR}, 
-      #{idCardFront,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{idCardFront,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{logisticType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into shipping_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="shippingNo != null" >
         shipping_no,
       </if>
@@ -120,6 +114,9 @@
       </if>
       <if test="shippingPrinter != null" >
         shipping_printer,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
       </if>
       <if test="glsReturnBack != null" >
         gls_return_back,
@@ -157,15 +154,6 @@
       <if test="idCardFront != null" >
         id_card_front,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -177,7 +165,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="shippingNo != null" >
         #{shippingNo,jdbcType=VARCHAR},
       </if>
@@ -214,6 +201,9 @@
       <if test="shippingPrinter != null" >
         #{shippingPrinter,jdbcType=VARCHAR},
       </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="glsReturnBack != null" >
         #{glsReturnBack,jdbcType=VARCHAR},
       </if>
@@ -249,15 +239,6 @@
       </if>
       <if test="idCardFront != null" >
         #{idCardFront,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -309,6 +290,9 @@
       <if test="shippingPrinter != null" >
         shipping_printer = #{shippingPrinter,jdbcType=VARCHAR},
       </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="glsReturnBack != null" >
         gls_return_back = #{glsReturnBack,jdbcType=VARCHAR},
       </if>
@@ -345,15 +329,6 @@
       <if test="idCardFront != null" >
         id_card_front = #{idCardFront,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -380,6 +355,7 @@
       sku_weight = #{skuWeight,jdbcType=DOUBLE},
       mall_orders = #{mallOrders,jdbcType=VARCHAR},
       shipping_printer = #{shippingPrinter,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
       gls_return_back = #{glsReturnBack,jdbcType=VARCHAR},
       receiver = #{receiver,jdbcType=VARCHAR},
       receiver_state = #{receiverState,jdbcType=VARCHAR},
@@ -392,9 +368,6 @@
       id_card = #{idCard,jdbcType=VARCHAR},
       id_card_back = #{idCardBack,jdbcType=VARCHAR},
       id_card_front = #{idCardFront,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       logistic_type = #{logisticType,jdbcType=VARCHAR}

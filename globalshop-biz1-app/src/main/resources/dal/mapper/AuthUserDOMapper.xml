@@ -17,16 +17,12 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="wx_user_id" property="wxUserId" jdbcType="BIGINT" />
     <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, user_no, login_name, name, password, sex, age, phone, user_type, 
-    status, organization_id, create_time, wx_user_id, email, is_del, gmt_create, gmt_modify, 
-    creator, modifier
+    status, organization_id, create_time, wx_user_id, email, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -39,26 +35,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into auth_user (id, company_no, user_no, 
-      login_name, name, password, 
-      sex, age, phone, user_type, 
+    insert into auth_user (company_no, user_no, login_name, 
+      name, password, sex, 
+      age, phone, user_type, 
       status, organization_id, create_time, 
-      wx_user_id, email, is_del, 
-      gmt_create, gmt_modify, creator, 
+      wx_user_id, email, creator, 
       modifier)
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, 
-      #{loginName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=TINYINT}, #{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, 
+    values (#{companyNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
+      #{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{organizationId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into auth_user
@@ -104,15 +98,6 @@
       </if>
       <if test="email != null" >
         email,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
       </if>
       <if test="creator != null" >
         creator,
@@ -163,15 +148,6 @@
       </if>
       <if test="email != null" >
         #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -226,15 +202,6 @@
       <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -260,9 +227,6 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       wx_user_id = #{wxUserId,jdbcType=BIGINT},
       email = #{email,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

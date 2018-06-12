@@ -5,24 +5,21 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="storage_no" property="storageNo" jdbcType="VARCHAR" />
     <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
     <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
     <result column="buyer_open_id" property="buyerOpenId" jdbcType="BIGINT" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
     <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="storage_type" property="storageType" jdbcType="TINYINT" />
     <result column="entry_date" property="entryDate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, storage_no, warehouse_no, warehouse_name, buyer_name, buyer_open_id, purchase_storage_no, 
-    buyer_task_no, gmt_create, storage_type, entry_date, gmt_modify, memo, is_del, creator, 
-    modifier
+    id, storage_no, warehouse_no, company_no, warehouse_name, buyer_name, buyer_open_id, 
+    purchase_storage_no, buyer_task_no, storage_type, entry_date, memo, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -35,34 +32,34 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into buyer_storage (id, storage_no, warehouse_no, 
+    insert into buyer_storage (storage_no, warehouse_no, company_no, 
       warehouse_name, buyer_name, buyer_open_id, 
-      purchase_storage_no, buyer_task_no, gmt_create, 
-      storage_type, entry_date, gmt_modify, 
-      memo, is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
+      purchase_storage_no, buyer_task_no, storage_type, 
+      entry_date, memo, creator, 
+      modifier)
+    values (#{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{warehouseName,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=BIGINT}, 
-      #{purchaseStorageNo,jdbcType=VARCHAR}, #{buyerTaskNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{storageType,jdbcType=TINYINT}, #{entryDate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{memo,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+      #{purchaseStorageNo,jdbcType=VARCHAR}, #{buyerTaskNo,jdbcType=VARCHAR}, #{storageType,jdbcType=TINYINT}, 
+      #{entryDate,jdbcType=TIMESTAMP}, #{memo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into buyer_storage
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="storageNo != null" >
         storage_no,
       </if>
       <if test="warehouseNo != null" >
         warehouse_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
       </if>
       <if test="warehouseName != null" >
         warehouse_name,
@@ -79,23 +76,14 @@
       <if test="buyerTaskNo != null" >
         buyer_task_no,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
       <if test="storageType != null" >
         storage_type,
       </if>
       <if test="entryDate != null" >
         entry_date,
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="memo != null" >
         memo,
-      </if>
-      <if test="isDel != null" >
-        is_del,
       </if>
       <if test="creator != null" >
         creator,
@@ -105,12 +93,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="storageNo != null" >
         #{storageNo,jdbcType=VARCHAR},
       </if>
       <if test="warehouseNo != null" >
         #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
       </if>
       <if test="warehouseName != null" >
         #{warehouseName,jdbcType=VARCHAR},
@@ -127,23 +117,14 @@
       <if test="buyerTaskNo != null" >
         #{buyerTaskNo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
       <if test="storageType != null" >
         #{storageType,jdbcType=TINYINT},
       </if>
       <if test="entryDate != null" >
         #{entryDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="memo != null" >
         #{memo,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -162,6 +143,9 @@
       <if test="warehouseNo != null" >
         warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
       </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="warehouseName != null" >
         warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       </if>
@@ -177,23 +161,14 @@
       <if test="buyerTaskNo != null" >
         buyer_task_no = #{buyerTaskNo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
       <if test="storageType != null" >
         storage_type = #{storageType,jdbcType=TINYINT},
       </if>
       <if test="entryDate != null" >
         entry_date = #{entryDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="memo != null" >
         memo = #{memo,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -208,17 +183,15 @@
     update buyer_storage
     set storage_no = #{storageNo,jdbcType=VARCHAR},
       warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
       warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       buyer_name = #{buyerName,jdbcType=VARCHAR},
       buyer_open_id = #{buyerOpenId,jdbcType=BIGINT},
       purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       buyer_task_no = #{buyerTaskNo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       storage_type = #{storageType,jdbcType=TINYINT},
       entry_date = #{entryDate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       memo = #{memo,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

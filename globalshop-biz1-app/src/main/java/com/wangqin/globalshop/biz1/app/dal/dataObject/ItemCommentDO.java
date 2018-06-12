@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class ItemCommentDO extends BaseModel {
     private Integer id;
 
@@ -26,12 +24,6 @@ public class ItemCommentDO extends BaseModel {
     private String content;
 
     private Byte status;
-
-    private Date gmtModify;
-
-    private Date gmtCreate;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -131,30 +123,6 @@ public class ItemCommentDO extends BaseModel {
 
     public void setStatus(Byte status) {
         this.status = status;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

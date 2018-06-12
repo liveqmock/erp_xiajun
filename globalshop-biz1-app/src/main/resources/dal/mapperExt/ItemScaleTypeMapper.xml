@@ -9,7 +9,7 @@
 
 
     
-    <select id="queryAllScaleType" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType" >
+    <select id="queryAllScaleType" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleTypeDO" >
         SELECT
         	 <include refid="Base_Column_List" />
         FROM

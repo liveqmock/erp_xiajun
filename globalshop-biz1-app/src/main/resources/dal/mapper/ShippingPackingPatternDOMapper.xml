@@ -9,15 +9,12 @@
     <result column="name_en" property="nameEn" jdbcType="VARCHAR" />
     <result column="weight" property="weight" jdbcType="DOUBLE" />
     <result column="package_level" property="packageLevel" jdbcType="INTEGER" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, pattern_no, packaging_scale_no, name, name_en, weight, package_level, is_del, 
-    gmt_create, gmt_modify, creator, modifier
+    id, pattern_no, packaging_scale_no, name, name_en, weight, package_level, creator, 
+    modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -30,27 +27,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_packing_pattern (id, pattern_no, packaging_scale_no, 
-      name, name_en, weight, 
-      package_level, is_del, gmt_create, 
-      gmt_modify, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{patternNo,jdbcType=VARCHAR}, #{packagingScaleNo,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{nameEn,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
-      #{packageLevel,jdbcType=INTEGER}, #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+    insert into shipping_packing_pattern (pattern_no, packaging_scale_no, name, 
+      name_en, weight, package_level, 
+      creator, modifier)
+    values (#{patternNo,jdbcType=VARCHAR}, #{packagingScaleNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{nameEn,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, #{packageLevel,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into shipping_packing_pattern
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="patternNo != null" >
         pattern_no,
       </if>
@@ -69,15 +61,6 @@
       <if test="packageLevel != null" >
         package_level,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -86,7 +69,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="patternNo != null" >
         #{patternNo,jdbcType=VARCHAR},
       </if>
@@ -104,15 +86,6 @@
       </if>
       <if test="packageLevel != null" >
         #{packageLevel,jdbcType=INTEGER},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -143,15 +116,6 @@
       <if test="packageLevel != null" >
         package_level = #{packageLevel,jdbcType=INTEGER},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -169,9 +133,6 @@
       name_en = #{nameEn,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DOUBLE},
       package_level = #{packageLevel,jdbcType=INTEGER},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

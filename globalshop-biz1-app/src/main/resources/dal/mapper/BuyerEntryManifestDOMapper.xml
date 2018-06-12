@@ -14,16 +14,12 @@
     <result column="batch_num" property="batchNum" jdbcType="VARCHAR" />
     <result column="upc" property="upc" jdbcType="VARCHAR" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, purchase_storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, item_code, 
-    currency, purchase_price, batch_num, upc, quantity, gmt_create, gmt_modify, is_del, 
-    creator, modifier
+    currency, purchase_price, batch_num, upc, quantity, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -36,29 +32,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into buyer_entry_manifest (id, purchase_storage_no, warehouse_no, 
-      warehouse_name, shelf_no, sku_code, 
-      item_code, currency, purchase_price, 
-      batch_num, upc, quantity, 
-      gmt_create, gmt_modify, is_del, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{purchaseStorageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
-      #{warehouseName,jdbcType=VARCHAR}, #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{itemCode,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DOUBLE}, 
-      #{batchNum,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into buyer_entry_manifest (purchase_storage_no, warehouse_no, warehouse_name, 
+      shelf_no, sku_code, item_code, 
+      currency, purchase_price, batch_num, 
+      upc, quantity, creator, 
+      modifier)
+    values (#{purchaseStorageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
+      #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{currency,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DOUBLE}, #{batchNum,jdbcType=VARCHAR}, 
+      #{upc,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into buyer_entry_manifest
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="purchaseStorageNo != null" >
         purchase_storage_no,
       </if>
@@ -92,15 +85,6 @@
       <if test="quantity != null" >
         quantity,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -109,7 +93,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="purchaseStorageNo != null" >
         #{purchaseStorageNo,jdbcType=VARCHAR},
       </if>
@@ -142,15 +125,6 @@
       </if>
       <if test="quantity != null" >
         #{quantity,jdbcType=INTEGER},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -196,15 +170,6 @@
       <if test="quantity != null" >
         quantity = #{quantity,jdbcType=INTEGER},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -227,9 +192,6 @@
       batch_num = #{batchNum,jdbcType=VARCHAR},
       upc = #{upc,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

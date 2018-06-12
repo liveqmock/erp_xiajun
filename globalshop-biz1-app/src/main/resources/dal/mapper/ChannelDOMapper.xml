@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="contact_mobile" property="contactMobile" jdbcType="VARCHAR" />
@@ -12,14 +11,12 @@
     <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
     <result column="contact_url" property="contactUrl" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, channel_no, gmt_create, name, type, contact_mobile, contact_name, contact_email, 
-    contact_url, remark, is_del, gmt_modify, creator, modifier
+    id, channel_no, name, type, contact_mobile, contact_name, contact_email, contact_url, 
+    remark, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -32,32 +29,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into channel (id, channel_no, gmt_create, 
-      name, type, contact_mobile, 
-      contact_name, contact_email, contact_url, 
-      remark, is_del, gmt_modify, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{channelNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{contactMobile,jdbcType=VARCHAR}, 
-      #{contactName,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{contactUrl,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into channel (channel_no, name, type, 
+      contact_mobile, contact_name, contact_email, 
+      contact_url, remark, creator, 
+      modifier)
+    values (#{channelNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{contactMobile,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
+      #{contactUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into channel
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="channelNo != null" >
         channel_no,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
       </if>
       <if test="name != null" >
         name,
@@ -80,12 +71,6 @@
       <if test="remark != null" >
         remark,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -94,12 +79,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="channelNo != null" >
         #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -122,12 +103,6 @@
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -141,9 +116,6 @@
     <set >
       <if test="channelNo != null" >
         channel_no = #{channelNo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -166,12 +138,6 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -184,7 +150,6 @@
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelDO" >
     update channel
     set channel_no = #{channelNo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       contact_mobile = #{contactMobile,jdbcType=VARCHAR},
@@ -192,8 +157,6 @@
       contact_email = #{contactEmail,jdbcType=VARCHAR},
       contact_url = #{contactUrl,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

@@ -19,16 +19,13 @@
     <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
     <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, inventory_on_warehouse_no, company_no, item_code, item_name, upc, scale, sku_code, 
     sku_pic, inventory, locked_inv, trans_inv, locked_trans_inv, warehouse_no, warehouse_name, 
-    shelf_no, batch_no, gmt_create, gmt_modify, is_del, creator, modifier
+    shelf_no, batch_no, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -41,33 +38,30 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into inventory_on_warehouse (id, inventory_on_warehouse_no, company_no, 
+    insert into inventory_on_warehouse (inventory_on_warehouse_no, company_no, 
       item_code, item_name, upc, 
       scale, sku_code, sku_pic, 
       inventory, locked_inv, trans_inv, 
       locked_trans_inv, warehouse_no, warehouse_name, 
-      shelf_no, batch_no, gmt_create, 
-      gmt_modify, is_del, creator, 
+      shelf_no, batch_no, creator, 
       modifier)
-    values (#{id,jdbcType=BIGINT}, #{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+    values (#{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, 
       #{scale,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR}, 
       #{inventory,jdbcType=BIGINT}, #{lockedInv,jdbcType=BIGINT}, #{transInv,jdbcType=BIGINT}, 
       #{lockedTransInv,jdbcType=BIGINT}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
-      #{shelfNo,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+      #{shelfNo,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into inventory_on_warehouse
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="inventoryOnWarehouseNo != null" >
         inventory_on_warehouse_no,
       </if>
@@ -116,15 +110,6 @@
       <if test="batchNo != null" >
         batch_no,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -133,7 +118,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="inventoryOnWarehouseNo != null" >
         #{inventoryOnWarehouseNo,jdbcType=VARCHAR},
       </if>
@@ -181,15 +165,6 @@
       </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -250,15 +225,6 @@
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -286,9 +252,6 @@
       warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       shelf_no = #{shelfNo,jdbcType=VARCHAR},
       batch_no = #{batchNo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

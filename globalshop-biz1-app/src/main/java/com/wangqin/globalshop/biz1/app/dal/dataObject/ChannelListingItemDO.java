@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class ChannelListingItemDO extends BaseModel {
     private Long id;
 
@@ -18,12 +16,6 @@ public class ChannelListingItemDO extends BaseModel {
     private String channelItemAlias;
 
     private Integer status;
-
-    private Boolean isDel;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
 
     private String creator;
 
@@ -91,30 +83,6 @@ public class ChannelListingItemDO extends BaseModel {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

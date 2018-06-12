@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class MallWxPayBillDO extends BaseModel {
     private Long id;
 
@@ -22,12 +20,6 @@ public class MallWxPayBillDO extends BaseModel {
     private String customerNo;
 
     private String wxOpenId;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -111,30 +103,6 @@ public class MallWxPayBillDO extends BaseModel {
 
     public void setWxOpenId(String wxOpenId) {
         this.wxOpenId = wxOpenId == null ? null : wxOpenId.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

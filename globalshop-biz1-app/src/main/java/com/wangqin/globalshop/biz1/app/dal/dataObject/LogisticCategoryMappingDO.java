@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class LogisticCategoryMappingDO extends BaseModel {
     private Long id;
 
@@ -15,15 +13,9 @@ public class LogisticCategoryMappingDO extends BaseModel {
 
     private String logisticsCompanyCategoryCode;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
     private String creator;
 
     private String modifier;
-
-    private Boolean isDel;
 
     public Long getId() {
         return id;
@@ -73,22 +65,6 @@ public class LogisticCategoryMappingDO extends BaseModel {
         this.logisticsCompanyCategoryCode = logisticsCompanyCategoryCode == null ? null : logisticsCompanyCategoryCode.trim();
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public String getCreator() {
         return creator;
     }
@@ -103,13 +79,5 @@ public class LogisticCategoryMappingDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 }

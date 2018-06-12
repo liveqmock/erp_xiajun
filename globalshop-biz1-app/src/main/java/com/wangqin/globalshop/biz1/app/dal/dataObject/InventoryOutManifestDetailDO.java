@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class InventoryOutManifestDetailDO extends BaseModel {
     private Long id;
 
@@ -22,12 +20,6 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     private String skuPic;
 
     private String shelfNo;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -113,30 +105,6 @@ public class InventoryOutManifestDetailDO extends BaseModel {
 
     public void setShelfNo(String shelfNo) {
         this.shelfNo = shelfNo == null ? null : shelfNo.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {
