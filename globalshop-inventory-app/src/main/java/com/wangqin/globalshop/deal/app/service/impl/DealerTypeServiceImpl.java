@@ -51,6 +51,11 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
 		dealerType.setIsDel(true);
 		mapper.updateByPrimaryKeySelective(dealerType);
 	}
+	@Override
+	public int countRelativeDealerType(String typeCode) {
+		// TODO Auto-generated method stub
+		return mapper.countRelativeDealerType(typeCode);
+	}
 
 	
 }

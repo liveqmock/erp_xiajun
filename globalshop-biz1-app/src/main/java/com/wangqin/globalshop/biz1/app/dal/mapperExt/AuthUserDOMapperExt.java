@@ -39,5 +39,8 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     List<UserQueryVO> queryUserQueryVOList(UserQueryVO userQueryVO);
 
 //    List<AuthUserDO> selectUserVoPage();
-
+    
+    AuthUserDO selectUserVoByUserNo(String userNo);
+    
+    void insertByNoId(AuthUserDO record);
 }

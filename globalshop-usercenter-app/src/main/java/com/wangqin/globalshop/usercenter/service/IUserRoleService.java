@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.service;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 
 /**
  *
@@ -8,5 +9,8 @@ package com.wangqin.globalshop.usercenter.service;
  */
 public interface IUserRoleService {
 
-
+	AuthUserRoleDO selectByUserId(Long userId);
+	
+	void deleteUserRoleByUserId(Long userId);
+	
 }

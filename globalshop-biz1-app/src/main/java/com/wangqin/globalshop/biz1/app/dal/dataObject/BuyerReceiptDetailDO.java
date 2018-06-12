@@ -16,7 +16,6 @@ public class BuyerReceiptDetailDO extends BaseModel {
     private String upc;
 
     private String receiptNo;
-    private String companyNo;
 
     private String buyerTaskDetailNo;
 
@@ -35,16 +34,6 @@ public class BuyerReceiptDetailDO extends BaseModel {
     private String creator;
 
     private String modifier;
-
-    @Override
-    public String getCompanyNo() {
-        return companyNo;
-    }
-
-    @Override
-    public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo;
-    }
 
     public Long getId() {
         return id;

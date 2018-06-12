@@ -68,16 +68,16 @@ public class BaseModel {
     }
 
     public void init() {
-        this.setModifier(AppUtil.getLoginUserId());
-        this.setCreator(AppUtil.getLoginUserId());
+        this.setModifier("biscuits");
+        this.setCreator("biscuits");
         this.setIsDel(false);
         Date date = new Date();
         this.setGmtCreate(date);
         this.setGmtModify(date);
-        this.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+        this.setCompanyNo("3");
     }
     public void initCompany() {
-        this.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+        this.setCompanyNo("3");
     }
 
     public void update() {
