@@ -9,7 +9,6 @@ import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -147,27 +146,27 @@ public class JDAccountInfoController {
 //
 //	}
 //
-	@RequestMapping("/shoptest")
-	public void shoptest(String state, String jsonStr){
-
-		JingdongOauth jdOauthResponse = JSON.parseObject(jsonStr, JingdongOauth.class);
-
-		ChannelShopDO channelShop = new ChannelShopDO();
-		channelShop.setChannelNo(String.valueOf(ChannelType.JingDong.getValue()));
-		channelShop.setCompanyNo(state);
-		channelShop.setShopCode(jdOauthResponse.getUid());
-		channelShop.setShopName(jdOauthResponse.getUser_nick());
-		channelShop.setExpiresTime(new Date());
-
-		Map<String,String> pram = new HashMap<>();
-		pram.put("channelShop",JSON.toJSONString(channelShop));
-		try {
-			JSONObject json = HttpClientUtil.post("http://localhost:8100/channelshop/addOrupdate",pram);
-		}catch (Exception e){
-
-		}
-
-	}
+//	@RequestMapping("/shoptest")
+//	public void shoptest(String state, String jsonStr){
+//
+//		JingdongOauth jdOauthResponse = JSON.parseObject(jsonStr, JingdongOauth.class);
+//
+//		ChannelShopDO channelShop = new ChannelShopDO();
+//		channelShop.setChannelNo(String.valueOf(ChannelType.JingDong.getValue()));
+//		channelShop.setCompanyNo(state);
+//		channelShop.setShopCode(jdOauthResponse.getUid());
+//		channelShop.setShopName(jdOauthResponse.getUser_nick());
+//		channelShop.setExpiresTime(new Date());
+//
+//		Map<String,String> pram = new HashMap<>();
+//		pram.put("channelShop",JSON.toJSONString(channelShop));
+//		try {
+//			JSONObject json = HttpClientUtil.post("http://localhost:8100/channelshop/addOrupdate",pram);
+//		}catch (Exception e){
+//
+//		}
+//
+//	}
 
 
 }

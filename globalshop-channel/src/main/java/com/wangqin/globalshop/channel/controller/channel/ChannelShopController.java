@@ -26,12 +26,12 @@ public class ChannelShopController extends BaseController {
 
 	@RequestMapping("/addOrupdate")
 	@ResponseBody
-	public Object addOrUpdateShop(String channelShopJson){
+	public Object addOrUpdateShop(String channelShop){
 		JsonResult<String> result = null;
 		try {
-			ChannelShopDO  channelShop = JSON.parseObject(channelShopJson,ChannelShopDO.class);
+			ChannelShopDO  channelShopIn = JSON.parseObject(channelShop,ChannelShopDO.class);
 			result = new JsonResult<>();
-			channelShopService.createOrUpdate(channelShop);
+			channelShopService.createOrUpdate(channelShopIn);
 		} catch (Exception e) {
 			return result.buildIsSuccess(false).buildMsg(""+e.getMessage());
 		}
