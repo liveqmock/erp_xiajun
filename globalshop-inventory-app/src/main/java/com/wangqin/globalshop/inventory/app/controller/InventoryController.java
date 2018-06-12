@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
@@ -39,6 +39,7 @@ import java.util.Set;
  */
 @Controller
 @RequestMapping("/inventory")
+@Authenticated
 public class InventoryController {
     @Autowired
     private InventoryService inventoryService;

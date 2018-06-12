@@ -2,6 +2,7 @@ package com.wangqin.globalshop.order.app.controller.mall;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
@@ -39,6 +40,7 @@ import static com.wangqin.globalshop.order.app.comm.Constant.*;
  */
 @Controller
 @RequestMapping("/outerOrder")
+@Authenticated
 public class MallOrderController {
 
     @Autowired

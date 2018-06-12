@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerReceiptDOMapperExt" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
+    <result column="receipt_no" property="receiptNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, buyer_task_no,company_no, receipt_no, total_price, currency, gmt_create, gmt_modify, purchase_storage_no,
+    status, buyer_id, is_del, creator, modifier
+  </sql>
+  <select id="list" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO">
+    SELECT <include refid="Base_Column_List"/>
+    FROM buyer_receipt
+    WHERE
+      company_no=#{companyNo}
+
+  </select>
+</mapper>

@@ -11,4 +11,5 @@ public interface BuyerReceiptDOMapperExt extends BuyerReceiptDOMapper {
     int queryReceiptCount(ReceiptQueryVO receiptQueryVO);
     List<BuyerReceiptDO>  queryReceipt(ReceiptQueryVO receiptQueryVO);
 
+    List<BuyerReceiptDO> list(BuyerReceiptDO receipt);
 }

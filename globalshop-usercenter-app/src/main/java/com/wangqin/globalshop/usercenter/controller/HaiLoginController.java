@@ -41,7 +41,7 @@ public class HaiLoginController extends BaseController {
      * @param password 密码
      * @return {Object}
      */
-    @PostMapping({"/haiLogin/login","/login"})
+    @PostMapping({"/haiLogin/login", "/login"})
 //    @RequestMapping("/login")
     @ResponseBody
     public Object loginPost(HttpServletRequest request, String username, String password, String captcha,
@@ -64,12 +64,12 @@ public class HaiLoginController extends BaseController {
             AuthUserDO user = userDOList;
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isBlank(sessionId)) {
-                    sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+                sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
             }
-                loginCache.putEx(sessionId, username, TIMEOUT);
-                loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
-                AppUtil.setLoginUser(username, user.getCompanyNo());
-                return renderSuccess();
+            loginCache.putEx(sessionId, username, TIMEOUT);
+            loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
+            AppUtil.setLoginUser(username, user.getCompanyNo());
+            return renderSuccess();
 
         }
     }

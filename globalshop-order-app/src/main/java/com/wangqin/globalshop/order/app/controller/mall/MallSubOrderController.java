@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
@@ -45,6 +46,7 @@ import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
  */
 @Controller
 @RequestMapping("/erpOrder")
+@Authenticated
 public class MallSubOrderController {
 
 	@Autowired

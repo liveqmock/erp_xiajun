@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.deal.app.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/sellerType")
+@Authenticated
 public class DealerTypeController {
 
     @Autowired
