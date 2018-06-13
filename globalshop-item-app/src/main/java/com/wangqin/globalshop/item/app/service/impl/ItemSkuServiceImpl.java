@@ -48,16 +48,16 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		JsonPageResult<List<ISkuDTO>> itemResult = new JsonPageResult<>();
 		//1、查询总的记录数量
 		Integer totalCount =  itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
-		System.out.println("shuliang"+totalCount);
+		System.out.println("查询到的sku数量："+totalCount);
 		//2、查询分页记录
 		if(totalCount!=null&&totalCount!=0L){
 			itemResult.buildPage(totalCount, itemSkuQueryVO);
 			List<ISkuDTO> itemSkus = itemSkuMapperExt.queryItemSkus(itemSkuQueryVO);
 			//查询sku的规格信息
-			itemSkus.forEach(itemSku -> {
-				List<ItemSkuScaleDO> scaleList = itemSkuScaleService.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
-				itemSku.setScaleList(scaleList);
-			});
+//			itemSkus.forEach(itemSku -> {
+//				List<ItemSkuScaleDO> scaleList = itemSkuScaleService.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
+//				itemSku.setScaleList(scaleList);
+//			});
 			itemResult.setData(itemSkus);
 		}
 		return itemResult;
