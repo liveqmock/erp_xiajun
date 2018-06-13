@@ -23,7 +23,7 @@ public class WarehouseController{
 	 * @param
 	 * @return
 	 */
-	@RequestMapping(value = "/add")
+	@PostMapping(value = "/add")
 	@ResponseBody
 	public Object add(String name) {
 		if(name == null){

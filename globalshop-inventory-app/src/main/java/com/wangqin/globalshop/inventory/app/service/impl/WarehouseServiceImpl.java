@@ -18,6 +18,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
 	@Autowired
 	private WarehouseDOMapperExt mapper;
 
+	@Override
 	public Map<String,Integer> getWarehousePropeties(String companyNo){
 
 		Map<String,Integer> propetiesMap = new HashMap<>();
@@ -42,6 +43,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
 	@Override
 	public void addWarehouse(String name) {
 		WarehouseDO warehouse = new WarehouseDO();
+		warehouse.init();
 		warehouse.setName(name);
 		warehouse.setWarehouseNo("WARE"+System.currentTimeMillis());
 		warehouse.init();
