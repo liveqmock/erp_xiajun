@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.usercenter.controller;
 
 import com.gargoylesoftware.htmlunit.javascript.host.event.UserProximityEvent;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
@@ -25,6 +26,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/user")
+@Authenticated
 public class UserController extends BaseController {
 
     @Autowired
@@ -131,7 +133,7 @@ public class UserController extends BaseController {
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.updateByVo(userVo);
-        return renderSuccess("添加成功");
+        return renderSuccess("修改成功");
     }
 
     /**

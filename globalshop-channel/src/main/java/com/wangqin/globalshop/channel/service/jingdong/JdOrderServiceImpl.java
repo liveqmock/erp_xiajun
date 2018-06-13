@@ -1,19 +1,30 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
+import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdOrderDOMapperExt;
+import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
+import com.wangqin.globalshop.common.utils.HttpClientUtil;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import net.sf.json.JSONObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.tags.EscapeBodyTag;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create by 777 on 2018/6/12
  */
 @Service
 public class JdOrderServiceImpl implements JdOrderService{
+
+	protected Logger logger = LogManager.getLogger(getClass());
 
 	@Autowired
 	private JdOrderDOMapperExt jdOrderDOMapperExt;
@@ -63,7 +74,7 @@ public class JdOrderServiceImpl implements JdOrderService{
 	 * 状态修改成request，等待下发
 	 * @param jdOrderDOS
 	 */
-	public void saveOrdes4Task(List<JdOrderDO> jdOrderDOS){
+	public void saveOrders4Task(List<JdOrderDO> jdOrderDOS){
 		for(JdOrderDO order : jdOrderDOS){
 
 			order.setSendStatus(SendStatus.REQUEST);
@@ -84,6 +95,43 @@ public class JdOrderServiceImpl implements JdOrderService{
 				jdOrderDOMapperExt.updateByPrimaryKey(result);
 			}
 		}
+	}
+
+
+	
+	public void sendJdOrder2globalshop4Task(JdOrderDO jdOrderDO, JdShopOauthDO shopOauth){
+		GlobalshopOrderVo globalShopOrderVo = null;
+		try {
+			globalShopOrderVo = JdShopFactory.getChannel(shopOauth).convertJdOrder2Globalshop(jdOrderDO.getOrderJson());
+		} catch (Exception e) {
+			logger.error("sendJdOrder2globalshop4Task error: ",e);
+		}
+
+		if(globalShopOrderVo == null){
+			logger.error("sendJdOrder2globalshop4Task error: ");
+		}
+
+		Map<String,String> pram = new HashMap<>();
+		pram.put("channelNo",shopOauth.getChannelNo());
+		pram.put("companyNo",shopOauth.getCompanyNo());
+		pram.put("shopCode",shopOauth.getShopCode());
+		pram.put("globalShopOrderVo",JSON.toJSONString(globalShopOrderVo));
+
+		JSONObject jsonObject = null;
+		try {
+			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/channel/",pram);
+		} catch (Exception e) {
+			logger.error("sendJdOrder2globalshop4Task error: ",e);
+		}
+
+		JsonResult<String> result = JSON.parseObject(jsonObject.toString(),JsonResult.class);
+
+		if(result.isSuccess()){
+			jdOrderDO.setSendStatus(SendStatus.SUCCESS);
+		}else {
+			jdOrderDO.setSendStatus(SendStatus.FAILURE);
+		}
+		jdOrderDOMapperExt.updateByPrimaryKey(jdOrderDO);
 	}
 
 

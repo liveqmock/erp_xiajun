@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Create by 777 on 2018/6/12
  */
-public class JDMallOrderVo {
+public class GlobalshopOrderVo {
 
 	private MallOrderDO mallOrderDO;
 
