@@ -1,14 +1,23 @@
 package com.wangqin.globalshop.channel.controller.taobao;
 
 import com.alibaba.fastjson.JSON;
+import com.jd.open.api.sdk.DefaultJdClient;
+import com.jd.open.api.sdk.JdClient;
+import com.jd.open.api.sdk.JdException;
+import com.jd.open.api.sdk.domain.seller.ShopSafService.ShopJosResult;
+import com.jd.open.api.sdk.request.seller.VenderShopQueryRequest;
+import com.jd.open.api.sdk.response.seller.VenderShopQueryResponse;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
+import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.JingDong.JingdongOauth;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +35,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/jd")
 public class JDAccountInfoController {
-			
+
+	protected Logger logger = LogManager.getLogger(getClass());
+
 	@Autowired
 	private JdShopOauthService jdShopOauthService;
 
@@ -95,6 +106,9 @@ public class JDAccountInfoController {
 
 
 		try {
+			ShopJosResult shopJosResult = getVenderInfo(shopOauth);
+			shopOauth.setShopCode(shopJosResult.getVenderId()+"");
+			channelShop.setShopName(shopJosResult.getShopName());
 			//创建或更新jd_shop_oauth
 			jdShopOauthService.createOrUpdateShopOauth(ChannelType.JingDong,shopOauth);
 			//创建或更新jd_shop_config
@@ -103,8 +117,10 @@ public class JDAccountInfoController {
 			Map<String,String> pram = new HashMap<>();
 			pram.put("channelShop",JSON.toJSONString(channelShop));
 			HttpClientUtil.post("http://test.buyer007.cn/channelshop/addOrupdate",pram);
+		} catch (ErpCommonException e){
+			return result.buildIsSuccess(false).buildMsg("授权失败, "+e.getErrorCode()+"  "+e.getErrorMsg());
 		} catch (Exception e) {
-			return result.buildIsSuccess(false).buildMsg("失败,jsonStr:" + jsonStr+"  "+e.getMessage());
+			return result.buildIsSuccess(false).buildMsg("授权失败,jsonStr:" + jsonStr+"  "+e.getMessage());
 		}
 		return result.buildIsSuccess(true).buildMsg("授权成功");
 	}
@@ -119,6 +135,27 @@ public class JDAccountInfoController {
 		return baos.toString(charset);
 	}
 
+
+	private ShopJosResult getVenderInfo(JdShopOauthDO shopOauth){
+
+		JdClient client = new DefaultJdClient(shopOauth.getServerUrl(),shopOauth.getAccessToken(),shopOauth.getAppKey(),shopOauth.getAppsecretKey());
+
+		VenderShopQueryRequest request=new VenderShopQueryRequest();
+
+		VenderShopQueryResponse response = null;
+		try {
+			response=client.execute(request);
+		} catch (JdException e) {
+			logger.error("getVenderInfo_error",e);
+			throw new ErpCommonException("getVenderInfo,获取店铺信息时，京东内部出错");
+		}
+		if(!response.getCode().equals("0")){
+			String errorMsg = "";
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			throw new ErpCommonException("获取店铺信息时，京东内部出错:"+errorMsg);
+		}
+		return response.getShopJosResult();
+	}
 
 
 
