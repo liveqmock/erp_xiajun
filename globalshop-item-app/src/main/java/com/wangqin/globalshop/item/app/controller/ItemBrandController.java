@@ -91,7 +91,7 @@ public class ItemBrandController {
 	@ResponseBody
 	public Object delete(Long id) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		itemBrandService.deleteByPrimaryKey(id);
+		itemBrandService.deleteItemBrandById(id);
 		return result.buildIsSuccess(true);
 	}
 

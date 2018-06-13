@@ -125,4 +125,10 @@
       </if>
     </trim>
   </insert>
+  
+  <update id="deleteItemBrandById" parameterType="java.lang.Long">
+  	update `item_brand`
+  	set is_del = 1
+  	where id = #{id}
+  </update>
 </mapper>
