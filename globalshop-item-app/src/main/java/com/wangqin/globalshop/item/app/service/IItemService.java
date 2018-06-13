@@ -8,9 +8,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-
-
-
+import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 
 /**
  * 
@@ -89,4 +88,11 @@ public interface IItemService {
 	void updateByPrimaryKeySelective(ItemDO item);
 	
 	Long queryIdByItemCode(String itemCode);
+
+
+	public ItemVo queryAdd(String itemCode);
+
+	public GlobalShopItemVo queryUpdate(String itemCode, String shopCode);
+
+
 }

@@ -1,16 +1,16 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
+import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
+import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.item.app.service.*;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -36,6 +36,13 @@ public class ItemServiceImplement implements IItemService {
     private ItemDOMapperExt    itemDOMapperExt;
 
     @Autowired
+    private ChannelListingItemDOMapperExt channelListingItemDOMapperExt;
+
+    @Autowired
+    private ChannelListingItemSkuDOMapperExt channelListingItemSkuDOMapperExt;
+
+
+    @Autowired
     private IItemSkuService    itemSkuService;
 
     @Autowired
@@ -49,6 +56,13 @@ public class ItemServiceImplement implements IItemService {
 
     @Autowired
     private IUploadFileService uploadFileService;
+
+
+    @Autowired
+    private InventoryMapperExt inventoryDOMapperExt;
+
+    @Autowired
+    private ItemSkuScaleMapperExt itemSkuScaleDOMapper;
 
     //插入单个商品
     @Override
@@ -298,5 +312,84 @@ public class ItemServiceImplement implements IItemService {
 	public Long queryIdByItemCode(String itemCode) {
 		return itemDOMapperExt.queryIdByItemCode(itemCode);
 	}
+
+
+	/**
+     * 专供渠道查询
+     * @param itemCode
+     * @return
+     */
+    public ItemVo queryAdd(String itemCode){
+
+        ItemVo itemVo = new ItemVo();
+        ItemDO itemDo = itemDOMapperExt.queryItemByItemCode(itemCode);
+        BeanUtils.copies(itemDo,itemVo);
+
+        List<ItemSkuVo> itemSkuVos = new ArrayList<>();
+        ItemSkuDO skuSo = new ItemSkuDO();
+        skuSo.setItemCode(itemDo.getItemCode());
+        List<ItemSkuDO> skuList = itemSkuService.querySkuListByItemCode(itemCode);
+        for(ItemSkuDO sku : skuList){
+            ItemSkuVo itemSkuVo = new ItemSkuVo();
+            BeanUtils.copies(sku,itemSkuVo);
+
+            //库存
+            InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(),sku.getSkuCode());
+            itemSkuVo.setInventoryDO(inventoryDO);
+
+            //规格尺寸
+            List<ItemSkuScaleDO> itemSkuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
+            Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
+            for(ItemSkuScaleDO scale : itemSkuScaleDOS){
+                scaleMap.put(scale.getScaleCode(),scale);
+            }
+            itemSkuVo.setScaleMap(scaleMap);
+
+            itemSkuVos.add(itemSkuVo);
+
+        }
+        itemVo.setItemSkus(itemSkuVos);
+        return itemVo;
+
+    }
+    /**
+     * 专供渠道查询
+     * @param itemCode
+     * @return
+     */
+    public GlobalShopItemVo queryUpdate(String itemCode, String shopCode){
+
+        GlobalShopItemVo resultVo = new GlobalShopItemVo();
+
+        ItemVo itemVo = this.queryAdd(itemCode);
+
+        resultVo.setItemVo(itemVo);
+
+        ChannelListingItemVo channelListingItemVo = new ChannelListingItemVo();
+
+        ChannelListingItemDO so = new ChannelListingItemVo();
+
+        so.setItemCode(itemVo.getItemCode());
+        so.setShopCode(shopCode);
+
+        ChannelListingItemDO channelListingItemDO = channelListingItemDOMapperExt.queryPo(so);
+
+        BeanUtils.copies(channelListingItemDO,channelListingItemVo);
+
+
+        ChannelListingItemSkuDO skuSo = new ChannelListingItemSkuDO();
+        skuSo.setChannelItemCode(channelListingItemDO.getChannelItemCode());
+
+
+        List<ChannelListingItemSkuDO> channelListingItemSkuDOS = channelListingItemSkuDOMapperExt.queryPoList(skuSo);
+
+        channelListingItemVo.setChannelListingItemSkuDOS(channelListingItemSkuDOS);
+
+
+        resultVo.setChannelListingItemVo(channelListingItemVo);
+
+        return resultVo;
+
+    }
    
 }

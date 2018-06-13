@@ -3,6 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapper;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemOperateDO;
 
 public interface JdItemOperateDOMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(JdItemOperateDO record);

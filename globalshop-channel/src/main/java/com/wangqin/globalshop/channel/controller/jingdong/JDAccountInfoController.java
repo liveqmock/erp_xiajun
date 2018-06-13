@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.channel.controller.taobao;
+package com.wangqin.globalshop.channel.controller.jingdong;
 
 import com.alibaba.fastjson.JSON;
 import com.jd.open.api.sdk.DefaultJdClient;

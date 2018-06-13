@@ -55,6 +55,13 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 		return jdShopOauthDOMapperExt.searchShopOauthCount(jdShopOauthDO);
 	}
 
+	public JdShopOauthDO searchShopOauthByCCS(String channelNo, String companyNo, String shopCode){
+		JdShopOauthDO jdShopOauthDO = new JdShopOauthDO();
+		jdShopOauthDO.setChannelNo(channelNo);
+		jdShopOauthDO.setCompanyNo(companyNo);
+		jdShopOauthDO.setShopCode(shopCode);
+		return jdShopOauthDOMapperExt.searchShopOauth(jdShopOauthDO);
+	}
 
 
 	/**
