@@ -23,10 +23,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.channel.Channel;
-import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
-import com.wangqin.globalshop.channelapi.dal.ChannelSalePriceVo;
-import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
-import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -106,6 +103,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	public Object createItem(ItemVo itemVo){
 
 		WareWriteAddRequest request = new WareWriteAddRequest();
+
 
 		Ware ware = new Ware();
 		ware.setTitle(itemVo.getItemName());
@@ -492,21 +490,49 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			throw new ErpCommonException("发货到京东时，京东内部出错:"+errorMsg);
 		}
 
-
 	}
 
 
 
+	//未完成
+	public GlobalShopItemVo convertItemJd2Global(String jsonData){
+
+		Ware ware = JSON.parseObject(jsonData,Ware.class);
+
+		GlobalShopItemVo resultVo = new GlobalShopItemVo();
+
+		ChannelListingItemVo channelListingItemVo = new ChannelListingItemVo();
+
+		ItemVo itemVo = new ItemVo();
+
+		//先处理头部
+
+		List<Sku> skus = ware.getSkus();
+
+		channelListingItemVo.setChannelNo(shopOauth.getChannelNo());
+		channelListingItemVo.setShopCode(shopOauth.getShopCode());
+		channelListingItemVo.setCompanyNo(shopOauth.getCompanyNo());
+
+		channelListingItemVo.setChannelItemCode(ware.getWareId()+"");
+		channelListingItemVo.setChannelItemAlias(ware.getTitle());
+
+		//itemVo.
+
+        return resultVo;
+
+	}
+
+
+	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson){
+		OrderSearchInfo jdOrder = JSON.parseObject(orderJson,OrderSearchInfo.class);
+
+		GlobalshopOrderVo globalshopOrderVo = new GlobalshopOrderVo();
 
 
 
+		return globalshopOrderVo;
 
-
-
-
-
-
-
+	}
 
 
 }

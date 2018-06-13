@@ -16,7 +16,7 @@ import java.util.List;
  *
  * Create by 777 on 2018/6/12
  */
-public class JdAbstractShopService implements JdShopService {
+public abstract class JdAbstractShopService implements JdShopService {
 
 	// logger
 	protected Logger logger = LogManager.getLogger(getClass());
@@ -68,7 +68,7 @@ public class JdAbstractShopService implements JdShopService {
 	}
 
 
-	public GlobalShopItemVo convertItemJd2Global(JSONObject jsonData){
+	public GlobalShopItemVo convertItemJd2Global(String jsonData){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品转换成内部模型功能");
 	}
 
@@ -91,7 +91,7 @@ public class JdAbstractShopService implements JdShopService {
 	 * @param orderJson
 	 * @return
 	 */
-	public JDMallOrderVo convertJdOrder2Globalshop(JSONObject orderJson){
+	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持订单转换内部结构功能");
 	}
 
