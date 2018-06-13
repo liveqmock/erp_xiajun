@@ -2,6 +2,8 @@ package com.wangqin.globalshop.biz1.app.vo;
 
 import java.util.Date;
 
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+
 /**
  * 商品对象查询
  * @author zhulu
@@ -9,6 +11,8 @@ import java.util.Date;
  */
 public class ItemSkuQueryVO extends PageQueryVO{
 
+	private String companyNo;
+	
 	private Long id;
 	
 	private Long itemId;
@@ -289,6 +293,15 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	public void setModifier(String modifier) {
 		this.modifier = modifier;
 	}
+
+	public String getCompanyNo() {
+		return companyNo;
+	}
+
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
+	
 	
 	
 	
