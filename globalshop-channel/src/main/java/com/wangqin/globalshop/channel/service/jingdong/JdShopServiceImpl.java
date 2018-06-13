@@ -145,6 +145,52 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 	public void updateItem(ItemVo itemVo, ChannelListingItemVo channelListingItemVo){
 
+
+		WareWriteUpdateWareRequest request=new WareWriteUpdateWareRequest();
+
+		Ware ware = new Ware();
+
+		ware.setWareId(Long.valueOf(channelListingItemVo.getChannelItemCode())); //必填
+
+		ware.setTitle(channelListingItemVo.getChannelItemAlias()); //名称，必填
+
+		ware.setTemplateId(1L); //非必填，模板ID，只能店铺后台查看
+
+		ware.setTransportId(1L); //必填，运输模板,后台查看，但是后台根本查看不到，需要测试不填会出现什么情况
+
+		ware.setIntroduction(itemVo.getDetail());//菲必填
+
+		ware.setWeight(itemVo.getWeight().floatValue());//非必填
+
+		List<Sku> skus = new ArrayList<>();
+		for(ItemSkuVo skuVo : itemVo.getItemSkus()){
+			Sku sku = new Sku();
+			sku.setBarCode(skuVo.getUpc());
+			sku.setOuterId(skuVo.getSkuCode());
+			sku.setJdPrice(BigDecimal.valueOf(skuVo.getSalePrice()));
+			sku.setStockNum(skuVo.getTotalAvailableInv());
+			skus.add(sku);
+		}
+		ware.setSkus(skus);
+		request.setWare(ware);
+
+
+		WareWriteUpdateWareResponse response = null;
+
+		try {
+			response=client.execute(request);
+		} catch (JdException e) {
+			logger.error("updateItem_error",e);
+			throw new ErpCommonException("updateItem,商品更新时，京东内部出错");
+		}
+
+		if(!response.getCode().equals("0")){
+			String errorMsg = "";
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			throw new ErpCommonException("商品更新时，京东内部出错:"+errorMsg);
+		}
+
+
 	}
 
 

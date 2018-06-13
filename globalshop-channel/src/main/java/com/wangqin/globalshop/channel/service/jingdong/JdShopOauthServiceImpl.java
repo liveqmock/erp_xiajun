@@ -78,6 +78,7 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 			existShopOauth.setRefreshToken(jdShopOauthDO.getRefreshToken());
 			existShopOauth.setExpiresTime(jdShopOauthDO.getExpiresTime());
 			existShopOauth.setOpen(true);
+			existShopOauth.setGmtModify(new Date());
 			jdShopOauthDOMapperExt.updateByPrimaryKey(existShopOauth);
 		}
 	}
