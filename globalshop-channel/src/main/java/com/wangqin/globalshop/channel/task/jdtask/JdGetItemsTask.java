@@ -1,13 +1,12 @@
 package com.wangqin.globalshop.channel.task.jdtask;
 
-
 import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.service.jingdong.JdOrderService;
+import com.wangqin.globalshop.channel.service.jingdong.JdItemService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopFactory;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
@@ -23,11 +22,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Create by 777 on 2018/6/12
+ * Create by 777 on 2018/6/13
  */
-
 @Component
-public class JdGetOrdersTask {
+public class JdGetItemsTask {
+
 
 	protected Logger logger = LogManager.getLogger(getClass());
 
@@ -40,7 +39,7 @@ public class JdGetOrdersTask {
 
 
 	@Autowired
-	private JdOrderService jdOrderService;
+	private JdItemService jdItemService;
 
 	private final static int internalTime = 30 * 1000;//延后30秒
 
@@ -48,7 +47,7 @@ public class JdGetOrdersTask {
 	// 每隔半小时执行一次
 	@Scheduled(cron = "0 0/30 * * * ?")
 	public void run() {
-		logger.info("定时任务：自动去京东下载订单===>Start");
+		logger.info("定时任务：自动去京东下载商品===>Start");
 		Long startTime = System.currentTimeMillis();
 		// 首先轮训出company
 		JdShopOauthDO so = new JdShopOauthDO();
@@ -58,7 +57,7 @@ public class JdGetOrdersTask {
 
 		Long shopCount= 0L;
 		JdShopConfigDO configso = new JdShopConfigDO();
-		configso.setConfigKey(AccountConfigKey.LAST_TRADES_GET_TIME.getDescription());
+		configso.setConfigKey(AccountConfigKey.LAST_ITEM_GET_TIME.getDescription());
 		for (JdShopOauthDO shopOauth : jdShopOauthDOS) {
 			configso.setShopCode(shopOauth.getShopCode());
 
@@ -71,43 +70,40 @@ public class JdGetOrdersTask {
 
 			String beginValue = jdShopConfigDO.getConfigValue();
 
-            Date beginTime = DateUtil.parseDate(beginValue);
+			Date beginTime = DateUtil.parseDate(beginValue);
 
-            Date endTime =  new Date(System.currentTimeMillis() - internalTime);
+			Date endTime =  new Date(System.currentTimeMillis() - internalTime);
 
-            if(beginTime.after(endTime)){
-               break;
+			if(beginTime.after(endTime)){
+				break;
 			}
 
 			Boolean success = true;
 
 			try {
-				List<JdOrderDO> jdOrderDOS = JdShopFactory
-						.getChannel(shopOauth).getOrders(DateUtil.convertDate2Str(beginTime,DateUtil.formateStr19), DateUtil.convertDate2Str(endTime,DateUtil.formateStr19));
+				List<JdItemDO> jdItemDOS = JdShopFactory.getChannel(shopOauth).getItems(beginTime, endTime);
 
-				if(!EasyUtil.isListEmpty(jdOrderDOS)){
-					jdOrderService.saveOrders4Task(jdOrderDOS);
+				if(!EasyUtil.isListEmpty(jdItemDOS)){
+					jdItemService.saveItems4Task(jdItemDOS);
 				}
 
 				shopCount++;
 			} catch (ErpCommonException e) {
 				success = false;
-				logger.error("JdGetOrdersTask error:",e);
+				logger.error("JdGetItemsTask error:",e);
 			} catch (Exception e) {
 				success = false;
-				logger.error("get jingdong orders error, shopCode: " + shopOauth.getShopCode(), e);
+				logger.error("get jingdong Items error, shopCode: " + shopOauth.getShopCode(), e);
 			}
 
-            if(success){
-                String endValue = DateUtil.convertDate2Str(endTime,DateUtil.formateStr19);
+			if(success){
+				String endValue = DateUtil.convertDate2Str(endTime,DateUtil.formateStr19);
 				jdShopConfigDO.setConfigValue(endValue);
-                jdShopConfigService.updateByPrimaryKey(jdShopConfigDO);
+				jdShopConfigService.updateByPrimaryKey(jdShopConfigDO);
 			}
 		}
 		Long endTime = System.currentTimeMillis();
 		logger.info("定时任务：自动去京东下载订单===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
 	}
-
-
 
 }

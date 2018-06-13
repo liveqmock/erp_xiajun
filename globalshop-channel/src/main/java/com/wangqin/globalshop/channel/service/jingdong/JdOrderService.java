@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 
 import java.util.List;
 
@@ -29,5 +30,7 @@ public interface JdOrderService {
 
 	public Long searchJdOrderCount(JdOrderDO jdOrderDO);
 
-	public void saveOrdes4Task(List<JdOrderDO> jdOrderDOS);
+	public void saveOrders4Task(List<JdOrderDO> jdOrderDOS);
+
+	public void sendJdOrder2globalshop4Task(JdOrderDO jdOrderDO, JdShopOauthDO shopOauth);
 }

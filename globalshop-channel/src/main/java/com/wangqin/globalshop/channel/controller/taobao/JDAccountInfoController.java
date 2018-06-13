@@ -181,6 +181,16 @@ public class JDAccountInfoController {
 //		shopOauth.setExpiresTime(new Date(jdOauthResponse.getTime() + jdOauthResponse.getExpires_in() * 1000));
 //		shopOauth.setRefreshToken(jdOauthResponse.getRefresh_token());
 //
+//		shopOauth.setServerUrl("https://api.jd.com/routerjson");
+//		shopOauth.setAppKey("96C38E0AAAA47520B6211D32A5A14EDE");
+//		shopOauth.setAppsecretKey("758ae3185aec4822aa5593fda0aa9b98");
+//		shopOauth.setTokenUrl("https://oauth.jd.com/oauth/token");
+//
+//		ShopJosResult shopJosResult = getVenderInfo(shopOauth);
+//		shopOauth.setShopCode(shopJosResult.getVenderId()+"");
+//
+//
+//
 //
 //		//创建或更新jd_shop_oauth
 //		jdShopOauthService.createOrUpdateShopOauth(ChannelType.JingDong,shopOauth);
@@ -189,7 +199,7 @@ public class JDAccountInfoController {
 //		jdShopConfigService.initShopConfig(ChannelType.JingDong,shopOauth);
 //
 //	}
-//
+
 //	@RequestMapping("/shoptest")
 //	public void shoptest(String state, String jsonStr){
 //
