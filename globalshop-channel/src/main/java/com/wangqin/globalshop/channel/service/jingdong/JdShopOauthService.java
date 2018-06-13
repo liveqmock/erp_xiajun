@@ -29,4 +29,6 @@ public interface JdShopOauthService {
 	public Long searchShopOauthCount(JdShopOauthDO jdShopOauthDO);
 
 	public void createOrUpdateShopOauth(ChannelType channelType, JdShopOauthDO jdShopOauthDO);
+
+	public JdShopOauthDO searchShopOauthByCCS(String channelNo, String companyNo, String shopCode);
 }

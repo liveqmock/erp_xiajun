@@ -23,10 +23,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.channel.Channel;
-import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
-import com.wangqin.globalshop.channelapi.dal.ChannelSalePriceVo;
-import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
-import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -107,6 +104,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 		WareWriteAddRequest request = new WareWriteAddRequest();
 
+
 		Ware ware = new Ware();
 		ware.setTitle(itemVo.getItemName());
 		ware.setCategoryId(1L);//必填
@@ -144,6 +142,52 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	public void updateItem(ItemVo itemVo, ChannelListingItemVo channelListingItemVo){
+
+
+		WareWriteUpdateWareRequest request=new WareWriteUpdateWareRequest();
+
+		Ware ware = new Ware();
+
+		ware.setWareId(Long.valueOf(channelListingItemVo.getChannelItemCode())); //必填
+
+		ware.setTitle(channelListingItemVo.getChannelItemAlias()); //名称，必填
+
+		ware.setTemplateId(1L); //非必填，模板ID，只能店铺后台查看
+
+		ware.setTransportId(1L); //必填，运输模板,后台查看，但是后台根本查看不到，需要测试不填会出现什么情况
+
+		ware.setIntroduction(itemVo.getDetail());//菲必填
+
+		ware.setWeight(itemVo.getWeight().floatValue());//非必填
+
+		List<Sku> skus = new ArrayList<>();
+		for(ItemSkuVo skuVo : itemVo.getItemSkus()){
+			Sku sku = new Sku();
+			sku.setBarCode(skuVo.getUpc());
+			sku.setOuterId(skuVo.getSkuCode());
+			sku.setJdPrice(BigDecimal.valueOf(skuVo.getSalePrice()));
+			sku.setStockNum(skuVo.getTotalAvailableInv());
+			skus.add(sku);
+		}
+		ware.setSkus(skus);
+		request.setWare(ware);
+
+
+		WareWriteUpdateWareResponse response = null;
+
+		try {
+			response=client.execute(request);
+		} catch (JdException e) {
+			logger.error("updateItem_error",e);
+			throw new ErpCommonException("updateItem,商品更新时，京东内部出错");
+		}
+
+		if(!response.getCode().equals("0")){
+			String errorMsg = "";
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			throw new ErpCommonException("商品更新时，京东内部出错:"+errorMsg);
+		}
+
 
 	}
 
@@ -446,21 +490,49 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			throw new ErpCommonException("发货到京东时，京东内部出错:"+errorMsg);
 		}
 
-
 	}
 
 
 
+	//未完成
+	public GlobalShopItemVo convertItemJd2Global(String jsonData){
+
+		Ware ware = JSON.parseObject(jsonData,Ware.class);
+
+		GlobalShopItemVo resultVo = new GlobalShopItemVo();
+
+		ChannelListingItemVo channelListingItemVo = new ChannelListingItemVo();
+
+		ItemVo itemVo = new ItemVo();
+
+		//先处理头部
+
+		List<Sku> skus = ware.getSkus();
+
+		channelListingItemVo.setChannelNo(shopOauth.getChannelNo());
+		channelListingItemVo.setShopCode(shopOauth.getShopCode());
+		channelListingItemVo.setCompanyNo(shopOauth.getCompanyNo());
+
+		channelListingItemVo.setChannelItemCode(ware.getWareId()+"");
+		channelListingItemVo.setChannelItemAlias(ware.getTitle());
+
+		//itemVo.
+
+        return resultVo;
+
+	}
+
+
+	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson){
+		OrderSearchInfo jdOrder = JSON.parseObject(orderJson,OrderSearchInfo.class);
+
+		GlobalshopOrderVo globalshopOrderVo = new GlobalshopOrderVo();
 
 
 
+		return globalshopOrderVo;
 
-
-
-
-
-
-
+	}
 
 
 }

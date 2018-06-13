@@ -155,18 +155,6 @@
         <foreach collection="list" item="item" index="index" separator=" " open="case ID" close="end">
             when #{item.id,jdbcType=BIGINT} then #{item.model,jdbcType=VARCHAR}
         </foreach>
-        ,gmt_modify=
-        <foreach collection="list" item="item" index="index" separator=" " open="case ID" close="end">
-            when #{item.id,jdbcType=BIGINT} then #{item.gmtModify,jdbcType=TIMESTAMP}
-        </foreach>
-        ,gmt_create=
-        <foreach collection="list" item="item" index="index" separator=" " open="case ID" close="end">
-            when #{item.id,jdbcType=BIGINT} then #{item.gmtCreate,jdbcType=TIMESTAMP}
-        </foreach>
-        ,is_del=
-        <foreach collection="list" item="item" index="index" separator=" " open="case ID" close="end">
-            when #{item.id,jdbcType=BIGINT} then #{item.isDel,jdbcType=BIT}
-        </foreach>
         ,creator=
         <foreach collection="list" item="item" index="index" separator=" " open="case ID" close="end">
             when #{item.id,jdbcType=BIGINT} then #{item.creator,jdbcType=VARCHAR}

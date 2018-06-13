@@ -25,6 +25,8 @@ public interface InventoryService {
     void returns(MallSubOrderDO mallReturnOrderDO,Long inv);
     /**出库单出库*/
     void outOfStorehouse(InventoryOutManifestDO outManifestDO);
+    /**SKU修改虚拟库存*/
+    void updateVirtualInv(String skuCode,Long virInv,String companyNo);
 
     InventoryDO selectByItemCodeAndSkuCode(String itemCode, String skuCode);
     /**释放占用*/

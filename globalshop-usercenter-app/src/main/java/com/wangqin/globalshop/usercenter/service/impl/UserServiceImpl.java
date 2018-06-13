@@ -85,38 +85,41 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     public void updateByVo(UserVo userVo) {
-        AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
-        user.update();
-        user.setSex(userVo.getSex().byteValue());
-        user.setAge(userVo.getAge().byteValue());
-        user.setUserType(userVo.getUserType().byteValue());
-        user.setStatus(userVo.getStatus().byteValue());
-        user.setIsDel(false);
-        if (StringUtils.isBlank(user.getPassword())) {
-            user.setPassword(null);
-        }
-        userMapper.updateByPrimaryKey(user);
+    	
+        AuthUserDO authUser = userMapper.selectByPrimaryKey(userVo.getId());
         
-//        Long id = userVo.getId();
-        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByLoginName(userVo.getLoginName());
-        if (userRoles != null && !userRoles.isEmpty()) {
-            for (AuthUserRoleDO userRole : userRoles) {
-                userRoleMapper.deleteByPrimaryKey(userRole.getId());
-            }
+        authUser.setLoginName(userVo.getLoginName());
+        authUser.setName(userVo.getName());
+        if (StringUtils.isBlank(userVo.getPassword())) {
+            authUser.setPassword(null);
         }
+        
+        authUser.setPassword(userVo.getPassword());
+        authUser.setSex((byte)userVo.getSex().intValue());
+        authUser.setAge((byte)userVo.getAge().intValue());
+        authUser.setUserType((byte)userVo.getUserType().intValue());
+        authUser.setOrganizationId(userVo.getOrganizationId());
+        authUser.setPhone(userVo.getPhone());
+        authUser.setStatus((byte)userVo.getStatus().intValue());
+        authUser.setIsDel(false);
+   
+        
+       
+        userMapper.updateByPrimaryKey(authUser);
+        
+//        System.out.println(userVo.getId());
+        AuthUserRoleDO userRole = userRoleMapper.selectByUserId(userVo.getId());
+        
+        userRole.setUserId(userVo.getId());
 
-        String[] roles = userVo.getRoleIds().split(",");
-        AuthUserRoleDO userRole = new AuthUserRoleDO();
-        for (String string : roles) {
-//            userRole.setUserId(id);
-            userRole.setRoleId(Long.valueOf(string));
-            userRoleMapper.insert(userRole);
-        }
+        userRole.setRoleId(Long.parseLong(userVo.getRoleIds()));
+        userRoleMapper.updateByPrimaryKey(userRole);
+        
     }
 
 //    @Override
 //    public void updateSelectiveById(AuthUserDO user) {
-//
+//			
 //    }
 
     @Override

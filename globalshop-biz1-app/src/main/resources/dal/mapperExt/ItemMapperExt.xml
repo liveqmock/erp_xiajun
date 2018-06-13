@@ -624,8 +624,8 @@
 	</where>
 	</select>
 	
-	<select id="queryItemByItemCode" >
-	SELECT 
+	<select id="queryItemByItemCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" >
+	SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
 	<include refid="Base_Column_List" />
 	FROM item 
 	<where>

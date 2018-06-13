@@ -55,6 +55,13 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 		return jdShopOauthDOMapperExt.searchShopOauthCount(jdShopOauthDO);
 	}
 
+	public JdShopOauthDO searchShopOauthByCCS(String channelNo, String companyNo, String shopCode){
+		JdShopOauthDO jdShopOauthDO = new JdShopOauthDO();
+		jdShopOauthDO.setChannelNo(channelNo);
+		jdShopOauthDO.setCompanyNo(companyNo);
+		jdShopOauthDO.setShopCode(shopCode);
+		return jdShopOauthDOMapperExt.searchShopOauth(jdShopOauthDO);
+	}
 
 
 	/**
@@ -72,12 +79,13 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 			jdShopOauthDO.setGmtCreate(new Date());
 			jdShopOauthDO.setIsDel(false);
 			jdShopOauthDO.setVersion(0L);
-			jdShopOauthDOMapperExt.insertSelective(jdShopOauthDO);
+			jdShopOauthDOMapperExt.insert(jdShopOauthDO);
 		}else {
 			existShopOauth.setAccessToken(jdShopOauthDO.getAccessToken());
 			existShopOauth.setRefreshToken(jdShopOauthDO.getRefreshToken());
 			existShopOauth.setExpiresTime(jdShopOauthDO.getExpiresTime());
 			existShopOauth.setOpen(true);
+			existShopOauth.setGmtModify(new Date());
 			jdShopOauthDOMapperExt.updateByPrimaryKey(existShopOauth);
 		}
 	}

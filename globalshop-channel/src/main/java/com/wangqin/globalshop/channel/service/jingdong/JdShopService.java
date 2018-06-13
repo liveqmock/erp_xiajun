@@ -77,7 +77,7 @@ public interface JdShopService {
 	 * @param jsonData
 	 * @return
 	 */
-	public GlobalShopItemVo convertItemJd2Global(JSONObject jsonData);
+	public GlobalShopItemVo convertItemJd2Global(String jsonData);
 
 
 	//订单:抓订单（按时间），抓订单（按ID），数据模型转换：jd转globalshop,发货
@@ -102,12 +102,15 @@ public interface JdShopService {
 	 * @param orderJson
 	 * @return
 	 */
-	public JDMallOrderVo convertJdOrder2Globalshop(JSONObject orderJson);
+	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson);
 
 	/**
 	 * 发货
 	 */
 	public void logisticComfire(JdLogisticsDO jdLogisticsDO);
+
+
+
 
 
 }
