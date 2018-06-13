@@ -397,16 +397,13 @@ public class ItemController  {
 			//重新设置商品名称
 			item.setName(nameNew.toString());
 			
-			ItemCategoryDO category = categoryService.selectByPrimaryKey(item.getCategoryId());
-			if(category!=null){
-				item.setCategoryName(category.getName());
-			}else{
-				return result.buildMsg("没有找到类目").buildIsSuccess(false);
-			}
+		
+			
+
 		}
 
 			String skuList = item.getSkuList();
-			System.out.println("skuList:"+skuList);
+			//System.out.println("skuList:"+skuList);
 			Double minPrice = null;
 			Double maxPrice = null;
 			if (StringUtils.isNotBlank(skuList)) {
@@ -534,8 +531,8 @@ public class ItemController  {
 			newItem.setDetail(item.getDetail());
 			detailDecoder(newItem);
 			System.out.println("detail:"+newItem.getDetail());
-			newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
-			newItem.setCategoryName(categoryService.selectByPrimaryKey(item.getCategoryId()).getName());
+			newItem.setCategoryCode(item.getCategoryCode());
+			newItem.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
 			newItem.setBrandName(item.getBrand());
 			newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand()));
 			newItem.setEnName(item.getEnName());
@@ -547,7 +544,8 @@ public class ItemController  {
 			newItem.setCountry(countryService.queryCodeById(item.getCountry()));	
 	        newItem.setRemark(item.getRemark());
 	        newItem.setMainPic(item.getMainPic());
-			iItemService.updateByPrimaryKeySelective(newItem);
+	        newItem.setId(item.getId());
+			iItemService.updateByIdSelective(newItem);
 			/*
 			//修改商品授权买手
 			Map<String, Object> delMap = Maps.newHashMap();
@@ -819,7 +817,7 @@ public class ItemController  {
 				ItemDO item = new ItemDO();
 				item.setId(itemId);			
 				item.setQrCodeUrl(picUrl);
-				iItemService.updateByPrimaryKeySelective(item);
+				iItemService.updateByIdSelective(item);
 			}
 		}
 		return result.buildIsSuccess(true);
@@ -841,7 +839,7 @@ public class ItemController  {
 				ItemDO item= new ItemDO();
 				item.setId(itemId);			
 				item.setQrCodeUrl(picUrl);
-				iItemService.updateByPrimaryKeySelective(item);
+				iItemService.updateByIdSelective(item);
 			}
 		}
 		
