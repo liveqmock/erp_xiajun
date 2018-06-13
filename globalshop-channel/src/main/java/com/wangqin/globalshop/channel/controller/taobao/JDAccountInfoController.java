@@ -106,7 +106,6 @@ public class JDAccountInfoController {
 
 
 		try {
-
 			ShopJosResult shopJosResult = getVenderInfo(shopOauth);
 			shopOauth.setShopCode(shopJosResult.getVenderId()+"");
 			channelShop.setShopName(shopJosResult.getShopName());
