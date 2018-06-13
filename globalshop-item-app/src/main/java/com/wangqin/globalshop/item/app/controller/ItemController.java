@@ -293,7 +293,8 @@ public class ItemController  {
 	        				itemSku.setItemName(newItem.getItemName());
 	        				itemSku.setItemId(newItem.getId());
 	        				//itemSku.setCategoryId(newItem.getCategoryId());
-	        				itemSku.setCategoryName(newItem.getCategoryName());
+	        				itemSku.setCategoryName(item.getCategoryName());
+	        				itemSku.setCategoryCode(item.getCategoryCode());
 	        				itemSku.setBrand(newItem.getBrandName());
 	        				//if(null == AppUtil.getLoginUserId()) {
 	        					///itemSku.setModifier("xiajun");

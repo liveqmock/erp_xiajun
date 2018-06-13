@@ -35,7 +35,7 @@ import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IScaleTypeService;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
-import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
+
 
 
 /**
@@ -55,8 +55,7 @@ public class ItemSkuController  {
 
 	@Autowired
 	private ItemIInventoryService inventoryService;
-	@Autowired
-	private ItemIMallOrderService erpOrderService;
+
 	
 	@Autowired
 	private IScaleTypeService scaleTypeService;
@@ -205,7 +204,6 @@ public class ItemSkuController  {
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
-		System.out.println("controller层获取到的sku数量："+result.getData().size());
 		result.buildIsSuccess(true);
 		return result;
 	}

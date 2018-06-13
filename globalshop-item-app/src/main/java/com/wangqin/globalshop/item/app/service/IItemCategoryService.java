@@ -51,4 +51,7 @@ public interface IItemCategoryService {
 	   
 	   //不能删除有子类目的类目
 	   int queryChildCategoryCountByCategoryCode(String categoryCode);
+	   
+	   //根据id删除类目
+	   void deleteItemCategoryById(Long id);
 }

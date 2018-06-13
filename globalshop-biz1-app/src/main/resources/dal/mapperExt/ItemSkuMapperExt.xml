@@ -102,6 +102,9 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
+            <if test=" categoryCode != null and categoryCode != '' ">
+                and T1.category_code = #{categoryCode}
+            </if>
             <if test=" companyNo != null and companyNo != '' ">
                 and T1.company_no = #{companyNo}
             </if>
@@ -133,7 +136,8 @@
         SELECT
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
-        	 T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,T1.sku_code AS skuCode,
+        	 T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,
+        	 T1.sku_code AS skuCode,T1.sale_price AS salePrice,T1.gmt_modify AS gmtModify,
              inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
 			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
@@ -142,6 +146,9 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
+            <if test=" categoryCode != null and categoryCode != '' ">
+                and T1.category_code = #{categoryCode}
+            </if>
             <if test=" companyNo != null and companyNo != '' ">
                 and T1.company_no = #{companyNo}
             </if>
@@ -201,6 +208,9 @@
       </if>
       <if test="upc != null" >
         upc = #{upc},
+      </if>
+      <if test="packageLevelId != null" >
+        package_level_id = #{packageLevelId},
       </if>
       <if test="weight != null" >
         weight = #{weight},
@@ -291,24 +301,25 @@
            T1.sku_code = #{skuCode}
 </select>
 
-
-   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
-        <selectKey resultType="long" keyProperty="id" order="AFTER">
+<!-- 批量插入sku -->
+<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+  <selectKey resultType="long" keyProperty="id" order="AFTER">
             SELECT
             LAST_INSERT_ID()
         </selectKey>
         insert into item_sku
-        (sku_code,item_code,item_name,company_no,upc,creator,modifier,sale_price)
+        (sku_code,cost_price,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
             separator=",">
             (
-            #{wdSolr.skuCode},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
-            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice}
+            #{wdSolr.skuCode}, #{wdSolr.costPrice},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
+            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice},
+            #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId}
             )
         </foreach>
-    </insert>
+</insert>
 
 <!-- 删除sku -->
     <update id="deleteById" parameterType="java.lang.Long">
