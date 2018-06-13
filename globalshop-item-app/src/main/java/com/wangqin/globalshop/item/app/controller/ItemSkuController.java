@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleTypeDO;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
@@ -26,6 +27,7 @@ import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
@@ -43,6 +45,7 @@ import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
  */
 @Controller
 @RequestMapping("/itemSku")
+@Authenticated
 public class ItemSkuController  {
 
 	@Autowired
@@ -197,17 +200,13 @@ public class ItemSkuController  {
 	@ResponseBody
 	public Object queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
 		JsonPageResult<List<ISkuDTO>> result = new JsonPageResult<>();
-		try{
-			try {
-				//itemSkuQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
-			} catch (Exception e) {				
-			}
-			result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
-			result.buildIsSuccess(true);
-		}catch(Exception e){
-			e.printStackTrace();
-			result.buildIsSuccess(false);
+		if(null == AppUtil.getLoginUserCompanyNo()) {
+			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
+		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
+		System.out.println("controller层获取到的sku数量："+result.getData().size());
+		result.buildIsSuccess(true);
 		return result;
 	}
 	

@@ -102,7 +102,10 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
-              <if test=" itemName != null and itemName != '' ">
+            <if test=" companyNo != null and companyNo != '' ">
+                and T1.company_no = #{companyNo}
+            </if>
+            <if test=" itemName != null and itemName != '' ">
                 and T1.item_name LIKE concat('%',#{itemName},'%')
             </if>
             <if test=" itemCode != null and itemCode != '' ">
@@ -139,7 +142,10 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
-              <if test=" itemName != null and itemName != '' ">
+            <if test=" companyNo != null and companyNo != '' ">
+                and T1.company_no = #{companyNo}
+            </if>
+            <if test=" itemName != null and itemName != '' ">
                 and T1.item_name LIKE concat('%',#{itemName},'%')
             </if>
             <if test=" itemCode != null and itemCode != '' ">
