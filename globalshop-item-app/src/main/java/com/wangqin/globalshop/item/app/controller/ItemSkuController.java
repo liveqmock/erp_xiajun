@@ -205,7 +205,6 @@ public class ItemSkuController  {
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
-		System.out.println("controller层获取到的sku数量："+result.getData().size());
 		result.buildIsSuccess(true);
 		return result;
 	}

@@ -23,6 +23,8 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	 */
 	private String itemCode;
 	
+	private String packageLevelId;
+	
 	/**
 	 * SKU编码
 	 */
@@ -49,6 +51,8 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	 * 
 	 */
 	private Long categoryId;
+	
+	private String categoryCode;
 	
 	/**
 	 * 品牌
@@ -300,6 +304,22 @@ public class ItemSkuQueryVO extends PageQueryVO{
 
 	public void setCompanyNo(String companyNo) {
 		this.companyNo = companyNo;
+	}
+
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
+	}
+
+	public String getPackageLevelId() {
+		return packageLevelId;
+	}
+
+	public void setPackageLevelId(String packageLevelId) {
+		this.packageLevelId = packageLevelId;
 	}
 	
 	

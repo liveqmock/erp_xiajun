@@ -33,4 +33,6 @@ public interface ItemBrandDOMapperExt  extends ItemBrandDOMapper {
         
         //插入单个品牌
         int insertBrandSelective(ItemBrandDO brand);
+        
+        void deleteItemBrandById(Long id);
 }
