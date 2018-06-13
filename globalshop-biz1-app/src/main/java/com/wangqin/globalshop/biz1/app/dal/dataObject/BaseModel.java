@@ -56,9 +56,10 @@ public class BaseModel {
 
     public void init() {
         this.setModifier(AppUtil.getLoginUserId());
-        this.setCreator(AppUtil.getLoginUserId());
+    	this.setCreator(AppUtil.getLoginUserId());
         this.setIsDel(false);
         this.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+     
     }
     public void initCompany() {
         this.setCompanyNo(AppUtil.getLoginUserCompanyNo());

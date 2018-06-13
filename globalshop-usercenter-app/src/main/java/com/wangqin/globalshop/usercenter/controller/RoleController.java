@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
@@ -29,6 +30,7 @@ import java.util.Set;
  */
 @Controller
 @RequestMapping("/role")
+@Authenticated
 public class RoleController extends BaseController {
 
     @Autowired
@@ -123,7 +125,6 @@ public class RoleController extends BaseController {
             return null;
         }
         role.setRoleId((long)RandomUtils.nextInt(1000000000));
-//        role.setStatus(Byte.valueOf("0"));
         roleService.insert(role);
         return renderSuccess("添加成功！");
     }
@@ -201,13 +202,14 @@ public class RoleController extends BaseController {
      * @param resourceIds
      * @return
      */
-    @RequestMapping("/grant")
+    @RequestMapping("/updateGrant")
     @ResponseBody
     public Object grant(Long id, String resourceIds) {
         roleService.updateRoleResource(id, resourceIds);
         return renderSuccess("授权成功！");
     }
-
+    
+    
 
     @RequestMapping("/query")
     @ResponseBody
