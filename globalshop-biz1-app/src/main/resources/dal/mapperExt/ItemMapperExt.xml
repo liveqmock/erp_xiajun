@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt">
-<!-- item-app模块使用 -->
+<!-- 商品模块的都在这里!!!! -->
 
    <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
@@ -13,7 +13,7 @@
     </sql>
     <!-- 2.0版通用查询结果列,xiajun-->
     <sql id="Base_Column_List_2">
-        T1.id,T1.item_name AS name,T1.status, T1.spec,T1.model,
+        T1.id,T1.item_name AS name,T1.status, T1.spec,T1.model,T1.country,T1.booking_date AS bookingDate,
         T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
         main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
         en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
@@ -270,6 +270,7 @@
    <update id="updateByIdSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
     update item
     <set >
+      <trim suffixOverrides="," >
       <if test="itemCode != null" >
         item_code = #{itemCode,jdbcType=VARCHAR},
       </if>
@@ -393,6 +394,7 @@
       <if test="remark != null" >
         `remark` = #{remark},
       </if>
+      </trim>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>

@@ -18,6 +18,8 @@ import com.wangqin.globalshop.channelapi.dal.ItemVo;
 
 public interface IItemService {
 
+	//根据id更新商品
+	void updateByIdSelective(ItemDO item);
 	
 	//插入单个商品
 	Long insertItemSelective(ItemDO item);
@@ -85,7 +87,6 @@ public interface IItemService {
 	
 	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);
 	
-	void updateByPrimaryKeySelective(ItemDO item);
 	
 	Long queryIdByItemCode(String itemCode);
 
