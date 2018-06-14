@@ -141,8 +141,9 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	}
 
 
-	public void updateItem(ItemVo itemVo, ChannelListingItemVo channelListingItemVo){
-
+	public void updateItem(GlobalShopItemVo globalShopItemVo){
+		ItemVo itemVo = globalShopItemVo.getItemVo();
+		ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
 
 		WareWriteUpdateWareRequest request=new WareWriteUpdateWareRequest();
 

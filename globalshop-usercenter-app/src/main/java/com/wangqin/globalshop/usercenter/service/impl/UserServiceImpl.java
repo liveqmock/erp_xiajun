@@ -108,12 +108,13 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         userMapper.updateByPrimaryKey(authUser);
         
 //        System.out.println(userVo.getId());
-        AuthUserRoleDO userRole = userRoleMapper.selectByUserId(userVo.getId());
-        
-        userRole.setUserId(userVo.getId());
+//        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByUserId(userVo.getId());
+//        for(AuthUserRoleDO userRole : userRoles) {
+//        	userRole.setRoleId(Long.parseLong(userVo.getRoleIds()));
+//            userRoleMapper.updateByPrimaryKey(userRole);
+//        }
 
-        userRole.setRoleId(Long.parseLong(userVo.getRoleIds()));
-        userRoleMapper.updateByPrimaryKey(userRole);
+        
         
     }
 

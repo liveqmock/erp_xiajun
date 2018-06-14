@@ -23,8 +23,8 @@ public class ItemDTO implements Serializable{
 
 
 	private Long id;
-	
 
+	
 	private Long companyId;
 	
 	private String name;

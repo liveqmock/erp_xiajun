@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.purchase.app.service.IBuyerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.util.List;
 @Service
 public class BuyerServiceImpl implements IBuyerService {
     @Autowired
-    private BuyerMapperExt mapper;
+    private BuyerDOMapperExt mapper;
     @Override
     public List<BuyerDO> list() {
-        return null/*mapper.list(AppUtil.getLoginUserCompanyNo())*/;
+        return mapper.list(AppUtil.getLoginUserCompanyNo());
     }
 }

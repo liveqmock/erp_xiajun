@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
 /**
+ * 同步至京东的状态
  * Create by 777 on 2018/6/12
  */
 public class SyncStatus {
