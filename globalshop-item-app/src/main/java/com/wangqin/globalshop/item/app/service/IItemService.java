@@ -1,15 +1,15 @@
 package com.wangqin.globalshop.item.app.service;
 
+
+import java.util.List;
+import java.util.Map;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
-import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 
@@ -95,11 +95,6 @@ public interface IItemService {
 
 	//渠道模块使用
 	public GlobalShopItemVo queryUpdate(String itemCode, String shopCode);
-
-
-	public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
-
-	public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
 
 
 }
