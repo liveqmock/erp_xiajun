@@ -119,7 +119,7 @@ public class JdOrderServiceImpl implements JdOrderService{
 
 		JSONObject jsonObject = null;
 		try {
-			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/channel/",pram);
+			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jdorder/dealOrder",pram);
 		} catch (Exception e) {
 			logger.error("sendJdOrder2globalshop4Task error: ",e);
 		}

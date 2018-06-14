@@ -118,7 +118,7 @@ public class JdItemServiceImpl implements JdItemService {
 
 		JSONObject jsonObject = null;
 		try {
-			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/channel/",pram);
+			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jditem/taskitem",pram);
 		} catch (Exception e) {
 			logger.error("sendJdItem2globalshop4Task error: ",e);
 		}

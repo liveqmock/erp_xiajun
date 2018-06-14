@@ -1,28 +1,5 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
@@ -38,199 +15,57 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
-import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ImageUtil;
-import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.common.utils.StringUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.IBuyerService;
-import com.wangqin.globalshop.item.app.service.ICountryService;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
-import com.wangqin.globalshop.item.app.service.IItemCategoryService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
-
+import com.wangqin.globalshop.item.app.service.*;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 商品处理器
- * 
- * @author zhulu
  *
+ * @author zhulu
  */
 @Controller
 @RequestMapping("/item")
 @Authenticated
-public class ItemController  {
+public class ItemController {
 
-	@Autowired
-	private IItemService iItemService;
-	
-	@Autowired
-	private InventoryService invService;
-	
-	@Autowired
-	private IItemSkuService itemSkuService;
-	
-	@Autowired
-	private IItemCategoryService categoryService;
-	
-	@Autowired
-	private ISequenceUtilService sequenceUtilService;
-	
-	
-	@Autowired
-	private ItemIInventoryService inventoryService;
-	
-	@Autowired
-	private IItemBrandService brandService;
-	
-
-	@Autowired
-	private ICountryService countryService;
-	
-	@Autowired
-	private IBuyerService buyerService;
+  public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
+  public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
+  @Autowired
+  private IItemBrandService brandService;
+  @Autowired
+  private IItemCategoryService categoryService;
+  @Autowired
+  private ICountryService countryService;
+  @Autowired
+  private IItemService iItemService;
+  @Autowired
+  private InventoryService invService;
+  @Autowired
+  private InventoryService inventoryService;
 
 
 //	@Autowired
 //	private ChannelCommonService channelCommonService;
-	
-	
-	
-	public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
-	public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
+  @Autowired
+  private IItemSkuService itemSkuService;
+  @Autowired
+  private ISequenceUtilService sequenceUtilService;
 //    public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wx56e36d38aff90280&secret=9269561bae6e1b59c8107c35a669016c";
-	
-	/**
-	 * 添加商品(fin)
-	 *
-	 * @param
-	 */
-	@RequestMapping("/add")
-	@ResponseBody
-	public Object add(ItemQueryVO item) {
-		item.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-		//item.setCompanyNo("1");
-		//logger.info("add item start");
-		JsonResult<ItemDO> result = new JsonResult<>();
-		if (item.getId() == null) {
-			StringBuffer nameNew = new StringBuffer();
-			//品牌
-			String[] brandArr = item.getBrand().split("->");
-			if(StringUtil.isNotBlank(brandArr[0])) {	//英文品牌
-				nameNew.append(brandArr[0] + " ");
-			}
-			if(brandArr.length>1 && StringUtil.isNotBlank(brandArr[1])) {	//中文品牌
-				nameNew.append(brandArr[1] + " ");
-			}
-			if(StringUtil.isNotBlank(item.getSexStyle())) {		//男女款
-				nameNew.append(item.getSexStyle() + " ");
-			}
-			nameNew.append(item.getName());
-			//重新设置商品名称
-			item.setName(nameNew.toString());
-
-			//ItemCategoryDO category = categoryService.selectByPrimaryKey(item.getCategoryId());
-			String categoryCode = item.getCategoryCode();
-			if(categoryCode != null){
-				item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
-			}else{
-				return result.buildMsg("没有找到类目").buildIsSuccess(false);
-			}
-			//设置item_code栏位的值
-			//item.setItemCode("I" + categoryCode + "Q" + sequenceUtilService.gainItemSequence());
-			item.setItemCode("I" + categoryCode + "Q" + RandomUtils.getTimeRandom());
-			String imgJson = ImageUtil.getImageUrl(item.getMainPic());
-			
-			// 解析skuList 数组对象
-			String skuList = item.getSkuList();
-			Double minPrice = null;
-			Double maxPrice = null;
-			if (StringUtils.isNotBlank(skuList)) {
-				try {
-					String s = skuList.replace("&quot;", "\"");
-					List<ItemSkuAddVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>(){});
-					Map<String, Integer> colorScaleMap = new HashMap<String, Integer>();
-					int i = 0;
-					if (skus != null && !skus.isEmpty()) {
-						for(ItemSkuAddVO itemSku : skus) {
-							//颜色和尺寸不能都为空
-							if(StringUtil.isBlank(itemSku.getColor()) && StringUtil.isBlank(itemSku.getScale())) {
-								return result.buildMsg("颜色和尺寸不能都为空").buildIsSuccess(false);
-							}
-							if(minPrice == null) {
-								minPrice = itemSku.getSalePrice();
-								maxPrice = itemSku.getSalePrice();
-							} else {
-								if(minPrice > itemSku.getSalePrice())  minPrice = itemSku.getSalePrice();
-								if(maxPrice < itemSku.getSalePrice())  maxPrice = itemSku.getSalePrice();
-							}
-							//判断颜色，尺寸是否冲突
-							String colorScaleKey = "";
-							if(itemSku.getColor() != null) {
-								String color = itemSku.getColor().trim();
-								colorScaleKey += color;
-								itemSku.setColor(color);
-							}
-							if(itemSku.getScale() != null) {
-								String scale = itemSku.getScale().trim();
-								colorScaleKey += scale;
-								itemSku.setScale(scale);
-							}
-							if(StringUtil.isBlank(colorScaleKey)) colorScaleKey = "none";
-							if(colorScaleMap.get(colorScaleKey)!=null) {
-								return result.buildMsg("SKU颜色尺码重复").buildIsSuccess(false);
-							}
-							colorScaleMap.put(colorScaleKey, 1);
-							
-							itemSku.setSkuCode("S" + item.getItemCode().substring(1) + String.format("%0"+4+"d", ++i));
-							itemSku.setLogisticType(item.getLogisticType());
-							itemSku.setBuySite(item.getBuySite());
-					
-							String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
-							itemSku.setSkuPic(skuPic);
-							if(StringUtils.isNotBlank(itemSku.getPackageLevelId()) ){
-							  List<Long> a =  HaiJsonUtils.toBean(itemSku.getPackageLevelId(), new TypeReference<List<Long>>(){});
-							  itemSku.setPackageId(a.get(a.size()-1));
-							}
-							// 如果商品没有图片，默认使用sku上的图片
-							if (StringUtils.isBlank(imgJson) && StringUtils.isNotBlank(skuPic)) {
-								imgJson = skuPic;
-							}
-						}
-						item.setItemSkus(skus);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					return result.buildMsg("解析SKU错误").buildIsSuccess(false);
-				}
-			}
-			//商品价格区间
-			if(minPrice.equals(maxPrice)) {
-				item.setPriceRange(maxPrice.toString());
-			}  else {
-				item.setPriceRange(minPrice.toString() + "-" + maxPrice.toString());
-			}
-			
-			item.setMainPic(imgJson);
-			
-			//对前端传来的时间进行处理
-			ItemDO newItem = new ItemDO();
-			DateFormat format= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			try {
-				newItem.setStartDate(format.parse(item.getStartDate()));
-				newItem.setEndDate(format.parse(item.getEndDate()));
-				newItem.setBookingDate(format.parse(item.getBookingDate()));
-			} catch(Exception e) {
-				//
-			}
 
 			//判断是否可售
 			if(item.getStartDate()==null || item.getEndDate()==null) {
@@ -538,7 +373,7 @@ public class ItemController  {
 				itemBuyer.setGmtModify(new Date());
 				itemBuyerMapper.insert(itemBuyer);
 			}
-			
+
 			// 有赞售卖有变化
 			if (oldItem.getSaleOnYouzan() != item.getSaleOnYouzan()) {
 				try {
@@ -553,7 +388,7 @@ public class ItemController  {
 					logger.error("商品添加时同步到有赞：", e);
 				}
 			}
-			
+
 			return result.buildIsSuccess(true);
 		}*/
 		//channelCommonService.createItem(item.getId());
@@ -891,5 +726,5 @@ public class ItemController  {
         return result;
     }    
 
-	
 }
+
