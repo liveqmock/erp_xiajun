@@ -11,11 +11,15 @@ import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
  */
 public class ItemSkuQueryVO extends PageQueryVO{
 
+	private String thirdSkuCode;
+	
 	private String companyNo;
 	
 	private Long id;
 	
 	private Long itemId;
+	
+	private int virtualInv;
 	
 	private Long lockedVirtualInv;
 	/**
@@ -321,8 +325,22 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	public void setPackageLevelId(String packageLevelId) {
 		this.packageLevelId = packageLevelId;
 	}
-	
-	
+
+	public String getThirdSkuCode() {
+		return thirdSkuCode;
+	}
+
+	public void setThirdSkuCode(String thirdSkuCode) {
+		this.thirdSkuCode = thirdSkuCode;
+	}
+
+	public int getVirtualInv() {
+		return virtualInv;
+	}
+
+	public void setVirtualInv(int virtualInv) {
+		this.virtualInv = virtualInv;
+	}	
 	
 	
 }

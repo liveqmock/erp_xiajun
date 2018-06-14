@@ -12,6 +12,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.JingDong.JingdongOauth;
+import com.wangqin.globalshop.channel.service.jingdong.GlobalshopStatic;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
@@ -87,7 +88,7 @@ public class JDAccountInfoController {
 		shopOauth.setAccessToken(jdOauthResponse.getAccess_token());
 
 		shopOauth.setGmtModify(new Date());//授权时间
-		shopOauth.setExpiresTime(new Date(jdOauthResponse.getTime() + jdOauthResponse.getExpires_in() * 1000));
+		shopOauth.setExpiresTime(new Date(jdOauthResponse.getTime() + jdOauthResponse.getExpires_in() * 1000));//测试token时效1天，生产1年
 		shopOauth.setRefreshToken(jdOauthResponse.getRefresh_token());
 
 		shopOauth.setServerUrl("https://api.jd.com/routerjson");
@@ -103,12 +104,15 @@ public class JDAccountInfoController {
 		channelShop.setShopCode(jdOauthResponse.getUid());
 		channelShop.setShopName(jdOauthResponse.getUser_nick());
 		channelShop.setExpiresTime(shopOauth.getExpiresTime());
-
+		channelShop.setProxyUrl(GlobalshopStatic.jd_server_url);
 
 		try {
 			ShopJosResult shopJosResult = getVenderInfo(shopOauth);
+
 			shopOauth.setShopCode(shopJosResult.getVenderId()+"");
+
 			channelShop.setShopName(shopJosResult.getShopName());
+			channelShop.setShopCode(shopJosResult.getVenderId()+"");
 			//创建或更新jd_shop_oauth
 			jdShopOauthService.createOrUpdateShopOauth(ChannelType.JingDong,shopOauth);
 			//创建或更新jd_shop_config
@@ -141,7 +145,6 @@ public class JDAccountInfoController {
 		JdClient client = new DefaultJdClient(shopOauth.getServerUrl(),shopOauth.getAccessToken(),shopOauth.getAppKey(),shopOauth.getAppsecretKey());
 
 		VenderShopQueryRequest request=new VenderShopQueryRequest();
-
 		VenderShopQueryResponse response = null;
 		try {
 			response=client.execute(request);
