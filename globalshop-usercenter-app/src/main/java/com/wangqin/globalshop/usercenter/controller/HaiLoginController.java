@@ -5,6 +5,7 @@ import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CookieUtil;
+import com.wangqin.globalshop.common.utils.Md5Util;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
@@ -59,7 +60,11 @@ public class HaiLoginController extends BaseController {
         AuthUserDO userDOList = userService.selectByLoginName(username);
         if (userDOList == null) {
             return renderError("该用户不存在");
-        } else {
+        } else if(userDOList.getPassword().equals(Md5Util.getMD5(password))) {
+
+            return renderError("该用户密码不正确");
+        } else
+         {
             //只会有一个，多了需要检查数据库约束
             AuthUserDO user = userDOList;
             String sessionId = (String) request.getAttribute(SESSION_ID);
