@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleTypeDO;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
@@ -31,6 +32,7 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IScaleTypeService;
@@ -50,19 +52,13 @@ public class ItemSkuController  {
 
 	@Autowired
 	private IItemSkuService iItemSkuService;
-	@Autowired
-	private IItemService iItemService;
-
-	@Autowired
-	private ItemIInventoryService inventoryService;
-
 	
 	@Autowired
 	private IScaleTypeService scaleTypeService;
-
-
 	
-	
+	@Autowired
+	private InventoryService inventoryService;
+
 	/**
 	 * 更新sku
 	 *
@@ -140,6 +136,8 @@ public class ItemSkuController  {
 			result.buildMsg("upc不可以重复，请再次输入");
 			return result;
 		}
+		//更新虚拟库存
+		//inventoryService.updateVirtualInv(itemSku.getSkuCode(), (long)itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());
 		iItemSkuService.updateById(itemSku);
 		return result;
 	}
@@ -250,7 +248,7 @@ public class ItemSkuController  {
 //		} else if(itemSku.getItemCode()==null) {
 //			return result.buildIsSuccess(false).buildMsg("商品编码错误");
 //		}
-		InventoryAddVO inv = inventoryService.queryInvBySkuCode(inventory.getSkuCode());
+		//InventoryAddVO inv = inventoryService.queryInvBySkuCode(inventory.getSkuCode());
 		//if(inventory == null) {
 		//	return result.buildIsSuccess(false).buildMsg("未找到此sku的库存");
 		//}
@@ -259,8 +257,8 @@ public class ItemSkuController  {
 //		if(lockedNum<0 || (lockedNum>inventory.getVirtualInv() && lockedNum>inventory.getTotalAvailableInv())) {
 //			return result.buildIsSuccess(false).buildMsg("锁定数量异常");
 //		}
-		inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
-		inventoryService.lockVirtualInv(inv);
+		//inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
+		//inventoryService.lockVirtualInv(inv);
 		
 		/**
 		//同步到有赞

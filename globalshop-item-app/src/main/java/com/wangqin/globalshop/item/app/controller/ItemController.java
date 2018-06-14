@@ -29,12 +29,13 @@ import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.AppUtil;
@@ -310,9 +311,7 @@ public class ItemController  {
 								//itemSku.setCompanyNo("1");
 							//} else {
 								itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-							//}
-							
-
+							//}							
 	        				//itemSku.setCompanyId(item.getCompanyId());
 	        				//System.out.println("销售价格："+itemSku.getSalePrice());
 	        				itemSku.setSalePrice(itemSku.getSalePrice());
@@ -328,8 +327,6 @@ public class ItemController  {
 			if(item.getIsSale()!=null && item.getIsSale()==1) {	
 					try {
 						Long currentItemId = iItemService.queryIdByItemCode(itemCode);
-						System.out.println("可售商品");
-						System.out.println(currentItemId);
 						//outerItemService.synItemYouzan(item.getId());
 						//ShiroUser user = ShiroUtil.getShiroUser();
 						//sendPost("http://localhost:8000/youzanSyn/batchSynItemYouzan?itemIds=["+currentItemId.toString()+"]","");
@@ -370,15 +367,13 @@ public class ItemController  {
 	@RequestMapping("/update")
 	@ResponseBody
 	public Object update(ItemQueryVO item) {
-		//logger.info("update item start");
 		JsonResult<ItemDO> result = new JsonResult<>();
 		ItemDTO oldItem = iItemService.queryItemById(item.getId());
 		if(StringUtil.isBlank(item.getDetail()) && StringUtil.isNotBlank(oldItem.getDetail())) {
 		    return result.buildMsg("商品详情不能为空").buildIsSuccess(false);
 		}
-		// if haven't item id ,add item
 		if (item.getId() == null) {
-			return result.buildIsSuccess(false).buildMsg("没有Item id");
+			return result.buildIsSuccess(false).buildMsg("没有商品id");
 		} else {
 			
 			StringBuffer nameNew = new StringBuffer();
@@ -396,87 +391,71 @@ public class ItemController  {
 			nameNew.append(item.getName());
 			//重新设置商品名称
 			item.setName(nameNew.toString());
-			
-		
-			
-
 		}
 
 			String skuList = item.getSkuList();
-			//System.out.println("skuList:"+skuList);
-			Double minPrice = null;
-			Double maxPrice = null;
-			if (StringUtils.isNotBlank(skuList)) {
-				Integer i = 0;
-				//Integer i = itemSkuService.queryMaxSkuCodeIndex(item.getId());
-				//if(i==null) i=0;
-				
+			if (StringUtils.isNotBlank(skuList)) {			
 				try {
 					String s = skuList.replace("&quot;", "\"");
-					List<ItemSkuAddVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>(){});
-					Map<String, Integer> colorScaleMap = new HashMap<String, Integer>();
+					List<ItemSkuQueryVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>(){});
 					if (skus != null && !skus.isEmpty()) {
-						for(ItemSkuAddVO itemSku : skus) {
-							//颜色和尺寸不能都为空
-							if(StringUtil.isBlank(itemSku.getColor()) && StringUtil.isBlank(itemSku.getScale())) {
-								return result.buildMsg("颜色和尺寸不能都为空").buildIsSuccess(false);
-							}
-							if(minPrice == null) {
-								minPrice = itemSku.getSalePrice();
-								maxPrice = itemSku.getSalePrice();
-							} else {
-								if(minPrice > itemSku.getSalePrice())  minPrice = itemSku.getSalePrice();
-								if(maxPrice < itemSku.getSalePrice())  maxPrice = itemSku.getSalePrice();
-							}
-							//判断颜色，尺寸是否冲突
-							String colorScaleKey = "";
-							if(itemSku.getColor()!=null) {
-								String color = itemSku.getColor().trim();
-								colorScaleKey += color;
-								itemSku.setColor(color);
-							}
-							if(itemSku.getScale()!=null) {
-								String scale = itemSku.getScale().trim();
-								colorScaleKey += scale;
-								itemSku.setScale(scale);
-							}
-							if(StringUtil.isBlank(colorScaleKey)) colorScaleKey = "none";
-							if(colorScaleMap.get(colorScaleKey)!=null) {
-								return result.buildMsg("SKU颜色尺码重复").buildIsSuccess(false);
-							}
-							colorScaleMap.put(colorScaleKey, 1);
-							
-							if(itemSku.getId()==null){
-								itemSku.setSkuCode("S" + item.getItemCode().substring(1) + String.format("%0"+4+"d", ++i));
-							}
-							itemSku.setLogisticType(item.getLogisticType());
-							itemSku.setBuySite(item.getBuySite());
-							itemSku.setItemId(item.getId());
-							itemSku.setItemCode(item.getItemCode());
-							itemSku.setItemName(item.getName());
-							itemSku.setCategoryId(item.getCategoryId());
-							itemSku.setCategoryName(item.getCategoryName());
-							itemSku.setBrand(item.getBrand());
-							String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
-							itemSku.setSkuPic(skuPic);
-							
-							if(StringUtils.isNotBlank(itemSku.getPackageLevelId()) ){
-								  List<Long> a =  HaiJsonUtils.toBean(itemSku.getPackageLevelId(), new TypeReference<List<Long>>(){});
-								  itemSku.setPackageId(a.get(a.size()-1));
-								}
-						}
-						item.setItemSkus(skus);
+							int startIndex = 0;
+							//获取原来绑定该商品的所有sku的skuCode
+							ItemSkuQueryVO itemSkuQueryVO = new ItemSkuQueryVO();
+							itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+							itemSkuQueryVO.setItemCode(item.getItemCode());
+							List<ItemSkuDO> itemSkuDOList = itemSkuService.queryItemSkuListSelective(itemSkuQueryVO);
+                            List<String> oldSkuCodeList = new ArrayList<String>();
+                            for(ItemSkuDO itemSkuDO:itemSkuDOList) {
+                            	oldSkuCodeList.add(itemSkuDO.getSkuCode());
+                            }
+                            //获取现在该商品的所有skuCode
+                            List<String> newSkuCodeList = new ArrayList<String>();
+                            for(ItemSkuQueryVO skuQueryVO:skus) {
+                            	if(null != skuQueryVO.getSkuCode()) {
+                            		newSkuCodeList.add(skuQueryVO.getSkuCode());
+                            	}
+                            }
+                            //两个集合求差值，判断哪些sku被删除了
+                            List<String> diffList = new ArrayList<String>();
+                            diffList.addAll(oldSkuCodeList);
+                            diffList.removeAll(newSkuCodeList);
+                            //删除sku
+                            diffList.forEach(skuCode -> {
+                            	itemSkuService.deleteItemSkuBySkuCode(skuCode);
+                            });
+                            //更新需要更新的sku
+                            for(ItemSkuQueryVO updateSku:skus) {
+                            	if(null != updateSku.getSkuCode()) {//需要更新的sku
+                            		itemSkuService.updateById(updateSku);
+                            	}
+                            }
+                            //插入新增的sku
+                            for(ItemSkuQueryVO newSku:skus) {
+                            	if(null == newSku.getSkuCode()) {//需要添加的sku                         		
+                            		ItemSkuDO addSku = new ItemSkuDO();
+                            		ItemDTO itemDTO = iItemService.queryItemById(item.getId());
+                            		addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+                            		addSku.setItemCode(itemDTO.getItemCode());      		              
+                             		addSku.setSkuCode("S" + itemDTO.getItemCode() + "Q" + RandomUtils.getTimeRandom()+(startIndex++));
+                            		addSku.setScale(newSku.getScale());
+                            		addSku.setSalePrice((double)newSku.getSalePrice());                       		
+                            		addSku.setWeight(newSku.getWeight());
+                            		addSku.setUpc(newSku.getUpc());
+                            		addSku.setSkuPic(newSku.getSkuPic());
+                            		addSku.setPackageLevelId(newSku.getPackageLevelId());
+                            		addSku.setCreator(AppUtil.getLoginUserId());
+                            		addSku.setModifier(AppUtil.getLoginUserId());
+                            		addSku.setItemName(itemDTO.getName());
+                            		itemSkuService.insertItemSkuSelective(addSku);                            		
+                            	}
+                            }                            																	
+
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					return result.buildMsg("解析SKU错误").buildIsSuccess(false);
 				}
-			}
-			//商品价格区间
-			if(minPrice.equals(maxPrice)) {
-				item.setPriceRange(maxPrice.toString());
-			}  else {
-				item.setPriceRange(minPrice.toString() + "-" + maxPrice.toString());
 			}
 			String imgJson = ImageUtil.getImageUrl(item.getMainPic());
 			item.setMainPic(imgJson);
@@ -530,7 +509,6 @@ public class ItemController  {
 
 			newItem.setDetail(item.getDetail());
 			detailDecoder(newItem);
-			System.out.println("detail:"+newItem.getDetail());
 			newItem.setCategoryCode(item.getCategoryCode());
 			newItem.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
 			newItem.setBrandName(item.getBrand());
@@ -583,7 +561,7 @@ public class ItemController  {
 	}
 
 	/*
-	 *商品详情处理 s
+	 *商品详情处理 
 	 */
 	private void detailDecoder(ItemDO item) {
 		if(StringUtils.isNotBlank(item.getDetail())){
@@ -675,15 +653,6 @@ public class ItemController  {
 		}
 	}
 
-	/**
-	@RequestMapping("/quersyItems")
-	@ResponseBody
-	public Object queryItems(ItemQueryVO itemQueryVO) {
-		//logger.info("queryItems item start");
-		JsonPageResult<List<ItemDO>> result = iItemService.queryItems(itemQueryVO);
-		return result.buildIsSuccess(true);
-	}
-	**/
 	/**
 	 * 商品批量上架
 	 * @param itemIdStrs 要上架的商品ID集合 ，分隔符   123,222,132 

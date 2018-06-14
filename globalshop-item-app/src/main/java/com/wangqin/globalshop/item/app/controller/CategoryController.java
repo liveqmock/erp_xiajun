@@ -1,19 +1,19 @@
 package com.wangqin.globalshop.item.app.controller;
 
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.common.utils.Util;
-import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.Util;
+import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 
 
 @Controller
@@ -32,8 +32,6 @@ public class CategoryController  {
 	@RequestMapping("/add")
 	@ResponseBody
 	public Object add(ItemCategoryDO category) {
-		//category.setCategoryCode("0000000");//XiaJun，在确定了category_code的生成方式之后，再重写这一句
-		//ShiroUser shiroUser = this.getShiroUser();
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
 		if (category.getpCode() == null) {//添加一级类目
 			category.setpCode("00000000");

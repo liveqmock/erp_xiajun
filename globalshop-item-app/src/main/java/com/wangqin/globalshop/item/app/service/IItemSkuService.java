@@ -83,4 +83,10 @@ public interface IItemSkuService  {
 	 Integer queryItemCountByUpc(String upc);
 	 
 	 List<ItemSkuDO> querySkuListByItemCode(String itemCode);
+	 
+	 List<ItemSkuDO> queryItemSkuListSelective(ItemSkuQueryVO itemSkuQueryVO);
+	 
+	 void deleteItemSkuBySkuCode(String skuCode);
+	 
+	 void insertItemSkuSelective(ItemSkuDO itemSkuDO);
 }

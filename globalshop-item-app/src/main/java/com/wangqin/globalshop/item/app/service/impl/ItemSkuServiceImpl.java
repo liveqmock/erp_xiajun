@@ -191,5 +191,20 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		return itemSkuMapperExt.querySkuListByItemCode(itemCode);
 	}
 	
+	@Override
+	public List<ItemSkuDO> queryItemSkuListSelective(ItemSkuQueryVO itemSkuQueryVO) {
+		return itemSkuMapperExt.queryItemSkuListSelective(itemSkuQueryVO);
+	}
+	
+	@Override
+	public void deleteItemSkuBySkuCode(String skuCode) {
+		 itemSkuMapperExt.deleteItemSkuBySkuCode(skuCode);
+	}
+	
+	@Override
+	public void insertItemSkuSelective(ItemSkuDO itemSkuDO) {
+		itemSkuMapperExt.insertItemSkuSelective(itemSkuDO);
+	}
+	
 }
 
