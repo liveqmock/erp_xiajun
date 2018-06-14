@@ -6,19 +6,18 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
+import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -213,6 +212,19 @@ public class MallOrderServiceImpl implements IMallOrderService {
     public List<MallOrderVO> list(MallOrderVO vo) {
         vo.init();
         return mallOrderDOMapper.list(vo);
+    }
+
+
+    public void dealOrder(JdCommonParam jdCommonParam, GlobalshopOrderVo globalshopOrderVo){
+
+        MallOrderDO mallOrderDO = globalshopOrderVo.getMallOrderDO();
+        mallOrderDOMapper.insertMallOrder(mallOrderDO);
+
+        List<MallSubOrderDO> mallSubOrderDOS = globalshopOrderVo.getMallSubOrderDOS();
+        for(MallSubOrderDO mallSubOrderDO : mallSubOrderDOS){
+            mallSubOrderDOMapper.insert(mallSubOrderDO);
+        }
+
     }
 
 }
