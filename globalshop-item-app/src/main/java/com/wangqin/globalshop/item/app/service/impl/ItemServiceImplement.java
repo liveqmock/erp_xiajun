@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
@@ -9,8 +7,6 @@ import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.*;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -40,9 +36,6 @@ public class ItemServiceImplement implements IItemService {
 
     @Autowired
     private IFreightService    iFreightService;
-
-    @Autowired
-    private ItemIInventoryService inventoryService;
 
     @Autowired
     private IItemBrandService  iBrandService;

@@ -12,4 +12,5 @@ public interface BuyerDOMapperExt extends BuyerDOMapper{
     int queryWxPurchaseUserCount(BuyerVO buyerVO);
     List<BuyerDO> queryWxPurchaseUser(BuyerVO buyerVO);
 
+    List<BuyerDO> list(String loginUserCompanyNo);
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerMapperExt">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt">
 
     <sql id="Base_Column_List">
         T1.id,T1.open_id as openId,T1.union_id as unionId,T1.nick_name as nickName,
@@ -45,22 +45,22 @@
     </sql>
 
 	-->
-	<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerVO">
-		SELECT COUNT(*) FROM buyer T1 WHERE T1.power_code !=0
-	</select>
+	<!--<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerVO">-->
+		<!--SELECT COUNT(*) FROM buyer T1 WHERE T1.power_code !=0-->
+	<!--</select>-->
 
-	<select id="queryWxPurchaseUser" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
-		SELECT <include refid="Base_Column_List2" /> FROM buyer T1 WHERE T1.power_code !=0
-		<if test="companyId != null ">
-			and T1.company_no = #{companyNo}
-		</if>
-	</select>
-	<select id="queryAllBuyers" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
+	<!--<select id="queryWxPurchaseUser" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">-->
+		<!--SELECT <include refid="Base_Column_List2" /> FROM buyer T1 WHERE T1.power_code !=0-->
+		<!--<if test="companyId != null ">-->
+			<!--and T1.company_no = #{companyNo}-->
+		<!--</if>-->
+	<!--</select>-->
+	<select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
 		select <include refid="Base_Column_List" />
 		FROM `buyer` T1
-	    <where>
-	      T1.is_del=0
-	    </where>
+		WHERE
+	      T1.is_del='0'
+		 AND T1.company_no = #{companyNo}
 	</select>
 
 </mapper>
