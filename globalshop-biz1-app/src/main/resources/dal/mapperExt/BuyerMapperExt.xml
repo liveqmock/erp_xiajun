@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt">
-
-    <sql id="Base_Column_List">
-        T1.id,T1.open_id as openId,T1.union_id as unionId,T1.nick_name as nickName,
-        T1.gender,T1.city,T1.province,T1.country   
-    </sql>
-
-	<resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO" >
+	<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO" >
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="company_no" property="companyNo" jdbcType="VARCHAR" />
 		<result column="open_id" property="openId" jdbcType="VARCHAR" />
@@ -23,16 +17,13 @@
 		<result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
 		<result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP" />
 		<result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
-		<result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-		<result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-		<result column="is_del" property="isDel" jdbcType="BIT" />
 		<result column="creator" property="creator" jdbcType="VARCHAR" />
 		<result column="modifier" property="modifier" jdbcType="VARCHAR" />
 	</resultMap>
-	<sql id="Base_Column_List2" >
+	<sql id="Base_Column_List" >
 		id, company_no, open_id, union_id, nick_name, head_protrait_url, gender, city, province,
 		country, referer, purchase_commission_mode, purchase_commission_str, first_login_time,
-		last_login_time, gmt_create, gmt_modify, is_del, creator, modifier
+		last_login_time, creator, modifier
 	</sql>
     <!-- 通用查询结果列
     <sql id="Base_Column_List">
@@ -55,12 +46,12 @@
 			<!--and T1.company_no = #{companyNo}-->
 		<!--</if>-->
 	<!--</select>-->
-	<select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
+	<select id="list" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select <include refid="Base_Column_List" />
-		FROM `buyer` T1
+		FROM `buyer`
 		WHERE
-	      T1.is_del='0'
-		 AND T1.company_no = #{companyNo}
+	      is_del='0'
+		 AND company_no = #{companyNo}
 	</select>
 
 </mapper>
