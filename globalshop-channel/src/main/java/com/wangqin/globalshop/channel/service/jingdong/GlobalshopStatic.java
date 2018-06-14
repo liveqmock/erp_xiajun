@@ -13,5 +13,7 @@ public class GlobalshopStatic {
 
 	public static final String globalshop_prod_url = "http://test.buyer007.cn";//网擒生产地址
 
+	public static final String jd_server_url = "http://test.buyer007.cn";  //京东服务器地址
+
 
 }
