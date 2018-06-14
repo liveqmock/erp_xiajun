@@ -1,11 +1,5 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -17,6 +11,11 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -210,6 +209,11 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	public String querySkuCodeById(Long id) {
 		return itemSkuMapperExt.querySkuCodeById(id);
 	}
-	
+
+	@Override
+	public List<ItemSkuDO> queryByItemCodeAndCompanyNo(String itemCode, String loginUserCompanyNo) {
+		return itemSkuMapperExt.queryByItemCodeAndCompanyNo(itemCode,loginUserCompanyNo);
+	}
+
 }
 

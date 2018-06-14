@@ -77,4 +77,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	void insertItemSkuSelective(ItemSkuDO itemSkuDO);
 	
 	String querySkuCodeById(Long id);
+
+    List<ItemSkuDO> queryByItemCodeAndCompanyNo(@Param("itemCode") String itemCode, @Param("companyNo") String CompanyNo);
 }

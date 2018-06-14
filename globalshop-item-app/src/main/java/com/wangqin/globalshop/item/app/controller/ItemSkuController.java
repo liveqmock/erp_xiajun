@@ -52,10 +52,10 @@ public class ItemSkuController  {
 
 	@Autowired
 	private IItemSkuService iItemSkuService;
-	
+
 	@Autowired
 	private IScaleTypeService scaleTypeService;
-	
+
 	@Autowired
 	private InventoryService inventoryService;
 
@@ -71,7 +71,7 @@ public class ItemSkuController  {
 		itemSku.setModifier("admin");
 		itemSku.setCreator("admin");
 		JsonResult<String> result = new JsonResult<>();
-         /**		
+         /**
 		//if haven't item id ,add item
 		if(itemSku.getId()==null){
 			return result.buildIsSuccess(false).buildMsg("没有SKU id");
@@ -91,7 +91,7 @@ public class ItemSkuController  {
 				//erpOrder.setWeight(itemSku.getWeight());
 				erpOrderService.updateWeightForOrder(erpOrder);
 			}
-			
+
 			//1. find item
 			ItemDO item = iItemService.queryItemByItemCode(itemSku.getItemCode());
 			if(item==null){
@@ -103,12 +103,12 @@ public class ItemSkuController  {
 			itemSku.setItemName(item.getItemName());
 			String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
 			itemSku.setSkuPic(skuPic);
-			//2.init 
+			//2.init
 			itemSku.setModel("admin");
 			itemSku.setGmtModify(new Date());
 //			iItemSkuService.updateById(itemSku);
 			iItemSkuService.updateItemSku(itemSku);
-			
+
 			//同步到有赞并上架
 			/*
 			if(item.getIsSale()!=null && item.getIsSale()==1) {
@@ -123,9 +123,9 @@ public class ItemSkuController  {
 					} catch (Exception e) {
 						logger.error("商品添加时同步到有赞：", e);
 					}
-				}				
+				}
 			}*/
-			
+
 			//return result.buildIsSuccess(true);
 		//}
 		result.buildIsSuccess(true);
@@ -141,7 +141,7 @@ public class ItemSkuController  {
 		iItemSkuService.updateById(itemSku);
 		return result;
 	}
-	
+
 	/**
 	 * 根据sku_code获取sku
 	 * @param id
@@ -160,7 +160,7 @@ public class ItemSkuController  {
 		}
 		return result.buildIsSuccess(true);
 	}
-	
+
 	@RequestMapping("/queryBySkuCodeOrUpc")
 	@ResponseBody
 	public Object queryBySkuCodeOrUpc(String code) {
@@ -176,7 +176,7 @@ public class ItemSkuController  {
 			} else {
 				tjItemSku.setSkuCode(null);
 				tjItemSku.setUpc(code);
-				
+
 //				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
 //				entityWrapper.setEntity(tjItemSku);
 				//itemSkuList = iItemSkuService.selectList(entityWrapper);
@@ -187,7 +187,7 @@ public class ItemSkuController  {
 		}
 		return result.buildIsSuccess(true);
 	}
-	
+
 	/**
 	 * sku列表展示
 	 * @param itemSkuQueryVO
@@ -205,7 +205,7 @@ public class ItemSkuController  {
 		result.buildIsSuccess(true);
 		return result;
 	}
-	
+
 	/**
 	 * 删除
 	 * @param id
@@ -232,7 +232,7 @@ public class ItemSkuController  {
 	}
 	
 
-	
+
 	/**
 	 * SKU 锁定虚拟库存，用在提前修改可售库存，以便同步到第三方平台(有赞)
 	 *
@@ -252,14 +252,14 @@ public class ItemSkuController  {
 		//if(inventory == null) {
 		//	return result.buildIsSuccess(false).buildMsg("未找到此sku的库存");
 		//}
-		
+
 //		int lockedNum = inventory.getLockedVirtualInv() + itemSku.getLockedVirtualInv();
 //		if(lockedNum<0 || (lockedNum>inventory.getVirtualInv() && lockedNum>inventory.getTotalAvailableInv())) {
 //			return result.buildIsSuccess(false).buildMsg("锁定数量异常");
 //		}
 		//inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
 		//inventoryService.lockVirtualInv(inv);
-		
+
 		/**
 		//同步到有赞
 		Item item = iItemService.selectById(itemSku.getItemId());
@@ -282,7 +282,7 @@ public class ItemSkuController  {
 **/
 		return result.buildIsSuccess(true);
 	}
-	
+
 	/**
 	 * 导出excel
 	 * @param id
@@ -318,7 +318,7 @@ public class ItemSkuController  {
     			}
     	        list.add(itemSku.getItemName());	//商品名称
     	        list.add(itemSku.getBrandName());       //商品品牌
-    	       
+
     	        list.add(itemSku.getScale());		//尺码
     	        list.add(itemSku.getSalePrice());	//销售价格
     			rowDatas.add(list);
@@ -329,14 +329,14 @@ public class ItemSkuController  {
     	Integer[] columnWidth = new Integer[]{10, 30, 10, 10, 20, 20};
     	excelHelper.setItemToSheet("Item", columnTitles, rowDatas, columnWidth);
     	//excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
-    	
+
     	ResponseEntity<byte[]> filebyte = null;
     	ByteArrayOutputStream  out = excelHelper.writeToByteArrayOutputStream();
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
     	String fileName = "商品.xlsx";
         headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("utf-8"), "ISO8859-1"));
-        
+
         filebyte = new ResponseEntity<byte[]>(out.toByteArray(), headers, HttpStatus.OK);
         out.close();
         excelHelper.close();

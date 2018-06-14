@@ -647,4 +647,12 @@
      		id = #{id}
      	</where>
      </select>
+     <select id="queryByItemCodeAndCompanyNo" parameterType="java.lang.String" resultType="java.lang.String">
+     	SELECT  <include refid="Base_Column_List" />
+     	FROM item_sku  T1
+         WHERE
+         T1.company_no = #{companyNo}
+         AND
+         T1.item_code = #{itemCode}
+     </select>
 </mapper>

@@ -8,7 +8,7 @@ import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-
+import org.apache.ibatis.annotations.Param;
 
 
 public interface IItemSkuService  {
@@ -91,4 +91,6 @@ public interface IItemSkuService  {
 	 void insertItemSkuSelective(ItemSkuDO itemSkuDO);
 	 
 	 String querySkuCodeById(Long id);
+
+    List<ItemSkuDO> queryByItemCodeAndCompanyNo( String itemCode,  String loginUserCompanyNo);
 }
