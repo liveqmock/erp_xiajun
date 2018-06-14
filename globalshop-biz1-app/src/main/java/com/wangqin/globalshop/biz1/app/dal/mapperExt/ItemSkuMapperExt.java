@@ -75,4 +75,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	void deleteItemSkuBySkuCode(String skuCode);
 	
 	void insertItemSkuSelective(ItemSkuDO itemSkuDO);
+	
+	String querySkuCodeById(Long id);
 }
