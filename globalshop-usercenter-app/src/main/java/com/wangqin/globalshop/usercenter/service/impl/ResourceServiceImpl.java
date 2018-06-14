@@ -59,7 +59,7 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 
     @Override
     public AuthResourceDO selectById(Long id) {
-        return null;
+        return resourceMapper.selectByPrimaryKey(id);
     }
 
     @Override
