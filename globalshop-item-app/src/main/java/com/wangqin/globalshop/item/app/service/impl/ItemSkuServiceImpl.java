@@ -1,5 +1,12 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
@@ -7,57 +14,41 @@ import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 
 
-/**
- *
- * @author
- * @since
- */
+
 @Service
-public class ItemSkuServiceImpl implements IItemSkuService {
+public class ItemSkuServiceImpl   implements IItemSkuService {
+	
+	@Autowired
+	private ItemIInventoryService inventoryService;
+	
+	@Autowired
+	private ItemSkuMapperExt itemSkuMapperExt;
+	
+	@Autowired
+	private IItemSkuScaleService itemSkuScaleService;
 
-
-  @Autowired
-  private ItemSkuMapperExt itemSkuMapperExt;
-
-
-//  @Override
-//  public void addItemSku(ItemSkuDO itemSku) {
-//    itemSkuMapperExt.insertSelective(itemSku);
-//    InventoryDO inventory = inventoryService.selectBySkuCodeAndCompanyNo(itemSku.getSkuCode());
-//    if (inventory == null) {
-//      List<ItemSkuDO> newInvList = Lists.newArrayList();
-//      newInvList.add(itemSku);
-//      //List<InventoryDO>  inventoryList = initInventory(newInvList);
-//      //inventoryService.insertBatch(inventoryList);
-//    } else {
-//      //if(inventory.getVirtualInv()!=itemSku.getVirtualInv()){
-//      //	inventory.setVirtualInv(itemSku.getVirtualInv());
-//      //	inventory.setGmtModify(new Date());
-//      //	inventoryService.updateById(inventory);
-//    }
-//  }
-
-  /**
-   * 按条件查询sku列表(分页）
-   */
-  @Override
-  public JsonPageResult<List<ISkuDTO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
-    JsonPageResult<List<ISkuDTO>> itemResult = new JsonPageResult<>();
-    //1、查询总的记录数量
-    Integer totalCount = itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
-    //2、查询分页记录
-    if (totalCount != null && totalCount != 0L) {
-      itemResult.buildPage(totalCount, itemSkuQueryVO);
-      List<ISkuDTO> itemSkus = itemSkuMapperExt.queryItemSkus(itemSkuQueryVO);
-      //查询sku的规格信息
+	@Override
+	public void insertBatch(List<ItemSkuAddVO> skuList) {
+		itemSkuMapperExt.insertBatch(skuList);
+	}
+	/**
+	 * 按条件查询sku列表(分页）
+	 */
+	@Override
+	public JsonPageResult<List<ISkuDTO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
+		JsonPageResult<List<ISkuDTO>> itemResult = new JsonPageResult<>();
+		//1、查询总的记录数量
+		Integer totalCount =  itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
+		//2、查询分页记录
+		if(totalCount!=null&&totalCount!=0L){
+			itemResult.buildPage(totalCount, itemSkuQueryVO);
+			List<ISkuDTO> itemSkus = itemSkuMapperExt.queryItemSkus(itemSkuQueryVO);
+			//查询sku的规格信息
 //			itemSkus.forEach(itemSku -> {
 //				List<ItemSkuScaleDO> scaleList = itemSkuScaleService.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
 //				itemSku.setScaleList(scaleList);

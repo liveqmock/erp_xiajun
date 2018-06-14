@@ -28,19 +28,19 @@ public interface IItemSkuService  {
 	 * @return
 	 */
 	List<InventoryDO> initInventory(List<ItemSkuAddVO> itemSkuList);
-//
-//	/**
-//	 * 新增SKU
-//	 * @param itemSku
-//	 */
-//	void addItemSku(ItemSkuDO itemSku);
-//
-//	/**
-//	 * update SKU
-//	 * @param itemSku
-//	 */
-//	void updateItemSku(ItemSkuDO itemSku);
-//	
+	
+	/**
+	 * 新增SKU
+	 * @param itemSku
+	 */
+	void addItemSku(ItemSkuDO itemSku);
+	
+	/**
+	 * update SKU
+	 * @param itemSku
+	 */
+	void updateItemSku(ItemSkuDO itemSku);
+	
 	/**
 	 * 新增SKU
 	 * @param itemSku
