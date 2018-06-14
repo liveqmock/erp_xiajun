@@ -639,4 +639,12 @@
      	where T1.item_code = #{itemCode}
      	and T1.is_del=0
      </select>
+     
+     <select id="querySkuCodeById" parameterType="java.lang.Long" resultType="java.lang.String">
+     	SELECT sku_code
+     	FROM item_sku 
+     	<where>
+     		id = #{id}
+     	</where>
+     </select>
 </mapper>

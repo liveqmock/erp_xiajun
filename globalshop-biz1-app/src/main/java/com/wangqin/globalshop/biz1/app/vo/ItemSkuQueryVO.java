@@ -19,7 +19,7 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	
 	private Long itemId;
 	
-	private int virtualInv;
+	private Long virtualInv;
 	
 	private Long lockedVirtualInv;
 	/**
@@ -334,13 +334,14 @@ public class ItemSkuQueryVO extends PageQueryVO{
 		this.thirdSkuCode = thirdSkuCode;
 	}
 
-	public int getVirtualInv() {
-		return virtualInv;
+
+	public void setVirtualInv(Long virtualInv) {
+		this.virtualInv = virtualInv;
 	}
 
-	public void setVirtualInv(int virtualInv) {
-		this.virtualInv = virtualInv;
-	}	
+	public Long getVirtualInv() {
+		return virtualInv;
+	}
 	
 	
 }

@@ -133,7 +133,7 @@ public class ItemSkuController  {
 			return result;
 		}
 		//更新虚拟库存
-		//inventoryService.updateVirtualInv(itemSku.getSkuCode(), (long)itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());
+		inventoryService.updateVirtualInv(iItemSkuService.querySkuCodeById(itemSku.getId()), itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());		
 		iItemSkuService.updateById(itemSku);
 		return result;
 	}

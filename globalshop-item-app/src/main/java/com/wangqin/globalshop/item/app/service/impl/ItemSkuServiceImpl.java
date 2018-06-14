@@ -215,5 +215,10 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 		itemSkuMapperExt.insertItemSkuSelective(itemSkuDO);
 	}
 	
+	@Override
+	public String querySkuCodeById(Long id) {
+		return itemSkuMapperExt.querySkuCodeById(id);
+	}
+	
 }
 
