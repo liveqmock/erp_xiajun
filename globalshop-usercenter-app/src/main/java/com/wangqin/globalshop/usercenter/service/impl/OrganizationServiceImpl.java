@@ -3,6 +3,7 @@ package com.wangqin.globalshop.usercenter.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthOrganizationDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
@@ -18,6 +19,7 @@ import com.wangqin.globalshop.usercenter.service.IOrganizationService;
  *
  */
 @Service
+@Authenticated
 public class OrganizationServiceImpl implements IOrganizationService {
 
     @Autowired
