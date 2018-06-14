@@ -12,14 +12,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Create by 777 on 2018/6/13
  */
-@Component
+//@Component
 public class JdSendOrders2GlobalshopTask {
 
 
