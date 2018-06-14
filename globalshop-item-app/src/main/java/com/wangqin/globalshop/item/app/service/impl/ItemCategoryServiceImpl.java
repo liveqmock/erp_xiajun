@@ -1,18 +1,17 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemCategoryMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 import com.wangqin.globalshop.common.utils.Tree;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -77,7 +76,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 
 	@Override
 	public void update(ItemCategoryDO category) {
-		// TODO Auto-generated method stub
+		category.update();
 		categoryMapper.updateByPrimaryKeySelective(category);
 	}
 

@@ -14,6 +14,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
+import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
@@ -40,6 +41,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -154,33 +156,31 @@ public class ShippingOrderController {
     // 合单发货表单
     @RequestMapping("/multiDeliveryForm")
     @ResponseBody
-    public Object multiDeliveryForm(String erpOrderId) throws InventoryException {
-        JsonResult result = new JsonResult();
+    public Object multiDeliveryForm(String erpOrderId) {
+        JsonResult<MultiDeliveryFormDTO> result = new JsonResult();
 //        shippingOrderService.ship(erpOrderId);
+        MultiDeliveryFormDTO dto = null;
         try {
-            result.setData(shippingOrderService.queryByOrderId(erpOrderId));
-            result.buildIsSuccess(true);
+            dto = shippingOrderService.queryByOrderId(erpOrderId);
         } catch (ErpCommonException e) {
             result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
         }
-        return result.buildMsg("发货成功").buildIsSuccess(true);
+        return result.buildData(dto).buildIsSuccess(true);
     }
 
     // 合单发货(将多个子订单合并成一个包裹)
     @RequestMapping("/multiDelivery")
     @ResponseBody
-    public Object multiDelivery(ShippingOrderDO shippingOrder) throws InventoryException {
+    @Transactional
+    public Object multiDelivery(ShippingOrderDO shippingOrder) {
         JsonResult<String> result = new JsonResult<>();
         try {
             shippingOrderService.ship(shippingOrder);
-
-
-            result.buildIsSuccess(true);
         } catch (ErpCommonException e) {
-            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+            result.buildMsg(e.getMessage()).buildIsSuccess(false);
         }
 
-        return result;
+        return result.buildMsg("发货成功").buildIsSuccess(true);
     }
 
     // 批量发货表单(检查是否有需要合单发货的，检查是否有需要等待一起合单发货的)
