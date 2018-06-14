@@ -57,13 +57,12 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private IUploadFileService uploadFileService;
 
-
-    @Autowired
-    private InventoryMapperExt inventoryDOMapperExt;
-
-    @Autowired
-    private ItemSkuScaleMapperExt itemSkuScaleDOMapper;
-
+   //根据id更新商品
+    @Override
+    public void updateByIdSelective(ItemDO item) {
+  		itemDOMapperExt.updateByIdSelective(item);
+  	}
+  	
     //插入单个商品
     @Override
     public Long insertItemSelective(ItemDO item) {
@@ -303,10 +302,7 @@ public class ItemServiceImplement implements IItemService {
 		return itemDOMapperExt.queryItems(itemQueryVO);
 	}
     
-	@Override
-	public void updateByPrimaryKeySelective(ItemDO item) {
-		itemDOMapperExt.updateByIdSelective(item);
-	}
+
 
 	@Override
 	public Long queryIdByItemCode(String itemCode) {

@@ -23,7 +23,7 @@ public interface AuthUserRoleDOMapperExt extends AuthUserRoleDOMapper {
 
     List<Long> selectRoleIdListByUserId(String loginName);
     
-    AuthUserRoleDO selectByUserId(Long userId);
+    List<AuthUserRoleDO> selectByUserId(Long userId);
     
     void insertByNoId(AuthUserRoleDO record);
 }

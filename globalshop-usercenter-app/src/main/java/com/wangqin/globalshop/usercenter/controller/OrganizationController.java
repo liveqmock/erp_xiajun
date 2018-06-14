@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/organization")
+@Authenticated
 public class OrganizationController extends BaseController {
 
     @Autowired

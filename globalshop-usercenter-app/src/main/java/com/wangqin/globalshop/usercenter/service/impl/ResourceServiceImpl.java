@@ -53,7 +53,8 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 
     @Override
     public int insert(AuthResourceDO resourceDO) {
-        return 0;
+    	resourceDO.init();
+        return resourceMapper.insertSelective(resourceDO);
     }
 
     @Override
@@ -63,12 +64,12 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 
     @Override
     public int updateSelectiveById(AuthResourceDO resourceDO) {
-        return 0;
+        return resourceMapper.updateByPrimaryKeySelective(resourceDO);
     }
 
     @Override
     public int deleteById(Long id) {
-        return 0;
+        return resourceMapper.deleteByPrimaryKey(id);
     }
 
     @Override

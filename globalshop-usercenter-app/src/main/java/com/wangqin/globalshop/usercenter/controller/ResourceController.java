@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/resource")
+@Authenticated
 public class ResourceController extends BaseController {
 
     @Autowired

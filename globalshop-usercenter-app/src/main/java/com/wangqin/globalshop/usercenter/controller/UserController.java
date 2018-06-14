@@ -133,6 +133,10 @@ public class UserController extends BaseController {
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.updateByVo(userVo);
+        
+        userRoleService.deleteUserRoleByUserId(userVo.getId());
+        userService.insertByUserVo(userVo);
+        
         return renderSuccess("修改成功");
     }
 
