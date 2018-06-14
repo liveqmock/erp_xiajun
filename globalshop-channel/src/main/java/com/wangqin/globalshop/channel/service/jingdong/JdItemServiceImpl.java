@@ -128,6 +128,7 @@ public class JdItemServiceImpl implements JdItemService {
 		if(result.isSuccess()){
 			jdItemDO.setSendStatus(SendStatus.SUCCESS);
 		}else {
+			//补充失败信息
 			jdItemDO.setSendStatus(SendStatus.FAILURE);
 		}
 		jdItemDOMapperExt.updateByPrimaryKey(jdItemDO);

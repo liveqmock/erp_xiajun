@@ -33,7 +33,11 @@ public interface JdItemOperateService {
 	public void createItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus);
 
 
-	public void queryItemThenSync2Jd4Task(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth);
+	public void queryItemThenSync2Jd4Add(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth);
+
+	public void queryItemThenSync2Jd4Update(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth);
+
+	public void sendItem2Globalshop(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth);
 
 
 }
