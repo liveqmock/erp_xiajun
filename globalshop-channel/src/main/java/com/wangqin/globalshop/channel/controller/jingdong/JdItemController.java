@@ -2,10 +2,10 @@ package com.wangqin.globalshop.channel.controller.jingdong;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.dal.JingDong.JdCommonParam;
 import com.wangqin.globalshop.channel.service.jingdong.*;
 import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
 import com.wangqin.globalshop.channelapi.dal.ChannelSalePriceVo;
+import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;

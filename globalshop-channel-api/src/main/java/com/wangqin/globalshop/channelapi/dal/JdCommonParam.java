@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.channel.dal.JingDong;
+package com.wangqin.globalshop.channelapi.dal;
 
 /**
  * Create by 777 on 2018/6/13

@@ -41,6 +41,12 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private ChannelListingItemSkuDOMapperExt channelListingItemSkuDOMapperExt;
 
+    @Autowired
+    private InventoryMapperExt inventoryDOMapperExt;
+
+    @Autowired
+    private ItemSkuScaleMapperExt itemSkuScaleDOMapper;
+
 
     @Autowired
     private IItemSkuService    itemSkuService;
