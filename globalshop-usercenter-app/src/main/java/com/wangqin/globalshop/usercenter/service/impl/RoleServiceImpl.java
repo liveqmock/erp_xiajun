@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
@@ -29,6 +30,7 @@ import com.wangqin.globalshop.common.utils.StringUtils;
  *
  */
 @Service
+@Authenticated
 public class RoleServiceImpl implements IRoleService {
 
     @Autowired

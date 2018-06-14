@@ -171,4 +171,10 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 		return categoryMapper.queryChildCategoryCountByCategoryCode(categoryCode);
 	}
 	
+	//根据id删除类目
+	@Override
+	public void deleteItemCategoryById(Long id) {
+		categoryMapper.deleteItemCategoryById(id);
+	}
+	
 }

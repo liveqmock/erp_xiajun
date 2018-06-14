@@ -23,7 +23,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
 	@Autowired
 	private AuthUserRoleDOMapperExt userRoleMapper;
 	@Override
-	public AuthUserRoleDO selectByUserId(Long userId) {
+	public List<AuthUserRoleDO> selectByUserId(Long userId) {
 		// TODO Auto-generated method stub
 		return userRoleMapper.selectByUserId(userId);
 	}
@@ -33,8 +33,12 @@ public class UserRoleServiceImpl implements IUserRoleService {
 	@Override
 	public void deleteUserRoleByUserId(Long userId) {
 		// TODO Auto-generated method stub
-		AuthUserRoleDO userRole = userRoleMapper.selectByUserId(userId);
-	    userRoleMapper.deleteByPrimaryKey(userRole.getId());  
+		List<AuthUserRoleDO> userRoles = userRoleMapper.selectByUserId(userId);
+		for(AuthUserRoleDO userRole : userRoles) {
+		    userRoleMapper.deleteByPrimaryKey(userRole.getId());  
+			
+		}
+	
 	}
 
 }

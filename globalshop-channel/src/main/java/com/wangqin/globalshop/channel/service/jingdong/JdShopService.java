@@ -31,7 +31,7 @@ public interface JdShopService {
 	 * @param itemVo
 	 * @param channelListingItemVo
 	 */
-	public void updateItem(ItemVo itemVo, ChannelListingItemVo channelListingItemVo);
+	public void updateItem(GlobalShopItemVo globalShopItemVo);
 
 	/**
 	 * 要上架的item，或者其中某个sku，没有sku，则全部上架，有则部分上架

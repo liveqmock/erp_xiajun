@@ -33,7 +33,7 @@ public abstract class JdAbstractShopService implements JdShopService {
 	}
 
 
-	public void updateItem(ItemVo itemVo, ChannelListingItemVo channelListingItemVo){
+	public void updateItem(GlobalShopItemVo globalShopItemVo){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品更新功能");
 	}
 

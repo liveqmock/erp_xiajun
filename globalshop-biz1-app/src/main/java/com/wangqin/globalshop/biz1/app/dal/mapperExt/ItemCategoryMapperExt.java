@@ -31,4 +31,7 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
     
     int queryChildCategoryCountByCategoryCode(String categoryCode);
     
+    //根据id删除类目
+    void deleteItemCategoryById(Long id);
+    
 }

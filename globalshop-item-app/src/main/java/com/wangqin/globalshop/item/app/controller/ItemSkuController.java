@@ -34,6 +34,8 @@ import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IScaleTypeService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+
 
 
 /**
@@ -51,7 +53,10 @@ public class ItemSkuController  {
 	@Autowired
 	private IItemService iItemService;
 
+	@Autowired
+	private ItemIInventoryService inventoryService;
 
+	
 	@Autowired
 	private IScaleTypeService scaleTypeService;
 
@@ -199,7 +204,6 @@ public class ItemSkuController  {
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
-		System.out.println("controller层获取到的sku数量："+result.getData().size());
 		result.buildIsSuccess(true);
 		return result;
 	}
@@ -230,57 +234,57 @@ public class ItemSkuController  {
 	}
 	
 
-//
-//	/**
-//	 * SKU 锁定虚拟库存，用在提前修改可售库存，以便同步到第三方平台(有赞)
-//	 *
-//	 * @param
-//	 * @return
-//	 */
-//	@RequestMapping("/lockedVirtualInv")
-//	@ResponseBody
-//	public Object lockedVirtualInv(InventoryAddVO inventory) {
-//		JsonResult<ItemSkuDO> result = new JsonResult<>();
-////		if(itemSku.getId()==null) {
-////			return result.buildIsSuccess(false).buildMsg("SKU ID错误");
-////		} else if(itemSku.getItemCode()==null) {
-////			return result.buildIsSuccess(false).buildMsg("商品编码错误");
-////		}
-//		InventoryAddVO inv = inventoryService.queryInvBySkuCode(inventory.getSkuCode());
-//		//if(inventory == null) {
-//		//	return result.buildIsSuccess(false).buildMsg("未找到此sku的库存");
-//		//}
-//
-////		int lockedNum = inventory.getLockedVirtualInv() + itemSku.getLockedVirtualInv();
-////		if(lockedNum<0 || (lockedNum>inventory.getVirtualInv() && lockedNum>inventory.getTotalAvailableInv())) {
-////			return result.buildIsSuccess(false).buildMsg("锁定数量异常");
-////		}
-//		inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
-//		inventoryService.lockVirtualInv(inv);
-//
-//		/**
-//		//同步到有赞
-//		Item item = iItemService.selectById(itemSku.getItemId());
-//		// 同步到有赞并上架
-//		if (item.getIsSale() != null && item.getIsSale() == 1) {
-//			if (item.getSaleOnYouzan() == 1) {
-//				try {
-//					ShiroUser user = ShiroUtil.getShiroUser();
-//					IChannelService channelService = ChannelFactory.getChannel(user.getCompanyId(), ChannelType.YouZan);
-//					if (item.getSaleOnYouzan() == 1 && item.getIsSale() != null && item.getIsSale() == 1) { // 同步到有赞并上架
-//						channelService.syncItem(item.getId());
-//					} else { // 下架
-//						channelService.syncDelistingItem(item.getId());
-//					}
-//				} catch (Exception e) {
-//					logger.error("SKU锁定虚拟库存时同步到有赞：", e);
-//				}
-//			}
+	
+	/**
+	 * SKU 锁定虚拟库存，用在提前修改可售库存，以便同步到第三方平台(有赞)
+	 *
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/lockedVirtualInv")
+	@ResponseBody
+	public Object lockedVirtualInv(InventoryAddVO inventory) {
+		JsonResult<ItemSkuDO> result = new JsonResult<>();
+//		if(itemSku.getId()==null) {
+//			return result.buildIsSuccess(false).buildMsg("SKU ID错误");
+//		} else if(itemSku.getItemCode()==null) {
+//			return result.buildIsSuccess(false).buildMsg("商品编码错误");
 //		}
-//**/
-//		return result.buildIsSuccess(true);
-//	}
-//
+		InventoryAddVO inv = inventoryService.queryInvBySkuCode(inventory.getSkuCode());
+		//if(inventory == null) {
+		//	return result.buildIsSuccess(false).buildMsg("未找到此sku的库存");
+		//}
+		
+//		int lockedNum = inventory.getLockedVirtualInv() + itemSku.getLockedVirtualInv();
+//		if(lockedNum<0 || (lockedNum>inventory.getVirtualInv() && lockedNum>inventory.getTotalAvailableInv())) {
+//			return result.buildIsSuccess(false).buildMsg("锁定数量异常");
+//		}
+		inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
+		inventoryService.lockVirtualInv(inv);
+		
+		/**
+		//同步到有赞
+		Item item = iItemService.selectById(itemSku.getItemId());
+		// 同步到有赞并上架
+		if (item.getIsSale() != null && item.getIsSale() == 1) {
+			if (item.getSaleOnYouzan() == 1) {
+				try {
+					ShiroUser user = ShiroUtil.getShiroUser();
+					IChannelService channelService = ChannelFactory.getChannel(user.getCompanyId(), ChannelType.YouZan);
+					if (item.getSaleOnYouzan() == 1 && item.getIsSale() != null && item.getIsSale() == 1) { // 同步到有赞并上架
+						channelService.syncItem(item.getId());
+					} else { // 下架
+						channelService.syncDelistingItem(item.getId());
+					}
+				} catch (Exception e) {
+					logger.error("SKU锁定虚拟库存时同步到有赞：", e);
+				}
+			}
+		}
+**/
+		return result.buildIsSuccess(true);
+	}
+	
 	/**
 	 * 导出excel
 	 * @param id

@@ -82,6 +82,13 @@
       </if>
     </trim>
   </insert>
+  
+  <!-- 删除类目 -->
+  <update id="deleteItemCategoryById" parameterType="java.lang.Long">
+  	update item_category
+  	set is_del=1
+  	where id=#{id}
+  </update>
 	
 	
 	<!-- 查询所有类目 -->

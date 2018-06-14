@@ -123,27 +123,27 @@ public class CategoryController  {
 		
 		int categoryCodeCount = categoryService.countRelativeItem(categoryService.selectByPrimaryKey(category.getId()).getCategoryCode());
 		if(categoryCodeCount > 0) {
-			return result.buildIsSuccess(false).buildMsg("错误，该类目已关联商品");
+			return result.buildIsSuccess(false).buildMsg("删除失败，该类目已关联商品");
 		}
 		int categoryCountByPcode = categoryService.queryChildCategoryCountByCategoryCode(categoryService.selectByPrimaryKey(category.getId()).getCategoryCode());
 		if(categoryCountByPcode > 0) {
-			return result.buildIsSuccess(false).buildMsg("错误，删除失败");
+			return result.buildIsSuccess(false).buildMsg("删除失败，已关联子类目");
 		}
-	
-		
+			
 		if (id == null) {
 			return result.buildIsSuccess(false).buildMsg("category id is null!");
 		}
-		ItemCategoryDO categoryP = categoryService.findCategory(id);
-		if (categoryP == null) {
-			return result.buildIsSuccess(false).buildMsg("not find category!");
-		}
+		
+//		ItemCategoryDO categoryP = categoryService.findCategory(id);
+//		if (categoryP == null) {
+//			return result.buildIsSuccess(false).buildMsg("not find category!");
+//		}
 		// TODO give session and set modify
 //		category.setGmtModify(new Date());
 		// category.setUserModify(userModify);
 //		category.setStatus(1);// 状态设置为1，假删除
 //		categoryService.updateSelectiveById(category);
-		categoryService.deleteById(category);
+		categoryService.deleteItemCategoryById(id);
 		return result.buildIsSuccess(true);
 	}
 	
