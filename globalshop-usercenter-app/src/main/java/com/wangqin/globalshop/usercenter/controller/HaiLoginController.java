@@ -60,8 +60,7 @@ public class HaiLoginController extends BaseController {
         AuthUserDO userDOList = userService.selectByLoginName(username);
         if (userDOList == null) {
             return renderError("该用户不存在");
-        } else if(userDOList.getPassword().equals(Md5Util.getMD5(password))) {
-
+        } else if(!userDOList.getPassword().equals(Md5Util.getMD5(password))) {
             return renderError("该用户密码不正确");
         } else
          {
