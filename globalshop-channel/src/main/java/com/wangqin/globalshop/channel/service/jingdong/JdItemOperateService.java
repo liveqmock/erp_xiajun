@@ -30,7 +30,7 @@ public interface JdItemOperateService {
 
 	public Long searchJdItemOperateCount(JdItemOperateDO jdItemOperateDO);
 
-	public void createItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus);
+	public void createOrUpdateItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus);
 
 
 	public void queryItemThenSync2Jd4Add(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth);

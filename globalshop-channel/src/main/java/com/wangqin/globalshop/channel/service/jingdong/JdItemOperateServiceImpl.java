@@ -7,7 +7,9 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdItemOperateDOMapperExt;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
+import com.wangqin.globalshop.common.utils.HttpPostUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
@@ -71,33 +73,62 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 		return jdItemOperateDOMapperExt.searchJdItemOperateCount(jdItemOperateDO);
 	}
 
-	public void createItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus){
-		JdItemOperateDO jdItemOperateDO = new JdItemOperateDO();
-		jdItemOperateDO.setChannelNo(shopOauth.getChannelNo());
-		jdItemOperateDO.setCompanyNo(shopOauth.getCompanyNo());
-		jdItemOperateDO.setShopCode(shopOauth.getShopCode());
-		jdItemOperateDO.setItemCode(itemCode);
-		jdItemOperateDO.setOperateType(operateType);
-		jdItemOperateDO.setIsDel(false);
+	public void createOrUpdateItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus){
 
-		jdItemOperateDO.setSyncStatus(syncStatus);
-		jdItemOperateDO.setSendStatus(sendStatus);
-		jdItemOperateDOMapperExt.insert(jdItemOperateDO);
+		JdItemOperateDO so = new JdItemOperateDO();
+		so.setChannelNo(shopOauth.getChannelNo());
+		so.setCompanyNo(shopOauth.getCompanyNo());
+		so.setShopCode(shopOauth.getShopCode());
+		so.setItemCode(itemCode);
+		so.setOperateType(operateType);
+		JdItemOperateDO exit = jdItemOperateDOMapperExt.searchJdItemOperate(so);
+		if(exit == null){
+			JdItemOperateDO jdItemOperateDO = new JdItemOperateDO();
+			jdItemOperateDO.setChannelNo(shopOauth.getChannelNo());
+			jdItemOperateDO.setCompanyNo(shopOauth.getCompanyNo());
+			jdItemOperateDO.setShopCode(shopOauth.getShopCode());
+			jdItemOperateDO.setItemCode(itemCode);
+			jdItemOperateDO.setOperateType(operateType);
+			jdItemOperateDO.setIsDel(false);
+
+			jdItemOperateDO.setSyncStatus(syncStatus);
+			jdItemOperateDO.setSendStatus(sendStatus);
+			jdItemOperateDOMapperExt.insert(jdItemOperateDO);
+		}else {
+			exit.setSyncStatus(syncStatus);
+			exit.setSendStatus(sendStatus);
+			jdItemOperateDOMapperExt.updateByPrimaryKey(exit);
+		}
+
 	}
 
 	public void queryItemThenSync2Jd4Add(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
 		Map<String,String> param = new HashMap<>();
 		param.put("itemCode",jdItemOperateDO.getItemCode());
 
-		JSONObject jsonObject = null;
-		try {
-			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jditem/queryadd",param);
-		} catch (Exception e) {
-			logger.error("queryItemThenSync2Jd4Add error: ",e);
+//		JSONObject jsonObject = null;
+//		try {
+//			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jditem/queryadd",param);
+//			HttpPostUtil.doHttpPost(GlobalshopStatic.globalshop_dev_url+"/jditem/queryadd",param)
+//
+//		} catch (Exception e) {
+//			logger.error("queryItemThenSync2Jd4Add error: ",e);
+//		}
+
+		String result = HttpPostUtil.doHttpPost(GlobalshopStatic.globalshop_dev_url+"/jditem/queryadd",param);
+
+		JsonResult<ItemVo> jsonResult = JSON.parseObject(result,JsonResult.class);
+
+		if(!jsonResult.isSuccess()){
+			jdItemOperateDO.setSyncStatus(SyncStatus.FAILURE);
+			jdItemOperateDO.setErrorMassge(EasyUtil.truncateLEFitSize(jsonResult.getMsg(),1020));
+			jdItemOperateDOMapperExt.updateByPrimaryKey(jdItemOperateDO);
+			return;
 		}
 
-		JsonResult<ItemVo> result = JSON.parseObject(jsonObject.toString(),JsonResult.class);
-		ItemVo itemVo = result.getData();
+
+		ItemVo itemVo = JSON.parseObject(result, ItemVo.class);
+
 		if(itemVo == null){
 			jdItemOperateDO.setSyncStatus(SyncStatus.SUCCESS);
 			jdItemOperateDO.setErrorMassge("itemcode 查询到的数据为空");

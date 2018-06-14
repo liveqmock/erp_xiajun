@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.item.app.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
@@ -25,19 +26,18 @@ public class ItemQuery4JdController {
 	@Autowired
 	private IItemService iItemService;
 
+	//已完成
 	@RequestMapping("/queryadd")
 	@ResponseBody
-	public Object queryAdd(String itemCode){
+	public String queryAdd(String itemCode){
 
 		ItemVo itemVo = iItemService.queryAdd(itemCode);
-		JsonResult<ItemVo> result = new JsonResult<>();
-		result.setData(itemVo);
-		result.setSuccess(true);
-		result.setMsg("成功");
-		return result;
+
+		return JSON.toJSONString(itemVo);
 
 	}
 
+	//已测试完成
 	@RequestMapping("/queryupdate")
 	@ResponseBody
 	public Object queryUpdate(String itemCode, String shopCode){
