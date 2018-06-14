@@ -68,7 +68,7 @@
         FROM <include refid="tableSection"/> T
         WHERE
         <include refid="commonSelectSection"/>
-        Item BY T.id desc
+        ORDER BY T.id desc
     </select>
 
 </mapper>
