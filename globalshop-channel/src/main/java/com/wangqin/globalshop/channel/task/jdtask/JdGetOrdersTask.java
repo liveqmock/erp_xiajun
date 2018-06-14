@@ -16,8 +16,6 @@ import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
@@ -26,7 +24,7 @@ import java.util.List;
  * Create by 777 on 2018/6/12
  */
 
-@Component
+//@Component
 public class JdGetOrdersTask {
 
 	protected Logger logger = LogManager.getLogger(getClass());
@@ -46,7 +44,7 @@ public class JdGetOrdersTask {
 
 
 	// 每隔半小时执行一次
-	@Scheduled(cron = "0 0/30 * * * ?")
+	//@Scheduled(cron = "0 0/30 * * * ?")
 	public void run() {
 		logger.info("定时任务：自动去京东下载订单===>Start");
 		Long startTime = System.currentTimeMillis();
