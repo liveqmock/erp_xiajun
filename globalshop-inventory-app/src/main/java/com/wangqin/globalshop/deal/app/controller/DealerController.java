@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.deal.app.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 
 @Controller
+@Authenticated
 @RequestMapping("/seller")
 public class DealerController{
 
@@ -36,7 +38,7 @@ public class DealerController{
 	public Object add(DealerDO seller) {
 		JsonResult<String> result = new JsonResult<>();
 		
-		List<DealerDO> list = iDealerService.list();
+		List<DealerDO> list2 = iDealerService.list2();
 		
 		if(seller.getCode().equals("") || seller.getCode() == null) {
 			return result.buildIsSuccess(false).buildMsg("Dealer code is null");
@@ -44,11 +46,11 @@ public class DealerController{
         	if(seller.getName().equals("") || seller.getName() == null) {
             	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
             }
-        	for(int i = 0; i < list.size(); i ++) {
-        		if(seller.getCode().equals(list.get(i).getCode())) {
-        			return result.buildIsSuccess(false).buildMsg("DealerType code is exist");
-        		}
-        	}
+        	for(int i = 0; i < list2.size(); i ++) {
+         		if(seller.getCode().equals(list2.get(i).getCode()) && seller.getId() != list2.get(i).getId()) {
+         			return result.buildIsSuccess(false).buildMsg("错误！不能使用该销售代码");
+         		}
+         	}
 		}
 		
 		
@@ -59,9 +61,10 @@ public class DealerController{
 	@RequestMapping("/update")
 	@ResponseBody
 	public Object update(DealerDO seller) {
-JsonResult<DealerTypeDO> result = new JsonResult<>();
-        
-    	List<DealerDO> list = iDealerService.list();
+		
+		JsonResult<DealerTypeDO> result = new JsonResult<>();
+ 
+    	List<DealerDO> list2 = iDealerService.list2();
     	
         if(seller.getCode().equals("") || seller.getCode() == null) {
          	
@@ -73,9 +76,9 @@ JsonResult<DealerTypeDO> result = new JsonResult<>();
              }
          	
          	
-         	for(int i = 0; i < list.size(); i ++) {
-         		if(seller.getCode().equals(list.get(i).getCode()) && seller.getId() != list.get(i).getId()) {
-         			return result.buildIsSuccess(false).buildMsg("DealerType code is exist");
+         	for(int i = 0; i < list2.size(); i ++) {
+         		if(seller.getCode().equals(list2.get(i).getCode()) && seller.getId() != list2.get(i).getId()) {
+         			return result.buildIsSuccess(false).buildMsg("错误！不能使用该销售代码");
          		}
          	}
  		}

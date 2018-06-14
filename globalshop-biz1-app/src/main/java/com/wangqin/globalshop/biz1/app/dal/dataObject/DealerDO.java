@@ -14,8 +14,11 @@ public class DealerDO extends BaseModel {
     private String creator;
 
     private String modifier;
-
-    public Long getId() {
+    
+    private int isdel;
+    
+   
+	public Long getId() {
         return id;
     }
 
@@ -70,4 +73,13 @@ public class DealerDO extends BaseModel {
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
+    
+    public int getIsdel() {
+		return isdel;
+	}
+
+	public void setIsdel(int isdel) {
+		this.isdel = isdel;
+	}
+
 }
