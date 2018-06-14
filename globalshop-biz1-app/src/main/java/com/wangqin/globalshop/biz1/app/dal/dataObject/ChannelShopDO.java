@@ -23,6 +23,8 @@ public class ChannelShopDO extends BaseModel {
 
     private String proxyUrl;
 
+    private String shopType;
+
     private Boolean open;
 
     public Long getId() {
@@ -103,6 +105,14 @@ public class ChannelShopDO extends BaseModel {
 
     public void setProxyUrl(String proxyUrl) {
         this.proxyUrl = proxyUrl == null ? null : proxyUrl.trim();
+    }
+
+    public String getShopType() {
+        return shopType;
+    }
+
+    public void setShopType(String shopType) {
+        this.shopType = shopType == null ? null : shopType.trim();
     }
 
     public Boolean getOpen() {

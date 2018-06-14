@@ -50,6 +50,7 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 			result.setGmtModify(new Date());
 			result.setModifier("-1");
 			result.setOpen(true);
+			channelShopDOMapperExt.updateByPrimaryKey(result);
 		}
 	}
 

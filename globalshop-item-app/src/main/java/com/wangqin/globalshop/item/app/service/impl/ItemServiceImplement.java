@@ -1,16 +1,16 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import com.itextpdf.text.pdf.AcroFields;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
-import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
-import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
-import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.*;
 import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.item.app.service.*;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.item.app.service.IUploadFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -47,18 +47,21 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private ItemSkuScaleMapperExt itemSkuScaleDOMapper;
 
+    @Autowired
+    private ItemSkuDOMapperExt itemSkuDOMapperExt;
+
 
     @Autowired
     private IItemSkuService    itemSkuService;
 
-    @Autowired
-    private IFreightService    iFreightService;
-
-    @Autowired
-    private ItemIInventoryService inventoryService;
-
-    @Autowired
-    private IItemBrandService  iBrandService;
+//    @Autowired
+//    private IFreightService    iFreightService;
+//
+//    @Autowired
+//    private InventoryService inventoryService;
+//
+//    @Autowired
+//    private IItemBrandService  iBrandService;
 
     @Autowired
     private IUploadFileService uploadFileService;
@@ -126,18 +129,18 @@ public class ItemServiceImplement implements IItemService {
 
         // itemQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
 
-        // 1、查询总的记录数量
-        Integer totalCount = itemDOMapperExt.queryItemsCount(itemQueryVO);
-
-        // 2、查询分页记录
-        if (totalCount != null && totalCount != 0) {
-            itemResult.buildPage(totalCount, itemQueryVO);
+//        // 1、查询总的记录数量
+//        Integer totalCount = itemDOMapperExt.queryItemsCount(itemQueryVO);
+//
+//        // 2、查询分页记录
+//        if (totalCount != null && totalCount != 0) {
+//            itemResult.buildPage(totalCount, itemQueryVO);
             List<ItemDTO> items = itemDOMapperExt.queryItems(itemQueryVO);
             itemResult.setData(items);
-        } else {
-            List<ItemDTO> items = new ArrayList<>();
-            itemResult.setData(items);
-        }
+//        } else {
+//            List<ItemDTO> items = new ArrayList<>();
+//            itemResult.setData(items);
+//        }
         return itemResult;
     }
     
@@ -383,6 +386,65 @@ public class ItemServiceImplement implements IItemService {
 
         return resultVo;
 
+    }
+
+
+    public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo){
+
+        ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
+
+        //第一步：channellistingitem
+        ChannelListingItemDO channelListingItemDO = new ChannelListingItemDO();
+        BeanUtils.copies(channelListingItemVo,channelListingItemDO);
+        channelListingItemDOMapperExt.insert(channelListingItemDO);
+
+        //第二步：channellistingitemSku
+        List<ChannelListingItemSkuDO> channelListingItemSkuDOS =  channelListingItemVo.getChannelListingItemSkuDOS();
+        for(ChannelListingItemSkuDO sku : channelListingItemSkuDOS){
+            channelListingItemSkuDOMapperExt.insert(sku);
+        }
+
+        ItemVo itemVo = globalShopItemVo.getItemVo();
+
+        ItemDO itemDO = new ItemDO();
+        BeanUtils.copies(itemVo,itemDO);
+        itemDOMapperExt.insert(itemDO);
+
+        List<ItemSkuVo> skuVos = itemVo.getItemSkus();
+        for(ItemSkuVo  skuVo : skuVos){
+            ItemSkuDO skuDO = new ItemSkuDO();
+            BeanUtils.copies(skuVo,skuDO);
+            itemSkuDOMapperExt.insert(skuDO);
+        }
+    }
+
+    public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo){
+
+        ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
+
+        //第一步：channellistingitem
+        ChannelListingItemDO channelListingItemDO = new ChannelListingItemDO();
+        BeanUtils.copies(channelListingItemVo,channelListingItemDO);
+        channelListingItemDOMapperExt.insert(channelListingItemDO);
+
+        //第二步：channellistingitemSku
+        List<ChannelListingItemSkuDO> channelListingItemSkuDOS =  channelListingItemVo.getChannelListingItemSkuDOS();
+        for(ChannelListingItemSkuDO sku : channelListingItemSkuDOS){
+            channelListingItemSkuDOMapperExt.insert(sku);
+        }
+
+        ItemVo itemVo = globalShopItemVo.getItemVo();
+
+        ItemDO itemDO = new ItemDO();
+        BeanUtils.copies(itemVo,itemDO);
+        itemDOMapperExt.insert(itemDO);
+
+        List<ItemSkuVo> skuVos = itemVo.getItemSkus();
+        for(ItemSkuVo  skuVo : skuVos){
+            ItemSkuDO skuDO = new ItemSkuDO();
+            BeanUtils.copies(skuVo,skuDO);
+            itemSkuDOMapperExt.insert(skuDO);
+        }
     }
    
 }

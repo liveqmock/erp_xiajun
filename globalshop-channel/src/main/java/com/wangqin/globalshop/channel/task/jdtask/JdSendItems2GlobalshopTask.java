@@ -11,17 +11,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Create by 777 on 2018/6/13
  */
-@Component
-@EnableAsync
+//@Component
+//@EnableAsync
 public class JdSendItems2GlobalshopTask {
 
 	protected Logger logger = LogManager.getLogger(getClass());

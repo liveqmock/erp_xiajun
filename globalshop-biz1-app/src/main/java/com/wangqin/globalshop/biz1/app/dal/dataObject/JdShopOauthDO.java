@@ -37,6 +37,8 @@ public class JdShopOauthDO extends BaseModel {
 
     private String tokenUrl;
 
+    private String shopType;
+
     private Boolean open;
 
     public Long getId() {
@@ -173,6 +175,14 @@ public class JdShopOauthDO extends BaseModel {
 
     public void setTokenUrl(String tokenUrl) {
         this.tokenUrl = tokenUrl == null ? null : tokenUrl.trim();
+    }
+
+    public String getShopType() {
+        return shopType;
+    }
+
+    public void setShopType(String shopType) {
+        this.shopType = shopType == null ? null : shopType.trim();
     }
 
     public Boolean getOpen() {

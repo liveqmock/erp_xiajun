@@ -12,11 +12,12 @@
     <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
     <result column="expires_time" property="expiresTime" jdbcType="TIMESTAMP" />
     <result column="proxy_url" property="proxyUrl" jdbcType="VARCHAR" />
+    <result column="shop_type" property="shopType" jdbcType="VARCHAR" />
     <result column="open" property="open" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, version, creator, modifier, channel_no, company_no, shop_name, shop_code, expires_time, 
-    proxy_url, open
+    proxy_url, shop_type, open
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -35,11 +36,11 @@
     insert into channel_shop (version, creator, modifier, 
       channel_no, company_no, shop_name, 
       shop_code, expires_time, proxy_url, 
-      open)
+      shop_type, open)
     values (#{version,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{channelNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
       #{shopCode,jdbcType=VARCHAR}, #{expiresTime,jdbcType=TIMESTAMP}, #{proxyUrl,jdbcType=VARCHAR}, 
-      #{open,jdbcType=BIT})
+      #{shopType,jdbcType=VARCHAR}, #{open,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -74,6 +75,9 @@
       <if test="proxyUrl != null" >
         proxy_url,
       </if>
+      <if test="shopType != null" >
+        shop_type,
+      </if>
       <if test="open != null" >
         open,
       </if>
@@ -105,6 +109,9 @@
       </if>
       <if test="proxyUrl != null" >
         #{proxyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shopType != null" >
+        #{shopType,jdbcType=VARCHAR},
       </if>
       <if test="open != null" >
         #{open,jdbcType=BIT},
@@ -141,6 +148,9 @@
       <if test="proxyUrl != null" >
         proxy_url = #{proxyUrl,jdbcType=VARCHAR},
       </if>
+      <if test="shopType != null" >
+        shop_type = #{shopType,jdbcType=VARCHAR},
+      </if>
       <if test="open != null" >
         open = #{open,jdbcType=BIT},
       </if>
@@ -158,6 +168,7 @@
       shop_code = #{shopCode,jdbcType=VARCHAR},
       expires_time = #{expiresTime,jdbcType=TIMESTAMP},
       proxy_url = #{proxyUrl,jdbcType=VARCHAR},
+      shop_type = #{shopType,jdbcType=VARCHAR},
       open = #{open,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
