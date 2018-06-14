@@ -293,15 +293,6 @@ public class ItemServiceImplement implements IItemService {
         return itemDOMapperExt.sumNewItemNumByMonth(months);
     }
 
- 
-
-    @Override
-    public ItemDO selectByPrimaryKey(Long id) {
-        // TODO Auto-generated method stub
-
-        return itemDOMapperExt.selectByPrimaryKey(id);
-    }
-
 	@Override
 	public List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO) {
 		List<ItemDTO> list = itemDOMapperExt.queryItems(itemQueryVO);

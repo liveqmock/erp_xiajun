@@ -24,7 +24,7 @@ public interface IItemService {
 	//插入单个商品
 	Long insertItemSelective(ItemDO item);
 		
-	ItemDO selectByPrimaryKey(Long id);
+
 	/**
 	 * add item 
 	 * @param item
@@ -90,9 +90,10 @@ public interface IItemService {
 	
 	Long queryIdByItemCode(String itemCode);
 
-
+    //渠道模块使用
 	public ItemVo queryAdd(String itemCode);
 
+	//渠道模块使用
 	public GlobalShopItemVo queryUpdate(String itemCode, String shopCode);
 
 
