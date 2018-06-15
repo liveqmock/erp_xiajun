@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class AuthOrganizationDO extends BaseModel {
     private Long id;
+
+    private String companyNo;
 
     private String orgId;
 
@@ -19,15 +19,9 @@ public class AuthOrganizationDO extends BaseModel {
 
     private Integer seq;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
     private String creator;
 
     private String modifier;
-
-    private Boolean isDel;
 
     public Long getId() {
         return id;
@@ -35,6 +29,14 @@ public class AuthOrganizationDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getOrgId() {
@@ -93,22 +95,6 @@ public class AuthOrganizationDO extends BaseModel {
         this.seq = seq;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public String getCreator() {
         return creator;
     }
@@ -123,13 +109,5 @@ public class AuthOrganizationDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 }

@@ -8,15 +8,12 @@
     <result column="logistics_company_code" property="logisticsCompanyCode" jdbcType="BIGINT" />
     <result column="logistics_company_name" property="logisticsCompanyName" jdbcType="VARCHAR" />
     <result column="logistics_company_category_code" property="logisticsCompanyCategoryCode" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, category_code, category_name, logistics_company_code, logistics_company_name, 
-    logistics_company_category_code, gmt_create, gmt_modify, creator, modifier, is_del
+    logistics_company_category_code, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,27 +26,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCategoryMappingDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into logistic_category_mapping (id, category_code, category_name, 
-      logistics_company_code, logistics_company_name, 
-      logistics_company_category_code, gmt_create, 
-      gmt_modify, creator, modifier, 
-      is_del)
-    values (#{id,jdbcType=BIGINT}, #{categoryCode,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
-      #{logisticsCompanyCode,jdbcType=BIGINT}, #{logisticsCompanyName,jdbcType=VARCHAR}, 
-      #{logisticsCompanyCategoryCode,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT})
+    insert into logistic_category_mapping (category_code, category_name, logistics_company_code, 
+      logistics_company_name, logistics_company_category_code, 
+      creator, modifier)
+    values (#{categoryCode,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, #{logisticsCompanyCode,jdbcType=BIGINT}, 
+      #{logisticsCompanyName,jdbcType=VARCHAR}, #{logisticsCompanyCategoryCode,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCategoryMappingDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into logistic_category_mapping
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="categoryCode != null" >
         category_code,
       </if>
@@ -65,24 +57,14 @@
       <if test="logisticsCompanyCategoryCode != null" >
         logistics_company_category_code,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="categoryCode != null" >
         #{categoryCode,jdbcType=VARCHAR},
       </if>
@@ -98,20 +80,11 @@
       <if test="logisticsCompanyCategoryCode != null" >
         #{logisticsCompanyCategoryCode,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -133,20 +106,11 @@
       <if test="logisticsCompanyCategoryCode != null" >
         logistics_company_category_code = #{logisticsCompanyCategoryCode,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -158,11 +122,8 @@
       logistics_company_code = #{logisticsCompanyCode,jdbcType=BIGINT},
       logistics_company_name = #{logisticsCompanyName,jdbcType=VARCHAR},
       logistics_company_category_code = #{logisticsCompanyCategoryCode,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
+      modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

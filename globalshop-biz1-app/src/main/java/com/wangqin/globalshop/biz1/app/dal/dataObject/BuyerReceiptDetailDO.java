@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class BuyerReceiptDetailDO extends BaseModel {
     private Long id;
 
@@ -17,6 +15,8 @@ public class BuyerReceiptDetailDO extends BaseModel {
 
     private String receiptNo;
 
+    private String companyNo;
+
     private String buyerTaskDetailNo;
 
     private Integer transQuantity;
@@ -24,12 +24,6 @@ public class BuyerReceiptDetailDO extends BaseModel {
     private String skuBuysite;
 
     private String purchaseStorageNo;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -91,6 +85,14 @@ public class BuyerReceiptDetailDO extends BaseModel {
         this.receiptNo = receiptNo == null ? null : receiptNo.trim();
     }
 
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
+    }
+
     public String getBuyerTaskDetailNo() {
         return buyerTaskDetailNo;
     }
@@ -121,30 +123,6 @@ public class BuyerReceiptDetailDO extends BaseModel {
 
     public void setPurchaseStorageNo(String purchaseStorageNo) {
         this.purchaseStorageNo = purchaseStorageNo == null ? null : purchaseStorageNo.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

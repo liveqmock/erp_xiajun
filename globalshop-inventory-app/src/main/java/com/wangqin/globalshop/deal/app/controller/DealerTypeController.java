@@ -29,92 +29,88 @@ public class DealerTypeController {
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
     public Object add(DealerTypeDO sellerType) {
-        JsonResult result = new JsonResult<>();
+    	
+        JsonResult<DealerTypeDO> result = new JsonResult<>();
+        
+        List<DealerTypeDO> list = iSellerTypeService.list();
+        
+        if(sellerType.getCode().equals("") || sellerType.getCode() == null) {
+        	
+        	return result.buildIsSuccess(false).buildMsg("DealerType code is null");
+        	
+        }else {
+        	if(sellerType.getName().equals("") || sellerType.getName() == null) {
+            	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
+            }
+        	for(int i = 0; i < list.size(); i ++) {
+        		if(sellerType.getCode().equals(list.get(i).getCode())) {
+        			return result.buildIsSuccess(false).buildMsg("DealerType code is exist");
+        		}
+        	}
+		}
+        
+     
         iSellerTypeService.insert(sellerType);
-//        JsonResult<String> result = new JsonResult<>();
-//
-//        if (null == sellerType.getId()) {
-//            SellerTypeQueryVO sellerTypeQueryVO = new SellerTypeQueryVO();
-//            sellerTypeQueryVO.setCode(sellerType.getCode());
-//            //Check code is unique
-//            Integer count = iSellerTypeService.querySellerTypesCount(sellerTypeQueryVO);
-//            if (count > 0) {
-//                result.buildMsg("经销商类别代码不可以重复").buildIsSuccess(false);
-//            } else {
-//                sellerType.setGmtCreate(new Date());
-//                sellerType.setGmtModify(new Date());
-//                result.buildIsSuccess(iSellerTypeService.insert(sellerType));
-//            }
-//        } else {
-//            result.buildMsg("错误数据").buildIsSuccess(false);
-//        }
-
-//        return result;
+       
         return result.buildIsSuccess(true);
     }
 
     @RequestMapping("/update")
     @ResponseBody
     public Object update(DealerTypeDO sellerType) {
-//        JsonResult<String> result = new JsonResult<>();
-//
-//        if (null != sellerType.getId()) {
-//            DealerTypeDO tjSellerType = new DealerTypeDO();
-//            tjSellerType.setCode(sellerType.getCode());
-//            DealerTypeDO selSellerType = iSellerTypeService.selectOne(tjSellerType);
-//            if(selSellerType!=null && selSellerType.getId().equals(sellerType.getId())) {
-//                return result.buildMsg("经销商类别代码不可以重复").buildIsSuccess(false);
-//            }
-//
-//            sellerType.setGmtCreate(null);
-//            sellerType.setGmtModify(new Date());
-//            //TODO: JC, 事务或存储过程？
-//            boolean bIsSuccess = iSellerTypeService.updateSelectiveById(sellerType);
-//
-//            if (bIsSuccess) {
-//                //update Seller table
-//                isellerService.updateSellerTypeByTypeCode(sellerType);
-//            }
-//
-//            result.buildIsSuccess(bIsSuccess);
-//        } else {
-//            result.buildMsg("错误数据").buildIsSuccess(false);
-//        }
-//
-//        return result;
-        return null;
+    	
+    	JsonResult<DealerTypeDO> result = new JsonResult<>();
+        
+    	List<DealerTypeDO> list = iSellerTypeService.list();
+    	
+        if(sellerType.getCode().equals("") || sellerType.getCode() == null) {
+         	
+         	return result.buildIsSuccess(false).buildMsg("DealerType code is null");
+         	
+         }else {
+         	if(sellerType.getName().equals("") || sellerType.getName() == null) {
+             	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
+             }
+         	
+         	
+         	for(int i = 0; i < list.size(); i ++) {
+         		if(sellerType.getCode().equals(list.get(i).getCode()) && sellerType.getId() != list.get(i).getId()) {
+         			return result.buildIsSuccess(false).buildMsg("DealerType code is exist");
+         		}
+         	}
+ 		}
+    	
+        
+    	iSellerTypeService.update(sellerType);
+    	
+        return result.buildIsSuccess(true);
     }
 
     @RequestMapping("/delete")
     @ResponseBody
     public Object delete(DealerTypeDO sellerType) {
-//        JsonResult<String> result = new JsonResult<>();
-//
-//        if (null != sellerType.getId()) {
-//            SellerQueryVO sellerQueryVO = new SellerQueryVO();
-//            sellerQueryVO.setTypeId(sellerType.getId());
-//
-//            Integer count = isellerService.querySellersCount(sellerQueryVO);
-//            if (count > 0) {
-//                result.buildMsg("经销商类别信息被使用，无法删除").buildIsSuccess(false);
-//            } else {
-//                result.buildIsSuccess(iSellerTypeService.deleteSelective(sellerType));
-//            }
-//        } else {
-//            result.buildMsg("错误数据").buildIsSuccess(false);
-//        }
-//
-//        return result;
-        return null;
+   
+    	JsonResult<DealerTypeDO> result = new JsonResult<>();
+    	//需要判断该类别下有没有销售管理
+    	DealerTypeDO sellerTypeCode = iSellerTypeService.selectByPrimaryKey(sellerType.getId());
+    	String typeCode = sellerTypeCode.getCode();
+    	
+    	int count = iSellerTypeService.countRelativeDealerType(typeCode);
+    	
+    	if(count > 0) {
+    		return result.buildIsSuccess(false).buildMsg("错误，该类别下存在有销售");
+    	}
+    	
+    	iSellerTypeService.deleteById(sellerType);
+        return result.buildIsSuccess(true);
     }
 
     @RequestMapping("/query")
     @ResponseBody
     public Object query(Long id) {
-//        JsonResult<DealerTypeDO> result = new JsonResult<>();
-//
-//        return result.buildData(iSellerTypeService.selectById(id)).buildIsSuccess(true);
-        return null;
+        JsonResult<DealerTypeDO> result = new JsonResult<>();
+        DealerTypeDO dealerTypeDO = iSellerTypeService.selectByPrimaryKey(id);
+    	return result.buildData(dealerTypeDO).buildIsSuccess(true);
     }
 
     @RequestMapping("/querySellerTypeList")
@@ -123,11 +119,6 @@ public class DealerTypeController {
         JsonResult<List<DealerTypeDO>> result = new JsonResult<>();
         List<DealerTypeDO> list = iSellerTypeService.list();
         result.setData(list);
-//        JsonResult<List<DealerTypeDO>> result = new JsonResult<>();
-//        List<DealerTypeDO> list = iSellerTypeService.querySellerTypeList(sellerTypeQueryVO);
-//        result.setData(list);
-//
-//        return result.buildIsSuccess(true);
         return result.buildIsSuccess(true);
     }
 }

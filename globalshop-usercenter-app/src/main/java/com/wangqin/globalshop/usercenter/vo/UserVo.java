@@ -19,9 +19,13 @@ public class UserVo implements Serializable {
 	
 	private Long id;
 
+	private String userNo;
+
 	private String loginName;
 
 	private String name;
+
+	private String companyNo;
 
 	@JsonIgnore
 	private String password;
@@ -57,6 +61,14 @@ public class UserVo implements Serializable {
 		this.id = id;
 	}
 
+	public String getUserNo() {
+		return userNo;
+	}
+
+	public void setUserNo(String userNo) {
+		this.userNo = userNo;
+	}
+
 	public String getLoginName() {
 		return loginName;
 	}
@@ -79,6 +91,14 @@ public class UserVo implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password == null ? null : password.trim();
+	}
+
+	public String getCompanyNo() {
+		return companyNo;
+	}
+
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
 	}
 
 	public Integer getSex() {

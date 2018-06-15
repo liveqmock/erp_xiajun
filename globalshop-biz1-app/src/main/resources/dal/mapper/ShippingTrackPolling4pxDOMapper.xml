@@ -7,15 +7,11 @@
     <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR" />
     <result column="is_normal" property="isNormal" jdbcType="INTEGER" />
     <result column="track_info" property="trackInfo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, delivery_no, shipping_no, is_normal, track_info, gmt_create, gmt_modify, creator, 
-    modifier, is_del
+    id, delivery_no, shipping_no, is_normal, track_info, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -28,25 +24,22 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPolling4pxDO" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_track_polling_4px (id, delivery_no, shipping_no, 
-      is_normal, track_info, gmt_create, 
-      gmt_modify, creator, modifier, 
-      is_del)
-    values (#{id,jdbcType=INTEGER}, #{deliveryNo,jdbcType=VARCHAR}, #{shippingNo,jdbcType=VARCHAR}, 
-      #{isNormal,jdbcType=INTEGER}, #{trackInfo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT})
+    insert into shipping_track_polling_4px (delivery_no, shipping_no, is_normal, 
+      track_info, creator, modifier
+      )
+    values (#{deliveryNo,jdbcType=VARCHAR}, #{shippingNo,jdbcType=VARCHAR}, #{isNormal,jdbcType=INTEGER}, 
+      #{trackInfo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPolling4pxDO" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into shipping_track_polling_4px
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="deliveryNo != null" >
         delivery_no,
       </if>
@@ -59,24 +52,14 @@
       <if test="trackInfo != null" >
         track_info,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=INTEGER},
       <if test="deliveryNo != null" >
         #{deliveryNo,jdbcType=VARCHAR},
       </if>
@@ -89,20 +72,11 @@
       <if test="trackInfo != null" >
         #{trackInfo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -121,20 +95,11 @@
       <if test="trackInfo != null" >
         track_info = #{trackInfo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -145,11 +110,8 @@
       shipping_no = #{shippingNo,jdbcType=VARCHAR},
       is_normal = #{isNormal,jdbcType=INTEGER},
       track_info = #{trackInfo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
+      modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

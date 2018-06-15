@@ -46,5 +46,12 @@ public interface IItemCategoryService {
 	   //插入类目
 	   void insertCategorySelective(ItemCategoryDO category);
 	   
-
+	   //不能删除有商品的类目
+	   int countRelativeItem(String categoryCode);
+	   
+	   //不能删除有子类目的类目
+	   int queryChildCategoryCountByCategoryCode(String categoryCode);
+	   
+	   //根据id删除类目
+	   void deleteItemCategoryById(Long id);
 }

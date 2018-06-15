@@ -408,7 +408,7 @@
         FROM
         `mall_order`
         where
-        1=1
+        is_del != '1'
         <if test="status != null">
             AND status = #{status}
         </if>
@@ -457,11 +457,6 @@
     </select>
 
 
-
-
-
-
-
     <sql id="commonSelectSection">
         1 = 1
         <if test="channelNo != null">
@@ -508,8 +503,11 @@
     <!--查询总条数 -->
     <select id="queryPo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
     >
-        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
-        FROM <include refid="tableSection"/> T1
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List"/>
+        FROM
+        <include refid="tableSection"/>
+        T1
         WHERE
         <include refid="commonSelectSection"/>
     </select>
@@ -518,23 +516,54 @@
     <select id="queryPoCount" resultType="java.lang.Integer"
     >
         SELECT COUNT(*)
-        FROM <include refid="tableSection"/> T1
+        FROM
+        <include refid="tableSection"/>
+        T1
         WHERE
         <include refid="commonSelectSection"/>
+    </select>
+    <select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO"
+    >
+           SELECT
+                DISTINCT
+                t1.order_no orderNo,
+                t1.id id,
+                t1.channel_order_no channelOrderNo,
+                 t1.dealer_name dealerName,
+                 t1.shop_code shopCode,
+                 t1.creator ,
+                 t1.order_time orderTime,
+                 t2.receiver receiver,
+                 t2.receiver_address addressDetail,
+                 t2.receiver_city receiverCity,
+                 t2.receiver_state receiverState,
+                 t2.receiver_district receiverDistrict,
+                 t1.status ,
+                 t2.receiver_address addressDetail,
+                 t2.telephone,
+                 t1.memo remark
+               FROM mall_order t1, mall_sub_order t2
+               WHERE t1.order_no = t2.order_no AND t1.is_del != '1'
+               <if test="companyNo!=null and companyNo!=''">
+                   AND t1.company_no = #{companyNo}
+               </if>
     </select>
 
     <!-- -->
     <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
     >
-        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List" />
-        FROM <include refid="tableSection"/> T1
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List"/>
+        FROM
+        <include refid="tableSection"/>
+        T1
         WHERE
         <include refid="commonSelectSection"/>
         ORDER BY T1.id desc
     </select>
 
 
-    <insert id="insertMallOrder" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
+    <insert id="insertMallOrder" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
 
         insert into mall_order (id, customer_no, order_no,
         company_no, channel_no, channel_name,

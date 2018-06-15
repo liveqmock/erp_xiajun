@@ -4,21 +4,19 @@
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="receipt_no" property="receiptNo" jdbcType="VARCHAR" />
     <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
     <result column="currency" property="currency" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, buyer_task_no, receipt_no, total_price, currency, gmt_create, gmt_modify, purchase_storage_no, 
-    status, buyer_id, is_del, creator, modifier
+    id, buyer_task_no, company_no, receipt_no, total_price, currency, purchase_storage_no, 
+    status, buyer_id, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,29 +29,29 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into buyer_receipt (id, buyer_task_no, receipt_no, 
-      total_price, currency, gmt_create, 
-      gmt_modify, purchase_storage_no, status, 
-      buyer_id, is_del, creator, 
+    insert into buyer_receipt (buyer_task_no, company_no, receipt_no, 
+      total_price, currency, purchase_storage_no, 
+      status, buyer_id, creator, 
       modifier)
-    values (#{id,jdbcType=BIGINT}, #{buyerTaskNo,jdbcType=VARCHAR}, #{receiptNo,jdbcType=VARCHAR}, 
-      #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{purchaseStorageNo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{buyerId,jdbcType=BIGINT}, #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, 
+    values (#{buyerTaskNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{receiptNo,jdbcType=VARCHAR}, 
+      #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=VARCHAR}, #{purchaseStorageNo,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{buyerId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into buyer_receipt
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="buyerTaskNo != null" >
         buyer_task_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
       </if>
       <if test="receiptNo != null" >
         receipt_no,
@@ -64,12 +62,6 @@
       <if test="currency != null" >
         currency,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no,
       </if>
@@ -79,9 +71,6 @@
       <if test="buyerId != null" >
         buyer_id,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -90,9 +79,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="buyerTaskNo != null" >
         #{buyerTaskNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
       </if>
       <if test="receiptNo != null" >
         #{receiptNo,jdbcType=VARCHAR},
@@ -103,12 +94,6 @@
       <if test="currency != null" >
         #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="purchaseStorageNo != null" >
         #{purchaseStorageNo,jdbcType=VARCHAR},
       </if>
@@ -117,9 +102,6 @@
       </if>
       <if test="buyerId != null" >
         #{buyerId,jdbcType=BIGINT},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -135,6 +117,9 @@
       <if test="buyerTaskNo != null" >
         buyer_task_no = #{buyerTaskNo,jdbcType=VARCHAR},
       </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="receiptNo != null" >
         receipt_no = #{receiptNo,jdbcType=VARCHAR},
       </if>
@@ -144,12 +129,6 @@
       <if test="currency != null" >
         currency = #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       </if>
@@ -158,9 +137,6 @@
       </if>
       <if test="buyerId != null" >
         buyer_id = #{buyerId,jdbcType=BIGINT},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -174,15 +150,13 @@
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" >
     update buyer_receipt
     set buyer_task_no = #{buyerTaskNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
       receipt_no = #{receiptNo,jdbcType=VARCHAR},
       total_price = #{totalPrice,jdbcType=DOUBLE},
       currency = #{currency,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       buyer_id = #{buyerId,jdbcType=BIGINT},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

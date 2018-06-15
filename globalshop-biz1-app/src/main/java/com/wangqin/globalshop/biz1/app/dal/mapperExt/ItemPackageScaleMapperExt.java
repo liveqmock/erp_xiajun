@@ -23,4 +23,5 @@ public interface ItemPackageScaleMapperExt {
 	List<ItemPackageScaleDTO> queryScaleList(ShippingPackingScaleQueryVO scaleVO);
 	
 	List<ShippingPackingScaleDO> queryScaleListSelective(ShippingPackingScaleQueryVO shippingPackingScaleQueryVO);
+	String queryNoById(Long id);
 }

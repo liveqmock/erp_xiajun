@@ -2,11 +2,11 @@ package com.wangqin.globalshop.order.app.controller.mall;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
@@ -33,11 +33,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.wangqin.globalshop.order.app.comm.Constant.*;
+
 /**
  * @author zhulu
  */
 @Controller
 @RequestMapping("/outerOrder")
+@Authenticated
 public class MallOrderController {
 
     @Autowired
@@ -50,61 +53,63 @@ public class MallOrderController {
     private IMallSubOrderService mallSubOrderService;
     @Autowired
     private InventoryService inventoryService;
+
+    /**
+     * 主页
+     */
+    @RequestMapping("/index")
+    @ResponseBody
+    public Object index(MallOrderVO vo) {
+        JsonResult<List<MallOrderVO>> result = new JsonResult<>();
+        List<MallOrderVO> outerOrder = mallOrderService.list(vo);
+        return result.buildData(outerOrder).buildIsSuccess(true);
+    }
+
     /**
      * 增加订单
      */
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Object add(MallOrderVO mallOrderVO) {
-        JsonResult<String> result = new JsonResult<>();
+        JsonResult<List<MallOrderVO>> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
             Long ordSequence = sequenceUtilService.gainORDSequence();
-            mallOrderVO.setOrderNo("P" + String.format("%0" + 2 + "d", mallOrderVO.getChannelNo()) + String.format("%0" + 4 + "d", mallOrderVO.getChannelName()) + "D" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+ordSequence );//系统自动生成
-//			//订单详情
-            String outerOrderDetailList = mallOrderVO.getOrderDetailList();
-            if (StringUtils.isNotBlank(outerOrderDetailList)) {
-                String s = outerOrderDetailList.replace("&quot;", "\"");
-                List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
-                });
-                mallOrderVO.setOuterOrderDetails(outerOrderDetails);
-                if (CollectionUtils.isEmpty(outerOrderDetails)) {
-                    return JsonResult.buildFailed("没有商品信息");
-                }
+            mallOrderVO.setOrderNo("P" + String.format("%0" + 2 + "d", mallOrderVO.getChannelNo()) + String.format("%0" + 4 + "d", mallOrderVO.getChannelName()) + "D" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + ordSequence);//系统自动生成
+            String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
+            String s = outerOrderDetailList.replace("&quot;", "\"");
+            List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
+            });
+            mallOrderVO.setOuterOrderDetails(outerOrderDetails);
+            if (CollectionUtils.isEmpty(outerOrderDetails)) {
+                return JsonResult.buildFailed("没有商品信息");
             }
             /**注入部门no*/
-            mallOrderVO.setCompanyNo("MallOrderController86");
             //创建外部订单
             mallOrderService.addOuterOrder(mallOrderVO);
-//            if (mallOrderVO.getStatus() == null || mallOrderVO.getStatus() == 0) {
-//                //生成子订单并配货
-//                mallOrderService.review(mallOrderVO.getOrderNo());
-//            }
-            result.buildIsSuccess(true);
         } else {
-            result.buildData("错误数据").buildIsSuccess(false);
+            result.buildMsg("错误数据").buildIsSuccess(false);
         }
-
-        return result;
+        return result.buildIsSuccess(true).buildMsg("添加成功");
     }
 
 
     /**
      * 更新订单
      */
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public Object update(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() != null) {
             //只有状态为新建的订单才能修改
             MallOrderDO selOuterOrder = mallOrderService.selectById(mallOrderVO.getId());
-            if (selOuterOrder == null || selOuterOrder.getStatus() != OrderStatus.INIT.getCode()) {
+            if (selOuterOrder == null || selOuterOrder.getStatus() != ORDER_SATUTS_INIT) {
                 return JsonResult.buildFailed("订单不存在或者状态错误");
             }
             //查询是否有发货的订单，有的话订单不能修改
             MallSubOrderDO erpOrderQuery = new MallSubOrderDO();
             erpOrderQuery.setOrderNo(mallOrderVO.getOrderNo());
-            erpOrderQuery.setStatus(OrderStatus.SENT.getCode());
+            erpOrderQuery.setStatus(ORDER_SATUTS_SENT);
             int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
             if (sendOrder > 0) {
                 return JsonResult.buildFailed("有子订单发货不能修改");
@@ -148,23 +153,29 @@ public class MallOrderController {
      */
     @RequestMapping("/query")
     @ResponseBody
-    public Object query(Long id) {
+    public Object query(String orderNo) {
         JsonResult<MallOrderDO> result = new JsonResult<>();
-        MallOrderDO outerOrder = mallOrderService.selectById(id);
-        return result.buildData(outerOrder).buildIsSuccess(true);
+        if (orderNo == null) {
+            return result.buildMsg("参数丢失").buildIsSuccess(true);
+        } else {
+            MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
+            return result.buildData(outerOrder).buildIsSuccess(true);
+        }
+
     }
+
 
     /**
      * 批量调价查询订单
      *
      * @return
      */
-    @RequestMapping(value = "/queryOuterOrderList",method = RequestMethod.POST)
+    @RequestMapping(value = "/queryOuterOrderList", method = RequestMethod.POST)
     @ResponseBody
     public Object queryOuterOrderList(MallOrderVO mallOrderVO) {
-        if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
-            mallOrderVO.setStatus(null);
-        }
+//        if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
+//            mallOrderVO.setStatus(null);
+//        }
         if (mallOrderVO.getEndGmtCreate() != null) {
             String endGmtCreateStr = DateUtil.ymdFormat(mallOrderVO.getEndGmtCreate());
             Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");
@@ -184,7 +195,7 @@ public class MallOrderController {
 //                outerOrderQueryVO.setOpenId(seller.getOpenId());
 //            }
 //        }
-        JsonResult<List<MallOrderDO>> result =new JsonResult<>();
+        JsonResult<List<MallOrderDO>> result = new JsonResult<>();
         List<MallOrderDO> list = mallOrderService.queryOuterOrderList(mallOrderVO);
         result.setData(list);
 //        if (roles.contains("irhdaili")) {
@@ -198,11 +209,11 @@ public class MallOrderController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Object delete(Long id) {
+    public Object delete(String orderNo) {
         JsonResult<String> result = new JsonResult<>();
         try {
-            MallOrderDO outerOrder = mallOrderService.selectById(id);
-            if (outerOrder == null || outerOrder.getStatus() != OrderStatus.CLOSE.getCode()) {
+            MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
+            if (outerOrder == null || outerOrder.getStatus() != ORDER_SATUTS_CLOSE) {
                 return JsonResult.buildFailed("先关闭才能删除订单");
             }
             mallOrderService.delete(outerOrder);
@@ -219,6 +230,7 @@ public class MallOrderController {
     @RequestMapping("/close")
     @ResponseBody
     public Object close(String orderIds) {
+        JsonResult result = new JsonResult();
         List<String> errorMsg = Lists.newArrayList();
         int i = 0;
         if (StringUtils.isNotBlank(orderIds)) {
@@ -228,33 +240,33 @@ public class MallOrderController {
             for (Long id : orderIdList) {
                 i++;
                 MallOrderDO outerOrder = mallOrderService.selectById(id);
-                if (outerOrder == null || outerOrder.getStatus() != OrderStatus.INIT.getCode()) {
+                if (outerOrder == null || outerOrder.getStatus() != ORDER_SATUTS_INIT) {
                     errorMsg.add("第" + i + "条不存在或者状态错误,");
                 }
                 //查询是否有发货的订单，有的话订单不能修改
                 MallSubOrderDO erpOrderQuery = new MallSubOrderDO();
                 erpOrderQuery.setOrderNo(outerOrder.getOrderNo());
-                erpOrderQuery.setStatus( OrderStatus.SENT.getCode());
+                erpOrderQuery.setStatus(ORDER_SATUTS_SENT);
                 int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
                 if (sendOrder > 0) {
-                    return errorMsg.add("第" + i + "条有子订单发货不能关闭");
+                    return result.buildMsg("第" + i + "条有子订单发货不能关闭").buildIsSuccess(false);
                 }
                 //1、释放子订单库存
 //                EntityWrapper<ErpOrder> entityWrapper = new EntityWrapper<>();
 //                entityWrapper.where("outer_order_id = {0} ", outerOrder.getId());
-                List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
-                if (CollectionUtils.isNotEmpty(erpOrders)) {
-                    for (MallSubOrderDO erpOrder : erpOrders) {
-                        //1,释放子订单库存
-                        inventoryService.release(erpOrder);
-                        //2,更改子订单状态
-                        erpOrder.setStatus( OrderStatus.CLOSE.getCode());
-                        erpOrder.setGmtModify(new Date());
-                        mallSubOrderService.update(erpOrder);
-                    }
-                }
+//                List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
+//                if (CollectionUtils.isNotEmpty(erpOrders)) {
+//                    for (MallSubOrderDO erpOrder : erpOrders) {
+//                        //1,释放子订单库存
+//                        inventoryService.release(erpOrder);
+//                        //2,更改子订单状态
+//                        erpOrder.setStatus(ORDER_SATUTS_CLOSE.getCode());
+//                        erpOrder.setGmtModify(new Date());
+//                        mallSubOrderService.update(erpOrder);
+//                    }
+//                }
                 //2、更改主子订单状态
-                outerOrder.setStatus( OrderStatus.CLOSE.getCode());
+                outerOrder.setStatus(ORDER_SATUTS_CLOSE);
                 outerOrder.setGmtModify(new Date());
                 mallOrderService.updateById(outerOrder);
             }
@@ -263,13 +275,13 @@ public class MallOrderController {
                 for (String a : errorMsg) {
                     rmsg.append(a);
                 }
-                return JsonResult.buildFailed(rmsg.toString());
+                return result.buildIsSuccess(false).buildMsg(rmsg.toString());
             } else {
-                return JsonResult.buildSuccess(null);
+                return result.buildIsSuccess(true);
             }
 
         } else {
-            return JsonResult.buildFailed("没有订单ID");
+            return result.buildMsg("没有订单ID").buildIsSuccess(false);
         }
     }
 
@@ -302,7 +314,7 @@ public class MallOrderController {
     }
 
     //主订单导出
-    @RequestMapping(value = "/OuterOrderExportExcel",method = RequestMethod.POST)
+    @RequestMapping(value = "/OuterOrderExportExcel", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<byte[]> OuterOrderExportExcel(MallOrderVO mallOrderVO) throws Exception {
         if (mallOrderVO.getStartGmtCreate() == null || mallOrderVO.getEndGmtCreate() == null) {
@@ -326,7 +338,7 @@ public class MallOrderController {
 //                list.add(outerOrder.getS());        //销售员
                 list.add(outerOrder.getTotalAmount());    //订单金额
                 list.add(outerOrder.getGmtCreate());        //下单时间
-                list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
+                list.add(outerOrder.getStatus());  //订单状态
                 list.add(outerOrder.getIdcardPicReverse());            //收件人
 //                list.add(outerOrder.getTelephone());        //手机
 //                list.add(outerOrder.getSt());    //省
@@ -366,7 +378,7 @@ public class MallOrderController {
             outerOrderList.forEach((outerOrder) -> {
                 mallOrderService.review(outerOrder.getOrderNo());
 
-                outerOrder.setStatus( 0);
+                outerOrder.setStatus(0);
                 mallOrderService.updateById(outerOrder);
             });
         }

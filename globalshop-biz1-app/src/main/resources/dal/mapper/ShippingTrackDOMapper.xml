@@ -23,9 +23,6 @@
     <result column="airlines" property="airlines" jdbcType="VARCHAR" />
     <result column="flight" property="flight" jdbcType="VARCHAR" />
     <result column="track_info" property="trackInfo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
@@ -33,8 +30,7 @@
     id, shipping_order_no, waybill_no, logistic_no, logistics_status, weight, volume, 
     totalfee, receive_time, oversea_in_time, oversea_out_time, oversea_on_transfer_time, 
     inland_in_time, inland_out_time, inland_express_company_code, inland_express_num, 
-    buyer_sign_time, air_take_off, airlines, flight, track_info, gmt_create, gmt_modify, 
-    is_del, creator, modifier
+    buyer_sign_time, air_take_off, airlines, flight, track_info, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -47,35 +43,32 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_track (id, shipping_order_no, waybill_no, 
-      logistic_no, logistics_status, weight, 
-      volume, totalfee, receive_time, 
-      oversea_in_time, oversea_out_time, oversea_on_transfer_time, 
+    insert into shipping_track (shipping_order_no, waybill_no, logistic_no, 
+      logistics_status, weight, volume, 
+      totalfee, receive_time, oversea_in_time, 
+      oversea_out_time, oversea_on_transfer_time, 
       inland_in_time, inland_out_time, inland_express_company_code, 
       inland_express_num, buyer_sign_time, air_take_off, 
       airlines, flight, track_info, 
-      gmt_create, gmt_modify, is_del, 
       creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{shippingOrderNo,jdbcType=VARCHAR}, #{waybillNo,jdbcType=VARCHAR}, 
-      #{logisticNo,jdbcType=VARCHAR}, #{logisticsStatus,jdbcType=INTEGER}, #{weight,jdbcType=DOUBLE}, 
-      #{volume,jdbcType=VARCHAR}, #{totalfee,jdbcType=DOUBLE}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{overseaInTime,jdbcType=TIMESTAMP}, #{overseaOutTime,jdbcType=TIMESTAMP}, #{overseaOnTransferTime,jdbcType=TIMESTAMP}, 
+    values (#{shippingOrderNo,jdbcType=VARCHAR}, #{waybillNo,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR}, 
+      #{logisticsStatus,jdbcType=INTEGER}, #{weight,jdbcType=DOUBLE}, #{volume,jdbcType=VARCHAR}, 
+      #{totalfee,jdbcType=DOUBLE}, #{receiveTime,jdbcType=TIMESTAMP}, #{overseaInTime,jdbcType=TIMESTAMP}, 
+      #{overseaOutTime,jdbcType=TIMESTAMP}, #{overseaOnTransferTime,jdbcType=TIMESTAMP}, 
       #{inlandInTime,jdbcType=TIMESTAMP}, #{inlandOutTime,jdbcType=TIMESTAMP}, #{inlandExpressCompanyCode,jdbcType=VARCHAR}, 
       #{inlandExpressNum,jdbcType=VARCHAR}, #{buyerSignTime,jdbcType=TIMESTAMP}, #{airTakeOff,jdbcType=VARCHAR}, 
       #{airlines,jdbcType=VARCHAR}, #{flight,jdbcType=VARCHAR}, #{trackInfo,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into shipping_track
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="shippingOrderNo != null" >
         shipping_order_no,
       </if>
@@ -136,15 +129,6 @@
       <if test="trackInfo != null" >
         track_info,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -153,7 +137,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="shippingOrderNo != null" >
         #{shippingOrderNo,jdbcType=VARCHAR},
       </if>
@@ -213,15 +196,6 @@
       </if>
       <if test="trackInfo != null" >
         #{trackInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -294,15 +268,6 @@
       <if test="trackInfo != null" >
         track_info = #{trackInfo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -334,9 +299,6 @@
       airlines = #{airlines,jdbcType=VARCHAR},
       flight = #{flight,jdbcType=VARCHAR},
       track_info = #{trackInfo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

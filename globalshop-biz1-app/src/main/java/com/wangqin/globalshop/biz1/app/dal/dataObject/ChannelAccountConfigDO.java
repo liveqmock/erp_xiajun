@@ -5,8 +5,6 @@ import java.util.Date;
 public class ChannelAccountConfigDO extends BaseModel {
     private Long id;
 
-    private Date gmtCreate;
-
     private Date gmtModified;
 
     private String companyNo;
@@ -23,14 +21,6 @@ public class ChannelAccountConfigDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
     }
 
     public Date getGmtModified() {

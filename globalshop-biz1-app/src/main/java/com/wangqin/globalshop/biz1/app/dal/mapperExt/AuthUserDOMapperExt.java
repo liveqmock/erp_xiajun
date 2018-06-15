@@ -2,6 +2,8 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import org.apache.ibatis.annotations.Param;
 
 
 import java.util.List;
@@ -30,6 +32,15 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
 
     AuthUserDO selectUserVoById(String userName);
 
-//    List<AuthUserDO> selectUserVoPage();
+    Integer queryUsersCount(UserQueryVO userQueryVO);
 
+    UserQueryVO queryUserQueryVOById(@Param("id") Long id);
+
+    List<UserQueryVO> queryUserQueryVOList(UserQueryVO userQueryVO);
+
+//    List<AuthUserDO> selectUserVoPage();
+    
+    AuthUserDO selectUserVoByUserNo(String userNo);
+    
+    void insertByNoId(AuthUserDO record);
 }

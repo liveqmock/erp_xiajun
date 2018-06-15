@@ -1,26 +1,21 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -48,16 +43,15 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		JsonPageResult<List<ISkuDTO>> itemResult = new JsonPageResult<>();
 		//1、查询总的记录数量
 		Integer totalCount =  itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
-		System.out.println("shuliang"+totalCount);
 		//2、查询分页记录
 		if(totalCount!=null&&totalCount!=0L){
 			itemResult.buildPage(totalCount, itemSkuQueryVO);
 			List<ISkuDTO> itemSkus = itemSkuMapperExt.queryItemSkus(itemSkuQueryVO);
 			//查询sku的规格信息
-			itemSkus.forEach(itemSku -> {
-				List<ItemSkuScaleDO> scaleList = itemSkuScaleService.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
-				itemSku.setScaleList(scaleList);
-			});
+//			itemSkus.forEach(itemSku -> {
+//				List<ItemSkuScaleDO> scaleList = itemSkuScaleService.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
+//				itemSku.setScaleList(scaleList);
+//			});
 			itemResult.setData(itemSkus);
 		}
 		return itemResult;
@@ -69,25 +63,18 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	 * 初始化库存信息，添加商品时用
 	 */
 	@Override
-	public List<InventoryAddVO> initInventory(List<ItemSkuAddVO> itemSkuList) {
-		List<InventoryAddVO> inventoryList = null;
-		if (CollectionUtils.isNotEmpty(itemSkuList)) {
-			inventoryList = Lists.transform(itemSkuList, new Function<ItemSkuAddVO, InventoryAddVO>() {
-				@Override
-				public InventoryAddVO apply(ItemSkuAddVO itemSku) {
-					// 初始化库存信息
-					InventoryAddVO inventory = new InventoryAddVO();
-					inventory.setCompanyNo(itemSku.getCompanyNo());
-					inventory.setItemName(itemSku.getItemName());
-				    inventory.setCreator("admin");
-				    inventory.setModifier("admin");
-				    inventory.setItemCode(itemSku.getItemCode());
-					inventory.setSkuCode(itemSku.getSkuCode());
-					inventory.setUpc(itemSku.getUpc());
-					return inventory;
-				}
-			});
-		}
+	public List<InventoryDO> initInventory(List<ItemSkuAddVO> itemSkuList) {
+		List<InventoryDO> inventoryList = new ArrayList<InventoryDO>();
+		itemSkuList.forEach(itemSku -> {
+			// 初始化库存信息
+			InventoryDO inventory = new InventoryDO();
+			inventory.setItemName(itemSku.getItemName());
+		    inventory.setItemCode(itemSku.getItemCode());
+			inventory.setSkuCode(itemSku.getSkuCode());
+			inventory.setUpc(itemSku.getUpc());
+			inventory.setVirtualInv(Long.valueOf(itemSku.getVirtualInv()));
+			inventoryList.add(inventory);
+		});
 		return inventoryList;
 	}
 
@@ -193,5 +180,40 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		return itemSkuMapperExt.querySaleableSkus();
 	}
 	
+	@Override
+	public Integer queryItemCountByUpc(String upc) {
+		return itemSkuMapperExt.queryItemCountByUpc(upc);
+	}
+	
+	@Override
+	public List<ItemSkuDO> querySkuListByItemCode(String itemCode) {
+		return itemSkuMapperExt.querySkuListByItemCode(itemCode);
+	}
+	
+	@Override
+	public List<ItemSkuDO> queryItemSkuListSelective(ItemSkuQueryVO itemSkuQueryVO) {
+		return itemSkuMapperExt.queryItemSkuListSelective(itemSkuQueryVO);
+	}
+	
+	@Override
+	public void deleteItemSkuBySkuCode(String skuCode) {
+		 itemSkuMapperExt.deleteItemSkuBySkuCode(skuCode);
+	}
+	
+	@Override
+	public void insertItemSkuSelective(ItemSkuDO itemSkuDO) {
+		itemSkuMapperExt.insertItemSkuSelective(itemSkuDO);
+	}
+	
+	@Override
+	public String querySkuCodeById(Long id) {
+		return itemSkuMapperExt.querySkuCodeById(id);
+	}
+
+	@Override
+	public List<ItemSkuDO> queryByItemCodeAndCompanyNo(String itemCode, String loginUserCompanyNo) {
+		return itemSkuMapperExt.queryByItemCodeAndCompanyNo(itemCode,loginUserCompanyNo);
+	}
+
 }
 

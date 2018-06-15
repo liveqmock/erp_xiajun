@@ -35,12 +35,6 @@ public class MallCustomerDO extends BaseModel {
 
     private Long lastLoginDevice;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
-
     private String creator;
 
     private String modifier;
@@ -177,30 +171,6 @@ public class MallCustomerDO extends BaseModel {
 
     public void setLastLoginDevice(Long lastLoginDevice) {
         this.lastLoginDevice = lastLoginDevice;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

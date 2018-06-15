@@ -10,5 +10,5 @@ public interface MallCustomerDOMapperExt extends MallCustomerDOMapper {
 
     MallCustomerDO selectByOpenId(@Param("openId") String openId);
 
-    List<MallCustomerDO> selectByRole(Integer role);
+    List<MallCustomerDO> selectByRole(@Param("role")Integer role);
 }

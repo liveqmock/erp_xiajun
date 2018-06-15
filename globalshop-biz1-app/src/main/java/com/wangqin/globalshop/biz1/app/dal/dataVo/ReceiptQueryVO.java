@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
 import java.util.Date;
+import com.wangqin.globalshop.biz1.app.vo.PageQueryVO;
 
 public class ReceiptQueryVO extends PageQueryVO {
 	private String receiptNo;

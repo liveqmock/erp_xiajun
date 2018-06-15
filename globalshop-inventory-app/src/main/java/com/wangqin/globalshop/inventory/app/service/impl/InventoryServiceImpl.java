@@ -8,9 +8,11 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.java2d.opengl.OGLContext;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author biscuit
@@ -37,25 +39,83 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     /**
-     * 入库
+     * 采购入库
      *
      * @param inventory
      * @param warehouseNo
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void outbound(InventoryDO inventory, String warehouseNo,String positionNo) {
-
-        /**1增加库存库存*/
-        insertInv(inventory, inventory.getInv());
-        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, warehouseNo,positionNo);
-        if (wareHouseDO == null){
+    public void outbound(InventoryDO inventory, String warehouseNo, String positionNo) {
+        Long inv = inventory.getInv();
+        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, inv, warehouseNo, positionNo);
+        inventory = mapper.queryBySkuCodeAndItemCode(inventory.getSkuCode(), inventory.getItemCode());
+        /**1增加实际库存*/
+        inventory.setInv(inventory.getInv() + inv);
+        inventory.update();
+        /**减少虚拟库存  保证可售不变*/
+        Long virtualInv = inventory.getVirtualInv();
+        if (virtualInv != 0) {
+            if (virtualInv < inv) {
+                inventory.setVirtualInv(0L);
+            } else {
+                inventory.setVirtualInv(virtualInv - inv);
+            }
+        }
+        mapper.updateByPrimaryKeySelective(inventory);
+        if (wareHouseDO == null) {
             throw new ErpCommonException("找不到对应的商品,入库失败");
         }
+
         /**2根据InventoryOnWareHouseDO和InventoryDO生成流水*/
         Integer opeatory = 101;
-        saveInventoryInOut(inventory, wareHouseDO, opeatory, inventory.getInv(), "采购入库");
+        saveInventoryInOut(inventory, wareHouseDO, opeatory, inv, "采购入库");
 
+
+    }
+
+    /**
+     * 退货
+     *
+     * @param orderDO
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void returns(MallSubOrderDO orderDO, Long inv) {
+        /**修改库存*/
+        InventoryDO inventory = mapper.queryBySkuCode(orderDO.getSkuCode());
+        if (inventory == null) {
+            throw new ErpCommonException("找不到相关库存");
+        }
+        inventory.setInv(inventory.getInv() + inv);
+        inventory.update();
+        mapper.updateByPrimaryKeySelective(inventory);
+        /**更新相关Inventory*/
+        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNo(orderDO.getCompanyNo(), orderDO.getSkuCode(), orderDO.getWarehouseNo());
+        if (wareHouseDO == null) {
+            throw new ErpCommonException("找不到相关库存");
+        }
+        wareHouseDO.update();
+        invOnWarehouseMapperExt.updateByPrimaryKeySelective(wareHouseDO);
+        /**修改流水*/
+        Integer opeatory = 102;
+        saveInventoryInOut(inventory, wareHouseDO, opeatory, inv, "退货入库");
+    }
+
+
+    /**
+     * 预售入库
+     *
+     * @param list
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void outbound(List<InventoryDO> list) {
+        for (InventoryDO aDo : list) {
+            /**1增加库存库存*/
+            aDo.init();
+            mapper.insertSelective(aDo);
+        }
 
     }
 
@@ -86,10 +146,10 @@ public class InventoryServiceImpl implements InventoryService {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
         if (inventoryDO == null) {
-            throw new ErpCommonException("不存在该商品，下单失败");
+            throw new ErpCommonException("库存不足，下单失败");
         }
 
-        if (inventoryDO.getInv() + inventoryDO.getLockedTransInv() - inventoryDO.getLockedInv() >= mallSubOrderDO.getQuantity()) {
+        if (inventoryDO.getInv() + inventoryDO.getVirtualInv() - inventoryDO.getLockedInv() >= mallSubOrderDO.getQuantity()) {
             /**修改库存占用*/
             inventoryDO.setLockedInv(inventoryDO.getLockedInv() + mallSubOrderDO.getQuantity());
             mapper.updateByPrimaryKeySelective(inventoryDO);
@@ -101,6 +161,20 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     /**
+     * 下单
+     *
+     * @param outerOrderDetails
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void order(List<MallSubOrderDO> outerOrderDetails) {
+        for (MallSubOrderDO detail : outerOrderDetails) {
+            order(detail);
+        }
+
+    }
+
+    /**
      * 取消订单
      *
      * @param mallSubOrderDO
@@ -108,9 +182,8 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void release(MallSubOrderDO mallSubOrderDO) {
-        /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
-        if (inventoryDO == null){
+        if (inventoryDO == null) {
             throw new ErpCommonException("找不到对应的库存");
         }
         /**修改库存占用*/
@@ -163,36 +236,31 @@ public class InventoryServiceImpl implements InventoryService {
      * @param orderDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
-    public void ship(MallSubOrderDO orderDO) {
+    public void ship(MallSubOrderDO orderDO) throws ErpCommonException {
         /**修改库存  和  库存占用*/
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(orderDO.getSkuCode(), orderDO.getItemCode());
-        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - orderDO.getQuantity());
-        inventoryDO.setInv(inventoryDO.getInv() - orderDO.getQuantity());
+        InventoryDO inventoryDO = mapper.queryBySkuCode(orderDO.getSkuCode());
+        /**
+         * 库存逻辑
+         * */
+        Integer quantity = orderDO.getQuantity();
+        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - quantity);
+        long inv = inventoryDO.getInv() - quantity;
+        if (inv < 0){
+            throw new ErpCommonException("库存不足,不允许发货");
+        }
+        inventoryDO.setInv(inv);
         mapper.updateByPrimaryKeySelective(inventoryDO);
         /**更新相关InventoryOnWareHouse*/
-        // TODO: 18.6.4
-        InventoryOnWareHouseDO warehouseDO = null;
+        /**发货*/
+        Map<InventoryOnWareHouseDO, Long> map = invOnWarehouseService.ship(inventoryDO, Long.valueOf(quantity));
         /**生成流水*/
         Integer opeatory = 201;
-        saveInventoryInOut(inventoryDO, warehouseDO, opeatory, inventoryDO.getInv(), "发货出库");
-        /**绑定shipping_order*/
-        // TODO: 18.6.4
-
-
-    }
-
-    /**
-     * 退货
-     *
-     * @param mallReturnOrderDO
-     */
-    @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
-    public void returns(MallReturnOrderDO mallReturnOrderDO) {
-        /**修改库存*/
-        /**更新相关Inventory*/
-        /**修改流水*/
+        for (InventoryOnWareHouseDO houseDO : map.keySet()) {
+            orderDO.setWarehouseNo(houseDO.getWarehouseNo());
+            orderDO.update();
+            mallSubOrderMapper.updateByPrimaryKeySelective(orderDO);
+            saveInventoryInOut(inventoryDO, houseDO, opeatory, map.get(houseDO), "发货出库");
+        }
     }
 
 
@@ -204,7 +272,53 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void outOfStorehouse(InventoryOutManifestDO outManifestDO) {
+//        outManifestMapper
+        List<InventoryOutManifestDetailDO> list = outManifestDetailDOMapper.selectByOutNo(outManifestDO.getInventoryOutNo());
+        outOfWarehouse(list);
+    }
 
+    /**
+     * 提供给sku修改的时候修改虚拟库存
+     *
+     * @param outManifestDO
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void updateVirtualInv(String skuCode, Long virInv, String companyNo) {
+        /**如果virInv 为负数  不允许修改*/
+        if (virInv < 0){
+            throw new ErpCommonException("虚拟库存必须大于0");
+
+        }
+        /**查出对应库存的仓库记录*/
+        InventoryDO inventory =  mapper.queryBySkuCodeAndCompanyNo(skuCode,companyNo);
+        Long inv = inventory.getInv() - inventory.getLockedInv();
+        if (inv < virInv){
+            throw new ErpCommonException("当前允许虚拟库存最小值为"+inv);
+        }
+        inventory.setVirtualInv(virInv);
+        mapper.updateByPrimaryKey(inventory);
+
+    }
+
+    private void outOfWarehouse(List<InventoryOutManifestDetailDO> list) {
+        for (InventoryOutManifestDetailDO aDo : list) {
+            /**修改库存*/
+            InventoryDO inventory = mapper.queryBySkuCodeAndItemCode(aDo.getSkuCode(), aDo.getItemCode());
+            long inv = inventory.getInv() - aDo.getQuantity();
+            if (inv < 0) {
+                throw new ErpCommonException("库存不足，出库失败");
+            }
+            inventory.setInv(inv);
+            mapper.updateByPrimaryKeySelective(inventory);
+            /**分库存*/
+            Map<InventoryOnWareHouseDO, Long> map = invOnWarehouseService.ship(inventory, Long.valueOf(aDo.getQuantity()));
+            /**生成流水*/
+            Integer opeatory = 201;
+            for (InventoryOnWareHouseDO houseDO : map.keySet()) {
+                saveInventoryInOut(inventory, houseDO, opeatory, map.get(houseDO), "出库单出库");
+            }
+        }
     }
 
     /**
@@ -232,12 +346,11 @@ public class InventoryServiceImpl implements InventoryService {
             ItemSkuDO itemSkuDO = itemSkuMapper.queryItemBySkuCode(inventoryDO.getSkuCode());
             inventoryDO.setItemName(itemSkuDO.getItemName());
             inventoryDO.setUpc(itemSkuDO.getUpc());
-            inventoryDO.setCompanyNo("InventoryServiceImpl4545");
             inventoryDO.init();
             mapper.insertSelective(inventoryDO);
         } else {
             inventory.setInv(inventory.getInv() + inv);
-            inventory.setGmtModify(new Date());
+            inventory.update();
             mapper.updateByPrimaryKeySelective(inventory);
         }
 

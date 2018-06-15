@@ -53,22 +53,23 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 
     @Override
     public int insert(AuthResourceDO resourceDO) {
-        return 0;
+    	resourceDO.init();
+        return resourceMapper.insertSelective(resourceDO);
     }
 
     @Override
     public AuthResourceDO selectById(Long id) {
-        return null;
+        return resourceMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public int updateSelectiveById(AuthResourceDO resourceDO) {
-        return 0;
+        return resourceMapper.updateByPrimaryKeySelective(resourceDO);
     }
 
     @Override
     public int deleteById(Long id) {
-        return 0;
+        return resourceMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -181,5 +182,45 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 //		return resCodes;
 //	}
 
-    
+    @Override
+    public List<AuthResourceDO> queryResourceList()
+    {
+//        EntityWrapper<AuthResourceDO> wrapper = new EntityWrapper<AuthResourceDO>();
+//        wrapper.orderBy("seq");
+//        return resourceMapper.selectList(wrapper);
+        return resourceMapper.selectList();
+    }
+
+    @Override
+    public List<AuthResourceDO> queryResourceTree(Long pid) {
+        List<AuthResourceDO> listParent = queryResourceByPid(pid);
+
+//        if ((null != listParent) && (listParent.size() > 0)) {
+//
+//            listParent.forEach(resourceHai -> {
+//                resourceHai.setChildList(queryResourceTree(resourceHai.getId()));
+//            });
+//        }
+
+        return listParent;
+    }
+
+    /**
+     * 递归调用获取子级资源
+     * @param pid
+     * @return
+     */
+    private List<AuthResourceDO> queryResourceByPid(Long pid) {
+//        EntityWrapper<AuthResourceDO> wrapper = new EntityWrapper<AuthResourceDO>();
+//        AuthResourceDO resource = new AuthResourceDO();
+//        wrapper.setEntity(resource);
+//        if (null == pid) {
+//            wrapper.where("pid is null", pid);
+//        } else {
+//            wrapper.where("pid = {0}", pid);
+//        }
+//        wrapper.orderBy("seq");
+//        return resourceMapper.selectList(wrapper);
+        return resourceMapper.selectList();
+    }
 }

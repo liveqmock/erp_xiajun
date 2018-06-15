@@ -7,12 +7,9 @@
     <result column="increment" property="increment" jdbcType="INTEGER" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    name, current_value, increment, modifier, creator, gmt_modify, gmt_create, is_del
+    name, current_value, increment, modifier, creator
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -26,11 +23,9 @@
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SequenceDO" >
     insert into sequence (name, current_value, increment, 
-      modifier, creator, gmt_modify, 
-      gmt_create, is_del)
+      modifier, creator)
     values (#{name,jdbcType=VARCHAR}, #{currentValue,jdbcType=INTEGER}, #{increment,jdbcType=INTEGER}, 
-      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER})
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SequenceDO" >
     insert into sequence
@@ -50,15 +45,6 @@
       <if test="creator != null" >
         creator,
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
@@ -75,15 +61,6 @@
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -102,15 +79,6 @@
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=INTEGER},
-      </if>
     </set>
     where name = #{name,jdbcType=VARCHAR}
   </update>
@@ -119,10 +87,7 @@
     set current_value = #{currentValue,jdbcType=INTEGER},
       increment = #{increment,jdbcType=INTEGER},
       modifier = #{modifier,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=INTEGER}
+      creator = #{creator,jdbcType=VARCHAR}
     where name = #{name,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -1,23 +1,36 @@
 package com.wangqin.globalshop.order.app.controller.shipping;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
-
-import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
+import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.common.enums.StockUpStatus;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.PicModel;
+import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
+import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
+import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import com.wangqin.globalshop.order.app.service.sifang.ISiFangService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -28,48 +41,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.Barcode128;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
-import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
-import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
-import com.wangqin.globalshop.common.enums.OrderStatus;
-import com.wangqin.globalshop.common.enums.StockUpStatus;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.PicModel;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.*;
+import java.util.List;
 
 /**
  * @author biscuits
@@ -77,12 +59,13 @@ import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
  */
 @Controller
 @RequestMapping("/shippingOrder")
+@Authenticated
 public class ShippingOrderController {
 
     @Autowired
-    private IShippingOrderService    shippingOrderService;
+    private IShippingOrderService shippingOrderService;
     @Autowired
-    private IMallSubOrderService     mallSubOrderService;
+    private IMallSubOrderService mallSubOrderService;
     @Autowired
     private ISiFangService siFangService;
     @Autowired
@@ -100,7 +83,7 @@ public class ShippingOrderController {
      * @param shippingOrderDo 前台界面传输过来的
      */
     public Object query(ShippingOrderVO shippingOrderVO) {
-        JsonResult<List<ShippingOrderDO>> result;
+        JsonResult<List<ShippingOrderDO>> result = new JsonResult<>();
         if (shippingOrderVO.getStartOrderTime() != null) {
             String startOrderTimeStr = DateUtil.ymdFormat(shippingOrderVO.getStartOrderTime());
             Date startOrderTime = DateUtil.parseDate(startOrderTimeStr + " 00:00:00");
@@ -125,142 +108,79 @@ public class ShippingOrderController {
         // shippingOrderQueryVO.setOpenId(seller.getOpenId());
         // }
         // }
-        result = shippingOrderService.queryShippingOrders(shippingOrderVO);
+        List<ShippingOrderDO> list = shippingOrderService.queryShippingOrders(shippingOrderVO);
         // if(roles.contains("irhdaili")) {
         // result.setAgentRoler(true);
         // }
+        result.buildData(list);
         result.setSuccess(true);
         return result;
     }
 
-    @RequestMapping(value = "/query", method = RequestMethod.POST)
-    @ResponseBody
-    /**
-     * @param shippingOrderDo 前台界面传输过来的
-     */
-    public Object query(String shippingOrderVO) {
-        ShippingOrderVO orderVO = JSON.parseObject(shippingOrderVO, ShippingOrderVO.class);
-        JsonResult<List<ShippingOrderDO>> result;
-        if (orderVO.getStartOrderTime() != null) {
-            String startOrderTimeStr = DateUtil.ymdFormat(orderVO.getStartOrderTime());
-            Date startOrderTime = DateUtil.parseDate(startOrderTimeStr + " 00:00:00");
-            orderVO.setStartOrderTime(startOrderTime);
-        }
-        if (orderVO.getEndOrderTime() != null) {
-            String endOrderTimeStr = DateUtil.ymdFormat(orderVO.getEndOrderTime());
-            Date endOrderTime = DateUtil.parseDate(endOrderTimeStr + " 23:59:59");
-            orderVO.setEndOrderTime(endOrderTime);
-        }
-        // 如果是代理
-        // ShiroUser shiroUser = this.getShiroUser();
-        // Set<String> roles = shiroUser.getRoles();
-        // if(roles.contains("irhdaili")) {
-        // String[] logingNameArr = shiroUser.getLoginName().split("_");
-        // if(logingNameArr.length<2 || StringUtils.isBlank(logingNameArr[1])) {
-        // throw new ErpCommonException("用户权限异常");
-        // }
-        // shippingOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
-        // Seller seller = sellerService.selectById(shippingOrderQueryVO.getSalesId());
-        // if(seller.getOpenId()!=null) {
-        // shippingOrderQueryVO.setOpenId(seller.getOpenId());
-        // }
-        // }
-        result = shippingOrderService.queryShippingOrders(orderVO);
-        // if(roles.contains("irhdaili")) {
-        // result.setAgentRoler(true);
-        // }
-        result.setSuccess(true);
-        return result;
-    }
+//    @RequestMapping(value = "/query", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Object query1(ShippingOrderVO orderVO) {
+//        JsonResult<List<ShippingOrderDO>> result;
+//        if (orderVO.getStartOrderTime() != null) {
+//            String startOrderTimeStr = DateUtil.ymdFormat(orderVO.getStartOrderTime());
+//            Date startOrderTime = DateUtil.parseDate(startOrderTimeStr + " 00:00:00");
+//            orderVO.setStartOrderTime(startOrderTime);
+//        }
+//        if (orderVO.getEndOrderTime() != null) {
+//            String endOrderTimeStr = DateUtil.ymdFormat(orderVO.getEndOrderTime());
+//            Date endOrderTime = DateUtil.parseDate(endOrderTimeStr + " 23:59:59");
+//            orderVO.setEndOrderTime(endOrderTime);
+//        }
+//        // 如果是代理
+//        // ShiroUser shiroUser = this.getShiroUser();
+//        // Set<String> roles = shiroUser.getRoles();
+//        // if(roles.contains("irhdaili")) {
+//        // String[] logingNameArr = shiroUser.getLoginName().split("_");
+//        // if(logingNameArr.length<2 || StringUtils.isBlank(logingNameArr[1])) {
+//        // throw new ErpCommonException("用户权限异常");
+//        // }
+//        // shippingOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
+//        // Seller seller = sellerService.selectById(shippingOrderQueryVO.getSalesId());
+//        // if(seller.getOpenId()!=null) {
+//        // shippingOrderQueryVO.setOpenId(seller.getOpenId());
+//        // }
+//        // }
+//        result = shippingOrderService.queryShippingOrders(orderVO);
+//        // if(roles.contains("irhdaili")) {
+//        // result.setAgentRoler(true);
+//        // }
+//        result.setSuccess(true);
+//        return result;
+//    }
 
     // 合单发货表单
     @RequestMapping("/multiDeliveryForm")
     @ResponseBody
-    public Object multiDeliveryForm(String erpOrderId) throws InventoryException {
-        JsonResult<MultiDeliveryFormDTO> result = new JsonResult<>();
-
+    public Object multiDeliveryForm(String erpOrderId) {
+        JsonResult<MultiDeliveryFormDTO> result = new JsonResult();
+//        shippingOrderService.ship(erpOrderId);
+        MultiDeliveryFormDTO dto = null;
         try {
-            result.setData(shippingOrderService.queryByOrderId(erpOrderId));
-            result.buildIsSuccess(true);
+            dto = shippingOrderService.queryByOrderId(erpOrderId);
         } catch (ErpCommonException e) {
             result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
         }
-        return result;
+        return result.buildData(dto).buildIsSuccess(true);
     }
 
     // 合单发货(将多个子订单合并成一个包裹)
     @RequestMapping("/multiDelivery")
     @ResponseBody
-    public Object multiDelivery(ShippingOrderDO shippingOrder) throws InventoryException {
+    @Transactional
+    public Object multiDelivery(ShippingOrderDO shippingOrder) {
         JsonResult<String> result = new JsonResult<>();
-        if (StringUtils.isNotBlank(shippingOrder.getMallOrders())) {
-            // ShiroUser shiroUser = this.getShiroUser();
-            // shippingOrder.setUserCreate(shiroUser.getLoginName());
-
-            if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐")) {
-                List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
-                if (ErpOrderList.size() > 1) {
-                    throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
-                }
-                if (ErpOrderList.get(0).getQuantity() > 1) {
-                    throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
-                }
-                if (StringUtils.isEmpty(ErpOrderList.get(0).getIdCard())) {
-                    throw new ErpCommonException("海狐物流发货单号缺少身份证信息");
-                }
-            }
-            try {
-                Set<String> mainIds = shippingOrderService.multiDelivery(shippingOrder);
-                // 更新主订单发货状态
-                if (CollectionUtils.isNotEmpty(mainIds)) {
-                    shippingOrderService.updateOuterstatus(mainIds);
-                }
-                // //对接邮客
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("邮客")) {
-                // youkeService.createOrder(shippingOrder.getId());
-                // }
-                // //对接运通快递
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("运通快递")) {
-                // yunTongService.createOrder(shippingOrder.getId());
-                // }
-                // //对接海狐
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐")) {
-                // haihuService.createOrder(shippingOrder.getId());
-                // }
-                // //对接海狐联邦转运
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")) {
-                // haihuService.returnPackageNo(shippingOrder);
-                //
-                // }
-                // //对接美国转运四方
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("4PX")) {
-                // siFangService.createOrder(shippingOrder.getId());
-                // }
-                // //对接联邦
-                // if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("联邦转运")) {
-                // fadRoadService.createOrder(shippingOrder.getId());
-                // }
-                // //直接选择顺丰或者韵达快递补全status = 4特殊国内物流轨迹
-                // if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("顺丰")||
-                // shippingOrder.getLogisticCompany().equals("韵达"))) {
-                // ShippingTrack shippingTrack = new ShippingTrack();
-                // shippingTrack.setGmtCreate(new Date());
-                // shippingTrack.setGmtModify(new Date());
-                // shippingTrack.setStatus(4);
-                // shippingTrack.setLogisticNo(shippingOrder.getLogisticNo());
-                // shippingTrack.setInlandExpressId(shippingOrder.getLogisticCompany());
-                // shippingTrack.setInlandExpressNo(shippingOrder.getLogisticNo());
-                // shippingTrack.setShippingNo(shippingOrder.getShippingNo());
-                // shippingTrackMapper.insert(shippingTrack);
-                // }
-                result.buildIsSuccess(true);
-            } catch (ErpCommonException e) {
-                result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
-            }
-        } else {
-            result.buildMsg("错误数据").buildIsSuccess(false);
+        try {
+            shippingOrderService.ship(shippingOrder);
+        } catch (ErpCommonException e) {
+            result.buildMsg(e.getMessage()).buildIsSuccess(false);
         }
-        return result;
+
+        return result.buildMsg("发货成功").buildIsSuccess(true);
     }
 
     // 批量发货表单(检查是否有需要合单发货的，检查是否有需要等待一起合单发货的)
@@ -282,9 +202,9 @@ public class ShippingOrderController {
                     throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getShopCode());
                 }
                 if (StringUtils.isBlank(erpOrder.getReceiver()) || StringUtils.isBlank(erpOrder.getTelephone())
-                    || StringUtils.isBlank(erpOrder.getReceiverState())
-                    || StringUtils.isBlank(erpOrder.getReceiverCity())
-                    || StringUtils.isBlank(erpOrder.getReceiverDistrict())) {
+                        || StringUtils.isBlank(erpOrder.getReceiverState())
+                        || StringUtils.isBlank(erpOrder.getReceiverCity())
+                        || StringUtils.isBlank(erpOrder.getReceiverDistrict())) {
                     throw new ErpCommonException("收货人地址不能为空：" + erpOrder.getShopCode());
                 }
                 MallSubOrderDO tjErpOrder = new MallSubOrderDO();
@@ -304,7 +224,7 @@ public class ShippingOrderController {
                     MallSubOrderDO selErpOrder = selErpOrderList.get(i);
                     // 不在同一仓库的情况，不用考虑
                     if (selErpOrder.getWarehouseNo() != null
-                        && selErpOrder.getWarehouseNo() != erpOrder.getWarehouseNo()) {
+                            && selErpOrder.getWarehouseNo() != erpOrder.getWarehouseNo()) {
                         continue;
                     }
                     // 在同一个仓库，已备货
@@ -441,7 +361,7 @@ public class ShippingOrderController {
             // yunTongService.createOrder(shippingOrder.getId());
             // } else
             if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("4PX")
-                && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接4PX
+                    && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接4PX
                 message = siFangService.createOrder(shippingOrder.getShippingNo());
             }
             // else if(shippingOrder.getLogisticCompany()!=null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")
@@ -452,7 +372,7 @@ public class ShippingOrderController {
             // fadRoadService.createOrder(shippingOrder.getId());
             // }
             else if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐")
-                     && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接海狐
+                    && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接海狐
                 List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
                 if (ErpOrderList.size() > 1) {
                     throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
@@ -464,7 +384,7 @@ public class ShippingOrderController {
                     haihuService.createOrder(shippingOrder.getId());
                 }
             } else if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")
-                       && StringUtil.isBlank(shippingOrder.getLogisticNo())) {
+                    && StringUtil.isBlank(shippingOrder.getLogisticNo())) {
                 haihuService.returnPackageNo(shippingOrder);
             }
             // else if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("顺丰")||
@@ -549,7 +469,7 @@ public class ShippingOrderController {
         lineParagraph.setSpacingBefore(0);
         lineParagraph.setSpacingAfter(2);
         // =========虚线end===================
-        float[] tableWidths = { 0.65f, 0.27f, 0.08f };
+        float[] tableWidths = {0.65f, 0.27f, 0.08f};
 
         String s = shippingOrderIds.replace("&quot;", "\"");
         List<Long> shippingOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
@@ -577,7 +497,7 @@ public class ShippingOrderController {
 
             // ===地址start
             Paragraph addressParagraph = new Paragraph("姓名：" + shippingOrder.getReceiver() + "   电话："
-                                                       + shippingOrder.getTelephone(), FontChinese_18);
+                    + shippingOrder.getTelephone(), FontChinese_18);
             addressParagraph.setLeading(22);
             addressParagraph.setSpacingBefore(5);
             document.add(addressParagraph);
@@ -708,11 +628,11 @@ public class ShippingOrderController {
             }
         }
         ExcelHelper excelHelper = new ExcelHelper();
-        String[] columnTitles = new String[] { "SKU编号", "商品名称", "商品图片", "颜色", "尺码", "品牌", "商品条码", "发货数量", "发货时间", "销售员",
-                                               "子订单编号", "小程序客户", "收件人", "手机", "省", "市", "区", "详细地址", "仓库", "包裹号",
-                                               "物流公司", "渠道方式", "物流单号", "发货方式" };
-        Integer[] columnWidth = new Integer[] { 25, 25, 15, 20, 20, 20, 20, 20, 20, 20, 25, 20, 20, 20, 20, 20, 20, 20,
-                                                20, 25, 20, 20, 20, 20 };
+        String[] columnTitles = new String[]{"SKU编号", "商品名称", "商品图片", "颜色", "尺码", "品牌", "商品条码", "发货数量", "发货时间", "销售员",
+                "子订单编号", "小程序客户", "收件人", "手机", "省", "市", "区", "详细地址", "仓库", "包裹号",
+                "物流公司", "渠道方式", "物流单号", "发货方式"};
+        Integer[] columnWidth = new Integer[]{25, 25, 15, 20, 20, 20, 20, 20, 20, 20, 25, 20, 20, 20, 20, 20, 20, 20,
+                20, 25, 20, 20, 20, 20};
 
         excelHelper.setShippingOrderToSheet("Shipping Order", columnTitles, rowDatas, columnWidth);
         // excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
@@ -766,9 +686,9 @@ public class ShippingOrderController {
             }
         }
         ExcelHelper excelHelper = new ExcelHelper();
-        String[] columnTitles = new String[] { "包裹单号", "物流公司", "预估物流费用", "商品净重(磅)", "收货人", "省", "市", "区", "详细地址",
-                                               "联系电话", "身份证", "创建者", "创建时间" };
-        Integer[] columnWidth = new Integer[] { 25, 25, 15, 20, 20, 20, 20, 20, 25, 20, 25, 20, 20 };
+        String[] columnTitles = new String[]{"包裹单号", "物流公司", "预估物流费用", "商品净重(磅)", "收货人", "省", "市", "区", "详细地址",
+                "联系电话", "身份证", "创建者", "创建时间"};
+        Integer[] columnWidth = new Integer[]{25, 25, 15, 20, 20, 20, 20, 20, 25, 20, 25, 20, 20};
         excelHelper.setShippingOrderPackageToSheet("Shipping Order Detail", columnTitles, rowDatas, columnWidth);
         // excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
 
@@ -797,8 +717,8 @@ public class ShippingOrderController {
         erpOrderList.forEach(erpOrder -> {
             // 拼邮、备货状态(已备货)、子订单状态(新建)
             if (erpOrder.getLogisticType() != null && erpOrder.getLogisticType() == 1
-                && erpOrder.getStockStatus() == StockUpStatus.STOCKUP.getCode()
-                && erpOrder.getStatus() == OrderStatus.INIT.getCode()) {
+                    && erpOrder.getStockStatus() == StockUpStatus.STOCKUP.getCode()
+                    && erpOrder.getStatus() == OrderStatus.INIT.getCode()) {
                 erpOrder.setStockStatus(StockUpStatus.PREPARE.getCode());
                 mallSubOrderService.update(erpOrder);
             } else {
@@ -834,30 +754,30 @@ public class ShippingOrderController {
             return result.buildIsSuccess(false).buildMsg("未知异常");
         }
     }
+//
+//    /**
+//     * 运通接口测试
+//     *
+//     * @param id
+//     * @return
+//     */
+//    @RequestMapping("/yuntongTest")
+//    public void queryLogisticCompany(Long id) {
+//        // yunTongService.createOrder(4800l);
+//    }
 
-    /**
-     * 运通接口测试
-     * 
-     * @param id
-     * @return
-     */
-    @RequestMapping("/yuntongTest")
-    public void queryLogisticCompany(Long id) {
-        // yunTongService.createOrder(4800l);
-    }
-
-    /**
-     * 邮客接口测试
-     */
-    @RequestMapping("/youkeTest")
-    public void youkeTest() {
-        // youkeService.createOrder(2l);
-        // youkeService.inboundStatus("PKG17062502002910007");
-        // youkeService.orderStatus("1739255020");
-        // EntityWrapper<ShippingOrderDO> entityWrapper = new EntityWrapper<>();
-        ShippingOrderDO Order = shippingOrderService.selectByShippingNO("PKG17062710132810022");
-        // haihuService.returnPackageNo(Order);
-    }
+//    /**
+//     * 邮客接口测试
+//     */
+//    @RequestMapping("/youkeTest")
+//    public void youkeTest() {
+//        // youkeService.createOrder(2l);
+//        // youkeService.inboundStatus("PKG17062502002910007");
+//        // youkeService.orderStatus("1739255020");
+//        // EntityWrapper<ShippingOrderDO> entityWrapper = new EntityWrapper<>();
+//        ShippingOrderDO Order = shippingOrderService.selectByShippingNO("PKG17062710132810022");
+//        // haihuService.returnPackageNo(Order);
+//    }
 
     /**
      * 批量订正主订单状态
@@ -912,7 +832,7 @@ public class ShippingOrderController {
 
     /**
      * 邮客接口测试
-     * 
+     *
      * @throws ParseException
      */
     @RequestMapping("/FadroadTest")
@@ -923,7 +843,7 @@ public class ShippingOrderController {
 
     /**
      * 完整物流轨迹详情展示
-     * 
+     *
      * @param shippingNo
      * @return
      */
@@ -1004,7 +924,7 @@ public class ShippingOrderController {
 
     class CustomDashedLineSeparator extends DottedLineSeparator {
 
-        protected float dash  = 5;
+        protected float dash = 5;
         protected float phase = 2.5f;
 
         public float getDash() {

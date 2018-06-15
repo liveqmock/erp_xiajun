@@ -71,6 +71,9 @@
 			<if test="positionNo!=null and positionNo!=''">
 				and shelf_no = #{positionNo}
 			</if>
+			<if test="companyNo!=null and companyNo!=''">
+				and company_no = #{companyNo}
+			</if>
 		</where>
 
     </select>

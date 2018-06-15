@@ -76,7 +76,7 @@
     
     <sql id="Base_Column_List" >
         T1.id,  T1.sku_code,  T1.item_code,  T1.item_name,  T1.company_no,  T1.category_code, 
-         T1.category_name,  T1.upc,T1.saleable,  T1.purchase_price,  T1.freight, 
+         T1.category_name,  T1.upc, T1.saleable,  T1.purchase_price,  T1.freight, 
           T1.discount,  T1.logistic_type,  T1.cost_price,  T1.brand_name,
          T1.weight,  T1.sku_pic,  T1.package_code,  T1.package_name,  T1.package_en, 
          T1.package_weight,  T1.package_level_id,
@@ -102,7 +102,13 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
-              <if test=" itemName != null and itemName != '' ">
+            <if test=" categoryCode != null and categoryCode != '' ">
+                and T1.category_code = #{categoryCode}
+            </if>
+            <if test=" companyNo != null and companyNo != '' ">
+                and T1.company_no = #{companyNo}
+            </if>
+            <if test=" itemName != null and itemName != '' ">
                 and T1.item_name LIKE concat('%',#{itemName},'%')
             </if>
             <if test=" itemCode != null and itemCode != '' ">
@@ -130,7 +136,8 @@
         SELECT
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
-        	 T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,
+        	 T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,
+        	 T1.sku_code AS skuCode,T1.sale_price AS salePrice,T1.gmt_modify AS gmtModify,
              inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
 			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
@@ -139,7 +146,13 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
-              <if test=" itemName != null and itemName != '' ">
+            <if test=" categoryCode != null and categoryCode != '' ">
+                and T1.category_code = #{categoryCode}
+            </if>
+            <if test=" companyNo != null and companyNo != '' ">
+                and T1.company_no = #{companyNo}
+            </if>
+            <if test=" itemName != null and itemName != '' ">
                 and T1.item_name LIKE concat('%',#{itemName},'%')
             </if>
             <if test=" itemCode != null and itemCode != '' ">
@@ -163,6 +176,22 @@
             </if>
           order by T1.id desc
           	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+    
+    <!-- 根据条件查询itemSkuList，不涉及其他的表 ，不做分页-->
+     <select id="queryItemSkuListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
+        SELECT
+        	 T1.sku_code AS skuCode
+        FROM
+            item_sku T1
+        where
+           T1.is_del=0
+            <if test=" companyNo != null and companyNo != '' ">
+                and T1.company_no = #{companyNo}
+            </if>
+            <if test=" itemCode != null and itemCode != '' ">
+               and T1.item_code = #{itemCode}
+            </if>
     </select>
     
     <!-- 通过skuCode查找单个sku -->
@@ -195,6 +224,9 @@
       </if>
       <if test="upc != null" >
         upc = #{upc},
+      </if>
+      <if test="packageLevelId != null" >
+        package_level_id = #{packageLevelId},
       </if>
       <if test="weight != null" >
         weight = #{weight},
@@ -280,35 +312,226 @@
      SELECT
         <include refid="Base_Column_List" />
         FROM
-            item_sku
+            item_sku T1
         where
-           sku_code = #{skuCode}
+           T1.sku_code = #{skuCode}
 </select>
 
-
-   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
-        <selectKey resultType="long" keyProperty="id" order="AFTER">
+<!-- 批量插入sku -->
+<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+  <selectKey resultType="long" keyProperty="id" order="AFTER">
             SELECT
             LAST_INSERT_ID()
         </selectKey>
         insert into item_sku
-        (sku_code,item_code,item_name,company_no,upc,creator,modifier)
+        (sku_code,cost_price,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
             separator=",">
             (
-            #{wdSolr.skuCode},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
-            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier}
+            #{wdSolr.skuCode}, #{wdSolr.costPrice},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
+            #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice},
+            #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId}
             )
         </foreach>
-    </insert>
+</insert>
 
-<!-- 删除sku -->
+<!-- 插入单个sku -->
+   <insert id="insertItemSkuSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
+    insert into item_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="skuCode != null" >
+        sku_code,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="categoryCode != null" >
+        category_code,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="upc != null" >
+        upc,
+      </if>
+      <if test="saleable != null" >
+        saleable,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="freight != null" >
+        freight,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="logisticType != null" >
+        logistic_type,
+      </if>
+      <if test="costPrice != null" >
+        cost_price,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="skuPic != null" >
+        sku_pic,
+      </if>
+      <if test="packageCode != null" >
+        package_code,
+      </if>
+      <if test="packageName != null" >
+        package_name,
+      </if>
+      <if test="packageEn != null" >
+        package_en,
+      </if>
+      <if test="packageWeight != null" >
+        package_weight,
+      </if>
+      <if test="packageLevelId != null" >
+        package_level_id,
+      </if>
+      <if test="scale != null" >
+        scale,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="saleType != null" >
+        sale_type,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="skuCode != null" >
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null" >
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null" >
+        #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="saleable != null" >
+        #{saleable,jdbcType=TINYINT},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="freight != null" >
+        #{freight,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="logisticType != null" >
+        #{logisticType,jdbcType=TINYINT},
+      </if>
+      <if test="costPrice != null" >
+        #{costPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="skuPic != null" >
+        #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="packageCode != null" >
+        #{packageCode,jdbcType=VARCHAR},
+      </if>
+      <if test="packageName != null" >
+        #{packageName,jdbcType=VARCHAR},
+      </if>
+      <if test="packageEn != null" >
+        #{packageEn,jdbcType=VARCHAR},
+      </if>
+      <if test="packageWeight != null" >
+        #{packageWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="packageLevelId != null" >
+        #{packageLevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="saleType != null" >
+        #{saleType,jdbcType=BIT},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+</insert>
+
+    <!-- 删除sku -->
     <update id="deleteById" parameterType="java.lang.Long">
     	update item_sku
     	set is_del=1
     	where id=#{id}
+    </update>
+    
+     <!-- 通过sku_code删除sku -->
+    <update id="deleteItemSkuBySkuCode" parameterType="java.lang.String">
+    	update item_sku
+    	set is_del=1
+    	where sku_code=#{skuCode}
     </update>
 
 
@@ -401,5 +624,35 @@
         T1.weight, T1.sku_pic, T1.package_code, T1.package_name, T1.package_en, T1.package_weight, T1.package_level_id,
         T1.scale, model, T1.sale_type, T1.sale_price, T1.creator, T1.modifier, T1.gmt_create, T1.gmt_modify, T1.is_del
     </sql>
+    
+    <select id="queryItemCountByUpc" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM `item_sku`
+		where upc=#{upc}
+		AND is_del=0
+	</select>
 
+<!-- 根据itemCode查询sku列表 -->
+     <select id="querySkuListByItemCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+     	select  <include refid="Base_Column_List" />
+     	from item_sku T1
+     	where T1.item_code = #{itemCode}
+     	and T1.is_del=0
+     </select>
+     
+     <select id="querySkuCodeById" parameterType="java.lang.Long" resultType="java.lang.String">
+     	SELECT sku_code
+     	FROM item_sku 
+     	<where>
+     		id = #{id}
+     	</where>
+     </select>
+     <select id="queryByItemCodeAndCompanyNo" parameterType="java.lang.String" resultType="java.lang.String">
+     	SELECT  <include refid="Base_Column_List" />
+     	FROM item_sku  T1
+         WHERE
+         T1.company_no = #{companyNo}
+         AND
+         T1.item_code = #{itemCode}
+     </select>
 </mapper>

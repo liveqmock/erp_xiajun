@@ -15,8 +15,22 @@ import java.util.List;
  */
 
 public interface IDealerTypeService {
-
+	
+	DealerTypeDO selectByPrimaryKey(Long id);
+	
     List<DealerTypeDO> list();
 
     void insert(DealerTypeDO sellerType);
+    
+    //查找销售类别
+    DealerTypeDO findDealerType (Long id);
+    
+    //修改销售类别
+    void update(DealerTypeDO dealerType);
+    
+    //删除销售类别
+    void deleteById(DealerTypeDO dealerType);
+    
+    int countRelativeDealerType(String typeCode);
+    
 }

@@ -1,11 +1,16 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.gargoylesoftware.htmlunit.javascript.host.event.UserProximityEvent;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.usercenter.service.IUserRoleService;
+import com.wangqin.globalshop.usercenter.service.IUserService;
+import com.wangqin.globalshop.usercenter.vo.UserVo;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,22 +19,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.usercenter.service.IUserService;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
-import com.wangqin.globalshop.usercenter.vo.UserVo;
+import java.util.*;
 
 /**
  * @description：用户管理
  */
 @Controller
 @RequestMapping("/user")
+@Authenticated
 public class UserController extends BaseController {
 
     @Autowired
     private IUserService userService;
-
+    @Autowired
+    private IUserRoleService userRoleService;
     /**
      * 用户管理页
      *
@@ -93,13 +96,48 @@ public class UserController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public Object add(UserVo userVo) {
+    	
+        AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
+        if (authUserLoginName != null ) {
+            return renderError("用户名已存在!");
+        }
+        String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+
+        userVo.setUserNo(userNo);
+        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
+        userService.insertByVo(userVo);
+        
+        AuthUserDO authUser = userService.selectUserVoByUserNo(userNo);
+        System.out.println(authUser.getId());
+        
+        
+        userVo.setId(authUser.getId());
+        userService.insertByUserVo(userVo);
+        
+        return renderSuccess("添加成功");
+    }
+    /**
+     * 修改用户信息
+     *
+     * @param userVo
+     * @return
+     */
+    @PostMapping("/update")
+    @ResponseBody
+    public Object update(UserVo userVo) {
         AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());
         if (list != null ) {
             return renderError("用户名已存在!");
         }
+        String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+        userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
-        userService.insertByVo(userVo);
-        return renderSuccess("添加成功");
+        userService.updateByVo(userVo);
+        
+        userRoleService.deleteUserRoleByUserId(userVo.getId());
+        userService.insertByUserVo(userVo);
+        
+        return renderSuccess("修改成功");
     }
 
     /**
@@ -129,7 +167,7 @@ public class UserController extends BaseController {
      * @param userVo
      * @return
      */
-    @RequestMapping("/edit")
+    @PostMapping("/edit")
     @ResponseBody
     public Object edit(UserVo userVo) {
         AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());
@@ -184,8 +222,24 @@ public class UserController extends BaseController {
     @RequestMapping("/delete")
     @ResponseBody
     public Object delete(Long id) {
-        userService.deleteUserById(""+id);
+        userService.deleteUserById(id);
+        userRoleService.deleteUserRoleByUserId(id);
+      
         return renderSuccess("删除成功！");
     }
 
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(Long id) {
+        JsonResult<UserQueryVO> result = new JsonResult<>();
+
+        return result.buildData(userService.queryVoById(id)).buildIsSuccess(true);
+    }
+
+    @RequestMapping("/queryList")
+    @ResponseBody
+    public Object queryList(UserQueryVO userQueryVO) {
+        JsonPageResult<List<UserQueryVO>> result = userService.queryUserQueryVOList(userQueryVO);
+        return result.buildIsSuccess(true);
+    }
 }

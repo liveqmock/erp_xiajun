@@ -4,15 +4,19 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,21 +47,34 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
+//    @Transactional
     public void insertByVo(UserVo userVo) {
         AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
-//        user.setCreateTime(new Date());
-        userMapper.insert(user);
-        
+        user.init();
+        user.setName(userVo.getName());
+        user.setSex(userVo.getSex().byteValue());
+        user.setAge(userVo.getAge().byteValue());
+        user.setUserType(userVo.getUserType().byteValue());
+        user.setStatus(userVo.getStatus().byteValue());
+        user.setIsDel(false);
+        userMapper.insertByNoId(user);
+
+    }
+    
+    @Override
+	public void insertByUserVo(UserVo userVo) {
+		// TODO Auto-generated method stub
+		AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
         Long id = user.getId();
         String[] roles = userVo.getRoleIds().split(",");
         AuthUserRoleDO userRole = new AuthUserRoleDO();
-
         for (String string : roles) {
+            userRole.init();
             userRole.setUserId(id);
             userRole.setRoleId(Long.valueOf(string));
-            userRoleMapper.insert(userRole);
+            userRoleMapper.insertByNoId(userRole);
         }
-    }
+	}
 
     @Override
     public UserVo selectVoById(String loginName) {
@@ -68,32 +85,42 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     public void updateByVo(UserVo userVo) {
-        AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
-        if (StringUtils.isBlank(user.getPassword())) {
-            user.setPassword(null);
-        }
-        userMapper.updateByPrimaryKey(user);
+    	
+        AuthUserDO authUser = userMapper.selectByPrimaryKey(userVo.getId());
         
-//        Long id = userVo.getId();
-        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByLoginName(userVo.getLoginName());
-        if (userRoles != null && !userRoles.isEmpty()) {
-            for (AuthUserRoleDO userRole : userRoles) {
-                userRoleMapper.deleteByPrimaryKey(userRole.getId());
-            }
+        authUser.setLoginName(userVo.getLoginName());
+        authUser.setName(userVo.getName());
+        if (StringUtils.isBlank(userVo.getPassword())) {
+            authUser.setPassword(null);
         }
+        
+        authUser.setPassword(userVo.getPassword());
+        authUser.setSex((byte)userVo.getSex().intValue());
+        authUser.setAge((byte)userVo.getAge().intValue());
+        authUser.setUserType((byte)userVo.getUserType().intValue());
+        authUser.setOrganizationId(userVo.getOrganizationId());
+        authUser.setPhone(userVo.getPhone());
+        authUser.setStatus((byte)userVo.getStatus().intValue());
+        authUser.setIsDel(false);
+   
+        
+       
+        userMapper.updateByPrimaryKey(authUser);
+        
+//        System.out.println(userVo.getId());
+//        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByUserId(userVo.getId());
+//        for(AuthUserRoleDO userRole : userRoles) {
+//        	userRole.setRoleId(Long.parseLong(userVo.getRoleIds()));
+//            userRoleMapper.updateByPrimaryKey(userRole);
+//        }
 
-        String[] roles = userVo.getRoleIds().split(",");
-        AuthUserRoleDO userRole = new AuthUserRoleDO();
-        for (String string : roles) {
-//            userRole.setUserId(id);
-            userRole.setRoleId(Long.valueOf(string));
-            userRoleMapper.insert(userRole);
-        }
+        
+        
     }
 
 //    @Override
 //    public void updateSelectiveById(AuthUserDO user) {
-//
+//			
 //    }
 
     @Override
@@ -114,14 +141,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
-    public void deleteUserById(String userNo) {
-        userMapper.deleteByLoginName(userNo);
-        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByLoginName(userNo);
-        if (userRoles != null && !userRoles.isEmpty()) {
-            for (AuthUserRoleDO userRole : userRoles) {
-                userRoleMapper.deleteByPrimaryKey(userRole.getId());
-            }
-        }
+    public void deleteUserById(Long id) {
+    	
+        userMapper.deleteByPrimaryKey(id);
+        
+        
+        
     }
 
 //	@Override
@@ -136,4 +161,35 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //    	return userMapper.selectUserIds();
 //    }
 
+    @Override
+    public UserQueryVO queryVoById(Long id) {
+        return userMapper.queryUserQueryVOById(id);
+    }
+
+    @Override
+    public JsonPageResult<List<UserQueryVO>> queryUserQueryVOList(UserQueryVO userQueryVO) {
+        JsonPageResult<List<UserQueryVO>> userResult = new JsonPageResult<>();
+
+        Integer totalCount = userMapper.queryUsersCount(userQueryVO);
+
+        if ((null != totalCount) && (0L != totalCount)) {
+            userResult.buildPage(totalCount, userQueryVO);
+
+            List<UserQueryVO> users = userMapper.queryUserQueryVOList(userQueryVO);
+            userResult.setData(users);
+        } else {
+            List<UserQueryVO> users = new ArrayList<>();
+            userResult.setData(users);
+        }
+
+        return userResult;
+    }
+
+	@Override
+	public AuthUserDO selectUserVoByUserNo(String userNo) {
+		// TODO Auto-generated method stub
+		return userMapper.selectUserVoByUserNo(userNo);
+	}
+
+	
 }

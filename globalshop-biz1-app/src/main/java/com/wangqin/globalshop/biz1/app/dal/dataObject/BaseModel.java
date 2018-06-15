@@ -1,27 +1,29 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.czh.ICheackParam;
+
 import java.util.Date;
 
 /**
  * @author biscuit
  * @data 2018/06/05
  */
-public class BaseModel {
-   private Boolean isDel;
+public class BaseModel implements ICheackParam {
+    protected Boolean isDel;
+    protected Date gmtCreate;
+    protected Date gmtModify;
 
-   private Date gmtCreate;
+    private String creator;
 
-   private Date gmtModify;
+    private String modifier;
+    private String companyNo;
 
-   private String creator;
-
-   private String modifier;
-
-    public Boolean getDel() {
+    public Boolean getIsDel() {
         return isDel;
     }
 
-    public void setDel(Boolean del) {
+    public void setIsDel(Boolean del) {
         isDel = del;
     }
 
@@ -41,27 +43,30 @@ public class BaseModel {
         this.gmtModify = gmtModify;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
     public void setCreator(String creator) {
         this.creator = creator;
-    }
-
-    public String getModifier() {
-        return modifier;
     }
 
     public void setModifier(String modifier) {
         this.modifier = modifier;
     }
-    public void init(){
-        this.setModifier("11111");
-        this.setCreator("222222");
-        this.setDel(false);
-        Date date = new Date();
-        this.setGmtCreate(date);
-        this.setGmtModify(date);
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo;
+    }
+
+    public void init() {
+        this.setModifier(AppUtil.getLoginUserId());
+    	this.setCreator(AppUtil.getLoginUserId());
+        this.setIsDel(false);
+        this.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+     
+    }
+    public void initCompany() {
+        this.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+    }
+
+    public void update() {
+        this.setModifier(AppUtil.getLoginUserId());
     }
 }

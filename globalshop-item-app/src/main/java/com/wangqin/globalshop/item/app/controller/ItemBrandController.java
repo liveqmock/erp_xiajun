@@ -38,7 +38,7 @@ public class ItemBrandController {
 		brand.setCreator("admin");
 		brand.setModifier("admin");
 		 if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
-		 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
 		 }
 		itemBrandService.insertBrandSelective(brand);
 		return result.buildIsSuccess(true);
@@ -72,6 +72,10 @@ public class ItemBrandController {
 		if (StringUtil.isBlank(brand.getName())) {
 			return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
 		}
+		/**zhangziyang**/
+		if(itemBrandService.selectBrandNoByName(brand.getName()) != null || !itemBrandService.selectBrandNoByName(brand.getName()).equals("")) {
+			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+		 }
 		itemBrandService.updateBrand(brand);
 		return result.buildIsSuccess(true);
 	}
@@ -82,16 +86,17 @@ public class ItemBrandController {
 	 * @param
 	 * @return
 	 */
+	
 	@RequestMapping("/delete")
 	@ResponseBody
 	public Object delete(Long id) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		itemBrandService.deleteByPrimaryKey(id);
+		itemBrandService.deleteItemBrandById(id);
 		return result.buildIsSuccess(true);
 	}
 
 	/**
-	 * 分页查询(fin)
+	 * 分页查询(fin)，用在品牌管理部分
 	 */
 	@RequestMapping("/queryBrands")
 	@ResponseBody

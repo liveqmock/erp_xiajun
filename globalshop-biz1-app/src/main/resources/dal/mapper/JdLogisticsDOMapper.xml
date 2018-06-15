@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdLogisticsDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="version" property="version" jdbcType="BIGINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
+    <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
+    <result column="send_status" property="sendStatus" jdbcType="VARCHAR" />
+    <result column="logistic_code" property="logisticCode" jdbcType="VARCHAR" />
+    <result column="logistic_name" property="logisticName" jdbcType="VARCHAR" />
+    <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, version, creator, modifier, channel_no, shop_code, channel_order_no, channel_sub_order_no, 
+    send_status, logistic_code, logistic_name, logistic_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from jd_logistics
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from jd_logistics
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_logistics (version, creator, modifier, 
+      channel_no, shop_code, channel_order_no, 
+      channel_sub_order_no, send_status, logistic_code, 
+      logistic_name, logistic_no)
+    values (#{version,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, 
+      #{channelSubOrderNo,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, #{logisticCode,jdbcType=VARCHAR}, 
+      #{logisticName,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_logistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="channelOrderNo != null" >
+        channel_order_no,
+      </if>
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no,
+      </if>
+      <if test="sendStatus != null" >
+        send_status,
+      </if>
+      <if test="logisticCode != null" >
+        logistic_code,
+      </if>
+      <if test="logisticName != null" >
+        logistic_name,
+      </if>
+      <if test="logisticNo != null" >
+        logistic_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="version != null" >
+        #{version,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSubOrderNo != null" >
+        #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendStatus != null" >
+        #{sendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticCode != null" >
+        #{logisticCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticName != null" >
+        #{logisticName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null" >
+        #{logisticNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+    update jd_logistics
+    <set >
+      <if test="version != null" >
+        version = #{version,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendStatus != null" >
+        send_status = #{sendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticCode != null" >
+        logistic_code = #{logisticCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticName != null" >
+        logistic_name = #{logisticName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticNo != null" >
+        logistic_no = #{logisticNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+    update jd_logistics
+    set version = #{version,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
+      send_status = #{sendStatus,jdbcType=VARCHAR},
+      logistic_code = #{logisticCode,jdbcType=VARCHAR},
+      logistic_name = #{logisticName,jdbcType=VARCHAR},
+      logistic_no = #{logisticNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

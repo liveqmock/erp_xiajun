@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdItemDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="version" property="version" jdbcType="BIGINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="send_status" property="sendStatus" jdbcType="VARCHAR" />
+    <result column="error_massge" property="errorMassge" jdbcType="VARCHAR" />
+    <result column="item_modify_time" property="itemModifyTime" jdbcType="TIMESTAMP" />
+    <result column="channel_item_code" property="channelItemCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO" extends="BaseResultMap" >
+    <result column="item_json" property="itemJson" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, version, creator, modifier, channel_no, shop_code, send_status, error_massge, 
+    item_modify_time, channel_item_code
+  </sql>
+  <sql id="Blob_Column_List" >
+    item_json
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from jd_item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from jd_item
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_item (version, creator, modifier, 
+      channel_no, shop_code, send_status, 
+      error_massge, item_modify_time, channel_item_code, 
+      item_json)
+    values (#{version,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, 
+      #{errorMassge,jdbcType=VARCHAR}, #{itemModifyTime,jdbcType=TIMESTAMP}, #{channelItemCode,jdbcType=VARCHAR}, 
+      #{itemJson,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="sendStatus != null" >
+        send_status,
+      </if>
+      <if test="errorMassge != null" >
+        error_massge,
+      </if>
+      <if test="itemModifyTime != null" >
+        item_modify_time,
+      </if>
+      <if test="channelItemCode != null" >
+        channel_item_code,
+      </if>
+      <if test="itemJson != null" >
+        item_json,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="version != null" >
+        #{version,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendStatus != null" >
+        #{sendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMassge != null" >
+        #{errorMassge,jdbcType=VARCHAR},
+      </if>
+      <if test="itemModifyTime != null" >
+        #{itemModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelItemCode != null" >
+        #{channelItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemJson != null" >
+        #{itemJson,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO" >
+    update jd_item
+    <set >
+      <if test="version != null" >
+        version = #{version,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendStatus != null" >
+        send_status = #{sendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMassge != null" >
+        error_massge = #{errorMassge,jdbcType=VARCHAR},
+      </if>
+      <if test="itemModifyTime != null" >
+        item_modify_time = #{itemModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelItemCode != null" >
+        channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemJson != null" >
+        item_json = #{itemJson,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO" >
+    update jd_item
+    set version = #{version,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      send_status = #{sendStatus,jdbcType=VARCHAR},
+      error_massge = #{errorMassge,jdbcType=VARCHAR},
+      item_modify_time = #{itemModifyTime,jdbcType=TIMESTAMP},
+      channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
+      item_json = #{itemJson,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO" >
+    update jd_item
+    set version = #{version,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      send_status = #{sendStatus,jdbcType=VARCHAR},
+      error_massge = #{errorMassge,jdbcType=VARCHAR},
+      item_modify_time = #{itemModifyTime,jdbcType=TIMESTAMP},
+      channel_item_code = #{channelItemCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -143,7 +143,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 					ItemCategoryDTO category = categoryLevel2.get(cate.getpCode());
 					category.getChildren().add(cate);
 				} else if(cate.getLevel()==2){
-					ItemCategoryDTO category = categoryLevel1.get(cate.getpCode());
+					ItemCategoryDTO category = categoryLevel1.get(cate.getpCode());				
 					category.getChildren().add(cate);
 				}
 			});
@@ -154,8 +154,27 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 
 	@Override
 	public void deleteById(ItemCategoryDO category) {
-		category.setIsDel(1);
+		category.setIsDel(true);
 		categoryMapper.updateByPrimaryKeySelective(category);
 		
 	}
+	
+	@Override
+	public int countRelativeItem(String categoryCode) {
+		// TODO Auto-generated method stub
+		return categoryMapper.countRelativeItem(categoryCode);
+	}
+
+	@Override
+	public int queryChildCategoryCountByCategoryCode(String categoryCode) {
+		// TODO Auto-generated method stub
+		return categoryMapper.queryChildCategoryCountByCategoryCode(categoryCode);
+	}
+	
+	//根据id删除类目
+	@Override
+	public void deleteItemCategoryById(Long id) {
+		categoryMapper.deleteItemCategoryById(id);
+	}
+	
 }

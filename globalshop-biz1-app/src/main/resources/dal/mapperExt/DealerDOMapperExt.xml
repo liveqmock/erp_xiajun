@@ -14,11 +14,93 @@
     <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, code, name, type_code, gmt_create, gmt_modify, creator, 
-    modifier, is_del
+    id, company_no AS companyNo, code, name, type_code AS typeCode, gmt_create AS gmtCreate, gmt_modify AS gmtModify, creator, 
+    modifier, is_del AS isDel
   </sql>
   <select id="list" resultMap="BaseResultMap">
-    SELECT <include refid="Base_Column_List"/>
-    FROM dealer
+    SELECT 
+    <include refid="Base_Column_List"/>
+    FROM dealer D1
+    <where>
+    	D1.is_del = 0
+    </where>
   </select>
+  
+  <select id="list2" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List"/>
+    FROM dealer D1
+  </select>
+  
+  <select id="selectByCode" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List"/>
+    FROM dealer
+    WHERE code = #{code}
+  </select>
+  
+  
+  
+  <insert id="insertNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO" >
+    insert into dealer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="typeCode != null" >
+        type_code,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCode != null" >
+        #{typeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  
 </mapper>

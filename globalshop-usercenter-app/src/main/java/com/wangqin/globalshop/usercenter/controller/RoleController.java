@@ -1,30 +1,36 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.PageInfo;
+import com.wangqin.globalshop.usercenter.service.IRoleService;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.utils.PageInfo;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
-import com.wangqin.globalshop.usercenter.service.IRoleService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @description：权限管理
  */
 @Controller
 @RequestMapping("/role")
+@Authenticated
 public class RoleController extends BaseController {
 
     @Autowired
@@ -82,6 +88,27 @@ public class RoleController extends BaseController {
     }
 
     /**
+     * 修改权限
+     *
+     * @param role
+     * @return
+     */
+    @PostMapping("/update")
+    @ResponseBody
+    public Object update(AuthRoleDO role, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+                System.out.println(error.getDefaultMessage());
+            }
+            return null;
+        }
+        role.setRoleId((long)RandomUtils.nextInt(1000000000));
+//        role.setStatus(Byte.valueOf("0"));
+        roleService.updateSelectiveById(role);
+        return renderSuccess("更新成功！");
+    }
+    /**
      * 添加权限
      *
      * @param role
@@ -89,7 +116,15 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Object add(AuthRoleDO role) {
+    public Object add(AuthRoleDO role, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+                System.out.println(error.getDefaultMessage());
+            }
+            return null;
+        }
+        role.setRoleId((long)RandomUtils.nextInt(1000000000));
         roleService.insert(role);
         return renderSuccess("添加成功！");
     }
@@ -127,7 +162,7 @@ public class RoleController extends BaseController {
      * @param role
      * @return
      */
-    @RequestMapping("/edit")
+    @PostMapping("/edit")
     @ResponseBody
     public Object edit(AuthRoleDO role) {
         roleService.updateSelectiveById(role);
@@ -167,18 +202,51 @@ public class RoleController extends BaseController {
      * @param resourceIds
      * @return
      */
-    @RequestMapping("/grant")
+    @RequestMapping("/updateGrant")
     @ResponseBody
     public Object grant(Long id, String resourceIds) {
         roleService.updateRoleResource(id, resourceIds);
         return renderSuccess("授权成功！");
     }
+    
+    
+
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(Long id) {
+        JsonResult<AuthRoleDO> result = new JsonResult<>();
+
+        return result.buildData(roleService.selectById(id)).buildIsSuccess(true);
+    }
+
+    @RequestMapping("/queryList")
+    @ResponseBody
+    public Object queryList(RoleQueryVO roleQueryVO) {
+        JsonPageResult<List<AuthRoleDO>> result = roleService.queryRoleList(roleQueryVO);
+
+        return result.buildIsSuccess(true);
+    }
+
+//    /**
+//     * 授权页面页面根据角色查询资源
+//     *
+//     * @param id
+//     * @return
+//     */
+//    @RequestMapping("/queryResourceIdListByRoleId")
+//    @ResponseBody
+//    public Object findResourceByRoleId(Long id) {
+//        JsonResult<List<Long>> result = new JsonResult<List<Long>>();
+//        List<Long> resources = roleService.queryResourceIdListByRoleId(id);
+//        result.buildData(resources);
+//        return result;
+//    }
 
     @RequestMapping("/resCodes")
     @ResponseBody
     public Object resCodes() {
         JsonResult<Set<String>> result = new JsonResult<>();
-        //AppUtil.getLoginUserId()
+//        AppUtil.getLoginUserId();
         // 读取用户的url和角色
         return result.buildData(roleService.queryUserResCodes(AppUtil.getLoginUserId())).buildIsSuccess(true);
     }

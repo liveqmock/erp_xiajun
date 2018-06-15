@@ -11,8 +11,6 @@ public class MallWxBannerDO extends BaseModel {
 
     private String pictureUrl;
 
-    private Date gmtCreate;
-
     private Date gmtModified;
 
     private Date startTime;
@@ -26,10 +24,6 @@ public class MallWxBannerDO extends BaseModel {
     private String itemCode;
 
     private String specialPageNo;
-
-    private Boolean isDel;
-
-    private Date gmtModify;
 
     private String creator;
 
@@ -65,14 +59,6 @@ public class MallWxBannerDO extends BaseModel {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl == null ? null : pictureUrl.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
     }
 
     public Date getGmtModified() {
@@ -129,22 +115,6 @@ public class MallWxBannerDO extends BaseModel {
 
     public void setSpecialPageNo(String specialPageNo) {
         this.specialPageNo = specialPageNo == null ? null : specialPageNo.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

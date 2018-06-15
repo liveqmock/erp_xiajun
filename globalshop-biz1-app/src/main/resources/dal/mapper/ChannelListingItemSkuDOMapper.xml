@@ -8,15 +8,12 @@
     <result column="platform_type" property="platformType" jdbcType="INTEGER" />
     <result column="channel_item_sku_code" property="channelItemSkuCode" jdbcType="VARCHAR" />
     <result column="channel_item_code" property="channelItemCode" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, item_code, sku_code, platform_type, channel_item_sku_code, channel_item_code, 
-    is_del, gmt_create, gmt_modify, creator, modifier
+    creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,25 +26,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into channel_listing_item_sku (id, item_code, sku_code, 
-      platform_type, channel_item_sku_code, channel_item_code, 
-      is_del, gmt_create, gmt_modify, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{platformType,jdbcType=INTEGER}, #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into channel_listing_item_sku (item_code, sku_code, platform_type, 
+      channel_item_sku_code, channel_item_code, creator, 
+      modifier)
+    values (#{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{platformType,jdbcType=INTEGER}, 
+      #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into channel_listing_item_sku
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="itemCode != null" >
         item_code,
       </if>
@@ -63,15 +57,6 @@
       <if test="channelItemCode != null" >
         channel_item_code,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -80,7 +65,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="itemCode != null" >
         #{itemCode,jdbcType=VARCHAR},
       </if>
@@ -95,15 +79,6 @@
       </if>
       <if test="channelItemCode != null" >
         #{channelItemCode,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -131,15 +106,6 @@
       <if test="channelItemCode != null" >
         channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -156,9 +122,6 @@
       platform_type = #{platformType,jdbcType=INTEGER},
       channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
       channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

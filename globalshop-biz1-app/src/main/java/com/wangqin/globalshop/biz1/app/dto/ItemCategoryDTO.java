@@ -39,6 +39,8 @@ public class ItemCategoryDTO {
 	private List<ItemCategoryDTO> children = new ArrayList<>();
 
     public List<ItemCategoryDTO> getChildren() {
+    	if(null == this.children) 
+    		this.children = new ArrayList<>();   	
 		return children;
 	}
 	public void setChildren(List<ItemCategoryDTO> children) {
@@ -46,7 +48,7 @@ public class ItemCategoryDTO {
 	}
 	
 	public String getValue(){
-		return this.id+"";
+		return this.categoryCode+"";
 	}
 	
 	public String getLabel(){

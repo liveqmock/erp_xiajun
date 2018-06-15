@@ -25,7 +25,6 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 
 	List<MallSubOrderDO> selectList(MallSubOrderDO order);
 
-	List<MallSubOrderDO> selectBatchIds(List<Long> batchIds);
 
 	List<MallSubOrderDO> queryByShippingOrder(ShippingOrderVO shippingOrderQueryVO);
 
@@ -40,17 +39,18 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 
 	List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
 	void updateOuterOrderDetailByItemSku(@Param("erpOrderIdList")List<String> erpOrderIdList);
-	
+
 	List<MallSubOrderDO> selectOuterOrderDetailByOuterOrderId(@Param("outerOrderId") Long outerOrderId);
-	
+
 	void updateUpcForOuterOrderDetail(MallOrderDO erpOrder);
-	
+
 	void updateWeightForOuterOrderDetail(MallOrderDO erpOrder);
 
     List<MallSubOrderDO> queryByOrderId(List<Long> erpOrderIdList);
 
 	String selectPositionNoByOrderId(String orderNo);
 
+	List<MallSubOrderDO> selectBatchIds(@Param("list") List<Long> list);
     int selectCount(MallSubOrderDO erpOrder);
 
 	List<MallSubOrderDO> SelectByOrderNo(String orderNo);
@@ -77,4 +77,6 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	MallSubOrderDO selectBySkuCode(String skuCode);
 
     MallSubOrderDO selectBySubOrderNo(String subOrderNo);
+
+    List<MallSubOrderDO> list();
 }

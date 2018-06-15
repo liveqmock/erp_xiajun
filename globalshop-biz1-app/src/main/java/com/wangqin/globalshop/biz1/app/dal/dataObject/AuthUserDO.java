@@ -5,6 +5,8 @@ import java.util.Date;
 public class AuthUserDO extends BaseModel {
     private Long id;
 
+    private String companyNo;
+
     private String userNo;
 
     private String loginName;
@@ -31,14 +33,6 @@ public class AuthUserDO extends BaseModel {
 
     private String email;
 
-    private String companyNo;
-
-    private Boolean isDel;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
     private String creator;
 
     private String modifier;
@@ -49,6 +43,14 @@ public class AuthUserDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getUserNo() {
@@ -153,38 +155,6 @@ public class AuthUserDO extends BaseModel {
 
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
-    }
-
-    public String getCompanyNo() {
-        return companyNo;
-    }
-
-    public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo == null ? null : companyNo.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
     }
 
     public String getCreator() {

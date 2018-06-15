@@ -25,5 +25,13 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
     
     //插入类目
     void insertCategorySelective(ItemCategoryDO category);
-
+    
+    //根据categoryCode和is_del来判断是否删除这个类目——张子阳
+    int countRelativeItem(String categoryCode);
+    
+    int queryChildCategoryCountByCategoryCode(String categoryCode);
+    
+    //根据id删除类目
+    void deleteItemCategoryById(Long id);
+    
 }

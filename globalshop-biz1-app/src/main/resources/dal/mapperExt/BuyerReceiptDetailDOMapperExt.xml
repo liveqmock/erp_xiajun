@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerReceiptDetailDOMapperExt" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDetailDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="upc" property="upc" jdbcType="VARCHAR" />
+    <result column="receipt_no" property="receiptNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
+    <result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
+    <result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
+    <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sku_code, item_code,company_no, price, quantity, upc, receipt_no, buyer_task_detail_no,
+    trans_quantity, sku_buysite, purchase_storage_no, gmt_create, gmt_modify, is_del, 
+    creator, modifier
+  </sql>
+  <select id="list" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDetailDO">
+    SELECT <include refid="Base_Column_List"/>
+    FROM buyer_receipt_detail
+    WHERE
+    company_no=#{companyNo}
+
+
+  </select>
+</mapper>

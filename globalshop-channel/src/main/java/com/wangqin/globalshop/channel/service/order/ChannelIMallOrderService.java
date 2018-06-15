@@ -31,9 +31,9 @@ public interface ChannelIMallOrderService {
 	public List<MallOrderDO> queryPoList(MallOrderDO mallOrderDO);
 
 
-	public void review(String orderNo);
+//	public void review(String orderNo);
 
-	public void reviewByIdList(List<String> orderNoList);
+//	public void reviewByIdList(List<String> orderNoList);
 
 
 }

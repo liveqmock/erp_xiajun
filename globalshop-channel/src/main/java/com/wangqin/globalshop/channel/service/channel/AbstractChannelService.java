@@ -4,18 +4,18 @@ import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.channel.dal.dataObjectVo.ItemVo;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemSkuService;
-import com.wangqin.globalshop.channel.service.inventory.IInventoryService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channel.service.item.IItemSkuService;
 import com.wangqin.globalshop.channel.service.order.ChannelIMallOrderService;
 import com.wangqin.globalshop.channel.service.order.ChannelIMallSubOrderService;
 import com.wangqin.globalshop.channel.service.order.ChannelIShippingOrderService;
 import com.wangqin.globalshop.channel.service.utils.ISequenceService;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.scan.SpringUtils;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,7 +48,7 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	protected ChannelIMallSubOrderService mallSubOrderService = SpringUtils.getBean(ChannelIMallSubOrderService.class);
 	
 	protected ChannelIShippingOrderService shippingOrderService = SpringUtils.getBean(ChannelIShippingOrderService.class);
-	protected IInventoryService inventoryService = SpringUtils.getBean(IInventoryService.class);
+	protected InventoryService inventoryService = SpringUtils.getBean(InventoryService.class);
 
 	public AbstractChannelService(ChannelAccountDO channelAccount) {
 		this.channelAccount = channelAccount;
@@ -182,7 +182,7 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 				outerItemSkuQuery.setSkuCode(skuCode);
 				ChannelListingItemSkuDO outerItemSkuDb = this.outerItemSkuService.queryPo(outerItemSkuQuery);
 				if(outerItemSkuDb!=null&&outerItemSkuDb.getChannelItemSkuCode()!=null){
-					InventoryDO inventory=inventoryService.queryInventoryByCode(itemCode, skuCode);
+					InventoryDO inventory=inventoryService.selectByItemCodeAndSkuCode(itemCode, skuCode);
 					//同步
 					if(inventory!=null){
 						adapterUpdateSkuInventory(outerItemSkuDb, inventory);

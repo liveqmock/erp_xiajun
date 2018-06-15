@@ -1,18 +1,18 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -35,10 +35,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
 
 /**
  * @author liuhui
@@ -46,6 +45,7 @@ import java.util.Set;
  */
 @Controller
 @RequestMapping("/erpOrder")
+@Authenticated
 public class MallSubOrderController {
 
 	@Autowired
@@ -57,8 +57,7 @@ public class MallSubOrderController {
 
 	@RequestMapping(value = "/query",method = RequestMethod.POST)
 	@ResponseBody
-	public Object query(String erpOrderQueryVO) {
-		MallSubOrderVO mallSubOrderVO = JSON.parseObject(erpOrderQueryVO, MallSubOrderVO.class);
+	public Object query(MallSubOrderVO mallSubOrderVO) {
 		JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();
 		if(mallSubOrderVO.getEndGmtCreate()!=null) {
 			String endGmtCreateStr = DateUtil.ymdFormat(mallSubOrderVO.getEndGmtCreate());
@@ -66,30 +65,13 @@ public class MallSubOrderController {
 			mallSubOrderVO.setEndGmtCreate(endGmtCreate);
 		}
 
-		mallSubOrderVO.setCompanyNo("MallSUbOrderController?JLJLJJLJ");
-		
-//		//如果是代理
-//		ShiroUser shiroUser = this.getShiroUser();
-//		Set<String> roles = shiroUser.getRoles();
-//		if(roles.contains("irhdaili")) {
-//			String[] logingNameArr = shiroUser.getLoginName().split("_");
-//			if(logingNameArr.length<2 || StringUtils.isBlank(logingNameArr[1])) {
-//				throw new ErpCommonException("用户权限异常");
-//			}
-//			erpOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
-//			Seller seller = sellerService.selectById(erpOrderQueryVO.getSalesId());
-//			if(seller.getOpenId()!=null) {
-//				erpOrderQueryVO.setOpenId(seller.getOpenId());
-//			}
-//		}
-		result = erpOrderService.queryErpOrders(mallSubOrderVO);
-//		if(roles.contains("irhdaili")) {
-//			result.setAgentRoler(true);
-//		}
+//		mallSubOrderVO.setCompanyNo("MallSUbOrderController?JLJLJJLJ");
+
+		result .buildData(erpOrderService.queryErpOrders(mallSubOrderVO));
 		result.setSuccess(true);
 		return result;
 	}
-	
+
 	@RequestMapping("/queryById")
 	@ResponseBody
 	public Object queryById(Long id) {
@@ -100,8 +82,7 @@ public class MallSubOrderController {
 	}
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
 	@ResponseBody
-	public Object update(String erpOrder) {
-		MallSubOrderDO orderDO = JSON.parseObject(erpOrder, MallSubOrderDO.class);
+	public Object update(MallSubOrderDO orderDO) {
 		JsonResult<MallSubOrderDO> result = new JsonResult<>();
 //		ShiroUser shiroUser = this.getShiroUser();
 //		erpOrder.setUserModify(shiroUser.getLoginName());
@@ -134,7 +115,7 @@ public class MallSubOrderController {
 				if(erpOrder==null){
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
- 					if( OrderStatus.INIT.getCode() == erpOrder.getStatus()){
+ 					if( ORDER_SATUTS_INIT == erpOrder.getStatus()){
 						try{
 							if(StringUtil.isNotBlank(closeReason)) {
 								erpOrder.setCloseReason(closeReason);
@@ -185,7 +166,7 @@ public class MallSubOrderController {
 			if(erpOrder.getQuantity()==1){
 				return JsonResult.buildFailed("一个商品不能拆分");
 			}
-			if(erpOrder.getStatus()==OrderStatus.INIT.getCode()){
+			if(erpOrder.getStatus()==ORDER_SATUTS_INIT){
 				try{
 					if(splitCount>=erpOrder.getQuantity()){
 						return JsonResult.buildFailed("拆单数量不能超过订单数量");
@@ -217,7 +198,7 @@ public class MallSubOrderController {
 			return JsonResult.buildFailed("未找到订单");
 		}else{
 			//订单状态校验
-			if(erpOrder.getStatus()==OrderStatus.INIT.getCode()&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
+			if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
 				inventoryService.release(erpOrder);
 			}else{
 				return JsonResult.buildFailed("订单状态错误");
@@ -275,7 +256,7 @@ public class MallSubOrderController {
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
 					erpOrders.add(erpOrder);
-					if(erpOrder.getStatus()==OrderStatus.INIT.getCode()){
+					if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())){
 						if(skuCode==null){
 							skuCode = erpOrder.getSkuCode();
 						}else{
@@ -375,7 +356,7 @@ public class MallSubOrderController {
     	        list.add(erpOrder.getQuantity());	//销售数量
     	        list.add(erpOrder.getSalePrice());	//销售价格
     	        list.add(erpOrder.getQuantity()*erpOrder.getSalePrice());               //销售总价
-    	        list.add(OrderStatus.of(erpOrder.getStatus()).getDescription());		//订单状态
+    	        list.add(erpOrder.getStatus());		//订单状态
     	        list.add(StockUpStatus.of(erpOrder.getStockStatus()).getDescription());	//备货状态
     	        list.add(DateUtil.ymdFormat(erpOrder.getOrderTime()));					//创建时间
     	        list.add(erpOrder.getReceiver());	//收件人
@@ -405,5 +386,18 @@ public class MallSubOrderController {
         excelHelper.close();
         return filebyte;
     }
-	
+    @RequestMapping("/listChoice")
+	private Object listChoice(Long id){
+		JsonResult<Map<String, String>> result = new JsonResult();
+		MallSubOrderDO subOrder = erpOrderService.selectById(id);
+		InventoryDO aDo = inventoryService.selectByItemCodeAndSkuCode(subOrder.getItemCode(), subOrder.getSkuCode());
+		Map<String, String> map = new HashMap<>();
+		map.put("orderNo",subOrder.getOrderNo());
+		map.put("skuCode",subOrder.getSkuCode());
+		result.setData(map);
+		result.setSuccess(true);
+		return result;
+
+	}
+
 }

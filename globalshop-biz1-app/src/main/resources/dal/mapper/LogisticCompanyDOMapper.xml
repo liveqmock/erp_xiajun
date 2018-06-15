@@ -15,16 +15,13 @@
     <result column="code_in_pdd" property="codeInPdd" jdbcType="VARCHAR" />
     <result column="name_in_taobao" property="nameInTaobao" jdbcType="VARCHAR" />
     <result column="code_in_taobao" property="codeInTaobao" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, 
-    code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, 
-    gmt_create, gmt_modify, creator, modifier
+    code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, creator, 
+    modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -37,31 +34,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into logistic_company (id, name, code, 
-      name_in_jd, code_in_jd, name_in_youzan, 
-      code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, 
-      name_in_pdd, code_in_pdd, name_in_taobao, 
-      code_in_taobao, is_del, gmt_create, 
-      gmt_modify, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{nameInJd,jdbcType=VARCHAR}, #{codeInJd,jdbcType=VARCHAR}, #{nameInYouzan,jdbcType=VARCHAR}, 
-      #{codeInYouzan,jdbcType=VARCHAR}, #{nameInKuaidi100,jdbcType=VARCHAR}, #{codeInKuaidi100,jdbcType=VARCHAR}, 
-      #{nameInPdd,jdbcType=VARCHAR}, #{codeInPdd,jdbcType=VARCHAR}, #{nameInTaobao,jdbcType=VARCHAR}, 
-      #{codeInTaobao,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+    insert into logistic_company (name, code, name_in_jd, 
+      code_in_jd, name_in_youzan, code_in_youzan, 
+      name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, 
+      code_in_pdd, name_in_taobao, code_in_taobao, 
+      creator, modifier)
+    values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{nameInJd,jdbcType=VARCHAR}, 
+      #{codeInJd,jdbcType=VARCHAR}, #{nameInYouzan,jdbcType=VARCHAR}, #{codeInYouzan,jdbcType=VARCHAR}, 
+      #{nameInKuaidi100,jdbcType=VARCHAR}, #{codeInKuaidi100,jdbcType=VARCHAR}, #{nameInPdd,jdbcType=VARCHAR}, 
+      #{codeInPdd,jdbcType=VARCHAR}, #{nameInTaobao,jdbcType=VARCHAR}, #{codeInTaobao,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into logistic_company
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="name != null" >
         name,
       </if>
@@ -98,15 +90,6 @@
       <if test="codeInTaobao != null" >
         code_in_taobao,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -115,7 +98,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
@@ -151,15 +133,6 @@
       </if>
       <if test="codeInTaobao != null" >
         #{codeInTaobao,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -208,15 +181,6 @@
       <if test="codeInTaobao != null" >
         code_in_taobao = #{codeInTaobao,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -240,9 +204,6 @@
       code_in_pdd = #{codeInPdd,jdbcType=VARCHAR},
       name_in_taobao = #{nameInTaobao,jdbcType=VARCHAR},
       code_in_taobao = #{codeInTaobao,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

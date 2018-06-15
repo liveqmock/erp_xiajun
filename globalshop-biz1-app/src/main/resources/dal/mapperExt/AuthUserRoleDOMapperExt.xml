@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt" >
-  <!--<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO" >-->
-    <!--<id column="id" property="id" jdbcType="BIGINT" />-->
-    <!--<result column="user_id" property="userId" jdbcType="BIGINT" />-->
-    <!--<result column="role_id" property="roleId" jdbcType="BIGINT" />-->
-    <!--<result column="is_del" property="isDel" jdbcType="BIT" />-->
-    <!--<result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />-->
-    <!--<result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />-->
-    <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
-    <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
-  <!--</resultMap>-->
+
+  <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List2" >
-    id, user_id, role_id, is_del, gmt_create, gmt_modify, creator, modifier
+    id, user_id, role_id, is_del, gmt_create, gmt_modify, creator, modifier, company_no
   </sql>
 
-  <select id="selectByUserId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO" parameterType="java.lang.Long">
+  <insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO" >
+    insert into auth_user_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectByUserId"  resultMap ="BaseResultMap2" parameterType="java.lang.Long">
     select
     <include refid="Base_Column_List2"/>
-    from auth_user_role
+    from auth_user_role	
     where user_id = #{userId}
   </select>
 
@@ -28,6 +71,11 @@
     from auth_user_role
     where user_id = #{userId}
   </select>
+  
+  
+  
+
+  
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->
     <!--select -->
     <!--<include refid="Base_Column_List" />-->

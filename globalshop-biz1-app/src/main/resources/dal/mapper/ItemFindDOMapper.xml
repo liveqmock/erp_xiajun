@@ -34,9 +34,6 @@
     <result column="refuse_reason" property="refuseReason" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" extends="BaseResultMap" >
     <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
@@ -45,8 +42,7 @@
     id, item_find_no, item_name, item_code, sku_code, is_new, sale_type, currency, buy_site, 
     origin, logistic_type, contact_person, contact_tel, id_card, start_date, end_date, 
     booking_date, is_sale, wxis_sale, is_find, status, desc, spec, model, buyer_open_id, 
-    buyer_name, purchase_status, reason, find_address, refuse_reason, creator, modifier, 
-    gmt_create, gmt_modify, is_del
+    buyer_name, purchase_status, reason, find_address, refuse_reason, creator, modifier
   </sql>
   <sql id="Blob_Column_List" >
     detail
@@ -64,43 +60,38 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into item_find (id, item_find_no, item_name, 
-      item_code, sku_code, is_new, 
-      sale_type, currency, buy_site, 
-      origin, logistic_type, contact_person, 
-      contact_tel, id_card, start_date, 
-      end_date, booking_date, is_sale, 
-      wxis_sale, is_find, status, 
-      desc, spec, model, 
-      buyer_open_id, buyer_name, purchase_status, 
-      reason, find_address, refuse_reason, 
-      creator, modifier, gmt_create, 
-      gmt_modify, is_del, detail
-      )
-    values (#{id,jdbcType=BIGINT}, #{itemFindNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
-      #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{isNew,jdbcType=TINYINT}, 
-      #{saleType,jdbcType=TINYINT}, #{currency,jdbcType=TINYINT}, #{buySite,jdbcType=VARCHAR}, 
-      #{origin,jdbcType=VARCHAR}, #{logisticType,jdbcType=TINYINT}, #{contactPerson,jdbcType=VARCHAR}, 
-      #{contactTel,jdbcType=VARCHAR}, #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, 
-      #{endDate,jdbcType=TIMESTAMP}, #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, 
-      #{wxisSale,jdbcType=TINYINT}, #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{desc,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
-      #{buyerOpenId,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=TINYINT}, 
-      #{reason,jdbcType=VARCHAR}, #{findAddress,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, #{detail,jdbcType=LONGVARCHAR}
-      )
+    insert into item_find (item_find_no, item_name, item_code, 
+      sku_code, is_new, sale_type, 
+      currency, buy_site, origin, 
+      logistic_type, contact_person, contact_tel, 
+      id_card, start_date, end_date, 
+      booking_date, is_sale, wxis_sale, 
+      is_find, status, desc, 
+      spec, model, buyer_open_id, 
+      buyer_name, purchase_status, reason, 
+      find_address, refuse_reason, creator, 
+      modifier, detail)
+    values (#{itemFindNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{skuCode,jdbcType=VARCHAR}, #{isNew,jdbcType=TINYINT}, #{saleType,jdbcType=TINYINT}, 
+      #{currency,jdbcType=TINYINT}, #{buySite,jdbcType=VARCHAR}, #{origin,jdbcType=VARCHAR}, 
+      #{logisticType,jdbcType=TINYINT}, #{contactPerson,jdbcType=VARCHAR}, #{contactTel,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
+      #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, #{wxisSale,jdbcType=TINYINT}, 
+      #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{desc,jdbcType=VARCHAR}, 
+      #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=VARCHAR}, 
+      #{buyerName,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=TINYINT}, #{reason,jdbcType=VARCHAR}, 
+      #{findAddress,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into item_find
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="itemFindNo != null" >
         item_find_no,
       </if>
@@ -194,21 +185,11 @@
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="detail != null" >
         detail,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="itemFindNo != null" >
         #{itemFindNo,jdbcType=VARCHAR},
       </if>
@@ -301,15 +282,6 @@
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="detail != null" >
         #{detail,jdbcType=LONGVARCHAR},
@@ -412,15 +384,6 @@
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="detail != null" >
         detail = #{detail,jdbcType=LONGVARCHAR},
       </if>
@@ -460,9 +423,6 @@
       refuse_reason = #{refuseReason,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -498,10 +458,7 @@
       find_address = #{findAddress,jdbcType=VARCHAR},
       refuse_reason = #{refuseReason,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT}
+      modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

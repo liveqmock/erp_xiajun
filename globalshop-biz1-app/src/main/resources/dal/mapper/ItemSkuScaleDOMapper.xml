@@ -8,15 +8,11 @@
     <result column="scale_code" property="scaleCode" jdbcType="VARCHAR" />
     <result column="scale_name" property="scaleName" jdbcType="VARCHAR" />
     <result column="scale_value" property="scaleValue" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, item_code, sku_code, scale_code, scale_name, scale_value, gmt_create, gmt_modify, 
-    creator, modifier, is_del
+    id, item_code, sku_code, scale_code, scale_name, scale_value, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,25 +25,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into item_sku_scale (id, item_code, sku_code, 
-      scale_code, scale_name, scale_value, 
-      gmt_create, gmt_modify, creator, 
-      modifier, is_del)
-    values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{scaleCode,jdbcType=VARCHAR}, #{scaleName,jdbcType=VARCHAR}, #{scaleValue,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{isDel,jdbcType=BIT})
+    insert into item_sku_scale (item_code, sku_code, scale_code, 
+      scale_name, scale_value, creator, 
+      modifier)
+    values (#{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{scaleCode,jdbcType=VARCHAR}, 
+      #{scaleName,jdbcType=VARCHAR}, #{scaleValue,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into item_sku_scale
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="itemCode != null" >
         item_code,
       </if>
@@ -63,24 +56,14 @@
       <if test="scaleValue != null" >
         scale_value,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="itemCode != null" >
         #{itemCode,jdbcType=VARCHAR},
       </if>
@@ -96,20 +79,11 @@
       <if test="scaleValue != null" >
         #{scaleValue,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -131,20 +105,11 @@
       <if test="scaleValue != null" >
         scale_value = #{scaleValue,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -156,11 +121,8 @@
       scale_code = #{scaleCode,jdbcType=VARCHAR},
       scale_name = #{scaleName,jdbcType=VARCHAR},
       scale_value = #{scaleValue,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
+      modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

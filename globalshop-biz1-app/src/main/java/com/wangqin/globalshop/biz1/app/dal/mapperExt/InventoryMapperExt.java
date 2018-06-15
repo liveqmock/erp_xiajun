@@ -97,5 +97,7 @@ public interface InventoryMapperExt extends InventoryDOMapper {
 
     InventoryDO queryBySkuCodeAndItemCode(@Param("skuCode") String skuCode, @Param("itemCode") String itemCode);
 
-    InventoryDO queryBySkuCode(String skuCode);
+    InventoryDO queryBySkuCode(@Param("skuCode")String skuCode);
+
+    InventoryDO queryBySkuCodeAndCompanyNo(@Param("skuCode")String skuCode, @Param("companyNo")String companyNo);
 }

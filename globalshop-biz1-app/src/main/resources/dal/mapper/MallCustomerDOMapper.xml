@@ -18,9 +18,6 @@
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     <result column="first_login_device" property="firstLoginDevice" jdbcType="BIGINT" />
     <result column="last_login_device" property="lastLoginDevice" jdbcType="BIGINT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
@@ -30,7 +27,7 @@
   <sql id="Base_Column_List" >
     id, customer_no, open_id, union_id, nick_name, gender, city, province, country, portrait_url, 
     refer, role, first_login_time, last_login_time, first_login_device, last_login_device, 
-    gmt_create, gmt_modify, is_del, creator, modifier, company_no, channel_no, shop_code
+    creator, modifier, company_no, channel_no, shop_code
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -43,35 +40,30 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_customer (id, customer_no, open_id, 
-      union_id, nick_name, gender, 
-      city, province, country, 
-      portrait_url, refer, role, 
-      first_login_time, last_login_time, first_login_device, 
-      last_login_device, gmt_create, gmt_modify, 
-      is_del, creator, modifier, 
-      company_no, channel_no, shop_code
-      )
-    values (#{id,jdbcType=BIGINT}, #{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
-      #{unionId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
-      #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
-      #{portraitUrl,jdbcType=VARCHAR}, #{refer,jdbcType=BIGINT}, #{role,jdbcType=INTEGER}, 
-      #{firstLoginTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{firstLoginDevice,jdbcType=BIGINT}, 
-      #{lastLoginDevice,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}
-      )
+    insert into mall_customer (customer_no, open_id, union_id, 
+      nick_name, gender, city, 
+      province, country, portrait_url, 
+      refer, role, first_login_time, 
+      last_login_time, first_login_device, last_login_device, 
+      creator, modifier, company_no, 
+      channel_no, shop_code)
+    values (#{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, 
+      #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{portraitUrl,jdbcType=VARCHAR}, 
+      #{refer,jdbcType=BIGINT}, #{role,jdbcType=INTEGER}, #{firstLoginTime,jdbcType=TIMESTAMP}, 
+      #{lastLoginTime,jdbcType=TIMESTAMP}, #{firstLoginDevice,jdbcType=BIGINT}, #{lastLoginDevice,jdbcType=BIGINT}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+      #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_customer
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="customerNo != null" >
         customer_no,
       </if>
@@ -117,15 +109,6 @@
       <if test="lastLoginDevice != null" >
         last_login_device,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -143,7 +126,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="customerNo != null" >
         #{customerNo,jdbcType=VARCHAR},
       </if>
@@ -188,15 +170,6 @@
       </if>
       <if test="lastLoginDevice != null" >
         #{lastLoginDevice,jdbcType=BIGINT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -263,15 +236,6 @@
       <if test="lastLoginDevice != null" >
         last_login_device = #{lastLoginDevice,jdbcType=BIGINT},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -307,9 +271,6 @@
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       first_login_device = #{firstLoginDevice,jdbcType=BIGINT},
       last_login_device = #{lastLoginDevice,jdbcType=BIGINT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       company_no = #{companyNo,jdbcType=VARCHAR},

@@ -5,7 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.common.utils.Util;
+import com.wangqin.globalshop.common.utils.czh.Util;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,8 +31,6 @@ public class CategoryController  {
 	@RequestMapping("/add")
 	@ResponseBody
 	public Object add(ItemCategoryDO category) {
-		//category.setCategoryCode("0000000");//XiaJun，在确定了category_code的生成方式之后，再重写这一句
-		//ShiroUser shiroUser = this.getShiroUser();
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
 		if (category.getpCode() == null) {//添加一级类目
 			category.setpCode("00000000");
@@ -118,19 +116,31 @@ public class CategoryController  {
 	public Object delete(ItemCategoryDO category) {
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
 		Long id = category.getId();
+		
+		
+		int categoryCodeCount = categoryService.countRelativeItem(categoryService.selectByPrimaryKey(category.getId()).getCategoryCode());
+		if(categoryCodeCount > 0) {
+			return result.buildIsSuccess(false).buildMsg("删除失败，该类目已关联商品");
+		}
+		int categoryCountByPcode = categoryService.queryChildCategoryCountByCategoryCode(categoryService.selectByPrimaryKey(category.getId()).getCategoryCode());
+		if(categoryCountByPcode > 0) {
+			return result.buildIsSuccess(false).buildMsg("删除失败，已关联子类目");
+		}
+			
 		if (id == null) {
 			return result.buildIsSuccess(false).buildMsg("category id is null!");
 		}
-		ItemCategoryDO categoryP = categoryService.findCategory(id);
-		if (categoryP == null) {
-			return result.buildIsSuccess(false).buildMsg("not find category!");
-		}
+		
+//		ItemCategoryDO categoryP = categoryService.findCategory(id);
+//		if (categoryP == null) {
+//			return result.buildIsSuccess(false).buildMsg("not find category!");
+//		}
 		// TODO give session and set modify
 //		category.setGmtModify(new Date());
 		// category.setUserModify(userModify);
 //		category.setStatus(1);// 状态设置为1，假删除
 //		categoryService.updateSelectiveById(category);
-		categoryService.deleteById(category);
+		categoryService.deleteItemCategoryById(id);
 		return result.buildIsSuccess(true);
 	}
 	

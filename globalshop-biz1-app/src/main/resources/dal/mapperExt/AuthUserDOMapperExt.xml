@@ -29,6 +29,27 @@
     modifier
   </sql>
 
+  <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+    <id column="id" property="id" jdbcType="BIGINT"/>
+    <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="password" property="password" jdbcType="VARCHAR"/>
+    <result column="sex" property="sex" jdbcType="TINYINT"/>
+    <result column="age" property="age" jdbcType="TINYINT"/>
+    <result column="user_type" property="userType" jdbcType="TINYINT"/>
+    <result column="status" property="status" jdbcType="TINYINT"/>
+    <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+
+    <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+
+    <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+      <id column="roleId" property="id"/>
+      <result column="roleName" property="name"/>
+    </collection>
+  </resultMap>
+
   <resultMap id="userVoResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
     <id column="id" property="id" jdbcType="BIGINT"/>
     <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
@@ -40,7 +61,7 @@
     <result column="user_type" property="userType" jdbcType="TINYINT"/>
     <result column="status" property="status" jdbcType="TINYINT"/>
     <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
     <result column="phone" property="phone" jdbcType="VARCHAR"/>
     <!-- <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/> -->
 
@@ -50,13 +71,122 @@
       <result column="name" property="name"/>
     </collection> -->
   </resultMap>
-
-
+  
+	<insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    insert into auth_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="userNo != null" >
+        user_no,
+      </if>
+      <if test="loginName != null" >
+        login_name,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="organizationId != null" >
+        organization_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="wxUserId != null" >
+        wx_user_id,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null" >
+        #{userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=TINYINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="organizationId != null" >
+        #{organizationId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wxUserId != null" >
+        #{wxUserId,jdbcType=BIGINT},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>	
+	
   <select id="selectByLoginName" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List2" />
     from auth_user
-    where user_no = #{userNo,jdbcType=VARCHAR}
+    where login_name = #{userNo,jdbcType=VARCHAR}
   </select>
 
   <update id="updateByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
@@ -154,6 +284,102 @@
     </where>
   </select>
 
+
+  <select id="queryUsersCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+    SELECT
+    count(1)
+    FROM
+    `auth_user` t
+    where
+    1=1
+    <if test=" name != null and name != '' ">
+      t.name = #{name}
+    </if>
+    <if test=" organizationId != null ">
+      t.organization_id = #{organizationId}
+    </if>
+    <if test=" startTime != null ">
+      <![CDATA[ and t.gmt_create >= #{startTime} ]]>
+    </if>
+    <if test=" endTime != null ">
+      <![CDATA[ and t.gmt_create <= #{endTime} ]]>
+    </if>
+
+  </select>
+
+  <select id="queryUserQueryVOById" resultMap="userQueryVOResultMap" parameterType="java.lang.Long">
+    SELECT
+    t.id,
+    login_name,
+    t.`name`,
+    `password`,
+    sex,
+    age,
+    user_type,
+    t.`status`,
+    organization_id,
+    t.gmt_create,
+    phone,
+    s.`name` AS organizationName,
+    o.id AS roleId,
+    o.`name` AS roleName
+    FROM
+    auth_user t
+    LEFT JOIN auth_user_role r ON t.id = r.user_id
+    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_organization s ON s.id = t.organization_id
+    <where>
+      t.id = #{id}
+    </where>
+  </select>
+
+  <select id="queryUserQueryVOList" resultMap="userQueryVOResultMap"  parameterType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+    SELECT
+    t.id,
+    login_name,
+    t.`name`,
+    `password`,
+    sex,
+    age,
+    user_type,
+    t.`status`,
+    organization_id,
+    t.gmt_create,
+    phone,
+    s.`name` AS organizationName,
+    o.id AS roleId,
+    o.`name` AS roleName
+    FROM
+    auth_user t
+    LEFT JOIN auth_user_role r ON t.id = r.user_id
+    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_organization s ON s.id = t.organization_id
+    <where>
+      1=1
+      <if test=" name != null and name != '' ">
+        t.name = #{name}
+      </if>
+      <if test=" organizationId != null ">
+        t.organization_id = #{organizationId}
+      </if>
+      <if test=" startTime != null ">
+        <![CDATA[ and t.gmt_create >= #{startTime} ]]>
+      </if>
+      <if test=" endTime != null ">
+        <![CDATA[ and t.gmt_create <= #{endTime} ]]>
+      </if>
+    </where>
+    order by t.gmt_create desc
+    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+  </select>
+  
+  
+  <select id="selectUserVoByUserNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List2" />
+    from auth_user
+    where user_no = #{userNo,jdbcType=VARCHAR}
+  </select>
   
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
     <!--delete from auth_user-->

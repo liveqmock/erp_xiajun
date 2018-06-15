@@ -67,12 +67,6 @@ public class ItemFindDO extends BaseModel {
 
     private String modifier;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
-
     private String detail;
 
     public Long getId() {
@@ -329,30 +323,6 @@ public class ItemFindDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getDetail() {

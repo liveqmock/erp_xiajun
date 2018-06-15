@@ -19,21 +19,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleType;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleTypeDO;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IScaleTypeService;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
-import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
+
 
 
 /**
@@ -43,24 +47,18 @@ import com.wangqin.globalshop.item.app.service.ItemIMallOrderService;
  */
 @Controller
 @RequestMapping("/itemSku")
+@Authenticated
 public class ItemSkuController  {
 
 	@Autowired
 	private IItemSkuService iItemSkuService;
-	@Autowired
-	private IItemService iItemService;
 
-	@Autowired
-	private ItemIInventoryService inventoryService;
-	@Autowired
-	private ItemIMallOrderService erpOrderService;
-	
 	@Autowired
 	private IScaleTypeService scaleTypeService;
 
+	@Autowired
+	private InventoryService inventoryService;
 
-	
-	
 	/**
 	 * 更新sku
 	 *
@@ -73,7 +71,7 @@ public class ItemSkuController  {
 		itemSku.setModifier("admin");
 		itemSku.setCreator("admin");
 		JsonResult<String> result = new JsonResult<>();
-         /**		
+         /**
 		//if haven't item id ,add item
 		if(itemSku.getId()==null){
 			return result.buildIsSuccess(false).buildMsg("没有SKU id");
@@ -93,7 +91,7 @@ public class ItemSkuController  {
 				//erpOrder.setWeight(itemSku.getWeight());
 				erpOrderService.updateWeightForOrder(erpOrder);
 			}
-			
+
 			//1. find item
 			ItemDO item = iItemService.queryItemByItemCode(itemSku.getItemCode());
 			if(item==null){
@@ -105,12 +103,12 @@ public class ItemSkuController  {
 			itemSku.setItemName(item.getItemName());
 			String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
 			itemSku.setSkuPic(skuPic);
-			//2.init 
+			//2.init
 			itemSku.setModel("admin");
 			itemSku.setGmtModify(new Date());
 //			iItemSkuService.updateById(itemSku);
 			iItemSkuService.updateItemSku(itemSku);
-			
+
 			//同步到有赞并上架
 			/*
 			if(item.getIsSale()!=null && item.getIsSale()==1) {
@@ -125,17 +123,25 @@ public class ItemSkuController  {
 					} catch (Exception e) {
 						logger.error("商品添加时同步到有赞：", e);
 					}
-				}				
+				}
 			}*/
-			
+
 			//return result.buildIsSuccess(true);
 		//}
 		result.buildIsSuccess(true);
 		result.buildMsg("更新成功");
+		//检测upc是否重复
+		if(0 < iItemSkuService.queryItemCountByUpc(itemSku.getUpc())) {
+			result.buildIsSuccess(false);
+			result.buildMsg("upc不可以重复，请再次输入");
+			return result;
+		}
+		//更新虚拟库存
+		inventoryService.updateVirtualInv(iItemSkuService.querySkuCodeById(itemSku.getId()), itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());		
 		iItemSkuService.updateById(itemSku);
 		return result;
 	}
-	
+
 	/**
 	 * 根据sku_code获取sku
 	 * @param id
@@ -154,7 +160,7 @@ public class ItemSkuController  {
 		}
 		return result.buildIsSuccess(true);
 	}
-	
+
 	@RequestMapping("/queryBySkuCodeOrUpc")
 	@ResponseBody
 	public Object queryBySkuCodeOrUpc(String code) {
@@ -170,7 +176,7 @@ public class ItemSkuController  {
 			} else {
 				tjItemSku.setSkuCode(null);
 				tjItemSku.setUpc(code);
-				
+
 //				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
 //				entityWrapper.setEntity(tjItemSku);
 				//itemSkuList = iItemSkuService.selectList(entityWrapper);
@@ -181,7 +187,7 @@ public class ItemSkuController  {
 		}
 		return result.buildIsSuccess(true);
 	}
-	
+
 	/**
 	 * sku列表展示
 	 * @param itemSkuQueryVO
@@ -191,20 +197,15 @@ public class ItemSkuController  {
 	@ResponseBody
 	public Object queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
 		JsonPageResult<List<ISkuDTO>> result = new JsonPageResult<>();
-		try{
-			try {
-				//itemSkuQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
-			} catch (Exception e) {				
-			}
-			result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
-			result.buildIsSuccess(true);
-		}catch(Exception e){
-			e.printStackTrace();
-			result.buildIsSuccess(false);
+		if(null == AppUtil.getLoginUserCompanyNo()) {
+			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
+		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
+		result.buildIsSuccess(true);
 		return result;
 	}
-	
+
 	/**
 	 * 删除
 	 * @param id
@@ -231,7 +232,7 @@ public class ItemSkuController  {
 	}
 	
 
-	
+
 	/**
 	 * SKU 锁定虚拟库存，用在提前修改可售库存，以便同步到第三方平台(有赞)
 	 *
@@ -247,18 +248,18 @@ public class ItemSkuController  {
 //		} else if(itemSku.getItemCode()==null) {
 //			return result.buildIsSuccess(false).buildMsg("商品编码错误");
 //		}
-		InventoryAddVO inv = inventoryService.queryInvBySkuCode(inventory.getSkuCode());
+		//InventoryAddVO inv = inventoryService.queryInvBySkuCode(inventory.getSkuCode());
 		//if(inventory == null) {
 		//	return result.buildIsSuccess(false).buildMsg("未找到此sku的库存");
 		//}
-		
+
 //		int lockedNum = inventory.getLockedVirtualInv() + itemSku.getLockedVirtualInv();
 //		if(lockedNum<0 || (lockedNum>inventory.getVirtualInv() && lockedNum>inventory.getTotalAvailableInv())) {
 //			return result.buildIsSuccess(false).buildMsg("锁定数量异常");
 //		}
-		inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
-		inventoryService.lockVirtualInv(inv);
-		
+		//inv.setLockedVirtualInv(inventory.getLockedVirtualInv());
+		//inventoryService.lockVirtualInv(inv);
+
 		/**
 		//同步到有赞
 		Item item = iItemService.selectById(itemSku.getItemId());
@@ -281,7 +282,7 @@ public class ItemSkuController  {
 **/
 		return result.buildIsSuccess(true);
 	}
-	
+
 	/**
 	 * 导出excel
 	 * @param id
@@ -317,7 +318,7 @@ public class ItemSkuController  {
     			}
     	        list.add(itemSku.getItemName());	//商品名称
     	        list.add(itemSku.getBrandName());       //商品品牌
-    	       
+
     	        list.add(itemSku.getScale());		//尺码
     	        list.add(itemSku.getSalePrice());	//销售价格
     			rowDatas.add(list);
@@ -328,14 +329,14 @@ public class ItemSkuController  {
     	Integer[] columnWidth = new Integer[]{10, 30, 10, 10, 20, 20};
     	excelHelper.setItemToSheet("Item", columnTitles, rowDatas, columnWidth);
     	//excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
-    	
+
     	ResponseEntity<byte[]> filebyte = null;
     	ByteArrayOutputStream  out = excelHelper.writeToByteArrayOutputStream();
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
     	String fileName = "商品.xlsx";
         headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("utf-8"), "ISO8859-1"));
-        
+
         filebyte = new ResponseEntity<byte[]>(out.toByteArray(), headers, HttpStatus.OK);
         out.close();
         excelHelper.close();
@@ -370,8 +371,8 @@ public class ItemSkuController  {
 	@RequestMapping("/scaleTypeList")
 	@ResponseBody
 	public Object scaleTypeList() {
-		JsonResult<List<ScaleType>> result = new JsonResult<>();
-		List<ScaleType> scaleTypeList= scaleTypeService.scaleTypeList();
+		JsonResult<List<ScaleTypeDO>> result = new JsonResult<>();
+		List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
 		
 		return result.buildData(scaleTypeList).buildIsSuccess(true);
 	}

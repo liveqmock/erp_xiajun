@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface DealerTypeDOMapperExt extends DealerTypeDOMapper {
     List<DealerTypeDO> list();
+    
+    int countRelativeDealerType(String typeCode);
+    
+    int inserByNoId(DealerTypeDO record);
 }

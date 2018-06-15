@@ -10,15 +10,12 @@
     <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
     <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, channal_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no, 
-    gmt_create, gmt_modify, creator, modifier, is_del
+    creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -31,27 +28,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into channel_sale_price (id, channal_no, company_no, 
-      shop_code, sale_price, sku_code, 
-      item_code, batch_no, gmt_create, 
-      gmt_modify, creator, modifier, 
-      is_del)
-    values (#{id,jdbcType=BIGINT}, #{channalNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
-      #{shopCode,jdbcType=BIGINT}, #{salePrice,jdbcType=REAL}, #{skuCode,jdbcType=VARCHAR}, 
-      #{itemCode,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT})
+    insert into channel_sale_price (channal_no, company_no, shop_code, 
+      sale_price, sku_code, item_code, 
+      batch_no, creator, modifier
+      )
+    values (#{channalNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=BIGINT}, 
+      #{salePrice,jdbcType=REAL}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{batchNo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into channel_sale_price
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="channalNo != null" >
         channal_no,
       </if>
@@ -73,24 +67,14 @@
       <if test="batchNo != null" >
         batch_no,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="channalNo != null" >
         #{channalNo,jdbcType=VARCHAR},
       </if>
@@ -112,20 +96,11 @@
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -153,20 +128,11 @@
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -180,11 +146,8 @@
       sku_code = #{skuCode,jdbcType=VARCHAR},
       item_code = #{itemCode,jdbcType=VARCHAR},
       batch_no = #{batchNo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT}
+      modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

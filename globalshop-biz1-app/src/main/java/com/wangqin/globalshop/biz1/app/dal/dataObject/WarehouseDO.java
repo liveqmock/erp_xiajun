@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class WarehouseDO extends BaseModel {
     private Long id;
 
@@ -18,12 +16,6 @@ public class WarehouseDO extends BaseModel {
     private String tel;
 
     private String contactPerson;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -91,30 +83,6 @@ public class WarehouseDO extends BaseModel {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson == null ? null : contactPerson.trim();
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

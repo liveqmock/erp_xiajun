@@ -1,8 +1,10 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.usercenter.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 /**
  * @description：资源管理
  */
 @Controller
 @RequestMapping("/resource")
+@Authenticated
 public class ResourceController extends BaseController {
 
     @Autowired
@@ -146,4 +151,42 @@ public class ResourceController extends BaseController {
         return renderSuccess("删除成功！");
     }
 
+
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(Long id) {
+        JsonResult<AuthResourceDO> result = new JsonResult<>();
+
+        return result.buildData(resourceService.selectById(id)).buildIsSuccess(true);
+    }
+
+    /**
+     * 以列表条目的形式返回所有的资源记录
+     * @param
+     * @return
+     */
+    @RequestMapping("/queryList")
+    @ResponseBody
+    public Object queryList() {
+        JsonResult<List<AuthResourceDO>> result = new JsonResult<List<AuthResourceDO>>();
+
+        result.setData(resourceService.queryResourceList());
+
+        return result.buildIsSuccess(true);
+    }
+
+    /**
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/queryTree")
+    @ResponseBody
+    public Object queryTree() {
+        JsonResult<List<AuthResourceDO>> result = new JsonResult<List<AuthResourceDO>>();
+
+        result.setData(resourceService.queryResourceTree(null));
+
+        return result.buildIsSuccess(true);
+    }
 }

@@ -194,6 +194,8 @@ public class PackingController {
 			result.buildData("错误数据").buildIsSuccess(false);
 		}
 		*/
+		String packagingScaleNo = shippingPackingScaleService.queryNoById(packageLevel.getPackageId());
+		packageLevel.setPackagingScaleNo(packagingScaleNo);
 		iPackageLevelService.updateLevelSelectiveById(packageLevel);
 		result.buildIsSuccess(true);
 		return result;
@@ -206,6 +208,7 @@ public class PackingController {
 	 */
 	@RequestMapping("/packageLevel/add")
 	@ResponseBody
+	
 	public Object add(ItemPackagePatternDTO packageLevel) {
 		JsonResult<String> result = new JsonResult<>();
 		
@@ -224,7 +227,12 @@ public class PackingController {
 				shippingPackingPatternDO.setName(packageLevel.getName());
 				shippingPackingPatternDO.setNameEn(packageLevel.getPackageEn());
 				shippingPackingPatternDO.setPatternNo(RandomUtils.getTimeRandom());
-				shippingPackingPatternDO.setPackagingScaleNo(packageLevel.getPackagingScaleNo());
+				shippingPackingPatternDO.setPackageLevel(packageLevel.getPackageLevel());
+				shippingPackingPatternDO.setWeight(packageLevel.getWeight());
+				//shippingPackingPatternDO.setPackagingScaleNo(packageLevel.getPackagingScaleNo());
+				String packagingScaleNo = shippingPackingScaleService.queryNoById(packageLevel.getPackageId());
+				shippingPackingPatternDO.setPackagingScaleNo(packagingScaleNo);
+				
 				iPackageLevelService.insertPattern(shippingPackingPatternDO);
 			} else {
 				result.buildData("包装规格名称和包装规格类别英文名称不可以为空").buildIsSuccess(false);

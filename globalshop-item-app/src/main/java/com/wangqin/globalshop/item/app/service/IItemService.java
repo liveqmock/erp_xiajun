@@ -8,9 +8,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-
-
-
+import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
 
 /**
  * 
@@ -19,11 +18,13 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 
 public interface IItemService {
 
+	//根据id更新商品
+	void updateByIdSelective(ItemDO item);
 	
 	//插入单个商品
-	int insertItemSelective(ItemDO item);
+	Long insertItemSelective(ItemDO item);
 		
-	ItemDO selectByPrimaryKey(Long id);
+
 	/**
 	 * add item 
 	 * @param item
@@ -39,7 +40,7 @@ public interface IItemService {
 	 * @param item
 	 * @param itemSkuList
 	 */
-	ItemDO queryItem(Long id);
+	ItemDO queryIte(Long id);
 	
 	/**
 	 * 按照条件分页查询商品
@@ -86,5 +87,14 @@ public interface IItemService {
 	
 	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);
 	
-	void updateByPrimaryKeySelective(ItemDO item);
+	
+	Long queryIdByItemCode(String itemCode);
+
+    //渠道模块使用
+	public ItemVo queryAdd(String itemCode);
+
+	//渠道模块使用
+	public GlobalShopItemVo queryUpdate(String itemCode, String shopCode);
+
+
 }

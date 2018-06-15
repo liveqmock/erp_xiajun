@@ -7,7 +7,8 @@
 	</sql>
 	
 	<sql id="Base_Column_List_Old">
-		id,name AS name,name_en AS packageEn,packaging_scale_no AS packagingScaleNo
+		id,name AS name,name_en AS packageEn,packaging_scale_no AS packagingScaleNo,
+		package_level AS packageLevel,weight AS weight
 	</sql>
 	
 	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO">
@@ -89,6 +90,13 @@
       <if test="nameEn != null" >
         name_en,
       </if>
+     
+      <if test="packageLevel != null" >
+        package_level,
+      </if>
+       <if test="weight != null" >
+        weight,
+      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -109,12 +117,20 @@
       <if test="nameEn != null" >
         #{nameEn,jdbcType=VARCHAR},
       </if>
+       <if test="packageLevel != null" >
+        #{packageLevel},
+      </if>
+       <if test="weight != null" >
+        #{weight},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
+      
+     
     </trim>
   </insert>
   
@@ -145,8 +161,16 @@
             <if test=" modifier!= null ">
            		T1.modifier = #{modifier},
             </if>
+            <if test=" weight!= null ">
+           		T1.weight = #{weight},
+            </if>
+            <if test=" packageLevel!= null ">
+           		T1.package_level = #{packageLevel},
+            </if>
          </trim>
            where id=#{id}
     </update>
+    
+    
     
 </mapper>

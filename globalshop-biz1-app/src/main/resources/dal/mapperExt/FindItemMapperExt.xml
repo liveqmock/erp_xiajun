@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemFindDOMapperExt">
+
+   <!-- 1.0通用查询结果列
+    <sql id="Base_Column_List">
+        T1.id,name,T1.status,remark,spec,model,category_id AS categoryId,category_name AS categoryName,item_code AS itemCode,is_new AS isNew,sale_type AS saleType,main_pic AS mainPic,dimensioncode_pic AS dimensionCodePic,item_short AS itemShort,en_name AS enName,brand,country,currency,buy_site AS buySite,origin,weight,price_range as priceRange,unit,source,promotion,contact_person AS contactPerson,contact_tel AS contactTel,id_card AS idCard,start_date AS startDate,end_date AS endDate,is_sale AS isSale,purchase_status AS purchaseStatus,logistic_type as logisticType,gmt_create AS gmtCreate,gmt_modify AS gmtModify,user_create AS userCreate,user_modify AS userModify 
+    </sql>-->
+    
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="item_find_no" property="itemFindNo" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="is_new" property="isNew" jdbcType="TINYINT" />
+    <result column="sale_type" property="saleType" jdbcType="TINYINT" />
+    <result column="currency" property="currency" jdbcType="TINYINT" />
+    <result column="buy_site" property="buySite" jdbcType="VARCHAR" />
+    <result column="origin" property="origin" jdbcType="VARCHAR" />
+    <result column="logistic_type" property="logisticType" jdbcType="TINYINT" />
+    <result column="contact_person" property="contactPerson" jdbcType="VARCHAR" />
+    <result column="contact_tel" property="contactTel" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="TINYINT" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="booking_date" property="bookingDate" jdbcType="TIMESTAMP" />
+    <result column="is_sale" property="isSale" jdbcType="TINYINT" />
+    <result column="wxis_sale" property="wxisSale" jdbcType="TINYINT" />
+    <result column="is_find" property="isFind" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="spec" property="spec" jdbcType="VARCHAR" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="purchase_status" property="purchaseStatus" jdbcType="TINYINT" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="find_address" property="findAddress" jdbcType="VARCHAR" />
+    <result column="refuse_reason" property="refuseReason" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+  </resultMap>
+
+
+ <sql id="Base_Column_List" >
+    T1.id, T1.item_find_no, T1.item_name, T1.item_code, T1.sku_code, T1.is_new, 
+    T1.sale_type, T1.currency, T1.buy_site, T1.origin, T1.logistic_type, 
+    T1.contact_person, T1.contact_tel, T1.id_card, T1.start_date, T1.end_date, 
+    T1.booking_date, T1.is_sale, T1.wxis_sale, T1.is_find, T1.status, T1.desc, 
+    T1.spec, T1.model, T1.buyer_open_id, T1.buyer_name, T1.purchase_status, T1.reason,
+     T1.find_address, T1.refuse_reason, T1.creator, T1.modifier, 
+    T1.gmt_create, T1.gmt_modify, T1.is_del
+  </sql>
+  
+	<select id="queryItemsCount" resultType="java.lang.Integer">
+        SELECT
+        	 <include refid="Base_Column_List" />
+        FROM
+            item_find T1 LEFT JOIN channel_listing_item T2 ON T1.item_code=T2.item_code 
+        where
+     		   T1.is_del=0      
+    </select>
+    
+    <select id="queryFindItems" resultMap="BaseResultMap" >
+        SELECT
+        	 <include refid="Base_Column_List" />
+        FROM
+            item_find T1 LEFT JOIN channel_listing_item T2 ON T1.item_code=T2.item_code 
+        where
+     		   T1.is_del=0   
+              
+            
+    </select>
+
+</mapper>

@@ -14,16 +14,12 @@
     <result column="locked_inv" property="lockedInv" jdbcType="BIGINT" />
     <result column="trans_inv" property="transInv" jdbcType="BIGINT" />
     <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, item_code, item_name, upc, sku_code, virtual_inv, locked_virtual_inv, 
-    inv, locked_inv, trans_inv, locked_trans_inv, gmt_create, gmt_modify, is_del, creator, 
-    modifier
+    inv, locked_inv, trans_inv, locked_trans_inv, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -36,29 +32,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into inventory (id, company_no, item_code, 
-      item_name, upc, sku_code, 
-      virtual_inv, locked_virtual_inv, inv, 
-      locked_inv, trans_inv, locked_trans_inv, 
-      gmt_create, gmt_modify, is_del, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
-      #{itemName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{virtualInv,jdbcType=BIGINT}, #{lockedVirtualInv,jdbcType=BIGINT}, #{inv,jdbcType=BIGINT}, 
-      #{lockedInv,jdbcType=BIGINT}, #{transInv,jdbcType=BIGINT}, #{lockedTransInv,jdbcType=BIGINT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into inventory (company_no, item_code, item_name, 
+      upc, sku_code, virtual_inv, 
+      locked_virtual_inv, inv, locked_inv, 
+      trans_inv, locked_trans_inv, creator, 
+      modifier)
+    values (#{companyNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{upc,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{virtualInv,jdbcType=BIGINT}, 
+      #{lockedVirtualInv,jdbcType=BIGINT}, #{inv,jdbcType=BIGINT}, #{lockedInv,jdbcType=BIGINT}, 
+      #{transInv,jdbcType=BIGINT}, #{lockedTransInv,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into inventory
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="companyNo != null" >
         company_no,
       </if>
@@ -92,15 +85,6 @@
       <if test="lockedTransInv != null" >
         locked_trans_inv,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -109,7 +93,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
@@ -142,15 +125,6 @@
       </if>
       <if test="lockedTransInv != null" >
         #{lockedTransInv,jdbcType=BIGINT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -196,15 +170,6 @@
       <if test="lockedTransInv != null" >
         locked_trans_inv = #{lockedTransInv,jdbcType=BIGINT},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -227,9 +192,6 @@
       locked_inv = #{lockedInv,jdbcType=BIGINT},
       trans_inv = #{transInv,jdbcType=BIGINT},
       locked_trans_inv = #{lockedTransInv,jdbcType=BIGINT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

@@ -11,8 +11,6 @@ public class CompanyDO extends BaseModel {
 
     private Integer status;
 
-    private Date gmtCreate;
-
     private Date gmtModified;
 
     private String shopName;
@@ -29,13 +27,9 @@ public class CompanyDO extends BaseModel {
 
     private Integer forceIdcardUpload;
 
-    private Date gmtModify;
-
     private String creator;
 
     private String modifier;
-
-    private Boolean isDel;
 
     private String intro;
 
@@ -69,14 +63,6 @@ public class CompanyDO extends BaseModel {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
     }
 
     public Date getGmtModified() {
@@ -143,14 +129,6 @@ public class CompanyDO extends BaseModel {
         this.forceIdcardUpload = forceIdcardUpload;
     }
 
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public String getCreator() {
         return creator;
     }
@@ -165,14 +143,6 @@ public class CompanyDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getIntro() {

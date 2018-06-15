@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleResourceDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.usercenter.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ import com.wangqin.globalshop.common.utils.StringUtils;
  *
  */
 @Service
+@Authenticated
 public class RoleServiceImpl implements IRoleService {
 
     @Autowired
@@ -51,28 +55,31 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public void insert(AuthRoleDO role) {
+    public int insert(AuthRoleDO role) {
+        role.init();
+        role.setIsDel(true);
+        return roleMapper.insert(role);
 
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public int deleteById(Long id) {
+        return roleMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public AuthRoleDO selectById(Long id) {
-        return null;
+        return roleMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public void updateSelectiveById(AuthRoleDO role) {
-
+    public int updateSelectiveById(AuthRoleDO role) {
+        role.init();
+        return roleMapper.updateByPrimaryKey(role);
     }
 
     @Override
     public Set<String> queryUserResCodes(String loginName) {
-
         Map<String, Set<String>> resourceMap = roleMapper.selectResourceMapByUserId(loginName);
         Set<String> urls = resourceMap.get("urls");
         Set<String> roles = resourceMap.get("roles");
@@ -151,4 +158,23 @@ public class RoleServiceImpl implements IRoleService {
 //        return resourceMap;
 //    }
 
+
+    @Override
+    public JsonPageResult<List<AuthRoleDO>> queryRoleList(RoleQueryVO roleQueryVO) {
+        JsonPageResult<List<AuthRoleDO>> result = new JsonPageResult<>();
+
+        Integer totalCount = roleMapper.queryRolesCount(roleQueryVO);
+
+        if ((null != totalCount) && (0L != totalCount)) {
+            result.buildPage(totalCount, roleQueryVO);
+
+            List<AuthRoleDO> roles = roleMapper.queryRoleQueryList(roleQueryVO);
+            result.setData(roles);
+        } else {
+            List<AuthRoleDO> roles = new ArrayList<>();
+            result.setData(roles);
+        }
+
+        return result;
+    }
 }

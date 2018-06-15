@@ -17,7 +17,14 @@ public class ItemSkuAddVO implements Serializable {
 	private String companyNo;
 	private String creator;
 	private String modifier;
+	private String categoryCode;
 	
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
+	}
 	public String getCompanyNo() {
 		return companyNo;
 	}

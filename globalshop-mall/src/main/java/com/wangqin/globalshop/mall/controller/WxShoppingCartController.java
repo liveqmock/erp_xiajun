@@ -43,11 +43,8 @@ public class WxShoppingCartController {
         if (selWxShoppingCart != null) {
             selWxShoppingCart.setItemName(shoppingCart.getItemName());
             selWxShoppingCart.setQuantity(shoppingCart.getQuantity() + selWxShoppingCart.getQuantity());
-            selWxShoppingCart.setGmtModify(new Date());
             mallShippingCartDOMapperExt.updateByPrimaryKeySelective(selWxShoppingCart);
         } else {
-            shoppingCart.setGmtCreate(new Date());
-            shoppingCart.setGmtModify(new Date());
             mallShippingCartDOMapperExt.insertSelective(shoppingCart);
         }
         return result.buildIsSuccess(true);

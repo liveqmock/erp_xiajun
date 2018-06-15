@@ -1,8 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
-public class ShippingPackingPatternDO {
+public class ShippingPackingPatternDO extends BaseModel {
     private Long id;
 
     private String patternNo;
@@ -13,11 +11,9 @@ public class ShippingPackingPatternDO {
 
     private String nameEn;
 
-    private Boolean isDel;
+    private Double weight;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
+    private Integer packageLevel;
 
     private String creator;
 
@@ -63,28 +59,20 @@ public class ShippingPackingPatternDO {
         this.nameEn = nameEn == null ? null : nameEn.trim();
     }
 
-    public Boolean getIsDel() {
-        return isDel;
+    public Double getWeight() {
+        return weight;
     }
 
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
+    public Integer getPackageLevel() {
+        return packageLevel;
     }
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
+    public void setPackageLevel(Integer packageLevel) {
+        this.packageLevel = packageLevel;
     }
 
     public String getCreator() {

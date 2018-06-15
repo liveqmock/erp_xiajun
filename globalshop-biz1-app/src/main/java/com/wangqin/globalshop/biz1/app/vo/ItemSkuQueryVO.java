@@ -2,6 +2,8 @@ package com.wangqin.globalshop.biz1.app.vo;
 
 import java.util.Date;
 
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+
 /**
  * 商品对象查询
  * @author zhulu
@@ -9,15 +11,23 @@ import java.util.Date;
  */
 public class ItemSkuQueryVO extends PageQueryVO{
 
+	private String thirdSkuCode;
+	
+	private String companyNo;
+	
 	private Long id;
 	
 	private Long itemId;
+	
+	private Long virtualInv;
 	
 	private Long lockedVirtualInv;
 	/**
 	 * 商品编码
 	 */
 	private String itemCode;
+	
+	private String packageLevelId;
 	
 	/**
 	 * SKU编码
@@ -45,6 +55,8 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	 * 
 	 */
 	private Long categoryId;
+	
+	private String categoryCode;
 	
 	/**
 	 * 品牌
@@ -289,7 +301,47 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	public void setModifier(String modifier) {
 		this.modifier = modifier;
 	}
-	
+
+	public String getCompanyNo() {
+		return companyNo;
+	}
+
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
+
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
+	}
+
+	public String getPackageLevelId() {
+		return packageLevelId;
+	}
+
+	public void setPackageLevelId(String packageLevelId) {
+		this.packageLevelId = packageLevelId;
+	}
+
+	public String getThirdSkuCode() {
+		return thirdSkuCode;
+	}
+
+	public void setThirdSkuCode(String thirdSkuCode) {
+		this.thirdSkuCode = thirdSkuCode;
+	}
+
+
+	public void setVirtualInv(Long virtualInv) {
+		this.virtualInv = virtualInv;
+	}
+
+	public Long getVirtualInv() {
+		return virtualInv;
+	}
 	
 	
 }

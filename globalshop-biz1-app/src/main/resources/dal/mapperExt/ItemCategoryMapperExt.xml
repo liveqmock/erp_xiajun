@@ -82,6 +82,13 @@
       </if>
     </trim>
   </insert>
+  
+  <!-- 删除类目 -->
+  <update id="deleteItemCategoryById" parameterType="java.lang.Long">
+  	update item_category
+  	set is_del=1
+  	where id=#{id}
+  </update>
 	
 	
 	<!-- 查询所有类目 -->
@@ -114,4 +121,26 @@
       AND T1.category_code = #{categoryCode}
 	</where>
 	</select>
+	
+	<!-- 张子阳写 -->
+	<select id="countRelativeItem" parameterType="java.lang.String" resultType="int">
+	SELECT
+	COUNT(*)
+	FROM item T1
+	<where>
+		T1.category_code = #{categoryCode}
+		AND T1.is_del=0
+	</where>
+	</select>
+	
+	<select id="queryChildCategoryCountByCategoryCode" parameterType="java.lang.String" resultType="int">
+	SELECT
+	COUNT(*)
+	FROM item_category T1
+	<where>
+		T1.p_code = #{categoryCode}
+		AND T1.is_del=0
+	</where>
+	</select>
+	<!-- 张子阳写 -->
 </mapper>

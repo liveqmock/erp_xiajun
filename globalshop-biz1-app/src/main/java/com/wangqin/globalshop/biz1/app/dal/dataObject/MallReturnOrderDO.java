@@ -33,19 +33,13 @@ public class MallReturnOrderDO extends BaseModel {
 
     private Date returnPayTime;
 
-    private String desc;
+    private String remark;
 
     private Integer returnRefer;
 
     private String proofImg;
 
     private Integer returnType;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -171,12 +165,12 @@ public class MallReturnOrderDO extends BaseModel {
         this.returnPayTime = returnPayTime;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Integer getReturnRefer() {
@@ -201,30 +195,6 @@ public class MallReturnOrderDO extends BaseModel {
 
     public void setReturnType(Integer returnType) {
         this.returnType = returnType;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

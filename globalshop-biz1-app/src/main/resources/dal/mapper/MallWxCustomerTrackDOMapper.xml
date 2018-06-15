@@ -9,15 +9,11 @@
     <result column="scene" property="scene" jdbcType="VARCHAR" />
     <result column="share_open_id" property="shareOpenId" jdbcType="VARCHAR" />
     <result column="owner_open_id" property="ownerOpenId" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, path, query, scene, share_open_id, owner_open_id, gmt_create, gmt_modify, 
-    is_del, creator, modifier
+    id, company_no, path, query, scene, share_open_id, owner_open_id, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -30,27 +26,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_wx_customer_track (id, company_no, path, 
-      query, scene, share_open_id, 
-      owner_open_id, gmt_create, gmt_modify, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
-      #{query,jdbcType=VARCHAR}, #{scene,jdbcType=VARCHAR}, #{shareOpenId,jdbcType=VARCHAR}, 
-      #{ownerOpenId,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+    insert into mall_wx_customer_track (company_no, path, query, 
+      scene, share_open_id, owner_open_id, 
+      creator, modifier)
+    values (#{companyNo,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{query,jdbcType=VARCHAR}, 
+      #{scene,jdbcType=VARCHAR}, #{shareOpenId,jdbcType=VARCHAR}, #{ownerOpenId,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_wx_customer_track
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="companyNo != null" >
         company_no,
       </if>
@@ -69,15 +60,6 @@
       <if test="ownerOpenId != null" >
         owner_open_id,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -86,7 +68,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
@@ -104,15 +85,6 @@
       </if>
       <if test="ownerOpenId != null" >
         #{ownerOpenId,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -143,15 +115,6 @@
       <if test="ownerOpenId != null" >
         owner_open_id = #{ownerOpenId,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -169,9 +132,6 @@
       scene = #{scene,jdbcType=VARCHAR},
       share_open_id = #{shareOpenId,jdbcType=VARCHAR},
       owner_open_id = #{ownerOpenId,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

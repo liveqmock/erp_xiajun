@@ -15,16 +15,12 @@
     <result column="scale" property="scale" jdbcType="VARCHAR" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, customer_no, open_id, company_no, channel_no, shop_code, sku_name, sku_code, 
-    item_code, item_name, scale, quantity, status, gmt_create, gmt_modify, is_del, creator, 
-    modifier
+    item_code, item_name, scale, quantity, status, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -37,31 +33,26 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_shopping_cart (id, customer_no, open_id, 
-      company_no, channel_no, shop_code, 
-      sku_name, sku_code, item_code, 
-      item_name, scale, quantity, 
-      status, gmt_create, gmt_modify, 
-      is_del, creator, modifier
-      )
-    values (#{id,jdbcType=BIGINT}, #{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
-      #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
-      #{skuName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
-      #{itemName,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
-      #{status,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+    insert into mall_shopping_cart (customer_no, open_id, company_no, 
+      channel_no, shop_code, sku_name, 
+      sku_code, item_code, item_name, 
+      scale, quantity, status, 
+      creator, modifier)
+    values (#{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
+      #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, 
+      #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{scale,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{status,jdbcType=BIT}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_shopping_cart
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="customerNo != null" >
         customer_no,
       </if>
@@ -98,15 +89,6 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -115,7 +97,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="customerNo != null" >
         #{customerNo,jdbcType=VARCHAR},
       </if>
@@ -151,15 +132,6 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=BIT},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -208,15 +180,6 @@
       <if test="status != null" >
         status = #{status,jdbcType=BIT},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -240,9 +203,6 @@
       scale = #{scale,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
       status = #{status,jdbcType=BIT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

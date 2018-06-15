@@ -1,8 +1,14 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
+import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
+
+import java.util.List;
 
 /**
  *
@@ -16,6 +22,8 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
     AuthUserDO selectByLoginName(String userNo);
 
     void insertByVo(UserVo userVo);
+    
+    void insertByUserVo(UserVo userVo);
 
     UserVo selectVoById(String loginName);
 
@@ -25,9 +33,15 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
 
     void selectDataGrid(PageInfo pageInfo);
 
-    void deleteUserById(String userNo);
+    void deleteUserById(Long id);
 
-//    void updateSelectiveById(AuthUserDO user);
+    UserQueryVO queryVoById(Long id);
+
+    JsonPageResult<List<UserQueryVO>> queryUserQueryVOList(UserQueryVO userQueryVO);
+    
+    AuthUserDO selectUserVoByUserNo(String userNo);
+    
+    
     
     /**
      * 查询买手

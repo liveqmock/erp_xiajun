@@ -30,6 +30,7 @@ public class InventoryInoutServiceImpl implements IInventoryInoutService {
 
     @Override
     public List<InventoryInoutDO> queryInventoryInouts(InventoryQueryVO inventoryQueryVO) {
+        inventoryQueryVO.init();
        return inventoryInoutMapperExt.queryInventoryInouts(inventoryQueryVO);
     }
 }

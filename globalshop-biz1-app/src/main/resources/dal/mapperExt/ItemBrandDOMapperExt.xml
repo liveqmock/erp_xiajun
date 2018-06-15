@@ -10,7 +10,7 @@
 	<!-- 2.0版本通用查询结果列 -->
 	<sql id="Base_Column_List_2">
 		T1.id,T1.brand_no AS brandNo,T1.name,T1.name_china AS nameChina,T1.name_alias AS nameAlias,
-		T1.seq,T1.creator,T1.modifier,T1.gmt_create AS gmtCreate, T1.gmt_modify AS gmtModify
+		T1.seq,T1.creator,T1.modifier,T1.gmt_create AS gmtCreate, T1.gmt_modify AS gmtModify,
 		T1.is_del AS isDel
 	</sql>
 
@@ -30,9 +30,10 @@
 
 	<!--分页查询 -->
 	<select id="queryBrands" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
-		SELECT <include refid="Base_Column_List" /> 
+		SELECT 
+		<include refid="Base_Column_List_2" /> 
 		FROM item_brand T1 
-		WHERE is_del=0
+		WHERE T1.is_del=0
 		<if test=" name != null and name != '' ">
 			and T1.name LIKE concat('%',#{name},'%')
         </if>
@@ -124,4 +125,10 @@
       </if>
     </trim>
   </insert>
+  
+  <update id="deleteItemBrandById" parameterType="java.lang.Long">
+  	update `item_brand`
+  	set is_del = 1
+  	where id = #{id}
+  </update>
 </mapper>

@@ -14,6 +14,8 @@ public class ItemPackagePatternDTO extends PageQueryVO{
 		private String name;//名称
 		
 		private String packagingScaleNo;
+		
+		private Long packageId;
 	
 		private String packageEn;
 		
@@ -21,8 +23,17 @@ public class ItemPackagePatternDTO extends PageQueryVO{
 		
 		private String modifier;
 		
+		private Integer packageLevel;
+		
+		private Double weight;
 		
 		
+		public Long getPackageId() {
+			return packageId;
+		}
+		public void setPackageId(Long packageId) {
+			this.packageId = packageId;
+		}
 		public String getCreator() {
 			return creator;
 		}
@@ -59,6 +70,18 @@ public class ItemPackagePatternDTO extends PageQueryVO{
 		public void setPackageEn(String packageEn) {
 			this.packageEn = packageEn;
 		}
+		public Integer getPackageLevel() {
+			return packageLevel;
+		}
+		public void setPackageLevel(Integer packageLevel) {
+			this.packageLevel = packageLevel;
+		}
+		public Double getWeight() {
+			return weight;
+		}
+		public void setWeight(Double weight) {
+			this.weight = weight;
+		}
 		
-	
+		
 }

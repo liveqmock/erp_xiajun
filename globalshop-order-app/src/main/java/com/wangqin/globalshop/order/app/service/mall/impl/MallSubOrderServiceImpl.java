@@ -1,14 +1,13 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.google.common.collect.Maps;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
-import com.wangqin.globalshop.common.enums.OrderStatus;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -21,10 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_CLOSE;
+import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
 
 /**
  * @author biscuit
@@ -83,19 +84,9 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    public JsonResult<List<MallSubOrderDO>> queryErpOrders(MallSubOrderVO erpOrderQueryVO) {
-        JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();
-        // 1、查询总的记录数量
-        Integer totalCount = mallSubOrderDOMapper.queryErpOrdersCount(erpOrderQueryVO);
-        // 2、查询分页记录
-        if (totalCount != null && totalCount != 0L) {
-            List<MallSubOrderDO> erpOrders = mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
-            result.setData(erpOrders);
-        } else {
-            List<MallSubOrderDO> erpOrders = new ArrayList<>();
-            result.setData(erpOrders);
-        }
-        return result;
+    public List<MallSubOrderDO> queryErpOrders(MallSubOrderVO erpOrderQueryVO) {
+        erpOrderQueryVO.init();
+            return mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
     }
 
     @Override
@@ -106,7 +97,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     @Transactional
     public void closeErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
-        erpOrder.setStatus(OrderStatus.CLOSE.getCode());
+        erpOrder.setStatus(ORDER_SATUTS_CLOSE);
         erpOrder.setGmtModify(new Date());
         mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
         //备货状态清空占用库存
@@ -122,7 +113,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         BeanUtils.copyProperties(erpOrder, newErpOrder);
         newErpOrder.setId(null);
 //		newErpOrder.setErpNo(erpNo);
-        newErpOrder.setStatus(OrderStatus.INIT.getCode());
+        newErpOrder.setStatus(ORDER_SATUTS_INIT);
         newErpOrder.setStockStatus( StockUpStatus.INIT.getCode());
         newErpOrder.setGmtModify(new Date());
         newErpOrder.setQuantity(erpOrder.getQuantity()-splitCount);
@@ -306,7 +297,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
 //    @Override
 //    public JsonResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
-//        if(erpOrder.getStatus()!=OrderStatus.INIT.getCode()){
+//        if(erpOrder.getStatus()!=ORDER_SATUTS_INIT.getCode()){
 //            return JsonResult.buildFailed("订单状态错误");
 //        }
 //        //未备货订单
@@ -347,5 +338,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     public int selectCountWithStateAndOrderNo(MallSubOrderDO erpOrderQuery) {
         return mallSubOrderDOMapper.findAlreadyShipped(erpOrderQuery.getOrderNo());
+    }
+
+    @Override
+    public List<MallSubOrderDO> list() {
+        return mallSubOrderDOMapper.list();
+
     }
 }

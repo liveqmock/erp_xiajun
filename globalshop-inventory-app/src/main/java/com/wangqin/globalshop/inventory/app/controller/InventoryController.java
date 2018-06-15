@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -54,6 +55,8 @@ public class InventoryController {
     private ISequenceUtilService sequenceUtilService;
     @Autowired
     private InventoryIMallSubOrderService erpOrderService;
+    @Autowired
+    private MallSubOrderMapperExt mallSubOrderMapper;
 
 
     @RequestMapping("/query")
@@ -118,8 +121,7 @@ public class InventoryController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public Object add(String itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory,
-                      Long transInv) {
+    public Object add(String itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory) {
         InventoryDO inventoryDO = new InventoryDO();
         inventoryDO.setSkuCode(skuCode);
         inventoryDO.setItemCode(itemCode);
@@ -227,15 +229,35 @@ public class InventoryController {
     @RequestMapping("/record/queryList")
     @ResponseBody
     public Object queryInventoryRecords(Long id) {
-        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
-        try {
-            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
-            result.setData(inventoryRecordList);
-            result.buildIsSuccess(true);
-        } catch (Exception e) {
-            result.buildIsSuccess(false);
-        }
-        return result;
+        JsonResult<Object> result = new JsonResult<>();
+        MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(id);
+        List<InventoryOnWareHouseDO> inventoryOnWareHouseDO = inventoryRecordService.selectByCompanyNoAndSkuCode(orderDO.getCompanyNo(), orderDO.getSkuCode());
+        return result.buildIsSuccess(true).buildData(inventoryOnWareHouseDO);
+//        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
+//        try {
+//            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
+//            result.setData(inventoryRecordList);
+//            result.buildIsSuccess(true);
+//        } catch (Exception e) {
+//            result.buildIsSuccess(false);
+//        }
+//        return result;
+    }
+    @RequestMapping("stockWarehouse")
+    @ResponseBody
+    public Object stockWarehouse() {
+        JsonResult<List<InventoryOnWareHouseDO>> result = new JsonResult<>();
+        List<InventoryOnWareHouseDO> inventoryOnWareHouseDO = inventoryRecordService.selectByCompanyNo("3");
+        return result.buildIsSuccess(true).buildData(inventoryOnWareHouseDO);
+//        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();
+//        try {
+//            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
+//            result.setData(inventoryRecordList);
+//            result.buildIsSuccess(true);
+//        } catch (Exception e) {
+//            result.buildIsSuccess(false);
+//        }
+//        return result;
     }
 
     /**
@@ -444,11 +466,8 @@ public class InventoryController {
             String invOutNo = "IOUT" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDD) + "U" + String.format("%0" + 4 + "d", "inventoryControllerJJJJ") + sequenceUtilService.gainINVOUTSequence();
             inventoryOut.setInventoryOutNo(invOutNo);
 //			inventoryOut.setUserCreate(loginName);
-            inventoryOut.setGmtCreate(nowDate);
-            inventoryOut.setGmtModify(nowDate);
         } else {
 //			inventoryOut.setUserModify(loginName);
-            inventoryOut.setGmtModify(nowDate);
         }
 
 //    	if(!StringUtils.isEmpty(inventoryOut.getInventoryOutDetailListStr())) {
@@ -549,27 +568,6 @@ public class InventoryController {
             return result.buildIsSuccess(false).buildMsg("未知异常");
         }
     }
-//	/**
-//	 * 备货商品列表查询
-//	 * @param inventoryQueryVO
-//	 * @return
-//	 */
-//	@RequestMapping("/stockWarehouse")
-//	@ResponseBody
-//	public Object querystockWarehouse(InventoryQueryVO inventoryQueryVO) {
-//		JsonPageResult<List<InventoryStock>> result = new JsonPageResult<>();
-//		try {
-//			if(StringUtil.isNotBlank(inventoryQueryVO.getOrderBy())) {
-//				String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getOrderBy());
-//				inventoryQueryVO.setOrderBy(orderBy);
-//			}
-//			result = inventoryStockService.queryInventoryStock(inventoryQueryVO);
-//			result.buildIsSuccess(true);
-//		} catch (Exception e) {
-//			result.buildIsSuccess(false);
-//		}
-//		return result;
-//	}
 //	/**
 //	 * 盘出到备货仓
 //	 * @param inventoryAreaId

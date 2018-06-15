@@ -1,11 +1,11 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class BuyerReceiptDO extends BaseModel {
     private Long id;
 
     private String buyerTaskNo;
+
+    private String companyNo;
 
     private String receiptNo;
 
@@ -13,17 +13,11 @@ public class BuyerReceiptDO extends BaseModel {
 
     private String currency;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
     private String purchaseStorageNo;
 
     private Byte status;
 
     private Long buyerId;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -43,6 +37,14 @@ public class BuyerReceiptDO extends BaseModel {
 
     public void setBuyerTaskNo(String buyerTaskNo) {
         this.buyerTaskNo = buyerTaskNo == null ? null : buyerTaskNo.trim();
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getReceiptNo() {
@@ -69,22 +71,6 @@ public class BuyerReceiptDO extends BaseModel {
         this.currency = currency == null ? null : currency.trim();
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public String getPurchaseStorageNo() {
         return purchaseStorageNo;
     }
@@ -107,14 +93,6 @@ public class BuyerReceiptDO extends BaseModel {
 
     public void setBuyerId(Long buyerId) {
         this.buyerId = buyerId;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

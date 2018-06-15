@@ -24,17 +24,13 @@
     <result column="sku_pic_url" property="skuPicUrl" jdbcType="VARCHAR" />
     <result column="entry_count" property="entryCount" jdbcType="INTEGER" />
     <result column="upc_pass_reason" property="upcPassReason" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_task_no, item_code, upc, price, max_price, count, owner_name, owner_no, 
     currency, buyer_name, buyer_open_id, status, start_time, end_time, mode, sku_code, 
-    desc, max_count, sku_pic_url, entry_count, upc_pass_reason, gmt_create, gmt_modify, 
-    is_del, creator, modifier
+    desc, max_count, sku_pic_url, entry_count, upc_pass_reason, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -47,35 +43,32 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into buyer_task_detail (id, buyer_task_no, item_code, 
-      upc, price, max_price, count, 
-      owner_name, owner_no, currency, 
-      buyer_name, buyer_open_id, status, 
-      start_time, end_time, mode, 
-      sku_code, desc, max_count, 
-      sku_pic_url, entry_count, upc_pass_reason, 
-      gmt_create, gmt_modify, is_del, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{buyerTaskNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
-      #{upc,jdbcType=VARCHAR}, #{price,jdbcType=REAL}, #{maxPrice,jdbcType=REAL}, #{count,jdbcType=INTEGER}, 
-      #{ownerName,jdbcType=VARCHAR}, #{ownerNo,jdbcType=VARCHAR}, #{currency,jdbcType=TINYINT}, 
-      #{buyerName,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{mode,jdbcType=TINYINT}, 
-      #{skuCode,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR}, #{maxCount,jdbcType=INTEGER}, 
-      #{skuPicUrl,jdbcType=VARCHAR}, #{entryCount,jdbcType=INTEGER}, #{upcPassReason,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into buyer_task_detail (buyer_task_no, item_code, upc, 
+      price, max_price, count, owner_name, 
+      owner_no, currency, buyer_name, 
+      buyer_open_id, status, start_time, 
+      end_time, mode, sku_code, 
+      desc, max_count, sku_pic_url, 
+      entry_count, upc_pass_reason, creator, 
+      modifier)
+    values (#{buyerTaskNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, 
+      #{price,jdbcType=REAL}, #{maxPrice,jdbcType=REAL}, #{count,jdbcType=INTEGER}, #{ownerName,jdbcType=VARCHAR}, 
+      #{ownerNo,jdbcType=VARCHAR}, #{currency,jdbcType=TINYINT}, #{buyerName,jdbcType=VARCHAR}, 
+      #{buyerOpenId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{mode,jdbcType=TINYINT}, #{skuCode,jdbcType=VARCHAR}, 
+      #{desc,jdbcType=VARCHAR}, #{maxCount,jdbcType=INTEGER}, #{skuPicUrl,jdbcType=VARCHAR}, 
+      #{entryCount,jdbcType=INTEGER}, #{upcPassReason,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into buyer_task_detail
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="buyerTaskNo != null" >
         buyer_task_no,
       </if>
@@ -139,15 +132,6 @@
       <if test="upcPassReason != null" >
         upc_pass_reason,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -156,7 +140,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="buyerTaskNo != null" >
         #{buyerTaskNo,jdbcType=VARCHAR},
       </if>
@@ -219,15 +202,6 @@
       </if>
       <if test="upcPassReason != null" >
         #{upcPassReason,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -303,15 +277,6 @@
       <if test="upcPassReason != null" >
         upc_pass_reason = #{upcPassReason,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -344,9 +309,6 @@
       sku_pic_url = #{skuPicUrl,jdbcType=VARCHAR},
       entry_count = #{entryCount,jdbcType=INTEGER},
       upc_pass_reason = #{upcPassReason,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

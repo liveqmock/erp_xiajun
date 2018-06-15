@@ -11,15 +11,12 @@
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="all_path" property="allPath" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="INTEGER" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, category_code, name, p_code, root_code, seq, level, status, all_path, gmt_create, 
-    gmt_modify, is_del, creator, modifier
+    id, category_code, name, p_code, root_code, seq, level, status, all_path, creator, 
+    modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -32,27 +29,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into item_category (id, category_code, name, 
-      p_code, root_code, seq, 
-      level, status, all_path, 
-      gmt_create, gmt_modify, is_del, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{categoryCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{pCode,jdbcType=VARCHAR}, #{rootCode,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, 
-      #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{allPath,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into item_category (category_code, name, p_code, 
+      root_code, seq, level, 
+      status, all_path, creator, 
+      modifier)
+    values (#{categoryCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{pCode,jdbcType=VARCHAR}, 
+      #{rootCode,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{allPath,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into item_category
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="categoryCode != null" >
         category_code,
       </if>
@@ -77,15 +71,6 @@
       <if test="allPath != null" >
         all_path,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
@@ -94,7 +79,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="categoryCode != null" >
         #{categoryCode,jdbcType=VARCHAR},
       </if>
@@ -118,15 +102,6 @@
       </if>
       <if test="allPath != null" >
         #{allPath,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=INTEGER},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -163,15 +138,6 @@
       <if test="allPath != null" >
         all_path = #{allPath,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=INTEGER},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -191,9 +157,6 @@
       level = #{level,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       all_path = #{allPath,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=INTEGER},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

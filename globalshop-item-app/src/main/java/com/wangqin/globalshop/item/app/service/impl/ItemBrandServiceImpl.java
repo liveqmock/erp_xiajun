@@ -97,4 +97,9 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
     }
 	
 
+	//删除品牌
+	@Override
+	public void deleteItemBrandById(Long id) {
+		itemBrandDOMapperExt.deleteByPrimaryKey(id);
+	}
 }

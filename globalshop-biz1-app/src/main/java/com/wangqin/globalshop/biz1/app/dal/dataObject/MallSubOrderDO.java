@@ -85,17 +85,13 @@ public class MallSubOrderDO extends BaseModel {
 
     private String memo;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
     private String creator;
 
     private String modifier;
 
-    private Boolean isDel;
-
     private String subOrderNo;
+
+    private String channelSubOrderNo;
 
     public Long getId() {
         return id;
@@ -425,22 +421,6 @@ public class MallSubOrderDO extends BaseModel {
         this.memo = memo == null ? null : memo.trim();
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
     public String getCreator() {
         return creator;
     }
@@ -457,19 +437,19 @@ public class MallSubOrderDO extends BaseModel {
         this.modifier = modifier == null ? null : modifier.trim();
     }
 
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
-    }
-
     public String getSubOrderNo() {
         return subOrderNo;
     }
 
     public void setSubOrderNo(String subOrderNo) {
         this.subOrderNo = subOrderNo == null ? null : subOrderNo.trim();
+    }
+
+    public String getChannelSubOrderNo() {
+        return channelSubOrderNo;
+    }
+
+    public void setChannelSubOrderNo(String channelSubOrderNo) {
+        this.channelSubOrderNo = channelSubOrderNo == null ? null : channelSubOrderNo.trim();
     }
 }

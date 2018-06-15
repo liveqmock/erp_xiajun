@@ -18,6 +18,79 @@
   <select id="list" resultMap="BaseResultMap" >
     SELECT
     <include refid="Base_Column_List"/>
-    FROM dealer_type
-</select>
+    FROM dealer_type D1
+    <where>
+    	D1.is_del = 0
+    </where>
+ </select>
+	
+ <select id="countRelativeDealerType" parameterType="java.lang.String" resultType="int">
+ 	SELECT 
+ 	count(1)
+ 	FROM dealer D1
+ 	
+ 	<where>
+ 		D1.is_del = 0
+ 		AND
+ 		type_code = #{typeCode}
+ 	
+ 	</where>
+ </select>
+
+	<insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO" >
+    insert into dealer_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="isDel != null" >
+        is_del,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null" >
+        #{isDel,jdbcType=BIT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
 </mapper>

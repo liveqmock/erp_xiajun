@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class ItemBrandDO extends BaseModel {
     private Long id;
 
@@ -14,12 +12,6 @@ public class ItemBrandDO extends BaseModel {
     private String nameAlias;
 
     private Byte seq;
-
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
 
     private String creator;
 
@@ -71,30 +63,6 @@ public class ItemBrandDO extends BaseModel {
 
     public void setSeq(Byte seq) {
         this.seq = seq;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

@@ -6,17 +6,13 @@
     <result column="site_msg_id" property="siteMsgId" jdbcType="BIGINT" />
     <result column="receiver_id" property="receiverId" jdbcType="BIGINT" />
     <result column="read_status" property="readStatus" jdbcType="TINYINT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="TINYINT" />
     <result column="sender_id" property="senderId" jdbcType="BIGINT" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, site_msg_id, receiver_id, read_status, gmt_create, gmt_modified, is_del, sender_id, 
-    gmt_modify, creator, modifier
+    id, site_msg_id, receiver_id, read_status, gmt_modified, sender_id, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,25 +25,22 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SiteMsgReadDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into site_msg_read (id, site_msg_id, receiver_id, 
-      read_status, gmt_create, gmt_modified, 
-      is_del, sender_id, gmt_modify, 
-      creator, modifier)
-    values (#{id,jdbcType=BIGINT}, #{siteMsgId,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT}, 
-      #{readStatus,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=TINYINT}, #{senderId,jdbcType=BIGINT}, #{gmtModify,jdbcType=TIMESTAMP}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+    insert into site_msg_read (site_msg_id, receiver_id, read_status, 
+      gmt_modified, sender_id, creator, 
+      modifier)
+    values (#{siteMsgId,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT}, #{readStatus,jdbcType=TINYINT}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{senderId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.SiteMsgReadDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into site_msg_read
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="siteMsgId != null" >
         site_msg_id,
       </if>
@@ -57,20 +50,11 @@
       <if test="readStatus != null" >
         read_status,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
       <if test="gmtModified != null" >
         gmt_modified,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="senderId != null" >
         sender_id,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
       </if>
       <if test="creator != null" >
         creator,
@@ -80,7 +64,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="siteMsgId != null" >
         #{siteMsgId,jdbcType=BIGINT},
       </if>
@@ -90,20 +73,11 @@
       <if test="readStatus != null" >
         #{readStatus,jdbcType=TINYINT},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
       <if test="gmtModified != null" >
         #{gmtModified,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=TINYINT},
-      </if>
       <if test="senderId != null" >
         #{senderId,jdbcType=BIGINT},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -125,20 +99,11 @@
       <if test="readStatus != null" >
         read_status = #{readStatus,jdbcType=TINYINT},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
       <if test="gmtModified != null" >
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=TINYINT},
-      </if>
       <if test="senderId != null" >
         sender_id = #{senderId,jdbcType=BIGINT},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -154,11 +119,8 @@
     set site_msg_id = #{siteMsgId,jdbcType=BIGINT},
       receiver_id = #{receiverId,jdbcType=BIGINT},
       read_status = #{readStatus,jdbcType=TINYINT},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      is_del = #{isDel,jdbcType=TINYINT},
       sender_id = #{senderId,jdbcType=BIGINT},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

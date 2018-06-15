@@ -192,7 +192,7 @@
       <include refid="Base_Column_List"/>
       FROM
       warehouse
-      WHERE warehouse_no =${warehouseNo}
+      WHERE warehouse_no =#{warehouseNo}
 
   </select>
   <select id="selectByCompanyNo" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -200,7 +200,7 @@
       <include refid="Base_Column_List"/>
       FROM
       warehouse
-      WHERE company_no =${companyNo}
+      WHERE company_no =#{companyNo}
 
   </select>
   <select id="list" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -208,6 +208,10 @@
       <include refid="Base_Column_List"/>
       FROM
       warehouse
+    WHERE 1=1
+    <if test="companyNo!=null and companyNo!=''">
+      and company_no=#{companyNo}
+    </if>
   </select>
 
 

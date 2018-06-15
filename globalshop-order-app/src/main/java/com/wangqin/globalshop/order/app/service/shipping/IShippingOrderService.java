@@ -5,7 +5,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.exception.InventoryException;
 
@@ -18,11 +17,11 @@ public interface IShippingOrderService {
 
 //	Set<Long> multiDelivery(ShippingOrderDO shippingOrder) ;
 
-	JsonPageResult<List<ShippingOrderDO>> queryShippingOrders(ShippingOrderVO shippingOrderVO);
+	List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO);
 
     MultiDeliveryFormDTO queryByOrderId(String erpOrderId);
 
-    Set<String> multiDelivery(ShippingOrderDO shippingOrderDO) throws InventoryException;
+    Set<String> multiDelivery(ShippingOrderDO shippingOrderDO) throws Exception;
 
     List<MallSubOrderDO> queryShippingOrderDetail(String mallOrders);
 
@@ -47,6 +46,9 @@ public interface IShippingOrderService {
     ShippingOrderDO selectOne(ShippingOrderDO order);
 
     void updateStatusByShippingNo(String logisticNo);
+//    -------------------------------------------------
+
+    void ship(ShippingOrderDO erpOrderId);
 
 
 //	MultiDeliveryFormDTO queryByErpOrderId(String erpOrderId);

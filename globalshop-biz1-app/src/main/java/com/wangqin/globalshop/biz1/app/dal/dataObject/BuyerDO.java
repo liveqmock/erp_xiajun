@@ -33,12 +33,6 @@ public class BuyerDO extends BaseModel {
 
     private Date lastLoginTime;
 
-    private Date gmtCreate;
-
-    private Date gmtModify;
-
-    private Boolean isDel;
-
     private String creator;
 
     private String modifier;
@@ -161,30 +155,6 @@ public class BuyerDO extends BaseModel {
 
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public Boolean getIsDel() {
-        return isDel;
-    }
-
-    public void setIsDel(Boolean isDel) {
-        this.isDel = isDel;
     }
 
     public String getCreator() {

@@ -43,12 +43,10 @@
     <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR" />
     <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+    <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code, 
@@ -56,8 +54,8 @@
     scale, sku_pic, logistic_type, freight, freight_real, weight, sale_price, sale_price_agent, 
     quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no, 
     receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address, 
-    telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, gmt_create, 
-    gmt_modify, creator, modifier, is_del, sub_order_no
+    telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, creator, 
+    modifier, sub_order_no, channel_sub_order_no
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -70,49 +68,46 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_sub_order (id, order_no, mall_return_order_no, 
-      customer_no, open_id, company_no, 
-      shop_code, channel_order_no, order_time, 
-      item_code, item_name, sku_code, 
-      channel_sku_code, upc, scale, 
-      sku_pic, logistic_type, freight, 
-      freight_real, weight, sale_price, 
-      sale_price_agent, quantity, status, 
-      close_reason, warehouse_no, stock_status, 
-      shipping_order_no, shipping_no, receiver, 
-      receiver_country, receiver_state, receiver_city, 
-      receiver_district, receiver_address, telephone, 
-      postcode, id_card, idcard_pic_front, 
-      idcard_pic_reverse, memo, gmt_create, 
-      gmt_modify, creator, modifier, 
-      is_del, sub_order_no)
-    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{mallReturnOrderNo,jdbcType=VARCHAR}, 
-      #{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
-      #{shopCode,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
-      #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
-      #{channelSkuCode,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
-      #{skuPic,jdbcType=VARCHAR}, #{logisticType,jdbcType=INTEGER}, #{freight,jdbcType=DOUBLE}, 
-      #{freightReal,jdbcType=DOUBLE}, #{weight,jdbcType=DOUBLE}, #{salePrice,jdbcType=DOUBLE}, 
-      #{salePriceAgent,jdbcType=DOUBLE}, #{quantity,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{closeReason,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{stockStatus,jdbcType=INTEGER}, 
-      #{shippingOrderNo,jdbcType=VARCHAR}, #{shippingNo,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
-      #{receiverCountry,jdbcType=VARCHAR}, #{receiverState,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, 
-      #{receiverDistrict,jdbcType=VARCHAR}, #{receiverAddress,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
-      #{postcode,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, 
-      #{idcardPicReverse,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModify,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{isDel,jdbcType=BIT}, #{subOrderNo,jdbcType=VARCHAR})
+    insert into mall_sub_order (order_no, mall_return_order_no, customer_no, 
+      open_id, company_no, shop_code, 
+      channel_order_no, order_time, item_code, 
+      item_name, sku_code, channel_sku_code, 
+      upc, scale, sku_pic, 
+      logistic_type, freight, freight_real, 
+      weight, sale_price, sale_price_agent, 
+      quantity, status, close_reason, 
+      warehouse_no, stock_status, shipping_order_no, 
+      shipping_no, receiver, receiver_country, 
+      receiver_state, receiver_city, receiver_district, 
+      receiver_address, telephone, postcode, 
+      id_card, idcard_pic_front, idcard_pic_reverse, 
+      memo, creator, modifier, 
+      sub_order_no, channel_sub_order_no)
+    values (#{orderNo,jdbcType=VARCHAR}, #{mallReturnOrderNo,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
+      #{channelOrderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, #{itemCode,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{channelSkuCode,jdbcType=VARCHAR}, 
+      #{upc,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR}, 
+      #{logisticType,jdbcType=INTEGER}, #{freight,jdbcType=DOUBLE}, #{freightReal,jdbcType=DOUBLE}, 
+      #{weight,jdbcType=DOUBLE}, #{salePrice,jdbcType=DOUBLE}, #{salePriceAgent,jdbcType=DOUBLE}, 
+      #{quantity,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{closeReason,jdbcType=VARCHAR}, 
+      #{warehouseNo,jdbcType=VARCHAR}, #{stockStatus,jdbcType=INTEGER}, #{shippingOrderNo,jdbcType=VARCHAR}, 
+      #{shippingNo,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{receiverCountry,jdbcType=VARCHAR}, 
+      #{receiverState,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, #{receiverDistrict,jdbcType=VARCHAR}, 
+      #{receiverAddress,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, 
+      #{memo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{subOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_sub_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
       <if test="orderNo != null" >
         order_no,
       </if>
@@ -233,27 +228,20 @@
       <if test="memo != null" >
         memo,
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
       </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
       <if test="subOrderNo != null" >
         sub_order_no,
       </if>
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      #{id,jdbcType=BIGINT},
       <if test="orderNo != null" >
         #{orderNo,jdbcType=VARCHAR},
       </if>
@@ -374,23 +362,17 @@
       <if test="memo != null" >
         #{memo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
       <if test="subOrderNo != null" >
         #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSubOrderNo != null" >
+        #{channelSubOrderNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -517,23 +499,17 @@
       <if test="memo != null" >
         memo = #{memo,jdbcType=VARCHAR},
       </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="isDel != null" >
-        is_del = #{isDel,jdbcType=BIT},
-      </if>
       <if test="subOrderNo != null" >
         sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSubOrderNo != null" >
+        channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -580,12 +556,10 @@
       idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
       idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
       memo = #{memo,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
-      is_del = #{isDel,jdbcType=BIT},
-      sub_order_no = #{subOrderNo,jdbcType=VARCHAR}
+      sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
