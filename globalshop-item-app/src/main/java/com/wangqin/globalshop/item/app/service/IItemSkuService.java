@@ -93,4 +93,6 @@ public interface IItemSkuService  {
 	 String querySkuCodeById(Long id);
 
     List<ItemSkuDO> queryByItemCodeAndCompanyNo( String itemCode,  String loginUserCompanyNo);
+
+    ItemSkuDO queryBySkuCodeOrUpcAndCompanyNo(String code, String companyNo);
 }

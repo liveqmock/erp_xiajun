@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -161,31 +162,34 @@ public class ItemSkuController  {
 		return result.buildIsSuccess(true);
 	}
 
-	@RequestMapping("/queryBySkuCodeOrUpc")
+	@PostMapping("/queryBySkuCodeOrUpc")
 	@ResponseBody
 	public Object queryBySkuCodeOrUpc(String code) {
-		JsonPageResult<List<ItemSkuDO>> result = new JsonPageResult<>();
-		if(StringUtils.isNoneBlank(code)) {
-			List<ItemSkuDO> itemSkuList = null;
-			ItemSkuDO tjItemSku = new ItemSkuDO();
-			tjItemSku.setSkuCode(code);
-			ItemSkuDO selItemSku = iItemSkuService.selectByPrimaryKey(tjItemSku.getId());
-			if(selItemSku != null) {
-				itemSkuList = new ArrayList<ItemSkuDO>();
-				itemSkuList.add(selItemSku);
-			} else {
-				tjItemSku.setSkuCode(null);
-				tjItemSku.setUpc(code);
-
-//				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
-//				entityWrapper.setEntity(tjItemSku);
-				//itemSkuList = iItemSkuService.selectList(entityWrapper);
-			}
-			result.setData(itemSkuList);
-		} else {
-			result.buildIsSuccess(false).buildMsg("skuCode 不能为空");
-		}
-		return result.buildIsSuccess(true);
+		JsonResult<ItemSkuDO> result = new JsonResult<>();
+		ItemSkuDO item = iItemSkuService.queryBySkuCodeOrUpcAndCompanyNo(code,AppUtil.getLoginUserCompanyNo());
+		return result.buildData(item).buildIsSuccess(true);
+//		JsonPageResult<List<ItemSkuDO>> result = new JsonPageResult<>();
+//		if(StringUtils.isNoneBlank(code)) {
+//			List<ItemSkuDO> itemSkuList = null;
+//			ItemSkuDO tjItemSku = new ItemSkuDO();
+//			tjItemSku.setSkuCode(code);
+//			ItemSkuDO selItemSku = iItemSkuService.selectByPrimaryKey(tjItemSku.getId());
+//			if(selItemSku != null) {
+//				itemSkuList = new ArrayList<ItemSkuDO>();
+//				itemSkuList.add(selItemSku);
+//			} else {
+//				tjItemSku.setSkuCode(null);
+//				tjItemSku.setUpc(code);
+//
+////				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
+////				entityWrapper.setEntity(tjItemSku);
+//				//itemSkuList = iItemSkuService.selectList(entityWrapper);
+//			}
+//			result.setData(itemSkuList);
+//		} else {
+//			result.buildIsSuccess(false).buildMsg("skuCode 不能为空");
+//		}
+//		return result.buildIsSuccess(true);
 	}
 
 	/**
