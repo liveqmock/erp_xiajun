@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.jd.open.api.sdk.DefaultJdClient;
 import com.jd.open.api.sdk.JdClient;
 import com.jd.open.api.sdk.JdException;
+import com.jd.open.api.sdk.domain.AdWords;
+import com.jd.open.api.sdk.domain.Image;
 import com.jd.open.api.sdk.domain.Sku;
 import com.jd.open.api.sdk.domain.Ware;
 import com.jd.open.api.sdk.domain.order.OrderQueryJsfService.OrderSearchInfo;
@@ -111,6 +113,24 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		ware.setOuterId(itemVo.getItemCode());
 		ware.setWrap(itemVo.getUnit());
 
+		List<Image> images = new ArrayList<>();
+//		Image image = new Image();
+//		image.setColorId(00000000000+"");
+//		image.setImgUrl("jfs/t2116/102/1731643157/81969/c3df941a/5670f868Nc441d4c3.jpg");
+//		image.setImgId(1L);
+//		image.setImgIndex(1);
+
+		Image image = new Image("jfs/t2116/102/1731643157/81969/c3df941a/5670f868Nc441d4c3.jpg",00000000000+"",1);
+		images.add(image);
+		ware.setImages(images);
+
+
+		AdWords adWords = new AdWords();
+		adWords.setUrl("adWords url");
+		adWords.setUrlWords("链接广告词");
+		adWords.setWords("广告词");
+		ware.setAdWords(adWords);
+
 
 		List<Sku> skus = new ArrayList<>();
 		for(ItemSkuVo skuVo : itemVo.getItemSkus()){
@@ -187,7 +207,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 		if(!response.getCode().equals("0")){
 			String errorMsg = "";
-			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("商品更新时，京东内部出错:"+errorMsg);
 		}
 
@@ -195,7 +215,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	}
 
 
-	//已完成
+	//已完成，成功
 	public void listingItem(ChannelListingItemVo channelListingItemVo){
 		WareWriteUpOrDownRequest request=new WareWriteUpOrDownRequest();
 		request.setNote(channelListingItemVo.getNode());
@@ -212,14 +232,14 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			return;
 		}else {
 			String errorMsg = "";
-			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("上架商品时，京东内部出错:"+errorMsg);
 		}
 
 	}
 
 
-	//已完成
+	//已完成，成功
 	public void delistingItem(ChannelListingItemVo channelListingItemVo){
 
 		WareWriteUpOrDownRequest request =  new WareWriteUpOrDownRequest();
@@ -237,7 +257,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			return;
 		}else {
 			String errorMsg = "";
-			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("上架商品时，京东内部出错:"+errorMsg);
 		}
 	}
@@ -265,8 +285,37 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		}
 		if(response.getSuccess()){
 			String errorMsg = "";
-			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("上架商品时，京东内部出错:"+errorMsg);
+		}
+	}
+
+
+	public void resetSkuStockNum(ChannelListingItemVo channelListingItemVo){
+
+		StockWriteUpdateSkuStockRequest request = new StockWriteUpdateSkuStockRequest();
+
+		StockWriteUpdateSkuStockResponse response = null;
+
+        for(ChannelListingItemSkuVo skuVo : channelListingItemVo.getChannelListingItemSkuVos()){
+
+			request.setSkuId(Long.valueOf(skuVo.getChannelItemSkuCode()));
+			request.setStockNum(skuVo.getStockNum());
+			try {
+				response = client.execute(request);
+			} catch (JdException e) {
+				logger.error("modifySalePrice",e);
+				throw new ErpCommonException("modifySalePrice,修改商品库存时，京东内部出错");
+			}
+
+			if(response != null && response.getSuccess()){
+				return;
+			}
+			if(response.getSuccess()){
+				String errorMsg = "";
+				errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
+				throw new ErpCommonException("修改商品库存时，京东内部出错:"+errorMsg);
+			}
 		}
 	}
 
@@ -327,6 +376,27 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 		}
 		return resultList;
+	}
+
+
+
+
+
+	public void createItemSku(){
+//		SkuWriteUpdateSkusRequest request=new SkuWriteUpdateSkusRequest();
+//
+//		request.setAppId( "jingdong" );
+//		request.setName( "jingdong" );
+//		request.setWareId( 123 );
+//		request.setSkuId( "123,234,345" );
+//		request.setSaleAttrs( "jingdong,yanfa,pop" );
+//		request.setSkuFeatures( "jingdong,yanfa,pop" );
+//		request.setJdPrice( "jingdong,yanfa,pop" );
+//		request.setOuterId( "jingdong,yanfa,pop" );
+//		request.setStockNum( "jingdong,yanfa,pop" );
+//		request.setBarCode( "jingdong,yanfa,pop" );
+//
+//		SkuWriteUpdateSkusResponse response=client.execute(request);
 	}
 
 
@@ -446,7 +516,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		}
 		if(response == null || response.getOrderDetailInfo() == null){
 			String errorMsg = "";
-			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("发货到京东时，京东内部出错:"+errorMsg);
 		}
 		OrderSearchInfo order = response.getOrderDetailInfo().getOrderInfo();
@@ -489,7 +559,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		}
 		if(!response.getSopjosshipmentResult().getSuccess()){
 			String errorMsg = "";
-			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("发货到京东时，京东内部出错:"+errorMsg);
 		}
 
@@ -520,6 +590,9 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		channelListingItemVo.setChannelItemAlias(ware.getTitle());
 
 		//itemVo.
+
+		resultVo.setChannelListingItemVo(channelListingItemVo);
+		resultVo.setItemVo(itemVo);
 
         return resultVo;
 

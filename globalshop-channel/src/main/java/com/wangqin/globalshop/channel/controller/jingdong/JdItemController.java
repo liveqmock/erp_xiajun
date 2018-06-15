@@ -98,6 +98,7 @@ public class JdItemController extends BaseController {
 	}
 
 
+	//已成功测试
 	@RequestMapping("/listingItem")
 	@ResponseBody
 	public Object listingItem(String jdCommonParam, String  channelListingItemVo)  {
@@ -162,6 +163,43 @@ public class JdItemController extends BaseController {
 
 		try {
 			JdShopFactory.getChannel(shopOauth).delistingItem(data);
+		}catch (ErpCommonException e){
+			return result.buildIsSuccess(false).buildMsg("错误："+e.getErrorMsg());
+		}catch (Exception e){
+			logger.error("",e);
+			return result.buildIsSuccess(false).buildMsg("内部错误："+e.getMessage());
+		}
+
+		return result.buildIsSuccess(true).buildMsg("成功");
+	}
+
+	@RequestMapping("/resetSkuInv")
+	@ResponseBody
+	public Object resetSkuInv(String jdCommonParam, String channelListingItemVo)  {
+
+		JsonResult<String> result = new JsonResult<>();
+
+		JdShopOauthDO shopOauth = null;
+		try {
+			shopOauth = getShopOauth(jdCommonParam);
+		}catch (ErpCommonException e){
+			return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+		}catch (Exception e){
+			logger.error("",e);
+			return  result.buildIsSuccess(false).buildMsg(e.getMessage());
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		ChannelListingItemVo data = null;
+		try {
+			data = mapper.readValue(channelListingItemVo,ChannelListingItemVo.class);
+		} catch (IOException e) {
+			logger.error("",e);
+			return result.buildIsSuccess(false).buildMsg("内部错误："+e.getMessage());
+		}
+
+		try {
+			JdShopFactory.getChannel(shopOauth).resetSkuStockNum(data);
 		}catch (ErpCommonException e){
 			return result.buildIsSuccess(false).buildMsg("错误："+e.getErrorMsg());
 		}catch (Exception e){

@@ -52,6 +52,12 @@ public interface JdShopService {
 	public void modifySalePrice(ChannelSalePriceVo channelSalePriceVo);
 
 	/**
+	 * 商品库存修改，全量
+	 * @param channelListingItemVo
+	 */
+	public void resetSkuStockNum(ChannelListingItemVo channelListingItemVo);
+
+	/**
 	 * 根据时间抓商品
 	 * @param startTime
 	 * @param endTime
