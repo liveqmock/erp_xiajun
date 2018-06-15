@@ -117,14 +117,14 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 
 		String result = HttpPostUtil.doHttpPost(GlobalshopStatic.globalshop_dev_url+"/jditem/queryadd",param);
 
-		JsonResult<ItemVo> jsonResult = JSON.parseObject(result,JsonResult.class);
-
-		if(!jsonResult.isSuccess()){
-			jdItemOperateDO.setSyncStatus(SyncStatus.FAILURE);
-			jdItemOperateDO.setErrorMassge(EasyUtil.truncateLEFitSize(jsonResult.getMsg(),1020));
-			jdItemOperateDOMapperExt.updateByPrimaryKey(jdItemOperateDO);
-			return;
-		}
+//		JsonResult<ItemVo> jsonResult = JSON.parseObject(result,JsonResult.class);
+//
+//		if(!jsonResult.isSuccess()){
+//			jdItemOperateDO.setSyncStatus(SyncStatus.FAILURE);
+//			jdItemOperateDO.setErrorMassge(EasyUtil.truncateLEFitSize(jsonResult.getMsg(),1020));
+//			jdItemOperateDOMapperExt.updateByPrimaryKey(jdItemOperateDO);
+//			return;
+//		}
 
 
 		ItemVo itemVo = JSON.parseObject(result, ItemVo.class);

@@ -118,11 +118,13 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			sku.setBarCode(skuVo.getUpc());
 			sku.setOuterId(skuVo.getSkuCode());
 			sku.setJdPrice(BigDecimal.valueOf(skuVo.getSalePrice()));
-			sku.setStockNum(skuVo.getTotalAvailableInv());
+			//sku.setStockNum(skuVo.getTotalAvailableInv());
+			sku.setStockNum(100L);//必填大于0
 			skus.add(sku);
 		}
 		ware.setSkus(skus);
 		request.setWare(ware);
+		request.setSkus(skus);
 
 		WareWriteAddResponse response = null;
 		try {
@@ -134,7 +136,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
         if(!response.getCode().equals("0")){
 			String errorMsg = "";
-			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
+			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("商品发布时，京东内部出错:"+errorMsg);
 		}
 		return JSONObject.toJSON(response.getWare());
