@@ -25,12 +25,21 @@
     	D1.is_del = 0
     </where>
   </select>
+  
+  <select id="list2" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List"/>
+    FROM dealer D1
+  </select>
+  
   <select id="selectByCode" resultMap="BaseResultMap">
     SELECT 
     <include refid="Base_Column_List"/>
     FROM dealer
     WHERE code = #{code}
   </select>
+  
+  
   
   <insert id="insertNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO" >
     insert into dealer

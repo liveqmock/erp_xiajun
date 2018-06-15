@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.inventory.app.service;
 
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface InventoryService {
     /**超售入库*/
     void outbound(List<InventoryDO> list);
     /**发货*/
-    void ship(MallSubOrderDO mallSubOrderDO);
+    void ship(MallSubOrderDO mallSubOrderDO) throws ErpCommonException;
     /**下单*/
     void order(MallOrderDO mallOrderDO);
     /**下单*/
@@ -29,7 +30,7 @@ public interface InventoryService {
     void updateVirtualInv(String skuCode,Long virInv,String companyNo);
 
     InventoryDO selectByItemCodeAndSkuCode(String itemCode, String skuCode);
-    /**释放占用*/
+    /**取消订单*/
     void release(MallSubOrderDO order);
 
     void checkIn(String skuCode, Long warehouseId, String positionNo, Long quantity);

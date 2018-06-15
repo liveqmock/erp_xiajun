@@ -21,7 +21,7 @@ public interface IShippingOrderService {
 
     MultiDeliveryFormDTO queryByOrderId(String erpOrderId);
 
-    Set<String> multiDelivery(ShippingOrderDO shippingOrderDO) throws InventoryException;
+    Set<String> multiDelivery(ShippingOrderDO shippingOrderDO) throws Exception;
 
     List<MallSubOrderDO> queryShippingOrderDetail(String mallOrders);
 

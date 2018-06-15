@@ -8,7 +8,7 @@ import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-
+import org.apache.ibatis.annotations.Param;
 
 
 public interface IItemSkuService  {
@@ -28,19 +28,19 @@ public interface IItemSkuService  {
 	 * @return
 	 */
 	List<InventoryDO> initInventory(List<ItemSkuAddVO> itemSkuList);
-//
-//	/**
-//	 * 新增SKU
-//	 * @param itemSku
-//	 */
-//	void addItemSku(ItemSkuDO itemSku);
-//
-//	/**
-//	 * update SKU
-//	 * @param itemSku
-//	 */
-//	void updateItemSku(ItemSkuDO itemSku);
-//	
+	
+	/**
+	 * 新增SKU
+	 * @param itemSku
+	 */
+	void addItemSku(ItemSkuDO itemSku);
+	
+	/**
+	 * update SKU
+	 * @param itemSku
+	 */
+	void updateItemSku(ItemSkuDO itemSku);
+	
 	/**
 	 * 新增SKU
 	 * @param itemSku
@@ -83,4 +83,14 @@ public interface IItemSkuService  {
 	 Integer queryItemCountByUpc(String upc);
 	 
 	 List<ItemSkuDO> querySkuListByItemCode(String itemCode);
+	 
+	 List<ItemSkuDO> queryItemSkuListSelective(ItemSkuQueryVO itemSkuQueryVO);
+	 
+	 void deleteItemSkuBySkuCode(String skuCode);
+	 
+	 void insertItemSkuSelective(ItemSkuDO itemSkuDO);
+	 
+	 String querySkuCodeById(Long id);
+
+    List<ItemSkuDO> queryByItemCodeAndCompanyNo( String itemCode,  String loginUserCompanyNo);
 }

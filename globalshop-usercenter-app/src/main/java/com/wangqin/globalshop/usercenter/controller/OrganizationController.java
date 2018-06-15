@@ -121,6 +121,7 @@ public class OrganizationController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public Object edit(AuthOrganizationDO organization) {
+    	organization.setOrgId(organization.getCode());
         organizationService.updateSelectiveById(organization);
         return renderSuccess("编辑成功！");
     }

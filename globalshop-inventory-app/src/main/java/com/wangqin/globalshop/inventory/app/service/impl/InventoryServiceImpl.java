@@ -236,8 +236,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param orderDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
-    public void ship(MallSubOrderDO orderDO) {
+    public void ship(MallSubOrderDO orderDO) throws ErpCommonException {
         /**修改库存  和  库存占用*/
         InventoryDO inventoryDO = mapper.queryBySkuCode(orderDO.getSkuCode());
         /**
@@ -245,7 +244,11 @@ public class InventoryServiceImpl implements InventoryService {
          * */
         Integer quantity = orderDO.getQuantity();
         inventoryDO.setLockedInv(inventoryDO.getLockedInv() - quantity);
-        inventoryDO.setInv(inventoryDO.getInv() - quantity);
+        long inv = inventoryDO.getInv() - quantity;
+        if (inv < 0){
+            throw new ErpCommonException("库存不足,不允许发货");
+        }
+        inventoryDO.setInv(inv);
         mapper.updateByPrimaryKeySelective(inventoryDO);
         /**更新相关InventoryOnWareHouse*/
         /**发货*/

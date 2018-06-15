@@ -52,8 +52,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
 	void updateById(ItemSkuQueryVO itemSkuQueryVO);
 
-	void deleteBySkuCode(String skuCode);
-
     ItemSkuDO queryItemBySkuCode(@Param("skuCode") String skuCode);
 
     List<ItemSkuDO> queryItemSkuList(ItemSkuDO skuSo);
@@ -71,4 +69,14 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	Integer queryItemCountByUpc(String upc);
 	
 	List<ItemSkuDO> querySkuListByItemCode(String itemCode);
+	
+	List<ItemSkuDO> queryItemSkuListSelective(ItemSkuQueryVO itemSkuQueryVO);
+	
+	void deleteItemSkuBySkuCode(String skuCode);
+	
+	void insertItemSkuSelective(ItemSkuDO itemSkuDO);
+	
+	String querySkuCodeById(Long id);
+
+    List<ItemSkuDO> queryByItemCodeAndCompanyNo(@Param("itemCode") String itemCode, @Param("companyNo") String CompanyNo);
 }

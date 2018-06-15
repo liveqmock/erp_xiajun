@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.DealerTypeDOMapperExt;
 import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
@@ -14,6 +15,7 @@ import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
  * @data 2018/06/05
  */
 @Service
+@Authenticated
 public class DealerTypeServiceImpl implements IDealerTypeService {
     @Autowired
     private DealerTypeDOMapperExt mapper;
@@ -48,8 +50,9 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
 	@Override
 	public void deleteById(DealerTypeDO dealerType) {
 		// TODO Auto-generated method stub
-		dealerType.setIsDel(true);
-		mapper.updateByPrimaryKeySelective(dealerType);
+		DealerTypeDO dealerTypes = mapper.selectByPrimaryKey(dealerType.getId());
+		dealerTypes.setIsdel(1);
+		mapper.updateByPrimaryKeySelective(dealerTypes);
 	}
 	@Override
 	public int countRelativeDealerType(String typeCode) {

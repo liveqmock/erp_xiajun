@@ -12,14 +12,17 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.LogisticCompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.NumberUtil;
+import com.wangqin.globalshop.common.utils.ShiroUtil;
+import com.wangqin.globalshop.common.utils.czh.Util;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
@@ -75,7 +78,6 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
         });
         List<MallSubOrderDO> mallSubOrderList = mallSubOrderMapper.queryByOrderId(erpOrderIdList);
-        List<MallSubOrderDO> totalMallSubOrderList = new ArrayList<>();
         String receiver = null;
         String telephone = null;
         String addressDetail = null;
@@ -151,12 +153,13 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //        });
         multiDeliveryFormDTO.setSkuWeight(skuWeight);
         multiDeliveryFormDTO.setTotalSalePrice(totalSalePrice);
-        multiDeliveryFormDTO.setMallSubOrderList(totalMallSubOrderList);
+        multiDeliveryFormDTO.setMallSubOrderList(mallSubOrderList);
         return multiDeliveryFormDTO;
     }
 
     @Override
-    public Set<String> multiDelivery(ShippingOrderDO shippingOrder) throws InventoryException {
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public Set<String> multiDelivery(ShippingOrderDO shippingOrder) throws ErpCommonException {
         String erpOrderIds = shippingOrder.getMallOrders();
         StringBuffer erpNos = new StringBuffer();
         String s = erpOrderIds.replace("&quot;", "\"");
@@ -470,9 +473,8 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         shippingOrderMapper.updateStatusByShippingNo(logisticNo);
     }
 
-    @Transactional(rollbackFor = ErpCommonException.class)
     @Override
-    public void ship(ShippingOrderDO shippingOrder) {
+    public void ship(ShippingOrderDO shippingOrder) throws ErpCommonException {
         String shippingNo = "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence();
         StringBuffer erpNos = new StringBuffer();
         String mallOrders = shippingOrder.getMallOrders();
@@ -515,11 +517,11 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 erpOrder.setShippingNo(shippingNo);
                 inventoryService.ship(erpOrder);
                 /**拼接erp*/
+                mallSubOrderMapper.updateByPrimaryKey(erpOrder);
                 erpNos.append(erpOrder.getShopCode()).append(",");
             } else {
                 throw new ErpCommonException("不能重复发货");
             }
-            mallSubOrderMapper.updateByPrimaryKeySelective(erpOrder);
             /**更新主订单的状态*/
             MallOrderDO orderDO = mallOrderService.selectByOrderNo(erpOrder.getOrderNo());
             updateMallOrderStats(orderDO);

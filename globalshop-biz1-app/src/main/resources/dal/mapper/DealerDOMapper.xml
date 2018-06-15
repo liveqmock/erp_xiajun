@@ -80,6 +80,7 @@
       </if>
     </trim>
   </insert>
+  
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO" >
     update dealer
     <set >
@@ -101,9 +102,14 @@
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
+      <if test="isdel">
+      	is_del = #{isdel, jdbcType=TINYINT},
+      </if>
+      
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO" >
     update dealer
     set company_no = #{companyNo,jdbcType=VARCHAR},

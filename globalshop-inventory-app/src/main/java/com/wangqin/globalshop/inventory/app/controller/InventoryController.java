@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
@@ -232,7 +231,6 @@ public class InventoryController {
     public Object queryInventoryRecords(Long id) {
         JsonResult<Object> result = new JsonResult<>();
         MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(id);
-        orderDO.initCompany();
         List<InventoryOnWareHouseDO> inventoryOnWareHouseDO = inventoryRecordService.selectByCompanyNoAndSkuCode(orderDO.getCompanyNo(), orderDO.getSkuCode());
         return result.buildIsSuccess(true).buildData(inventoryOnWareHouseDO);
 //        JsonPageResult<InventoryBookingRecordDO> result = new JsonPageResult<>();

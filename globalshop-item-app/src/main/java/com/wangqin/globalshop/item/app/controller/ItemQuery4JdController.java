@@ -57,49 +57,27 @@ public class ItemQuery4JdController {
 		return result;
 
 	}
-	/**
-	 * 上新商品后的返回值
-	 * @param jdCommonParam
-	 * @param globalShopItemVo
-	 * @return
-	 */
+
+
 	@RequestMapping("/additem")
 	@ResponseBody
 	public Object addItem(@RequestBody JdCommonParam jdCommonParam, @RequestBody GlobalShopItemVo globalShopItemVo){
 
-		JsonResult<String> result = new JsonResult<>();
-		try {
-			iItemService.dealItemAndChannelItem4JdAdd(jdCommonParam,globalShopItemVo);
-		} catch (Exception e) {
-			return result.buildIsSuccess(false).buildMsg("失败："+e.getMessage());
-		}
+		JsonResult<GlobalShopItemVo> result = new JsonResult<>();
+
+//		GlobalShopItemVo globalShopItemVo = null;
+//		try {
+//			globalShopItemVo = iItemService.queryUpdate(itemCode,shopCode);
+//		} catch (Exception e) {
+//			return result.buildIsSuccess(false).buildMsg("查询失败"+e.getMessage());
+//		}
+
+		result.setData(globalShopItemVo);
 		result.setSuccess(true);
 		result.setMsg("成功");
 		return result;
 
 	}
-	/**
-	 * 主动从京东抓取过来的商品下发
-	 * @param jdCommonParam
-	 * @param globalShopItemVo
-	 * @return
-	 */
-	@RequestMapping("/taskitem")
-	@ResponseBody
-	public Object taskitem(@RequestBody JdCommonParam jdCommonParam, @RequestBody GlobalShopItemVo globalShopItemVo){
-
-		JsonResult<String> result = new JsonResult<>();
-		try {
-			iItemService.dealItemAndChannelItem4JdTask(jdCommonParam,globalShopItemVo);
-		} catch (Exception e) {
-			return result.buildIsSuccess(false).buildMsg("失败："+e.getMessage());
-		}
-		result.setSuccess(true);
-		result.setMsg("成功");
-		return result;
-
-	}
-
 
 
 
