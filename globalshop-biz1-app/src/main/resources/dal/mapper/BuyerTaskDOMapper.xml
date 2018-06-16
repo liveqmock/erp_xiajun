@@ -11,7 +11,7 @@
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="buyer_open_id" property="buyerOpenId" jdbcType="BIGINT" />
+    <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
     <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
     <result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT" />
     <result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
@@ -44,7 +44,7 @@
       creator, modifier)
     values (#{buyerTaskNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{ownerNo,jdbcType=VARCHAR}, 
       #{companyNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{buyerOpenId,jdbcType=BIGINT}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{buyerOpenId,jdbcType=VARCHAR}, 
       #{buyerName,jdbcType=VARCHAR}, #{purchaseCommissionMode,jdbcType=BIGINT}, #{purchaseCommissionStr,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
@@ -123,7 +123,7 @@
         #{status,jdbcType=INTEGER},
       </if>
       <if test="buyerOpenId != null" >
-        #{buyerOpenId,jdbcType=BIGINT},
+        #{buyerOpenId,jdbcType=VARCHAR},
       </if>
       <if test="buyerName != null" >
         #{buyerName,jdbcType=VARCHAR},
@@ -170,7 +170,7 @@
         status = #{status,jdbcType=INTEGER},
       </if>
       <if test="buyerOpenId != null" >
-        buyer_open_id = #{buyerOpenId,jdbcType=BIGINT},
+        buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       </if>
       <if test="buyerName != null" >
         buyer_name = #{buyerName,jdbcType=VARCHAR},
@@ -200,7 +200,7 @@
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
-      buyer_open_id = #{buyerOpenId,jdbcType=BIGINT},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       buyer_name = #{buyerName,jdbcType=VARCHAR},
       purchase_commission_mode = #{purchaseCommissionMode,jdbcType=BIGINT},
       purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},

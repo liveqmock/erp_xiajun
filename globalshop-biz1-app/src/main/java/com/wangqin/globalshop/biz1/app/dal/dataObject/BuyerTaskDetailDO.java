@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class BuyerTaskDetailDO extends BaseModel {
@@ -11,9 +12,9 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     private String upc;
 
-    private Float price;
+    private BigDecimal price;
 
-    private Float maxPrice;
+    private BigDecimal maxPrice;
 
     private Integer count;
 
@@ -25,7 +26,7 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     private String buyerName;
 
-    private Long buyerOpenId;
+    private String buyerOpenId;
 
     private Integer status;
 
@@ -37,7 +38,7 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     private String skuCode;
 
-    private String desc;
+    private String remark;
 
     private Integer maxCount;
 
@@ -46,10 +47,6 @@ public class BuyerTaskDetailDO extends BaseModel {
     private Integer entryCount;
 
     private String upcPassReason;
-
-    private String creator;
-
-    private String modifier;
 
     public Long getId() {
         return id;
@@ -83,19 +80,19 @@ public class BuyerTaskDetailDO extends BaseModel {
         this.upc = upc == null ? null : upc.trim();
     }
 
-    public Float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public Float getMaxPrice() {
+    public BigDecimal getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(Float maxPrice) {
+    public void setMaxPrice(BigDecimal maxPrice) {
         this.maxPrice = maxPrice;
     }
 
@@ -139,12 +136,12 @@ public class BuyerTaskDetailDO extends BaseModel {
         this.buyerName = buyerName == null ? null : buyerName.trim();
     }
 
-    public Long getBuyerOpenId() {
+    public String getBuyerOpenId() {
         return buyerOpenId;
     }
 
-    public void setBuyerOpenId(Long buyerOpenId) {
-        this.buyerOpenId = buyerOpenId;
+    public void setBuyerOpenId(String buyerOpenId) {
+        this.buyerOpenId = buyerOpenId == null ? null : buyerOpenId.trim();
     }
 
     public Integer getStatus() {
@@ -187,12 +184,12 @@ public class BuyerTaskDetailDO extends BaseModel {
         this.skuCode = skuCode == null ? null : skuCode.trim();
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Integer getMaxCount() {
@@ -225,21 +222,5 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     public void setUpcPassReason(String upcPassReason) {
         this.upcPassReason = upcPassReason == null ? null : upcPassReason.trim();
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
     }
 }

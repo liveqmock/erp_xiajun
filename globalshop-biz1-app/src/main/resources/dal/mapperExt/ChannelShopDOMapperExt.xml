@@ -3,14 +3,24 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelShopDOMapperExt" >
 
     <sql id="tableSection">channel_shop</sql>
-
-    <resultMap id="BaseResultMapExt" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO" extends="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelShopDOMapper.BaseResultMap">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+        <result column="expires_time" property="expiresTime" jdbcType="TIMESTAMP" />
+        <result column="proxy_url" property="proxyUrl" jdbcType="VARCHAR" />
+        <result column="shop_type" property="shopType" jdbcType="VARCHAR" />
+        <result column="open" property="open" jdbcType="BIT" />
     </resultMap>
-
-
-
-
-
+    <sql id="Base_Column_List" >
+        id, version, creator, modifier, channel_no, company_no, shop_name, shop_code, expires_time,
+        proxy_url, shop_type, open
+    </sql>
 
     <sql id="commonSelectSection">
         1 = 1
@@ -44,8 +54,8 @@
 
 
     <!--查询总条数 -->
-    <select id="searchShop" resultMap="BaseResultMapExt">
-        SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelShopDOMapper.Base_Column_List" />
+    <select id="searchShop" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
         FROM <include refid="tableSection"/> T
         WHERE
         <include refid="commonSelectSection"/>
@@ -60,8 +70,8 @@
     </select>
 
     <!-- -->
-    <select id="searchShopList" resultMap="BaseResultMapExt">
-        SELECT  <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelShopDOMapper.Base_Column_List" />
+    <select id="searchShopList" resultMap="BaseResultMap">
+        SELECT  <include refid="Base_Column_List" />
         FROM <include refid="tableSection"/> T
         WHERE
         <include refid="commonSelectSection"/>
