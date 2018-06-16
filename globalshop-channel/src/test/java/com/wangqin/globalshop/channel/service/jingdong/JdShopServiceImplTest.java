@@ -1,19 +1,27 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jd.open.api.sdk.DefaultJdClient;
 import com.jd.open.api.sdk.JdClient;
 import com.jd.open.api.sdk.JdException;
-import com.jd.open.api.sdk.domain.Feature;
 import com.jd.open.api.sdk.domain.Image;
+import com.jd.open.api.sdk.domain.Prop;
 import com.jd.open.api.sdk.domain.Sku;
 import com.jd.open.api.sdk.domain.Ware;
-import com.jd.open.api.sdk.internal.JSON.JSON;
+import com.jd.open.api.sdk.domain.category.Category;
+import com.jd.open.api.sdk.domain.list.CategoryAttrReadService.CategoryAttrJos;
 import com.jd.open.api.sdk.request.category.CategoryAttributeSearchRequest;
+import com.jd.open.api.sdk.request.category.CategorySearchRequest;
+import com.jd.open.api.sdk.request.list.CategoryReadFindAttrsByCategoryIdJosRequest;
+import com.jd.open.api.sdk.request.list.CategoryReadFindValuesByAttrIdRequest;
 import com.jd.open.api.sdk.request.ware.WareGetRequest;
 import com.jd.open.api.sdk.request.ware.WareInfoByInfoRequest;
 import com.jd.open.api.sdk.request.ware.WareWriteAddRequest;
 import com.jd.open.api.sdk.response.category.CategoryAttributeSearchResponse;
+import com.jd.open.api.sdk.response.category.CategorySearchResponse;
+import com.jd.open.api.sdk.response.list.CategoryReadFindAttrsByCategoryIdJosResponse;
+import com.jd.open.api.sdk.response.list.CategoryReadFindValuesByAttrIdResponse;
 import com.jd.open.api.sdk.response.ware.WareGetResponse;
 import com.jd.open.api.sdk.response.ware.WareInfoByInfoSearchResponse;
 import com.jd.open.api.sdk.response.ware.WareWriteAddResponse;
@@ -34,7 +42,7 @@ public class JdShopServiceImplTest {
 
 	public static final String url = "https://api.jd.com/routerjson";
 
-	public static final String token = "32c4da5a-2a99-4d0e-a304-3c58da5cf59d";
+	public static final String token = "e34381e3-45f9-4741-a2a2-fa7c16833526";
 
 
 	public static final String appkey = "96C38E0AAAA47520B6211D32A5A14EDE";
@@ -57,22 +65,28 @@ public class JdShopServiceImplTest {
 
 		Ware ware = new Ware();
 		ware.setTitle("title_名称");
-		ware.setCategoryId(16797L);//必填
+		ware.setCategoryId(16797L);//必填16753
 		ware.setOuterId("1528882109");
 		ware.setWrap("件");
 
 
 
 
-		//属性[产品产地:152198],
-		// 国产/进口:152199],
+		//属性,
+
 		// 分类:152196],
-		// 功效:152197],
-		// 净含量（mL/g）:10152247],
-		// 分类:10152248],
-		// 保质期（年）:10152245],
-		// 产品产地:10152246],
-		// 功效:10152249],必填
+
+
+
+
+
+
+
+		//找出来的：
+		//产品产地152198，进口国产152199，分类152196,功效152197，功效10152249，金含量10152247，分类10152248，产地10152246
+		//1001042309颜色，尺码1001042310，
+		//，保质期10152245
+		//
 
 		ware.setColType(0);
 		ware.setWareLocation(1);
@@ -81,59 +95,111 @@ public class JdShopServiceImplTest {
 		//private Set<Prop> props;
 
 
-//		Set<Prop> props = new HashSet<>();
-//		Prop Prop_01 = new Prop();
-//		Prop_01.setAttrId(152198+"");
-//		Prop_01.setAttrValues();
-//
-//
-//		Prop Prop_02 = new Prop(152199+"","国产","国产/进口");
-//		Prop Prop_03 = new Prop(152196+"","分类，不懂填什么","分类");
-//		Prop Prop_04 = new Prop(152197+"","很好用饿","功效");
-//		Prop Prop_05 = new Prop(10152247+"","10","净含量（mL/g）");
-//
-//		Prop Prop_06 = new Prop(10152248+"","又来一个分类","分类");
-//		Prop Prop_07 = new Prop(10152245+"","1","保质期（年）");
-//		Prop Prop_08 = new Prop(10152246+"","又来中国","产品产地");
-//		Prop Prop_09 = new Prop(10152249+"","又来功效","功效");
-//
-//		features.add(feature_01);
-//		features.add(feature_02);
-//		features.add(feature_03);
-//		features.add(feature_04);
-//		features.add(feature_05);
-//		features.add(feature_06);
-//		features.add(feature_07);
-//		features.add(feature_08);
-//		features.add(feature_09);
-//		ware.setFeatures(features);
 
-		//特殊属性
-		//private Set<Feature> features;
 
-		Set<Feature> features = new HashSet<>();
-		//产品产地:152198
-		Feature feature_01 = new Feature(152198+"","中国","产品产地");
-		Feature feature_02 = new Feature(152199+"","国产","国产/进口");
-		Feature feature_03 = new Feature(152196+"","分类，不懂填什么","分类");
-		Feature feature_04 = new Feature(152197+"","很好用饿","功效");
-		Feature feature_05 = new Feature(10152247+"","10","净含量（mL/g）");
+		// 152196:781934^
+		// 152197:781954^
+		// 152198:781960^
+		// 152199:781962^
+		//152249:10782209^
 
-		Feature feature_06 = new Feature(10152248+"","又来一个分类","分类");
-		Feature feature_07 = new Feature(10152245+"","1","保质期（年）");
-		Feature feature_08 = new Feature(10152246+"","又来中国","产品产地");
-		Feature feature_09 = new Feature(10152249+"","又来功效","功效");
 
-		features.add(feature_01);
-		features.add(feature_02);
-		features.add(feature_03);
-		features.add(feature_04);
-		features.add(feature_05);
-		features.add(feature_06);
-		features.add(feature_07);
-		features.add(feature_08);
-		features.add(feature_09);
-		ware.setFeatures(features);
+
+
+		// 1001042309:1875762344,1875764708^
+
+		// 10152245:0,3年
+		// 10152246:0,日本^
+		// 10152247:0,101g_mL-200g_mL^
+		// 10152248:10782198^
+
+		Set<Prop> props = new HashSet<>();
+
+		Prop prop01 = new Prop();
+
+		prop01.setAttrId(152198+"");//[产品产地:152198]
+		String[] value = new String[1];
+		value[0]="781960";
+		//value[0]="ww";
+		prop01.setAttrValues(value);
+
+		Prop prop02 = new Prop();
+		prop02.setAttrId(152199+"");// 国产/进口:152199],已验证
+		value[0]="781962";//781961
+		//value[0]="ww";
+		prop02.setAttrValues(value);
+
+		Prop prop03 = new Prop();
+		prop03.setAttrId(152197+"");// 功效:152197],已验证
+		value[0]="781954";
+		//value[0]="ww";
+		prop03.setAttrValues(value);
+
+		Prop prop09 = new Prop();
+		prop09.setAttrId(152196+"");// 分类:10152248],
+		value[0]="781934";
+		prop09.setAttrValues(value);
+
+
+
+
+
+
+		Prop prop04 = new Prop();
+		prop04.setAttrId(10152247+"");// 净含量（mL/g）:10152247],
+		value[0]="随便写能通过吗";//呢能过
+		prop04.setAttrValues(value);
+
+		Prop prop05 = new Prop();
+		prop05.setAttrId(10152248+"");// 分类:10152248],
+		value[0]="10782198";
+		prop05.setAttrValues(value);
+
+		Prop prop06 = new Prop();
+		prop06.setAttrId(10152245+"");// 保质期（年）:10152245],
+		value[0]="3年";
+		prop06.setAttrValues(value);
+
+		Prop prop07 = new Prop();
+		prop07.setAttrId(10152246+"");// 产品产地:10152246],
+		value[0]="781960";
+		//value[0]="没有值";
+		prop07.setAttrValues(value);
+
+
+
+//		Prop prop08 = new Prop();
+//		prop08.setAttrId(10152249+"");// 功效:10152249],必填
+//		value[0]="10782203";
+//		//value[0]="ww";
+//		prop08.setAttrValues(value);
+
+
+
+		Set<Prop> skuProps = new HashSet<>();
+		skuProps.add(prop01);
+		skuProps.add(prop02);
+		skuProps.add(prop03);
+		skuProps.add(prop09);
+
+
+		props.add(prop04);
+		//props.add(prop05);
+		props.add(prop06);
+		props.add(prop07);
+		//props.add(prop08);
+		props.add(prop01);
+		props.add(prop02);
+		props.add(prop03);
+		props.add(prop09);
+
+
+
+		ware.setProps(props);
+
+
+
+
 
 
 
@@ -177,7 +243,7 @@ public class JdShopServiceImplTest {
 			sku.setJdPrice(BigDecimal.valueOf(10));
 			//sku.setStockNum(skuVo.getTotalAvailableInv());
 			sku.setStockNum(100L);//必填大于0
-		    sku.setFeatures(features);
+		    //sku.setFeatures(features);
 			skus.add(sku);
 
 		ware.setSkus(skus);
@@ -278,7 +344,7 @@ public class JdShopServiceImplTest {
 			e.printStackTrace();
 		}
 
-		System.out.println(JSON.toString(response));
+		System.out.println(JSON.toJSONString(response));
 
 
 		List<com.jd.open.api.sdk.domain.ware.Ware> wares = response.getWareInfos();
@@ -300,9 +366,109 @@ public class JdShopServiceImplTest {
 		} catch (JdException e) {
 			e.printStackTrace();
 		}
-		System.out.println(JSON.toString(skuRequest));
+		System.out.println(JSON.toJSONString(skuRequest));
 
 	}
+
+
+
+
+	@Test
+	public void getSkus(){
+
+		String wareId = "1967499532";
+
+		WareGetRequest skuRequest=new WareGetRequest();
+
+		skuRequest.setWareId(wareId+"");
+
+		WareGetResponse skuResponse = null;
+		try {
+			skuResponse = client.execute(skuRequest);
+		} catch (JdException e) {
+			e.printStackTrace();
+		}
+		System.out.println(JSON.toJSONString(skuRequest));
+	}
+
+	//第一步：获取商家已有类目
+	@Test
+	public void getCategory(){
+
+		//第一步：获取商家已有类目
+
+		CategorySearchRequest request=new CategorySearchRequest();
+		CategorySearchResponse cateRes = null;
+		try {
+			 cateRes=client.execute(request);
+			System.out.println(JSON.toJSONString(cateRes));
+		} catch (JdException e) {
+			e.printStackTrace();
+		}
+
+
+
+
+
+
+
+		//第二步：根据已有类目ID，查看该类目下有哪些属性
+        List<Integer> categoryIdList = new ArrayList<>();
+		for(Category category : cateRes.getCategory()){
+                 categoryIdList.add(category.getId());
+
+			CategoryReadFindAttrsByCategoryIdJosRequest attIdListRequest=new CategoryReadFindAttrsByCategoryIdJosRequest();
+
+
+			attIdListRequest.setCid(Long.valueOf(category.getId()));
+			//request.setAttributeType( 123 );
+			try {
+				CategoryReadFindAttrsByCategoryIdJosResponse attresponse=client.execute(attIdListRequest);
+				System.out.println("category.getId(): "+category.getId()+" "+category.getName()+"  "+JSON.toJSONString(attresponse));
+
+
+				//第三步：针对每个属性值，再去查看所有可能的值
+
+                for(CategoryAttrJos attrJos : attresponse.getCategoryAttrs()){
+
+					CategoryReadFindValuesByAttrIdRequest valueRequest=new CategoryReadFindValuesByAttrIdRequest();
+
+
+					valueRequest.setCategoryAttrId(Long.valueOf(attrJos.getCategoryAttrId()));
+					//valueRequest.setField( "jingdong,yanfa,pop" );
+					try {
+						CategoryReadFindValuesByAttrIdResponse valuesresponse=client.execute(valueRequest);
+						System.out.println(category.getId()+""+ attrJos.getAttName()+" "+attrJos.getCategoryAttrId()+"  " +JSON.toJSONString(valuesresponse));
+					} catch (JdException e) {
+						e.printStackTrace();
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+
+			} catch (JdException e) {
+				e.printStackTrace();
+
+			}
+		}
+
+
+
+
+
+	}
+
+
+
+
 
 
 

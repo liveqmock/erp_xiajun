@@ -9,25 +9,35 @@ import com.jd.open.api.sdk.domain.AdWords;
 import com.jd.open.api.sdk.domain.Image;
 import com.jd.open.api.sdk.domain.Sku;
 import com.jd.open.api.sdk.domain.Ware;
+import com.jd.open.api.sdk.domain.category.Category;
+import com.jd.open.api.sdk.domain.list.CategoryAttrReadService.CategoryAttrJos;
+import com.jd.open.api.sdk.domain.list.CategoryAttrValueReadService.CategoryAttrValue;
 import com.jd.open.api.sdk.domain.order.OrderQueryJsfService.OrderSearchInfo;
+import com.jd.open.api.sdk.domain.order.OrderQueryJsfService.UserInfo;
+import com.jd.open.api.sdk.request.category.CategorySearchRequest;
+import com.jd.open.api.sdk.request.list.CategoryReadFindAttrsByCategoryIdJosRequest;
+import com.jd.open.api.sdk.request.list.CategoryReadFindValuesByAttrIdRequest;
 import com.jd.open.api.sdk.request.order.PopOrderGetRequest;
 import com.jd.open.api.sdk.request.order.PopOrderSearchRequest;
 import com.jd.open.api.sdk.request.order.PopOrderShipmentRequest;
 import com.jd.open.api.sdk.request.ware.*;
+import com.jd.open.api.sdk.response.category.CategorySearchResponse;
+import com.jd.open.api.sdk.response.list.CategoryReadFindAttrsByCategoryIdJosResponse;
+import com.jd.open.api.sdk.response.list.CategoryReadFindValuesByAttrIdResponse;
 import com.jd.open.api.sdk.response.order.PopOrderGetResponse;
 import com.jd.open.api.sdk.response.order.PopOrderSearchResponse;
 import com.jd.open.api.sdk.response.order.PopOrderShipmentResponse;
 import com.jd.open.api.sdk.response.ware.*;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.channel.Channel;
 import com.wangqin.globalshop.channelapi.dal.*;
+import com.wangqin.globalshop.common.utils.DateUtil;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -321,7 +331,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//已完成，调用者要负责sendStatus的改写
-	public List<JdItemDO> getItems(Date startTime, Date endTime){
+	public List<JdItemDO> getItemsError(Date startTime, Date endTime){
 
 		List<JdItemDO> resultList = new ArrayList<>();
 
@@ -377,9 +387,82 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		}
 		return resultList;
 	}
+	/**
+	 * 老接口调用
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<JdItemDO> getItems(Date startTime, Date endTime){
+
+		List<JdItemDO> resultList = new ArrayList<>();
+
+		WareInfoByInfoRequest request=new WareInfoByInfoRequest();
+
+		request.setEndModified(DateUtil.convertDate2Str(endTime,DateUtil.formateStr19));
+		request.setStartModified(DateUtil.convertDate2Str(startTime,DateUtil.formateStr19));
+
+		int page = 1;
+		int pageSize = 50;
+
+		request.setPage(page+"");
+		request.setPageSize(pageSize+"");
+		request.setFields("ware_id");
+
+		WareInfoByInfoSearchResponse response = null;
 
 
+		for(;;page++){
+			try {
+				response = client.execute(request);
+			} catch (JdException e) {
+				logger.error("getItems",e);
+				throw new ErpCommonException("getItems,批量获取京东商品时，京东内部出错");
+			}
 
+			if(response != null && (response.getWareInfos() == null || !response.getCode().equals("0")) ){
+				throw new ErpCommonException("getItemByItemCode", "从京东获取商品时,调用API时异常.卖家:[" + shopOauth.getShopCode() + "].京东描述:" + response.getZhDesc());
+			}
+
+			if(response.getWareInfos() == null || response.getWareInfos().size() < 1){
+				break;
+			}
+
+			for(com.jd.open.api.sdk.domain.ware.Ware ware : response.getWareInfos()){
+				WareGetRequest skuRequest=new WareGetRequest();
+
+				skuRequest.setWareId(ware.getWareId()+"");
+
+				WareGetResponse skuResponse = null;
+				try {
+					skuResponse = client.execute(skuRequest);
+				} catch (JdException e) {
+					logger.error("getItems",e);
+					throw new ErpCommonException("getItems,批量获取京东商品时，京东内部出错");
+				}
+
+				JdItemDO jdItemDO = new JdItemDO();
+				jdItemDO.setIsDel(false);
+				jdItemDO.setVersion(0L);
+				jdItemDO.setCreator("-1");
+				jdItemDO.setGmtCreate(new Date());
+				jdItemDO.setItemModifyTime(new Date());
+
+				jdItemDO.setShopCode(shopOauth.getShopCode());
+				jdItemDO.setChannelItemCode(ware.getWareId()+"");
+				jdItemDO.setItemJson(JSON.toJSONString(skuResponse.getWare()));
+
+				resultList.add(jdItemDO);
+			}
+
+			if(response.getWareInfos().size() < pageSize){
+				break;
+			}
+
+		}
+		return resultList;
+
+	}
 
 
 	public void createItemSku(){
@@ -570,7 +653,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	//未完成
 	public GlobalShopItemVo convertItemJd2Global(String jsonData){
 
-		Ware ware = JSON.parseObject(jsonData,Ware.class);
+		com.jd.open.api.sdk.domain.ware.Ware  ware = JSON.parseObject(jsonData,com.jd.open.api.sdk.domain.ware.Ware.class);
 
 		GlobalShopItemVo resultVo = new GlobalShopItemVo();
 
@@ -580,35 +663,262 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 		//先处理头部
 
-		List<Sku> skus = ware.getSkus();
-
 		channelListingItemVo.setChannelNo(shopOauth.getChannelNo());
 		channelListingItemVo.setShopCode(shopOauth.getShopCode());
 		channelListingItemVo.setCompanyNo(shopOauth.getCompanyNo());
 
 		channelListingItemVo.setChannelItemCode(ware.getWareId()+"");
 		channelListingItemVo.setChannelItemAlias(ware.getTitle());
+		channelListingItemVo.setItemCode(ware.getWareId()+"");
+
+		channelListingItemVo.init4NoLogin();
 
 		//itemVo.
 
+
+
+		itemVo.setItemCode(ware.getWareId()+"");
+		itemVo.setCompanyNo(shopOauth.getCompanyNo());
+        itemVo.setItemName(ware.getTitle());
+        itemVo.setWeight(Double.valueOf(ware.getWeight()));
+        itemVo.setUnit(ware.getWrap());
+		itemVo.setCategoryCode(ware.getCategoryId()+"");
+
+		itemVo.init4NoLogin();
+
+		List<com.jd.open.api.sdk.domain.ware.Sku> skus = ware.getSkus();
+
+		List<ChannelListingItemSkuVo> chanenlSkuVos = new ArrayList<>();
+
+		List<ItemSkuVo> itemSkuVos = new ArrayList<>();
+
+		for(com.jd.open.api.sdk.domain.ware.Sku sku : skus){
+
+			ChannelListingItemSkuVo skuVo = new ChannelListingItemSkuVo();
+			skuVo.setItemCode(itemVo.getItemCode());
+			skuVo.setChannelItemCode(ware.getWareId()+"");
+			skuVo.setChannelItemSkuCode(sku.getSkuId()+"");
+			skuVo.setSkuCode(sku.getSkuId()+"");
+			skuVo.setStockNum(sku.getStockNum());
+			skuVo.setPlatformType(Integer.valueOf(shopOauth.getChannelNo()));
+
+			skuVo.init4NoLogin();
+			chanenlSkuVos.add(skuVo);
+
+			ItemSkuVo itemSkuVo = new ItemSkuVo();
+			itemSkuVo.setItemCode(ware.getWareId()+"");
+			itemSkuVo.setSkuCode(sku.getSkuId()+"");
+			itemSkuVo.setSalePrice(Double.valueOf(sku.getJdPrice()));
+            itemSkuVo.setUpc(ware.getUpcCode());
+            //itemSkuVo.setScale(ware.getAttributes());
+			itemSkuVo.init4NoLogin();
+			itemSkuVos.add(itemSkuVo);
+
+		}
+
+		channelListingItemVo.setChannelListingItemSkuVos(chanenlSkuVos);
 		resultVo.setChannelListingItemVo(channelListingItemVo);
+		//itemVo.setItemSkus(itemSkuVos);
 		resultVo.setItemVo(itemVo);
-
         return resultVo;
-
 	}
 
 
-	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson){
-		OrderSearchInfo jdOrder = JSON.parseObject(orderJson,OrderSearchInfo.class);
+	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson)  {
 
-		GlobalshopOrderVo globalshopOrderVo = new GlobalshopOrderVo();
-
-
-
+		GlobalshopOrderVo globalshopOrderVo = null;
+		try {
+			globalshopOrderVo= doConvertJdOrder2Globalshop(orderJson);
+		} catch (ParseException e) {
+			logger.error("",e);
+			throw  new ErpCommonException("解析订单失败");
+		}
 		return globalshopOrderVo;
+	}
+
+	private GlobalshopOrderVo doConvertJdOrder2Globalshop(String orderJson) throws ParseException {
+		OrderSearchInfo jdOrder = JSON.parseObject(orderJson, OrderSearchInfo.class);
+		GlobalshopOrderVo globalshopOrderVo = new GlobalshopOrderVo();
+		MallOrderDO mallOrderDO = new MallOrderDO();
+		MallSubOrderDO mallSubOrderDO = new MallSubOrderDO();
+		mallOrderDO.setCompanyNo(shopOauth.getCompanyNo());
+		mallOrderDO.setChannelNo(shopOauth.getChannelNo());
+		mallOrderDO.setChannelName("京东");
+		mallOrderDO.setChannelType(shopOauth.getChannelNo());
+		mallOrderDO.setShopCode(shopOauth.getShopCode());
+		// 有赞平台为01,销售为0000
+		mallOrderDO.setOrderTime(DateUtil.convertStr2Date(jdOrder.getOrderStartTime(), DateUtil.formateStr19)); // 付款时间
+		mallOrderDO.setStatus(OrderStatus.INIT.getCode()); // 状态：新建
+		mallOrderDO.setChannelOrderNo(jdOrder.getOrderId());
+		//mallOrderDO.setIdCard(TradeDetail.getIdCardNumber()); // 身份证
+		mallOrderDO.setPayType(Integer.valueOf(jdOrder.getPayType())); // 支付方式
+		//邮费
+		mallOrderDO.setFreight(Double.valueOf(jdOrder.getFreightPrice()));
+		mallOrderDO.setTotalAmount(Double.valueOf(jdOrder.getOrderSellerPrice()));
+		mallOrderDO.setActualAmount(Double.valueOf(jdOrder.getOrderTotalPrice()));
+		mallOrderDO.setMemo(jdOrder.getOrderRemark() + jdOrder.getVenderRemark());
+		mallOrderDO.setCreator("京东自动获取订单");
+		mallOrderDO.setGmtCreate(DateUtil.convertStr2Date(jdOrder.getOrderStartTime(), DateUtil.formateStr19)); // 创建时间
+		//mallOrderDO.setGmtModify(jdOrder.getti); // 修改时间
+		//补充必填信息
+		mallOrderDO.setCustomerNo("无");
+		mallOrderDO.setChannelCustomerNo("自定义类型，无买家昵称");
+		mallOrderDO.setIsDel(false);
+		mallOrderDO.setModifier("-1");
+		List<MallSubOrderDO> outerOrderDetails = new ArrayList<MallSubOrderDO>();
+		for (com.jd.open.api.sdk.domain.order.OrderQueryJsfService.ItemInfo itemInfo : jdOrder.getItemInfoList()) {
+			MallSubOrderDO outerOrderDetail = new MallSubOrderDO();
+			outerOrderDetail.setCompanyNo(shopOauth.getCompanyNo());
+			outerOrderDetail.setOrderNo(jdOrder.getOrderId()); // 主订单ID
+			outerOrderDetail.setShopCode(shopOauth.getShopCode());
+			outerOrderDetail.setSkuCode(itemInfo.getSkuId()); // sku编码
+			outerOrderDetail.setSalePrice(Double.parseDouble(String.valueOf(itemInfo.getJdPrice()))); // 商品单价
+			outerOrderDetail.setQuantity(Integer.parseInt(String.valueOf(itemInfo.getItemTotal()))); // 购买数量
+			outerOrderDetail.setGmtCreate(DateUtil.convertStr2Date(jdOrder.getPaymentConfirmTime(), DateUtil.formateStr19)); // 创建时间
+			outerOrderDetail.setGmtModify(DateUtil.convertStr2Date(jdOrder.getModified(), DateUtil.formateStr19)); // 修改时间
+			UserInfo receiver = jdOrder.getConsigneeInfo();
+			outerOrderDetail.setReceiver(receiver.getFullname()); // 收货人
+			outerOrderDetail.setReceiverState(receiver.getProvince()); // 省
+			outerOrderDetail.setReceiverCity(receiver.getCity()); // 市
+			outerOrderDetail.setReceiverDistrict(receiver.getCounty()); // 区
+			outerOrderDetail.setReceiverAddress(receiver.getFullAddress()); // 详细地址
+			outerOrderDetail.setTelephone(receiver.getTelephone()); // 联系电话
+			//outerOrderDetail.setPostcode(receiver.get); // 邮编
+			outerOrderDetail.setShopCode(shopOauth.getShopCode());
+			outerOrderDetail.setOrderNo(mallOrderDO.getOrderNo());
+			outerOrderDetail.setCustomerNo("无");
+			outerOrderDetail.setIsDel(false);
+			outerOrderDetail.setCreator("系统");
+			outerOrderDetail.setModifier("系统");
+			outerOrderDetail.setChannelOrderNo(jdOrder.getOrderId());
+			//有赞有子订单号
+			//outerOrderDetail.setChannelSubOrderNo(String.valueOf(tradeOrder.getOid()));
+			outerOrderDetails.add(outerOrderDetail);
+
+		}
+		globalshopOrderVo.setMallOrderDO(mallOrderDO);
+		globalshopOrderVo.setMallSubOrderDOS(outerOrderDetails);
+		return globalshopOrderVo;
+	}
+
+	public void getCategory(){
+		CategorySearchRequest request=new CategorySearchRequest();
+		CategorySearchResponse cateRes = null;
+		try{
+			cateRes=client.execute(request);
+			System.out.println(JSON.toJSONString(cateRes));
+		} catch (JdException e) {
+			e.printStackTrace();
+		}
+
+		for(Category category : cateRes.getCategory()){
+			JdCategoryDO jdCategoryDO = new JdCategoryDO();
+			jdCategoryDO.setMsg(JSON.toJSONString(cateRes));
+			jdCategoryDO.setCid(category.getId()+"");
+			jdCategoryDO.setAttributeId(category.getId()+"");
+			jdCategoryDO.setLev(category.getLev()+"");
+			jdCategoryDO.setName(category.getName());
+
+			jdCategoryDO.setShopCode(shopOauth.getShopCode());
+			jdCategoryDO.setChannelNo(shopOauth.getChannelNo());
+			jdCategoryDO.setCompanyNo(shopOauth.getCompanyNo());
+			//jdCategoryDOMapper.insertSelective(jdCategoryDO);
+		}
+
+
+		//第二步：根据已有类目ID，查看该类目下有哪些属性
+		List<Integer> categoryIdList = new ArrayList<>();
+		for(Category category : cateRes.getCategory()){
+			categoryIdList.add(category.getId());
+
+			CategoryReadFindAttrsByCategoryIdJosRequest attIdListRequest=new CategoryReadFindAttrsByCategoryIdJosRequest();
+
+
+			attIdListRequest.setCid(Long.valueOf(category.getId()));
+			//request.setAttributeType( 123 );
+			try {
+				CategoryReadFindAttrsByCategoryIdJosResponse attresponse=client.execute(attIdListRequest);
+				System.out.println("category.getId(): "+category.getId()+" "+category.getName()+"  "+JSON.toJSONString(attresponse));
+
+
+				for(CategoryAttrJos attrJos : attresponse.getCategoryAttrs()){
+
+					JdCategoryAttarDO jdCategoryAttarDO = new JdCategoryAttarDO();
+					jdCategoryAttarDO.setShopCode(shopOauth.getShopCode());
+					jdCategoryAttarDO.setChannelNo(shopOauth.getChannelNo());
+					jdCategoryAttarDO.setCompanyNo(shopOauth.getCompanyNo());
+
+					jdCategoryAttarDO.setAttname(attrJos.getAttName());
+					jdCategoryAttarDO.setAttributeType(attrJos.getAttributeType()+"");
+					jdCategoryAttarDO.setMsg(JSON.toJSONString(attresponse));
+					jdCategoryAttarDO.setCategoryAttrId(attrJos.getCategoryAttrId()+"");
+
+					//jdCategoryAttarDOMapper.insert(jdCategoryAttarDO);
+				}
+
+
+				//第三步：针对每个属性值，再去查看所有可能的值
+
+				for(CategoryAttrJos attrJos : attresponse.getCategoryAttrs()){
+
+					CategoryReadFindValuesByAttrIdRequest valueRequest=new CategoryReadFindValuesByAttrIdRequest();
+
+
+					valueRequest.setCategoryAttrId(Long.valueOf(attrJos.getCategoryAttrId()));
+					//valueRequest.setField( "jingdong,yanfa,pop" );
+					try {
+						CategoryReadFindValuesByAttrIdResponse valuesresponse=client.execute(valueRequest);
+						System.out.println(category.getId()+""+ attrJos.getAttName()+" "+attrJos.getCategoryAttrId()+"  "+valuesresponse.getCategoryAttrValues().get(0).getId() +JSON.toJSONString(valuesresponse));
+
+
+
+						for(CategoryAttrValue categoryAttrValue : valuesresponse.getCategoryAttrValues()){
+
+
+							JdCategoryAttarValueDO attarValueDO = new JdCategoryAttarValueDO();
+							attarValueDO.setShopCode(shopOauth.getShopCode());
+							attarValueDO.setChannelNo(shopOauth.getChannelNo());
+							attarValueDO.setCompanyNo(shopOauth.getCompanyNo());
+
+
+							attarValueDO.setCategoryAttrId(categoryAttrValue.getAttributeId()+"");
+							attarValueDO.setCategoryId(categoryAttrValue.getCategoryId()+"");
+							attarValueDO.setValueId(categoryAttrValue.getId()+"");
+							attarValueDO.setValue(categoryAttrValue.getValue());
+
+							//jdCategoryAttarValueDOMapper.insert(attarValueDO);
+
+
+						}
+
+					} catch (JdException e) {
+						e.printStackTrace();
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+
+			} catch (JdException e) {
+				e.printStackTrace();
+
+			}
+		}
+
 
 	}
+
+
+
+
+
 
 
 }

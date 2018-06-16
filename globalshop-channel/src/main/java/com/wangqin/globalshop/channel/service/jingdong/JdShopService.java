@@ -116,7 +116,7 @@ public interface JdShopService {
 	public void logisticComfire(JdLogisticsDO jdLogisticsDO);
 
 
-
+	public void getCategory();
 
 
 }

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdCategoryAttarDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryAttarDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="attrFeatures" property="attrfeatures" jdbcType="VARCHAR" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+    <result column="attName" property="attname" jdbcType="VARCHAR" />
+    <result column="attr_index_id" property="attrIndexId" jdbcType="VARCHAR" />
+    <result column="attribute_type" property="attributeType" jdbcType="VARCHAR" />
+    <result column="category_attr_id" property="categoryAttrId" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="input_type" property="inputType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, creator, modifier, channel_no, company_no, shop_code, attrFeatures, msg, attName, 
+    attr_index_id, attribute_type, category_attr_id, category_id, input_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from jd_category_attar
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from jd_category_attar
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryAttarDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_category_attar (creator, modifier, channel_no, 
+      company_no, shop_code, attrFeatures, 
+      msg, attName, attr_index_id, 
+      attribute_type, category_attr_id, category_id, 
+      input_type)
+    values (#{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{attrfeatures,jdbcType=VARCHAR}, 
+      #{msg,jdbcType=VARCHAR}, #{attname,jdbcType=VARCHAR}, #{attrIndexId,jdbcType=VARCHAR}, 
+      #{attributeType,jdbcType=VARCHAR}, #{categoryAttrId,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, 
+      #{inputType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryAttarDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_category_attar
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="attrfeatures != null" >
+        attrFeatures,
+      </if>
+      <if test="msg != null" >
+        msg,
+      </if>
+      <if test="attname != null" >
+        attName,
+      </if>
+      <if test="attrIndexId != null" >
+        attr_index_id,
+      </if>
+      <if test="attributeType != null" >
+        attribute_type,
+      </if>
+      <if test="categoryAttrId != null" >
+        category_attr_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="inputType != null" >
+        input_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="attrfeatures != null" >
+        #{attrfeatures,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="attname != null" >
+        #{attname,jdbcType=VARCHAR},
+      </if>
+      <if test="attrIndexId != null" >
+        #{attrIndexId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeType != null" >
+        #{attributeType,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryAttrId != null" >
+        #{categoryAttrId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="inputType != null" >
+        #{inputType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryAttarDO" >
+    update jd_category_attar
+    <set >
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="attrfeatures != null" >
+        attrFeatures = #{attrfeatures,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="attname != null" >
+        attName = #{attname,jdbcType=VARCHAR},
+      </if>
+      <if test="attrIndexId != null" >
+        attr_index_id = #{attrIndexId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeType != null" >
+        attribute_type = #{attributeType,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryAttrId != null" >
+        category_attr_id = #{categoryAttrId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="inputType != null" >
+        input_type = #{inputType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryAttarDO" >
+    update jd_category_attar
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      attrFeatures = #{attrfeatures,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR},
+      attName = #{attname,jdbcType=VARCHAR},
+      attr_index_id = #{attrIndexId,jdbcType=VARCHAR},
+      attribute_type = #{attributeType,jdbcType=VARCHAR},
+      category_attr_id = #{categoryAttrId,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=VARCHAR},
+      input_type = #{inputType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

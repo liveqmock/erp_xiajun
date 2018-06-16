@@ -13,14 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Create by 777 on 2018/6/13
  */
-@Component
+//@Component
 @EnableAsync
 public class JdSendItems2GlobalshopTask {
 
@@ -34,7 +33,7 @@ public class JdSendItems2GlobalshopTask {
 	private JdItemService jdItemService;
 
 	// 每隔半小时执行一次
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void run4Request() {
 		logger.info("定时任务：自动将京东下载的商品下发至globalshop===>Start");
 		Long startTime = System.currentTimeMillis();

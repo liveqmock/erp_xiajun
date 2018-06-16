@@ -173,6 +173,7 @@ public class JdItemController extends BaseController {
 		return result.buildIsSuccess(true).buildMsg("成功");
 	}
 
+	//已测试
 	@RequestMapping("/resetSkuInv")
 	@ResponseBody
 	public Object resetSkuInv(String jdCommonParam, String channelListingItemVo)  {
@@ -210,6 +211,7 @@ public class JdItemController extends BaseController {
 		return result.buildIsSuccess(true).buildMsg("成功");
 	}
 
+	//测试完成
 	@RequestMapping("/modifySalePrice")
 	@ResponseBody
 	public Object modifySalePrice(String jdCommonParam, String channelSalePriceVo)  {

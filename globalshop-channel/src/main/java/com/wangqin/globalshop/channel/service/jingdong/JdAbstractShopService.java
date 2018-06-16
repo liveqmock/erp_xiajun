@@ -2,7 +2,10 @@ package com.wangqin.globalshop.channel.service.jingdong;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channelapi.dal.*;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +26,13 @@ public abstract class JdAbstractShopService implements JdShopService {
 
 	// 平台账号信息
 	protected JdShopOauthDO shopOauth;
+
+
+
+
+
+
+
 
 	public JdAbstractShopService(JdShopOauthDO shopOauth) {
 		this.shopOauth = shopOauth;
@@ -102,5 +112,7 @@ public abstract class JdAbstractShopService implements JdShopService {
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持确认发货功能");
 	}
 
-
+	public void getCategory(){
+		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持获取类目功能");
+	}
 }

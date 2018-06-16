@@ -19,6 +19,7 @@ public enum PayType {
 	MERGEDPAY(10,"合并付货款"),
 	ECARD(11, "有赞E卡支付"),
 	CREDITECARD(12, "信用卡");
+
 	
     private int code;
     private String description;

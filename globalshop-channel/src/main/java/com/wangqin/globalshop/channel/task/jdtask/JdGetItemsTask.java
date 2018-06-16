@@ -15,6 +15,7 @@ import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Date;
 import java.util.List;
@@ -43,7 +44,7 @@ public class JdGetItemsTask {
 
 
 	// 每隔半小时执行一次
-	//@Scheduled(cron = "0 0/30 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void run() {
 		logger.info("定时任务：自动去京东下载商品===>Start");
 		Long startTime = System.currentTimeMillis();
