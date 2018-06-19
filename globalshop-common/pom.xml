@@ -184,6 +184,19 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>zxing-parent</artifactId>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+		</dependency>
 
 		<!-- <dependency>
 			<groupId>com.google.code.gson</groupId>

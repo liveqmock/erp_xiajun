@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,13 @@ public class BuyerTaskController {
             File baseFile = new File(fileName);
             // 从第四行的第A列到X列开始读
             List<List<Object>> list = ReadExcel.readExcel(baseFile, 1, 0, 12);
-            String[] errMsg =  buyerTaskService.importTask(list);
+            buyerTaskService.importTask(list);
         } catch (IOException e) {
-            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
+        } catch (ErpCommonException e) {
+            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         }
-
         return result.buildIsSuccess(true);
     }
+
 }

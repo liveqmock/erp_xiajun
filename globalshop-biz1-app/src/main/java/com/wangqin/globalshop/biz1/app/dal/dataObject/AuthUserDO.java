@@ -29,7 +29,9 @@ public class AuthUserDO extends BaseModel {
 
     private Date createTime;
 
-    private Long wxUserId;
+    private String wxUnionId;
+
+    private String wxOpenId;
 
     private String email;
 
@@ -141,12 +143,20 @@ public class AuthUserDO extends BaseModel {
         this.createTime = createTime;
     }
 
-    public Long getWxUserId() {
-        return wxUserId;
+    public String getWxUnionId() {
+        return wxUnionId;
     }
 
-    public void setWxUserId(Long wxUserId) {
-        this.wxUserId = wxUserId;
+    public void setWxUnionId(String wxUnionId) {
+        this.wxUnionId = wxUnionId == null ? null : wxUnionId.trim();
+    }
+
+    public String getWxOpenId() {
+        return wxOpenId;
+    }
+
+    public void setWxOpenId(String wxOpenId) {
+        this.wxOpenId = wxOpenId == null ? null : wxOpenId.trim();
     }
 
     public String getEmail() {
