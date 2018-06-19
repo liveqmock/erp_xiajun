@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
@@ -28,14 +29,17 @@ public class ShareUserController {
 	/**
 	 * 用户登录
 	 */
+	@RequestMapping("/login")
+	@ResponseBody
 	public Object Login(AuthUserDO user) {
 		JsonResult<AuthUserDO> result = new JsonResult<AuthUserDO>();
-		AuthUserDO responseUser = userService.selectUserByWxOpenId("123");
-		AuthUserRoleDO authUserRoleDO = userRoleService.selectRoleIdByUserId(responseUser.getId());
+		AuthUserDO responseUser = userService.selectUserByWxOpenId(user.getWxOpenId());
+//		AuthUserRoleDO authUserRoleDO = userRoleService.selectRoleIdByUserId(responseUser.getId());
 		if(null == responseUser) {
 			result.buildIsSuccess(false).buildMsg("无该用户");
 		}
-		//if(au)
+		result.buildIsSuccess(true).buildData(responseUser);
+		
 		return result;
 	}
 }
