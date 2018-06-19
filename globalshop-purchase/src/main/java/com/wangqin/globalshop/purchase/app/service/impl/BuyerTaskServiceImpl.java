@@ -129,11 +129,14 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             detailList.add(detail);
         }
 
-        if (errMsg.size() == 0) {
+        int size = errMsg.size();
+        if (size == 0) {
             detailMapper.inserBatch(detailList);
             mapper.insertBatch(taskList);
-        } else {
+        } else if (size < 10) {
             throw new ErpCommonException(errMsg.toString());
+        } else {
+            throw new ErpCommonException("上传文件错误过多,请验证后再次上传");
         }
 
     }
