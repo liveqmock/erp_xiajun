@@ -28,6 +28,9 @@
     FROM buyer_task
     WHERE
     company_no = #{companyNo}
+    <if test="buyerOpenId != null">
+      AND buyer_open_id=#{buyerOpenId}
+    </if>
   </select>
 
 </mapper>
