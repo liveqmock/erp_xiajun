@@ -14,4 +14,6 @@ public interface IBuyerTaskService {
     List<BuyerTaskDO> list(BuyerTaskDO buyerTaskDO);
 
     void add(BuyerTaskVO buyerTaskDO);
+
+    void importTask(List<List<Object>> list);
 }
