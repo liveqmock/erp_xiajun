@@ -62,6 +62,20 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     }
 
+    @Override
+    public String[] importTask(List<List<Object>> list) {
+        for (List<Object> str : list) {
+
+        }
+
+
+
+
+
+
+        return new String[0];
+    }
+
     private void getBuyerTaskDO(BuyerTaskDO task, BuyerDO buyer, BuyerTaskVO vo) {
         task.setTitle(vo.getTaskTitle());
         task.setRemark(vo.getTaskDesc());

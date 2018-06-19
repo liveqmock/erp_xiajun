@@ -48,21 +48,28 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void outbound(InventoryDO inventory, String warehouseNo, String positionNo) {
         Long inv = inventory.getInv();
+        /**更新具体仓库的库存*/
         InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, inv, warehouseNo, positionNo);
         inventory = mapper.queryBySkuCodeAndItemCode(inventory.getSkuCode(), inventory.getItemCode());
-        /**1增加实际库存*/
-        inventory.setInv(inventory.getInv() + inv);
-        inventory.update();
-        /**减少虚拟库存  保证可售不变*/
-        Long virtualInv = inventory.getVirtualInv();
-        if (virtualInv != 0) {
+        /**如果有虚拟库存,表示已有库存记录  需要更新
+         * 反之  则没有库存记录  需要新增
+         * */
+        if (inventory != null) {
+            Long virtualInv = inventory.getVirtualInv();
+            /**1增加实际库存*/
+            inventory.setInv(inventory.getInv() + inv);
+            inventory.update();
+            /**减少虚拟库存  保证可售不变*/
             if (virtualInv < inv) {
-                inventory.setVirtualInv(0L);
-            } else {
                 inventory.setVirtualInv(virtualInv - inv);
+            } else {
+                inventory.setVirtualInv(0L);
             }
+            mapper.updateByPrimaryKeySelective(inventory);
+        } else {
+            inventory.init();
+            mapper.insertSelective(inventory);
         }
-        mapper.updateByPrimaryKeySelective(inventory);
         if (wareHouseDO == null) {
             throw new ErpCommonException("找不到对应的商品,入库失败");
         }
@@ -245,7 +252,7 @@ public class InventoryServiceImpl implements InventoryService {
         Integer quantity = orderDO.getQuantity();
         inventoryDO.setLockedInv(inventoryDO.getLockedInv() - quantity);
         long inv = inventoryDO.getInv() - quantity;
-        if (inv < 0){
+        if (inv < 0) {
             throw new ErpCommonException("库存不足,不允许发货");
         }
         inventoryDO.setInv(inv);
@@ -286,15 +293,15 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void updateVirtualInv(String skuCode, Long virInv, String companyNo) {
         /**如果virInv 为负数  不允许修改*/
-        if (virInv < 0){
+        if (virInv < 0) {
             throw new ErpCommonException("虚拟库存必须大于0");
 
         }
         /**查出对应库存的仓库记录*/
-        InventoryDO inventory =  mapper.queryBySkuCodeAndCompanyNo(skuCode,companyNo);
+        InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(skuCode, companyNo);
         Long inv = inventory.getInv() - inventory.getLockedInv();
-        if (inv < virInv){
-            throw new ErpCommonException("当前允许虚拟库存最小值为"+inv);
+        if (inv < virInv) {
+            throw new ErpCommonException("当前允许虚拟库存最小值为" + inv);
         }
         inventory.setVirtualInv(virInv);
         mapper.updateByPrimaryKey(inventory);
@@ -370,12 +377,10 @@ public class InventoryServiceImpl implements InventoryService {
         /****inventory***/
         inoutDO.setSkuCode(inventoryDO.getSkuCode());
         inoutDO.setItemCode(inventoryDO.getItemCode());
-        inoutDO.setCompanyNo(inventoryDO.getCompanyNo());
         /****warehouse***/
         inoutDO.setInventoryOnWarehouseNo(wareHouseDO.getInventoryOnWarehouseNo());
         inoutDO.setWarehouseNo(wareHouseDO.getWarehouseNo());
         inoutDO.setShelfNo(wareHouseDO.getShelfNo());
-        inoutDO.setInventoryOnWarehouseNo(wareHouseDO.getInventoryOnWarehouseNo());
         /*******/
         inoutDO.init();
         inoutDO.setOperatorType(opeatory);
