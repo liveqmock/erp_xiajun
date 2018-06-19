@@ -2,8 +2,8 @@ package com.wangqin.globalshop.wen.controller.usercenter;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.usercenter.service.IUserRoleService;
 import com.wangqin.globalshop.usercenter.service.IUserService;
+import com.wangqin.globalshop.web.dto.BaseDto;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ public class ShareUserController {
 	 */
 	@RequestMapping("/login")
 	@ResponseBody
-	public Object Login(@RequestParam("type") String type,
+	public String Login(@RequestParam("type") String type,
 						@RequestParam(value="mobileNo", required=false) String mobileNo,
 						@RequestParam(value="checkCode", required=false) String checkCode,
 						@RequestParam(value="thirdPartyId", required=false) String thirdPartyId,
@@ -45,9 +45,9 @@ public class ShareUserController {
 
 		if(null == responseUser) {
 			result.buildIsSuccess(false).buildMsg("用户不存在");
-			return result;
+			return BaseDto.toString(result);
 		}
 		result.buildIsSuccess(true).buildData(responseUser);
-		return result;
+		return BaseDto.toString(result);
 	}
 }
