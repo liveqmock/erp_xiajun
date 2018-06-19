@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdCategoryDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+    <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+    <result column="fid" property="fid" jdbcType="VARCHAR" />
+    <result column="cid" property="cid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent" property="parent" jdbcType="VARCHAR" />
+    <result column="lev" property="lev" jdbcType="VARCHAR" />
+    <result column="index_id" property="indexId" jdbcType="VARCHAR" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, creator, modifier, channel_no, company_no, shop_code, attribute_id, fid, cid, 
+    name, parent, lev, index_id, msg
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from jd_category
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from jd_category
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_category (creator, modifier, channel_no, 
+      company_no, shop_code, attribute_id, 
+      fid, cid, name, parent, 
+      lev, index_id, msg)
+    values (#{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{attributeId,jdbcType=VARCHAR}, 
+      #{fid,jdbcType=VARCHAR}, #{cid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR}, 
+      #{lev,jdbcType=VARCHAR}, #{indexId,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="shopCode != null" >
+        shop_code,
+      </if>
+      <if test="attributeId != null" >
+        attribute_id,
+      </if>
+      <if test="fid != null" >
+        fid,
+      </if>
+      <if test="cid != null" >
+        cid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parent != null" >
+        parent,
+      </if>
+      <if test="lev != null" >
+        lev,
+      </if>
+      <if test="indexId != null" >
+        index_id,
+      </if>
+      <if test="msg != null" >
+        msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeId != null" >
+        #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="fid != null" >
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null" >
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parent != null" >
+        #{parent,jdbcType=VARCHAR},
+      </if>
+      <if test="lev != null" >
+        #{lev,jdbcType=VARCHAR},
+      </if>
+      <if test="indexId != null" >
+        #{indexId,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        #{msg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryDO" >
+    update jd_category
+    <set >
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null" >
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeId != null" >
+        attribute_id = #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="fid != null" >
+        fid = #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null" >
+        cid = #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parent != null" >
+        parent = #{parent,jdbcType=VARCHAR},
+      </if>
+      <if test="lev != null" >
+        lev = #{lev,jdbcType=VARCHAR},
+      </if>
+      <if test="indexId != null" >
+        index_id = #{indexId,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdCategoryDO" >
+    update jd_category
+    set creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      attribute_id = #{attributeId,jdbcType=VARCHAR},
+      fid = #{fid,jdbcType=VARCHAR},
+      cid = #{cid,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      parent = #{parent,jdbcType=VARCHAR},
+      lev = #{lev,jdbcType=VARCHAR},
+      index_id = #{indexId,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

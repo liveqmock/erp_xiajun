@@ -626,10 +626,9 @@
 	
 	<select id="queryItemByItemCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" >
 	SELECT <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
-	<include refid="Base_Column_List" />
-	FROM item 
+	FROM item
 	<where>
-	item_code={itemCode}
+	item_code = #{itemCode}
 	AND is_del=0;
 	</where>
 	</select>

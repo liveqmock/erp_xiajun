@@ -15,4 +15,6 @@ public  class SendStatus {
 
 	public final static String SUCCESS = "SUCCESS";//停止下发
 
+
+
 }

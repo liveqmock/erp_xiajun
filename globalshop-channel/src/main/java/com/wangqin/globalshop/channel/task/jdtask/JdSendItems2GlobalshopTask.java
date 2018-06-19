@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * Create by 777 on 2018/6/13
  */
 //@Component
-//@EnableAsync
+@EnableAsync
 public class JdSendItems2GlobalshopTask {
 
 	protected Logger logger = LogManager.getLogger(getClass());
@@ -32,7 +33,7 @@ public class JdSendItems2GlobalshopTask {
 	private JdItemService jdItemService;
 
 	// 每隔半小时执行一次
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void run4Request() {
 		logger.info("定时任务：自动将京东下载的商品下发至globalshop===>Start");
 		Long startTime = System.currentTimeMillis();

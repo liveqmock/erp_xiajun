@@ -5,10 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
-import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
-import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
-import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.*;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.item.app.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +59,9 @@ public class ItemServiceImplement implements IItemService {
 
     @Autowired
     private IUploadFileService uploadFileService;
+
+    @Autowired
+    private ItemSkuDOMapperExt itemSkuDOMapperExt;
 
    //根据id更新商品
     @Override
@@ -316,16 +316,18 @@ public class ItemServiceImplement implements IItemService {
 
         ItemVo itemVo = new ItemVo();
         ItemDO itemDo = itemDOMapperExt.queryItemByItemCode(itemCode);
-        BeanUtils.copies(itemDo,itemVo);
-
+        if(itemDo != null){
+            BeanUtils.copies(itemDo,itemVo);
+        }
         List<ItemSkuVo> itemSkuVos = new ArrayList<>();
         ItemSkuDO skuSo = new ItemSkuDO();
         skuSo.setItemCode(itemDo.getItemCode());
         List<ItemSkuDO> skuList = itemSkuService.querySkuListByItemCode(itemCode);
         for(ItemSkuDO sku : skuList){
             ItemSkuVo itemSkuVo = new ItemSkuVo();
-            BeanUtils.copies(sku,itemSkuVo);
-
+            if(sku != null){
+                BeanUtils.copies(sku,itemSkuVo);
+            }
             //库存
             InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(),sku.getSkuCode());
             itemSkuVo.setInventoryDO(inventoryDO);
@@ -367,7 +369,10 @@ public class ItemServiceImplement implements IItemService {
 
         ChannelListingItemDO channelListingItemDO = channelListingItemDOMapperExt.queryPo(so);
 
-        BeanUtils.copies(channelListingItemDO,channelListingItemVo);
+        if(channelListingItemDO != null){
+            BeanUtils.copies(channelListingItemDO,channelListingItemVo);
+        }
+
 
 
         ChannelListingItemSkuDO skuSo = new ChannelListingItemSkuDO();
@@ -376,13 +381,84 @@ public class ItemServiceImplement implements IItemService {
 
         List<ChannelListingItemSkuDO> channelListingItemSkuDOS = channelListingItemSkuDOMapperExt.queryPoList(skuSo);
 
-        channelListingItemVo.setChannelListingItemSkuDOS(channelListingItemSkuDOS);
+        List<ChannelListingItemSkuVo> channelListingItemSkuVos = new ArrayList<>();
+        for(ChannelListingItemSkuDO sku : channelListingItemSkuDOS){
+            ChannelListingItemSkuVo skuVo = new ChannelListingItemSkuVo();
+            if(sku !=null){
+                BeanUtils.copies(sku,skuVo);
+            }
+            channelListingItemSkuVos.add(skuVo);
+        }
+
+        channelListingItemVo.setChannelListingItemSkuVos(channelListingItemSkuVos);
 
 
         resultVo.setChannelListingItemVo(channelListingItemVo);
 
         return resultVo;
 
+    }
+
+    public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo){
+
+        ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
+
+        //第一步：channellistingitem
+        ChannelListingItemDO channelListingItemDO = new ChannelListingItemDO();
+        BeanUtils.copies(channelListingItemVo,channelListingItemDO);
+        channelListingItemDOMapperExt.insert(channelListingItemDO);
+
+        //第二步：channellistingitemSku
+        List<ChannelListingItemSkuVo> channelListingItemSkuVoS =  channelListingItemVo.getChannelListingItemSkuVos();
+        for(ChannelListingItemSkuVo sku : channelListingItemSkuVoS){
+            ChannelListingItemSkuDO channelListingItemSkuDO = new ChannelListingItemSkuDO();
+            BeanUtils.copies(sku,channelListingItemSkuDO);
+            channelListingItemSkuDOMapperExt.insert(channelListingItemSkuDO);
+        }
+
+        ItemVo itemVo = globalShopItemVo.getItemVo();
+
+        ItemDO itemDO = new ItemDO();
+        BeanUtils.copies(itemVo,itemDO);
+        itemDOMapperExt.insert(itemDO);
+
+        List<ItemSkuVo> skuVos = itemVo.getItemSkus();
+        for(ItemSkuVo  skuVo : skuVos){
+            ItemSkuDO skuDO = new ItemSkuDO();
+            BeanUtils.copies(skuVo,skuDO);
+            itemSkuDOMapperExt.insert(skuDO);
+        }
+    }
+
+    public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo){
+
+        ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
+
+        //第一步：channellistingitem
+        ChannelListingItemDO channelListingItemDO = new ChannelListingItemDO();
+        BeanUtils.copies(channelListingItemVo,channelListingItemDO);
+        channelListingItemDOMapperExt.insert(channelListingItemDO);
+
+        //第二步：channellistingitemSku
+        List<ChannelListingItemSkuVo> channelListingItemSkuVoS =  channelListingItemVo.getChannelListingItemSkuVos();
+        for(ChannelListingItemSkuVo sku : channelListingItemSkuVoS){
+            ChannelListingItemSkuDO channelListingItemSkuDO = new ChannelListingItemSkuDO();
+            BeanUtils.copies(sku,channelListingItemSkuDO);
+            channelListingItemSkuDOMapperExt.insert(channelListingItemSkuDO);
+        }
+
+        ItemVo itemVo = globalShopItemVo.getItemVo();
+
+        ItemDO itemDO = new ItemDO();
+        BeanUtils.copies(itemVo,itemDO);
+        itemDOMapperExt.insert(itemDO);
+
+        List<ItemSkuVo> skuVos = itemVo.getItemSkus();
+        for(ItemSkuVo  skuVo : skuVos){
+            ItemSkuDO skuDO = new ItemSkuDO();
+            BeanUtils.copies(skuVo,skuDO);
+            itemSkuDOMapperExt.insert(skuDO);
+        }
     }
    
 }

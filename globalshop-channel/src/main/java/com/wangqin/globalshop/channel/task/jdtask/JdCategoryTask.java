@@ -2,30 +2,25 @@ package com.wangqin.globalshop.channel.task.jdtask;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.service.jingdong.JdOrderService;
+import com.wangqin.globalshop.channel.service.jingdong.JdCategoryService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
-import com.wangqin.globalshop.channel.service.jingdong.JdShopFactory;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Date;
 import java.util.List;
 
 /**
- * Create by 777 on 2018/6/12
+ * Create by 777 on 2018/6/16
  */
-
 //@Component
-public class JdGetOrdersTask {
+
+public class JdCategoryTask {
 
 	protected Logger logger = LogManager.getLogger(getClass());
 
@@ -38,15 +33,14 @@ public class JdGetOrdersTask {
 
 
 	@Autowired
-	private JdOrderService jdOrderService;
+	private JdCategoryService jdCategoryService;
 
-	private final static int internalTime = 30 * 1000;//延后30秒
 
 
 	// 每隔半小时执行一次
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void run() {
-		logger.info("定时任务：自动去京东下载订单===>Start");
+		logger.info("定时任务：自动去京东下载商品===>Start");
 		Long startTime = System.currentTimeMillis();
 		// 首先轮训出company
 		JdShopOauthDO so = new JdShopOauthDO();
@@ -56,7 +50,7 @@ public class JdGetOrdersTask {
 
 		Long shopCount= 0L;
 		JdShopConfigDO configso = new JdShopConfigDO();
-		configso.setConfigKey(AccountConfigKey.LAST_TRADES_GET_TIME.getDescription());
+		configso.setConfigKey(AccountConfigKey.NEED_GET_CATEGORY.getDescription());
 		for (JdShopOauthDO shopOauth : jdShopOauthDOS) {
 			configso.setShopCode(shopOauth.getShopCode());
 
@@ -67,45 +61,34 @@ public class JdGetOrdersTask {
 				break;
 			}
 
-			String beginValue = jdShopConfigDO.getConfigValue();
+			Boolean need = "true".equalsIgnoreCase(jdShopConfigDO.getConfigValue());
 
-            Date beginTime = DateUtil.parseDate(beginValue);
-
-            Date endTime =  new Date(System.currentTimeMillis() - internalTime);
-
-            if(beginTime.after(endTime)){
-               break;
+			if(!need){
+				break;
 			}
 
 			Boolean success = true;
 
 			try {
-				List<JdOrderDO> jdOrderDOS = JdShopFactory
-						.getChannel(shopOauth).getOrders(DateUtil.convertDate2Str(beginTime,DateUtil.formateStr19), DateUtil.convertDate2Str(endTime,DateUtil.formateStr19));
 
-				if(!EasyUtil.isListEmpty(jdOrderDOS)){
-					jdOrderService.saveOrders4Task(jdOrderDOS);
-				}
-
+				//JdShopFactory.getChannel(shopOauth).getCategory();
+				jdCategoryService.getCategory(shopOauth);
 				shopCount++;
 			} catch (ErpCommonException e) {
 				success = false;
-				logger.error("JdGetOrdersTask error:",e);
+				logger.error("JdGetItemsTask error:",e);
 			} catch (Exception e) {
 				success = false;
-				logger.error("get jingdong orders error, shopCode: " + shopOauth.getShopCode(), e);
+				logger.error("get jingdong Items error, shopCode: " + shopOauth.getShopCode(), e);
 			}
 
-            if(success){
-                String endValue = DateUtil.convertDate2Str(endTime,DateUtil.formateStr19);
-				jdShopConfigDO.setConfigValue(endValue);
-                jdShopConfigService.updateByPrimaryKey(jdShopConfigDO);
+			if(success){
+				jdShopConfigDO.setConfigValue("false");
+				jdShopConfigService.updateByPrimaryKey(jdShopConfigDO);
 			}
 		}
 		Long endTime = System.currentTimeMillis();
-		logger.info("定时任务：自动去京东下载订单===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
+		logger.info("定时任务：自动去京东下载订===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
 	}
-
-
 
 }

@@ -653,6 +653,30 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
+        <!--<table tableName="jd_category" domainObjectName="JdCategoryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+        <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+        <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
+        <!--<table tableName="jd_category_attar" domainObjectName="JdCategoryAttarDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
+        <!--<table tableName="jd_category_attarvalue" domainObjectName="JdCategoryAttarValueDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
 
         <!--<table tableName="wx_user" domainObjectName="WxUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->

@@ -5,9 +5,9 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdItemDOMapperExt;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
+import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
+import com.wangqin.globalshop.common.utils.HttpPostUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,19 +111,22 @@ public class JdItemServiceImpl implements JdItemService {
 		}
 
 		Map<String,String> pram = new HashMap<>();
-		pram.put("channelNo",shopOauth.getChannelNo());
-		pram.put("companyNo",shopOauth.getCompanyNo());
-        pram.put("shopCode",shopOauth.getShopCode());
+		JdCommonParam jdCommonParam = new JdCommonParam();
+		jdCommonParam.setChannelNo(shopOauth.getChannelNo());
+		jdCommonParam.setCompanyNo(shopOauth.getCompanyNo());
+		jdCommonParam.setShopCode(shopOauth.getShopCode());
+
+        pram.put("jdCommonParam",JSON.toJSONString(jdCommonParam));
 		pram.put("globalShopItemVo",JSON.toJSONString(globalShopItemVo));
 
-		JSONObject jsonObject = null;
+		String jsonStr = null;
 		try {
-			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jditem/taskitem",pram);
+			jsonStr = HttpPostUtil.doHttpPost(GlobalshopStatic.globalshop_dev_url+"/jditem/taskitem",pram);
 		} catch (Exception e) {
 			logger.error("sendJdItem2globalshop4Task error: ",e);
 		}
 
-		JsonResult<String> result = JSON.parseObject(jsonObject.toString(),JsonResult.class);
+		JsonResult<Object> result = JSON.parseObject(jsonStr,JsonResult.class);
 
 		if(result.isSuccess()){
 			jdItemDO.setSendStatus(SendStatus.SUCCESS);

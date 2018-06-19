@@ -1,15 +1,17 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemOperateDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdItemOperateDOMapperExt;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
+import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
+import com.wangqin.globalshop.common.utils.EasyUtil;
+import com.wangqin.globalshop.common.utils.HttpPostUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,33 +73,50 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 		return jdItemOperateDOMapperExt.searchJdItemOperateCount(jdItemOperateDO);
 	}
 
-	public void createItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus){
-		JdItemOperateDO jdItemOperateDO = new JdItemOperateDO();
-		jdItemOperateDO.setChannelNo(shopOauth.getChannelNo());
-		jdItemOperateDO.setCompanyNo(shopOauth.getCompanyNo());
-		jdItemOperateDO.setShopCode(shopOauth.getShopCode());
-		jdItemOperateDO.setItemCode(itemCode);
-		jdItemOperateDO.setOperateType(operateType);
-		jdItemOperateDO.setIsDel(false);
+	public void createOrUpdateItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus){
 
-		jdItemOperateDO.setSyncStatus(syncStatus);
-		jdItemOperateDO.setSendStatus(sendStatus);
-		jdItemOperateDOMapperExt.insert(jdItemOperateDO);
+		JdItemOperateDO so = new JdItemOperateDO();
+		so.setChannelNo(shopOauth.getChannelNo());
+		so.setCompanyNo(shopOauth.getCompanyNo());
+		so.setShopCode(shopOauth.getShopCode());
+		so.setItemCode(itemCode);
+		so.setOperateType(operateType);
+		JdItemOperateDO exit = jdItemOperateDOMapperExt.searchJdItemOperate(so);
+		if(exit == null){
+			JdItemOperateDO jdItemOperateDO = new JdItemOperateDO();
+			jdItemOperateDO.setChannelNo(shopOauth.getChannelNo());
+			jdItemOperateDO.setCompanyNo(shopOauth.getCompanyNo());
+			jdItemOperateDO.setShopCode(shopOauth.getShopCode());
+			jdItemOperateDO.setItemCode(itemCode);
+			jdItemOperateDO.setOperateType(operateType);
+			jdItemOperateDO.setIsDel(false);
+
+			jdItemOperateDO.setSyncStatus(syncStatus);
+			jdItemOperateDO.setSendStatus(sendStatus);
+			jdItemOperateDOMapperExt.insert(jdItemOperateDO);
+		}else {
+			exit.setSyncStatus(syncStatus);
+			exit.setSendStatus(sendStatus);
+			jdItemOperateDOMapperExt.updateByPrimaryKey(exit);
+		}
+
 	}
 
 	public void queryItemThenSync2Jd4Add(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
 		Map<String,String> param = new HashMap<>();
 		param.put("itemCode",jdItemOperateDO.getItemCode());
 
-		JSONObject jsonObject = null;
-		try {
-			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jditem/queryadd",param);
-		} catch (Exception e) {
-			logger.error("queryItemThenSync2Jd4Add error: ",e);
+		String jsonStr = HttpPostUtil.doHttpPost(GlobalshopStatic.globalshop_dev_url+"/jditem/queryadd",param);
+		JsonResult<Object> jsonResult = JSON.parseObject(jsonStr,JsonResult.class);
+		if(!jsonResult.isSuccess()){
+						jdItemOperateDO.setSyncStatus(SyncStatus.FAILURE);
+						jdItemOperateDO.setErrorMassge(EasyUtil.truncateLEFitSize(jsonResult.getMsg(),1020));
+						jdItemOperateDOMapperExt.updateByPrimaryKey(jdItemOperateDO);
+						return;
 		}
 
-		JsonResult<ItemVo> result = JSON.parseObject(jsonObject.toString(),JsonResult.class);
-		ItemVo itemVo = result.getData();
+		ItemVo itemVo  = JSONObject.parseObject(jsonResult.getData().toString(),ItemVo.class);
+
 		if(itemVo == null){
 			jdItemOperateDO.setSyncStatus(SyncStatus.SUCCESS);
 			jdItemOperateDO.setErrorMassge("itemcode 查询到的数据为空");
@@ -134,15 +153,23 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 		param.put("itemCode",jdItemOperateDO.getItemCode());
 		param.put("shopCode",shopOauth.getShopCode());
 
-		JSONObject jsonObject = null;
+		String jsonStr = null;
 		try {
-			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jditem/queryupdate",param);
+			jsonStr = HttpPostUtil.doHttpPost(GlobalshopStatic.globalshop_dev_url+"/jditem/queryupdate",param);
 		} catch (Exception e) {
 			logger.error("queryItemThenSync2Jd4Update error: ",e);
 		}
 
-		JsonResult<GlobalShopItemVo> result = JSON.parseObject(jsonObject.toString(),JsonResult.class);
-		GlobalShopItemVo globalShopItemVo = result.getData();
+		JsonResult<Object> jsonResult = JSON.parseObject(jsonStr,JsonResult.class);
+		if(!jsonResult.isSuccess()){
+			jdItemOperateDO.setSyncStatus(SyncStatus.FAILURE);
+			jdItemOperateDO.setErrorMassge(EasyUtil.truncateLEFitSize(jsonResult.getMsg(),1020));
+			jdItemOperateDOMapperExt.updateByPrimaryKey(jdItemOperateDO);
+			return;
+		}
+
+		GlobalShopItemVo globalShopItemVo  = JSONObject.parseObject(jsonResult.getData().toString(),GlobalShopItemVo.class);
+
 		if(globalShopItemVo == null){
 			jdItemOperateDO.setSyncStatus(SyncStatus.SUCCESS);
 			jdItemOperateDO.setErrorMassge("itemcode 查询到的数据为空");
@@ -181,14 +208,16 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 		}
 
 		Map<String,String> pram = new HashMap<>();
-		pram.put("channelNo",shopOauth.getChannelNo());
-		pram.put("companyNo",shopOauth.getCompanyNo());
-		pram.put("shopCode",shopOauth.getShopCode());
+		JdCommonParam jdCommonParam = new JdCommonParam();
+		jdCommonParam.setChannelNo(shopOauth.getChannelNo());
+		jdCommonParam.setCompanyNo(shopOauth.getCompanyNo());
+		jdCommonParam.setShopCode(shopOauth.getShopCode());
+		pram.put("jdCommonParam",JSON.toJSONString(jdCommonParam));
 		pram.put("globalShopItemVo",JSON.toJSONString(globalShopItemVo));
 
-		JSONObject jsonObject = null;
+		String jsonObject = null;
 		try {
-			jsonObject = HttpClientUtil.post(GlobalshopStatic.globalshop_dev_url+"/jditem/taskitem",pram);
+			jsonObject = HttpPostUtil.doHttpPost(GlobalshopStatic.globalshop_dev_url+"/jditem/taskitem",pram);
 		} catch (Exception e) {
 			logger.error("sendItem2Globalshop error: ",e);
 		}
