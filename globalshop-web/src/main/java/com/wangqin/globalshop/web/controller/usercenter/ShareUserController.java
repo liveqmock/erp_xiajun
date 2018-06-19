@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.wen.controller.usercenter;
+package com.wangqin.globalshop.web.controller.usercenter;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
