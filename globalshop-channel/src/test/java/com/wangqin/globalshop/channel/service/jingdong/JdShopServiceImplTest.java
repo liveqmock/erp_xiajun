@@ -42,7 +42,7 @@ public class JdShopServiceImplTest {
 
 	public static final String url = "https://api.jd.com/routerjson";
 
-	public static final String token = "e34381e3-45f9-4741-a2a2-fa7c16833526";
+	public static final String token = "b67bd481-2f8a-45d1-bce8-01f64e0d84de";
 
 
 	public static final String appkey = "96C38E0AAAA47520B6211D32A5A14EDE";

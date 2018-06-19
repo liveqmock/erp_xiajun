@@ -3,24 +3,32 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.JdShopOauthDOMapperExt" >
 
     <sql id="tableSection">jd_shop_oauth</sql>
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="version" property="version" jdbcType="BIGINT" />
         <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
         <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
         <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
         <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+        <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
         <result column="expires_time" property="expiresTime" jdbcType="TIMESTAMP" />
-        <result column="proxy_url" property="proxyUrl" jdbcType="VARCHAR" />
+        <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR" />
+        <result column="refresh_exprires_time" property="refreshExpriresTime" jdbcType="TIMESTAMP" />
+        <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+        <result column="appsecret_key" property="appsecretKey" jdbcType="VARCHAR" />
+        <result column="access_key" property="accessKey" jdbcType="VARCHAR" />
+        <result column="access_value" property="accessValue" jdbcType="VARCHAR" />
+        <result column="server_url" property="serverUrl" jdbcType="VARCHAR" />
+        <result column="token_url" property="tokenUrl" jdbcType="VARCHAR" />
         <result column="shop_type" property="shopType" jdbcType="VARCHAR" />
         <result column="open" property="open" jdbcType="BIT" />
     </resultMap>
     <sql id="Base_Column_List" >
-        id, version, creator, modifier, channel_no, company_no, shop_name, shop_code, expires_time,
-        proxy_url, shop_type, open
-    </sql>
+    id, version, creator, modifier, channel_no, company_no, shop_code, access_token,
+    expires_time, refresh_token, refresh_exprires_time, app_key, appsecret_key, access_key,
+    access_value, server_url, token_url, shop_type, open
+  </sql>
 
 
 
