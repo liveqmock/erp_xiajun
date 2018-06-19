@@ -45,13 +45,15 @@ public class BuyerController {
 
     }
 
-
+    /**
+     * 查询采购任务的明细
+     * @return
+     */
     @PostMapping("/queryTaskDailyList")
     public Object queryTaskDailyList(BuyerTaskDO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
         List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
-        result.buildData(list);
-        return result.buildIsSuccess(true);
+        return result.buildData(list).buildIsSuccess(true);
     }
 
     /**
@@ -63,21 +65,19 @@ public class BuyerController {
     public Object addTask(BuyerTaskVO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
         buyerTaskService.add(buyerTaskDO);
-//        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
-//        result.buildData(list);
         return result.buildIsSuccess(true);
     }
 
     /**
-     * 查询该买手的任务单
+     * 查询该买手的采购任务
      * @param buyerTaskDO
      * @return
      */
     @PostMapping("/queryBuyerTaskList")
     public Object queryBuyerTaskList(BuyerTaskDO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-//        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
-//        result.buildData(list);
+        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
+        result.buildData(list);
         return result.buildIsSuccess(true);
     }
 
