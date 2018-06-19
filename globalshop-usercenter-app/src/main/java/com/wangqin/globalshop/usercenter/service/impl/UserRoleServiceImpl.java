@@ -41,4 +41,12 @@ public class UserRoleServiceImpl implements IUserRoleService {
 	
 	}
 
+
+
+	@Override
+	public AuthUserRoleDO selectRoleIdByUserId(Long userId) {
+		// TODO Auto-generated method stub
+		return userRoleMapper.selectRoleIdByUserId(userId);
+	}
+
 }

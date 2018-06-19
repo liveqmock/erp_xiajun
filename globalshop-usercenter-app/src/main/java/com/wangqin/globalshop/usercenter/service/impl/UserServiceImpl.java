@@ -190,6 +190,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 		// TODO Auto-generated method stub
 		return userMapper.selectUserVoByUserNo(userNo);
 	}
+	
+	 //一键分享登录
+	@Override
+	public AuthUserDO selectUserByWxOpenId(String wxOpenId) {
+    	return userMapper.selectUserByWxOpenId(wxOpenId);
+    }
 
 	
 }

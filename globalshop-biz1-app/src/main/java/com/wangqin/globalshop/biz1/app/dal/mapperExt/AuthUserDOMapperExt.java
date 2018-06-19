@@ -43,4 +43,7 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     AuthUserDO selectUserVoByUserNo(String userNo);
     
     void insertByNoId(AuthUserDO record);
+    
+    //一键分享登录
+    AuthUserDO selectUserByWxOpenId(String wxOpenId);
 }

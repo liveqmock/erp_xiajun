@@ -72,6 +72,13 @@
     where user_id = #{userId}
   </select>
   
+  <select id="selectRoleIdByUserId" resultMap="BaseResultMap2" parameterType="java.lang.Long">
+    select
+    role_id AS roleId
+    from auth_user_role
+    where user_id = #{userId}
+  </select>
+  
   
   
 
