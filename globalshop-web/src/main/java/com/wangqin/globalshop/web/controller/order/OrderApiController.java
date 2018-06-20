@@ -25,11 +25,14 @@ public class OrderApiController {
 
         JsonResult<List<MyHomeOrderEntity>> jsonResult = new JsonResult<>();
         List<MyHomeOrderEntity> orders = new ArrayList<>();
+
         MyHomeOrderEntity entity = new MyHomeOrderEntity();
         entity.setCommission("1000");
         entity.setOrderCount("1");
         entity.setTime("2018-06-20");
         orders.add(entity);
+
+
         jsonResult.buildIsSuccess(true).buildData(orders);
         return BaseDto.toString(jsonResult);
     }
@@ -43,7 +46,11 @@ public class OrderApiController {
 
         JsonResult<MyHomeOrderDetailEntity> jsonResult = new JsonResult<>();
         MyHomeOrderDetailEntity entity = new MyHomeOrderDetailEntity();
-        entity.setOrderDetailDesc("TTTTTTTT");
+
+
+       String summary =  String.format("%s个订单，佣金%s", "", "");
+        entity.setOrderDetailDesc(summary);
+
         List<OrderDetailEntity> orderDetailList = new ArrayList<>();
         OrderDetailEntity tmp = new OrderDetailEntity();
         tmp.setOrderNo("1111111");

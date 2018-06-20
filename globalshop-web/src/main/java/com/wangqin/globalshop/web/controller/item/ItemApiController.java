@@ -33,16 +33,22 @@ public class ItemApiController {
                           @RequestParam("pageSize") String pageSize,
                           @RequestParam("pageNo") String pageNo){
 
-        //TODO
         JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
         List<ItemEntity> items = new ArrayList<>();
+
+
+        //-------------------------------------------------------
+        //TODO
         ItemEntity item0 = new ItemEntity();
         item0.setItemCode("11111");
-        item0.setPrice("120");
-        item0.setOriginPrice("$20");
+        item0.setPrice("120");       //默认SKU的价格
+        item0.setOriginPrice("$20"); //TODO 外币
         item0.setTitle("title11111");
         item0.setImgUrl("http://img.haihu.com/wq_logo.jpg");
         items.add(item0);
+
+        //-------------------------------------------------------
+
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
     }
@@ -57,6 +63,8 @@ public class ItemApiController {
         //TODO
         JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
         List<ItemEntity> items = new ArrayList<>();
+
+
         ItemEntity item0 = new ItemEntity();
         item0.setItemCode("11111");
         item0.setPrice("120");
@@ -64,6 +72,8 @@ public class ItemApiController {
         item0.setTitle("title11111");
         item0.setImgUrl("http://img.haihu.com/wq_logo.jpg");
         items.add(item0);
+
+
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
     }
@@ -76,11 +86,14 @@ public class ItemApiController {
         //TODO
         JsonResult<ItemDetailEntity> jsonResult = new JsonResult<>();
         ItemDetailEntity entity = new ItemDetailEntity();
+
         entity.setItemCode("1111");
         entity.setItemDesc("xxxxxx");
         entity.setPrice("120");
         entity.setOriginPrice("$20");
         entity.setImgList(Arrays.asList("http://img.haihu.com/wq_logo.jpg"));
+
+
         jsonResult.buildIsSuccess(true).buildData(entity);
         return BaseDto.toString(jsonResult);
     }
