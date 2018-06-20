@@ -79,4 +79,7 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
     MallSubOrderDO selectBySubOrderNo(String subOrderNo);
 
     List<MallSubOrderDO> list();
+
+    //一键分享，我的订单
+	List<MallSubOrderDO> queryOrdersByShareUserId(String shareUserId);
 }
