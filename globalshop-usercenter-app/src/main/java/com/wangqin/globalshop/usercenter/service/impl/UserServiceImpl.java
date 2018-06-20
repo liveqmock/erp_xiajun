@@ -191,7 +191,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 		return userMapper.selectUserVoByUserNo(userNo);
 	}
 	
-	 //一键分享登录
+	//一键分享登录
 	@Override
 	public  List<AuthUserDO> selectUserByWxOpenId(String wxOpenId) {
     	return userMapper.selectUserByWxOpenId(wxOpenId);

@@ -673,5 +673,16 @@
     T1.company_no = #{companyNo}
     </where>	
     </select>
+    
+    
+    <!-- 一键分享，订单详情的商品图片 -->
+    <select id="queryItemPicByItemCode" resultType="java.lang.String" parameterType="java.lang.String">
+    	SELECT
+    		main_pic
+    	FROM item
+    	<where>
+    		item_code = #{itemCode}    
+    	</where>	
+    </select>
    
 </mapper>

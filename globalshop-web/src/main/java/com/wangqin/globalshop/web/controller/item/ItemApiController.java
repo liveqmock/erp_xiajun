@@ -48,16 +48,18 @@ public class ItemApiController {
     	List<ItemEntity> items = new ArrayList<>();
     	int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
     	List<ItemDO>itemList = itemService.queryItemByStatus(companyNo, type, start, pageSize);
-    	ItemEntity itemEntity = new ItemEntity();
+    	
     	for(int i = 0; i < itemList.size(); i ++) {
+    		ItemEntity itemEntity = new ItemEntity();
     		itemEntity.setItemCode(itemList.get(i).getItemCode());
     		itemEntity.setPrice(itemList.get(i).getPriceRange());//价格
     		itemEntity.setOriginPrice("meiyuan");//外币
     		itemEntity.setTitle(itemList.get(i).getItemName());//标题
     		itemEntity.setImgUrl(itemList.get(i).getMainPic());//头像
+    		items.add(itemEntity); 
     	}
     	
-    	items.add(itemEntity); 
+    	
 
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
@@ -75,18 +77,20 @@ public class ItemApiController {
         List<ItemEntity> items = new ArrayList<>();
         int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
         List<ItemDO> itemList = itemService.queryItemByKeyWord(keyword, companyNo, start, pageSize);
-        ItemEntity itemEntity = new ItemEntity();
+      
         for(int i = 0; i < itemList.size(); i ++) {
+        	 ItemEntity itemEntity = new ItemEntity();
         	itemEntity.setItemCode(itemList.get(i).getItemCode());
         	itemEntity.setPrice(itemList.get(i).getMainPic());
         	itemEntity.setOriginPrice("美元");
         	itemEntity.setPrice("价格");
         	itemEntity.setTitle("标题");
+        	items.add(itemEntity);
+
         }
 
     
-        items.add(itemEntity);
-
+     
 
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
