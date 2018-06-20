@@ -51,10 +51,12 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	
 	ItemDO queryItemByItemCode(String itemCode);
 
-    ItemDO selectByItemCode(String itemCode);
-	
+
     //根据id更新商品
 	void updateByIdSelective(ItemDO item);
 	
 	Long queryIdByItemCode(String itemCode);
+
+	List<ItemDTO> queryMallItems(ItemQueryVO itemQueryVO);
+
 }

@@ -15,14 +15,14 @@
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="organization_id" jdbcType="INTEGER" property="organizationId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="wx_user_id" jdbcType="BIGINT" property="wxUserId" />
+    <result column="wx_union_id" jdbcType="BIGINT" property="wxUnionId" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="modifier" jdbcType="VARCHAR" property="modifier" />
   </resultMap>
   <sql id="Base_Column_List">
     id, company_no, user_no, login_name, name, password, sex, age, phone, user_type, 
-    status, organization_id, create_time, wx_user_id, email, creator, modifier
+    status, organization_id, create_time, wx_union_id, email, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -42,13 +42,13 @@
       name, password, sex, 
       age, phone, user_type, 
       status, organization_id, create_time, 
-      wx_user_id, email, creator, 
+      wx_union_id, email, creator, 
       modifier)
     values (#{companyNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
       #{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{organizationId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{wxUnionId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
@@ -94,8 +94,8 @@
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="wxUserId != null">
-        wx_user_id,
+      <if test="wxUnionId != null">
+        wx_union_id,
       </if>
       <if test="email != null">
         email,
@@ -145,8 +145,8 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="wxUserId != null">
-        #{wxUserId,jdbcType=BIGINT},
+      <if test="wxUnionId != null">
+        #{wxUnionId,jdbcType=BIGINT},
       </if>
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
@@ -198,8 +198,8 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="wxUserId != null">
-        wx_user_id = #{wxUserId,jdbcType=BIGINT},
+      <if test="wxUnionId != null">
+        wx_union_id = #{wxUnionId,jdbcType=BIGINT},
       </if>
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
@@ -227,7 +227,7 @@
       status = #{status,jdbcType=TINYINT},
       organization_id = #{organizationId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      wx_user_id = #{wxUserId,jdbcType=BIGINT},
+      wx_union_id = #{wxUnionId,jdbcType=BIGINT},
       email = #{email,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}

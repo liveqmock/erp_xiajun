@@ -26,4 +26,11 @@ public interface AuthUserRoleDOMapperExt extends AuthUserRoleDOMapper {
     List<AuthUserRoleDO> selectByUserId(Long userId);
     
     void insertByNoId(AuthUserRoleDO record);
+
+    AuthUserRoleDO searchUserRole(AuthUserRoleDO record);
+
+    Long searchUserRoleCount(AuthUserRoleDO record);
+
+    List<AuthUserRoleDO> searchUserRoleList(AuthUserRoleDO record);
+
 }

@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import com.gargoylesoftware.htmlunit.javascript.host.event.UserProximityEvent;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
@@ -9,6 +8,7 @@ import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.usercenter.service.IUserRoleService;
 import com.wangqin.globalshop.usercenter.service.IUserService;
+import com.wangqin.globalshop.usercenter.service.QrCodeService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,9 @@ public class UserController extends BaseController {
     private IUserService userService;
     @Autowired
     private IUserRoleService userRoleService;
+
+    @Autowired
+    private QrCodeService qrCodeService;
     /**
      * 用户管理页
      *
@@ -242,4 +245,24 @@ public class UserController extends BaseController {
         JsonPageResult<List<UserQueryVO>> result = userService.queryUserQueryVOList(userQueryVO);
         return result.buildIsSuccess(true);
     }
+
+
+    @RequestMapping("/getqrcode")
+    @ResponseBody
+    public Object getQrcode() {
+        JsonPageResult<String> result = new JsonPageResult<>();
+
+        String qrCodeUrl = qrCodeService.getQrCodeUrl(AppUtil.getLoginUserCompanyNo());
+
+        if(EasyUtil.isStringEmpty(qrCodeUrl)){
+            return result.buildIsSuccess(false).buildMsg("生成二维码失败");
+        }
+
+        result.setData(qrCodeUrl);
+        return result.buildIsSuccess(true);
+    }
+
+
+
+
 }

@@ -1,24 +1,25 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.WxUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.JsonPageResult;
-import com.wangqin.globalshop.common.utils.PageInfo;
-import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
+import java.util.UUID;
 
 /**
  *
@@ -33,7 +34,16 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Autowired
     private AuthUserRoleDOMapperExt userRoleMapper;
-    
+
+    @Autowired
+    private WxUserDOMapperExt wxUserDOMapper;
+
+    @Autowired
+    private AuthRoleDOMapperExt authRoleDOMapper;
+
+    @Autowired
+    private AuthUserRoleDOMapperExt userRoleDOMapperExt;
+
     @Override
     public AuthUserDO selectByLoginName(String userNo) {
 //        AuthUserDO user = new AuthUserDO();
@@ -191,5 +201,103 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 		return userMapper.selectUserVoByUserNo(userNo);
 	}
 
-	
+    @Override
+    public void addUserByqrcode(String companyNo, WxUserDO wxUserVO){
+
+        //创建微信用户
+//        WxUserDO wxUserso = new WxUserDO();
+//        wxUserso.setOpenId(wxUserVO.getOpenId());
+//        wxUserso.setUnionId(wxUserVO.getUnionId());
+//
+//        WxUserDO existWxUser = wxUserDOMapper.searchWxUser(wxUserso);
+//
+//        if(existWxUser == null){
+            WxUserDO newWxUser = new WxUserDO();
+            BeanUtils.copies(wxUserVO,newWxUser);
+            newWxUser.init4NoLogin();
+            wxUserDOMapper.insert(newWxUser);
+//        }else {
+//            existWxUser.setLastLoginTime(new Date());
+//            existWxUser.setGmtModify(new Date());
+//            existWxUser.setLastLoginDevice(wxUserVO.getLastLoginDevice());
+//            wxUserDOMapper.updateByPrimaryKey(existWxUser);
+//        }
+
+
+        //创建用户
+
+        AuthUserDO authUserSo = new AuthUserDO();
+        //authUserDO.init4NoLogin();
+        authUserSo.setCompanyNo(companyNo);
+        authUserSo.setWxOpenId(wxUserVO.getOpenId());
+        authUserSo.setWxUnionId(wxUserVO.getUnionId());
+
+        AuthUserDO existAuthUser = userMapper.searchAuthUser(authUserSo);
+
+        if(existAuthUser == null){
+            existAuthUser = new AuthUserDO();
+            existAuthUser.init4NoLogin();
+            existAuthUser.setCompanyNo(companyNo);
+            existAuthUser.setWxUnionId(wxUserVO.getUnionId());
+            existAuthUser.setWxOpenId(wxUserVO.getOpenId());
+            existAuthUser.setSex(wxUserVO.getGender().byteValue());
+            Integer userType = new Integer(0);
+            existAuthUser.setUserType(userType.byteValue());
+            Integer status = new Integer(0);
+            existAuthUser.setStatus(status.byteValue());
+            existAuthUser.setLoginName(wxUserVO.getNickName());
+            existAuthUser.setName(wxUserVO.getNickName());
+
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            existAuthUser.setPassword(Md5Util.getMD5(uuid));//uuid+md5
+            String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+            existAuthUser.setUserNo(userNo);
+
+            userMapper.insert(existAuthUser);
+            existAuthUser = userMapper.searchAuthUser(authUserSo);
+        }else {
+            existAuthUser.update();
+            userMapper.updateByPrimaryKey(existAuthUser);
+        }
+
+        //绑定默认权限
+        AuthRoleDO authRoleSo = new AuthRoleDO();
+        authRoleSo.setCompanyNo(companyNo);
+        authRoleSo.setName("新成员");
+        AuthRoleDO existRole = authRoleDOMapper.searchAuthRole(authRoleSo);
+        if(existRole == null){
+            existRole = new AuthRoleDO();
+            existRole.setCompanyNo(companyNo);
+            existRole.setName("新成员");
+            existRole.init4NoLogin();
+            existRole.setRoleId((long)RandomUtils.nextInt(1000000000));
+            authRoleDOMapper.insertSelective(existRole);
+            existRole = authRoleDOMapper.searchAuthRole(authRoleSo);
+        }
+
+        AuthUserRoleDO userRoleSo = new AuthUserRoleDO();
+        userRoleSo.setCompanyNo(companyNo);
+        userRoleSo.setRoleId(existRole.getRoleId());
+        userRoleSo.setUserId(existAuthUser.getId());
+
+        AuthUserRoleDO existUserRole = userRoleDOMapperExt.searchUserRole(userRoleSo);
+        if(existUserRole != null){
+            AuthUserRoleDO userRole = new AuthUserRoleDO();
+            userRole.setCompanyNo(companyNo);
+            userRole.setRoleId(existRole.getRoleId());
+            userRole.setUserId(existAuthUser.getId());
+            userRole.init4NoLogin();
+            userRoleDOMapperExt.insert(userRole);
+        }
+
+
+    }
+
+
+    @Override
+    public List<AuthUserDO> selectByUnionid(String unionid) {
+        return userMapper.selectByUnionid(unionid);
+    }
+
+
 }
