@@ -17,4 +17,5 @@ public interface WxUserDOMapperExt extends WxUserDOMapper {
 
 	public List<WxUserDO> searchWxUserList(WxUserDO wxUserDO);
 
+	WxUserDO queryByUnionId(String unionId);
 }

@@ -81,46 +81,6 @@ public class WechatLoginController {
 
         return result.buildIsSuccess(false).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆");
 
-//
-//        String openid = o.getString("openid");
-//        String accessToken = o.getString("access_token");
-//        /**根据token获取用户的信息*/
-//        o = HttpClientUtil.post(" https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null, "2");
-//        if (o.containsKey("errcode")) {
-//            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
-//        }
-//        String nickname = o.getString("nickname");
-//        String sex = o.getString("sex");
-//        String province = o.getString("province");
-//        String city = o.getString("city");
-//        String country = o.getString("country");
-//        String headimgurl = o.getString("headimgurl");
-//        String privilege = o.getString("privilege");
-//        String unionid = o.getString("unionid");
-
-
-//        user.set
-
-//        {
-//            "openid":"OPENID",
-//                "nickname":"NICKNAME",
-//                "sex":1,
-//                "province":"PROVINCE",
-//                "city":"CITY",
-//                "country":"COUNTRY",
-//                "headimgurl":
-//            "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0",
-//                    "privilege":[
-//            用户特征信息
-//            "PRIVILEGE1",
-//                    "PRIVILEGE2"
-//],
-//            "unionid":" o6_bmasdasdsad6_2sgVt7hMZOPfL"
-//
-//        }
-//
-//        result.buildIsSuccess(true).setData(o);
-//        return result;
     }
 
     @RequestMapping("/auth")
@@ -170,7 +130,7 @@ public class WechatLoginController {
     }
 
     public static void main(String[] args) {
-        String encode = URLEncoder.encode("https://test.buyer007.cn/wechatLogin/login");
+        String encode = URLEncoder.encode("https://test.buyer007.cn/wechatLogin/auth");
         System.out.println(encode);
     }
 }

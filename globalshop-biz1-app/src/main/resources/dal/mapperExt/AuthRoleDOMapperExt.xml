@@ -368,5 +368,12 @@
     <include refid="commonSelectSection"/>
     ORDER BY T.id desc
   </select>
+  <select id="selectByNameAndCompanyNo" resultMap="BaseResultMapExt">
+    SELECT  <include refid="Base_Column_List2" />
+    FROM auth_role
+    WHERE
+    company_no = #{companyNo}
+    AND name = #{newOne}
+  </select>
 
 </mapper>

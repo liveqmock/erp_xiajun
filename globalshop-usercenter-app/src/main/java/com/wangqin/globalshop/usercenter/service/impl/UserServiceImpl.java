@@ -9,12 +9,14 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WxUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,9 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
  * AuthUserDO 表数据服务层接口实现类
- *
  */
 @Service
 public class UserServiceImpl implements IUserService { //extends SuperServiceImpl<AuthUserDOMapperExt, AuthUserDO>
@@ -70,11 +70,11 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         userMapper.insertByNoId(user);
 
     }
-    
+
     @Override
-	public void insertByUserVo(UserVo userVo) {
-		// TODO Auto-generated method stub
-		AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
+    public void insertByUserVo(UserVo userVo) {
+        // TODO Auto-generated method stub
+        AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
         Long id = user.getId();
         String[] roles = userVo.getRoleIds().split(",");
         AuthUserRoleDO userRole = new AuthUserRoleDO();
@@ -84,7 +84,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
             userRole.setRoleId(Long.valueOf(string));
             userRoleMapper.insertByNoId(userRole);
         }
-	}
+    }
 
     @Override
     public UserVo selectVoById(String loginName) {
@@ -95,28 +95,27 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     public void updateByVo(UserVo userVo) {
-    	
+
         AuthUserDO authUser = userMapper.selectByPrimaryKey(userVo.getId());
-        
+
         authUser.setLoginName(userVo.getLoginName());
         authUser.setName(userVo.getName());
         if (StringUtils.isBlank(userVo.getPassword())) {
             authUser.setPassword(null);
         }
-        
+
         authUser.setPassword(userVo.getPassword());
-        authUser.setSex((byte)userVo.getSex().intValue());
-        authUser.setAge((byte)userVo.getAge().intValue());
-        authUser.setUserType((byte)userVo.getUserType().intValue());
+        authUser.setSex((byte) userVo.getSex().intValue());
+        authUser.setAge((byte) userVo.getAge().intValue());
+        authUser.setUserType((byte) userVo.getUserType().intValue());
         authUser.setOrganizationId(userVo.getOrganizationId());
         authUser.setPhone(userVo.getPhone());
-        authUser.setStatus((byte)userVo.getStatus().intValue());
+        authUser.setStatus((byte) userVo.getStatus().intValue());
         authUser.setIsDel(false);
-   
-        
-       
+
+
         userMapper.updateByPrimaryKey(authUser);
-        
+
 //        System.out.println(userVo.getId());
 //        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByUserId(userVo.getId());
 //        for(AuthUserRoleDO userRole : userRoles) {
@@ -124,8 +123,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //            userRoleMapper.updateByPrimaryKey(userRole);
 //        }
 
-        
-        
+
     }
 
 //    @Override
@@ -152,11 +150,10 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     public void deleteUserById(Long id) {
-    	
+
         userMapper.deleteByPrimaryKey(id);
-        
-        
-        
+
+
     }
 
 //	@Override
@@ -165,7 +162,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //		columnMap.put("organization_id", 7);
 //		return userMapper.selectByMap(columnMap);
 //	}
-	
+
 //	@Override
 //    public List<Long> selectUserIds() {
 //    	return userMapper.selectUserIds();
@@ -195,96 +192,51 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         return userResult;
     }
 
-	@Override
-	public AuthUserDO selectUserVoByUserNo(String userNo) {
-		// TODO Auto-generated method stub
-		return userMapper.selectUserVoByUserNo(userNo);
-	}
+    @Override
+    public AuthUserDO selectUserVoByUserNo(String userNo) {
+        // TODO Auto-generated method stub
+        return userMapper.selectUserVoByUserNo(userNo);
+    }
 
     @Override
-    public void addUserByqrcode(String companyNo, WxUserDO wxUserVO){
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void addUserByqrcode(String companyNo, WxUserDO wxUser) {
 
-//        创建微信用户
-        WxUserDO wxUserso = new WxUserDO();
-        wxUserso.setOpenId(wxUserVO.getOpenId());
-        wxUserso.setUnionId(wxUserVO.getUnionId());
+        WxUserDO existWxUser = wxUserDOMapper.queryByUnionId(wxUser.getUnionId());
 
-        WxUserDO existWxUser = wxUserDOMapper.searchWxUser(wxUserso);
-
-        if(existWxUser == null){
-            WxUserDO newWxUser = new WxUserDO();
-            BeanUtils.copies(wxUserVO,newWxUser);
-            newWxUser.init4NoLogin();
-            wxUserDOMapper.insert(newWxUser);
-        }else {
-            existWxUser.setLastLoginTime(new Date());
-            existWxUser.setGmtModify(new Date());
-            existWxUser.setLastLoginDevice(wxUserVO.getLastLoginDevice());
+        if (existWxUser == null) {
+            wxUser.init4NoLogin();
+            wxUserDOMapper.insertSelective(wxUser);
+        } else {
+            wxUser.setModifier("system");
             wxUserDOMapper.updateByPrimaryKey(existWxUser);
         }
 
+        AuthUserDO user = new AuthUserDO();
+        user.init4NoLogin();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        user.setPassword(Md5Util.getMD5(uuid));
+        String userNo = DateUtil.formatDate(new Date(), "yyMMdd HH:mm:ss") + String.format("%1$06d", RandomUtils.nextInt(1000000));
+        user.setUserNo(userNo);
+        user.setCompanyNo(companyNo);
+        user.setWxUnionId(wxUser.getUnionId());
+        user.setWxOpenId(wxUser.getOpenId());
+        user.setSex(wxUser.getGender().byteValue());
+        user.setUserType((byte) 0);
+        user.setStatus((byte) 0);
+        user.setName(wxUser.getNickName());
+        user.setLoginName("#init#"+companyNo+RandomUtils.nextInt(100000));
+        userMapper.insertSelective(user);
+        AuthUserDO userDO = userMapper.selectUserVoByUserNo(userNo);
 
-        //创建用户
-//
-        AuthUserDO authUserSo = new AuthUserDO();
-//        //authUserDO.init4NoLogin();
-//        authUserSo.setCompanyNo(companyNo);
-//        authUserSo.setWxOpenId(wxUserVO.getOpenId());
-//        authUserSo.setWxUnionId(wxUserVO.getUnionId());
-//
-//        AuthUserDO existAuthUser = userMapper.searchAuthUser(authUserSo);
 
-//        if(existAuthUser == null){
-        authUserSo = new AuthUserDO();
-        authUserSo.init4NoLogin();
-        authUserSo.setCompanyNo(companyNo);
-        authUserSo.setWxUnionId(wxUserVO.getUnionId());
-        authUserSo.setWxOpenId(wxUserVO.getOpenId());
-        authUserSo.setSex(wxUserVO.getGender().byteValue());
-            Integer userType = new Integer(0);
-        authUserSo.setUserType(userType.byteValue());
-            Integer status = new Integer(0);
-        authUserSo.setStatus(status.byteValue());
-        authUserSo.setLoginName(wxUserVO.getNickName());
-        authUserSo.setName(wxUserVO.getNickName());
-
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-        authUserSo.setPassword(Md5Util.getMD5(uuid));//uuid+md5
-            String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
-        authUserSo.setUserNo(userNo);
-
-            userMapper.insert(authUserSo);
-//            existAuthUser = userMapper.searchAuthUser(authUserSo);
-
-        //绑定默认权限
-        AuthRoleDO authRoleSo = new AuthRoleDO();
-        authRoleSo.setCompanyNo(companyNo);
-        authRoleSo.setName("新成员");
-        AuthRoleDO existRole = authRoleDOMapper.searchAuthRole(authRoleSo);
-        if(existRole == null){
-            existRole = new AuthRoleDO();
-            existRole.setCompanyNo(companyNo);
-            existRole.setName("新成员");
-            existRole.init4NoLogin();
-            existRole.setRoleId((long)RandomUtils.nextInt(1000000000));
-            authRoleDOMapper.insertSelective(existRole);
-            existRole = authRoleDOMapper.searchAuthRole(authRoleSo);
-        }
-
-        AuthUserRoleDO userRoleSo = new AuthUserRoleDO();
-        userRoleSo.setCompanyNo(companyNo);
-        userRoleSo.setRoleId(existRole.getRoleId());
-        userRoleSo.setUserId(existRole.getId());
-
-        AuthUserRoleDO existUserRole = userRoleDOMapperExt.searchUserRole(userRoleSo);
-        if(existUserRole != null){
-            AuthUserRoleDO userRole = new AuthUserRoleDO();
-            userRole.setCompanyNo(companyNo);
-            userRole.setRoleId(existRole.getRoleId());
-            userRole.setUserId(existRole.getId());
-            userRole.init4NoLogin();
-            userRoleDOMapperExt.insert(userRole);
-        }
+        AuthRoleDO role = authRoleDOMapper.selectByNameAndCompanyNo("新成员", companyNo);
+        AuthUserRoleDO authUserRole = new AuthUserRoleDO();
+        authUserRole.setRoleId(role.getRoleId());
+        authUserRole.setCompanyNo(companyNo);
+        authUserRole.setUserId(userDO.getId());
+        authUserRole.init4NoLogin();
+        userRoleDOMapperExt.insert(authUserRole);
 
 
     }

@@ -4,7 +4,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
-import org.apache.http.auth.AUTH;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -47,4 +46,6 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
     Long searchAuthRoleCount(AuthRoleDO authRole);
 
     List<AuthRoleDO> searchAuthRoleList(AuthRoleDO authRoleDO);
+
+    AuthRoleDO selectByNameAndCompanyNo(String newOne, String companyNo);
 }
