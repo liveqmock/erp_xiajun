@@ -3,7 +3,11 @@ package com.wangqin.globalshop.usercenter.controller;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.redis.Cache;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CookieUtil;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -21,12 +28,20 @@ import java.util.List;
 @ResponseBody
 @RequestMapping("/wechatLogin")
 public class WechatLogin {
+    public static final String SESSION_ID = "SessionID";
+    public static final String COMPANY_NO = "CompanyNO_";
+
+    private static long TIMEOUT = 30 * 60 * 1000;
+
     @Autowired
     private IUserService userService;
+    @Autowired
+    private Cache loginCache;
+
 
     @RequestMapping("/login")
     @ResponseBody
-    public Object getXcxCookieId(String code) {
+    public Object getXcxCookieId(HttpServletRequest request, HttpServletResponse response, String code) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
         String appsecret = "e9cb888962d848456af2048699316e77";
         String appid = "wxfcdeefc831b3e8c4";
@@ -50,9 +65,21 @@ public class WechatLogin {
 //        {"errcode":40029,"errmsg":"invalid code"}
         String unionid = o.getString("unionid");
         List<AuthUserDO> list = userService.selectByUnionid(unionid);
-        if (list.size() > 0) {
+        if (list.size() > 1) {
             return result.buildIsSuccess(true).buildData(list);
         }
+        if (list.size() == 1) {
+            AuthUserDO user = list.get(0);
+            String sessionId = (String) request.getAttribute(SESSION_ID);
+            if (StringUtils.isBlank(sessionId)) {
+                sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+            }
+            loginCache.putEx(sessionId, user.getName(), TIMEOUT);
+            loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
+            AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
+            return result.buildIsSuccess(true).buildMsg("登陆成功");
+        }
+
         return result.buildIsSuccess(false).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆");
 
 //
@@ -112,7 +139,7 @@ public class WechatLogin {
         }
         String unionid = o.getString("unionid");
         List<AuthUserDO> list = userService.selectByUnionid(unionid);
-        if (hasAuthUser(list, state)){
+        if (hasAuthUser(list, state)) {
             return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
         }
 
@@ -144,4 +171,8 @@ public class WechatLogin {
         return false;
     }
 
+    public static void main(String[] args) {
+        String encode = URLEncoder.encode("https://test.buyer007.cn//wechatLogin/login");
+        System.out.println(encode);
+    }
 }
