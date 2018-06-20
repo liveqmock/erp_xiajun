@@ -629,19 +629,48 @@
 	FROM item
 	<where>
 	item_code = #{itemCode}
-	AND is_del=0;
+	AND is_del=0
 	</where>
 	</select>
 	
+	<!--一键分享首页商品  -->
 	<select id="queryItemByStatus" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap">
 	SELECT
 		<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
 	FROM item T1
 	<where>
-	T1.company_no = #{companyNo}
+	T1.company_no = #{companyNo}	
 	AND
 	T1.status = #{type}
 	</where>	
 	</select>
     
+    <!-- 一键分享搜索商品 -->
+    <select id="queryItemByKeyWord"  resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap">
+    SELECT
+    	<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List"/>
+    FROM item T1
+    <where>
+    T1.company_no = #{companyNo}
+    AND
+    T1.item_name 
+    LIKE '%#{keyWord}%'
+    ORDER BY T1.item_name asc,<!--按name字段升序 -->
+        T1.id desc
+		<![CDATA[ LIMIT (#{pageNo} -1) * #{pageSize},#{pageSize} ]]>
+    </where>
+    </select>
+    
+    <!-- 一键分享商品详情 -->
+    <select id="itemDetailByItemCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap">
+    SELECT
+    	<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List"/>
+    FROM item T1
+    <where>
+    T1.item_code = #{itemCode}
+    AND
+    T1.company_no = #{companyNo}
+    </where>	
+    </select>
+   
 </mapper>

@@ -42,7 +42,7 @@ public class ItemApiController {
                           @RequestParam("pageSize") String pageSize,
                           @RequestParam("pageNo") String pageNo){
 
-<<<<<<< HEAD
+
         //TODO
     	JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
     	List<ItemEntity> items = new ArrayList<>();
@@ -57,25 +57,7 @@ public class ItemApiController {
     	}
     	
     	items.add(itemEntity); 
-    	
-=======
-        JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
-        List<ItemEntity> items = new ArrayList<>();
 
-
-        //-------------------------------------------------------
-        //TODO
-        ItemEntity item0 = new ItemEntity();
-        item0.setItemCode("11111");
-        item0.setPrice("120");       //默认SKU的价格
-        item0.setOriginPrice("$20"); //TODO 外币
-        item0.setTitle("title11111");
-        item0.setImgUrl("http://img.haihu.com/wq_logo.jpg");
-        items.add(item0);
-
-        //-------------------------------------------------------
-
->>>>>>> 9390b62a5bb002d9e1be0ad4e722346174f88bcc
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
     }
@@ -90,20 +72,20 @@ public class ItemApiController {
         //TODO
         JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
         List<ItemEntity> items = new ArrayList<>();
+        List<ItemDO> itemList = itemService.queryItemByKeyWord(keyword, companyNo, pageSize, pageNo);
+        ItemEntity itemEntity = new ItemEntity();
+        for(int i = 0; i < itemList.size(); i ++) {
+        	itemEntity.setItemCode(itemList.get(i).getItemCode());
+        	itemEntity.setPrice(itemList.get(i).getMainPic());
+        	itemEntity.setOriginPrice("美元");
+        	itemEntity.setPrice("价格");
+        	itemEntity.setTitle("标题");
+        }
+
+    
+        items.add(itemEntity);
 
 
-        ItemEntity item0 = new ItemEntity();
-        item0.setItemCode("11111");
-        item0.setPrice("120");
-        item0.setOriginPrice("$20");
-        item0.setTitle("title11111");
-        item0.setImgUrl("http://img.haihu.com/wq_logo.jpg");
-        items.add(item0);
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 9390b62a5bb002d9e1be0ad4e722346174f88bcc
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
     }
@@ -115,16 +97,23 @@ public class ItemApiController {
 
         //TODO
         JsonResult<ItemDetailEntity> jsonResult = new JsonResult<>();
-        ItemDetailEntity entity = new ItemDetailEntity();
+        ItemDetailEntity itemDetailEntity = new ItemDetailEntity();
+        ItemDO itemDO = itemService.itemDetailByItemCode(itemCode, companyNo);
+        itemDetailEntity.setItemCode(itemDO.getItemCode());
+        itemDetailEntity.setItemDesc(itemDO.getDetail());
+        itemDetailEntity.setPrice(itemDO.getMainPic());
+        itemDetailEntity.setOriginPrice("美元");
+        itemDetailEntity.setImgList(Arrays.asList("http://img.haihu.com/wq_logo.jpg"));
+      
+        
+//        entity.setItemCode("1111");
+//        entity.setItemDesc("xxxxxx");
+//        entity.setPrice("120");
+//        entity.setOriginPrice("$20");
+//        entity.setImgList(Arrays.asList("http://img.haihu.com/wq_logo.jpg"));
+//
 
-        entity.setItemCode("1111");
-        entity.setItemDesc("xxxxxx");
-        entity.setPrice("120");
-        entity.setOriginPrice("$20");
-        entity.setImgList(Arrays.asList("http://img.haihu.com/wq_logo.jpg"));
-
-
-        jsonResult.buildIsSuccess(true).buildData(entity);
+        jsonResult.buildIsSuccess(true).buildData(itemDetailEntity);
         return BaseDto.toString(jsonResult);
     }
 

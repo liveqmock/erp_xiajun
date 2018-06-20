@@ -381,7 +381,7 @@
     where user_no = #{userNo,jdbcType=VARCHAR}
   </select>
   
-  <!-- 一键分享登录接口 -->
+  <!-- 一键分享登录接口-->
   <select id="selectUserByWxOpenId" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select 
     company_no AS companyNo,user_no AS userNo,name
