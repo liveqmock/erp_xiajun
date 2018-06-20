@@ -49,10 +49,10 @@ public class ItemApiController {
 
     @RequestMapping("/search")
     @ResponseBody
-    public String search(@RequestParam("keyword") String keyword,
-                         @RequestParam("companyNo") String companyNo,
-                         @RequestParam("pageSize") String pageSize,
-                         @RequestParam("pageNo") String pageNo){
+        public String search(@RequestParam("keyword") String keyword,
+                @RequestParam("companyNo") String companyNo,
+                @RequestParam("pageSize") String pageSize,
+                @RequestParam("pageNo") String pageNo){
 
         //TODO
         JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
