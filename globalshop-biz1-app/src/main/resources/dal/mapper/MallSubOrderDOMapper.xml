@@ -1,54 +1,675 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
-    <result column="mall_return_order_no" property="mallReturnOrderNo" jdbcType="VARCHAR" />
-    <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
-    <result column="open_id" property="openId" jdbcType="VARCHAR" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
-    <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
-    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
-    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
-    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
-    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-    <result column="channel_sku_code" property="channelSkuCode" jdbcType="VARCHAR" />
-    <result column="upc" property="upc" jdbcType="VARCHAR" />
-    <result column="scale" property="scale" jdbcType="VARCHAR" />
-    <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
-    <result column="logistic_type" property="logisticType" jdbcType="INTEGER" />
-    <result column="freight" property="freight" jdbcType="DOUBLE" />
-    <result column="freight_real" property="freightReal" jdbcType="DOUBLE" />
-    <result column="weight" property="weight" jdbcType="DOUBLE" />
-    <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
-    <result column="sale_price_agent" property="salePriceAgent" jdbcType="DOUBLE" />
-    <result column="quantity" property="quantity" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="close_reason" property="closeReason" jdbcType="VARCHAR" />
-    <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
-    <result column="stock_status" property="stockStatus" jdbcType="INTEGER" />
-    <result column="shipping_order_no" property="shippingOrderNo" jdbcType="VARCHAR" />
-    <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR" />
-    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
-    <result column="receiver_country" property="receiverCountry" jdbcType="VARCHAR" />
-    <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
-    <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
-    <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
-    <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
-    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
-    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
-    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
-    <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR" />
-    <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR" />
-    <result column="memo" property="memo" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
-    <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper">
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="mall_return_order_no" jdbcType="VARCHAR" property="mallReturnOrderNo" />
+    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="channel_order_no" jdbcType="VARCHAR" property="channelOrderNo" />
+    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="channel_sku_code" jdbcType="VARCHAR" property="channelSkuCode" />
+    <result column="upc" jdbcType="VARCHAR" property="upc" />
+    <result column="scale" jdbcType="VARCHAR" property="scale" />
+    <result column="sku_pic" jdbcType="VARCHAR" property="skuPic" />
+    <result column="logistic_type" jdbcType="INTEGER" property="logisticType" />
+    <result column="freight" jdbcType="DOUBLE" property="freight" />
+    <result column="freight_real" jdbcType="DOUBLE" property="freightReal" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="sale_price" jdbcType="DOUBLE" property="salePrice" />
+    <result column="sale_price_agent" jdbcType="DOUBLE" property="salePriceAgent" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="close_reason" jdbcType="VARCHAR" property="closeReason" />
+    <result column="warehouse_no" jdbcType="VARCHAR" property="warehouseNo" />
+    <result column="stock_status" jdbcType="INTEGER" property="stockStatus" />
+    <result column="shipping_order_no" jdbcType="VARCHAR" property="shippingOrderNo" />
+    <result column="shipping_no" jdbcType="VARCHAR" property="shippingNo" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="receiver_country" jdbcType="VARCHAR" property="receiverCountry" />
+    <result column="receiver_state" jdbcType="VARCHAR" property="receiverState" />
+    <result column="receiver_city" jdbcType="VARCHAR" property="receiverCity" />
+    <result column="receiver_district" jdbcType="VARCHAR" property="receiverDistrict" />
+    <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="postcode" jdbcType="VARCHAR" property="postcode" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="idcard_pic_front" jdbcType="VARCHAR" property="idcardPicFront" />
+    <result column="idcard_pic_reverse" jdbcType="VARCHAR" property="idcardPicReverse" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="sub_order_no" jdbcType="VARCHAR" property="subOrderNo" />
+    <result column="channel_sub_order_no" jdbcType="VARCHAR" property="channelSubOrderNo" />
+    <result column="share_user_id" jdbcType="VARCHAR" property="shareUserId" />
+    <result column="share_token" jdbcType="VARCHAR" property="shareToken" />
+    <result column="share_time" jdbcType="VARCHAR" property="shareTime" />
+    <result column="share_close_flag" jdbcType="VARCHAR" property="shareCloseFlag" />
+    <result column="share_close_time" jdbcType="VARCHAR" property="shareCloseTime" />
   </resultMap>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
+    id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code, 
+    channel_order_no, order_time, item_code, item_name, sku_code, channel_sku_code, upc, 
+    scale, sku_pic, logistic_type, freight, freight_real, weight, sale_price, sale_price_agent, 
+    quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no, 
+    receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address, 
+    telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, creator, 
+    modifier, sub_order_no, channel_sub_order_no, share_user_id, share_token, share_time, 
+    share_close_flag, share_close_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mall_sub_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from mall_sub_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_sub_order (order_no, mall_return_order_no, customer_no, 
+      open_id, company_no, shop_code, 
+      channel_order_no, order_time, item_code, 
+      item_name, sku_code, channel_sku_code, 
+      upc, scale, sku_pic, 
+      logistic_type, freight, freight_real, 
+      weight, sale_price, sale_price_agent, 
+      quantity, status, close_reason, 
+      warehouse_no, stock_status, shipping_order_no, 
+      shipping_no, receiver, receiver_country, 
+      receiver_state, receiver_city, receiver_district, 
+      receiver_address, telephone, postcode, 
+      id_card, idcard_pic_front, idcard_pic_reverse, 
+      memo, creator, modifier, 
+      sub_order_no, channel_sub_order_no, share_user_id, 
+      share_token, share_time, share_close_flag, 
+      share_close_time)
+    values (#{orderNo,jdbcType=VARCHAR}, #{mallReturnOrderNo,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
+      #{channelOrderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, #{itemCode,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{channelSkuCode,jdbcType=VARCHAR}, 
+      #{upc,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR}, 
+      #{logisticType,jdbcType=INTEGER}, #{freight,jdbcType=DOUBLE}, #{freightReal,jdbcType=DOUBLE}, 
+      #{weight,jdbcType=DOUBLE}, #{salePrice,jdbcType=DOUBLE}, #{salePriceAgent,jdbcType=DOUBLE}, 
+      #{quantity,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{closeReason,jdbcType=VARCHAR}, 
+      #{warehouseNo,jdbcType=VARCHAR}, #{stockStatus,jdbcType=INTEGER}, #{shippingOrderNo,jdbcType=VARCHAR}, 
+      #{shippingNo,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{receiverCountry,jdbcType=VARCHAR}, 
+      #{receiverState,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, #{receiverDistrict,jdbcType=VARCHAR}, 
+      #{receiverAddress,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, 
+      #{memo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{subOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR}, #{shareUserId,jdbcType=VARCHAR}, 
+      #{shareToken,jdbcType=VARCHAR}, #{shareTime,jdbcType=VARCHAR}, #{shareCloseFlag,jdbcType=VARCHAR}, 
+      #{shareCloseTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_sub_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="mallReturnOrderNo != null">
+        mall_return_order_no,
+      </if>
+      <if test="customerNo != null">
+        customer_no,
+      </if>
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="companyNo != null">
+        company_no,
+      </if>
+      <if test="shopCode != null">
+        shop_code,
+      </if>
+      <if test="channelOrderNo != null">
+        channel_order_no,
+      </if>
+      <if test="orderTime != null">
+        order_time,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="skuCode != null">
+        sku_code,
+      </if>
+      <if test="channelSkuCode != null">
+        channel_sku_code,
+      </if>
+      <if test="upc != null">
+        upc,
+      </if>
+      <if test="scale != null">
+        scale,
+      </if>
+      <if test="skuPic != null">
+        sku_pic,
+      </if>
+      <if test="logisticType != null">
+        logistic_type,
+      </if>
+      <if test="freight != null">
+        freight,
+      </if>
+      <if test="freightReal != null">
+        freight_real,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="salePrice != null">
+        sale_price,
+      </if>
+      <if test="salePriceAgent != null">
+        sale_price_agent,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="closeReason != null">
+        close_reason,
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no,
+      </if>
+      <if test="stockStatus != null">
+        stock_status,
+      </if>
+      <if test="shippingOrderNo != null">
+        shipping_order_no,
+      </if>
+      <if test="shippingNo != null">
+        shipping_no,
+      </if>
+      <if test="receiver != null">
+        receiver,
+      </if>
+      <if test="receiverCountry != null">
+        receiver_country,
+      </if>
+      <if test="receiverState != null">
+        receiver_state,
+      </if>
+      <if test="receiverCity != null">
+        receiver_city,
+      </if>
+      <if test="receiverDistrict != null">
+        receiver_district,
+      </if>
+      <if test="receiverAddress != null">
+        receiver_address,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="postcode != null">
+        postcode,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="idcardPicFront != null">
+        idcard_pic_front,
+      </if>
+      <if test="idcardPicReverse != null">
+        idcard_pic_reverse,
+      </if>
+      <if test="memo != null">
+        memo,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="subOrderNo != null">
+        sub_order_no,
+      </if>
+      <if test="channelSubOrderNo != null">
+        channel_sub_order_no,
+      </if>
+      <if test="shareUserId != null">
+        share_user_id,
+      </if>
+      <if test="shareToken != null">
+        share_token,
+      </if>
+      <if test="shareTime != null">
+        share_time,
+      </if>
+      <if test="shareCloseFlag != null">
+        share_close_flag,
+      </if>
+      <if test="shareCloseTime != null">
+        share_close_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mallReturnOrderNo != null">
+        #{mallReturnOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null">
+        #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null">
+        #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null">
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSkuCode != null">
+        #{channelSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null">
+        #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null">
+        #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="skuPic != null">
+        #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticType != null">
+        #{logisticType,jdbcType=INTEGER},
+      </if>
+      <if test="freight != null">
+        #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="freightReal != null">
+        #{freightReal,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="salePrice != null">
+        #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="salePriceAgent != null">
+        #{salePriceAgent,jdbcType=DOUBLE},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="closeReason != null">
+        #{closeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stockStatus != null">
+        #{stockStatus,jdbcType=INTEGER},
+      </if>
+      <if test="shippingOrderNo != null">
+        #{shippingOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingNo != null">
+        #{shippingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCountry != null">
+        #{receiverCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverState != null">
+        #{receiverState,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCity != null">
+        #{receiverCity,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverDistrict != null">
+        #{receiverDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverAddress != null">
+        #{receiverAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicFront != null">
+        #{idcardPicFront,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicReverse != null">
+        #{idcardPicReverse,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null">
+        #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSubOrderNo != null">
+        #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUserId != null">
+        #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareToken != null">
+        #{shareToken,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTime != null">
+        #{shareTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseFlag != null">
+        #{shareCloseFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseTime != null">
+        #{shareCloseTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    update mall_sub_order
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mallReturnOrderNo != null">
+        mall_return_order_no = #{mallReturnOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null">
+        customer_no = #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null">
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        shop_code = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null">
+        channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null">
+        order_time = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null">
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSkuCode != null">
+        channel_sku_code = #{channelSkuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null">
+        upc = #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null">
+        scale = #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="skuPic != null">
+        sku_pic = #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticType != null">
+        logistic_type = #{logisticType,jdbcType=INTEGER},
+      </if>
+      <if test="freight != null">
+        freight = #{freight,jdbcType=DOUBLE},
+      </if>
+      <if test="freightReal != null">
+        freight_real = #{freightReal,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="salePrice != null">
+        sale_price = #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="salePriceAgent != null">
+        sale_price_agent = #{salePriceAgent,jdbcType=DOUBLE},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="closeReason != null">
+        close_reason = #{closeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stockStatus != null">
+        stock_status = #{stockStatus,jdbcType=INTEGER},
+      </if>
+      <if test="shippingOrderNo != null">
+        shipping_order_no = #{shippingOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingNo != null">
+        shipping_no = #{shippingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCountry != null">
+        receiver_country = #{receiverCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverState != null">
+        receiver_state = #{receiverState,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCity != null">
+        receiver_city = #{receiverCity,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverDistrict != null">
+        receiver_district = #{receiverDistrict,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverAddress != null">
+        receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        postcode = #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicFront != null">
+        idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPicReverse != null">
+        idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null">
+        sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSubOrderNo != null">
+        channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUserId != null">
+        share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareToken != null">
+        share_token = #{shareToken,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTime != null">
+        share_time = #{shareTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseFlag != null">
+        share_close_flag = #{shareCloseFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseTime != null">
+        share_close_time = #{shareCloseTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    update mall_sub_order
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      mall_return_order_no = #{mallReturnOrderNo,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      channel_sku_code = #{channelSkuCode,jdbcType=VARCHAR},
+      upc = #{upc,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=VARCHAR},
+      sku_pic = #{skuPic,jdbcType=VARCHAR},
+      logistic_type = #{logisticType,jdbcType=INTEGER},
+      freight = #{freight,jdbcType=DOUBLE},
+      freight_real = #{freightReal,jdbcType=DOUBLE},
+      weight = #{weight,jdbcType=DOUBLE},
+      sale_price = #{salePrice,jdbcType=DOUBLE},
+      sale_price_agent = #{salePriceAgent,jdbcType=DOUBLE},
+      quantity = #{quantity,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      close_reason = #{closeReason,jdbcType=VARCHAR},
+      warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      stock_status = #{stockStatus,jdbcType=INTEGER},
+      shipping_order_no = #{shippingOrderNo,jdbcType=VARCHAR},
+      shipping_no = #{shippingNo,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      receiver_country = #{receiverCountry,jdbcType=VARCHAR},
+      receiver_state = #{receiverState,jdbcType=VARCHAR},
+      receiver_city = #{receiverCity,jdbcType=VARCHAR},
+      receiver_district = #{receiverDistrict,jdbcType=VARCHAR},
+      receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      postcode = #{postcode,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
+      idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
+      share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      share_token = #{shareToken,jdbcType=VARCHAR},
+      share_time = #{shareTime,jdbcType=VARCHAR},
+      share_close_flag = #{shareCloseFlag,jdbcType=VARCHAR},
+      share_close_time = #{shareCloseTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="mall_return_order_no" jdbcType="VARCHAR" property="mallReturnOrderNo" />
+    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    <result column="shop_code" jdbcType="VARCHAR" property="shopCode" />
+    <result column="channel_order_no" jdbcType="VARCHAR" property="channelOrderNo" />
+    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
+    <result column="channel_sku_code" jdbcType="VARCHAR" property="channelSkuCode" />
+    <result column="upc" jdbcType="VARCHAR" property="upc" />
+    <result column="scale" jdbcType="VARCHAR" property="scale" />
+    <result column="sku_pic" jdbcType="VARCHAR" property="skuPic" />
+    <result column="logistic_type" jdbcType="INTEGER" property="logisticType" />
+    <result column="freight" jdbcType="DOUBLE" property="freight" />
+    <result column="freight_real" jdbcType="DOUBLE" property="freightReal" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="sale_price" jdbcType="DOUBLE" property="salePrice" />
+    <result column="sale_price_agent" jdbcType="DOUBLE" property="salePriceAgent" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="close_reason" jdbcType="VARCHAR" property="closeReason" />
+    <result column="warehouse_no" jdbcType="VARCHAR" property="warehouseNo" />
+    <result column="stock_status" jdbcType="INTEGER" property="stockStatus" />
+    <result column="shipping_order_no" jdbcType="VARCHAR" property="shippingOrderNo" />
+    <result column="shipping_no" jdbcType="VARCHAR" property="shippingNo" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="receiver_country" jdbcType="VARCHAR" property="receiverCountry" />
+    <result column="receiver_state" jdbcType="VARCHAR" property="receiverState" />
+    <result column="receiver_city" jdbcType="VARCHAR" property="receiverCity" />
+    <result column="receiver_district" jdbcType="VARCHAR" property="receiverDistrict" />
+    <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="postcode" jdbcType="VARCHAR" property="postcode" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="idcard_pic_front" jdbcType="VARCHAR" property="idcardPicFront" />
+    <result column="idcard_pic_reverse" jdbcType="VARCHAR" property="idcardPicReverse" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="sub_order_no" jdbcType="VARCHAR" property="subOrderNo" />
+    <result column="channel_sub_order_no" jdbcType="VARCHAR" property="channelSubOrderNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
     id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code, 
     channel_order_no, order_time, item_code, item_name, sku_code, channel_sku_code, upc, 
     scale, sku_pic, logistic_type, freight, freight_real, weight, sale_price, sale_price_agent, 
@@ -57,18 +678,18 @@
     telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, creator, 
     modifier, sub_order_no, channel_sub_order_no
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from mall_sub_order
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from mall_sub_order
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_sub_order (order_no, mall_return_order_no, customer_no, 
@@ -102,419 +723,419 @@
       #{memo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{subOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_sub_order
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderNo != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
         order_no,
       </if>
-      <if test="mallReturnOrderNo != null" >
+      <if test="mallReturnOrderNo != null">
         mall_return_order_no,
       </if>
-      <if test="customerNo != null" >
+      <if test="customerNo != null">
         customer_no,
       </if>
-      <if test="openId != null" >
+      <if test="openId != null">
         open_id,
       </if>
-      <if test="companyNo != null" >
+      <if test="companyNo != null">
         company_no,
       </if>
-      <if test="shopCode != null" >
+      <if test="shopCode != null">
         shop_code,
       </if>
-      <if test="channelOrderNo != null" >
+      <if test="channelOrderNo != null">
         channel_order_no,
       </if>
-      <if test="orderTime != null" >
+      <if test="orderTime != null">
         order_time,
       </if>
-      <if test="itemCode != null" >
+      <if test="itemCode != null">
         item_code,
       </if>
-      <if test="itemName != null" >
+      <if test="itemName != null">
         item_name,
       </if>
-      <if test="skuCode != null" >
+      <if test="skuCode != null">
         sku_code,
       </if>
-      <if test="channelSkuCode != null" >
+      <if test="channelSkuCode != null">
         channel_sku_code,
       </if>
-      <if test="upc != null" >
+      <if test="upc != null">
         upc,
       </if>
-      <if test="scale != null" >
+      <if test="scale != null">
         scale,
       </if>
-      <if test="skuPic != null" >
+      <if test="skuPic != null">
         sku_pic,
       </if>
-      <if test="logisticType != null" >
+      <if test="logisticType != null">
         logistic_type,
       </if>
-      <if test="freight != null" >
+      <if test="freight != null">
         freight,
       </if>
-      <if test="freightReal != null" >
+      <if test="freightReal != null">
         freight_real,
       </if>
-      <if test="weight != null" >
+      <if test="weight != null">
         weight,
       </if>
-      <if test="salePrice != null" >
+      <if test="salePrice != null">
         sale_price,
       </if>
-      <if test="salePriceAgent != null" >
+      <if test="salePriceAgent != null">
         sale_price_agent,
       </if>
-      <if test="quantity != null" >
+      <if test="quantity != null">
         quantity,
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status,
       </if>
-      <if test="closeReason != null" >
+      <if test="closeReason != null">
         close_reason,
       </if>
-      <if test="warehouseNo != null" >
+      <if test="warehouseNo != null">
         warehouse_no,
       </if>
-      <if test="stockStatus != null" >
+      <if test="stockStatus != null">
         stock_status,
       </if>
-      <if test="shippingOrderNo != null" >
+      <if test="shippingOrderNo != null">
         shipping_order_no,
       </if>
-      <if test="shippingNo != null" >
+      <if test="shippingNo != null">
         shipping_no,
       </if>
-      <if test="receiver != null" >
+      <if test="receiver != null">
         receiver,
       </if>
-      <if test="receiverCountry != null" >
+      <if test="receiverCountry != null">
         receiver_country,
       </if>
-      <if test="receiverState != null" >
+      <if test="receiverState != null">
         receiver_state,
       </if>
-      <if test="receiverCity != null" >
+      <if test="receiverCity != null">
         receiver_city,
       </if>
-      <if test="receiverDistrict != null" >
+      <if test="receiverDistrict != null">
         receiver_district,
       </if>
-      <if test="receiverAddress != null" >
+      <if test="receiverAddress != null">
         receiver_address,
       </if>
-      <if test="telephone != null" >
+      <if test="telephone != null">
         telephone,
       </if>
-      <if test="postcode != null" >
+      <if test="postcode != null">
         postcode,
       </if>
-      <if test="idCard != null" >
+      <if test="idCard != null">
         id_card,
       </if>
-      <if test="idcardPicFront != null" >
+      <if test="idcardPicFront != null">
         idcard_pic_front,
       </if>
-      <if test="idcardPicReverse != null" >
+      <if test="idcardPicReverse != null">
         idcard_pic_reverse,
       </if>
-      <if test="memo != null" >
+      <if test="memo != null">
         memo,
       </if>
-      <if test="creator != null" >
+      <if test="creator != null">
         creator,
       </if>
-      <if test="modifier != null" >
+      <if test="modifier != null">
         modifier,
       </if>
-      <if test="subOrderNo != null" >
+      <if test="subOrderNo != null">
         sub_order_no,
       </if>
-      <if test="channelSubOrderNo != null" >
+      <if test="channelSubOrderNo != null">
         channel_sub_order_no,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderNo != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="mallReturnOrderNo != null" >
+      <if test="mallReturnOrderNo != null">
         #{mallReturnOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="customerNo != null" >
+      <if test="customerNo != null">
         #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="openId != null" >
+      <if test="openId != null">
         #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null" >
+      <if test="companyNo != null">
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null" >
+      <if test="shopCode != null">
         #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="channelOrderNo != null" >
+      <if test="channelOrderNo != null">
         #{channelOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderTime != null" >
+      <if test="orderTime != null">
         #{orderTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="itemCode != null" >
+      <if test="itemCode != null">
         #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="itemName != null" >
+      <if test="itemName != null">
         #{itemName,jdbcType=VARCHAR},
       </if>
-      <if test="skuCode != null" >
+      <if test="skuCode != null">
         #{skuCode,jdbcType=VARCHAR},
       </if>
-      <if test="channelSkuCode != null" >
+      <if test="channelSkuCode != null">
         #{channelSkuCode,jdbcType=VARCHAR},
       </if>
-      <if test="upc != null" >
+      <if test="upc != null">
         #{upc,jdbcType=VARCHAR},
       </if>
-      <if test="scale != null" >
+      <if test="scale != null">
         #{scale,jdbcType=VARCHAR},
       </if>
-      <if test="skuPic != null" >
+      <if test="skuPic != null">
         #{skuPic,jdbcType=VARCHAR},
       </if>
-      <if test="logisticType != null" >
+      <if test="logisticType != null">
         #{logisticType,jdbcType=INTEGER},
       </if>
-      <if test="freight != null" >
+      <if test="freight != null">
         #{freight,jdbcType=DOUBLE},
       </if>
-      <if test="freightReal != null" >
+      <if test="freightReal != null">
         #{freightReal,jdbcType=DOUBLE},
       </if>
-      <if test="weight != null" >
+      <if test="weight != null">
         #{weight,jdbcType=DOUBLE},
       </if>
-      <if test="salePrice != null" >
+      <if test="salePrice != null">
         #{salePrice,jdbcType=DOUBLE},
       </if>
-      <if test="salePriceAgent != null" >
+      <if test="salePriceAgent != null">
         #{salePriceAgent,jdbcType=DOUBLE},
       </if>
-      <if test="quantity != null" >
+      <if test="quantity != null">
         #{quantity,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="closeReason != null" >
+      <if test="closeReason != null">
         #{closeReason,jdbcType=VARCHAR},
       </if>
-      <if test="warehouseNo != null" >
+      <if test="warehouseNo != null">
         #{warehouseNo,jdbcType=VARCHAR},
       </if>
-      <if test="stockStatus != null" >
+      <if test="stockStatus != null">
         #{stockStatus,jdbcType=INTEGER},
       </if>
-      <if test="shippingOrderNo != null" >
+      <if test="shippingOrderNo != null">
         #{shippingOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="shippingNo != null" >
+      <if test="shippingNo != null">
         #{shippingNo,jdbcType=VARCHAR},
       </if>
-      <if test="receiver != null" >
+      <if test="receiver != null">
         #{receiver,jdbcType=VARCHAR},
       </if>
-      <if test="receiverCountry != null" >
+      <if test="receiverCountry != null">
         #{receiverCountry,jdbcType=VARCHAR},
       </if>
-      <if test="receiverState != null" >
+      <if test="receiverState != null">
         #{receiverState,jdbcType=VARCHAR},
       </if>
-      <if test="receiverCity != null" >
+      <if test="receiverCity != null">
         #{receiverCity,jdbcType=VARCHAR},
       </if>
-      <if test="receiverDistrict != null" >
+      <if test="receiverDistrict != null">
         #{receiverDistrict,jdbcType=VARCHAR},
       </if>
-      <if test="receiverAddress != null" >
+      <if test="receiverAddress != null">
         #{receiverAddress,jdbcType=VARCHAR},
       </if>
-      <if test="telephone != null" >
+      <if test="telephone != null">
         #{telephone,jdbcType=VARCHAR},
       </if>
-      <if test="postcode != null" >
+      <if test="postcode != null">
         #{postcode,jdbcType=VARCHAR},
       </if>
-      <if test="idCard != null" >
+      <if test="idCard != null">
         #{idCard,jdbcType=VARCHAR},
       </if>
-      <if test="idcardPicFront != null" >
+      <if test="idcardPicFront != null">
         #{idcardPicFront,jdbcType=VARCHAR},
       </if>
-      <if test="idcardPicReverse != null" >
+      <if test="idcardPicReverse != null">
         #{idcardPicReverse,jdbcType=VARCHAR},
       </if>
-      <if test="memo != null" >
+      <if test="memo != null">
         #{memo,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null" >
+      <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
+      <if test="modifier != null">
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="subOrderNo != null" >
+      <if test="subOrderNo != null">
         #{subOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="channelSubOrderNo != null" >
+      <if test="channelSubOrderNo != null">
         #{channelSubOrderNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
     update mall_sub_order
-    <set >
-      <if test="orderNo != null" >
+    <set>
+      <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="mallReturnOrderNo != null" >
+      <if test="mallReturnOrderNo != null">
         mall_return_order_no = #{mallReturnOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="customerNo != null" >
+      <if test="customerNo != null">
         customer_no = #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="openId != null" >
+      <if test="openId != null">
         open_id = #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="companyNo != null" >
+      <if test="companyNo != null">
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="shopCode != null" >
+      <if test="shopCode != null">
         shop_code = #{shopCode,jdbcType=VARCHAR},
       </if>
-      <if test="channelOrderNo != null" >
+      <if test="channelOrderNo != null">
         channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderTime != null" >
+      <if test="orderTime != null">
         order_time = #{orderTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="itemCode != null" >
+      <if test="itemCode != null">
         item_code = #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="itemName != null" >
+      <if test="itemName != null">
         item_name = #{itemName,jdbcType=VARCHAR},
       </if>
-      <if test="skuCode != null" >
+      <if test="skuCode != null">
         sku_code = #{skuCode,jdbcType=VARCHAR},
       </if>
-      <if test="channelSkuCode != null" >
+      <if test="channelSkuCode != null">
         channel_sku_code = #{channelSkuCode,jdbcType=VARCHAR},
       </if>
-      <if test="upc != null" >
+      <if test="upc != null">
         upc = #{upc,jdbcType=VARCHAR},
       </if>
-      <if test="scale != null" >
+      <if test="scale != null">
         scale = #{scale,jdbcType=VARCHAR},
       </if>
-      <if test="skuPic != null" >
+      <if test="skuPic != null">
         sku_pic = #{skuPic,jdbcType=VARCHAR},
       </if>
-      <if test="logisticType != null" >
+      <if test="logisticType != null">
         logistic_type = #{logisticType,jdbcType=INTEGER},
       </if>
-      <if test="freight != null" >
+      <if test="freight != null">
         freight = #{freight,jdbcType=DOUBLE},
       </if>
-      <if test="freightReal != null" >
+      <if test="freightReal != null">
         freight_real = #{freightReal,jdbcType=DOUBLE},
       </if>
-      <if test="weight != null" >
+      <if test="weight != null">
         weight = #{weight,jdbcType=DOUBLE},
       </if>
-      <if test="salePrice != null" >
+      <if test="salePrice != null">
         sale_price = #{salePrice,jdbcType=DOUBLE},
       </if>
-      <if test="salePriceAgent != null" >
+      <if test="salePriceAgent != null">
         sale_price_agent = #{salePriceAgent,jdbcType=DOUBLE},
       </if>
-      <if test="quantity != null" >
+      <if test="quantity != null">
         quantity = #{quantity,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="closeReason != null" >
+      <if test="closeReason != null">
         close_reason = #{closeReason,jdbcType=VARCHAR},
       </if>
-      <if test="warehouseNo != null" >
+      <if test="warehouseNo != null">
         warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
       </if>
-      <if test="stockStatus != null" >
+      <if test="stockStatus != null">
         stock_status = #{stockStatus,jdbcType=INTEGER},
       </if>
-      <if test="shippingOrderNo != null" >
+      <if test="shippingOrderNo != null">
         shipping_order_no = #{shippingOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="shippingNo != null" >
+      <if test="shippingNo != null">
         shipping_no = #{shippingNo,jdbcType=VARCHAR},
       </if>
-      <if test="receiver != null" >
+      <if test="receiver != null">
         receiver = #{receiver,jdbcType=VARCHAR},
       </if>
-      <if test="receiverCountry != null" >
+      <if test="receiverCountry != null">
         receiver_country = #{receiverCountry,jdbcType=VARCHAR},
       </if>
-      <if test="receiverState != null" >
+      <if test="receiverState != null">
         receiver_state = #{receiverState,jdbcType=VARCHAR},
       </if>
-      <if test="receiverCity != null" >
+      <if test="receiverCity != null">
         receiver_city = #{receiverCity,jdbcType=VARCHAR},
       </if>
-      <if test="receiverDistrict != null" >
+      <if test="receiverDistrict != null">
         receiver_district = #{receiverDistrict,jdbcType=VARCHAR},
       </if>
-      <if test="receiverAddress != null" >
+      <if test="receiverAddress != null">
         receiver_address = #{receiverAddress,jdbcType=VARCHAR},
       </if>
-      <if test="telephone != null" >
+      <if test="telephone != null">
         telephone = #{telephone,jdbcType=VARCHAR},
       </if>
-      <if test="postcode != null" >
+      <if test="postcode != null">
         postcode = #{postcode,jdbcType=VARCHAR},
       </if>
-      <if test="idCard != null" >
+      <if test="idCard != null">
         id_card = #{idCard,jdbcType=VARCHAR},
       </if>
-      <if test="idcardPicFront != null" >
+      <if test="idcardPicFront != null">
         idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
       </if>
-      <if test="idcardPicReverse != null" >
+      <if test="idcardPicReverse != null">
         idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
       </if>
-      <if test="memo != null" >
+      <if test="memo != null">
         memo = #{memo,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null" >
+      <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
+      <if test="modifier != null">
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="subOrderNo != null" >
+      <if test="subOrderNo != null">
         sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="channelSubOrderNo != null" >
+      <if test="channelSubOrderNo != null">
         channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
     update mall_sub_order
     set order_no = #{orderNo,jdbcType=VARCHAR},
       mall_return_order_no = #{mallReturnOrderNo,jdbcType=VARCHAR},

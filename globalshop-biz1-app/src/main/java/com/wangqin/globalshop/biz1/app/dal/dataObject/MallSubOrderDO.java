@@ -93,6 +93,16 @@ public class MallSubOrderDO extends BaseModel {
 
     private String channelSubOrderNo;
 
+    private String shareUserId;
+
+    private String shareToken;
+
+    private String shareTime;
+
+    private String shareCloseFlag;
+
+    private String shareCloseTime;
+
     public Long getId() {
         return id;
     }
@@ -451,5 +461,45 @@ public class MallSubOrderDO extends BaseModel {
 
     public void setChannelSubOrderNo(String channelSubOrderNo) {
         this.channelSubOrderNo = channelSubOrderNo == null ? null : channelSubOrderNo.trim();
+    }
+
+    public String getShareUserId() {
+        return shareUserId;
+    }
+
+    public void setShareUserId(String shareUserId) {
+        this.shareUserId = shareUserId == null ? null : shareUserId.trim();
+    }
+
+    public String getShareToken() {
+        return shareToken;
+    }
+
+    public void setShareToken(String shareToken) {
+        this.shareToken = shareToken == null ? null : shareToken.trim();
+    }
+
+    public String getShareTime() {
+        return shareTime;
+    }
+
+    public void setShareTime(String shareTime) {
+        this.shareTime = shareTime == null ? null : shareTime.trim();
+    }
+
+    public String getShareCloseFlag() {
+        return shareCloseFlag;
+    }
+
+    public void setShareCloseFlag(String shareCloseFlag) {
+        this.shareCloseFlag = shareCloseFlag == null ? null : shareCloseFlag.trim();
+    }
+
+    public String getShareCloseTime() {
+        return shareCloseTime;
+    }
+
+    public void setShareCloseTime(String shareCloseTime) {
+        this.shareCloseTime = shareCloseTime == null ? null : shareCloseTime.trim();
     }
 }
