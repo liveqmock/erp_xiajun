@@ -30,9 +30,9 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
 
     Map<String, Set<String>> selectResourceMapByUserId(String loginName);
 
-    List<AuthResourceDO> selectResourceListByRoleIdList(List<Long> roleIdList );
+    List<AuthResourceDO> selectResourceListByRoleIdList(List<Long> roleIdList);
 
-    List<Long>  selectResourceIdListByRoleId( Long id);
+    List<Long> selectResourceIdListByRoleId(Long id);
 
     List<Long> queryResourceIdListByRoleId(@Param("id") Long id);
 
@@ -47,5 +47,5 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
 
     List<AuthRoleDO> searchAuthRoleList(AuthRoleDO authRoleDO);
 
-    AuthRoleDO selectByNameAndCompanyNo(String newOne, String companyNo);
+    AuthRoleDO selectByNameAndCompanyNo(@Param("newOne") String newOne, @Param("companyNo") String companyNo);
 }

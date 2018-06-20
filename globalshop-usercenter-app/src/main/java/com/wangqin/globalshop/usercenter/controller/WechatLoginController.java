@@ -117,7 +117,7 @@ public class WechatLoginController {
         user.setUnionId(unionid);
         user.setAvatarUrl(o.getString("headimgurl"));
         userService.addUserByqrcode(state, user);
-        return null;
+        return result.buildIsSuccess(true).buildMsg("授权成功");
     }
 
     private boolean hasAuthUser(List<AuthUserDO> list, String state) {
