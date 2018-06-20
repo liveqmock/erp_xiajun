@@ -130,7 +130,7 @@ public class WechatLoginController {
     }
 
     public static void main(String[] args) {
-        String encode = URLEncoder.encode("https://test.buyer007.cn/wechatLogin/auth");
+        String encode = URLEncoder.encode("https://buyer007.cn/wechatLogin/login");
         System.out.println(encode);
     }
 }
