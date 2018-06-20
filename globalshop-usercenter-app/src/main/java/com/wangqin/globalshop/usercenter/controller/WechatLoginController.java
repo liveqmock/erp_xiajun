@@ -25,9 +25,9 @@ import java.util.List;
  * @data 2018/06/20
  */
 @Controller
-@ResponseBody
 @RequestMapping("/wechatLogin")
-public class WechatLogin {
+@ResponseBody
+public class WechatLoginController {
     public static final String SESSION_ID = "SessionID";
     public static final String COMPANY_NO = "CompanyNO_";
 
@@ -40,7 +40,6 @@ public class WechatLogin {
 
 
     @RequestMapping("/login")
-    @ResponseBody
     public Object getXcxCookieId(HttpServletRequest request, HttpServletResponse response, String code) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
         String appsecret = "e9cb888962d848456af2048699316e77";
@@ -125,7 +124,6 @@ public class WechatLogin {
     }
 
     @RequestMapping("/auth")
-    @ResponseBody
     public Object getXcxCookieId(String code, String state) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
         String appsecret = "e9cb888962d848456af2048699316e77";
@@ -172,7 +170,7 @@ public class WechatLogin {
     }
 
     public static void main(String[] args) {
-        String encode = URLEncoder.encode("https://test.buyer007.cn//wechatLogin/login");
+        String encode = URLEncoder.encode("https://test.buyer007.cn/wechatLogin/login");
         System.out.println(encode);
     }
 }
