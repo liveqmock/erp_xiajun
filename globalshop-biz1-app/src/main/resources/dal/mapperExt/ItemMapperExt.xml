@@ -644,7 +644,6 @@
 	T1.status = #{type}
 	</where>
 	<![CDATA[ LIMIT #{start}, #{pageSize}]]>
-	GROUP BY itme_no
 	</select>
     
     <!-- 一键分享搜索商品 -->
