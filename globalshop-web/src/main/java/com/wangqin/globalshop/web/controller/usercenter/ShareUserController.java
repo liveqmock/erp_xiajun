@@ -4,6 +4,9 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.web.dto.BaseDto;
+
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,27 +32,32 @@ public class ShareUserController {
 	@RequestMapping("/login")
 	@ResponseBody
 	public String Login(@RequestParam("type") String type,
-						@RequestParam(value="mobileNo", required=false) String mobileNo,
-						@RequestParam(value="checkCode", required=false) String checkCode,
-						@RequestParam(value="thirdPartyId", required=false) String thirdPartyId,
-						@RequestParam(value="thirdPartyAvtar", required=false) String thirdPartyAvtar) {
+						@RequestParam(value = "mobileNo", required = false) String mobileNo,
+						@RequestParam(value = "checkCode", required = false) String checkCode,
+						@RequestParam(value = "thirdPartyId", required = false) String thirdPartyId,
+						@RequestParam(value = "thirdPartyAvtar", required = false) String thirdPartyAvtar) {
 		//TODO log
 		JsonResult<AuthUserDO> result = new JsonResult<AuthUserDO>();
+		JsonResult<List<AuthUserDO>> resultList = new JsonResult<List<AuthUserDO>>();
 
-		AuthUserDO responseUser = null;
-        if (StringUtils.isNotBlank(type) && type.equals("wechat")){
-			responseUser = userService.selectUserByWxOpenId(thirdPartyId);
-			//TODO 多个company,
-
-		}else{
-        	//TODO
+		List<AuthUserDO> responseUserList = null;
+		if (StringUtils.isNotBlank(type) && type.equals("wechat")) {
+			responseUserList = userService.selectUserByWxOpenId(thirdPartyId);
+			//买手不存在
+			if (null == responseUserList) {
+				result.buildIsSuccess(false).buildMsg("用户不存在");
+				return BaseDto.toString(result);
+			}
+			//买手只关联了一个公司
+			if (1 == responseUserList.size()) {
+				result.buildIsSuccess(true).buildData(responseUserList.get(0));
+				return BaseDto.toString(result);
+			}
+			//TODO 多个company
+			resultList.buildIsSuccess(true).buildData(responseUserList);
+			return BaseDto.toString(resultList);
+		} else {
+			return "";
 		}
-
-		if(null == responseUser) {
-			result.buildIsSuccess(false).buildMsg("用户不存在");
-			return BaseDto.toString(result);
-		}
-		result.buildIsSuccess(true).buildData(responseUser);
-		return BaseDto.toString(result);
 	}
 }

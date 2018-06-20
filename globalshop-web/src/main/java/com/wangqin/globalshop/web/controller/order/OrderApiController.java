@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class OrderApiController {
         List<MyHomeOrderEntity> orders = new ArrayList<>();
 
         MyHomeOrderEntity entity = new MyHomeOrderEntity();
-        entity.setCommission("1000");
+        entity.set
         entity.setOrderCount("1");
         entity.setTime("2018-06-20");
         orders.add(entity);
@@ -48,7 +47,7 @@ public class OrderApiController {
         MyHomeOrderDetailEntity entity = new MyHomeOrderDetailEntity();
 
 
-       String summary =  String.format("%s个订单，佣金%s", "", "");
+        String summary =  String.format("%s个订单，佣金%s", "", "");
         entity.setOrderDetailDesc(summary);
 
         List<OrderDetailEntity> orderDetailList = new ArrayList<>();
