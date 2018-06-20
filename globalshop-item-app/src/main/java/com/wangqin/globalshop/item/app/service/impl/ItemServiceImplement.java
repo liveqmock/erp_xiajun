@@ -478,5 +478,12 @@ public class ItemServiceImplement implements IItemService {
 		// TODO Auto-generated method stub
 		return itemDOMapperExt.itemDetailByItemCode(itemCode, companyNo);
 	}
+	
+
+	//一键分享，获取商品的图片
+	@Override
+	public String queryItemPicByItemCode(String itemCode) {
+		return itemDOMapperExt.queryItemPicByItemCode(itemCode);
+	}
    
 }

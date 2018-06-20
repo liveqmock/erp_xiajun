@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper;
+import com.wangqin.globalshop.biz1.app.dto.MyOrderDTO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -79,4 +80,13 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
     MallSubOrderDO selectBySubOrderNo(String subOrderNo);
 
     List<MallSubOrderDO> list();
+    
+    //一键分享，我的订单
+    List<MyOrderDTO> queryOrderByShareUserId(@Param("shareUserId")String shareUserId,
+    		@Param("start")int start,@Param("pageSize")String pageSize);
+    
+    //一键分享，订单详情
+    List<MallSubOrderDO> queryOrderDetailByTime(@Param("shareUserId")String shareUserId,
+    		@Param("shareTime")String shareTime,
+    		@Param("start")int start,@Param("pageSize")String pageSize);
 }
