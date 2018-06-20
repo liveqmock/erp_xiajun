@@ -5,12 +5,16 @@ import com.wangqin.globalshop.web.dto.BaseDto;
 import com.wangqin.globalshop.web.dto.api.MyHomeOrderDetailEntity;
 import com.wangqin.globalshop.web.dto.api.MyHomeOrderEntity;
 import com.wangqin.globalshop.web.dto.api.OrderDetailEntity;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
+@Setter
+@Getter
 
 @Controller
 @RequestMapping("/api/orders")
@@ -26,7 +30,7 @@ public class OrderApiController {
         List<MyHomeOrderEntity> orders = new ArrayList<>();
 
         MyHomeOrderEntity entity = new MyHomeOrderEntity();
-        entity.set
+        entity.setCommission("123");
         entity.setOrderCount("1");
         entity.setTime("2018-06-20");
         orders.add(entity);

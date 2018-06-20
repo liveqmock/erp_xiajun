@@ -25,7 +25,7 @@ public class ShareUserController {
 
 	@Autowired
 	private IUserService userService;
-<<<<<<< HEAD
+
 
 	/**
 	 * 用户登录
@@ -61,7 +61,7 @@ public class ShareUserController {
 			return "";
 		}
 	}
-=======
+
 //
 //	/**
 //	 * 用户登录
@@ -100,5 +100,4 @@ public class ShareUserController {
 //			return null;
 //		}
 //	}
->>>>>>> b0424d337716e372e7051181d3184026bb6d2f64
 }
