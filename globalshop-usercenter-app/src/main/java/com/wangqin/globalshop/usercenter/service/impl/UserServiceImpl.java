@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ *
  * AuthUserDO 表数据服务层接口实现类
+ *
  */
 @Service
 public class UserServiceImpl implements IUserService { //extends SuperServiceImpl<AuthUserDOMapperExt, AuthUserDO>
@@ -84,7 +86,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
             userRole.setRoleId(Long.valueOf(string));
             userRoleMapper.insertByNoId(userRole);
         }
-    }
+	}
 
     @Override
     public UserVo selectVoById(String loginName) {
@@ -95,27 +97,28 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     public void updateByVo(UserVo userVo) {
-
+    	
         AuthUserDO authUser = userMapper.selectByPrimaryKey(userVo.getId());
-
+        
         authUser.setLoginName(userVo.getLoginName());
         authUser.setName(userVo.getName());
         if (StringUtils.isBlank(userVo.getPassword())) {
             authUser.setPassword(null);
         }
-
+        
         authUser.setPassword(userVo.getPassword());
-        authUser.setSex((byte) userVo.getSex().intValue());
-        authUser.setAge((byte) userVo.getAge().intValue());
-        authUser.setUserType((byte) userVo.getUserType().intValue());
+        authUser.setSex((byte)userVo.getSex().intValue());
+        authUser.setAge((byte)userVo.getAge().intValue());
+        authUser.setUserType((byte)userVo.getUserType().intValue());
         authUser.setOrganizationId(userVo.getOrganizationId());
         authUser.setPhone(userVo.getPhone());
-        authUser.setStatus((byte) userVo.getStatus().intValue());
+        authUser.setStatus((byte)userVo.getStatus().intValue());
         authUser.setIsDel(false);
-
-
+   
+        
+       
         userMapper.updateByPrimaryKey(authUser);
-
+        
 //        System.out.println(userVo.getId());
 //        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByUserId(userVo.getId());
 //        for(AuthUserRoleDO userRole : userRoles) {
@@ -123,7 +126,8 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //            userRoleMapper.updateByPrimaryKey(userRole);
 //        }
 
-
+        
+        
     }
 
 //    @Override
@@ -150,10 +154,11 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     public void deleteUserById(Long id) {
-
+    	
         userMapper.deleteByPrimaryKey(id);
-
-
+        
+        
+        
     }
 
 //	@Override
@@ -162,7 +167,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 //		columnMap.put("organization_id", 7);
 //		return userMapper.selectByMap(columnMap);
 //	}
-
+	
 //	@Override
 //    public List<Long> selectUserIds() {
 //    	return userMapper.selectUserIds();
@@ -192,11 +197,11 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         return userResult;
     }
 
-    @Override
-    public AuthUserDO selectUserVoByUserNo(String userNo) {
-        // TODO Auto-generated method stub
-        return userMapper.selectUserVoByUserNo(userNo);
-    }
+	@Override
+	public AuthUserDO selectUserVoByUserNo(String userNo) {
+		// TODO Auto-generated method stub
+		return userMapper.selectUserVoByUserNo(userNo);
+	}
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
