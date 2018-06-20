@@ -1,11 +1,10 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.WxUserVO;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
-import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 
 import java.util.List;
@@ -41,8 +40,10 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
     
     AuthUserDO selectUserVoByUserNo(String userNo);
     
-    
-    
+    void addUserByqrcode(String companyNo, WxUserVO wxUserVO);
+
+    void addUserFromToken(String companyNo, String wxInfoJson);
+
     /**
      * 查询买手
      * @return

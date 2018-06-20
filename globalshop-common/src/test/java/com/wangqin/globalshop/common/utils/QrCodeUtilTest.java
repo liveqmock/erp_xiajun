@@ -1,15 +1,9 @@
 package com.wangqin.globalshop.common.utils;
 
 
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
 import org.junit.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 public class QrCodeUtilTest {
 
