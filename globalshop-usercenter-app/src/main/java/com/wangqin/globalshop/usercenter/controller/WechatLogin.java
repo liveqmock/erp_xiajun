@@ -1,0 +1,147 @@
+package com.wangqin.globalshop.usercenter.controller;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.HttpClientUtil;
+import com.wangqin.globalshop.usercenter.service.IUserService;
+import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+
+/**
+ * @author biscuit
+ * @data 2018/06/20
+ */
+@Controller
+@ResponseBody
+@RequestMapping("/wechatLogin")
+public class WechatLogin {
+    @Autowired
+    private IUserService userService;
+
+    @RequestMapping("/login")
+    @ResponseBody
+    public Object getXcxCookieId(String code) {
+        JsonResult<List<AuthUserDO>> result = new JsonResult<>();
+        String appsecret = "e9cb888962d848456af2048699316e77";
+        String appid = "wxfcdeefc831b3e8c4";
+        /**获取openId和token*/
+        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + appsecret + "&code=" + code + "&grant_type=authorization_code", null,
+                null, "2");
+        /**如果相应包含errcode  表示请求失败*/
+        if (o.containsKey("errcode")) {
+            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+        }
+        //        正确的返回
+//        {
+//            "access_token":"ACCESS_TOKEN",                    接口调用凭证
+//                "expires_in":7200,                            access_token接口调用凭证超时时间，单位（秒）
+//                "refresh_token":"REFRESH_TOKEN",              用户刷新access_token
+//                "openid":"OPENID",                            授权用户唯一标识
+//                "scope":"SCOPE",                              用户授权的作用域，使用逗号（,）分隔
+//                "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"    当且仅当该网站应用已获得该用户的userinfo授权时，才会出现该字段。
+//        }
+//        错误的返回
+//        {"errcode":40029,"errmsg":"invalid code"}
+        String unionid = o.getString("unionid");
+        List<AuthUserDO> list = userService.selectByUnionid(unionid);
+        if (list.size() > 0) {
+            return result.buildIsSuccess(true).buildData(list);
+        }
+        return result.buildIsSuccess(false).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆");
+
+//
+//        String openid = o.getString("openid");
+//        String accessToken = o.getString("access_token");
+//        /**根据token获取用户的信息*/
+//        o = HttpClientUtil.post(" https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null, "2");
+//        if (o.containsKey("errcode")) {
+//            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+//        }
+//        String nickname = o.getString("nickname");
+//        String sex = o.getString("sex");
+//        String province = o.getString("province");
+//        String city = o.getString("city");
+//        String country = o.getString("country");
+//        String headimgurl = o.getString("headimgurl");
+//        String privilege = o.getString("privilege");
+//        String unionid = o.getString("unionid");
+
+
+//        user.set
+
+//        {
+//            "openid":"OPENID",
+//                "nickname":"NICKNAME",
+//                "sex":1,
+//                "province":"PROVINCE",
+//                "city":"CITY",
+//                "country":"COUNTRY",
+//                "headimgurl":
+//            "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0",
+//                    "privilege":[
+//            用户特征信息
+//            "PRIVILEGE1",
+//                    "PRIVILEGE2"
+//],
+//            "unionid":" o6_bmasdasdsad6_2sgVt7hMZOPfL"
+//
+//        }
+//
+//        result.buildIsSuccess(true).setData(o);
+//        return result;
+    }
+
+    @RequestMapping("/auth")
+    @ResponseBody
+    public Object getXcxCookieId(String code, String state) {
+        JsonResult<List<AuthUserDO>> result = new JsonResult<>();
+        String appsecret = "e9cb888962d848456af2048699316e77";
+        String appid = "wxfcdeefc831b3e8c4";
+        /**获取openId和token*/
+        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + appsecret + "&code=" + code + "&grant_type=authorization_code", null,
+                null, "2");
+        /**如果相应包含errcode  表示请求失败*/
+        if (o.containsKey("errcode")) {
+            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+        }
+        String unionid = o.getString("unionid");
+        List<AuthUserDO> list = userService.selectByUnionid(unionid);
+        if (hasAuthUser(list, state)){
+            return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
+        }
+
+        String openid = o.getString("openid");
+        String accessToken = o.getString("access_token");
+        /**根据token获取用户的信息*/
+        JSONObject object = HttpClientUtil.post("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null,
+                null, "2");
+        WxUserDO user = new WxUserDO();
+        user.setCompanyNo(state);
+        user.setGender(Integer.valueOf(object.getString("sex")));
+        user.setNickName(object.getString("nickname"));
+        user.setProvince(object.getString("province"));
+        user.setCity(object.getString("city"));
+        user.setCountry(object.getString("country"));
+        user.setOpenId(openid);
+        user.setUnionId(unionid);
+        user.setAvatarUrl(o.getString("headimgurl"));
+        userService.addUserByqrcode(state, user);
+        return null;
+    }
+
+    private boolean hasAuthUser(List<AuthUserDO> list, String state) {
+        for (AuthUserDO authUserDO : list) {
+            if (state.equals(authUserDO.getCompanyNo())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}

@@ -1,13 +1,9 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.WxUserVO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
@@ -47,7 +43,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Autowired
     private AuthUserRoleDOMapperExt userRoleDOMapperExt;
-    
+
     @Override
     public AuthUserDO selectByLoginName(String userNo) {
 //        AuthUserDO user = new AuthUserDO();
@@ -205,27 +201,27 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 		return userMapper.selectUserVoByUserNo(userNo);
 	}
 
-	@Override
-    public void addUserByqrcode(String companyNo, WxUserVO wxUserVO){
+    @Override
+    public void addUserByqrcode(String companyNo, WxUserDO wxUserVO){
 
         //创建微信用户
-        WxUserDO wxUserso = new WxUserDO();
-        wxUserso.setOpenId(wxUserVO.getOpenId());
-        wxUserso.setUnionId(wxUserVO.getUnionId());
-
-        WxUserDO existWxUser = wxUserDOMapper.searchWxUser(wxUserso);
-
-        if(existWxUser == null){
+//        WxUserDO wxUserso = new WxUserDO();
+//        wxUserso.setOpenId(wxUserVO.getOpenId());
+//        wxUserso.setUnionId(wxUserVO.getUnionId());
+//
+//        WxUserDO existWxUser = wxUserDOMapper.searchWxUser(wxUserso);
+//
+//        if(existWxUser == null){
             WxUserDO newWxUser = new WxUserDO();
             BeanUtils.copies(wxUserVO,newWxUser);
             newWxUser.init4NoLogin();
             wxUserDOMapper.insert(newWxUser);
-        }else {
-            existWxUser.setLastLoginTime(new Date());
-            existWxUser.setGmtModify(new Date());
-            existWxUser.setLastLoginDevice(wxUserVO.getLastLoginDevice());
-            wxUserDOMapper.updateByPrimaryKey(existWxUser);
-        }
+//        }else {
+//            existWxUser.setLastLoginTime(new Date());
+//            existWxUser.setGmtModify(new Date());
+//            existWxUser.setLastLoginDevice(wxUserVO.getLastLoginDevice());
+//            wxUserDOMapper.updateByPrimaryKey(existWxUser);
+//        }
 
 
         //创建用户
@@ -297,9 +293,11 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     }
 
-    public void addUserFromToken(String companyNo, String wxInfoJson){
-        WxUserVO wxUserVO = JSON.parseObject(wxInfoJson, WxUserVO.class);
-        this.addUserByqrcode(companyNo, wxUserVO);
+
+    @Override
+    public List<AuthUserDO> selectByUnionid(String unionid) {
+        return userMapper.selectByUnionid(unionid);
     }
-	
+
+
 }

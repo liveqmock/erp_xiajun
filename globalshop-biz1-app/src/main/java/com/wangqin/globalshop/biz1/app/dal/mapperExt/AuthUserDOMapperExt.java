@@ -49,4 +49,6 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     Long searchAuthUserCount(AuthUserDO record);
 
     List<AuthUserDO> searchAuthUserList(AuthUserDO record);
+
+    List<AuthUserDO> selectByUnionid(@Param("unionid") String unionid);
 }

@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.WxUserVO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
@@ -40,9 +40,12 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
     
     AuthUserDO selectUserVoByUserNo(String userNo);
     
-    void addUserByqrcode(String companyNo, WxUserVO wxUserVO);
 
-    void addUserFromToken(String companyNo, String wxInfoJson);
+    void addUserByqrcode(String companyNo, WxUserDO wxInfoJson);
+
+
+    List<AuthUserDO> selectByUnionid(String unionid);
+
 
     /**
      * 查询买手

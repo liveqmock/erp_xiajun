@@ -379,7 +379,13 @@
     from auth_user
     where user_no = #{userNo,jdbcType=VARCHAR}
   </select>
-  
+  <select id="selectByUnionid" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List2" />
+    from auth_user
+    where wx_union_id = #{unionid,jdbcType=VARCHAR}
+  </select>
+
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
     <!--delete from auth_user-->
     <!--where id = #{id,jdbcType=BIGINT}-->
