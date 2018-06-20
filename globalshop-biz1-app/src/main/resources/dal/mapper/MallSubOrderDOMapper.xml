@@ -47,6 +47,12 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
     <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
+    <result column="share_user_id" property="shareUserId" jdbcType="VARCHAR" />
+    <result column="share_token" property="shareToken" jdbcType="VARCHAR" />
+    <result column="share_time" property="shareTime" jdbcType="VARCHAR" />
+    <result column="share_close_flag" property="shareCloseFlag" jdbcType="VARCHAR" />
+    <result column="share_close_time" property="shareCloseTime" jdbcType="VARCHAR" />
+    <result column="share_money" property="shareMoney" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code, 
@@ -55,7 +61,8 @@
     quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no, 
     receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address, 
     telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, creator, 
-    modifier, sub_order_no, channel_sub_order_no
+    modifier, sub_order_no, channel_sub_order_no, share_user_id, share_token, share_time, 
+    share_close_flag, share_close_time, share_money
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -85,7 +92,9 @@
       receiver_address, telephone, postcode, 
       id_card, idcard_pic_front, idcard_pic_reverse, 
       memo, creator, modifier, 
-      sub_order_no, channel_sub_order_no)
+      sub_order_no, channel_sub_order_no, share_user_id, 
+      share_token, share_time, share_close_flag, 
+      share_close_time, share_money)
     values (#{orderNo,jdbcType=VARCHAR}, #{mallReturnOrderNo,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
       #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
       #{channelOrderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, #{itemCode,jdbcType=VARCHAR}, 
@@ -100,7 +109,9 @@
       #{receiverAddress,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, 
       #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, 
       #{memo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{subOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR})
+      #{subOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR}, #{shareUserId,jdbcType=VARCHAR}, 
+      #{shareToken,jdbcType=VARCHAR}, #{shareTime,jdbcType=VARCHAR}, #{shareCloseFlag,jdbcType=VARCHAR}, 
+      #{shareCloseTime,jdbcType=VARCHAR}, #{shareMoney,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -240,6 +251,24 @@
       <if test="channelSubOrderNo != null" >
         channel_sub_order_no,
       </if>
+      <if test="shareUserId != null" >
+        share_user_id,
+      </if>
+      <if test="shareToken != null" >
+        share_token,
+      </if>
+      <if test="shareTime != null" >
+        share_time,
+      </if>
+      <if test="shareCloseFlag != null" >
+        share_close_flag,
+      </if>
+      <if test="shareCloseTime != null" >
+        share_close_time,
+      </if>
+      <if test="shareMoney != null" >
+        share_money,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
@@ -373,6 +402,24 @@
       </if>
       <if test="channelSubOrderNo != null" >
         #{channelSubOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUserId != null" >
+        #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareToken != null" >
+        #{shareToken,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTime != null" >
+        #{shareTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseFlag != null" >
+        #{shareCloseFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseTime != null" >
+        #{shareCloseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shareMoney != null" >
+        #{shareMoney,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -511,6 +558,24 @@
       <if test="channelSubOrderNo != null" >
         channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
       </if>
+      <if test="shareUserId != null" >
+        share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareToken != null" >
+        share_token = #{shareToken,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTime != null" >
+        share_time = #{shareTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseFlag != null" >
+        share_close_flag = #{shareCloseFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="shareCloseTime != null" >
+        share_close_time = #{shareCloseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shareMoney != null" >
+        share_money = #{shareMoney,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -559,7 +624,13 @@
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
-      channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR}
+      channel_sub_order_no = #{channelSubOrderNo,jdbcType=VARCHAR},
+      share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      share_token = #{shareToken,jdbcType=VARCHAR},
+      share_time = #{shareTime,jdbcType=VARCHAR},
+      share_close_flag = #{shareCloseFlag,jdbcType=VARCHAR},
+      share_close_time = #{shareCloseTime,jdbcType=VARCHAR},
+      share_money = #{shareMoney,jdbcType=DECIMAL}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

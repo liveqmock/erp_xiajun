@@ -31,6 +31,8 @@ public class MallShippingCartDO extends BaseModel {
 
     private String modifier;
 
+    private String shareToken;
+
     public Long getId() {
         return id;
     }
@@ -149,5 +151,13 @@ public class MallShippingCartDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getShareToken() {
+        return shareToken;
+    }
+
+    public void setShareToken(String shareToken) {
+        this.shareToken = shareToken == null ? null : shareToken.trim();
     }
 }

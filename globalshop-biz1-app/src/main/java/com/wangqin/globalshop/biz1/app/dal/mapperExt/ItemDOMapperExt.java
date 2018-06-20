@@ -57,4 +57,6 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	void updateByIdSelective(ItemDO item);
 	
 	Long queryIdByItemCode(String itemCode);
+	
+	List<ItemDO> queryItemByStatus(String companyNo, String status);
 }

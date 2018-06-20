@@ -460,5 +460,11 @@ public class ItemServiceImplement implements IItemService {
             itemSkuDOMapperExt.insert(skuDO);
         }
     }
+
+	@Override
+	public List<ItemDO> queryItemByStatus(String companyNo, String status) {
+		// TODO Auto-generated method stub
+		return itemDOMapperExt.queryItemByStatus(companyNo, status);
+	}
    
 }

@@ -39,6 +39,8 @@ public class ShareUserController {
 		AuthUserDO responseUser = null;
         if (StringUtils.isNotBlank(type) && type.equals("wechat")){
 			responseUser = userService.selectUserByWxOpenId(thirdPartyId);
+			//TODO 多个company,
+
 		}else{
         	//TODO
 		}

@@ -99,9 +99,9 @@ public interface IItemService {
 	public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
 
 	public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
-
-
-
+	
+	//一键分享的首页商品列表
+	List<ItemDO> queryItemByStatus(String companyNo, String status);
 
 
 }
