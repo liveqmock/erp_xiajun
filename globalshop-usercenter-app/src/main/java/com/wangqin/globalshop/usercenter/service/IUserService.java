@@ -42,7 +42,7 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
     AuthUserDO selectUserVoByUserNo(String userNo);
     
     //一键分享登录
-    AuthUserDO selectUserByWxOpenId(String wxOpenId);
+    List<AuthUserDO> selectUserByWxOpenId(String wxOpenId);
     
     
     /**
