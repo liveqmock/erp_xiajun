@@ -103,5 +103,9 @@ public interface IItemService {
 	//一键分享的首页商品列表
 	List<ItemDO> queryItemByStatus(String companyNo, String status);
 
-
+	//一键分享搜索商品
+	List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, String pageSize, String pageNo);
+	
+	//一键分享商品详情
+	ItemDO itemDetailByItemCode(String itemCode, String companyNo);
 }
