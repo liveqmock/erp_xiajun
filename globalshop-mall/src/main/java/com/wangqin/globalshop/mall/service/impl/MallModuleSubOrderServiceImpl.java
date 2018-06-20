@@ -16,7 +16,7 @@ import com.wangqin.globalshop.mall.service.IMallSubOrderService;
 
 
 @Service
-public class MallSubOrderServiceImpl  implements IMallSubOrderService {
+public class MallModuleSubOrderServiceImpl  implements IMallSubOrderService {
 
 	@Autowired
 	private MallSubOrderMapperExt mallSubOrderMapperExt;
