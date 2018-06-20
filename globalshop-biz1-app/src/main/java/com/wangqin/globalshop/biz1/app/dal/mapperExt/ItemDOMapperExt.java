@@ -58,10 +58,10 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	
 	Long queryIdByItemCode(String itemCode);
 	//一键分享首页商品
-	List<ItemDO> queryItemByStatus(String companyNo, String status);
+	List<ItemDO> queryItemByStatus(String companyNo, String status, int start, String pageSize);
 	
 	//一键分享搜索商品
-	List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, String pageSize, String pageNo);
+	List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, int start, String pageSize);
 	
 	//一键分享商品详情
 	ItemDO itemDetailByItemCode(String itemCode, String companyNo);

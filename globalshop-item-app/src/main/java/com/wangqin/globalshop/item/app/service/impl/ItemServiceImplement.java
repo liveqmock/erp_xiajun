@@ -462,15 +462,15 @@ public class ItemServiceImplement implements IItemService {
     }
 
 	@Override
-	public List<ItemDO> queryItemByStatus(String companyNo, String status) {
+	public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, String pageSize) {
 		// TODO Auto-generated method stub
-		return itemDOMapperExt.queryItemByStatus(companyNo, status);
+		return itemDOMapperExt.queryItemByStatus(companyNo, status, start, pageSize);
 	}
 
 	@Override
-	public List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, String pageSize, String pageNo) {
+	public List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, int start, String pageSize) {
 		// TODO Auto-generated method stub
-		return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, pageSize, pageNo);
+		return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, start, pageSize);
 	}
 
 	@Override

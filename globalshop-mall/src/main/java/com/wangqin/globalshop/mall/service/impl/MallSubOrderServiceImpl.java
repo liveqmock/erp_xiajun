@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.mall.service.impl;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,6 @@ public class MallSubOrderServiceImpl  implements IMallSubOrderService {
 	public List<MallSubOrderDO> queryOrderDetailByTime(String shareUserId,String shareTime,int start,String pageSize) {
 		 return mallSubOrderMapperExt.queryOrderDetailByTime(shareUserId, shareTime, start, pageSize);
 	 }
+
 
 }

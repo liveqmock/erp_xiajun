@@ -46,7 +46,8 @@ public class ItemApiController {
         //TODO
     	JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
     	List<ItemEntity> items = new ArrayList<>();
-    	List<ItemDO>itemList = itemService.queryItemByStatus(companyNo, type);
+    	int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
+    	List<ItemDO>itemList = itemService.queryItemByStatus(companyNo, type, start, pageSize);
     	ItemEntity itemEntity = new ItemEntity();
     	for(int i = 0; i < itemList.size(); i ++) {
     		itemEntity.setItemCode(itemList.get(i).getItemCode());
@@ -72,7 +73,8 @@ public class ItemApiController {
         //TODO
         JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
         List<ItemEntity> items = new ArrayList<>();
-        List<ItemDO> itemList = itemService.queryItemByKeyWord(keyword, companyNo, pageSize, pageNo);
+        int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
+        List<ItemDO> itemList = itemService.queryItemByKeyWord(keyword, companyNo, start, pageSize);
         ItemEntity itemEntity = new ItemEntity();
         for(int i = 0; i < itemList.size(); i ++) {
         	itemEntity.setItemCode(itemList.get(i).getItemCode());

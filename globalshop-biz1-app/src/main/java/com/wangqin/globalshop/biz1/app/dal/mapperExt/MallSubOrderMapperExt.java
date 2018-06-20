@@ -80,6 +80,7 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
     MallSubOrderDO selectBySubOrderNo(String subOrderNo);
 
     List<MallSubOrderDO> list();
+
     
     //一键分享，我的订单
     List<MyOrderDTO> queryOrderByShareUserId(@Param("shareUserId")String shareUserId,
@@ -89,4 +90,5 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
     List<MallSubOrderDO> queryOrderDetailByTime(@Param("shareUserId")String shareUserId,
     		@Param("shareTime")String shareTime,
     		@Param("start")int start,@Param("pageSize")String pageSize);
+
 }

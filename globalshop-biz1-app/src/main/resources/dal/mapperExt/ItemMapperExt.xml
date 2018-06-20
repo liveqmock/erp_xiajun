@@ -642,7 +642,9 @@
 	T1.company_no = #{companyNo}	
 	AND
 	T1.status = #{type}
-	</where>	
+	</where>
+	<![CDATA[ LIMIT #{start}, #{pageSize}]]>
+	GROUP BY itme_no
 	</select>
     
     <!-- 一键分享搜索商品 -->
@@ -657,7 +659,7 @@
     LIKE '%#{keyWord}%'
     ORDER BY T1.item_name asc,<!--按name字段升序 -->
         T1.id desc
-		<![CDATA[ LIMIT (#{pageNo} -1) * #{pageSize},#{pageSize} ]]>
+		<![CDATA[ LIMIT #{start}, #{pageSize}]]>
     </where>
     </select>
     

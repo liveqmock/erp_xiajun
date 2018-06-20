@@ -22,4 +22,5 @@ public interface IMallSubOrderService {
     //一键分享，订单详情
     List<MallSubOrderDO> queryOrderDetailByTime(String shareUserId,String shareTime,int start,String pageSize);
   
+
 }

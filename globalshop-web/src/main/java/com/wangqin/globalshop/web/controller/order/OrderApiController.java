@@ -1,13 +1,16 @@
 package com.wangqin.globalshop.web.controller.order;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dto.MyOrderDTO;
@@ -18,6 +21,11 @@ import com.wangqin.globalshop.web.dto.BaseDto;
 import com.wangqin.globalshop.web.dto.api.MyHomeOrderDetailEntity;
 import com.wangqin.globalshop.web.dto.api.MyHomeOrderEntity;
 import com.wangqin.globalshop.web.dto.api.OrderDetailEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 @Controller
 @RequestMapping("/api/orders")
@@ -37,6 +45,7 @@ public class OrderApiController {
 
         JsonResult<List<MyHomeOrderEntity>> jsonResult = new JsonResult<>();
         List<MyHomeOrderEntity> orders = new ArrayList<>();
+
         //分页的计算
         int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
         //获取订单list
@@ -67,7 +76,7 @@ public class OrderApiController {
         MyHomeOrderDetailEntity entity = new MyHomeOrderDetailEntity();
 
 
-       String summary =  String.format("%s个订单，佣金%s", "", "");
+        String summary =  String.format("%s个订单，佣金%s", "", "");
         entity.setOrderDetailDesc(summary);
 
         List<OrderDetailEntity> orderDetailList = new ArrayList<>();
