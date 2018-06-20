@@ -460,5 +460,23 @@ public class ItemServiceImplement implements IItemService {
             itemSkuDOMapperExt.insert(skuDO);
         }
     }
+
+	@Override
+	public List<ItemDO> queryItemByStatus(String companyNo, String status) {
+		// TODO Auto-generated method stub
+		return itemDOMapperExt.queryItemByStatus(companyNo, status);
+	}
+
+	@Override
+	public List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, String pageSize, String pageNo) {
+		// TODO Auto-generated method stub
+		return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, pageSize, pageNo);
+	}
+
+	@Override
+	public ItemDO itemDetailByItemCode(String itemCode, String companyNo) {
+		// TODO Auto-generated method stub
+		return itemDOMapperExt.itemDetailByItemCode(itemCode, companyNo);
+	}
    
 }
