@@ -1,16 +1,15 @@
 package com.wangqin.globalshop.web.controller.order;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dto.MyOrderDTO;
@@ -76,10 +75,6 @@ public class OrderApiController {
         JsonResult<MyHomeOrderDetailEntity> jsonResult = new JsonResult<>();
         MyHomeOrderDetailEntity entity = new MyHomeOrderDetailEntity();
 
-
-        String summary =  String.format("%s个订单，佣金%s", "", "");
-        entity.setOrderDetailDesc(summary);
-
         List<OrderDetailEntity> orderDetailList = new ArrayList<>();
         
         //分页的计算
@@ -89,10 +84,13 @@ public class OrderApiController {
         if(null == orderList) {
         	 entity.setOrderDetailList(orderDetailList);
         	 jsonResult.buildIsSuccess(true).buildData(entity);
+        	 String summary =  String.format("%s个订单，佣金%s", 0, 0);
+             entity.setOrderDetailDesc(summary);
              return BaseDto.toString(jsonResult);
         }
         
-        orderList.forEach(order -> {
+        BigDecimal totalMoney = new BigDecimal(0);
+        for(MallSubOrderDO order:orderList) {
         	OrderDetailEntity tmp = new OrderDetailEntity();
         	tmp.setCommission(order.getShareMoney().toString());
         	String itemPic = itemService.queryItemPicByItemCode(order.getItemCode());
@@ -103,7 +101,13 @@ public class OrderApiController {
         	tmp.setOrderTime(order.getShareCloseTime());
         	tmp.setRealPay("$12");
         	orderDetailList.add(tmp);
-        });       
+        	totalMoney = totalMoney.add(order.getShareMoney());
+        }
+ 
+        String summary =  String.format("%s个订单，佣金%s", orderList.size(), totalMoney);
+        entity.setOrderDetailDesc(summary);
+        
+        
         entity.setOrderDetailList(orderDetailList);
         jsonResult.buildIsSuccess(true).buildData(entity);
         return BaseDto.toString(jsonResult);
