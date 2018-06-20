@@ -241,19 +241,19 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         authUserSo.setWxUnionId(wxUserVO.getUnionId());
         authUserSo.setWxOpenId(wxUserVO.getOpenId());
         authUserSo.setSex(wxUserVO.getGender().byteValue());
-            Integer userType = new Integer(0);
+        Integer userType = new Integer(0);
         authUserSo.setUserType(userType.byteValue());
-            Integer status = new Integer(0);
+        Integer status = new Integer(0);
         authUserSo.setStatus(status.byteValue());
         authUserSo.setLoginName(wxUserVO.getNickName());
         authUserSo.setName(wxUserVO.getNickName());
 
-            String uuid = UUID.randomUUID().toString().replace("-", "");
+        String uuid = UUID.randomUUID().toString().replace("-", "");
         authUserSo.setPassword(Md5Util.getMD5(uuid));//uuid+md5
-            String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+        String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
         authUserSo.setUserNo(userNo);
 
-            userMapper.insert(authUserSo);
+        userMapper.insert(authUserSo);
 //            existAuthUser = userMapper.searchAuthUser(authUserSo);
 
         //绑定默认权限
@@ -261,31 +261,28 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         authRoleSo.setCompanyNo(companyNo);
         authRoleSo.setName("新成员");
         AuthRoleDO existRole = authRoleDOMapper.searchAuthRole(authRoleSo);
-        if(existRole == null){
-            existRole = new AuthRoleDO();
-            existRole.setCompanyNo(companyNo);
-            existRole.setName("新成员");
-            existRole.init4NoLogin();
-            existRole.setRoleId((long)RandomUtils.nextInt(1000000000));
-            authRoleDOMapper.insertSelective(existRole);
-            existRole = authRoleDOMapper.searchAuthRole(authRoleSo);
-        }
+//        if(existRole == null){
+//            existRole = new AuthRoleDO();
+//            existRole.setCompanyNo(companyNo);
+//            existRole.setName("新成员");
+//            existRole.init4NoLogin();
+//            existRole.setRoleId((long)RandomUtils.nextInt(1000000000));
+//            authRoleDOMapper.insertSelective(existRole);
+//            existRole = authRoleDOMapper.searchAuthRole(authRoleSo);
+//        }
 
-        AuthUserRoleDO userRoleSo = new AuthUserRoleDO();
-        userRoleSo.setCompanyNo(companyNo);
-        userRoleSo.setRoleId(existRole.getRoleId());
-        userRoleSo.setUserId(existRole.getId());
+//        AuthUserRoleDO userRoleSo = new AuthUserRoleDO();
+//        userRoleSo.setCompanyNo(companyNo);
+//        userRoleSo.setRoleId(existRole.getRoleId());
+//        userRoleSo.setUserId(existRole.getId());
 
-        AuthUserRoleDO existUserRole = userRoleDOMapperExt.searchUserRole(userRoleSo);
-        if(existUserRole != null){
-            AuthUserRoleDO userRole = new AuthUserRoleDO();
-            userRole.setCompanyNo(companyNo);
-            userRole.setRoleId(existRole.getRoleId());
-            userRole.setUserId(existRole.getId());
-            userRole.init4NoLogin();
-            userRoleDOMapperExt.insert(userRole);
-        }
 
+        AuthUserRoleDO userRole = new AuthUserRoleDO();
+        userRole.setCompanyNo(companyNo);
+        userRole.setRoleId(existRole.getRoleId());
+        userRole.setUserId(existRole.getId());
+        userRole.init4NoLogin();
+        userRoleDOMapperExt.insert(userRole);
 
     }
 
