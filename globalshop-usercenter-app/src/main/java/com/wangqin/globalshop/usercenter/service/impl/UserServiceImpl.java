@@ -221,7 +221,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         user.init4NoLogin();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         user.setPassword(Md5Util.getMD5(uuid));
-        String userNo = DateUtil.formatDate(new Date(), "yyMMdd HH:mm:ss") + String.format("%1$06d", RandomUtils.nextInt(1000000));
+		String userNo=CodeGenUtil.genUserNo();
         user.setUserNo(userNo);
         user.setCompanyNo(companyNo);
         user.setWxUnionId(wxUser.getUnionId());
