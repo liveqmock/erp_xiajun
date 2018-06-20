@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class MallSubOrderDO extends BaseModel {
@@ -102,6 +103,8 @@ public class MallSubOrderDO extends BaseModel {
     private String shareCloseFlag;
 
     private String shareCloseTime;
+
+    private BigDecimal shareMoney;
 
     public Long getId() {
         return id;
@@ -501,5 +504,13 @@ public class MallSubOrderDO extends BaseModel {
 
     public void setShareCloseTime(String shareCloseTime) {
         this.shareCloseTime = shareCloseTime == null ? null : shareCloseTime.trim();
+    }
+
+    public BigDecimal getShareMoney() {
+        return shareMoney;
+    }
+
+    public void setShareMoney(BigDecimal shareMoney) {
+        this.shareMoney = shareMoney;
     }
 }
