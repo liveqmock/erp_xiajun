@@ -50,22 +50,22 @@ public class InventoryServiceImpl implements InventoryService {
         Long inv = inventory.getInv();
         /**更新具体仓库的库存*/
         InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, inv, warehouseNo, positionNo);
-        inventory = mapper.queryBySkuCodeAndItemCode(inventory.getSkuCode(), inventory.getItemCode());
+        InventoryDO exitInventory = mapper.queryBySkuCodeAndItemCode(inventory.getSkuCode(), inventory.getItemCode());
         /**如果有虚拟库存,表示已有库存记录  需要更新
          * 反之  则没有库存记录  需要新增
          * */
-        if (inventory != null) {
-            Long virtualInv = inventory.getVirtualInv();
+        if (exitInventory != null) {
+            Long virtualInv = exitInventory.getVirtualInv();
             /**1增加实际库存*/
-            inventory.setInv(inventory.getInv() + inv);
-            inventory.update();
+            exitInventory.setInv(exitInventory.getInv() + inv);
+            exitInventory.update();
             /**减少虚拟库存  保证可售不变*/
             if (virtualInv < inv) {
-                inventory.setVirtualInv(virtualInv - inv);
+                exitInventory.setVirtualInv(virtualInv - inv);
             } else {
-                inventory.setVirtualInv(0L);
+                exitInventory.setVirtualInv(0L);
             }
-            mapper.updateByPrimaryKeySelective(inventory);
+            mapper.updateByPrimaryKeySelective(exitInventory);
         } else {
             inventory.init();
             mapper.insertSelective(inventory);

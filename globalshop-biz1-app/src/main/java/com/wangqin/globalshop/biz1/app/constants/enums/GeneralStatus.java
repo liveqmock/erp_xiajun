@@ -10,7 +10,8 @@ public enum GeneralStatus {
 	INIT(0, "新建"),
 	CONFIRM(1,"已确认"),
 	SUCCESS(2,"成功"),
-	CLOSE(-1, "关闭");
+	CLOSE(-1, "关闭"),
+	CONFIRMING(3,"入库中");
     private int code;
     private String description;
     GeneralStatus(int code,String description){
