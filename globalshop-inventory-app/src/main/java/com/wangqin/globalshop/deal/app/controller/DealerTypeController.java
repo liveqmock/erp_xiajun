@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.deal.app.controller;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
@@ -62,25 +63,15 @@ public class DealerTypeController {
     	JsonResult<DealerTypeDO> result = new JsonResult<>();
         
     	List<DealerTypeDO> list = iSellerTypeService.list();
-    	
-        if(sellerType.getCode().equals("") || sellerType.getCode() == null) {
-         	
-         	return result.buildIsSuccess(false).buildMsg("DealerType code is null");
-         	
-         }else {
-         	if(sellerType.getName().equals("") || sellerType.getName() == null) {
-             	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
-             }
-         	
-         	
-         	for(int i = 0; i < list.size(); i ++) {
-         		if(sellerType.getCode().equals(list.get(i).getCode()) && sellerType.getId() != list.get(i).getId()) {
-         			return result.buildIsSuccess(false).buildMsg("DealerType code is exist");
-         		}
-         	}
- 		}
-    	
-        
+
+
+    	if(EasyUtil.isStringEmpty(sellerType.getCode())){
+			return result.buildIsSuccess(false).buildMsg("类别代码必填");
+		}
+		if(EasyUtil.isStringEmpty(sellerType.getName())){
+			return result.buildIsSuccess(false).buildMsg("类别名称必填");
+		}
+
     	iSellerTypeService.update(sellerType);
     	
         return result.buildIsSuccess(true);
