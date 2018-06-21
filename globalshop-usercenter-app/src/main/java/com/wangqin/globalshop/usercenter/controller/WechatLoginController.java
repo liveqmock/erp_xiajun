@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -31,6 +32,9 @@ import java.util.List;
 public class WechatLoginController {
     public static final String SESSION_ID = "SessionID";
     public static final String COMPANY_NO = "CompanyNO_";
+    public static final String APPSECRET = "e9cb888962d848456af2048699316e77";
+    public static final String appid = "wxfcdeefc831b3e8c4";
+    private static final String sysurl = "http://test.buyer007.cn";
 
     private static long TIMEOUT = 30 * 60 * 1000;
 
@@ -41,13 +45,11 @@ public class WechatLoginController {
 
 
     @RequestMapping("/login")
-    public Object getXcxCookieId(HttpServletRequest request, HttpServletResponse response, String code) {
+    public Object login(HttpServletRequest request, HttpServletResponse response, String code) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
         try {
-            String appsecret = "e9cb888962d848456af2048699316e77";
-            String appid = "wxfcdeefc831b3e8c4";
             /**获取openId和token*/
-            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + appsecret + "&code=" + code + "&grant_type=authorization_code", null,
+            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
                     null, "2");
             /**如果相应包含errcode  表示请求失败*/
             if (o.containsKey("errcode")) {
@@ -67,7 +69,7 @@ public class WechatLoginController {
                 loginCache.putEx(sessionId, user.getName(), TIMEOUT);
                 loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
                 AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
-                response.sendRedirect("/#");
+                response.sendRedirect("/#/login");
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
 
@@ -78,13 +80,12 @@ public class WechatLoginController {
 
     }
 
-    @RequestMapping("/auth")
-    public Object getXcxCookieId(String code, String state) {
+    @RequestMapping("/authorized")
+    public Object authorized(String code, String state) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
-        String appsecret = "e9cb888962d848456af2048699316e77";
-        String appid = "wxfcdeefc831b3e8c4";
+
         /**获取openId和token*/
-        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + appsecret + "&code=" + code + "&grant_type=authorization_code", null,
+        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
                 null, "2");
         /**如果相应包含errcode  表示请求失败*/
         if (o.containsKey("errcode")) {
@@ -124,8 +125,30 @@ public class WechatLoginController {
         return false;
     }
 
-    public static void main(String[] args) {
-        String encode = URLEncoder.encode("https://test.buyer007.cn/wechatLogin/login");
-        System.out.println(encode);
+    /**
+     * 获取微信二维码的链接
+     *
+     * @param type 授权时 该参数为authorized
+     *             登录时  该参数为login
+     * @return
+     */
+    @RequestMapping("/getUrl")
+    public Object getUrl(String type) {
+        JsonResult<Object> result = new JsonResult<>();
+        try {
+            String baseUrl = sysurl + "/wechatLogin/" + type;
+            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+            if ("authorized".equals(type)) {
+                String state = AppUtil.getLoginUserCompanyNo();
+                url = url + "&state=" + state;
+            }
+            return result.buildData(url).buildIsSuccess(true);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return result.buildIsSuccess(false).buildMsg("获取失败");
+
     }
+
 }
