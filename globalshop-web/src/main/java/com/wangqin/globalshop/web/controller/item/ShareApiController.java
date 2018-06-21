@@ -35,39 +35,51 @@ public class ShareApiController {
                          @RequestParam("companyNo") String companyNo,
                          @RequestParam("userId") String userId){
 
-        //TODO
-    	
         JsonResult<ItemShareEntity> jsonResult = new JsonResult<>();
-        ItemShareEntity entity = new ItemShareEntity();
-        entity.setItemDesc("share from wq");
 
         //TODO refactor
+        //生成分享
         String reponse = DimensionCodeUtil.sendGet(ACCESS_TOKENURL, ACCESS_TOKENPARAM);
         JSONObject myJson = JSONObject.fromObject(reponse);
         String token = (String) myJson.get("access_token");
         String picUrl = itemService.generateItemShareUrl(userId, companyNo, itemCode, "pages/item/detail", token);
 
-        entity.setItemImgList(Arrays.asList(picUrl));
 
         ItemShareEntity itemShareEntity = new ItemShareEntity();
 
         String pic = itemService.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
         String desc = itemService.itemDetailByItemCode(itemCode, companyNo).getDetail();
+        //TODO 写一个sql，查出商品，
+
 
         itemShareEntity.setItemDesc(desc);
+
         JSONObject jsonObject = JSONObject.fromObject(pic);
-        int num = Integer.parseInt(jsonObject.getString("mainPicNum"));
         JSONArray jsonArray = JSONArray.fromObject(jsonObject.getString("picList"));
         List<String> picList = new ArrayList<>();
-        for(int i = 0; i < jsonArray.size(); i ++) {
+
+        int maxSize = jsonArray.size() > 8 ? 8 : jsonArray.size();
+        for(int i = 0; i < maxSize; i ++) {
         	JSONObject jsonPicList = jsonArray.getJSONObject(i);
         	picList.add((String) jsonPicList.get("uid"));
         }
-        if(num > 8) {
 
+        //插入分享码图片
+        if (picList.size() < 5){
+            picList.add(picUrl);
+        }else{
+            List<String> tmp = new ArrayList<>();
+            int i = 0;
+            for (String purl : picList){
+                if (i++ == 5){
+                    tmp.add(picUrl);
+                }
+                tmp.add(purl);
+            }
+            picList = tmp;
         }
-
-        jsonResult.buildIsSuccess(true).buildData(entity);
+        itemShareEntity.setItemImgList(picList);
+        jsonResult.buildIsSuccess(true).buildData(itemShareEntity);
         return BaseDto.toString(jsonResult);
     }
 
