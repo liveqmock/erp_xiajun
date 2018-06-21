@@ -1,11 +1,11 @@
 package com.wangqin.globalshop.item.app.service;
 
 
-import java.util.List;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+
+import java.util.List;
 
 
 
@@ -45,5 +45,6 @@ public interface IItemBrandService {
     int insertBrandSelective(ItemBrandDO brand);
     
     void deleteItemBrandById(Long id);
-  
+
+	List<ItemBrandDO> queryByEnNameAndCnName(String name);
 }

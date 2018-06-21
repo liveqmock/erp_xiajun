@@ -11,7 +11,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
@@ -73,15 +73,12 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void importTask(List<List<Object>> list) {
+    public void importTask(List<List<Object>> list) throws ErpCommonException {
         List<String> errMsg = new ArrayList<>();
         List<BuyerTaskDO> taskList = new ArrayList<>();
         List<BuyerTaskDetailDO> detailList = new ArrayList<>();
         int i = 0;
         for (List<Object> obj : list) {
-            if (obj.size() < 6){
-                break;
-            }
             i++;
             BuyerTaskDO task = new BuyerTaskDO();
             BuyerTaskDetailDO detail = new BuyerTaskDetailDO();

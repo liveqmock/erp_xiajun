@@ -111,4 +111,10 @@ public interface IItemService {
 	
 	//一键分享，获取商品的图片
 	String queryItemPicByItemCode(String itemCode);
+
+	/**
+	 * 导入商品列表
+	 * @param list
+	 */
+    void importItem(List<List<Object>> list);
 }

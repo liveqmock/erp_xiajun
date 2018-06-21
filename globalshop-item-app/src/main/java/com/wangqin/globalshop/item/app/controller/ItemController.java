@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.item.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
@@ -12,6 +13,7 @@ import com.wangqin.globalshop.biz1.app.vo.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.*;
 import net.sf.json.JSONObject;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URL;
@@ -851,6 +854,30 @@ public class ItemController {
         }
         System.out.println("返回值：" + result);
         return result;
+    }
+
+    /**
+     * 导入商品
+     * @param file
+     * @return
+     */
+    @RequestMapping("/improtItem")
+    public Object importTask(MultipartFile file) {
+        JsonResult<Object> result = new JsonResult<>();
+        try {
+            if (!file.isEmpty()) {
+                // 文件保存路径
+                List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(),file.getOriginalFilename(),1,0,16);
+                iItemService.importItem(list);
+            }
+        } catch (IOException e) {
+            return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
+        } catch (ErpCommonException e) {
+            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result.buildIsSuccess(true).buildMsg("上传成功");
     }
 
 }

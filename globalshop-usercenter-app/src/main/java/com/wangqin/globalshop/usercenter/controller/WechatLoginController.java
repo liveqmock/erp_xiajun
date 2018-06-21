@@ -72,6 +72,7 @@ public class WechatLoginController {
                 if (StringUtils.isBlank(sessionId)) {
                     sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
                 }
+
                 loginCache.putEx(sessionId, user.getName(), TIMEOUT);
                 loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
                 AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
