@@ -768,6 +768,58 @@
   </select>
 
 
+  <insert id="insertBatch" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into item(
+        item_code,
+        company_no,
+        category_code,
+        item_name,
+        en_name,
+        category_name,
+        sale_type,
+        main_pic,
+        brand_no,
+        brand_name,
+        currency,
+        origin,
+        weight,
+        unit,
+        third_sale,
+        spec,
+        model,
+        creator,
+        modifier
+    )
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (
+      #{item.itemCode},
+      #{item.companyNo},
+      #{item.categoryCode},
+      #{item.itemName},
+      #{item.enName},
+      #{item.categoryName},
+      #{item.saleType},
+      #{item.mainPic},
+      #{item.brandNo},
+      #{item.brandName},
+      #{item.currency},
+      #{item.origin},
+      #{item.weight},
+      #{item.unit},
+      #{item.thirdSale},
+      #{item.spec},
+      #{item.model},
+      #{item.creator},
+      #{item.modifier}
+      )
+    </foreach>
+  </insert>
+
+
   <select id="selectBatchIds" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.ResultMapWithBLOBs" parameterType="java.util.ArrayList" >
     select
     <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />

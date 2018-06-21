@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.common.utils;
 
-public class PageQueryVO {
+public class PageQueryVO extends BaseVO{
 
 	
 	/**

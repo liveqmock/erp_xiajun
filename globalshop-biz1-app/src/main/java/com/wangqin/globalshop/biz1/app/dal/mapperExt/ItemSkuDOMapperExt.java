@@ -1,11 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.coyote.http11.filters.VoidInputFilter;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
+
+import java.util.List;
 
 public interface ItemSkuDOMapperExt extends ItemSkuDOMapper {
 
@@ -13,5 +11,6 @@ public interface ItemSkuDOMapperExt extends ItemSkuDOMapper {
 
     ItemSkuDO selectByUpc(String upc);
 
- 
+
+    void inserBatch(List<ItemSkuDO> skuList);
 }

@@ -2,7 +2,7 @@ package com.wangqin.globalshop.purchase.app.controller;
 
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.utils.excel.ImportExcelUtil;
+import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,19 +30,17 @@ public class BuyerTaskController {
         try {
             if (!file.isEmpty()) {
                 // 文件保存路径
-                List<List<Object>> list = new ImportExcelUtil().getBankListByExcel(file.getInputStream(),file.getOriginalFilename());
+                List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(),file.getOriginalFilename(),1,0,5);
                 buyerTaskService.importTask(list);
             }
-
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
         } catch (ErpCommonException e) {
-            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+            String str = e.getErrorMsg().replace(",", "</br>");
+            return result.buildIsSuccess(false).buildMsg(str);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
-
     }
-
 }

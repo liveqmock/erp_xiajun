@@ -56,6 +56,9 @@
     <if test=" pid != null  ">
       and T1.pid = #{pid}
     </if>
+    <if test="companyNo != null" >
+      and T1.company_no = #{companyNo}
+    </if>
     <if test=" startGmt != null ">
       and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
     </if>
@@ -80,6 +83,9 @@
     </if>
     <if test=" pid != null  ">
       and T1.pid = #{pid}
+    </if>
+    <if test="companyNo != null" >
+      and T1.company_no = #{companyNo}
     </if>
     <if test=" startGmt != null ">
       and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>

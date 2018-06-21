@@ -72,4 +72,5 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 
 	List<ItemDTO> queryMallItems(ItemQueryVO itemQueryVO);
 
+    void insertBatch(List<ItemDO> itemList);
 }
