@@ -41,7 +41,7 @@ public class WechatLoginController {
     private   String appid ;
     @Value("#{sys.sysurl}")
     private   String sysurl ;
-
+    @Value("#{sys.TIMEOUT}")
     private static long TIMEOUT ;
 
     @Autowired

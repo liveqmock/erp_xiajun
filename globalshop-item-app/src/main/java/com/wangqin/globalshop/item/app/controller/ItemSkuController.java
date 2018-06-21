@@ -373,8 +373,8 @@ public class ItemSkuController  {
 //
 //		return result.buildData(scaleTypeList).buildIsSuccess(true);
 //	}
-    
-	
+
+
 
 	@RequestMapping("/saleable")
 	@ResponseBody
