@@ -796,7 +796,6 @@
     VALUES
     <foreach collection="list" item="item" separator=",">
       (
-      #{task.buyerTaskNo},
       #{item.itemCode},
       #{item.companyNo},
       #{item.categoryCode},

@@ -873,7 +873,8 @@ public class ItemController {
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
         } catch (ErpCommonException e) {
-            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+            String str = e.getErrorMsg().replace(",", "</br>");
+            return result.buildIsSuccess(false).buildMsg(str);
         } catch (Exception e) {
             e.printStackTrace();
         }
