@@ -31,6 +31,8 @@ public class BuyerStorageDO extends BaseModel {
 
     private String modifier;
 
+    private Integer status;
+
     public Long getId() {
         return id;
     }
@@ -141,5 +143,13 @@ public class BuyerStorageDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

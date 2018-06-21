@@ -25,5 +25,9 @@ public interface IBuyerStorageService {
 
     public List<BuyerStorageDetailVo> searchAll();
 
+    public void comfirm(BuyerStorageDetailVo detailVo);
+
+    public List<BuyerStorageDetailVo> queryHasComfirm();
+
 
 }

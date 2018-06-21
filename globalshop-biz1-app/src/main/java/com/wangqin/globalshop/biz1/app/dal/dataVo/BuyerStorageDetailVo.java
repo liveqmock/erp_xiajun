@@ -39,8 +39,24 @@ public class BuyerStorageDetailVo {
 
 	private String shelfNo;
 
-	private Long itemCode;
+	private String itemCode;
 
+	private String statusName;
+
+	private Integer status;
+
+	public String getStatusName() {
+		return statusName;
+	}
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 	public String getSkuCode() {
 		return skuCode;
 	}
@@ -131,10 +147,10 @@ public class BuyerStorageDetailVo {
 	public void setShelfNo(String shelfNo) {
 		this.shelfNo = shelfNo;
 	}
-	public Long getItemCode() {
+	public String getItemCode() {
 		return itemCode;
 	}
-	public void setItemCode(Long itemCode) {
+	public void setItemCode(String itemCode) {
 		this.itemCode = itemCode;
 	}
 }
