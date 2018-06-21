@@ -8,9 +8,9 @@
             <!--location="../../mysql-connector-java-5.1.44.jar"/>-->
     <classPathEntry
 
-            location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+            location="../../mysql-connector-java-5.1.44.jar"/>
 
-            location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+           
 
 
     <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
