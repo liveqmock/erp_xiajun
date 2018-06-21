@@ -49,12 +49,12 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                 "images", "css", "/login" };
         boolean beFilter = true;
         for (String s : noFilters) {
-            if (uri.indexOf(s) != -1) {
+            if (uri.contains(s)) {
                 beFilter = false;
                 break;
             }
         }
-        if (beFilter == false) {
+        if (!beFilter) {
             return super.preHandle(request, response, handler);
         }
 
@@ -92,7 +92,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                     }
                 } catch (Exception e) {
                     LogWorker.log(log, "从Cache获取session异常，跳转登录页面", "");
-                    response.sendRedirect("/haiLogin/logout");
+                    response.sendRedirect("127.0.0.1:8000/#/login");
                     return false;
                 }
             }else
@@ -101,7 +101,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
             }
         }
         if (isJump) {
-            response.setStatus(302);
+            response.sendRedirect("127.0.0.1:8000/#/login");
             return false;
         } else {
             return true;
