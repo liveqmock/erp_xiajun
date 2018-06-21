@@ -66,6 +66,10 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	//一键分享商品详情
 	ItemDO itemDetailByItemCode(String itemCode, String companyNo);
 	
+
+	//一键分享获取商品的图片
+	String queryItemPicByItemCodeAndCompanyNo(String itemCode, String comanyNo);
+	
 	//一键分享，获取商品的图片
 	String queryItemPicByItemCode(String itemCode);
 

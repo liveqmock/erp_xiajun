@@ -682,10 +682,21 @@
     		main_pic
     	FROM item
     	<where>
-    		item_code = #{itemCode}    
+    		item_code = #{itemCode}   
     	</where>	
     </select>
    
+    <!-- 一键分享，订单详情的商品图片 -->
+	 <select id="queryItemPicByItemCodeAndCompanyNo" resultType="java.lang.String" parameterType="java.lang.String">
+    	SELECT
+    		main_pic
+    	FROM item
+    	<where>
+    		item_code = #{itemCode}
+    		AND
+    		company_no = #{companyNo}    
+    	</where>	
+    </select>
 
   <!-- 2.0版通用查询结果列,xiajun-->
   <sql id="Mall_Base_Column_List">
@@ -766,6 +777,5 @@
     order by T1.gmt_modify desc;
 
   </select>
-
 
 </mapper>
