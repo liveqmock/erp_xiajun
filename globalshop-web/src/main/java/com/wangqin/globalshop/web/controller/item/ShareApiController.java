@@ -70,10 +70,11 @@ public class ShareApiController {
             List<String> tmp = new ArrayList<>();
             int i = 0;
             for (String purl : picList){
-                if (i++ == 5){
+                if (i == 4){ //TODO refactor
                     tmp.add(picUrl);
                 }
                 tmp.add(purl);
+                i++;
             }
             picList = tmp;
         }

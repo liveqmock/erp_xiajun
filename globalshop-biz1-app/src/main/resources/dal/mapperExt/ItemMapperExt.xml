@@ -666,7 +666,7 @@
     <!-- 一键分享商品详情 -->
     <select id="itemDetailByItemCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap">
     SELECT
-    	<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List"/>
+    	<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List"/>,`detail`
     FROM item T1
     <where>
     T1.item_code = #{itemCode}
