@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -42,43 +43,37 @@ public class WechatLoginController {
     @RequestMapping("/login")
     public Object getXcxCookieId(HttpServletRequest request, HttpServletResponse response, String code) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
-        String appsecret = "e9cb888962d848456af2048699316e77";
-        String appid = "wxfcdeefc831b3e8c4";
-        /**获取openId和token*/
-        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + appsecret + "&code=" + code + "&grant_type=authorization_code", null,
-                null, "2");
-        /**如果相应包含errcode  表示请求失败*/
-        if (o.containsKey("errcode")) {
-            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
-        }
-        //        正确的返回
-//        {
-//            "access_token":"ACCESS_TOKEN",                    接口调用凭证
-//                "expires_in":7200,                            access_token接口调用凭证超时时间，单位（秒）
-//                "refresh_token":"REFRESH_TOKEN",              用户刷新access_token
-//                "openid":"OPENID",                            授权用户唯一标识
-//                "scope":"SCOPE",                              用户授权的作用域，使用逗号（,）分隔
-//                "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"    当且仅当该网站应用已获得该用户的userinfo授权时，才会出现该字段。
-//        }
-//        错误的返回
-//        {"errcode":40029,"errmsg":"invalid code"}
-        String unionid = o.getString("unionid");
-        List<AuthUserDO> list = userService.selectByUnionid(unionid);
-        if (list.size() > 1) {
-            return result.buildIsSuccess(true).buildData(list);
-        }
-        if (list.size() == 1) {
-            AuthUserDO user = list.get(0);
-            String sessionId = (String) request.getAttribute(SESSION_ID);
-            if (StringUtils.isBlank(sessionId)) {
-                sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+        try {
+            String appsecret = "e9cb888962d848456af2048699316e77";
+            String appid = "wxfcdeefc831b3e8c4";
+            /**获取openId和token*/
+            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + appsecret + "&code=" + code + "&grant_type=authorization_code", null,
+                    null, "2");
+            /**如果相应包含errcode  表示请求失败*/
+            if (o.containsKey("errcode")) {
+                return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
             }
-            loginCache.putEx(sessionId, user.getName(), TIMEOUT);
-            loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
-            AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
-            return result.buildIsSuccess(true).buildMsg("登陆成功");
-        }
+            String unionid = o.getString("unionid");
+            List<AuthUserDO> list = userService.selectByUnionid(unionid);
+            if (list.size() > 1) {
+                return result.buildIsSuccess(true).buildData(list);
+            }
+            if (list.size() == 1) {
+                AuthUserDO user = list.get(0);
+                String sessionId = (String) request.getAttribute(SESSION_ID);
+                if (StringUtils.isBlank(sessionId)) {
+                    sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+                }
+                loginCache.putEx(sessionId, user.getName(), TIMEOUT);
+                loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
+                AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
+                response.sendRedirect("/#");
+                return result.buildIsSuccess(true).buildMsg("登陆成功");
+            }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return result.buildIsSuccess(false).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆");
 
     }
@@ -130,7 +125,7 @@ public class WechatLoginController {
     }
 
     public static void main(String[] args) {
-        String encode = URLEncoder.encode("https://buyer007.cn/wechatLogin/login");
+        String encode = URLEncoder.encode("https://test.buyer007.cn/wechatLogin/login");
         System.out.println(encode);
     }
 }
