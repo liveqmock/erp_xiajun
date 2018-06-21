@@ -1,22 +1,22 @@
 package com.wangqin.globalshop.web.controller.item;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.web.dto.api.ItemDetailEntity;
+import com.wangqin.globalshop.web.dto.api.ItemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.web.dto.BaseDto;
-import com.wangqin.globalshop.web.dto.api.ItemDetailEntity;
-import com.wangqin.globalshop.web.dto.api.ItemEntity;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/items")
