@@ -110,7 +110,7 @@ public class OrderApiController {
         	OrderDetailEntity tmp = new OrderDetailEntity();
         	tmp.setCommission(order.getShareMoney().toString());
         	String itemPic = itemService.queryItemPicByItemCode(order.getItemCode());
-        	System.out.println("itempic"+itemPic);
+        	
         	//筛选出一张图片
         	JSONObject jsonObject = JSONObject.fromObject(itemPic);
             JSONArray array = jsonObject.getJSONArray("picList");
