@@ -95,4 +95,6 @@ public interface IItemSkuService  {
     List<ItemSkuDO> queryByItemCodeAndCompanyNo( String itemCode,  String loginUserCompanyNo);
 
     ItemSkuDO queryBySkuCodeOrUpcAndCompanyNo(String code, String companyNo);
+    
+    Double querySalePriceByItemCode(String itemCode);
 }
