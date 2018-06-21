@@ -50,5 +50,5 @@ public class FindItemServiceImpl implements IFindItemService {
 		}
 		return itemResult;
 	}
-	
+
 }

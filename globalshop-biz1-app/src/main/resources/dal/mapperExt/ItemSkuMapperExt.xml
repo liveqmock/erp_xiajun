@@ -666,4 +666,18 @@
          T1.upc = #{code})
 
      </select>
+     
+     <!-- 一键分享的商品的价格 -->
+     <select id="querySalePriceByItemCode" parameterType="java.lang.String" resultType="java.lang.Double">
+     	SELECT
+     	MIN(sale_price)
+     	FROM 
+     	 item_sku
+     	<where>
+     	 item_code = #{itemCode}
+     	 AND
+     	 is_del = 0	
+     	</where>
+     
+     </select>
 </mapper>

@@ -202,6 +202,21 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 		// TODO Auto-generated method stub
 		return userMapper.selectUserVoByUserNo(userNo);
 	}
+	
+	//一键分享登录
+	@Override
+	public  List<AuthUserDO> selectUserByWxOpenId(String wxOpenId) {
+    	return userMapper.selectUserByWxOpenId(wxOpenId);
+    }
+
+
+	//一键分享手机号登录
+	@Override
+	public AuthUserDO selectUserByPhone(String phone) {
+    	return userMapper.selectUserByPhone(phone);
+    }
+	
+}
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -254,3 +269,4 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
 
 }
+

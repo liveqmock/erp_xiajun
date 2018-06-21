@@ -15,4 +15,6 @@ public interface IUserRoleService {
 	
 	void deleteUserRoleByUserId(Long userId);
 	
+	AuthUserRoleDO selectRoleIdByUserId(Long userId);
+	
 }
