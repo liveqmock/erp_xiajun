@@ -7,7 +7,11 @@
     <!--<classPathEntry-->
             <!--location="../../mysql-connector-java-5.1.44.jar"/>-->
     <classPathEntry
+
             location="../../mysql-connector-java-5.1.44.jar"/>
+
+           
+
 
     <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
 
@@ -134,13 +138,13 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
+        <table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+        enableSelectByExample="false" selectByExampleQueryId="false" >
+        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
+            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
+            <ignoreColumn column="is_del" delimitedColumnName=""/>
+        </table>
 
         <!--<table tableName="auth_user_role" domainObjectName="AuthUserRoleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -492,20 +496,28 @@
         <!--</table>-->
 
         <!--<table tableName="mall_shopping_cart" domainObjectName="MallShippingCartDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+       <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
             <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="mall_sub_order" domainObjectName="MallSubOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+       <!--<table tableName="mall_sub_order" domainObjectName="MallSubOrderDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+       <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
         <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
             <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
+       <!--</table>-->
+       
+       <!--<table tableName="share_token_record" domainObjectName="ShareTokenRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+       <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+       <!--</table>-->
 
         <!--<table tableName="mall_wx_banner" domainObjectName="MallWxBannerDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->

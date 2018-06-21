@@ -632,6 +632,7 @@
 	AND is_del=0
 	</where>
 	</select>
+
 	
 	<!--一键分享首页商品  -->
 	<select id="queryItemByStatus" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap">
@@ -681,8 +682,100 @@
     		main_pic
     	FROM item
     	<where>
-    		item_code = #{itemCode}    
+    		item_code = #{itemCode}   
     	</where>	
     </select>
    
+    <!-- 一键分享，订单详情的商品图片 -->
+	 <select id="queryItemPicByItemCodeAndCompanyNo" resultType="java.lang.String" parameterType="java.lang.String">
+    	SELECT
+    		main_pic
+    	FROM item
+    	<where>
+    		item_code = #{itemCode}
+    		AND
+    		company_no = #{companyNo}    
+    	</where>	
+    </select>
+
+  <!-- 2.0版通用查询结果列,xiajun-->
+  <sql id="Mall_Base_Column_List">
+        T1.id,T1.item_name AS name,T1.status, T1.spec,T1.model,T1.country,T1.booking_date AS bookingDate,
+        T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
+        main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
+        en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
+        unit,source,promotion,T1.id_card AS idCard,T1.detail,T1.start_date AS startDate,
+        T1.end_date AS endDate,T1.is_sale AS isSale,T1.logistic_type as logisticType,
+        T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.creator AS userCreate,
+        T1.modifier AS userModify,T1.remark AS remark,T1.detail AS detail
+    </sql>
+
+  <!-- 按条件查询商品(fin) -->
+  <select id="queryMallItems" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+    SELECT
+    <include refid="Mall_Base_Column_List" />
+    FROM
+    item T1  LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
+    where
+    T1.is_del=0
+    <if test="id != null">
+      and T1.id = #{id}
+    </if>
+    <!--
+    <if test="companyId != null">
+        and T1.company_id = #{companyId}
+    </if>
+     -->
+    <if test=" name != null and name != '' ">
+      and T1.item_name LIKE concat('%',#{name},'%')
+    </if>
+    <if test=" itemCode != null and itemCode != '' ">
+      and T1.item_code = #{itemCode}
+    </if>
+    <if test=" companyNo != null and companyNo != '' ">
+      and T1.company_no = #{companyNo}
+    </if>
+    <!--
+     <if test=" enName != null and enName != '' ">
+      and  T1.en_name LIKE concat('%',#{enName},'%')
+    </if>
+    -->
+    <!--
+    <if test=" categoryId != null">
+      and  T1.category_id = #{categoryId}
+    </if>
+    -->
+    <if test=" brand != null and brand != ''">
+      and  T1.brand_name = #{brand}
+    </if>
+    <!--
+    <if test=" buySite != null and buySite != ''">
+      and  T1.buy_site = #{buySite}
+    </if>
+
+    <if test=" owners != null and owners != '' ">
+      and  T1.owners LIKE concat('%',#{owners},'%')
+    </if>-->
+    <if test=" startDate!= null and endDate!= null">
+      and  (
+      (<![CDATA[  T1.start_date >= #{startDate} ]]> and <![CDATA[  T1.start_date <= #{endDate} ]]>)
+      or
+      (<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
+      )
+    </if>
+    <if test=" startGmt!= null and endGmt!= null">
+      and
+      (<![CDATA[  T1.gmt_create >= #{startGmt} ]]> and <![CDATA[  T1.gmt_create <= #{endGmt} ]]>)
+
+    </if>
+    <if test="hasInventory > 0">
+      and <![CDATA[ T3.inv > 0 ]]>
+    </if>
+    <if test="hasVirtualInventory > 0">
+      and	<![CDATA[ T3.virtual_inv > 0 ]]>
+    </if>
+    order by T1.gmt_modify desc;
+
+  </select>
+
 </mapper>

@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleTypeDO;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
@@ -34,12 +32,7 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.IScaleTypeService;
-import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
-
-
 
 /**
  * 商品SKU处理器
@@ -54,8 +47,8 @@ public class ItemSkuController  {
 	@Autowired
 	private IItemSkuService iItemSkuService;
 
-	@Autowired
-	private IScaleTypeService scaleTypeService;
+//	@Autowired
+//	private IScaleTypeService scaleTypeService;
 
 	@Autowired
 	private InventoryService inventoryService;
@@ -372,14 +365,14 @@ public class ItemSkuController  {
 	}
     
 
-	@RequestMapping("/scaleTypeList")
-	@ResponseBody
-	public Object scaleTypeList() {
-		JsonResult<List<ScaleTypeDO>> result = new JsonResult<>();
-		List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
-		
-		return result.buildData(scaleTypeList).buildIsSuccess(true);
-	}
+//	@RequestMapping("/scaleTypeList")
+//	@ResponseBody
+//	public Object scaleTypeList() {
+//		JsonResult<List<ScaleTypeDO>> result = new JsonResult<>();
+//		List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
+//
+//		return result.buildData(scaleTypeList).buildIsSuccess(true);
+//	}
     
 	
 

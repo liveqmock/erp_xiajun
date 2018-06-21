@@ -113,4 +113,7 @@ public interface IItemService {
 	
 	//一键分享，获取商品的图片
 	String queryItemPicByItemCode(String itemCode);
+	
+	//一键分享，获取商品的图片
+	String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo);
 }
