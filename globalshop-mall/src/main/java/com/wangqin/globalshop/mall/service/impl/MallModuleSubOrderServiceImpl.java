@@ -22,12 +22,12 @@ public class MallModuleSubOrderServiceImpl  implements IMallSubOrderService {
 	private MallSubOrderMapperExt mallSubOrderMapperExt;
 	
 	@Override
-	public List<MyOrderDTO> queryOrderByShareUserId(String shareUserId,int start,String pageSize) {
+	public List<MyOrderDTO> queryOrderByShareUserId(String shareUserId,int start,int pageSize) {
 		return mallSubOrderMapperExt.queryOrderByShareUserId(shareUserId,start,pageSize);
 	}
 	
 	@Override
-	public List<MallSubOrderDO> queryOrderDetailByTime(String shareUserId,String shareTime,int start,String pageSize) {
+	public List<MallSubOrderDO> queryOrderDetailByTime(String shareUserId,String shareTime,int start,int pageSize) {
 		 return mallSubOrderMapperExt.queryOrderDetailByTime(shareUserId, shareTime, start, pageSize);
 	 }
 
