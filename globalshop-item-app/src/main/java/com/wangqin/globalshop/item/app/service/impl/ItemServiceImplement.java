@@ -482,8 +482,8 @@ public class ItemServiceImplement implements IItemService {
 
 	//一键分享，获取商品的图片
 	@Override
-	public String queryItemPicByItemCode(String itemCode) {
-		return itemDOMapperExt.queryItemPicByItemCode(itemCode);
+	public String queryItemPicByItemCode(String itemCode, String companyNo) {
+		return itemDOMapperExt.queryItemPicByItemCode(itemCode, companyNo);
 	}
    
 }

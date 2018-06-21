@@ -110,5 +110,5 @@ public interface IItemService {
 	ItemDO itemDetailByItemCode(String itemCode, String companyNo);
 	
 	//一键分享，获取商品的图片
-	String queryItemPicByItemCode(String itemCode);
+	String queryItemPicByItemCode(String itemCode, String companyNo);
 }
