@@ -17,10 +17,11 @@
     <result column="status" property="status" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="share_token" property="shareToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, customer_no, open_id, company_no, channel_no, shop_code, sku_name, sku_code, 
-    item_code, item_name, scale, quantity, status, creator, modifier
+    item_code, item_name, scale, quantity, status, creator, modifier, share_token
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -40,12 +41,14 @@
       channel_no, shop_code, sku_name, 
       sku_code, item_code, item_name, 
       scale, quantity, status, 
-      creator, modifier)
+      creator, modifier, share_token
+      )
     values (#{customerNo,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, 
       #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
       #{scale,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{status,jdbcType=BIT}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{shareToken,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -95,6 +98,9 @@
       <if test="modifier != null" >
         modifier,
       </if>
+      <if test="shareToken != null" >
+        share_token,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerNo != null" >
@@ -138,6 +144,9 @@
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="shareToken != null" >
+        #{shareToken,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -186,6 +195,9 @@
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
+      <if test="shareToken != null" >
+        share_token = #{shareToken,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -204,7 +216,8 @@
       quantity = #{quantity,jdbcType=INTEGER},
       status = #{status,jdbcType=BIT},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      modifier = #{modifier,jdbcType=VARCHAR},
+      share_token = #{shareToken,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

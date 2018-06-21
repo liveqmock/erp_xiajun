@@ -379,6 +379,25 @@
     from auth_user
     where user_no = #{userNo,jdbcType=VARCHAR}
   </select>
+
+  
+  <!-- 一键分享微信登录接口-->
+  <select id="selectUserByWxOpenId" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select 
+    company_no AS companyNo,user_no AS userNo,name
+    from auth_user
+    where wx_open_id = #{wxOpenId}
+  </select>
+  
+    
+  <!-- 一键分享手机号登录接口-->
+  <select id="selectUserByPhone" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select 
+    company_no AS companyNo,user_no AS userNo,name
+    from auth_user
+    where phone = #{phone}
+  </select>
+
   <select id="selectByUnionid" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List2" />

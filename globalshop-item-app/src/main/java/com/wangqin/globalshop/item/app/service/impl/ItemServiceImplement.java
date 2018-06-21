@@ -460,5 +460,30 @@ public class ItemServiceImplement implements IItemService {
             itemSkuDOMapperExt.insert(skuDO);
         }
     }
+
+	@Override
+	public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, String pageSize) {
+		// TODO Auto-generated method stub
+		return itemDOMapperExt.queryItemByStatus(companyNo, status, start, pageSize);
+	}
+
+	@Override
+	public List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, int start, String pageSize) {
+		// TODO Auto-generated method stub
+		return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, start, pageSize);
+	}
+
+	@Override
+	public ItemDO itemDetailByItemCode(String itemCode, String companyNo) {
+		// TODO Auto-generated method stub
+		return itemDOMapperExt.itemDetailByItemCode(itemCode, companyNo);
+	}
+	
+
+	//一键分享，获取商品的图片
+	@Override
+	public String queryItemPicByItemCode(String itemCode) {
+		return itemDOMapperExt.queryItemPicByItemCode(itemCode);
+	}
    
 }

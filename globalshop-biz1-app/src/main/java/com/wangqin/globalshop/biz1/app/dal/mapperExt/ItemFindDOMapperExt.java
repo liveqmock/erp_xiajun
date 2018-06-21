@@ -10,4 +10,5 @@ public interface ItemFindDOMapperExt extends ItemFindDOMapper {
 	Integer queryItemsCount();
 	
 	List<ItemFindDO> queryFindItems();
+
 }
