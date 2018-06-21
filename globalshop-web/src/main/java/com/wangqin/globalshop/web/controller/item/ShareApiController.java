@@ -1,14 +1,7 @@
 package com.wangqin.globalshop.web.controller.item;
 
-import com.wangqin.globalshop.common.base.BaseDto;
-import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.web.dto.api.ItemShareEntity;
-import net.sf.json.JSONObject;
-
-
-import net.sf.json.JSONArray;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.google.gson.JsonArray;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.web.dto.api.ItemShareEntity;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 public class ShareApiController {
@@ -46,22 +46,21 @@ public class ShareApiController {
 
 
         ItemShareEntity itemShareEntity = new ItemShareEntity();
+        
+        ItemDO item = itemService.itemDetailByItemCode(itemCode, companyNo);
+        itemShareEntity.setItemDesc(item.getDetail());
+        
+        String mainPic = item.getMainPic();
 
-        String pic = itemService.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
-        String desc = itemService.itemDetailByItemCode(itemCode, companyNo).getDetail();
-        //TODO 写一个sql，查出商品，
-
-
-        itemShareEntity.setItemDesc(desc);
-
-        JSONObject jsonObject = JSONObject.fromObject(pic);
-        JSONArray jsonArray = JSONArray.fromObject(jsonObject.getString("picList"));
+        JSONObject jsonObject = JSONObject.fromObject(mainPic);
+        JSONArray array = jsonObject.getJSONArray("picList");
+        //JSONArray jsonArray = JSONArray.fromObject(jsonObject.getString("picList"));
         List<String> picList = new ArrayList<>();
 
-        int maxSize = jsonArray.size() > 8 ? 8 : jsonArray.size();
+        int maxSize = array.size() > 8 ? 8 : array.size();
         for(int i = 0; i < maxSize; i ++) {
-        	JSONObject jsonPicList = jsonArray.getJSONObject(i);
-        	picList.add((String) jsonPicList.get("uid"));
+        	String pic = array.getJSONObject(i).getString("url");
+        	picList.add(pic);
         }
 
         //插入分享码图片
