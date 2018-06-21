@@ -55,10 +55,18 @@ public class ShareUserController {
 				return BaseDto.toString(result);
 			}
 			//TODO 多个company
-			resultList.buildIsSuccess(true).buildData(responseUserList);
-			return BaseDto.toString(resultList);
+			result.buildIsSuccess(true).buildData(responseUserList.get(0));
+			return BaseDto.toString(result);
 		} else {
-			return "";
+			//TODO hard code
+			if ("135xxxx".equals(mobileNo) && "".equals(checkCode)){
+				AuthUserDO authUserDO = null;
+				result.buildIsSuccess(true).buildData(authUserDO);
+				return BaseDto.toString(result);
+			}else{
+				result.buildIsSuccess(false).buildMsg("用户不存在");
+				return BaseDto.toString(result);
+			}
 		}
 	}
 

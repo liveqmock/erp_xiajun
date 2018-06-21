@@ -42,8 +42,6 @@ public class ItemApiController {
                           @RequestParam("pageSize") String pageSize,
                           @RequestParam("pageNo") String pageNo){
 
-
-        //TODO
     	JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
     	List<ItemEntity> items = new ArrayList<>();
     	int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
