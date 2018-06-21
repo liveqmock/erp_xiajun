@@ -1,13 +1,8 @@
 package com.wangqin.globalshop.web.controller.item;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.service.IFindItemService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.web.dto.BaseDto;
-import com.wangqin.globalshop.web.dto.api.ItemDetailEntity;
-import com.wangqin.globalshop.web.dto.api.ItemEntity;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.web.dto.BaseDto;
+import com.wangqin.globalshop.web.dto.api.ItemDetailEntity;
+import com.wangqin.globalshop.web.dto.api.ItemEntity;
 
 @Controller
 @RequestMapping("/api/items")
@@ -26,6 +25,9 @@ public class ItemApiController {
 	
 	@Autowired
 	private IItemService itemService;
+	@Autowired
+	private IItemSkuService itemSkuService;
+	
     /**
      * 0对应今日上新，1对应全部商品
      * 每页24个
@@ -47,13 +49,15 @@ public class ItemApiController {
     	int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
     	List<ItemDO>itemList = itemService.queryItemByStatus(companyNo, type, start, pageSize);
     	
-    	for(int i = 0; i < itemList.size(); i ++) {
+    	for(int i = 0; i < itemList.size(); i++) {
     		ItemEntity itemEntity = new ItemEntity();
-    		itemEntity.setItemCode(itemList.get(i).getItemCode());
-    		itemEntity.setPrice(itemList.get(i).getPriceRange());//价格
+    		ItemDO item = itemList.get(i);
+    		Double price = itemSkuService.querySalePriceByItemCode(item.getItemCode());
+    		itemEntity.setItemCode(item.getItemCode());
+    		itemEntity.setPrice(price.toString());//价格
     		itemEntity.setOriginPrice("meiyuan");//外币
-    		itemEntity.setTitle(itemList.get(i).getItemName());//标题
-    		itemEntity.setImgUrl(itemList.get(i).getMainPic());//头像
+    		itemEntity.setTitle(item.getItemName());//标题
+    		itemEntity.setImgUrl(item.getMainPic());//商品图片
     		items.add(itemEntity); 
     	}
     	
@@ -76,13 +80,15 @@ public class ItemApiController {
         int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
         List<ItemDO> itemList = itemService.queryItemByKeyWord(keyword, companyNo, start, pageSize);
       
-        for(int i = 0; i < itemList.size(); i ++) {
-        	 ItemEntity itemEntity = new ItemEntity();
-        	itemEntity.setItemCode(itemList.get(i).getItemCode());
-        	itemEntity.setPrice(itemList.get(i).getMainPic());
-        	itemEntity.setOriginPrice("美元");
-        	itemEntity.setPrice("价格");
-        	itemEntity.setTitle("标题");
+        for(int i = 0; i < itemList.size(); i++) {
+        	ItemEntity itemEntity = new ItemEntity();
+        	ItemDO item = itemList.get(i);
+        	Double price = itemSkuService.querySalePriceByItemCode(item.getItemCode());
+        	itemEntity.setItemCode(item.getItemCode());
+        	itemEntity.setPrice(item.getMainPic());
+        	itemEntity.setOriginPrice("meiyuan");
+        	itemEntity.setPrice(price.toString());
+        	itemEntity.setTitle(item.getItemName());
         	items.add(itemEntity);
 
         }
@@ -103,11 +109,12 @@ public class ItemApiController {
         JsonResult<ItemDetailEntity> jsonResult = new JsonResult<>();
         ItemDetailEntity itemDetailEntity = new ItemDetailEntity();
         ItemDO itemDO = itemService.itemDetailByItemCode(itemCode, companyNo);
+        Double price = itemSkuService.querySalePriceByItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemDesc(itemDO.getDetail());
-        itemDetailEntity.setPrice(itemDO.getMainPic());
+        itemDetailEntity.setPrice(price.toString());
         itemDetailEntity.setOriginPrice("美元");
-        itemDetailEntity.setImgList(Arrays.asList("http://img.haihu.com/wq_logo.jpg"));
+        itemDetailEntity.setImgList(Arrays.asList(itemDO.getMainPic()));
       
         
 //        entity.setItemCode("1111");
