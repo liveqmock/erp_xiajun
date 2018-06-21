@@ -222,6 +222,9 @@ public class RoleController extends BaseController {
     @RequestMapping("/queryList")
     @ResponseBody
     public Object queryList(RoleQueryVO roleQueryVO) {
+        String companyNo=AppUtil.getLoginUserCompanyNo();
+        logger.info("current CompanyNo is " + companyNo);
+        roleQueryVO.setCompanyNo(companyNo);
         JsonPageResult<List<AuthRoleDO>> result = roleService.queryRoleList(roleQueryVO);
 
         return result.buildIsSuccess(true);

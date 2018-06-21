@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class CompanyDO extends BaseModel {
     private Long id;
 
@@ -10,8 +8,6 @@ public class CompanyDO extends BaseModel {
     private String companyName;
 
     private Integer status;
-
-    private Date gmtModified;
 
     private String shopName;
 
@@ -63,14 +59,6 @@ public class CompanyDO extends BaseModel {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
     }
 
     public String getShopName() {

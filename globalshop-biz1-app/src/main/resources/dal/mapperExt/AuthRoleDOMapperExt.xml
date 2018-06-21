@@ -136,7 +136,9 @@
     <if test=" status != null ">
       and T1.status = #{status}
     </if>
-
+    <if test="companyNo != null" >
+      and T1.company_no = #{companyNo}
+    </if>
   </select>
 
   <select id="queryRoleQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO">
@@ -154,6 +156,9 @@
     </if>
     <if test=" status != null ">
       and T1.status = #{status}
+    </if>
+    <if test="companyNo != null" >
+      and T1.company_no = #{companyNo}
     </if>
     order by T1.name desc
     <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
