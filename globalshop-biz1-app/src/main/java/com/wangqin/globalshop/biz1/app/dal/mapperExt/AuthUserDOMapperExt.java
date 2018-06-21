@@ -39,11 +39,25 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     List<UserQueryVO> queryUserQueryVOList(UserQueryVO userQueryVO);
 
 //    List<AuthUserDO> selectUserVoPage();
-    
+
     AuthUserDO selectUserVoByUserNo(String userNo);
     
     void insertByNoId(AuthUserDO record);
+
     
     //一键分享登录
     List<AuthUserDO> selectUserByWxOpenId(String wxOpenId);
+    
+    //一键分享手机号登录
+    AuthUserDO selectUserByPhone(String phone);
+
+
+    AuthUserDO searchAuthUser(AuthUserDO record);
+
+    Long searchAuthUserCount(AuthUserDO record);
+
+    List<AuthUserDO> searchAuthUserList(AuthUserDO record);
+
+    List<AuthUserDO> selectByUnionid(@Param("unionid") String unionid);
+
 }

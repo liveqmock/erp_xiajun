@@ -39,7 +39,7 @@ public class ShareUserController {
 						@RequestParam(value = "thirdPartyAvtar", required = false) String thirdPartyAvtar) {
 		//TODO log
 		JsonResult<AuthUserDO> result = new JsonResult<AuthUserDO>();
-		JsonResult<List<AuthUserDO>> resultList = new JsonResult<List<AuthUserDO>>();
+		//JsonResult<List<AuthUserDO>> resultList = new JsonResult<List<AuthUserDO>>();
 
 		List<AuthUserDO> responseUserList = null;
 		if (StringUtils.isNotBlank(type) && type.equals("wechat")) {
@@ -59,11 +59,11 @@ public class ShareUserController {
 			return BaseDto.toString(result);
 		} else {
 			//TODO hard code
-			if ("135xxxx".equals(mobileNo) && "".equals(checkCode)){
-				AuthUserDO authUserDO = null;
+			if ("18366116306".equals(mobileNo) && "18366116306".equals(checkCode)) {
+				AuthUserDO authUserDO = userService.selectUserByPhone("18366116306");
 				result.buildIsSuccess(true).buildData(authUserDO);
 				return BaseDto.toString(result);
-			}else{
+			} else {
 				result.buildIsSuccess(false).buildMsg("用户不存在");
 				return BaseDto.toString(result);
 			}

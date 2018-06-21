@@ -27,6 +27,7 @@ import com.jd.open.api.sdk.response.ware.WareInfoByInfoSearchResponse;
 import com.jd.open.api.sdk.response.ware.WareWriteAddResponse;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.DateUtil;
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -54,6 +55,14 @@ public class JdShopServiceImplTest {
 	protected Logger logger = LogManager.getLogger(getClass());
 
 	JdClient client = new DefaultJdClient(url,token,appkey,appsecret);
+
+
+
+	@Test
+	public void dateTest(){
+		String userNo = DateUtil.formatDate(new Date(), "yyMMddHHmmss") + String.format("%1$06d", RandomUtils.nextInt(1000000));
+		System.out.println("userNo: "+userNo);
+	}
 
 
 	@Test public void createItem() {

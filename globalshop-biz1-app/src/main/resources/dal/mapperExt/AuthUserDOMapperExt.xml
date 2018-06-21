@@ -14,7 +14,7 @@
     <!--<result column="status" property="status" jdbcType="TINYINT" />-->
     <!--<result column="organization_id" property="organizationId" jdbcType="INTEGER" />-->
     <!--<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />-->
-    <!--<result column="wx_user_id" property="wxUserId" jdbcType="BIGINT" />-->
+    <!--<result column="wx_union_id" property="wxUnionId" jdbcType="BIGINT" />-->
     <!--<result column="email" property="email" jdbcType="VARCHAR" />-->
     <!--<result column="company_no" property="companyNo" jdbcType="VARCHAR" />-->
     <!--<result column="is_del" property="isDel" jdbcType="BIT" />-->
@@ -24,9 +24,8 @@
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
   <!--</resultMap>-->
   <sql id="Base_Column_List2" >
-    id, user_no, login_name, name, password, sex, age, phone, user_type, status, organization_id,
-    create_time, wx_user_id, email, company_no, is_del, gmt_create, gmt_modify, creator,
-    modifier
+    id, company_no, user_no, login_name, name, password, sex, age, phone, user_type,
+    status, organization_id, create_time, wx_union_id, email, creator, modifier
   </sql>
 
   <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
@@ -111,8 +110,8 @@
       <if test="createTime != null" >
         create_time,
       </if>
-      <if test="wxUserId != null" >
-        wx_user_id,
+      <if test="wxUnionId != null" >
+        wx_union_id,
       </if>
       <if test="email != null" >
         email,
@@ -164,8 +163,8 @@
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="wxUserId != null" >
-        #{wxUserId,jdbcType=BIGINT},
+      <if test="wxUnionId != null" >
+        #{wxUnionId,jdbcType=BIGINT},
       </if>
       <if test="email != null" >
         #{email,jdbcType=VARCHAR},
@@ -225,8 +224,8 @@
   <if test="createTime != null" >
   create_time = #{createTime,jdbcType=TIMESTAMP},
   </if>
-  <if test="wxUserId != null" >
-  wx_user_id = #{wxUserId,jdbcType=BIGINT},
+  <if test="wxUnionId != null" >
+  wx_union_id = #{wxUnionId,jdbcType=BIGINT},
   </if>
   <if test="email != null" >
   email = #{email,jdbcType=VARCHAR},
@@ -380,8 +379,9 @@
     from auth_user
     where user_no = #{userNo,jdbcType=VARCHAR}
   </select>
+
   
-  <!-- 一键分享登录接口-->
+  <!-- 一键分享微信登录接口-->
   <select id="selectUserByWxOpenId" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select 
     company_no AS companyNo,user_no AS userNo,name
@@ -389,6 +389,22 @@
     where wx_open_id = #{wxOpenId}
   </select>
   
+    
+  <!-- 一键分享手机号登录接口-->
+  <select id="selectUserByPhone" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select 
+    company_no AS companyNo,user_no AS userNo,name
+    from auth_user
+    where phone = #{phone}
+  </select>
+
+  <select id="selectByUnionid" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List2" />
+    from auth_user
+    where wx_union_id = #{unionid,jdbcType=VARCHAR}
+  </select>
+
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
     <!--delete from auth_user-->
     <!--where id = #{id,jdbcType=BIGINT}-->
@@ -401,14 +417,14 @@
       <!--name, password, sex, -->
       <!--age, phone, user_type, -->
       <!--status, organization_id, create_time, -->
-      <!--wx_user_id, email, company_no, -->
+      <!--wx_union_id, email, company_no, -->
       <!--is_del, gmt_create, gmt_modify, -->
       <!--creator, modifier)-->
     <!--values (#{id,jdbcType=BIGINT}, #{userNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, -->
       <!--#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, -->
       <!--#{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, -->
       <!--#{status,jdbcType=TINYINT}, #{organizationId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, -->
-      <!--#{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, -->
+      <!--#{wxUnionId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, -->
       <!--#{isDel,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, -->
       <!--#{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})-->
   <!--</insert>-->
@@ -452,8 +468,8 @@
       <!--<if test="createTime != null" >-->
         <!--create_time,-->
       <!--</if>-->
-      <!--<if test="wxUserId != null" >-->
-        <!--wx_user_id,-->
+      <!--<if test="wxUnionId != null" >-->
+        <!--wx_union_id,-->
       <!--</if>-->
       <!--<if test="email != null" >-->
         <!--email,-->
@@ -512,8 +528,8 @@
       <!--<if test="createTime != null" >-->
         <!--#{createTime,jdbcType=TIMESTAMP},-->
       <!--</if>-->
-      <!--<if test="wxUserId != null" >-->
-        <!--#{wxUserId,jdbcType=BIGINT},-->
+      <!--<if test="wxUnionId != null" >-->
+        <!--#{wxUnionId,jdbcType=BIGINT},-->
       <!--</if>-->
       <!--<if test="email != null" >-->
         <!--#{email,jdbcType=VARCHAR},-->
@@ -574,8 +590,8 @@
       <!--<if test="createTime != null" >-->
         <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
       <!--</if>-->
-      <!--<if test="wxUserId != null" >-->
-        <!--wx_user_id = #{wxUserId,jdbcType=BIGINT},-->
+      <!--<if test="wxUnionId != null" >-->
+        <!--wx_union_id = #{wxUnionId,jdbcType=BIGINT},-->
       <!--</if>-->
       <!--<if test="email != null" >-->
         <!--email = #{email,jdbcType=VARCHAR},-->
@@ -614,7 +630,7 @@
       <!--status = #{status,jdbcType=TINYINT},-->
       <!--organization_id = #{organizationId,jdbcType=INTEGER},-->
       <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
-      <!--wx_user_id = #{wxUserId,jdbcType=BIGINT},-->
+      <!--wx_union_id = #{wxUnionId,jdbcType=BIGINT},-->
       <!--email = #{email,jdbcType=VARCHAR},-->
       <!--company_no = #{companyNo,jdbcType=VARCHAR},-->
       <!--is_del = #{isDel,jdbcType=BIT},-->
@@ -624,4 +640,59 @@
       <!--modifier = #{modifier,jdbcType=VARCHAR}-->
     <!--where id = #{id,jdbcType=BIGINT}-->
   <!--</update>-->
+
+  <sql id="tableSection">auth_user</sql>
+
+  <sql id="commonSelectSection">
+    1 = 1
+
+    <if test="openId != null">
+      and T.open_id = #{openId}
+    </if>
+
+    <if test="unionId != null">
+      and T.union_id = #{unionId}
+    </if>
+
+    <if test=" isDel == true">
+      and T.is_del is true
+    </if>
+    <if test=" isDel == false">
+      and T.is_del is false
+    </if>
+    <if test=" isDel == null">
+      and T.is_del is false
+    </if>
+
+  </sql>
+
+
+  <!--查询总条数 -->
+  <select id="searchAuthUser" resultMap="userVoResultMap"
+  >
+    SELECT <include refid="Base_Column_List2" />
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+  </select>
+
+  <!--查询总条数 -->
+  <select id="searchAuthUserCount" resultType="java.lang.Long"
+  >
+    SELECT COUNT(*)
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+  </select>
+
+  <!-- -->
+  <select id="searchAuthUserList" resultMap="userVoResultMap">
+    SELECT  <include refid="Base_Column_List2" />
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+    ORDER BY T.id desc
+  </select>
+
+
 </mapper>
