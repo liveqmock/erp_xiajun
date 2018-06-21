@@ -2,10 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDetailMapperExt">
 
-   <!-- 通用查询结果列-->
-    <sql id="Base_Column_List">
-    id,sku_id AS skuId,sku_code AS skuCode,quantity,trans_quantity AS transQuantity,price,currency,total_price AS totalPrice,warehouse_id AS warehouseId,warehouse_name AS warehouseName,upc,shelf_no AS shelfNo,sto_order_no AS stoOrderNo,storage_id AS storageId,item_id AS itemId,gmt_create AS gmtCreate,gmt_modify AS gmtModify,task_daily_detail_id AS taskDailyDetailId
-    </sql>
+	<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="storage_no" property="storageNo" jdbcType="VARCHAR" />
+		<result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+		<result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+		<result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
+		<result column="currency" property="currency" jdbcType="TINYINT" />
+		<result column="upc" property="upc" jdbcType="VARCHAR" />
+		<result column="quantity" property="quantity" jdbcType="INTEGER" />
+		<result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
+		<result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
+		<result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
+		<result column="item_code" property="itemCode" jdbcType="BIGINT" />
+		<result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="modifier" property="modifier" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+    id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price,
+    currency, upc, quantity, trans_quantity, purchase_storage_no, buyer_task_detail_no,
+    item_code, sku_buysite, creator, modifier
+  </sql>
 
 	
     
@@ -39,4 +60,61 @@
 		WHERE a.gmt_create &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d 00:00:00') AND a.gmt_create &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d 23:59:59') AND b.`status`=1
 		GROUP BY a.sku_id;
 	</select>
+
+
+	<sql id="tableSection">buyer_storage_detail</sql>
+
+
+	<sql id="commonSelectSection">
+		1 = 1
+
+		<if test="storageNo != null">
+			and T.storage_no = #{storageNo}
+		</if>
+
+		<if test="status != null">
+			and T.status = #{status}
+		</if>
+
+
+		<if test=" isDel == true">
+			and T.is_del is true
+		</if>
+		<if test=" isDel == false">
+			and T.is_del is false
+		</if>
+		<if test=" isDel == null">
+			and T.is_del is false
+		</if>
+
+	</sql>
+
+
+	<!--查询总条数 -->
+	<select id="search" resultMap="BaseResultMap"
+	>
+		SELECT <include refid="Base_Column_List" />
+		FROM <include refid="tableSection"/> T
+		WHERE
+		<include refid="commonSelectSection"/>
+	</select>
+
+	<!--查询总条数 -->
+	<select id="searchCount" resultType="java.lang.Long"
+	>
+		SELECT COUNT(*)
+		FROM <include refid="tableSection"/> T
+		WHERE
+		<include refid="commonSelectSection"/>
+	</select>
+
+	<!-- -->
+	<select id="searchList" resultMap="BaseResultMap">
+		SELECT  <include refid="Base_Column_List" />
+		FROM <include refid="tableSection"/> T
+		WHERE
+		<include refid="commonSelectSection"/>
+		ORDER BY T.id desc
+	</select>
+
 </mapper>

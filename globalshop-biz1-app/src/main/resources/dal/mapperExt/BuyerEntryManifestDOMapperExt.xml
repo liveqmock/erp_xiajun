@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerEntryManifestDOMapperExt" >
+    <resultMap id="BaseResultMapExt" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="currency" property="currency" jdbcType="VARCHAR" />
+        <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE" />
+        <result column="batch_num" property="batchNum" jdbcType="VARCHAR" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="quantity" property="quantity" jdbcType="INTEGER" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List_Ext" >
+    id, company_no, purchase_storage_no, warehouse_no, warehouse_name, shelf_no, sku_code,
+    item_code, currency, purchase_price, batch_num, upc, quantity, creator, modifier
+  </sql>
+
+
+<sql id="tableSection">buyer_entry_manifest</sql>
+
+
+<sql id="commonSelectSection">
+       1 = 1
+    <if test="companyNo != null">
+       and T.company_no = #{companyNo}
+    </if>
+
+
+
+    <if test="warehouseNo != null">
+        and T.warehouse_no = #{warehouseNo}
+    </if>
+
+
+
+    <if test=" isDel == true">
+        and T.is_del is true
+    </if>
+    <if test=" isDel == false">
+        and T.is_del is false
+    </if>
+    <if test=" isDel == null">
+        and T.is_del is false
+    </if>
+
+</sql>
+
+
+        <!--查询总条数 -->
+<select id="searchEntryManifest" resultMap="BaseResultMapExt"
+>
+SELECT <include refid="Base_Column_List_Ext" />
+FROM <include refid="tableSection"/> T
+WHERE
+<include refid="commonSelectSection"/>
+</select>
+
+        <!--查询总条数 -->
+<select id="searchEntryManifestCount" resultType="java.lang.Long"
+>
+SELECT COUNT(*)
+FROM <include refid="tableSection"/> T
+WHERE
+<include refid="commonSelectSection"/>
+</select>
+
+        <!-- -->
+<select id="searchEntryManifestList" resultMap="BaseResultMapExt">
+SELECT  <include refid="Base_Column_List_Ext" />
+FROM <include refid="tableSection"/> T
+WHERE
+<include refid="commonSelectSection"/>
+ORDER BY T.id desc
+</select>
+
+</mapper>

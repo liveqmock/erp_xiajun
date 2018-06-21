@@ -3,6 +3,8 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 public class BuyerEntryManifestDO extends BaseModel {
     private Long id;
 
+    private String companyNo;
+
     private String purchaseStorageNo;
 
     private String warehouseNo;
@@ -35,6 +37,14 @@ public class BuyerEntryManifestDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getPurchaseStorageNo() {
