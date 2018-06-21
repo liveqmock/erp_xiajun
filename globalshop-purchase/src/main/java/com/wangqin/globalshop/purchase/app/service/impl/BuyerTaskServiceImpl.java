@@ -79,6 +79,9 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         List<BuyerTaskDetailDO> detailList = new ArrayList<>();
         int i = 0;
         for (List<Object> obj : list) {
+            if (obj.size() < 6){
+                break;
+            }
             i++;
             BuyerTaskDO task = new BuyerTaskDO();
             BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
