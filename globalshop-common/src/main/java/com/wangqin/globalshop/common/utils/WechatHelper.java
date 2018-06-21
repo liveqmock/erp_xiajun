@@ -1,14 +1,14 @@
 package com.wangqin.globalshop.common.utils;
 
+import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.alibaba.fastjson.JSON;
 
 /**
  * 这个包含了微信相关的操作：获取accesstoken、用户信息、地理位置、支付、二维码扫描等等
@@ -18,8 +18,10 @@ import com.alibaba.fastjson.JSON;
 public class WechatHelper {
 
     protected static Logger     wxLog       = LoggerFactory.getLogger("Wechat");
-    private static final String WXAPPID     = "wxdf84c61fbef8d933";
-    private static final String WXAPPSECRET = "74662cf6ea8353cb2c73f860cb149266";
+    @Value("#{sys.WXAPPID}")
+    private static String WXAPPID;
+    @Value("#{sys.WXAPPSECRET}")
+    private static String WXAPPSECRET;
 
     /**
      * 创建带场景的二维码（临时，过期时间默认30天）

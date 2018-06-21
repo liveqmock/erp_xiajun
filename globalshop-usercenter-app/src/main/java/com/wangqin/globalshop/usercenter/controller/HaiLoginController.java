@@ -10,6 +10,7 @@ import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,12 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class HaiLoginController extends BaseController {
 
-
-    public static final String SESSION_ID = "SessionID";
-
-    public static final String COMPANY_NO = "CompanyNO_";
-
-    private static long TIMEOUT = 30 * 60 * 1000;
+    @Value("#{sys.SESSION_ID}")
+    private String SESSION_ID;
+    @Value("#{sys.COMPANY_NO}")
+    private String COMPANY_NO;
+    @Value("#{sys.TIMEOUT}")
+    private long TIMEOUT;
     @Autowired
     IUserService userService;
 
@@ -42,10 +43,10 @@ public class HaiLoginController extends BaseController {
      * @param password 密码
      * @return {Object}
      */
-    @PostMapping({"/haiLogin/login","/login"})
+    @PostMapping({"/haiLogin/login", "/login"})
 //    @RequestMapping("/login")
     @ResponseBody
-    public Object loginPost(HttpServletRequest request, String username, String password,  String captcha,
+    public Object loginPost(HttpServletRequest request, String username, String password, String captcha,
                             @RequestParam(value = "rememberMe", defaultValue = "1") Integer rememberMe) {
         logger.info("POST请求登录");
         // 改为全部抛出异常，避免ajax csrf token被刷新
@@ -60,20 +61,19 @@ public class HaiLoginController extends BaseController {
         AuthUserDO userDOList = userService.selectByLoginName(username);
         if (userDOList == null) {
             return renderError("该用户不存在");
-        } else if(!userDOList.getPassword().equals(Md5Util.getMD5(password))) {
+        } else if (!userDOList.getPassword().equals(Md5Util.getMD5(password))) {
             return renderError("该用户密码不正确");
-        } else
-         {
+        } else {
             //只会有一个，多了需要检查数据库约束
             AuthUserDO user = userDOList;
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isBlank(sessionId)) {
-                    sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+                sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
             }
-                loginCache.putEx(sessionId, username, TIMEOUT);
-                loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
-                AppUtil.setLoginUser(username, user.getCompanyNo());
-                return renderSuccess();
+            loginCache.putEx(sessionId, username, TIMEOUT);
+            loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
+            AppUtil.setLoginUser(username, user.getCompanyNo());
+            return renderSuccess();
 
         }
     }

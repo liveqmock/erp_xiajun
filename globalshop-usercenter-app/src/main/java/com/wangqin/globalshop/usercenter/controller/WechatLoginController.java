@@ -11,6 +11,7 @@ import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,13 +31,18 @@ import java.util.List;
 @RequestMapping("/wechatLogin")
 @ResponseBody
 public class WechatLoginController {
-    public static final String SESSION_ID = "SessionID";
-    public static final String COMPANY_NO = "CompanyNO_";
-    public static final String APPSECRET = "e9cb888962d848456af2048699316e77";
-    public static final String appid = "wxfcdeefc831b3e8c4";
-    private static final String sysurl = "http://test.buyer007.cn";
+    @Value("#{sys.SESSION_ID}")
+    private   String SESSION_ID ;
+    @Value("#{sys.COMPANY_NO}")
+    private   String COMPANY_NO ;
+    @Value("#{sys.APPSECRET}")
+    private   String APPSECRET;
+    @Value("#{sys.appid}")
+    private   String appid ;
+    @Value("#{sys.sysurl}")
+    private   String sysurl ;
 
-    private static long TIMEOUT = 30 * 60 * 1000;
+    private static long TIMEOUT ;
 
     @Autowired
     private IUserService userService;
@@ -69,7 +75,7 @@ public class WechatLoginController {
                 loginCache.putEx(sessionId, user.getName(), TIMEOUT);
                 loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
                 AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
-                response.sendRedirect("/#/overview");
+                response.sendRedirect(sysurl);
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
 
