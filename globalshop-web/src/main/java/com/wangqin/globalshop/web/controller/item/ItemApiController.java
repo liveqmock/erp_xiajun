@@ -4,10 +4,14 @@ package com.wangqin.globalshop.web.controller.item;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.web.dto.api.ItemDetailEntity;
 import com.wangqin.globalshop.web.dto.api.ItemEntity;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +51,10 @@ public class ItemApiController {
     	JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
     	List<ItemEntity> items = new ArrayList<>();
     	int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
-    	List<ItemDO>itemList = itemService.queryItemByStatus(companyNo, type, start, pageSize);
+    	if (type.equals("1")){
+    	    type = null;  //TODO
+        }
+    	List<ItemDO>itemList = itemService.queryItemByStatus(companyNo, type, start, Integer.valueOf(pageSize));
     	
     	for(int i = 0; i < itemList.size(); i++) {
     		ItemEntity itemEntity = new ItemEntity();
@@ -55,9 +62,19 @@ public class ItemApiController {
     		Double price = itemSkuService.querySalePriceByItemCode(item.getItemCode());
     		itemEntity.setItemCode(item.getItemCode());
     		itemEntity.setPrice(price.toString());//价格
-    		itemEntity.setOriginPrice(item.getOriginSalePrice());//外币
+
+            String originSalePrice = item.getOriginSalePrice();
+            if(StringUtils.isBlank(originSalePrice)){
+                originSalePrice = "$0";
+            }
+    		itemEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
     		itemEntity.setTitle(item.getItemName());//标题
-    		itemEntity.setImgUrl(item.getMainPic());//商品图片
+
+
+            JSONObject jsonObject = JSONObject.fromObject(item.getMainPic());
+            JSONArray array = jsonObject.getJSONArray("picList");
+            JSONObject imgObject = array.getJSONObject(0);
+            itemEntity.setImgUrl(imgObject.getString("url"));//商品图片
     		items.add(itemEntity); 
     	}
 
@@ -72,19 +89,38 @@ public class ItemApiController {
                 @RequestParam("pageSize") String pageSize,
                 @RequestParam("pageNo") String pageNo){
 
-        //TODO
         JsonResult<List<ItemEntity>> jsonResult = new JsonResult<>();
         List<ItemEntity> items = new ArrayList<>();
         int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
-        List<ItemDO> itemList = itemService.queryItemByKeyWord(keyword, companyNo, start, pageSize);
+
+        //TODO reafctor
+        String[] keyWordArr = keyword.split(" ");
+        List<String> kwList = new ArrayList<>();
+        for (String kw : keyWordArr){
+            if (StringUtil.isNotBlank(kw)){
+                kwList.add(kw.trim());
+            }
+        }
+        List<ItemDO> itemList = itemService.queryItemByKeyWord(kwList, companyNo, start, Integer.valueOf(pageSize));
       
         for(int i = 0; i < itemList.size(); i++) {
         	ItemEntity itemEntity = new ItemEntity();
         	ItemDO item = itemList.get(i);
         	Double price = itemSkuService.querySalePriceByItemCode(item.getItemCode());
         	itemEntity.setItemCode(item.getItemCode());
-        	itemEntity.setImgUrl(item.getMainPic());
-        	itemEntity.setOriginPrice(item.getOriginSalePrice());
+
+        	//TODO
+            JSONObject jsonObject = JSONObject.fromObject(item.getMainPic());
+            JSONArray array = jsonObject.getJSONArray("picList");
+            JSONObject imgObject = array.getJSONObject(0);
+            itemEntity.setImgUrl(imgObject.getString("url"));//商品图片
+
+            String originSalePrice = item.getOriginSalePrice();
+            if(StringUtils.isBlank(originSalePrice)){
+                originSalePrice = "$0";
+            }
+            itemEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
+
         	itemEntity.setPrice(price.toString());
         	itemEntity.setTitle(item.getItemName());
         	items.add(itemEntity);

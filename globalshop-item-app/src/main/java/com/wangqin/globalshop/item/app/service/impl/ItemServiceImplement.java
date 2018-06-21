@@ -488,14 +488,14 @@ public class ItemServiceImplement implements IItemService {
     
     //一键分享商品的首页
 	@Override
-	public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, String pageSize) {
+	public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, int pageSize) {
 		// TODO Auto-generated method stub
 		return itemDOMapperExt.queryItemByStatus(companyNo, status, start, pageSize);
 	}
 
 	//一键分享商品的搜索
 	@Override
-	public List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, int start, String pageSize) {
+	public List<ItemDO> queryItemByKeyWord(List<String> keyWord, String companyNo, int start, int pageSize) {
 		// TODO Auto-generated method stub
 		return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, start, pageSize);
 	}
