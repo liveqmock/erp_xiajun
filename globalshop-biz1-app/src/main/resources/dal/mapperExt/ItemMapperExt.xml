@@ -642,7 +642,7 @@
 	<where>
 	T1.company_no = #{companyNo}	
 	AND
-	T1.status = #{type}
+	T1.status = #{status}
 	</where>
 	<![CDATA[ LIMIT #{start}, #{pageSize}]]>
 	</select>
