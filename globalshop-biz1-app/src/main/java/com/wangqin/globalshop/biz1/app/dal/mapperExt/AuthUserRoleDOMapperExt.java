@@ -29,7 +29,7 @@ public interface AuthUserRoleDOMapperExt extends AuthUserRoleDOMapper {
 
     
     AuthUserRoleDO selectRoleIdByUserId(Long userId);
-}
+
 
 
     AuthUserRoleDO searchUserRole(AuthUserRoleDO record);
