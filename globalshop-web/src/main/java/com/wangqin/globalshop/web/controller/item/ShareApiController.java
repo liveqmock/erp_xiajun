@@ -48,7 +48,7 @@ public class ShareApiController {
         ItemShareEntity itemShareEntity = new ItemShareEntity();
         
         ItemDO item = itemService.itemDetailByItemCode(itemCode, companyNo);
-        itemShareEntity.setItemDesc(item.getDetail());
+        itemShareEntity.setItemDesc(item.getItemName());
         
         String mainPic = item.getMainPic();
 
