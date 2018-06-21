@@ -643,8 +643,11 @@
 	T1.company_no = #{companyNo}	
 	AND
 	T1.status = #{status}
+		<![CDATA[ LIMIT #{start}, #{pageSize}]]>
 	</where>
-	<![CDATA[ LIMIT #{start}, #{pageSize}]]>
+
+	
+
 	</select>
     
     <!-- 一键分享搜索商品 -->
