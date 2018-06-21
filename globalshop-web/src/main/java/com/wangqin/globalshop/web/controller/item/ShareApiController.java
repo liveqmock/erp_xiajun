@@ -34,7 +34,7 @@ public class ShareApiController {
         JsonResult<ItemShareEntity> jsonResult = new JsonResult<>();
         ItemShareEntity ItemShareEntity = new ItemShareEntity();
         
-        String pic = itemService.queryItemPicByItemCode(itemCode, companyNo);
+        String pic = itemService.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
         String desc = itemService.itemDetailByItemCode(itemCode, companyNo).getDetail();
         
         ItemShareEntity.setItemDesc(desc);
