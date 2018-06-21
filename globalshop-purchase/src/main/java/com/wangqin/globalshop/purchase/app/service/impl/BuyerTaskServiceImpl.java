@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
@@ -11,8 +12,9 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +96,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             }
             /**采购限价*/
             String maxPrice = obj.get(3).toString().trim();
+            maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
             if (isParseToInteger(maxPrice)) {
                 detail.setMaxPrice(BigDecimal.valueOf(Long.valueOf(maxPrice)));
             } else {
@@ -101,13 +104,15 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             }
             /**采购数目*/
             String maxCount = obj.get(4).toString().trim();
+            maxCount = StringUtil.isBlank(maxCount) ? "0" : maxCount;
             if (isParseToInteger(maxCount)) {
                 detail.setMaxCount(Integer.valueOf(maxCount));
-            } else {
+            }  else {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + maxCount);
             }
             /**任务的有效天数*/
             String limitTime = obj.get(5).toString().trim();
+            limitTime = StringUtil.isBlank(limitTime) ? "0" : limitTime;
             if (isParseToInteger(limitTime)) {
                 Date date = new Date();
                 detail.setStartTime(date);
@@ -119,12 +124,13 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
             }
             task.setStatus(Constant.TO_BE_PURCHASED);
-            task.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
+            String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
+            task.setBuyerTaskNo(buyerTaskNo);
             task.init();
             taskList.add(task);
 
             detail.init();
-            detail.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
+            detail.setBuyerTaskNo(buyerTaskNo);
             detail.setMode((byte) 1);
             detailList.add(detail);
         }

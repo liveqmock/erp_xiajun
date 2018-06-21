@@ -8,7 +8,7 @@ import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.*;
 import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.item.app.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -500,6 +500,7 @@ public class ItemServiceImplement implements IItemService {
         List<String> errMsg = new ArrayList<>();
         List<ItemDO> itemList = new ArrayList<>();
         List<ItemSkuDO> skuList = new ArrayList<>();
+        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
         int i = 0;
         for (List<Object> obj : list) {
             i++;
@@ -550,11 +551,10 @@ public class ItemServiceImplement implements IItemService {
                 itemSku.setCategoryCode(category.getName());
             }
             /**规格(颜色)*/
-            /// TODO: 2018/6/21
             String scala1 = obj.get(8).toString();
             /**规格(尺寸)*/
-            /// TODO: 2018/6/21
             String scala2 = obj.get(9).toString();
+            addInfo2ScaleList(scala1,scala2,scaleList);
             /**采购地*/
             String purchaseFrom = obj.get(10).toString();
             item.setCountry(purchaseFrom);
@@ -592,14 +592,18 @@ public class ItemServiceImplement implements IItemService {
             }
             /**包装*/
             String packName = obj.get(15).toString();
+
             ShippingPackingPatternDO pack = shippingPackingPatternDOMapper.selectByName(packName);
-            //todo 包装
+            itemSku.setPackageCode(pack.getPatternNo());
+            itemSku.setPackageLevelId(String.valueOf(pack.getPackageLevel()));
+            itemSku.setPackageName(pack.getName());
+            itemSku.setPackageEn(pack.getNameEn());
+            itemSku.setPackageWeight(pack.getWeight());
             /**图片链接*/
             String imgUrl = obj.get(16).toString();
             item.setMainPic(imgUrl);
             itemSku.setSkuPic(imgUrl);
-
-            String itemCode = "I" + categoryCode + "Q" + RandomUtils.getTimeRandom();
+            String itemCode = CodeGenUtil.getItemCode(categoryCode);
             item.setItemCode(itemCode);
             itemSku.setItemCode(itemCode);
             item.init();
@@ -612,12 +616,35 @@ public class ItemServiceImplement implements IItemService {
         if (size == 0) {
             itemDOMapperExt.insertBatch(itemList);
             itemSkuMapperExt.inserBatch(skuList);
+            itemSkuScaleDOMapper.insertBatch(scaleList);
         } else if (size < 10) {
             throw new ErpCommonException(errMsg.toString());
         } else {
             throw new ErpCommonException("上传文件错误过多,请验证后再次上传");
         }
 
+
+    }
+
+    /**
+     * 根据颜色和尺寸完成itemSkuScale对象的封装并装配到链表中
+     * @param scala1 颜色对应的值
+     * @param scala2 尺寸对应的值
+     * @param scaleList 装配itemSkuScale对象的链表
+     */
+    private void addInfo2ScaleList(String scala1, String scala2, List<ItemSkuScaleDO> scaleList) {
+        ItemSkuScaleDO itemScale1 = new ItemSkuScaleDO();
+        ItemSkuScaleDO itemScale2 = new ItemSkuScaleDO();
+        itemScale1.init();
+        itemScale1.setScaleCode(CodeGenUtil.getScaleCode());
+        itemScale1.setScaleName("颜色");
+        itemScale1.setScaleValue(scala1);
+        itemScale2.init();
+        itemScale2.setScaleCode(CodeGenUtil.getScaleCode());
+        itemScale2.setScaleName("尺寸");
+        itemScale2.setScaleValue(scala2);
+        scaleList.add(itemScale1);
+        scaleList.add(itemScale2);
 
     }
 
