@@ -3,6 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.BuyerEntryManifestDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
     <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
     <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
@@ -18,8 +19,8 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, purchase_storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, item_code, 
-    currency, purchase_price, batch_num, upc, quantity, creator, modifier
+    id, company_no, purchase_storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, 
+    item_code, currency, purchase_price, batch_num, upc, quantity, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -35,16 +36,16 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into buyer_entry_manifest (purchase_storage_no, warehouse_no, warehouse_name, 
-      shelf_no, sku_code, item_code, 
-      currency, purchase_price, batch_num, 
-      upc, quantity, creator, 
-      modifier)
-    values (#{purchaseStorageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
-      #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
-      #{currency,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DOUBLE}, #{batchNum,jdbcType=VARCHAR}, 
-      #{upc,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+    insert into buyer_entry_manifest (company_no, purchase_storage_no, warehouse_no, 
+      warehouse_name, shelf_no, sku_code, 
+      item_code, currency, purchase_price, 
+      batch_num, upc, quantity, 
+      creator, modifier)
+    values (#{companyNo,jdbcType=VARCHAR}, #{purchaseStorageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{itemCode,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DOUBLE}, 
+      #{batchNum,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -52,6 +53,9 @@
     </selectKey>
     insert into buyer_entry_manifest
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no,
       </if>
@@ -93,6 +97,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="purchaseStorageNo != null" >
         #{purchaseStorageNo,jdbcType=VARCHAR},
       </if>
@@ -137,6 +144,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO" >
     update buyer_entry_manifest
     <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       </if>
@@ -181,7 +191,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerEntryManifestDO" >
     update buyer_entry_manifest
-    set purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
       warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       shelf_no = #{shelfNo,jdbcType=VARCHAR},

@@ -7,4 +7,11 @@ import java.util.List;
 
 public interface BuyerStorageDOMapperExt extends BuyerStorageDOMapper {
     List<BuyerStorageDO> list(BuyerStorageDO buyerStorage);
+
+
+    List<BuyerStorageDO> searchList(BuyerStorageDO buyerStorageDO);
+
+    BuyerStorageDO search(BuyerStorageDO buyerStorageDO);
+
+    Long searchCount(BuyerStorageDO buyerStorageDO);
 }
