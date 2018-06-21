@@ -67,7 +67,7 @@ public class WechatLoginController {
                 loginCache.putEx(sessionId, user.getName(), TIMEOUT);
                 loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
                 AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
-                response.sendRedirect("http://test.buyer007.cn");
+                response.sendRedirect("/#");
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
 
@@ -125,7 +125,7 @@ public class WechatLoginController {
     }
 
     public static void main(String[] args) {
-        String encode = URLEncoder.encode("https://buyer007.cn/wechatLogin/login");
+        String encode = URLEncoder.encode("https://test.buyer007.cn/wechatLogin/login");
         System.out.println(encode);
     }
 }

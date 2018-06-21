@@ -1,9 +1,10 @@
 package com.wangqin.globalshop.biz1.app.aop;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.common.redis.Cache;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CookieUtil;
+import com.wangqin.globalshop.common.utils.LogWorker;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +12,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.common.redis.Cache;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.CookieUtil;
-import com.wangqin.globalshop.common.utils.LogWorker;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 访问鉴权的拦截器，主要是用于需要登录才能访问页面的鉴权
@@ -93,7 +92,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                     }
                 } catch (Exception e) {
                     LogWorker.log(log, "从Cache获取session异常，跳转登录页面", "");
-                    response.setStatus(302);
+                    response.sendRedirect("/haiLogin/logout");
                     return false;
                 }
             }else
