@@ -69,7 +69,7 @@ public class WechatLoginController {
                 loginCache.putEx(sessionId, user.getName(), TIMEOUT);
                 loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
                 AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
-                response.sendRedirect("/#/login");
+                response.sendRedirect("/#/overview");
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
 
