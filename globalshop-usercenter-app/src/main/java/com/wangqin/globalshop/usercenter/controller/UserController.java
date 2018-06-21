@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import com.gargoylesoftware.htmlunit.javascript.host.event.UserProximityEvent;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
@@ -9,8 +8,8 @@ import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.usercenter.service.IUserRoleService;
 import com.wangqin.globalshop.usercenter.service.IUserService;
+import com.wangqin.globalshop.usercenter.service.QrCodeService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
-import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description：用户管理
@@ -33,6 +35,9 @@ public class UserController extends BaseController {
     private IUserService userService;
     @Autowired
     private IUserRoleService userRoleService;
+
+    @Autowired
+    private QrCodeService qrCodeService;
     /**
      * 用户管理页
      *
@@ -101,7 +106,7 @@ public class UserController extends BaseController {
         if (authUserLoginName != null ) {
             return renderError("用户名已存在!");
         }
-        String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+        String userNo=CodeGenUtil.genUserNo();
 
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
@@ -129,7 +134,7 @@ public class UserController extends BaseController {
         if (list != null ) {
             return renderError("用户名已存在!");
         }
-        String userNo=DateUtil.formatDate(new Date(),"yyMMdd HH:mm:ss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+        String userNo=CodeGenUtil.genUserNo();
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.updateByVo(userVo);
@@ -242,4 +247,24 @@ public class UserController extends BaseController {
         JsonPageResult<List<UserQueryVO>> result = userService.queryUserQueryVOList(userQueryVO);
         return result.buildIsSuccess(true);
     }
+
+
+    @RequestMapping("/getqrcode")
+    @ResponseBody
+    public Object getQrcode() {
+        JsonPageResult<String> result = new JsonPageResult<>();
+
+        String qrCodeUrl = qrCodeService.getQrCodeUrl(AppUtil.getLoginUserCompanyNo());
+
+        if(EasyUtil.isStringEmpty(qrCodeUrl)){
+            return result.buildIsSuccess(false).buildMsg("生成二维码失败");
+        }
+
+        result.setData(qrCodeUrl);
+        return result.buildIsSuccess(true);
+    }
+
+
+
+
 }

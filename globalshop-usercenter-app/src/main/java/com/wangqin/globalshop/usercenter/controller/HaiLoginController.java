@@ -45,7 +45,7 @@ public class HaiLoginController extends BaseController {
     @PostMapping({"/haiLogin/login","/login"})
 //    @RequestMapping("/login")
     @ResponseBody
-    public Object loginPost(HttpServletRequest request, String username, String password, String captcha,
+    public Object loginPost(HttpServletRequest request, String username, String password,  String captcha,
                             @RequestParam(value = "rememberMe", defaultValue = "1") Integer rememberMe) {
         logger.info("POST请求登录");
         // 改为全部抛出异常，避免ajax csrf token被刷新

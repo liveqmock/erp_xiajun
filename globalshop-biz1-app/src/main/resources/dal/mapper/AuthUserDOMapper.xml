@@ -1,219 +1,227 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper">
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="user_no" jdbcType="VARCHAR" property="userNo" />
-    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="sex" jdbcType="TINYINT" property="sex" />
-    <result column="age" jdbcType="TINYINT" property="age" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="user_type" jdbcType="TINYINT" property="userType" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="organization_id" jdbcType="INTEGER" property="organizationId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="wx_user_id" jdbcType="BIGINT" property="wxUserId" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="user_no" property="userNo" jdbcType="VARCHAR" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="age" property="age" jdbcType="TINYINT" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="organization_id" property="organizationId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="wx_union_id" property="wxUnionId" jdbcType="VARCHAR" />
+    <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, company_no, user_no, login_name, name, password, sex, age, phone, user_type, 
-    status, organization_id, create_time, wx_user_id, email, creator, modifier
+    status, organization_id, create_time, wx_union_id, wx_open_id, email, creator, modifier
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from auth_user
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from auth_user
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into auth_user (company_no, user_no, login_name, 
       name, password, sex, 
       age, phone, user_type, 
       status, organization_id, create_time, 
-      wx_user_id, email, creator, 
-      modifier)
+      wx_union_id, wx_open_id, email, 
+      creator, modifier)
     values (#{companyNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
       #{age,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{organizationId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{wxUserId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+      #{wxUnionId,jdbcType=VARCHAR}, #{wxOpenId,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into auth_user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
-      <if test="companyNo != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="userNo != null">
+      <if test="userNo != null" >
         user_no,
       </if>
-      <if test="loginName != null">
+      <if test="loginName != null" >
         login_name,
       </if>
-      <if test="name != null">
+      <if test="name != null" >
         name,
       </if>
-      <if test="password != null">
+      <if test="password != null" >
         password,
       </if>
-      <if test="sex != null">
+      <if test="sex != null" >
         sex,
       </if>
-      <if test="age != null">
+      <if test="age != null" >
         age,
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         phone,
       </if>
-      <if test="userType != null">
+      <if test="userType != null" >
         user_type,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
-      <if test="organizationId != null">
+      <if test="organizationId != null" >
         organization_id,
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         create_time,
       </if>
-      <if test="wxUserId != null">
-        wx_user_id,
+      <if test="wxUnionId != null" >
+        wx_union_id,
       </if>
-      <if test="email != null">
+      <if test="wxOpenId != null" >
+        wx_open_id,
+      </if>
+      <if test="email != null" >
         email,
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=BIGINT},
-      <if test="companyNo != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="userNo != null">
+      <if test="userNo != null" >
         #{userNo,jdbcType=VARCHAR},
       </if>
-      <if test="loginName != null">
+      <if test="loginName != null" >
         #{loginName,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
+      <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
+      <if test="password != null" >
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="sex != null">
+      <if test="sex != null" >
         #{sex,jdbcType=TINYINT},
       </if>
-      <if test="age != null">
+      <if test="age != null" >
         #{age,jdbcType=TINYINT},
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="userType != null">
+      <if test="userType != null" >
         #{userType,jdbcType=TINYINT},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="organizationId != null">
+      <if test="organizationId != null" >
         #{organizationId,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="wxUserId != null">
-        #{wxUserId,jdbcType=BIGINT},
+      <if test="wxUnionId != null" >
+        #{wxUnionId,jdbcType=VARCHAR},
       </if>
-      <if test="email != null">
+      <if test="wxOpenId != null" >
+        #{wxOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
         #{email,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
     update auth_user
-    <set>
-      <if test="companyNo != null">
+    <set >
+      <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="userNo != null">
+      <if test="userNo != null" >
         user_no = #{userNo,jdbcType=VARCHAR},
       </if>
-      <if test="loginName != null">
+      <if test="loginName != null" >
         login_name = #{loginName,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
+      <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
+      <if test="password != null" >
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="sex != null">
+      <if test="sex != null" >
         sex = #{sex,jdbcType=TINYINT},
       </if>
-      <if test="age != null">
+      <if test="age != null" >
         age = #{age,jdbcType=TINYINT},
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="userType != null">
+      <if test="userType != null" >
         user_type = #{userType,jdbcType=TINYINT},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="organizationId != null">
+      <if test="organizationId != null" >
         organization_id = #{organizationId,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="wxUserId != null">
-        wx_user_id = #{wxUserId,jdbcType=BIGINT},
+      <if test="wxUnionId != null" >
+        wx_union_id = #{wxUnionId,jdbcType=VARCHAR},
       </if>
-      <if test="email != null">
+      <if test="wxOpenId != null" >
+        wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
     update auth_user
     set company_no = #{companyNo,jdbcType=VARCHAR},
       user_no = #{userNo,jdbcType=VARCHAR},
@@ -227,7 +235,8 @@
       status = #{status,jdbcType=TINYINT},
       organization_id = #{organizationId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      wx_user_id = #{wxUserId,jdbcType=BIGINT},
+      wx_union_id = #{wxUnionId,jdbcType=VARCHAR},
+      wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}

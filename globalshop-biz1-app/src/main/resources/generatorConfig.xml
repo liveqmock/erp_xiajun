@@ -7,7 +7,11 @@
     <!--<classPathEntry-->
             <!--location="../../mysql-connector-java-5.1.44.jar"/>-->
     <classPathEntry
+
             location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+
+            location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+
 
     <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
 
@@ -134,13 +138,13 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
+        <table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+        enableSelectByExample="false" selectByExampleQueryId="false" >
+        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
+            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
+            <ignoreColumn column="is_del" delimitedColumnName=""/>
+        </table>
 
         <!--<table tableName="auth_user_role" domainObjectName="AuthUserRoleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->

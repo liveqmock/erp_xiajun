@@ -15,6 +15,19 @@
     <!--<result column="creator" property="creator" jdbcType="VARCHAR" />-->
     <!--<result column="modifier" property="modifier" jdbcType="VARCHAR" />-->
   <!--</resultMap>-->
+
+  <resultMap id="BaseResultMapExt" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="seq" property="seq" jdbcType="TINYINT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+
   <sql id="Base_Column_List2" >
     id, role_id, company_no, name, seq, description, status, is_del, gmt_create, gmt_modify,
     creator, modifier
@@ -302,4 +315,65 @@
       <!--modifier = #{modifier,jdbcType=VARCHAR}-->
     <!--where id = #{id,jdbcType=BIGINT}-->
   <!--</update>-->
+
+  <sql id="tableSection">auth_role</sql>
+
+  <sql id="commonSelectSection">
+    1 = 1
+
+    <if test="companyNo != null">
+      and T.company_no = #{companyNo}
+    </if>
+
+    <if test="name != null">
+      and T.name = #{name}
+    </if>
+
+    <if test=" isDel == true">
+      and T.is_del is true
+    </if>
+    <if test=" isDel == false">
+      and T.is_del is false
+    </if>
+    <if test=" isDel == null">
+      and T.is_del is false
+    </if>
+
+  </sql>
+
+
+  <!--查询总条数 -->
+  <select id="searchAuthRole" resultMap="BaseResultMapExt"
+  >
+    SELECT <include refid="Base_Column_List2" />
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+  </select>
+
+  <!--查询总条数 -->
+  <select id="searchAuthRoleCount" resultType="java.lang.Long"
+  >
+    SELECT COUNT(*)
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+  </select>
+
+  <!-- -->
+  <select id="searchAuthRoleList" resultMap="BaseResultMapExt">
+    SELECT  <include refid="Base_Column_List2" />
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+    ORDER BY T.id desc
+  </select>
+  <select id="selectByNameAndCompanyNo" resultMap="BaseResultMapExt">
+    SELECT  <include refid="Base_Column_List2" />
+    FROM auth_role
+    WHERE
+    company_no = #{companyNo}
+    AND name = #{newOne}
+  </select>
+
 </mapper>
