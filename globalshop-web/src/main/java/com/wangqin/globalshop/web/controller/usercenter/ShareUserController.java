@@ -3,7 +3,7 @@ package com.wangqin.globalshop.web.controller.usercenter;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.usercenter.service.IUserService;
-import com.wangqin.globalshop.web.dto.BaseDto;
+import com.wangqin.globalshop.common.base.BaseDto;
 
 import java.util.List;
 

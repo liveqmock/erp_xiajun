@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.web.dto;
+package com.wangqin.globalshop.common.base;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;

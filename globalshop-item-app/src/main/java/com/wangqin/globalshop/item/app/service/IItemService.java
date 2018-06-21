@@ -31,6 +31,8 @@ public interface IItemService {
 	 * @param itemSkuList
 	 */
 	void addItem(ItemDO item);
+
+	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
 	
 	
 	

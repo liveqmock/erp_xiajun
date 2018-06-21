@@ -1,11 +1,9 @@
 package com.wangqin.globalshop.web.controller.item;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.service.IFindItemService;
 import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.web.dto.BaseDto;
+import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.web.dto.api.ItemDetailEntity;
 import com.wangqin.globalshop.web.dto.api.ItemEntity;
 

@@ -6,8 +6,13 @@ import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.*;
+import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.redis.Cache;
+import com.wangqin.globalshop.common.redis.RedisCacheTemplate;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.item.app.service.*;
+import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -21,10 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ItemServiceImplement implements IItemService {
@@ -62,6 +64,10 @@ public class ItemServiceImplement implements IItemService {
 
     @Autowired
     private ItemSkuDOMapperExt itemSkuDOMapperExt;
+
+    @Autowired
+    private Cache shareCache;
+
 
    //根据id更新商品
     @Override
@@ -198,6 +204,25 @@ public class ItemServiceImplement implements IItemService {
 
         return result;
     }
+
+
+    public String generateItemShareUrl(String userId,  String companyNo,String itemCode, String pages, String accessToken){
+
+        String key = String.format("%s-uuid-%s-%s-%s", "token",userId, companyNo, itemCode);
+        String picUrl = (String)shareCache.get(key);
+        if (StringUtils.isBlank(picUrl)){
+            UUID uid = UUID.randomUUID();
+            String uuid = uid.toString().replaceAll("-", "");
+            ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
+            picUrl = insertIntoItemDimension(uuid, pages, accessToken);
+            // uuid:picUrl
+            shareCache.put(uuid, BaseDto.toString(tokenEntity));
+            // key:uuid
+            shareCache.put(key, picUrl);
+        }
+        return picUrl;
+    }
+
 
     @Override
     public String insertIntoItemDimension(String sceneStr, String pages, String accessToken) {

@@ -16,7 +16,7 @@ import com.wangqin.globalshop.biz1.app.dto.MyOrderDTO;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.mall.service.IMallSubOrderService;
-import com.wangqin.globalshop.web.dto.BaseDto;
+import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.web.dto.api.MyHomeOrderDetailEntity;
 import com.wangqin.globalshop.web.dto.api.MyHomeOrderEntity;
 import com.wangqin.globalshop.web.dto.api.OrderDetailEntity;
