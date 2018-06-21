@@ -55,13 +55,11 @@ public class ItemApiController {
     		Double price = itemSkuService.querySalePriceByItemCode(item.getItemCode());
     		itemEntity.setItemCode(item.getItemCode());
     		itemEntity.setPrice(price.toString());//价格
-    		itemEntity.setOriginPrice("meiyuan");//外币
+    		itemEntity.setOriginPrice(item.getOriginSalePrice());//外币
     		itemEntity.setTitle(item.getItemName());//标题
     		itemEntity.setImgUrl(item.getMainPic());//商品图片
     		items.add(itemEntity); 
     	}
-    	
-    	
 
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
@@ -85,16 +83,13 @@ public class ItemApiController {
         	ItemDO item = itemList.get(i);
         	Double price = itemSkuService.querySalePriceByItemCode(item.getItemCode());
         	itemEntity.setItemCode(item.getItemCode());
-        	itemEntity.setPrice(item.getMainPic());
-        	itemEntity.setOriginPrice("meiyuan");
+        	itemEntity.setImgUrl(item.getMainPic());
+        	itemEntity.setOriginPrice(item.getOriginSalePrice());
         	itemEntity.setPrice(price.toString());
         	itemEntity.setTitle(item.getItemName());
         	items.add(itemEntity);
 
         }
-
-    
-     
 
         jsonResult.buildIsSuccess(true).buildData(items);
         return BaseDto.toString(jsonResult);
@@ -113,17 +108,9 @@ public class ItemApiController {
         itemDetailEntity.setItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemDesc(itemDO.getDetail());
         itemDetailEntity.setPrice(price.toString());
-        itemDetailEntity.setOriginPrice("美元");
+        itemDetailEntity.setOriginPrice(itemDO.getOriginSalePrice());
         itemDetailEntity.setImgList(Arrays.asList(itemDO.getMainPic()));
       
-        
-//        entity.setItemCode("1111");
-//        entity.setItemDesc("xxxxxx");
-//        entity.setPrice("120");
-//        entity.setOriginPrice("$20");
-//        entity.setImgList(Arrays.asList("http://img.haihu.com/wq_logo.jpg"));
-//
-
         jsonResult.buildIsSuccess(true).buildData(itemDetailEntity);
         return BaseDto.toString(jsonResult);
     }
