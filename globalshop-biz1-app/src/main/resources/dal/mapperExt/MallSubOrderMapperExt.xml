@@ -404,15 +404,6 @@
     	<![CDATA[ LIMIT #{start},#{pageSize} ]]>
     </select>
 
-    <!--一键分享，我的订单-->
-    <select id="queryOrdersByShareUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
-        SELECT
-        share_time AS shareTime,count(1) AS id,sum(share_money) AS shareMoney
-        FROM mall_sub_order
-        <where>
-            share_user_id = #{shareUserId}
-        </where>
-        GROUP BY shareTime
-    </select>
+  
 
 </mapper>

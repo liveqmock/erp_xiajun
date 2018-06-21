@@ -381,12 +381,21 @@
     where user_no = #{userNo,jdbcType=VARCHAR}
   </select>
   
-  <!-- 一键分享登录接口-->
+  <!-- 一键分享微信登录接口-->
   <select id="selectUserByWxOpenId" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select 
     company_no AS companyNo,user_no AS userNo,name
     from auth_user
     where wx_open_id = #{wxOpenId}
+  </select>
+  
+    
+  <!-- 一键分享手机号登录接口-->
+  <select id="selectUserByPhone" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+    select 
+    company_no AS companyNo,user_no AS userNo,name
+    from auth_user
+    where phone = #{phone}
   </select>
   
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >-->
