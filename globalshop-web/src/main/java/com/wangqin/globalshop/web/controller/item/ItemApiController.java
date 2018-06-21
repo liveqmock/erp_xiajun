@@ -106,7 +106,7 @@ public class ItemApiController {
         ItemDO itemDO = itemService.itemDetailByItemCode(itemCode, companyNo);
         Double price = itemSkuService.querySalePriceByItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemCode(itemDO.getItemCode());
-        itemDetailEntity.setItemDesc(itemDO.getDetail());
+        itemDetailEntity.setItemDesc(itemDO.getItemName());
         itemDetailEntity.setPrice(price.toString());
         itemDetailEntity.setOriginPrice(itemDO.getOriginSalePrice());
         itemDetailEntity.setImgList(Arrays.asList(itemDO.getMainPic()));
