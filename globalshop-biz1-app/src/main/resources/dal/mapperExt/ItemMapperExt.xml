@@ -681,8 +681,11 @@
     		main_pic
     	FROM item
     	<where>
-    		item_code = #{itemCode}    
+    		item_code = #{itemCode}
+    		AND
+    		company_no = #{companyNo}    
     	</where>	
     </select>
+   
    
 </mapper>
