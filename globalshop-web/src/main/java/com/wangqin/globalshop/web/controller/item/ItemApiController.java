@@ -144,9 +144,30 @@ public class ItemApiController {
         itemDetailEntity.setItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemDesc(itemDO.getDetail());
         itemDetailEntity.setPrice(price.toString());
-        itemDetailEntity.setOriginPrice(itemDO.getOriginSalePrice());
-        itemDetailEntity.setImgList(Arrays.asList(itemDO.getMainPic()));
-      
+
+        String originSalePrice = itemDO.getOriginSalePrice();
+        if(StringUtils.isBlank(originSalePrice)){
+            originSalePrice = "$0";
+        }
+        itemDetailEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
+
+        itemDetailEntity.setTitle(itemDO.getItemName());
+
+        String mainPic = itemDO.getMainPic();
+
+        JSONObject jsonObject = JSONObject.fromObject(mainPic);
+        JSONArray array = jsonObject.getJSONArray("picList");
+        //JSONArray jsonArray = JSONArray.fromObject(jsonObject.getString("picList"));
+        List<String> picList = new ArrayList<>();
+
+        int maxSize = array.size() > 8 ? 8 : array.size();
+        for(int i = 0; i < maxSize; i ++) {
+            String pic = array.getJSONObject(i).getString("url");
+            picList.add(pic);
+        }
+
+        itemDetailEntity.setImgList(picList);
+
         jsonResult.buildIsSuccess(true).buildData(itemDetailEntity);
         return BaseDto.toString(jsonResult);
     }
