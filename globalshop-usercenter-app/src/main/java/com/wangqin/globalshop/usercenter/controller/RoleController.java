@@ -95,7 +95,7 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/update")
     @ResponseBody
-    public Object update(AuthRoleDO role, BindingResult result, Model model) {
+    public Object update(AuthRoleDO role, BindingResult result, Model model, String resourceIds) {
         if (result.hasErrors()) {
             List<ObjectError> list = result.getAllErrors();
             for (ObjectError error : list) {
@@ -104,8 +104,10 @@ public class RoleController extends BaseController {
             return null;
         }
         role.setRoleId((long)RandomUtils.nextInt(1000000000));
-//        role.setStatus(Byte.valueOf("0"));
-        roleService.updateSelectiveById(role);
+        
+        AuthRoleDO authRole = roleService.selectById(role.getId());
+        Long roleId = authRole.getRoleId();
+        roleService.updateRoleResource(roleId, resourceIds);
         return renderSuccess("更新成功！");
     }
     /**

@@ -19,7 +19,7 @@ public interface IRoleService {//extends ISuperService<AuthRoleDO>
 
     List<Long> selectResourceIdListByRoleId(Long id);
 
-    void updateRoleResource(Long id, String resourceIds);
+    void updateRoleResource(Long roleId, String resourceIds);
 
 //    Map<String, Set<String>> selectResourceMapByUserId(Long userId);
 
