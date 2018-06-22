@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.poi.hssf.record.SCLRecord;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -351,10 +352,27 @@ public class ItemSkuController  {
 	@RequestMapping("/scaleTypeList")
 	@ResponseBody
 	public Object scaleTypeList() {
-		JsonResult<String> result = new JsonResult<>();
-		//List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
-
-		return result.buildData("deprcated request").buildIsSuccess(true).buildMsg("不用的请求");
+		JsonResult<List<Scale>> result = new JsonResult<List<Scale>>();
+		ScaleType scaleType1 = new ScaleType();
+		ScaleType scaleType2 = new ScaleType();
+		scaleType1.setId(348L);
+		scaleType1.setName("3");
+		scaleType1.setSeq(0);
+		scaleType1.setTypeId(348L);
+		scaleType2.setId(349L);
+		scaleType2.setName("3.5");
+		scaleType2.setSeq(1);
+		scaleType2.setTypeId(348L);
+		List<ScaleType> scaleList = new ArrayList<ScaleType>();
+		scaleList.add(scaleType1);
+		scaleList.add(scaleType2);
+		Scale scale = new Scale();
+		scale.setId(348L);
+		scale.setType("成人鞋类(美码)");
+		scale.setScaleList(scaleList);
+		List<Scale> scaleCollection = new ArrayList<Scale>();
+		scaleCollection.add(scale);
+		return result.buildData(scaleCollection).buildIsSuccess(true).buildMsg("不用的请求");
 	}
 
 
@@ -369,5 +387,62 @@ public class ItemSkuController  {
 		}
 		result.buildData(skuList).buildIsSuccess(true);
 		return result;
+	}
+	
+	private class ScaleType {
+		private Long id;
+		private String name;
+		private Long typeId;
+		private Integer seq;
+		public Long getId() {
+			return id;
+		}
+		public void setId(Long id) {
+			this.id = id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public Long getTypeId() {
+			return typeId;
+		}
+		public void setTypeId(Long typeId) {
+			this.typeId = typeId;
+		}
+		public Integer getSeq() {
+			return seq;
+		}
+		public void setSeq(Integer seq) {
+			this.seq = seq;
+		}
+		
+	}
+	
+	private class Scale {
+		private Long id;
+		private String type;
+		private List<ScaleType> scaleList;
+		public Long getId() {
+			return id;
+		}
+		public void setId(Long id) {
+			this.id = id;
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
+		public List<ScaleType> getScaleList() {
+			return scaleList;
+		}
+		public void setScaleList(List<ScaleType> scaleList) {
+			this.scaleList = scaleList;
+		}
+		
 	}
 }
