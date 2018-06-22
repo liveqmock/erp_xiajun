@@ -37,6 +37,7 @@ public class ShareUserController {
 						@RequestParam(value = "mobileNo", required = false) String mobileNo,
 						@RequestParam(value = "checkCode", required = false) String checkCode,
 						@RequestParam(value = "thirdPartyId", required = false) String thirdPartyId,
+						@RequestParam(value = "thirdPartyUnionid", required = false) String thirdPartyUnionid,
 						@RequestParam(value = "thirdPartyAvtar", required = false) String thirdPartyAvtar) {
 		JsonResult<AuthUserDO> result = new JsonResult<AuthUserDO>();
 
@@ -44,7 +45,7 @@ public class ShareUserController {
 		//TODO enum wechat mobile
 		if (StringUtils.isNotBlank(type) && "wechat".equals(type)) {
 			//微信登录
-			responseUserList = userService.selectUserByWxOpenId(thirdPartyId);
+			responseUserList = userService.selectUserByWxUnionId(thirdPartyUnionid);
 			//买手不存在
 			if (CollectionUtils.isEmpty(responseUserList)) {
 				result.buildIsSuccess(false).buildMsg("用户不存在");

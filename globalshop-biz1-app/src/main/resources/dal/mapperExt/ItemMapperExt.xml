@@ -641,7 +641,7 @@
 	FROM item T1
     where T1.company_no = #{companyNo} and T1.status = '1'
     <if test="type != null">
-       and DATE_FORMAT(T1.gmt_create,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')
+       and DATE_FORMAT(T1.gmt_create,'%Y-%m-%d') &gt; DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -30 DAY),'%Y-%m-%d')
     </if>
       limit #{start}, #{pageSize}
 	</select>

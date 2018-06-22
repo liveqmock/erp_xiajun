@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -143,6 +144,22 @@ public class ItemApiController {
         Double price = itemSkuService.querySalePriceByItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemDesc(itemDO.getItemName());
+
+        String commissionMode = itemDO.getCommissionMode();
+
+        if (price == null){
+            price = 0d;
+        }
+        if (StringUtils.isBlank(commissionMode)){
+            commissionMode = "0";
+        }
+
+        //TODO refactor
+        BigDecimal pb = new BigDecimal(price);
+        BigDecimal cb = new BigDecimal(commissionMode);
+        BigDecimal cbm = pb.multiply(cb).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        itemDetailEntity.setSharePrice(cbm.toString());
         itemDetailEntity.setPrice(price.toString());
 
         String originSalePrice = itemDO.getOriginSalePrice();
