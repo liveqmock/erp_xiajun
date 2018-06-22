@@ -69,4 +69,10 @@ public class BaseModel implements ICheackParam {
     public void update() {
         this.setModifier(AppUtil.getLoginUserId());
     }
+
+    public void init4NoLogin() {
+        this.setModifier("-1");
+        this.setCreator("-1");
+        this.setIsDel(false);
+    }
 }

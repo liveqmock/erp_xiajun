@@ -32,7 +32,7 @@ public class JdOperateItemTask {
 
 	// 每隔半小时执行一次
 	@Async
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void run4AddRequest() {
 		logger.info("定时任务：自动发布商品至京东run4AddRequest===>Start");
 		Long startTime = System.currentTimeMillis();
@@ -125,7 +125,7 @@ public class JdOperateItemTask {
 
 
 	@Async
-	@Scheduled(cron = "0 0/15 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void run4UpdateRequest() {
 		logger.info("定时任务：自动更新商品至京东run4UpdateRequest===>Start");
 		Long startTime = System.currentTimeMillis();

@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.channelapi.dal;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class ChannelListingItemVo extends ChannelListingItemDO {
 	//传递上下架原因
 	private String node;
 
-	List<ChannelListingItemSkuDO> channelListingItemSkuDOS;
+	List<ChannelListingItemSkuVo> channelListingItemSkuVos;
 
 
 	public String getNode() {
@@ -22,10 +21,10 @@ public class ChannelListingItemVo extends ChannelListingItemDO {
 	public void setNode(String node) {
 		this.node = node;
 	}
-	public List<ChannelListingItemSkuDO> getChannelListingItemSkuDOS() {
-		return channelListingItemSkuDOS;
+	public List<ChannelListingItemSkuVo> getChannelListingItemSkuVos() {
+		return channelListingItemSkuVos;
 	}
-	public void setChannelListingItemSkuDOS(List<ChannelListingItemSkuDO> channelListingItemSkuDOS) {
-		this.channelListingItemSkuDOS = channelListingItemSkuDOS;
+	public void setChannelListingItemSkuVos(List<ChannelListingItemSkuVo> channelListingItemSkuVos) {
+		this.channelListingItemSkuVos = channelListingItemSkuVos;
 	}
 }

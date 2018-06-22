@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt">
+
+
+    <insert id="inserBatch" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into buyer_task_detail(
+        buyer_task_no,
+        item_code,
+        upc,
+        max_price,
+        start_time,
+        end_time,
+        mode,
+        sku_code,
+        remark,
+        max_count,
+        sku_pic_url,
+        creator,
+        modifier,
+        company_no
+        )
+        VALUES
+        <foreach collection="list" item="detail" separator=",">
+            (
+            #{detail.buyerTaskNo},
+            #{detail.itemCode},
+            #{detail.upc},
+            #{detail.maxPrice},
+            #{detail.startTime},
+            #{detail.endTime},
+            #{detail.mode},
+            #{detail.skuCode},
+            #{detail.remark},
+            #{detail.maxCount},
+            #{detail.skuPicUrl},
+            #{detail.creator},
+            #{detail.modifier},
+            #{detail.companyNo}
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

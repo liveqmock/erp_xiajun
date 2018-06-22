@@ -1,13 +1,13 @@
 package com.wangqin.globalshop.usercenter.vo;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.utils.JsonUtils;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @description：UserVo

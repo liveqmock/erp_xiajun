@@ -215,5 +215,15 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		return itemSkuMapperExt.queryByItemCodeAndCompanyNo(itemCode,loginUserCompanyNo);
 	}
 
+	@Override
+	public ItemSkuDO queryBySkuCodeOrUpcAndCompanyNo(String code, String companyNo) {
+		return itemSkuMapperExt.queryBySkuCodeOrUpcAndCompanyNo(code,companyNo);
+	}
+	@Override
+	public Double querySalePriceByItemCode(String itemCode) {
+		// TODO Auto-generated method stub
+		return itemSkuMapperExt.querySalePriceByItemCode(itemCode);
+	}
+
 }
 

@@ -8,6 +8,8 @@ import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 
 
 /**
@@ -51,10 +53,31 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	
 	ItemDO queryItemByItemCode(String itemCode);
 
-    ItemDO selectByItemCode(String itemCode);
-	
+
     //根据id更新商品
 	void updateByIdSelective(ItemDO item);
 	
 	Long queryIdByItemCode(String itemCode);
+
+	//一键分享首页商品
+	List<ItemDO> queryItemByStatus( @Param("companyNo")String companyNo,  @Param("type")String type,
+			 @Param("start")int start,  @Param("pageSize")int pageSize);
+	
+	//一键分享搜索商品
+	List<ItemDO> queryItemByKeyWord(@Param("keyWord")List<String> keyWord,  @Param("companyNo")String companyNo,
+			 @Param("start")int start,  @Param("pageSize")int pageSize);
+	
+	//一键分享商品详情
+	ItemDO itemDetailByItemCode(@Param("itemCode")String itemCode, @Param("companyNo")String companyNo);
+	
+
+	//一键分享获取商品的图片
+	String queryItemPicByItemCodeAndCompanyNo(@Param("itemCode")String itemCode,  @Param("companyNo")String comanyNo);
+	
+	//一键分享，获取商品的图片
+	String queryItemPicByItemCode(String itemCode);
+
+
+	List<ItemDTO> queryMallItems(ItemQueryVO itemQueryVO);
+
 }

@@ -79,6 +79,10 @@ public class ItemDO extends BaseModel {
 
     private String buyerOpenId;
 
+    private String originSalePrice;
+
+    private String commissionRate;
+
     private String creator;
 
     private String modifier;
@@ -389,6 +393,22 @@ public class ItemDO extends BaseModel {
 
     public void setBuyerOpenId(String buyerOpenId) {
         this.buyerOpenId = buyerOpenId == null ? null : buyerOpenId.trim();
+    }
+
+    public String getOriginSalePrice() {
+        return originSalePrice;
+    }
+
+    public void setOriginSalePrice(String originSalePrice) {
+        this.originSalePrice = originSalePrice == null ? null : originSalePrice.trim();
+    }
+
+    public String getCommissionRate() {
+        return commissionRate;
+    }
+
+    public void setCommissionRate(String commissionRate) {
+        this.commissionRate = commissionRate == null ? null : commissionRate.trim();
     }
 
     public String getCreator() {

@@ -378,5 +378,36 @@
             #{item}
         </foreach>
     </select>
+    
+    <!-- 一键分享，我的订单 -->
+    <select id="queryOrderByShareUserId" resultType="com.wangqin.globalshop.biz1.app.dto.MyOrderDTO" >
+    	SELECT 
+    	share_time AS time,count(1) AS orderCount,sum(share_money) AS commission
+    	FROM mall_sub_order
+    	<where>
+    	share_user_id=#{shareUserId}
+    	</where>
+    	GROUP BY share_time
+    	<![CDATA[ LIMIT #{start},#{pageSize} ]]>
+    	
+    </select>
+    
+    
+    <!-- 一键分享，订单详情 -->
+    <select id="queryOrderDetailByTime" resultMap="BaseResultMap" >
+    	SELECT 
+    	item_code AS itemCode,
+    	share_money AS shareMoney,
+    	order_no AS orderNo,
+    	gmt_create AS gmtCreate
+    	FROM mall_sub_order
+    	<where>
+    	share_user_id=#{shareUserId}
+    	AND share_time=#{shareTime}
+    	</where>
+    	<![CDATA[ LIMIT #{start},#{pageSize} ]]>
+    </select>
+
+  
 
 </mapper>

@@ -6,10 +6,12 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
 import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
@@ -38,6 +40,9 @@ public class MallOrderServiceImpl implements IMallOrderService {
     private MallSubOrderMapperExt mallSubOrderDOMapper;
     @Autowired
     private IMallOrderService mallSubOrderService;
+
+    @Autowired
+    private SequenceUtilMapperExt sequenceUtilMapperExt;
 
     @Override
     public MallOrderDO selectById(Long id) {
@@ -218,10 +223,20 @@ public class MallOrderServiceImpl implements IMallOrderService {
     public void dealOrder(JdCommonParam jdCommonParam, GlobalshopOrderVo globalshopOrderVo){
 
         MallOrderDO mallOrderDO = globalshopOrderVo.getMallOrderDO();
+
+        mallOrderDO.setOrderNo("P" + String.format("%0" + 2 + "d", 1) + String.format("%0" + 4 + "d", 4) + "D"
+        				+ DateUtil.formatDate(mallOrderDO.getOrderTime(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)
+        				+ sequenceUtilMapperExt.gainORDSequence()); // 系统自动生成
+
         mallOrderDOMapper.insertMallOrder(mallOrderDO);
 
         List<MallSubOrderDO> mallSubOrderDOS = globalshopOrderVo.getMallSubOrderDOS();
         for(MallSubOrderDO mallSubOrderDO : mallSubOrderDOS){
+
+
+            //outerOrderDetail.setSubOrderNo("O" + outerOrder.getOrderNo().substring(1) + String.format("%0" + 4 + "d", outerOrderDetails.size() + 1));
+
+
             mallSubOrderDOMapper.insert(mallSubOrderDO);
         }
 

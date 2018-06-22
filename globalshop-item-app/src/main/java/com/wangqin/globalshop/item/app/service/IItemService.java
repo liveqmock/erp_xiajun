@@ -1,15 +1,15 @@
 package com.wangqin.globalshop.item.app.service;
 
-
-import java.util.List;
-import java.util.Map;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -31,6 +31,8 @@ public interface IItemService {
 	 * @param itemSkuList
 	 */
 	void addItem(ItemDO item);
+
+	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
 	
 	
 	
@@ -96,5 +98,22 @@ public interface IItemService {
 	//渠道模块使用
 	public GlobalShopItemVo queryUpdate(String itemCode, String shopCode);
 
+	public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
 
+	public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
+	
+	//一键分享的首页商品列表
+	List<ItemDO> queryItemByStatus(String companyNo, String status, int start, int pageSize);
+
+	//一键分享搜索商品
+	List<ItemDO> queryItemByKeyWord(List<String> keyWord, String companyNo, int start, int pageSize);
+	
+	//一键分享商品详情
+	ItemDO itemDetailByItemCode(String itemCode, String companyNo);
+	
+	//一键分享，获取商品的图片
+	String queryItemPicByItemCode(String itemCode);
+	
+	//一键分享，获取商品的图片
+	String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo);
 }

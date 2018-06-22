@@ -647,12 +647,37 @@
      		id = #{id}
      	</where>
      </select>
-     <select id="queryByItemCodeAndCompanyNo" parameterType="java.lang.String" resultType="java.lang.String">
+     <select id="queryByItemCodeAndCompanyNo" parameterType="java.lang.String" resultMap="BaseResultMap">
      	SELECT  <include refid="Base_Column_List" />
      	FROM item_sku  T1
          WHERE
          T1.company_no = #{companyNo}
          AND
          T1.item_code = #{itemCode}
+     </select>
+     <select id="queryBySkuCodeOrUpcAndCompanyNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+     	SELECT  <include refid="Base_Column_List" />
+     	FROM item_sku  T1
+         WHERE
+         T1.company_no = #{companyNo}
+         AND
+         ( T1.sku_code =#{code}
+         OR
+         T1.upc = #{code})
+
+     </select>
+     
+     <!-- 一键分享的商品的价格 -->
+     <select id="querySalePriceByItemCode" parameterType="java.lang.String" resultType="java.lang.Double">
+     	SELECT
+     	MIN(sale_price)
+     	FROM 
+     	 item_sku
+     	<where>
+     	 item_code = #{itemCode}
+     	 AND
+     	 is_del = 0	
+     	</where>
+     
      </select>
 </mapper>

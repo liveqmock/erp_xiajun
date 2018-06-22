@@ -37,7 +37,8 @@ import java.net.URLDecoder;
 import java.util.*;
 
 @Channel(type = ChannelType.YouZan)
-public class YouZanChannelServiceImp extends AbstractChannelService implements IChannelService {
+public class
+YouZanChannelServiceImp extends AbstractChannelService implements IChannelService {
 
     private DefaultYZClient yzClient = null;
     private static final int mode = 1; // 服务商
