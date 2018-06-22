@@ -300,8 +300,12 @@ public class HttpClient
 		{
 			try
 			{
-				if (null != in) in.close();
-				if (null != baos) baos.close();
+				if (null != in) {
+                    in.close();
+                }
+				if (null != baos) {
+                    baos.close();
+                }
 				httpConn.disconnect();
 			}
 			catch (IOException e)

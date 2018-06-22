@@ -69,6 +69,7 @@ public class SysLogDO extends BaseModel {
         return creator;
     }
 
+    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }

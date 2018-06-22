@@ -37,7 +37,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 	 * 上新接口：暂时只支持有赞
 	 * @param itemId
 	 */
-	public void createItem(String companyNo, Long itemId){
+	@Override
+    public void createItem(String companyNo, Long itemId){
 		if(EasyUtil.isStringEmpty(companyNo) || itemId == null || itemId < 0){
 			throw  new ErpCommonException("companyNo或itemId为空，"+companyNo+";"+itemId);
 		}
@@ -63,7 +64,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 	 * @param mallSubOrderList
 	 * @param shippingOrder
 	 */
-	public void syncLogistics2Channel(List<MallSubOrderDO> mallSubOrderList, ShippingOrderDO shippingOrder){
+	@Override
+    public void syncLogistics2Channel(List<MallSubOrderDO> mallSubOrderList, ShippingOrderDO shippingOrder){
 		if(EasyUtil.isListEmpty(mallSubOrderList)){
              throw new ErpCommonException("mallSubOrderList为空");
 		}

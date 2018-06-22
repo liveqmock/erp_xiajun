@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.item.app.dal.mapperExt.ShippingPackingPatternDOMapperExt">
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingPackingPatternDOMapperExt">
 	
 	<sql id="Base_Column_List">
 		id,name,package_en AS packageEn,package_level AS packageLevel,package_id AS packageId,weight
 	</sql>
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="pattern_no" property="patternNo" jdbcType="VARCHAR" />
+        <result column="packaging_scale_no" property="packagingScaleNo" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="name_en" property="nameEn" jdbcType="VARCHAR" />
+        <result column="weight" property="weight" jdbcType="DOUBLE" />
+        <result column="package_level" property="packageLevel" jdbcType="INTEGER" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List1" >
+        id, pattern_no, packaging_scale_no, name, name_en, weight, package_level, creator,
+        modifier
+    </sql>
 	
 	<select id="queryPackageLevelsCount" resultType="java.lang.Integer" >
         SELECT
@@ -51,4 +66,14 @@
           	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
     
+    <select id="selectByName" resultMap="BaseResultMap">
+        SELECT
+        	 <include refid="Base_Column_List1" />
+        FROM
+            shipping_packing_pattern
+        where
+                name = #{packName}
+
+    </select>
+
 </mapper>

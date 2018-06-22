@@ -31,6 +31,8 @@ public class BuyerStorageDO extends BaseModel {
 
     private String modifier;
 
+    private Integer status;
+
     public Long getId() {
         return id;
     }
@@ -59,6 +61,7 @@ public class BuyerStorageDO extends BaseModel {
         return companyNo;
     }
 
+    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -131,6 +134,7 @@ public class BuyerStorageDO extends BaseModel {
         return creator;
     }
 
+    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -139,7 +143,16 @@ public class BuyerStorageDO extends BaseModel {
         return modifier;
     }
 
+    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

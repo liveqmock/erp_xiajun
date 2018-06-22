@@ -61,7 +61,7 @@ public class HaihuServiceImpl implements IHaihuService {
 //					ItemDeclareTypeCode = (String) entry.getValue();
 //				}
 			}
-			if (ItemDeclareTypeCode.equals("09010100002")) {
+			if ("09010100002".equals(ItemDeclareTypeCode)) {
 				goods.put("SpecUnit", "毫升");
 				goods.put("SpecValue", 10);
 			}
@@ -74,7 +74,7 @@ public class HaihuServiceImpl implements IHaihuService {
 			if (StringUtil.isNotBlank(erpOrder.getScale())) {
 				spec.append(",Size:" + erpOrder.getScale());
 			}
-			if (!spec.toString().equals("")) {
+			if (!"".equals(spec.toString())) {
 				goods.put("Spec", spec.toString().substring(1));
 			}
 			goodsList.add(goods);

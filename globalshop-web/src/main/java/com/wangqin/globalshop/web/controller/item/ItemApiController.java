@@ -55,7 +55,7 @@ public class ItemApiController {
     	if (type.equals("1")){
     	    type = null;  //TODO
         }
-    	List<ItemDO>itemList = itemService.queryItemByStatus(companyNo, type, start, Integer.valueOf(pageSize));
+    	List<ItemDO> itemList = itemService.queryItemByStatus(companyNo, type, start, Integer.valueOf(pageSize));
     	
     	for(int i = 0; i < itemList.size(); i++) {
     		ItemEntity itemEntity = new ItemEntity();

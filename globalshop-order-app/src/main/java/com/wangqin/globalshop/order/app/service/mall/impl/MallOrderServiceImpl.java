@@ -220,6 +220,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     }
 
 
+    @Override
     public void dealOrder(JdCommonParam jdCommonParam, GlobalshopOrderVo globalshopOrderVo){
 
         MallOrderDO mallOrderDO = globalshopOrderVo.getMallOrderDO();

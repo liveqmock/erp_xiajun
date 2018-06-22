@@ -242,9 +242,9 @@ public class ShippingOrderController {
                 }
             }
 
-            if (!erpNoErrStr.toString().equals("")) {
+            if (!"".equals(erpNoErrStr.toString())) {
                 result.buildIsSuccess(false).buildMsg("需要合单发货的子订单：" + erpNoErrStr.toString());
-            } else if (!erpNoTipStr.toString().equals("")) {
+            } else if (!"".equals(erpNoTipStr.toString())) {
                 result.buildIsSuccess(true).buildData("需要等待合单发货的子订单：" + erpNoTipStr.toString());
             } else {
                 result.buildIsSuccess(true);
@@ -263,7 +263,7 @@ public class ShippingOrderController {
         if (StringUtils.isNotBlank(shippingOrder.getMallOrders())) {
             // ShiroUser shiroUser = this.getShiroUser();
             // shippingOrder.setUserCreate(shiroUser.getLoginName());
-            if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐")) {
+            if (shippingOrder.getLogisticCompany() != null && "海狐".equals(shippingOrder.getLogisticCompany())) {
                 List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
                 if (ErpOrderList.size() > 1) {
                     throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
@@ -309,7 +309,7 @@ public class ShippingOrderController {
                 //
                 // }
                 // //对接美国转运四方
-                if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("4PX")) {
+                if (shippingOrder.getLogisticCompany() != null && "4PX".equals(shippingOrder.getLogisticCompany())) {
                     for (String shippingOrderNO : shippingOrderIds) {
                         siFangService.createOrder(shippingOrderNO);
                     }
@@ -360,7 +360,7 @@ public class ShippingOrderController {
             // && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接运通
             // yunTongService.createOrder(shippingOrder.getId());
             // } else
-            if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("4PX")
+            if (shippingOrder.getLogisticCompany() != null && "4PX".equals(shippingOrder.getLogisticCompany())
                     && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接4PX
                 message = siFangService.createOrder(shippingOrder.getShippingNo());
             }
@@ -371,7 +371,7 @@ public class ShippingOrderController {
             // && StringUtil.isBlank(shippingOrder.getLogisticNo())) {//对接联邦
             // fadRoadService.createOrder(shippingOrder.getId());
             // }
-            else if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐")
+            else if (shippingOrder.getLogisticCompany() != null && "海狐".equals(shippingOrder.getLogisticCompany())
                     && StringUtil.isBlank(shippingOrder.getLogisticNo())) {// 对接海狐
                 List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(shippingOrder.getMallOrders());
                 if (ErpOrderList.size() > 1) {
@@ -383,7 +383,7 @@ public class ShippingOrderController {
                 } else {
                     haihuService.createOrder(shippingOrder.getId());
                 }
-            } else if (shippingOrder.getLogisticCompany() != null && shippingOrder.getLogisticCompany().equals("海狐联邦转运")
+            } else if (shippingOrder.getLogisticCompany() != null && "海狐联邦转运".equals(shippingOrder.getLogisticCompany())
                     && StringUtil.isBlank(shippingOrder.getLogisticNo())) {
                 haihuService.returnPackageNo(shippingOrder);
             }
@@ -436,7 +436,7 @@ public class ShippingOrderController {
     @RequestMapping("/shippingOrderExportPdf")
     @ResponseBody
     public ResponseEntity<byte[]> shippingOrderExportPdf(String shippingOrderIds) throws Exception {
-        if (StringUtil.isBlank(shippingOrderIds) || shippingOrderIds.equals("[]")) {
+        if (StringUtil.isBlank(shippingOrderIds) || "[]".equals(shippingOrderIds)) {
             return null;
         }
         // ShiroUser shiroUser = this.getShiroUser();

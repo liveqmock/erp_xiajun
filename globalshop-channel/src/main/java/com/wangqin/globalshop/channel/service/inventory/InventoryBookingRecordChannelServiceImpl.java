@@ -17,7 +17,8 @@ public class InventoryBookingRecordChannelServiceImpl implements IInventoryBooki
 	InventoryBookingRecordDOMapperExt inventoryBookingRecordDOMapperExt;
 
 
-	public void updateBatchInvRecord(List<InventoryBookingRecordDO> inventoryBookingRecordDOS){
+	@Override
+    public void updateBatchInvRecord(List<InventoryBookingRecordDO> inventoryBookingRecordDOS){
 		for(InventoryBookingRecordDO record : inventoryBookingRecordDOS){
 			inventoryBookingRecordDOMapperExt.updateByPrimaryKey(record);
 		}

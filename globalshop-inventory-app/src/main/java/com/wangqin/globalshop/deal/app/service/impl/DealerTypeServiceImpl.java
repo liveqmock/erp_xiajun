@@ -51,7 +51,7 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
 	public void deleteById(DealerTypeDO dealerType) {
 		// TODO Auto-generated method stub
 		DealerTypeDO dealerTypes = mapper.selectByPrimaryKey(dealerType.getId());
-		dealerTypes.setIsdel(1);
+		dealerTypes.setIsDel(true);
 		mapper.updateByPrimaryKeySelective(dealerTypes);
 	}
 	@Override

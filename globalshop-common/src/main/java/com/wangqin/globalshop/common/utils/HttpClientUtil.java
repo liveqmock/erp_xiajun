@@ -140,7 +140,7 @@ public class HttpClientUtil {
 
         try {
             // 如果参数类型为1 证明参数传递方式为 json格式
-            if (paramstype != null && paramstype.equals("1")) {
+            if (paramstype != null && "1".equals(paramstype)) {
                 if (params != null) {
                     StringEntity entity = new StringEntity(JSONObject.fromObject(params).toString(), "utf-8");// 解决中文乱码问题
                     entity.setContentEncoding("UTF-8");
@@ -166,7 +166,7 @@ public class HttpClientUtil {
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 // 返回类型如果不为空 并且 等于1 证明该返回结果经过zip压缩
-                if (resulttype != null && resulttype.equals("1")) {
+                if (resulttype != null && "1".equals(resulttype)) {
                     result = EntityUtils.toString(new GzipDecompressingEntity(entity), "utf-8");
                 } else {
                     result = EntityUtils.toString(entity, "utf-8");
@@ -214,7 +214,7 @@ public class HttpClientUtil {
         
         if (params != null) {
             // 如果参数类型为1 证明参数传递方式为 json格式
-            if (paramstype != null && paramstype.equals("1")) {
+            if (paramstype != null && "1".equals(paramstype)) {
                 StringEntity entity = new StringEntity(JSONObject.fromObject(params).toString(), "utf-8");// 解决中文乱码问题
                 entity.setContentEncoding("UTF-8");
                 entity.setContentType("application/json");
@@ -265,7 +265,7 @@ public class HttpClientUtil {
         return null;
     }
     
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
     	/*Map<String, Object> param = new HashMap<String, Object>();
     	Map<String, Object> paramDetail = new HashMap<String, Object>();
     	paramDetail.put("transfer_id", "1739255020");
@@ -360,14 +360,17 @@ public class HttpClientUtil {
             SSLContext ctx = SSLContext.getInstance("SSL");
             X509TrustManager tm = new X509TrustManager() {
 
+                @Override
                 public void checkClientTrusted(java.security.cert.X509Certificate[] chain,
                                                String authType) throws java.security.cert.CertificateException {
                 }
 
+                @Override
                 public void checkServerTrusted(java.security.cert.X509Certificate[] chain,
                                                String authType) throws java.security.cert.CertificateException {
                 }
 
+                @Override
                 public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }

@@ -528,7 +528,7 @@ public class TimeUtil {
         int fourthDateDay = TimeUtil.getDateDay(fourthDate);
         int maxDateDay = TimeUtil.getMonthMaxDay(fourthDate);
         if ((fourthDateDay + 7) <= maxDateDay) {
-            return new Date(fourthDate.getTime() + 7 * 24 * 60 * 60 * 1000l);
+            return new Date(fourthDate.getTime() + 7 * 24 * 60 * 60 * 1000L);
         } else {
             return fourthDate;
         }
@@ -547,7 +547,7 @@ public class TimeUtil {
         int fourthDateDay = TimeUtil.getDateDay(fourthDate, timeZoneID);
         int maxDateDay = TimeUtil.getMonthMaxDay(fourthDate, timeZoneID);
         if ((fourthDateDay + 7) <= maxDateDay) {
-            return new Date(fourthDate.getTime() + 7 * 24 * 60 * 60 * 1000l);
+            return new Date(fourthDate.getTime() + 7 * 24 * 60 * 60 * 1000L);
         } else {
             return fourthDate;
         }

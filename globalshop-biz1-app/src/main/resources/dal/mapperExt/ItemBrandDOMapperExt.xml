@@ -57,7 +57,13 @@
 			and T1.name_china LIKE concat('%',#{nameChina},'%')
         </if>
 	</select>
-	
+	<!--按品牌名称模糊查询 -->
+	<select id="queryByEnNameAndCnName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
+		SELECT <include refid="Base_Column_List_2" />
+		FROM item_brand T1
+		WHERE T1.is_del=0 AND name LIKE  #{brandName}
+	</select>
+
 	<!--总查询 -->
 	<select id="queryAllBrand" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
 		SELECT 

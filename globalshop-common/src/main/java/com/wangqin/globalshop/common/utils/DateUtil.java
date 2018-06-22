@@ -122,23 +122,27 @@ public class DateUtil {
 	}
 
 	private static ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<SimpleDateFormat>() {
-		protected SimpleDateFormat initialValue() {
+		@Override
+        protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat(DATE_PARTEN);
 		}
 	};
 
 	private static ThreadLocal<SimpleDateFormat> threadLocal_simple = new ThreadLocal<SimpleDateFormat>() {
-		protected SimpleDateFormat initialValue() {
+		@Override
+        protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat(SIMPLE_DATE_PARTEN);
 		}
 	};
 	private static ThreadLocal<SimpleDateFormat> threadLocal_milli = new ThreadLocal<SimpleDateFormat>() {
-		protected SimpleDateFormat initialValue() {
+		@Override
+        protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat(DATE_PARTEN_MILLI);
 		}
 	};
 	private static ThreadLocal<SimpleDateFormat> threadLocal_chinese = new ThreadLocal<SimpleDateFormat>() {
-		protected SimpleDateFormat initialValue() {
+		@Override
+        protected SimpleDateFormat initialValue() {
 			return new SimpleDateFormat(DATE_PARTEN_Chinese);
 		}
 	};

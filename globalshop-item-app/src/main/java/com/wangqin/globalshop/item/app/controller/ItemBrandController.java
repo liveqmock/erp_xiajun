@@ -73,7 +73,7 @@ public class ItemBrandController {
 			return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
 		}
 		/**zhangziyang**/
-		if(itemBrandService.selectBrandNoByName(brand.getName()) != null || !itemBrandService.selectBrandNoByName(brand.getName()).equals("")) {
+		if(itemBrandService.selectBrandNoByName(brand.getName()) != null || !"".equals(itemBrandService.selectBrandNoByName(brand.getName()))) {
 			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
 		 }
 		itemBrandService.updateBrand(brand);

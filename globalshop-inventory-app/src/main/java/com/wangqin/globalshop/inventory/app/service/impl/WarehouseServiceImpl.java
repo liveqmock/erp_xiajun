@@ -7,10 +7,7 @@ import com.wangqin.globalshop.inventory.app.service.IWarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class WarehouseServiceImpl implements IWarehouseService {
@@ -70,5 +67,15 @@ public class WarehouseServiceImpl implements IWarehouseService {
 	public List<WarehouseDO> list(WarehouseDO warehouseDO) {
 		warehouseDO.init();
 		return mapper.list(warehouseDO);
+	}
+
+	@Override
+	public List<WarehouseDO> selectWhList(WarehouseDO warehouseDO){
+		List<WarehouseDO> whList = new ArrayList<>();
+		if(warehouseDO.getCompanyNo() == null){
+			warehouseDO.initCompany();
+		}
+		whList = mapper.selectWhList(warehouseDO);
+		return whList;
 	}
 }

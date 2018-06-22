@@ -112,7 +112,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	/***********************   商品模块   **************************/
 
 	//上新
-	public Object createItem(ItemVo itemVo){
+	@Override
+    public Object createItem(ItemVo itemVo){
 
 		WareWriteAddRequest request = new WareWriteAddRequest();
 
@@ -164,7 +165,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			throw new ErpCommonException("createItem,商品发布时，京东内部出错");
 		}
 
-        if(!response.getCode().equals("0")){
+        if(!"0".equals(response.getCode())){
 			String errorMsg = "";
 			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("商品发布时，京东内部出错:"+errorMsg);
@@ -173,7 +174,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	}
 
 
-	public void updateItem(GlobalShopItemVo globalShopItemVo){
+	@Override
+    public void updateItem(GlobalShopItemVo globalShopItemVo){
 		ItemVo itemVo = globalShopItemVo.getItemVo();
 		ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
 
@@ -215,7 +217,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			throw new ErpCommonException("updateItem,商品更新时，京东内部出错");
 		}
 
-		if(!response.getCode().equals("0")){
+		if(!"0".equals(response.getCode())){
 			String errorMsg = "";
 			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
 			throw new ErpCommonException("商品更新时，京东内部出错:"+errorMsg);
@@ -226,7 +228,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//已完成，成功
-	public void listingItem(ChannelListingItemVo channelListingItemVo){
+	@Override
+    public void listingItem(ChannelListingItemVo channelListingItemVo){
 		WareWriteUpOrDownRequest request=new WareWriteUpOrDownRequest();
 		request.setNote(channelListingItemVo.getNode());
 		request.setWareId(Long.valueOf(channelListingItemVo.getChannelItemCode()));
@@ -250,7 +253,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//已完成，成功
-	public void delistingItem(ChannelListingItemVo channelListingItemVo){
+	@Override
+    public void delistingItem(ChannelListingItemVo channelListingItemVo){
 
 		WareWriteUpOrDownRequest request =  new WareWriteUpOrDownRequest();
 		request.setNote(channelListingItemVo.getNode());
@@ -274,7 +278,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//已完成
-	public void modifySalePrice(ChannelSalePriceVo channelSalePriceVo){
+	@Override
+    public void modifySalePrice(ChannelSalePriceVo channelSalePriceVo){
 
 		PriceWriteUpdateSkuJdPriceRequest request=new PriceWriteUpdateSkuJdPriceRequest();
 
@@ -301,7 +306,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	}
 
 
-	public void resetSkuStockNum(ChannelListingItemVo channelListingItemVo){
+	@Override
+    public void resetSkuStockNum(ChannelListingItemVo channelListingItemVo){
 
 		StockWriteUpdateSkuStockRequest request = new StockWriteUpdateSkuStockRequest();
 
@@ -357,7 +363,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 				throw new ErpCommonException("getItems,批量获取京东商品时，京东内部出错");
 			}
 
-			if(response != null && (response.getPage() == null || !response.getCode().equals("0")) ){
+			if(response != null && (response.getPage() == null || !"0".equals(response.getCode())) ){
 				throw new ErpCommonException("getItemByItemCode", "从京东获取商品时,调用API时异常.卖家:[" + shopOauth.getShopCode() + "].京东描述:" + response.getZhDesc());
 			}
 
@@ -393,7 +399,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	 * @param endTime
 	 * @return
 	 */
-	public List<JdItemDO> getItems(Date startTime, Date endTime){
+	@Override
+    public List<JdItemDO> getItems(Date startTime, Date endTime){
 
 		List<JdItemDO> resultList = new ArrayList<>();
 
@@ -420,7 +427,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 				throw new ErpCommonException("getItems,批量获取京东商品时，京东内部出错");
 			}
 
-			if(response != null && (response.getWareInfos() == null || !response.getCode().equals("0")) ){
+			if(response != null && (response.getWareInfos() == null || !"0".equals(response.getCode())) ){
 				throw new ErpCommonException("getItemByItemCode", "从京东获取商品时,调用API时异常.卖家:[" + shopOauth.getShopCode() + "].京东描述:" + response.getZhDesc());
 			}
 
@@ -484,7 +491,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//已完成
-	public JdItemDO getItemByItemCode(String itemCode){
+	@Override
+    public JdItemDO getItemByItemCode(String itemCode){
 		WareReadFindWareByIdRequest request=new WareReadFindWareByIdRequest();
 
 		request.setWareId(Long.valueOf(itemCode));
@@ -497,7 +505,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			throw new ErpCommonException("getOrders,根据时间抓取订单时，京东内部出错");
 		}
 
-		if(response != null && (response.getWare() == null || !response.getCode().equals("0")) ){
+		if(response != null && (response.getWare() == null || !"0".equals(response.getCode())) ){
 			throw new ErpCommonException("getItemByItemCode", "从京东获取商品时,调用API时异常.卖家:[" + shopOauth.getShopCode() + "].京东描述:" + response.getZhDesc());
 		}
 
@@ -519,7 +527,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//已完成
-	public List<JdOrderDO> getOrders(String startTime, String endTime){
+	@Override
+    public List<JdOrderDO> getOrders(String startTime, String endTime){
 
 		List<JdOrderDO> resultOrders = new ArrayList<>();
 
@@ -544,7 +553,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 				logger.error("getOrders_error",e);
 				throw new ErpCommonException("getOrders,根据时间抓取订单时，京东内部出错");
 			}
-			if (!response.getCode().equals("0")) {
+			if (!"0".equals(response.getCode())) {
 				throw new ErpCommonException("getOrders_error", "从京东获取订单ID时,调用API时异常.卖家:[" + shopOauth.getShopCode() + "].京东描述:" + response.getZhDesc());
 			}
 
@@ -585,7 +594,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	 * @param tid
 	 * @return
 	 */
-	public JdOrderDO getOrderByTid(String tid){
+	@Override
+    public JdOrderDO getOrderByTid(String tid){
 		PopOrderGetRequest request=new PopOrderGetRequest();
 
 		request.setOptionalFields(orderinfo_fileds);
@@ -622,7 +632,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//已完成
-	public void logisticComfire(JdLogisticsDO jdLogisticsDO){
+	@Override
+    public void logisticComfire(JdLogisticsDO jdLogisticsDO){
 
 		PopOrderShipmentRequest request=new PopOrderShipmentRequest();
 
@@ -651,7 +662,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 
 	//未完成
-	public GlobalShopItemVo convertItemJd2Global(String jsonData){
+	@Override
+    public GlobalShopItemVo convertItemJd2Global(String jsonData){
 
 		com.jd.open.api.sdk.domain.ware.Ware  ware = JSON.parseObject(jsonData,com.jd.open.api.sdk.domain.ware.Ware.class);
 
@@ -724,7 +736,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 	}
 
 
-	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson)  {
+	@Override
+    public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson)  {
 
 		GlobalshopOrderVo globalshopOrderVo = null;
 		try {
@@ -801,7 +814,8 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		return globalshopOrderVo;
 	}
 
-	public void getCategory(){
+	@Override
+    public void getCategory(){
 		CategorySearchRequest request=new CategorySearchRequest();
 		CategorySearchResponse cateRes = null;
 		try{

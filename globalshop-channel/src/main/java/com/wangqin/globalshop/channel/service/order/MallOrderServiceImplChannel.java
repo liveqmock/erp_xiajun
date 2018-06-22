@@ -41,38 +41,47 @@ public class MallOrderServiceImplChannel implements ChannelIMallOrderService {
         return mallOrderDOMapperExt;
     }
 
+    @Override
     public int deleteByPrimaryKey(Long id) {
         return mallOrderDOMapperExt.deleteByPrimaryKey(id);
     }
 
+    @Override
     public int insert(MallOrderDO record) {
         return mallOrderDOMapperExt.insert(record);
     }
 
+    @Override
     public int insertSelective(MallOrderDO record) {
         return mallOrderDOMapperExt.insertSelective(record);
     }
 
+    @Override
     public MallOrderDO selectByPrimaryKey(Long id) {
         return mallOrderDOMapperExt.selectByPrimaryKey(id);
     }
 
+    @Override
     public int updateByPrimaryKeySelective(MallOrderDO record) {
         return mallOrderDOMapperExt.updateByPrimaryKeySelective(record);
     }
 
+    @Override
     public int updateByPrimaryKey(MallOrderDO record) {
         return mallOrderDOMapperExt.updateByPrimaryKeySelective(record);
     }
 
+    @Override
     public Integer queryPoCount(MallOrderDO mallOrderDO) {
         return mallOrderDOMapperExt.queryPoCount(mallOrderDO);
     }
 
+    @Override
     public MallOrderDO queryPo(MallOrderDO mallOrderDO) {
         return mallOrderDOMapperExt.queryPo(mallOrderDO);
     }
 
+    @Override
     public List<MallOrderDO> queryPoList(MallOrderDO mallOrderDO) {
         return mallOrderDOMapperExt.queryPoList(mallOrderDO);
     }

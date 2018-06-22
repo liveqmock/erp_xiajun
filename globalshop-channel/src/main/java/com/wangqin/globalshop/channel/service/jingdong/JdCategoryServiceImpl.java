@@ -42,7 +42,8 @@ public class JdCategoryServiceImpl implements JdCategoryService{
 	private JdCategoryAttarValueDOMapper jdCategoryAttarValueDOMapper;
 
 
-	public void getCategory(JdShopOauthDO shopOauth){
+	@Override
+    public void getCategory(JdShopOauthDO shopOauth){
 
 		JdClient client = new DefaultJdClient(shopOauth.getServerUrl(),shopOauth.getAccessToken(),shopOauth.getAppKey(),shopOauth.getAppsecretKey());
 

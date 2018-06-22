@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
@@ -11,8 +12,9 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,8 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         BuyerDO buyer = buyerMapper.selectByPrimaryKey(vo.getBuyerId());
         BuyerTaskDO task = new BuyerTaskDO();
         /**封装出一个buyerTaskDO对象*/
+        String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
+        task.setBuyerTaskNo(buyerTaskNo);
         getBuyerTaskDO(task, buyer, vo);
         mapper.insertSelective(task);
         List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
@@ -64,6 +68,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             BuyerDO by = buyerMapper.selectByPrimaryKey(itemTask.getBuyerId());
             BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
             /**封装出一个buyerDetailTaskDO对象*/
+            detail.setBuyerTaskNo(buyerTaskNo);
             getBuyerTaskDetailDO(detail, itemTask, by);
             detailMapper.insertSelective(detail);
         }
@@ -73,7 +78,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void importTask(List<List<Object>> list) {
+    public void importTask(List<List<Object>> list) throws ErpCommonException {
         List<String> errMsg = new ArrayList<>();
         List<BuyerTaskDO> taskList = new ArrayList<>();
         List<BuyerTaskDetailDO> detailList = new ArrayList<>();
@@ -94,20 +99,24 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             }
             /**采购限价*/
             String maxPrice = obj.get(3).toString().trim();
-            if (isParseToInteger(maxPrice)) {
-                detail.setMaxPrice(BigDecimal.valueOf(Long.valueOf(maxPrice)));
+            maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
+            if (isParseToDouble(maxPrice)) {
+                BigDecimal decimal = new BigDecimal(maxPrice);
+                detail.setMaxPrice(decimal);
             } else {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第4列的  " + maxPrice);
             }
             /**采购数目*/
             String maxCount = obj.get(4).toString().trim();
+            maxCount = StringUtil.isBlank(maxCount) ? "0" : maxCount;
             if (isParseToInteger(maxCount)) {
                 detail.setMaxCount(Integer.valueOf(maxCount));
-            } else {
+            }  else {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + maxCount);
             }
             /**任务的有效天数*/
             String limitTime = obj.get(5).toString().trim();
+            limitTime = StringUtil.isBlank(limitTime) ? "0" : limitTime;
             if (isParseToInteger(limitTime)) {
                 Date date = new Date();
                 detail.setStartTime(date);
@@ -119,12 +128,13 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
             }
             task.setStatus(Constant.TO_BE_PURCHASED);
-            task.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
+            String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
+            task.setBuyerTaskNo(buyerTaskNo);
             task.init();
             taskList.add(task);
 
             detail.init();
-            detail.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
+            detail.setBuyerTaskNo(buyerTaskNo);
             detail.setMode((byte) 1);
             detailList.add(detail);
         }
@@ -176,6 +186,19 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         }
         return true;
     }
+    /**
+     * 判断是否能够转换成Double类型
+     *
+     * @param price
+     */
+    private boolean isParseToDouble(String price) {
+        try {
+            Double.valueOf(price);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
     private void getBuyerTaskDO(BuyerTaskDO task, BuyerDO buyer, BuyerTaskVO vo) {
         task.setTitle(vo.getTaskTitle());
@@ -184,7 +207,6 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         task.setStartTime(vo.getTaskStartTime());
         /**设置采购中*/
         task.setStatus(Constant.TO_BE_PURCHASED);
-        task.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
         task.init();
         task.setBuyerName(buyer.getNickName());
         task.setBuyerOpenId(buyer.getOpenId());
@@ -192,7 +214,6 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     private void getBuyerTaskDetailDO(BuyerTaskDetailDO detail, ItemTask itemTask, BuyerDO by) {
         detail.init();
-        detail.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
         detail.setBuyerName(by.getNickName());
         detail.setBuyerOpenId(by.getOpenId());
         detail.setCount(itemTask.getCount());

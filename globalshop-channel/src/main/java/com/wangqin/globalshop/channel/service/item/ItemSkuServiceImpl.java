@@ -28,48 +28,59 @@ public class ItemSkuServiceImpl  implements IItemSkuService {
 	}
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return itemSkuDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(ItemSkuDO record){
+	@Override
+    public int insert(ItemSkuDO record){
 		return itemSkuDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(ItemSkuDO record){
+	@Override
+    public int insertSelective(ItemSkuDO record){
 		return itemSkuDOMapperExt.insertSelective(record);
 	}
 
-	public ItemSkuDO selectByPrimaryKey(Long id){
+	@Override
+    public ItemSkuDO selectByPrimaryKey(Long id){
 		return itemSkuDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(ItemSkuDO record){
+	@Override
+    public int updateByPrimaryKeySelective(ItemSkuDO record){
 		return itemSkuDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKeyWithBLOBs(ItemSkuDO record){
+	@Override
+    public int updateByPrimaryKeyWithBLOBs(ItemSkuDO record){
 		return itemSkuDOMapperExt.updateByPrimaryKeyWithBLOBs(record);
 	}
 
-	public int updateByPrimaryKey(ItemSkuDO record){
+	@Override
+    public int updateByPrimaryKey(ItemSkuDO record){
 		return itemSkuDOMapperExt.updateByPrimaryKey(record);
 	}
 
 
-	public ItemSkuDO queryPo(ItemSkuDO itemSkuDO){
+	@Override
+    public ItemSkuDO queryPo(ItemSkuDO itemSkuDO){
 		return itemSkuDOMapperExt.queryItemSku(itemSkuDO);
 	}
 
-	public Integer queryPoCount(ItemSkuDO itemSkuDO){
+	@Override
+    public Integer queryPoCount(ItemSkuDO itemSkuDO){
 		return itemSkuDOMapperExt.queryItemSkuCount(itemSkuDO);
 	}
-	public List<ItemSkuDO> queryPoList(ItemSkuDO itemSkuDO){
+	@Override
+    public List<ItemSkuDO> queryPoList(ItemSkuDO itemSkuDO){
 		return itemSkuDOMapperExt.queryItemSkuList(itemSkuDO);
 	}
 
 
-	public List<ItemSkuVo> queryItemSkusForItemThirdSale(String itemCode, String shopCode){
+	@Override
+    public List<ItemSkuVo> queryItemSkusForItemThirdSale(String itemCode, String shopCode){
 
 		List<ItemSkuDO> itemSkuDOS =  itemSkuDOMapperExt.queryItemSkusForItemThirdSale(itemCode,shopCode);
 		List<ItemSkuVo> itemSkuVos = new ArrayList<>();
@@ -81,7 +92,8 @@ public class ItemSkuServiceImpl  implements IItemSkuService {
 		return itemSkuVos;
 	}
 
-	public List<ItemSkuVo> queryVoList(ItemSkuDO itemSkuDO){
+	@Override
+    public List<ItemSkuVo> queryVoList(ItemSkuDO itemSkuDO){
 
 		List<ItemSkuDO> itemSkuDOS = itemSkuDOMapperExt.queryItemSkuList(itemSkuDO);
 		List<ItemSkuVo> itemSkuVos = new ArrayList<>();

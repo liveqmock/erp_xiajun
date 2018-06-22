@@ -35,6 +35,7 @@ public class ChannelAccountConfigDO extends BaseModel {
         return companyNo;
     }
 
+    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }

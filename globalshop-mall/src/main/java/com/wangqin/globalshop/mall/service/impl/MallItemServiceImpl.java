@@ -25,7 +25,8 @@ public class MallItemServiceImpl implements MallItemService {
 	private ItemDOMapperExt itemDOMapperExt;
 
 
-	public ItemDTO itemqueryshare(String itemCode, String companyNo){
+	@Override
+    public ItemDTO itemqueryshare(String itemCode, String companyNo){
 
 		ItemQueryVO itemQueryVO = new ItemQueryVO();
 		itemQueryVO.setItemCode(itemCode);
@@ -40,7 +41,8 @@ public class MallItemServiceImpl implements MallItemService {
 		return itemDTO;
 	}
 
-	public List<ItemDTO> queryOneDay(String companyNo){
+	@Override
+    public List<ItemDTO> queryOneDay(String companyNo){
 		Date endTime = new Date();
 		Date startTime = DateUtil.getDateByCalculate(endTime, Calendar.DAY_OF_MONTH, -1);
 

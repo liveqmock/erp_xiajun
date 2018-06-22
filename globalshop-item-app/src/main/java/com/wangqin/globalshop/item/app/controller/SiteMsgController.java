@@ -1,5 +1,6 @@
  package com.wangqin.globalshop.item.app.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.wangqin.globalshop.common.utils.JsonPageResult;
  */
 @Controller
 @RequestMapping("/sitemsg")
+@Authenticated
 public class SiteMsgController extends BaseController {
 
 

@@ -66,6 +66,7 @@ public class ShippingTrackServiceImpl implements IShippingTrackService {
         return shippingTrackDOMapper.selectCountByShippingOrderNo(selShippingTrack.getShippingOrderNo());
     }
 
+    @Override
     public List<ShippingTrackDO> selectShippingTrackListByLogisticNo(String logisticNo){
         return shippingTrackDOMapper.selectShippingTrackListByLogisticNo(logisticNo);
     }

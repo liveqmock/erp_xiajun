@@ -29,6 +29,7 @@ public class ItemPackagePatternServiceImpl implements IItemPackagePatternService
     
 
 
+    @Override
     public Integer queryPackageLevelsCount(ShippingPackingPatternQueryVO packageLevelQueryVO) {
         return packageLevelMapper.queryPackageLevelsCount(packageLevelQueryVO);
     }

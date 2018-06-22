@@ -198,7 +198,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 totalWeight = Math.ceil((shippingOrder.getSkuWeight() + 0.33) * 10);
                 totalWeight = totalWeight / 10;
             }
-            if (shippingOrder.getLogisticCompany().equals("邮客")) {
+            if ("邮客".equals(shippingOrder.getLogisticCompany())) {
                 if (shippingOrder.getType() == 6) {    //邮客食品线
                     shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 2.2));
                 } else if (shippingOrder.getType() == 7) {    //邮客奶粉线(包邮)
@@ -206,9 +206,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 } else {
                     shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.5));
                 }
-            } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 4) {
+            } else if ("运通快递".equals(shippingOrder.getLogisticCompany()) && shippingOrder.getType() == 4) {
                 shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.7));
-            } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 5) {
+            } else if ("运通快递".equals(shippingOrder.getLogisticCompany()) && shippingOrder.getType() == 5) {
                 shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 4.2));
             }
         }
@@ -377,7 +377,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                     totalWeight = totalWeight / 10;
                 }
 
-                if (shippingOrder.getLogisticCompany().equals("邮客")) {
+                if ("邮客".equals(shippingOrder.getLogisticCompany())) {
                     if (shippingOrder.getType() == 6) {    //邮客食品线
                         shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 2.2));
                     } else if (shippingOrder.getType() == 7) {    //邮客奶粉线(包邮)
@@ -385,9 +385,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                     } else {
                         shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.5));
                     }
-                } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 4) {
+                } else if ("运通快递".equals(shippingOrder.getLogisticCompany()) && shippingOrder.getType() == 4) {
                     shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 3.7));
-                } else if (shippingOrder.getLogisticCompany().equals("运通快递") && shippingOrder.getType() == 5) {
+                } else if ("运通快递".equals(shippingOrder.getLogisticCompany()) && shippingOrder.getType() == 5) {
                     shippingOrder.setFreight(NumberUtil.formatDouble2(totalWeight * 4.2));
                 }
             }
@@ -397,9 +397,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
             // 对接邮客、运通快递
             if (shippingOrder.getLogisticCompany() != null
-                    && (shippingOrder.getLogisticCompany().equals("邮客") || shippingOrder.getLogisticCompany().equals("运通快递")
-                    || shippingOrder.getLogisticCompany().equals("4PX")
-                    || shippingOrder.getLogisticCompany().equals("联邦转运"))) {
+                    && ("邮客".equals(shippingOrder.getLogisticCompany()) || "运通快递".equals(shippingOrder.getLogisticCompany())
+                    || "4PX".equals(shippingOrder.getLogisticCompany())
+                    || "联邦转运".equals(shippingOrder.getLogisticCompany()))) {
                 shippingOrderIds.add(shippingOrder.getId().toString());
             }
 

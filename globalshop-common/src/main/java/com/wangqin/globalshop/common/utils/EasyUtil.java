@@ -196,7 +196,9 @@ public class EasyUtil {
      * @return
      */
     public static final String calculatePercent(Double mole, Double deno) {
-        if (deno == null || deno == 0) return "0.00%";
+        if (deno == null || deno == 0) {
+            return "0.00%";
+        }
 
         double result = (mole / deno) * 100;
 
@@ -206,7 +208,9 @@ public class EasyUtil {
     }
 
     public static final String calculatePercent(Integer mole, Integer deno) {
-        if (deno == null || deno == 0) return "0.00%";
+        if (deno == null || deno == 0) {
+            return "0.00%";
+        }
 
         double result = (mole * 1.0 / deno) * 100;
 
@@ -240,7 +244,9 @@ public class EasyUtil {
         StringBuffer sb = new StringBuffer();
         if (!isListEmpty(list)) {
             for (Object item : list) {
-                if (sb.length() > 0) sb.append(tag);
+                if (sb.length() > 0) {
+                    sb.append(tag);
+                }
                 sb.append(item);
             }
         }

@@ -24,27 +24,33 @@ public class ChannelListingItemServiceImpl implements IChannelListingItemService
 	}
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return channelListingItemDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(ChannelListingItemDO record){
+	@Override
+    public int insert(ChannelListingItemDO record){
 		return channelListingItemDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(ChannelListingItemDO record){
+	@Override
+    public int insertSelective(ChannelListingItemDO record){
 		return channelListingItemDOMapperExt.insertSelective(record);
 	}
 
-	public ChannelListingItemDO selectByPrimaryKey(Long id){
+	@Override
+    public ChannelListingItemDO selectByPrimaryKey(Long id){
 		return channelListingItemDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(ChannelListingItemDO record){
+	@Override
+    public int updateByPrimaryKeySelective(ChannelListingItemDO record){
 		return channelListingItemDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(ChannelListingItemDO record){
+	@Override
+    public int updateByPrimaryKey(ChannelListingItemDO record){
 		return channelListingItemDOMapperExt.updateByPrimaryKey(record);
 	}
 
