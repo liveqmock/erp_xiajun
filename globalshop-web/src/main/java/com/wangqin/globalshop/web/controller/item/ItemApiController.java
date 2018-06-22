@@ -145,7 +145,7 @@ public class ItemApiController {
         itemDetailEntity.setItemCode(itemDO.getItemCode());
         itemDetailEntity.setItemDesc(itemDO.getItemName());
 
-        String commissionMode = itemDO.getCommissionMode();
+        String commissionMode = itemDO.getCommissionRate();
 
         if (price == null){
             price = 0d;
