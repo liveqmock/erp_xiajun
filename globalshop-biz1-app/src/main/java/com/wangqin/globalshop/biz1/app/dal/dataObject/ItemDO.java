@@ -81,7 +81,7 @@ public class ItemDO extends BaseModel {
 
     private String originSalePrice;
 
-    private String commissionMode;
+    private String commissionRate;
 
     private String creator;
 
@@ -111,7 +111,6 @@ public class ItemDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -404,19 +403,18 @@ public class ItemDO extends BaseModel {
         this.originSalePrice = originSalePrice == null ? null : originSalePrice.trim();
     }
 
-    public String getCommissionMode() {
-        return commissionMode;
+    public String getCommissionRate() {
+        return commissionRate;
     }
 
-    public void setCommissionMode(String commissionMode) {
-        this.commissionMode = commissionMode == null ? null : commissionMode.trim();
+    public void setCommissionRate(String commissionRate) {
+        this.commissionRate = commissionRate == null ? null : commissionRate.trim();
     }
 
     public String getCreator() {
         return creator;
     }
 
-    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -425,7 +423,6 @@ public class ItemDO extends BaseModel {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
