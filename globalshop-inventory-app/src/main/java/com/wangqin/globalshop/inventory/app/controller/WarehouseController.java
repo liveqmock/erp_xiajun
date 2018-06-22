@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.ShiroUtil;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/warehouse")
+@Authenticated
 public class WarehouseController{
 
 	@Autowired
@@ -74,7 +76,23 @@ public class WarehouseController{
 	@ResponseBody
 	public Object queryWarehouses(WarehouseDO warehouseDO) {
 //		List<WarehouseDO> list = warehouseService.queryWarehouses(ShiroUtil.getShiroUser().getCompanyNo());
+
 		List<WarehouseDO> list = warehouseService.list(warehouseDO);
 		return JsonResult.buildSuccess(list);
 	}
+
+	/**
+	 * 查询仓库列表(可用及companyNo过滤)
+	 *
+	 * @return
+	 */
+	@GetMapping("/selectWhList")
+	@ResponseBody
+	public Object selectWhList() {
+		WarehouseDO warehouse = new WarehouseDO();
+		warehouse.initCompany();
+		List<WarehouseDO> list = warehouseService.selectWhList(warehouse);
+		return JsonResult.buildSuccess(list);
+	}
+
 }
