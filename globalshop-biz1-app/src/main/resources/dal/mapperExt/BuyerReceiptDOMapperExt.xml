@@ -26,6 +26,6 @@
     FROM buyer_receipt
     WHERE
       company_no=#{companyNo}
-
+      and is_del = 0
   </select>
 </mapper>
