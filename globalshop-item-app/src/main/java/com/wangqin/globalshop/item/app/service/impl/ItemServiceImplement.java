@@ -226,7 +226,7 @@ public class ItemServiceImplement implements IItemService {
             UUID uid = UUID.randomUUID();
             String uuid = uid.toString().replaceAll("-", "");
             ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
-            picUrl = insertIntoItemDimension(uuid, pages, accessToken);
+            picUrl = insertIntoItemDimension(String.format("id=%s",uuid), pages, accessToken);
             // uuid:picUrl
             shareCache.put(uuid, BaseDto.toString(tokenEntity));
             // key:uuid

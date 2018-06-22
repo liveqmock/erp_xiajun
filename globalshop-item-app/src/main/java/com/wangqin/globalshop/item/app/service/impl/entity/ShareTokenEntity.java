@@ -24,7 +24,7 @@ public class ShareTokenEntity {
         entity.setCompanyNo(companyNo);
         entity.setItemCode(itemCode);
         entity.setUuidShare(uuidShare);
-        entity.setUuidSale(uuidShare);
+        entity.setUuidSale("");
         entity.setSaleUserId(userId);
         entity.setSeq(1L);
         return entity;
