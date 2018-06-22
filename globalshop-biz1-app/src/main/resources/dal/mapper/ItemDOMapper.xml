@@ -41,7 +41,7 @@
     <result column="model" property="model" jdbcType="VARCHAR" />
     <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
     <result column="origin_sale_price" property="originSalePrice" jdbcType="VARCHAR" />
-    <result column="commission_mode" property="commissionMode" jdbcType="VARCHAR" />
+    <result column="commission_rate" property="commissionRate" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
@@ -54,7 +54,7 @@
     en_name, item_short, category_name, sale_type, main_pic, brand_no, brand_name, country, 
     currency, origin, freight, weight, logistic_type, price_range, unit, source, promotion, 
     id_card, start_date, end_date, booking_date, is_sale, sale_on_youzan, third_sale, 
-    wxis_sale, is_find, status, spec, model, buyer_open_id, origin_sale_price, commission_mode, 
+    wxis_sale, is_find, status, spec, model, buyer_open_id, origin_sale_price, commission_rate, 
     creator, modifier
   </sql>
   <sql id="Blob_Column_List" >
@@ -88,7 +88,7 @@
       booking_date, is_sale, sale_on_youzan, 
       third_sale, wxis_sale, is_find, 
       status, spec, model, 
-      buyer_open_id, origin_sale_price, commission_mode, 
+      buyer_open_id, origin_sale_price, commission_rate, 
       creator, modifier, remark, 
       detail)
     values (#{itemCode,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, 
@@ -103,7 +103,7 @@
       #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, #{saleOnYouzan,jdbcType=INTEGER}, 
       #{thirdSale,jdbcType=INTEGER}, #{wxisSale,jdbcType=TINYINT}, #{isFind,jdbcType=TINYINT}, 
       #{status,jdbcType=INTEGER}, #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
-      #{buyerOpenId,jdbcType=VARCHAR}, #{originSalePrice,jdbcType=VARCHAR}, #{commissionMode,jdbcType=VARCHAR}, 
+      #{buyerOpenId,jdbcType=VARCHAR}, #{originSalePrice,jdbcType=VARCHAR}, #{commissionRate,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR}, 
       #{detail,jdbcType=LONGVARCHAR})
   </insert>
@@ -227,8 +227,8 @@
       <if test="originSalePrice != null" >
         origin_sale_price,
       </if>
-      <if test="commissionMode != null" >
-        commission_mode,
+      <if test="commissionRate != null" >
+        commission_rate,
       </if>
       <if test="creator != null" >
         creator,
@@ -358,8 +358,8 @@
       <if test="originSalePrice != null" >
         #{originSalePrice,jdbcType=VARCHAR},
       </if>
-      <if test="commissionMode != null" >
-        #{commissionMode,jdbcType=VARCHAR},
+      <if test="commissionRate != null" >
+        #{commissionRate,jdbcType=VARCHAR},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -492,8 +492,8 @@
       <if test="originSalePrice != null" >
         origin_sale_price = #{originSalePrice,jdbcType=VARCHAR},
       </if>
-      <if test="commissionMode != null" >
-        commission_mode = #{commissionMode,jdbcType=VARCHAR},
+      <if test="commissionRate != null" >
+        commission_rate = #{commissionRate,jdbcType=VARCHAR},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -550,7 +550,7 @@
       model = #{model,jdbcType=VARCHAR},
       buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       origin_sale_price = #{originSalePrice,jdbcType=VARCHAR},
-      commission_mode = #{commissionMode,jdbcType=VARCHAR},
+      commission_rate = #{commissionRate,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=LONGVARCHAR},
@@ -597,7 +597,7 @@
       model = #{model,jdbcType=VARCHAR},
       buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       origin_sale_price = #{originSalePrice,jdbcType=VARCHAR},
-      commission_mode = #{commissionMode,jdbcType=VARCHAR},
+      commission_rate = #{commissionRate,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

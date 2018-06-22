@@ -382,11 +382,11 @@
 
   
   <!-- 一键分享微信登录接口-->
-  <select id="selectUserByWxOpenId" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectUserByWxUnionId" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select 
     company_no AS companyNo,user_no AS userNo,name
     from auth_user
-    where wx_open_id = #{wxOpenId}
+    where wx_union_id = #{wxUnionId}
   </select>
   
     

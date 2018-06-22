@@ -7,10 +7,18 @@ import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.*;
+import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.redis.Cache;
+import com.wangqin.globalshop.common.redis.RedisCacheTemplate;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+
+import com.wangqin.globalshop.common.utils.StringUtils;
+
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
+
 import com.wangqin.globalshop.item.app.service.*;
+import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -25,10 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ItemServiceImplement implements IItemService {
@@ -71,7 +76,13 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private ShippingPackingPatternDOMapperExt shippingPackingPatternDOMapper;
 
-    //根据id更新商品
+
+    @Autowired
+    private Cache shareCache;
+
+
+   //根据id更新商品
+
     @Override
     public void updateByIdSelective(ItemDO item) {
         itemDOMapperExt.updateByIdSelective(item);
@@ -205,6 +216,25 @@ public class ItemServiceImplement implements IItemService {
 
         return result;
     }
+
+
+    public String generateItemShareUrl(String userId,  String companyNo,String itemCode, String pages, String accessToken){
+
+        String key = String.format("%s-uuid-%s-%s-%s", "token",userId, companyNo, itemCode);
+        String picUrl = (String)shareCache.get(key);
+        if (StringUtils.isBlank(picUrl)){
+            UUID uid = UUID.randomUUID();
+            String uuid = uid.toString().replaceAll("-", "");
+            ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
+            picUrl = insertIntoItemDimension(uuid, pages, accessToken);
+            // uuid:picUrl
+            shareCache.put(uuid, BaseDto.toString(tokenEntity));
+            // key:uuid
+            shareCache.put(key, picUrl);
+        }
+        return picUrl;
+    }
+
 
     @Override
     public String insertIntoItemDimension(String sceneStr, String pages, String accessToken) {
@@ -473,30 +503,7 @@ public class ItemServiceImplement implements IItemService {
         }
     }
 
-    @Override
-    public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, String pageSize) {
-        // TODO Auto-generated method stub
-        return itemDOMapperExt.queryItemByStatus(companyNo, status, start, pageSize);
-    }
 
-    @Override
-    public List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, int start, String pageSize) {
-        // TODO Auto-generated method stub
-        return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, start, pageSize);
-    }
-
-    @Override
-    public ItemDO itemDetailByItemCode(String itemCode, String companyNo) {
-        // TODO Auto-generated method stub
-        return itemDOMapperExt.itemDetailByItemCode(itemCode, companyNo);
-    }
-
-
-    //一键分享，获取商品的图片
-    @Override
-    public String queryItemPicByItemCode(String itemCode) {
-        return itemDOMapperExt.queryItemPicByItemCode(itemCode);
-    }
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -679,4 +686,37 @@ public class ItemServiceImplement implements IItemService {
         return true;
     }
 
+    //一键分享商品的首页
+    @Override
+    public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, int pageSize) {
+        // TODO Auto-generated method stub
+        return itemDOMapperExt.queryItemByStatus(companyNo, status, start, pageSize);
+    }
+
+    //一键分享商品的搜索
+    @Override
+    public List<ItemDO> queryItemByKeyWord(List<String> keyWord, String companyNo, int start, int pageSize) {
+        // TODO Auto-generated method stub
+        return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, start, pageSize);
+    }
+
+    //一键分享商品的详情
+    @Override
+    public ItemDO itemDetailByItemCode(String itemCode, String companyNo) {
+        // TODO Auto-generated method stub
+        return itemDOMapperExt.itemDetailByItemCode(itemCode, companyNo);
+    }
+
+
+    //一键分享，获取商品的图片
+    @Override
+    public String queryItemPicByItemCode(String itemCode) {
+        return itemDOMapperExt.queryItemPicByItemCode(itemCode);
+    }
+
+    //一键分享，获取商品的图片
+    @Override
+    public String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo) {
+        return itemDOMapperExt.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
+    }
 }
