@@ -69,6 +69,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
 		return mapper.list(warehouseDO);
 	}
 
+	@Override
 	public List<WarehouseDO> selectWhList(WarehouseDO warehouseDO){
 		List<WarehouseDO> whList = new ArrayList<>();
 		if(warehouseDO.getCompanyNo() == null){

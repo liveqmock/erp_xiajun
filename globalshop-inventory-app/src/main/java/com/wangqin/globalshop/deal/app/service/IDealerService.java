@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -17,16 +18,12 @@ import java.util.List;
 @Authenticated
 public interface IDealerService{
 
-    List<DealerDO> list();
-
-    List<DealerDO> list2();
-    
+	List<Map<String, String>> dealerList(String companyNo);
+   
     void insert(DealerDO seller);
 
     DealerDO selectByCode(String dealerCode);
-    
-    
-    //软删除销售
+       
     void deleteByDealer(DealerDO seller);
     
     DealerDO selectByPrimaryKey(Long id);

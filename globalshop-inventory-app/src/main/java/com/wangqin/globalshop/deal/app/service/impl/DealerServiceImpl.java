@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author biscuit
@@ -20,15 +21,9 @@ public class DealerServiceImpl implements IDealerService {
     @Autowired
     private DealerDOMapperExt mapper;
     @Override
-    public List<DealerDO> list() {
-        return mapper.list();
+    public List<Map<String, String>> dealerList(String companyNo) {
+        return mapper.dealerList(companyNo);
     }
-    
-    @Override
-	public List<DealerDO> list2() {
-		// TODO Auto-generated method stub
-		return mapper.list2();
-	}
     
     @Override
     public void insert(DealerDO seller) {
@@ -50,10 +45,7 @@ public class DealerServiceImpl implements IDealerService {
 	@Override
 	public void deleteByDealer(DealerDO seller) {
 		// TODO Auto-generated method stub
-		
-		DealerDO sellers = mapper.selectByPrimaryKey(seller.getId());
-		sellers.setIsdel(1);
-		mapper.updateByPrimaryKeySelective(sellers);
+		mapper.deleteByPrimaryKey(seller.getId());
 	}
 
 	@Override

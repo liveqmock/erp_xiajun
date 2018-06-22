@@ -17,10 +17,10 @@ public interface IMallSubOrderService {
 
 
 	//一键分享，我的订单
-    List<MyOrderDTO> queryOrderByShareUserId(String shareUserId,int start,String pageSize);    
+    List<MyOrderDTO> queryOrderByShareUserId(String shareUserId,int start,int pageSize);    
     
     //一键分享，订单详情
-    List<MallSubOrderDO> queryOrderDetailByTime(String shareUserId,String shareTime,int start,String pageSize);
+    List<MallSubOrderDO> queryOrderDetailByTime(String shareUserId,String shareTime,int start,int pageSize);
   
 
 }

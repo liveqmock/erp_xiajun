@@ -3,6 +3,7 @@ package com.wangqin.globalshop.usercenter.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.common.utils.PageInfo;
 //import com.wangqin.globalshop.usercenter.service.ISysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/sysLog")
+@Authenticated
 public class SysLogController {
 
 //    @Autowired

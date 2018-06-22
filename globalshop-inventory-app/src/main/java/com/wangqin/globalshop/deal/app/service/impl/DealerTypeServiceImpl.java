@@ -14,6 +14,7 @@ import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
  * @author biscuit
  * @data 2018/06/05
  */
+
 @Service
 @Authenticated
 public class DealerTypeServiceImpl implements IDealerTypeService {
@@ -25,8 +26,8 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
 		return mapper.selectByPrimaryKey(id);
 	}
     @Override
-    public List<DealerTypeDO> list() {
-        return mapper.list();
+    public List<DealerTypeDO> list(String companyNo) {
+        return mapper.list(companyNo);
     }
 
     @Override
@@ -50,9 +51,7 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
 	@Override
 	public void deleteById(DealerTypeDO dealerType) {
 		// TODO Auto-generated method stub
-		DealerTypeDO dealerTypes = mapper.selectByPrimaryKey(dealerType.getId());
-		dealerTypes.setIsDel(true);
-		mapper.updateByPrimaryKeySelective(dealerTypes);
+		mapper.deleteByPrimaryKey(dealerType.getId());
 	}
 	@Override
 	public int countRelativeDealerType(String typeCode) {
