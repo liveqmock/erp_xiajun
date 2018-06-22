@@ -23,9 +23,7 @@ import java.util.List;
 @Controller
 @Authenticated
 @ResponseBody
-@RequestMapping(value = {
-//        "/wx/purchaseUser",
-        "/purchase"})
+@RequestMapping(value = {"/purchase"})
 public class BuyerController {
     @Autowired
     private IBuyerService service;
