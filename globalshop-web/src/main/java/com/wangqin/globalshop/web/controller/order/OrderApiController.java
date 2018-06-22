@@ -61,6 +61,7 @@ public class OrderApiController {
         //获取订单list
         List<MyOrderDTO> myOrderList = mallSubOrderService.queryOrderByShareUserId(userId, start, Integer.parseInt(pageSize));
         if(CollectionUtils.isEmpty(myOrderList)) {//无订单
+            result.put("commission","0");
            jsonResult.buildIsSuccess(true).buildData(result);
            return BaseDto.toString(jsonResult);
         }
