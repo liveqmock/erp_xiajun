@@ -120,7 +120,7 @@ public class OrderApiController {
         	tmp.setImgUrl(imgObject.getString("url"));
         	       	
         	tmp.setOrderNo(order.getOrderNo());
-        	tmp.setOrderTime(DateUtil.formatDate(order.getGmtCreate()).substring(0, 10));
+        	tmp.setOrderTime(DateUtil.formatDate(order.getGmtCreate()));
         	tmp.setRealPay("0");
         	orderDetailList.add(tmp);
         	totalMoney = totalMoney.add(order.getShareMoney());
