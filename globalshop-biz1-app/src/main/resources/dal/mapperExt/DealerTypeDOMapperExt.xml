@@ -21,6 +21,8 @@
     FROM dealer_type D1
     <where>
     	D1.is_del = 0
+    	AND
+    	D1.company_no = #{companyNo}
     </where>
  </select>
 	

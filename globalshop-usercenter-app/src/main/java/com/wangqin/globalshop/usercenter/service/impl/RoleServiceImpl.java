@@ -125,39 +125,7 @@ public class RoleServiceImpl implements IRoleService {
     public List<Long> selectResourceIdListByRoleId(Long id) {
         return roleMapper.selectResourceIdListByRoleId(id);
     }
-    
-//    @Override
-//    public Map<String, Set<String>> selectResourceMapByUserId(String userId) {
-//        Map<String, Set<String>> resourceMap = new HashMap<String, Set<String>>();
-//        List<Long> roleIdList = userRoleMapper.selectRoleIdListByUserId(userId);
-//        Set<String> urlSet = new HashSet<String>();
-//        Set<String> roles = new HashSet<String>();
-//        Set<String> resCodes = new HashSet<String>();
-//        for (Long roleId : roleIdList) {
-//            List<AuthResourceDO> resourceList = roleMapper.selectResourceListByRoleId(roleId);
-//            if (resourceList != null) {
-//				for (AuthResourceDO resource : resourceList) {
-//					if (resource != null) {
-//						if (StringUtils.isNotBlank(resource.getUrl())) {
-//							urlSet.add(resource.getUrl());
-//						}
-//						if (StringUtils.isNotBlank(resource.getResCode())) {
-//							resCodes.add(resource.getResCode());
-//						}
-//					}
-//				}
-//            }
-//            AuthRoleDO role = roleMapper.selectById(roleId);
-//            if (role != null) {
-//                roles.add(role.getName());
-//            }
-//        }
-//        resourceMap.put("urls", urlSet);
-//        resourceMap.put("roles", roles);
-//        resourceMap.put("resCodes", resCodes);
-//        return resourceMap;
-//    }
-
+  
 
     @Override
     public JsonPageResult<List<AuthRoleDO>> queryRoleList(RoleQueryVO roleQueryVO) {

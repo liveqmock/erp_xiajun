@@ -17,6 +17,7 @@ public class DealerDO extends BaseModel {
     
     private int isdel;
     
+    private String typeName;
    
 	public Long getId() {
         return id;
@@ -84,5 +85,14 @@ public class DealerDO extends BaseModel {
 	public void setIsdel(int isdel) {
 		this.isdel = isdel;
 	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	
 
 }

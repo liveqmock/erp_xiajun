@@ -18,7 +18,7 @@ public interface IDealerTypeService {
 	
 	DealerTypeDO selectByPrimaryKey(Long id);
 	
-    List<DealerTypeDO> list();
+    List<DealerTypeDO> list(String companyNo);
 
     void insert(DealerTypeDO sellerType);
     
