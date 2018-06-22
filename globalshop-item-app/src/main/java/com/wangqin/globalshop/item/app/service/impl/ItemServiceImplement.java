@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
@@ -10,7 +11,12 @@ import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.redis.RedisCacheTemplate;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+
 import com.wangqin.globalshop.common.utils.StringUtils;
+
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.StringUtil;
+
 import com.wangqin.globalshop.item.app.service.*;
 import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +24,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -32,7 +39,7 @@ import java.util.*;
 public class ItemServiceImplement implements IItemService {
 
     @Autowired
-    private ItemDOMapperExt    itemDOMapperExt;
+    private ItemDOMapperExt itemDOMapperExt;
 
     @Autowired
     private ChannelListingItemDOMapperExt channelListingItemDOMapperExt;
@@ -48,45 +55,51 @@ public class ItemServiceImplement implements IItemService {
 
 
     @Autowired
-    private IItemSkuService    itemSkuService;
+    private IItemSkuService itemSkuService;
 
     @Autowired
-    private IFreightService    iFreightService;
+    private IFreightService iFreightService;
 
     @Autowired
     private ItemIInventoryService inventoryService;
 
     @Autowired
-    private IItemBrandService  iBrandService;
+    private IItemBrandService iBrandService;
 
     @Autowired
     private IUploadFileService uploadFileService;
 
     @Autowired
-    private ItemSkuDOMapperExt itemSkuDOMapperExt;
+    private ItemSkuMapperExt itemSkuMapperExt;
+    @Autowired
+    private IItemCategoryService categoryService;
+    @Autowired
+    private ShippingPackingPatternDOMapperExt shippingPackingPatternDOMapper;
+
 
     @Autowired
     private Cache shareCache;
 
 
    //根据id更新商品
+
     @Override
     public void updateByIdSelective(ItemDO item) {
-  		itemDOMapperExt.updateByIdSelective(item);
-  	}
-  	
+        itemDOMapperExt.updateByIdSelective(item);
+    }
+
     //插入单个商品
     @Override
     public Long insertItemSelective(ItemDO item) {
-    	item.setCreator("admin");
-    	item.setModifier("admin");
-    	return itemDOMapperExt.insertItemSelective(item);
+        item.setCreator("admin");
+        item.setModifier("admin");
+        return itemDOMapperExt.insertItemSelective(item);
     }
-  	
+
     @Override
     public void addItem(ItemDO item) {
-    	
-    	itemDOMapperExt.insertSelective(item);	
+
+        itemDOMapperExt.insertSelective(item);
 
     }
 
@@ -107,7 +120,6 @@ public class ItemServiceImplement implements IItemService {
         // itemSku.setFreight(f);
     }
 
-   
 
     @Override
     public ItemDO queryIte(Long id) {
@@ -146,30 +158,30 @@ public class ItemServiceImplement implements IItemService {
         }
         return itemResult;
     }
-    
+
     /**
      * 根据id查询商品，商品编辑使用(fin)
      */
     @Override
     public ItemDTO queryItemById(Long id) {
-    	//return itemDOMapperExt.queryItemById(id);
-    	if(null == id){
-			throw new RuntimeException("商品的id不能为空");
-		}
-		ItemDTO item = itemDOMapperExt.queryItemById(id);
-		if(item!=null){
-			List<ItemSkuDO> itemSkus = itemSkuService.querySkuListByItemCode(item.getItemCode());
-			//查询分渠道销售价格
+        //return itemDOMapperExt.queryItemById(id);
+        if (null == id) {
+            throw new RuntimeException("商品的id不能为空");
+        }
+        ItemDTO item = itemDOMapperExt.queryItemById(id);
+        if (item != null) {
+            List<ItemSkuDO> itemSkus = itemSkuService.querySkuListByItemCode(item.getItemCode());
+            //查询分渠道销售价格
 //			itemSkus.forEach(sku -> {
 //				if(ChannelSaleType.DIFFERENT.getValue() == sku.getSaleMode()) {
 //					sku.setChannelSalePriceList(channelSalePriceService.queryPriceListBySkuCode(sku.getSkuCode()));
 //				}
 //			});
-			if(itemSkus!=null){
-				item.setItemSkus(itemSkus);
-			}
-		}
-		return item;
+            if (itemSkus != null) {
+                item.setItemSkus(itemSkus);
+            }
+        }
+        return item;
     }
 
     @Override
@@ -251,7 +263,7 @@ public class ItemServiceImplement implements IItemService {
 
             StringBuilder sb = new StringBuilder();
             sb.append((int) (Math.random()
-                             * 100)).append("_").append(System.currentTimeMillis()).append(".").append("jpg");
+                    * 100)).append("_").append(System.currentTimeMillis()).append(".").append("jpg");
             String picKey = sb.toString();
             picUrl = uploadFileService.uploadImg(inputStream, picKey);
             if (picUrl.isEmpty()) {
@@ -315,53 +327,54 @@ public class ItemServiceImplement implements IItemService {
         return itemDOMapperExt.sumNewItemNumByMonth(months);
     }
 
-	@Override
-	public List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO) {
-		List<ItemDTO> list = itemDOMapperExt.queryItems(itemQueryVO);
-		for(ItemDTO item:list) {
-			item.setCategoryId(337L);
-		}
-		return itemDOMapperExt.queryItems(itemQueryVO);
-	}
-    
+    @Override
+    public List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO) {
+        List<ItemDTO> list = itemDOMapperExt.queryItems(itemQueryVO);
+        for (ItemDTO item : list) {
+            item.setCategoryId(337L);
+        }
+        return itemDOMapperExt.queryItems(itemQueryVO);
+    }
 
 
-	@Override
-	public Long queryIdByItemCode(String itemCode) {
-		return itemDOMapperExt.queryIdByItemCode(itemCode);
-	}
+    @Override
+    public Long queryIdByItemCode(String itemCode) {
+        return itemDOMapperExt.queryIdByItemCode(itemCode);
+    }
 
 
-	/**
+    /**
      * 专供渠道查询
+     *
      * @param itemCode
      * @return
      */
-    public ItemVo queryAdd(String itemCode){
+    @Override
+    public ItemVo queryAdd(String itemCode) {
 
         ItemVo itemVo = new ItemVo();
         ItemDO itemDo = itemDOMapperExt.queryItemByItemCode(itemCode);
-        if(itemDo != null){
-            BeanUtils.copies(itemDo,itemVo);
+        if (itemDo != null) {
+            BeanUtils.copies(itemDo, itemVo);
         }
         List<ItemSkuVo> itemSkuVos = new ArrayList<>();
         ItemSkuDO skuSo = new ItemSkuDO();
         skuSo.setItemCode(itemDo.getItemCode());
         List<ItemSkuDO> skuList = itemSkuService.querySkuListByItemCode(itemCode);
-        for(ItemSkuDO sku : skuList){
+        for (ItemSkuDO sku : skuList) {
             ItemSkuVo itemSkuVo = new ItemSkuVo();
-            if(sku != null){
-                BeanUtils.copies(sku,itemSkuVo);
+            if (sku != null) {
+                BeanUtils.copies(sku, itemSkuVo);
             }
             //库存
-            InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(),sku.getSkuCode());
+            InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(), sku.getSkuCode());
             itemSkuVo.setInventoryDO(inventoryDO);
 
             //规格尺寸
             List<ItemSkuScaleDO> itemSkuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
-            Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
-            for(ItemSkuScaleDO scale : itemSkuScaleDOS){
-                scaleMap.put(scale.getScaleCode(),scale);
+            Map<String, ItemSkuScaleDO> scaleMap = new HashMap<>();
+            for (ItemSkuScaleDO scale : itemSkuScaleDOS) {
+                scaleMap.put(scale.getScaleCode(), scale);
             }
             itemSkuVo.setScaleMap(scaleMap);
 
@@ -372,12 +385,15 @@ public class ItemServiceImplement implements IItemService {
         return itemVo;
 
     }
+
     /**
      * 专供渠道查询
+     *
      * @param itemCode
      * @return
      */
-    public GlobalShopItemVo queryUpdate(String itemCode, String shopCode){
+    @Override
+    public GlobalShopItemVo queryUpdate(String itemCode, String shopCode) {
 
         GlobalShopItemVo resultVo = new GlobalShopItemVo();
 
@@ -394,10 +410,9 @@ public class ItemServiceImplement implements IItemService {
 
         ChannelListingItemDO channelListingItemDO = channelListingItemDOMapperExt.queryPo(so);
 
-        if(channelListingItemDO != null){
-            BeanUtils.copies(channelListingItemDO,channelListingItemVo);
+        if (channelListingItemDO != null) {
+            BeanUtils.copies(channelListingItemDO, channelListingItemVo);
         }
-
 
 
         ChannelListingItemSkuDO skuSo = new ChannelListingItemSkuDO();
@@ -407,10 +422,10 @@ public class ItemServiceImplement implements IItemService {
         List<ChannelListingItemSkuDO> channelListingItemSkuDOS = channelListingItemSkuDOMapperExt.queryPoList(skuSo);
 
         List<ChannelListingItemSkuVo> channelListingItemSkuVos = new ArrayList<>();
-        for(ChannelListingItemSkuDO sku : channelListingItemSkuDOS){
+        for (ChannelListingItemSkuDO sku : channelListingItemSkuDOS) {
             ChannelListingItemSkuVo skuVo = new ChannelListingItemSkuVo();
-            if(sku !=null){
-                BeanUtils.copies(sku,skuVo);
+            if (sku != null) {
+                BeanUtils.copies(sku, skuVo);
             }
             channelListingItemSkuVos.add(skuVo);
         }
@@ -424,100 +439,284 @@ public class ItemServiceImplement implements IItemService {
 
     }
 
-    public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo){
+    @Override
+    public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo) {
 
         ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
 
         //第一步：channellistingitem
         ChannelListingItemDO channelListingItemDO = new ChannelListingItemDO();
-        BeanUtils.copies(channelListingItemVo,channelListingItemDO);
+        BeanUtils.copies(channelListingItemVo, channelListingItemDO);
         channelListingItemDOMapperExt.insert(channelListingItemDO);
 
         //第二步：channellistingitemSku
-        List<ChannelListingItemSkuVo> channelListingItemSkuVoS =  channelListingItemVo.getChannelListingItemSkuVos();
-        for(ChannelListingItemSkuVo sku : channelListingItemSkuVoS){
+        List<ChannelListingItemSkuVo> channelListingItemSkuVoS = channelListingItemVo.getChannelListingItemSkuVos();
+        for (ChannelListingItemSkuVo sku : channelListingItemSkuVoS) {
             ChannelListingItemSkuDO channelListingItemSkuDO = new ChannelListingItemSkuDO();
-            BeanUtils.copies(sku,channelListingItemSkuDO);
+            BeanUtils.copies(sku, channelListingItemSkuDO);
             channelListingItemSkuDOMapperExt.insert(channelListingItemSkuDO);
         }
 
         ItemVo itemVo = globalShopItemVo.getItemVo();
 
         ItemDO itemDO = new ItemDO();
-        BeanUtils.copies(itemVo,itemDO);
+        BeanUtils.copies(itemVo, itemDO);
         itemDOMapperExt.insert(itemDO);
 
         List<ItemSkuVo> skuVos = itemVo.getItemSkus();
-        for(ItemSkuVo  skuVo : skuVos){
+        for (ItemSkuVo skuVo : skuVos) {
             ItemSkuDO skuDO = new ItemSkuDO();
-            BeanUtils.copies(skuVo,skuDO);
-            itemSkuDOMapperExt.insert(skuDO);
+            BeanUtils.copies(skuVo, skuDO);
+            itemSkuMapperExt.insert(skuDO);
         }
     }
 
-    public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo){
+    @Override
+    public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo) {
 
         ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
 
         //第一步：channellistingitem
         ChannelListingItemDO channelListingItemDO = new ChannelListingItemDO();
-        BeanUtils.copies(channelListingItemVo,channelListingItemDO);
+        BeanUtils.copies(channelListingItemVo, channelListingItemDO);
         channelListingItemDOMapperExt.insert(channelListingItemDO);
 
         //第二步：channellistingitemSku
-        List<ChannelListingItemSkuVo> channelListingItemSkuVoS =  channelListingItemVo.getChannelListingItemSkuVos();
-        for(ChannelListingItemSkuVo sku : channelListingItemSkuVoS){
+        List<ChannelListingItemSkuVo> channelListingItemSkuVoS = channelListingItemVo.getChannelListingItemSkuVos();
+        for (ChannelListingItemSkuVo sku : channelListingItemSkuVoS) {
             ChannelListingItemSkuDO channelListingItemSkuDO = new ChannelListingItemSkuDO();
-            BeanUtils.copies(sku,channelListingItemSkuDO);
+            BeanUtils.copies(sku, channelListingItemSkuDO);
             channelListingItemSkuDOMapperExt.insert(channelListingItemSkuDO);
         }
 
         ItemVo itemVo = globalShopItemVo.getItemVo();
 
         ItemDO itemDO = new ItemDO();
-        BeanUtils.copies(itemVo,itemDO);
+        BeanUtils.copies(itemVo, itemDO);
         itemDOMapperExt.insert(itemDO);
 
         List<ItemSkuVo> skuVos = itemVo.getItemSkus();
-        for(ItemSkuVo  skuVo : skuVos){
+        for (ItemSkuVo skuVo : skuVos) {
             ItemSkuDO skuDO = new ItemSkuDO();
-            BeanUtils.copies(skuVo,skuDO);
-            itemSkuDOMapperExt.insert(skuDO);
+            BeanUtils.copies(skuVo, skuDO);
+            itemSkuMapperExt.insert(skuDO);
         }
     }
-    
+
+
+
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void importItem(List<List<Object>> list) throws ErpCommonException {
+        List<String> errMsg = new ArrayList<>();
+        List<ItemDO> itemList = new ArrayList<>();
+        List<ItemSkuDO> skuList = new ArrayList<>();
+        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+        int i = 0;
+        for (List<Object> obj : list) {
+            i++;
+            ItemDO item = new ItemDO();
+            ItemSkuDO itemSku = new ItemSkuDO();
+            /**SKU编号*/
+            itemSku.setSkuCode(obj.get(0).toString());
+            /**商品名称*/
+            String itemName = obj.get(1).toString();
+            item.setItemName(itemName);
+            itemSku.setItemName(itemName);
+            /**UPC*/
+            itemSku.setUpc(obj.get(2).toString());
+            /**品牌(英文)*/
+            String brandEnName = obj.get(3).toString();
+            /**品牌(中文)*/
+            String brandCnName = obj.get(4).toString();
+            item.setBrandName(brandEnName + " " + brandCnName);
+            itemSku.setBrandName(brandEnName + " " + brandCnName);
+            List<ItemBrandDO> brand = iBrandService.queryByEnNameAndCnName("%" + brandEnName + "%" + brandCnName + "%");
+            if (brand.size() == 0) {
+                errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
+            } else if (brand.size() > 1) {
+                errMsg.add("第" + i + "行:" + brandEnName + " " + brandCnName + "对应的品牌不唯一");
+            } else {
+                item.setBrandNo(brand.get(0).getBrandNo());
+            }
+            /**类目1*/
+            String category1 = obj.get(5).toString();
+            List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
+            /**类目2*/
+            String category2 = obj.get(6).toString();
+            List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
+            /**类目3*/
+            String category3 = obj.get(7).toString();
+            List<ItemCategoryDO> categoryList = categoryService.selectByParentAndName(categoryList2, category3);
+            String categoryCode = "";
+            if (categoryList.size() == 0) {
+                errMsg.add("第" + i + "行:找不到" + category1+"/"+ category2+"/"+ category3+ "对应的类目");
+            } else if (categoryList.size() > 1) {
+                errMsg.add("第" + i + "行:" + category1+"/"+ category2+"/"+ category3+ "对应的类目不唯一");
+            } else {
+                ItemCategoryDO category = categoryList.get(0);
+                categoryCode=category.getCategoryCode();
+                item.setCategoryCode(categoryCode);
+                item.setCategoryName(category.getName());
+                itemSku.setCategoryCode(categoryCode);
+                itemSku.setCategoryCode(category.getName());
+            }
+            /**规格(颜色)*/
+            String scala1 = obj.get(8).toString();
+            /**规格(尺寸)*/
+            String scala2 = obj.get(9).toString();
+            addInfo2ScaleList(scala1,scala2,scaleList);
+            /**采购地*/
+            String purchaseFrom = obj.get(10).toString();
+            item.setCountry(purchaseFrom);
+            /**币种*/
+            String currency = obj.get(11).toString();
+            if (isParseToInteger(currency)) {
+                item.setCurrency(Byte.valueOf(currency));
+            } else {
+                errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + currency);
+            }
+            /**销售价*/
+            String salePrice = obj.get(12).toString();
+            salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
+            if (isParseToDouble(salePrice)) {
+                itemSku.setSalePrice(Double.valueOf(salePrice));
+            } else {
+                errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
+            }
+            /**原价*/
+            String price = obj.get(13).toString();
+            price = StringUtil.isBlank(price) ? "0" : price;
+            if (isParseToDouble(price)) {
+                itemSku.setCostPrice(Double.valueOf(price));
+            } else {
+                errMsg.add("存在未知格式的数据:第" + i + "行 第14列的  " + price);
+            }
+            /**重量*/
+            String weight = obj.get(14).toString();
+            weight = StringUtil.isBlank(weight) ? "0" : weight;
+            if (isParseToDouble(weight)) {
+                item.setWeight(Double.valueOf(weight));
+                itemSku.setWeight(Double.valueOf(weight));
+            } else {
+                errMsg.add("存在未知格式的数据:第" + i + "行 第15列的  " + weight);
+            }
+            /**包装*/
+            String packName = obj.get(15).toString();
+
+            ShippingPackingPatternDO pack = shippingPackingPatternDOMapper.selectByName(packName);
+            itemSku.setPackageCode(pack.getPatternNo());
+            itemSku.setPackageLevelId(String.valueOf(pack.getPackageLevel()));
+            itemSku.setPackageName(pack.getName());
+            itemSku.setPackageEn(pack.getNameEn());
+            itemSku.setPackageWeight(pack.getWeight());
+            /**图片链接*/
+            String imgUrl = obj.get(16).toString();
+            item.setMainPic(imgUrl);
+            itemSku.setSkuPic(imgUrl);
+            String itemCode = CodeGenUtil.getItemCode(categoryCode);
+            item.setItemCode(itemCode);
+            itemSku.setItemCode(itemCode);
+            item.init();
+            itemSku.init();
+
+            itemList.add(item);
+            skuList.add(itemSku);
+        }
+        int size = errMsg.size();
+        if (size == 0) {
+            itemDOMapperExt.insertBatch(itemList);
+            itemSkuMapperExt.inserBatch(skuList);
+            itemSkuScaleDOMapper.insertBatch(scaleList);
+        } else if (size < 10) {
+            throw new ErpCommonException(errMsg.toString());
+        } else {
+            throw new ErpCommonException("上传文件错误过多,请验证后再次上传");
+        }
+
+
+    }
+    /**
+     * 判断是否能够转换成Double类型
+     *
+     * @param price
+     */
+    private boolean isParseToDouble(String price) {
+        try {
+            Double.valueOf(price);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 根据颜色和尺寸完成itemSkuScale对象的封装并装配到链表中
+     * @param scala1 颜色对应的值
+     * @param scala2 尺寸对应的值
+     * @param scaleList 装配itemSkuScale对象的链表
+     */
+    private void addInfo2ScaleList(String scala1, String scala2, List<ItemSkuScaleDO> scaleList) {
+        ItemSkuScaleDO itemScale1 = new ItemSkuScaleDO();
+        ItemSkuScaleDO itemScale2 = new ItemSkuScaleDO();
+        itemScale1.init();
+        itemScale1.setScaleCode(CodeGenUtil.getScaleCode());
+        itemScale1.setScaleName("颜色");
+        itemScale1.setScaleValue(scala1);
+        itemScale2.init();
+        itemScale2.setScaleCode(CodeGenUtil.getScaleCode());
+        itemScale2.setScaleName("尺寸");
+        itemScale2.setScaleValue(scala2);
+        scaleList.add(itemScale1);
+        scaleList.add(itemScale2);
+
+    }
+
+    /**
+     * 判断是否能够转换成Integer类型
+     *
+     * @param maxPrice
+     */
+    private Boolean isParseToInteger(String maxPrice) {
+        try {
+            Integer.valueOf(maxPrice);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
     //一键分享商品的首页
-	@Override
-	public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, int pageSize) {
-		// TODO Auto-generated method stub
-		return itemDOMapperExt.queryItemByStatus(companyNo, status, start, pageSize);
-	}
+    @Override
+    public List<ItemDO> queryItemByStatus(String companyNo, String status, int start, int pageSize) {
+        // TODO Auto-generated method stub
+        return itemDOMapperExt.queryItemByStatus(companyNo, status, start, pageSize);
+    }
 
-	//一键分享商品的搜索
-	@Override
-	public List<ItemDO> queryItemByKeyWord(List<String> keyWord, String companyNo, int start, int pageSize) {
-		// TODO Auto-generated method stub
-		return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, start, pageSize);
-	}
+    //一键分享商品的搜索
+    @Override
+    public List<ItemDO> queryItemByKeyWord(List<String> keyWord, String companyNo, int start, int pageSize) {
+        // TODO Auto-generated method stub
+        return itemDOMapperExt.queryItemByKeyWord(keyWord, companyNo, start, pageSize);
+    }
 
-	//一键分享商品的详情
-	@Override
-	public ItemDO itemDetailByItemCode(String itemCode, String companyNo) {
-		// TODO Auto-generated method stub
-		return itemDOMapperExt.itemDetailByItemCode(itemCode, companyNo);
-	}
-	
+    //一键分享商品的详情
+    @Override
+    public ItemDO itemDetailByItemCode(String itemCode, String companyNo) {
+        // TODO Auto-generated method stub
+        return itemDOMapperExt.itemDetailByItemCode(itemCode, companyNo);
+    }
 
-	//一键分享，获取商品的图片
-	@Override
-	public String queryItemPicByItemCode(String itemCode) {
-		return itemDOMapperExt.queryItemPicByItemCode(itemCode);
-	}
-	
-	//一键分享，获取商品的图片
-	@Override
-	public String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo) {
-		return itemDOMapperExt.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
-	}
-   
+
+    //一键分享，获取商品的图片
+    @Override
+    public String queryItemPicByItemCode(String itemCode) {
+        return itemDOMapperExt.queryItemPicByItemCode(itemCode);
+    }
+
+    //一键分享，获取商品的图片
+    @Override
+    public String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo) {
+        return itemDOMapperExt.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
+    }
 }

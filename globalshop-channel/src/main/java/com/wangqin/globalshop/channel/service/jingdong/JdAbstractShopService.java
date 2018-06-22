@@ -38,52 +38,62 @@ public abstract class JdAbstractShopService implements JdShopService {
 		this.shopOauth = shopOauth;
 	}
 
-	public Object createItem(ItemVo itemVo){
+	@Override
+    public Object createItem(ItemVo itemVo){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品上新功能");
 	}
 
 
-	public void updateItem(GlobalShopItemVo globalShopItemVo){
+	@Override
+    public void updateItem(GlobalShopItemVo globalShopItemVo){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品更新功能");
 	}
 
 
-	public void listingItem(ChannelListingItemVo channelListingItemVo){
+	@Override
+    public void listingItem(ChannelListingItemVo channelListingItemVo){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品上架功能");
 	}
 
 
-	public void delistingItem(ChannelListingItemVo channelListingItemVo){
+	@Override
+    public void delistingItem(ChannelListingItemVo channelListingItemVo){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品下架功能");
 	}
 
 
-	public void modifySalePrice(ChannelSalePriceVo channelSalePriceVo){
+	@Override
+    public void modifySalePrice(ChannelSalePriceVo channelSalePriceVo){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品修改价格功能");
 	}
 
 
-	public List<JdItemDO> getItems(Date startTime, Date endTime){
+	@Override
+    public List<JdItemDO> getItems(Date startTime, Date endTime){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持同步商品功能");
 	}
 
 
-	public JdItemDO getItemByItemCode(String itemCode){
+	@Override
+    public JdItemDO getItemByItemCode(String itemCode){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持单个商品抓取功能");
 	}
 
 
-	public JSONObject convertItemGlobal2Jd(ItemVo itemVo){
+	@Override
+    public JSONObject convertItemGlobal2Jd(ItemVo itemVo){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品转换成JD模型功能");
 	}
 
 
-	public GlobalShopItemVo convertItemJd2Global(String jsonData){
+	@Override
+    public GlobalShopItemVo convertItemJd2Global(String jsonData){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持商品转换成内部模型功能");
 	}
 
 
-	public List<JdOrderDO> getOrders(String startTime, String endTime){
+	@Override
+    public List<JdOrderDO> getOrders(String startTime, String endTime){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持批量抓取订单功能");
 	}
 
@@ -92,7 +102,8 @@ public abstract class JdAbstractShopService implements JdShopService {
 	 * @param tid
 	 * @return
 	 */
-	public JdOrderDO getOrderByTid(String tid){
+	@Override
+    public JdOrderDO getOrderByTid(String tid){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持按单号抓取订单功能");
 	}
 
@@ -101,18 +112,21 @@ public abstract class JdAbstractShopService implements JdShopService {
 	 * @param orderJson
 	 * @return
 	 */
-	public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson){
+	@Override
+    public GlobalshopOrderVo convertJdOrder2Globalshop(String orderJson){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持订单转换内部结构功能");
 	}
 
 	/**
 	 * 发货
 	 */
-	public void logisticComfire(JdLogisticsDO jdLogisticsDO){
+	@Override
+    public void logisticComfire(JdLogisticsDO jdLogisticsDO){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持确认发货功能");
 	}
 
-	public void getCategory(){
+	@Override
+    public void getCategory(){
 		throw new ErpCommonException("渠道：【"+ChannelType.getChannelType(Integer.valueOf(shopOauth.getChannelNo())).getName()+"】不支持获取类目功能");
 	}
 }

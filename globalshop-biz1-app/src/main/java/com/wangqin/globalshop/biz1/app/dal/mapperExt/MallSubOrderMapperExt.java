@@ -17,11 +17,14 @@ import java.util.List;
  *
  */
 public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
-	int deleteByPrimaryKey(Long id);
+	@Override
+    int deleteByPrimaryKey(Long id);
 
-	int insertSelective(MallSubOrderDO record);
+	@Override
+    int insertSelective(MallSubOrderDO record);
 
-	MallSubOrderDO selectByPrimaryKey(Long id);
+	@Override
+    MallSubOrderDO selectByPrimaryKey(Long id);
 
 
 	List<MallSubOrderDO> selectList(MallSubOrderDO order);

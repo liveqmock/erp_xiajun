@@ -37,7 +37,7 @@ public class CookieUtil {
      * @return
      */
     public static Cookie getCookie(HttpServletRequest request, String name) {
-        Cookie cookies[] = request.getCookies();
+        Cookie[] cookies = request.getCookies();
         if (cookies != null && null != name) {
             for (int i = 0; i < cookies.length; i++) {
                 if (name.equals(cookies[i].getName())) {
@@ -61,7 +61,9 @@ public class CookieUtil {
             encode = defEncode; // 默认"UTF-8"
         }
         String val = getCookiePriValue(request, name);
-        if (val == null) return null;
+        if (val == null) {
+            return null;
+        }
         try {
             return URLDecoder.decode(val, encode);
         } catch (UnsupportedEncodingException e) {
@@ -75,7 +77,9 @@ public class CookieUtil {
      */
     public static String getCookiePriValue(HttpServletRequest request, String name) {
         Cookie sCookie = getCookie(request, name);
-        if (sCookie == null) return null;
+        if (sCookie == null) {
+            return null;
+        }
         return sCookie.getValue();
     }
 
@@ -139,8 +143,10 @@ public class CookieUtil {
      * @param response
      */
     public static void removeAllCookie(HttpServletRequest request, HttpServletResponse response) {
-        Cookie cookies[] = request.getCookies();
-        if (cookies == null || cookies.length <= 0) return;
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null || cookies.length <= 0) {
+            return;
+        }
         for (int i = 0; i < cookies.length; i++) {
             Cookie sCookie = cookies[i];
             sCookie.setValue(null);

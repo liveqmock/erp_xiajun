@@ -88,6 +88,7 @@ public class GoodsController {
 
         Map<String, List<ItemDO>> itemsMap = new TreeMap<String, List<ItemDO>>(new Comparator<String>() {
 
+            @Override
             public int compare(String obj1, String obj2) {
                 // 降序排序
                 return obj2.compareTo(obj1);

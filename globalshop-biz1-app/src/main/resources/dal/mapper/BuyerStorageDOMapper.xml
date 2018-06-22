@@ -16,10 +16,12 @@
     <result column="memo" property="memo" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, storage_no, warehouse_no, company_no, warehouse_name, buyer_name, buyer_open_id, 
-    purchase_storage_no, buyer_task_no, storage_type, entry_date, memo, creator, modifier
+    purchase_storage_no, buyer_task_no, storage_type, entry_date, memo, creator, modifier, 
+    status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -39,12 +41,12 @@
       warehouse_name, buyer_name, buyer_open_id, 
       purchase_storage_no, buyer_task_no, storage_type, 
       entry_date, memo, creator, 
-      modifier)
+      modifier, status)
     values (#{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{warehouseName,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=BIGINT}, 
       #{purchaseStorageNo,jdbcType=VARCHAR}, #{buyerTaskNo,jdbcType=VARCHAR}, #{storageType,jdbcType=TINYINT}, 
       #{entryDate,jdbcType=TIMESTAMP}, #{memo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+      #{modifier,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -91,6 +93,9 @@
       <if test="modifier != null" >
         modifier,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="storageNo != null" >
@@ -131,6 +136,9 @@
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -176,6 +184,9 @@
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -193,7 +204,8 @@
       entry_date = #{entryDate,jdbcType=TIMESTAMP},
       memo = #{memo,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      modifier = #{modifier,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

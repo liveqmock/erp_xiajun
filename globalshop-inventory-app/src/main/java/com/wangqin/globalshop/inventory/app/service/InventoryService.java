@@ -37,4 +37,6 @@ public interface InventoryService {
 
     void inventoryCheckOut(Long inventoryAreaId, Long quantity);
 
+
+
 }

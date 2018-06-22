@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.common.enums;
 
+import java.util.Objects;
+
 public enum Kuaidi100Status {
 	NotNeed_Subscribe(0, "不需订阅"),
 	Need_Subscribe(1, "需要订阅，但未订阅"),
@@ -32,7 +34,7 @@ public enum Kuaidi100Status {
 	
 	public static Kuaidi100Status statusOfValue(Integer value) {
 		for (Kuaidi100Status item : Kuaidi100Status.values()) {
-			if (item.value == value) {
+			if (Objects.equals(item.value, value)) {
 				return item;
 			}
 		}

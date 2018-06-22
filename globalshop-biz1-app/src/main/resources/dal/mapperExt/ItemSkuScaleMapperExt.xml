@@ -15,6 +15,34 @@
     from item_sku_scale T1
     where T1.sku_code = #{skuCode}
   </select>
+
+  <insert id="insertBatch" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into item_sku_scale(
+        item_code,
+        sku_code,
+        scale_code,
+        scale_name,
+        scale_value,
+        creator,
+        modifier
+      )
+    VALUES
+      <foreach collection="list" item="scale" separator=",">
+          (
+          #{scale.item_code},
+          #{scale.sku_code},
+          #{scale.scale_code},
+          #{scale.scale_name},
+          #{scale.scale_value},
+          #{scale.creator},
+          #{scale.modifier}
+          )
+      </foreach>
+
+  </insert>
   
   
 </mapper>

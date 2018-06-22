@@ -1,17 +1,16 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemBrandDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 
@@ -101,5 +100,10 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 	@Override
 	public void deleteItemBrandById(Long id) {
 		itemBrandDOMapperExt.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public List<ItemBrandDO> queryByEnNameAndCnName(String name) {
+		return itemBrandDOMapperExt.queryByEnNameAndCnName(name);
 	}
 }

@@ -664,7 +664,8 @@
          ( T1.sku_code =#{code}
          OR
          T1.upc = #{code})
-
+         AND
+         T1.is_del = 0
      </select>
      
      <!-- 一键分享的商品的价格 -->
@@ -680,4 +681,57 @@
      	</where>
      
      </select>
+
+
+    <insert id="inserBatch" parameterType="java.util.List" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into item_sku(
+                sku_code,
+                item_code,
+                item_name,
+                company_no,
+                category_code,
+                category_name,
+                upc,
+                cost_price,
+                brand_name,
+                weight,
+                sku_pic,
+                package_code,
+                package_name,
+                package_en,
+                package_weight,
+                package_level_id,
+                scale,
+                creator,
+                modifier,
+                remark
+        )VALUES
+        <foreach collection="list" item="itemSku" separator=",">
+            (
+            #{itemSku.skuCode},
+            #{itemSku.itemCode},
+            #{itemSku.itemName},
+            #{itemSku.companyNo},
+            #{itemSku.categoryCode},
+            #{itemSku.categoryName},
+            #{itemSku.upc},
+            #{itemSku.costPrice},
+            #{itemSku.brandName},
+            #{itemSku.weight},
+            #{itemSku.skuPic},
+            #{itemSku.packageCode},
+            #{itemSku.packageName},
+            #{itemSku.packageEn},
+            #{itemSku.packageWeight},
+            #{itemSku.packageLevelId},
+            #{itemSku.scale},
+            #{itemSku.creator},
+            #{itemSku.modifier},
+            #{itemSku.remark}
+            )
+        </foreach>
+    </insert>
 </mapper>

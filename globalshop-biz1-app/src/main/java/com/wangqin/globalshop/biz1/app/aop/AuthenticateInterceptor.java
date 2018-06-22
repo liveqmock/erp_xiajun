@@ -67,11 +67,11 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                 if (annotationInBean == null) {
                     return true;
                 }
-                if (annotationInBean.intercept().equals("notIntercept")) {
+                if ("notIntercept".equals(annotationInBean.intercept())) {
                     isJump = false;
                 }
             } else {
-                if (authenticate.intercept().equals("notIntercept")) {
+                if ("notIntercept".equals(authenticate.intercept())) {
                     isJump = false;
                 }
             }
@@ -81,7 +81,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
             sessionId = CookieUtil.getCookieValue(request, sessionIDName);
         }
         if (StringUtils.isNotBlank(sessionId)) {
-            if(!request.getRequestURI().equalsIgnoreCase("/login")) {
+            if(!"/login".equalsIgnoreCase(request.getRequestURI())) {
                 try {
                     // redis 缓存尝试取
                     String userId = (String) loginCache.get(sessionId);

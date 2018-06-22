@@ -30,7 +30,7 @@
     FROM buyer_receipt_detail
     WHERE
     company_no=#{companyNo}
-
+    and is_del = 0
 
   </select>
 </mapper>

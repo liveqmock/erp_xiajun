@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  */
 public class MathUtil {
 
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 //		System.out.println(subtract(18.0234d, 2.345d));
 //		System.out.println(MathUtil.mul("18.0234", "2.9881"));
 //		

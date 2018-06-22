@@ -135,13 +135,19 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	public boolean isCanDeleteSku(Long skuId) {
 		if(skuId!=null) {
 			Integer  o = itemSkuMapperExt.queryItemSkusCountInOrder(skuId);
-			if(o !=null && o>0) return false;
+			if(o !=null && o>0) {
+                return false;
+            }
 			
 			Integer i = itemSkuMapperExt.queryItemSkusCountInInventoryArea(skuId);
-			if(i !=null && i>0) return false;
+			if(i !=null && i>0) {
+                return false;
+            }
 			
 			Integer t =itemSkuMapperExt.queryItemSkusCountInTask(skuId);
-			if(t !=null && t>0) return false;
+			if(t !=null && t>0) {
+                return false;
+            }
 			
 			Integer p = itemSkuMapperExt.queryItemSkusCountInPurchase(skuId);
             return p == null || p <= 0;

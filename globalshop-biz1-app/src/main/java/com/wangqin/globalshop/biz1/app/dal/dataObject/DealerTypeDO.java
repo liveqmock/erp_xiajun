@@ -7,14 +7,14 @@ public class DealerTypeDO extends BaseModel {
 
     private String name;
 
+    private String companyNo;
+
     private String remark;
 
     private String creator;
 
     private String modifier;
 
-    private int isdel;
-    
     public Long getId() {
         return id;
     }
@@ -39,6 +39,15 @@ public class DealerTypeDO extends BaseModel {
         this.name = name == null ? null : name.trim();
     }
 
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    @Override
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -51,6 +60,7 @@ public class DealerTypeDO extends BaseModel {
         return creator;
     }
 
+    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -59,16 +69,8 @@ public class DealerTypeDO extends BaseModel {
         return modifier;
     }
 
+    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
-
-	public int getIsdel() {
-		return isdel;
-	}
-
-	public void setIsdel(int isdel) {
-		this.isdel = isdel;
-	}
-    
 }

@@ -29,13 +29,15 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     private String buyerTaskDetailNo;
 
-    private Long itemCode;
+    private String itemCode;
 
     private String skuBuysite;
 
     private String creator;
 
     private String modifier;
+
+    private Integer status;
 
     public Long getId() {
         return id;
@@ -149,12 +151,12 @@ public class BuyerStorageDetailDO extends BaseModel {
         this.buyerTaskDetailNo = buyerTaskDetailNo == null ? null : buyerTaskDetailNo.trim();
     }
 
-    public Long getItemCode() {
+    public String getItemCode() {
         return itemCode;
     }
 
-    public void setItemCode(Long itemCode) {
-        this.itemCode = itemCode;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode == null ? null : itemCode.trim();
     }
 
     public String getSkuBuysite() {
@@ -169,6 +171,7 @@ public class BuyerStorageDetailDO extends BaseModel {
         return creator;
     }
 
+    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -177,7 +180,16 @@ public class BuyerStorageDetailDO extends BaseModel {
         return modifier;
     }
 
+    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

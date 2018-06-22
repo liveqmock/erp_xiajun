@@ -6,9 +6,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,39 +15,29 @@ import java.util.List;
 
 /**
  * @author biscuit
- * @data 2018/06/19
+ * @data 2018/06/21
  */
 public class ReadExcel {
-    public ReadExcel() {
+
+
+    private ReadExcel() {
     }
 
-    public static List<List<Object>> readExcel(File file) throws IOException {
-        String fileName = file.getName();
+
+    public static List<List<Object>> readExcel(InputStream stream,String fileName, int beginRow, int beginRolumn, int endRolumn) throws IOException {
         String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
         if ("xls".equals(extension)) {
-            return read2003Excel(file, 0, 0, 0);
+            return read2003Excel(stream, beginRow, beginRolumn, endRolumn);
         } else if ("xlsx".equals(extension)) {
-            return read2007Excel(file, 0, 0, 0);
+            return read2007Excel(stream, beginRow, beginRolumn, endRolumn);
         } else {
             throw new IOException("不支持的文件类型");
         }
     }
 
-    public static List<List<Object>> readExcel(File file, int beginRow, int beginRolumn, int endRolumn) throws IOException {
-        String fileName = file.getName();
-        String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
-        if ("xls".equals(extension)) {
-            return read2003Excel(file, beginRow, beginRolumn, endRolumn);
-        } else if ("xlsx".equals(extension)) {
-            return read2007Excel(file, beginRow, beginRolumn, endRolumn);
-        } else {
-            throw new IOException("不支持的文件类型");
-        }
-    }
-
-    private static List<List<Object>> read2007Excel(File file, int beginRow, int beginRolumn, int endRolumn) throws IOException {
+    private static List<List<Object>> read2007Excel(InputStream stream, int beginRow, int beginRolumn, int endRolumn) throws IOException {
         List<List<Object>> list = new ArrayList();
-        XSSFWorkbook xwb = new XSSFWorkbook(new FileInputStream(file));
+        XSSFWorkbook xwb = new XSSFWorkbook(stream);
         XSSFSheet sheet = xwb.getSheetAt(0);
         Object value = null;
         XSSFRow row = null;
@@ -118,13 +107,13 @@ public class ReadExcel {
             }
         }
 
-        file.delete();
+        stream.close();
         return list;
     }
 
-    private static List<List<Object>> read2003Excel(File file, int beginRow, int beginRolumn, int endRolumn) throws IOException {
+    private static List<List<Object>> read2003Excel(InputStream stream, int beginRow, int beginRolumn, int endRolumn) throws IOException {
         List<List<Object>> list = new ArrayList();
-        HSSFWorkbook hwb = new HSSFWorkbook(new FileInputStream(file));
+        HSSFWorkbook hwb = new HSSFWorkbook(stream);
         HSSFSheet sheet = hwb.getSheetAt(0);
         Object value = null;
         HSSFRow row = null;
@@ -193,8 +182,7 @@ public class ReadExcel {
                 }
             }
         }
-
-        file.delete();
+        stream.close();
         return list;
     }
 }

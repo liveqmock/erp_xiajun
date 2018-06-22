@@ -23,39 +23,48 @@ public class JdShopConfigServiceImpl implements JdShopConfigService {
 	private JdShopConfigDOMapperExt jdShopConfigDOMapperExt;
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return jdShopConfigDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(JdShopConfigDO record){
+	@Override
+    public int insert(JdShopConfigDO record){
 		return jdShopConfigDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(JdShopConfigDO record){
+	@Override
+    public int insertSelective(JdShopConfigDO record){
 		return jdShopConfigDOMapperExt.insertSelective(record);
 	}
 
-	public JdShopConfigDO selectByPrimaryKey(Long id){
+	@Override
+    public JdShopConfigDO selectByPrimaryKey(Long id){
 		return jdShopConfigDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(JdShopConfigDO record){
+	@Override
+    public int updateByPrimaryKeySelective(JdShopConfigDO record){
 		return jdShopConfigDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(JdShopConfigDO record){
+	@Override
+    public int updateByPrimaryKey(JdShopConfigDO record){
 		return jdShopConfigDOMapperExt.updateByPrimaryKey(record);
 	}
 
-	public JdShopConfigDO searchShopConfig(JdShopConfigDO JdShopConfigDO){
+	@Override
+    public JdShopConfigDO searchShopConfig(JdShopConfigDO JdShopConfigDO){
 		return jdShopConfigDOMapperExt.searchShopConfig(JdShopConfigDO);
 	}
 
-	public List<JdShopConfigDO> searchShopConfigList(JdShopConfigDO jdShopConfigDO){
+	@Override
+    public List<JdShopConfigDO> searchShopConfigList(JdShopConfigDO jdShopConfigDO){
 		return jdShopConfigDOMapperExt.searchShopConfigList(jdShopConfigDO);
 	}
 
-	public Long searchShopConfigCount(JdShopConfigDO jdShopConfigDO){
+	@Override
+    public Long searchShopConfigCount(JdShopConfigDO jdShopConfigDO){
 		return jdShopConfigDOMapperExt.searchShopConfigCount(jdShopConfigDO);
 	}
 
@@ -65,7 +74,8 @@ public class JdShopConfigServiceImpl implements JdShopConfigService {
 	 * jdShopOauthDo做成统一标准
 	 * @param jdShopOauthDO
 	 */
-	public void initShopConfig(ChannelType channelType, JdShopOauthDO jdShopOauthDO){
+	@Override
+    public void initShopConfig(ChannelType channelType, JdShopOauthDO jdShopOauthDO){
 
 		Date nowTime = new Date();
 		Date startTime = DateUtil.getDateByCalculate(nowTime, Calendar.DAY_OF_MONTH, -2);

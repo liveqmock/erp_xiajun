@@ -393,8 +393,9 @@ YouZanChannelServiceImp extends AbstractChannelService implements IChannelServic
                     } else {
                         skuQuantity = itemSku.getTotalAvailableInv() - lockedVirtualInv;
                     }
-                    if (skuQuantity < 0)
+                    if (skuQuantity < 0) {
                         skuQuantity = 0L;
+                    }
                     skuStocksMap.put("quantity", skuQuantity);
                     skuStocksMap.put("item_no", itemSku.getSkuCode()); // 重点：这里的sku_item_no对应的有赞 outer_id
                     List<Map<String, Object>> skusList = new ArrayList<>();
@@ -436,8 +437,9 @@ YouZanChannelServiceImp extends AbstractChannelService implements IChannelServic
                             } else {
                                 skuQuantity = itemSku.getTotalAvailableInv() - lockedVirtualInv;
                             }
-                            if (skuQuantity < 0)
+                            if (skuQuantity < 0) {
                                 skuQuantity = 0L;
+                            }
                             skuStocksMap.put("quantity", skuQuantity);
                             skuStocksMap.put("item_no", itemSku.getSkuCode()); // 重点：这里的sku_item_no对应的有赞 outer_id
                             List<Map<String, Object>> skusList = new ArrayList<>();
@@ -577,6 +579,7 @@ YouZanChannelServiceImp extends AbstractChannelService implements IChannelServic
      * @param orderList
      * @param shippingOrder
      */
+    @Override
     public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> orderList, ShippingOrderDO shippingOrder) {
         logger.error("有赞发货");
 

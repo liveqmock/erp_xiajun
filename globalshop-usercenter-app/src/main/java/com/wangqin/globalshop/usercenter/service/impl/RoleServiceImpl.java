@@ -109,14 +109,14 @@ public class RoleServiceImpl implements IRoleService {
     public void updateRoleResource(Long roleId, String resourceIds) {
         // 先删除后添加,有点爆力
         AuthRoleResourceDO roleResource = new AuthRoleResourceDO();
-        roleResource.setRoleId(roleId);
-        roleResourceMapper.deleteSelective(roleResource);
+        roleResourceMapper.deleteSelective(roleId);
         
         String[] resourceIdArray = resourceIds.split(",");
         for (String resourceId : resourceIdArray) {
             roleResource = new AuthRoleResourceDO();
             roleResource.setRoleId(roleId);
             roleResource.setResourceId(Long.parseLong(resourceId));
+            roleResource.init();
             roleResourceMapper.insert(roleResource);
         }
     }

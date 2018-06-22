@@ -21,4 +21,6 @@ public interface IWarehouseService {
 	List<WarehouseDO> queryWarehouses(String companyNo);
 
 	List<WarehouseDO> list(WarehouseDO warehouseDO);
+
+	List<WarehouseDO> selectWhList(WarehouseDO warehouseDO);
 }

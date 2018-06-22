@@ -31,4 +31,73 @@
     WHERE
     company_no=#{companyNo}
   </select>
+
+  <sql id="tableSection">buyer_storage</sql>
+
+
+  <sql id="commonSelectSection">
+    1 = 1
+    <if test="companyNo != null">
+      and T.company_no = #{companyNo}
+    </if>
+
+
+
+    <if test="warehouseNo != null">
+      and T.warehouse_no = #{warehouseNo}
+    </if>
+
+    <if test="buyerOpenId != null">
+      and T.buyer_open_id = #{buyerOpenId}
+    </if>
+
+    <if test="storageNo != null">
+      and T.storage_no = #{storageNo}
+    </if>
+
+    <if test="status != null">
+      and T.status = #{status}
+    </if>
+
+
+    <if test=" isDel == true">
+      and T.is_del is true
+    </if>
+    <if test=" isDel == false">
+      and T.is_del is false
+    </if>
+    <if test=" isDel == null">
+      and T.is_del is false
+    </if>
+
+  </sql>
+
+
+  <!--查询总条数 -->
+  <select id="search" resultMap="BaseResultMap"
+  >
+    SELECT <include refid="Base_Column_List" />
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+  </select>
+
+  <!--查询总条数 -->
+  <select id="searchCount" resultType="java.lang.Long"
+  >
+    SELECT COUNT(*)
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+  </select>
+
+  <!-- -->
+  <select id="searchList" resultMap="BaseResultMap">
+    SELECT  <include refid="Base_Column_List" />
+    FROM <include refid="tableSection"/> T
+    WHERE
+    <include refid="commonSelectSection"/>
+    ORDER BY T.id desc
+  </select>
+
 </mapper>

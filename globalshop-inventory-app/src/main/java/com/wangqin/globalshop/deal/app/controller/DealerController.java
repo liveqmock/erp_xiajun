@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 
@@ -40,14 +41,14 @@ public class DealerController{
 		
 		List<DealerDO> list2 = iDealerService.list2();
 		
-		if(seller.getCode().equals("") || seller.getCode() == null) {
+		if("".equals(seller.getCode()) || seller.getCode() == null) {
 			return result.buildIsSuccess(false).buildMsg("Dealer code is null");
 		}else {
-        	if(seller.getName().equals("") || seller.getName() == null) {
+        	if("".equals(seller.getName()) || seller.getName() == null) {
             	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
             }
         	for(int i = 0; i < list2.size(); i ++) {
-         		if(seller.getCode().equals(list2.get(i).getCode()) && seller.getId() != list2.get(i).getId()) {
+         		if(seller.getCode().equals(list2.get(i).getCode()) && !Objects.equals(seller.getId(), list2.get(i).getId())) {
          			return result.buildIsSuccess(false).buildMsg("错误！不能使用该销售代码");
          		}
          	}
@@ -66,18 +67,18 @@ public class DealerController{
  
     	List<DealerDO> list2 = iDealerService.list2();
     	
-        if(seller.getCode().equals("") || seller.getCode() == null) {
+        if("".equals(seller.getCode()) || seller.getCode() == null) {
          	
          	return result.buildIsSuccess(false).buildMsg("DealerType code is null");
          	
          }else {
-         	if(seller.getName().equals("") || seller.getName() == null) {
+         	if("".equals(seller.getName()) || seller.getName() == null) {
              	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
              }
          	
          	
          	for(int i = 0; i < list2.size(); i ++) {
-         		if(seller.getCode().equals(list2.get(i).getCode()) && seller.getId() != list2.get(i).getId()) {
+         		if(seller.getCode().equals(list2.get(i).getCode()) && !Objects.equals(seller.getId(), list2.get(i).getId())) {
          			return result.buildIsSuccess(false).buildMsg("错误！不能使用该销售代码");
          		}
          	}

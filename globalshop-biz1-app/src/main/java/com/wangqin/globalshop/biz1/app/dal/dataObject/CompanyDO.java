@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import java.util.Date;
-
 public class CompanyDO extends BaseModel {
     private Long id;
 
@@ -10,8 +8,6 @@ public class CompanyDO extends BaseModel {
     private String companyName;
 
     private Integer status;
-
-    private Date gmtModified;
 
     private String shopName;
 
@@ -45,6 +41,7 @@ public class CompanyDO extends BaseModel {
         return companyNo;
     }
 
+    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -63,14 +60,6 @@ public class CompanyDO extends BaseModel {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
     }
 
     public String getShopName() {
@@ -133,6 +122,7 @@ public class CompanyDO extends BaseModel {
         return creator;
     }
 
+    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -141,6 +131,7 @@ public class CompanyDO extends BaseModel {
         return modifier;
     }
 
+    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.poi.hssf.record.SCLRecord;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -158,31 +159,14 @@ public class ItemSkuController  {
 	@PostMapping("/queryBySkuCodeOrUpc")
 	@ResponseBody
 	public Object queryBySkuCodeOrUpc(String code) {
-		JsonResult<ItemSkuDO> result = new JsonResult<>();
+		JsonResult<List<ItemSkuDO>> result = new JsonResult<>();
 		ItemSkuDO item = iItemSkuService.queryBySkuCodeOrUpcAndCompanyNo(code,AppUtil.getLoginUserCompanyNo());
-		return result.buildData(item).buildIsSuccess(true);
-//		JsonPageResult<List<ItemSkuDO>> result = new JsonPageResult<>();
-//		if(StringUtils.isNoneBlank(code)) {
-//			List<ItemSkuDO> itemSkuList = null;
-//			ItemSkuDO tjItemSku = new ItemSkuDO();
-//			tjItemSku.setSkuCode(code);
-//			ItemSkuDO selItemSku = iItemSkuService.selectByPrimaryKey(tjItemSku.getId());
-//			if(selItemSku != null) {
-//				itemSkuList = new ArrayList<ItemSkuDO>();
-//				itemSkuList.add(selItemSku);
-//			} else {
-//				tjItemSku.setSkuCode(null);
-//				tjItemSku.setUpc(code);
-//
-////				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
-////				entityWrapper.setEntity(tjItemSku);
-//				//itemSkuList = iItemSkuService.selectList(entityWrapper);
-//			}
-//			result.setData(itemSkuList);
-//		} else {
-//			result.buildIsSuccess(false).buildMsg("skuCode 不能为空");
-//		}
-//		return result.buildIsSuccess(true);
+
+		List<ItemSkuDO> skuDOS = new ArrayList<>();
+		skuDOS.add(item);
+
+		return result.buildData(skuDOS).buildIsSuccess(true);
+
 	}
 
 	/**
@@ -364,17 +348,34 @@ public class ItemSkuController  {
     	return result;
 	}
     
+    //查询规格列表，不用的请求
+	@RequestMapping("/scaleTypeList")
+	@ResponseBody
+	public Object scaleTypeList() {
+		JsonResult<List<Scale>> result = new JsonResult<List<Scale>>();
+		ScaleType scaleType1 = new ScaleType();
+		ScaleType scaleType2 = new ScaleType();
+		scaleType1.setId(348L);
+		scaleType1.setName("3");
+		scaleType1.setSeq(0);
+		scaleType1.setTypeId(348L);
+		scaleType2.setId(349L);
+		scaleType2.setName("3.5");
+		scaleType2.setSeq(1);
+		scaleType2.setTypeId(348L);
+		List<ScaleType> scaleList = new ArrayList<ScaleType>();
+		scaleList.add(scaleType1);
+		scaleList.add(scaleType2);
+		Scale scale = new Scale();
+		scale.setId(348L);
+		scale.setType("成人鞋类(美码)");
+		scale.setScaleList(scaleList);
+		List<Scale> scaleCollection = new ArrayList<Scale>();
+		scaleCollection.add(scale);
+		return result.buildData(scaleCollection).buildIsSuccess(true).buildMsg("不用的请求");
+	}
 
-//	@RequestMapping("/scaleTypeList")
-//	@ResponseBody
-//	public Object scaleTypeList() {
-//		JsonResult<List<ScaleTypeDO>> result = new JsonResult<>();
-//		List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
-//
-//		return result.buildData(scaleTypeList).buildIsSuccess(true);
-//	}
-    
-	
+
 
 	@RequestMapping("/saleable")
 	@ResponseBody
@@ -386,5 +387,62 @@ public class ItemSkuController  {
 		}
 		result.buildData(skuList).buildIsSuccess(true);
 		return result;
+	}
+	
+	private class ScaleType {
+		private Long id;
+		private String name;
+		private Long typeId;
+		private Integer seq;
+		public Long getId() {
+			return id;
+		}
+		public void setId(Long id) {
+			this.id = id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public Long getTypeId() {
+			return typeId;
+		}
+		public void setTypeId(Long typeId) {
+			this.typeId = typeId;
+		}
+		public Integer getSeq() {
+			return seq;
+		}
+		public void setSeq(Integer seq) {
+			this.seq = seq;
+		}
+		
+	}
+	
+	private class Scale {
+		private Long id;
+		private String type;
+		private List<ScaleType> scaleList;
+		public Long getId() {
+			return id;
+		}
+		public void setId(Long id) {
+			this.id = id;
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
+		public List<ScaleType> getScaleList() {
+			return scaleList;
+		}
+		public void setScaleList(List<ScaleType> scaleList) {
+			this.scaleList = scaleList;
+		}
+		
 	}
 }

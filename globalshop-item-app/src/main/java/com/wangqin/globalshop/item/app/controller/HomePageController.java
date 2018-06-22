@@ -415,8 +415,8 @@ public class HomePageController extends BaseController {
 		statusList.add(OrderStatus.PAID.getCode());
 		statusList.add(OrderStatus.PART_SENT.getCode());
 		statusList.add(OrderStatus.SENT.getCode());	
-		statusList.add(OrderStatus.SUCCESS.getCode());	
-		Integer salesQuantity[] = new Integer[7];
+		statusList.add(OrderStatus.SUCCESS.getCode());
+        Integer[] salesQuantity = new Integer[7];
 		Float salesMoneyTotal = 0.0f;
 		Integer salesQuantityTotal = 0;
 //		for(int i = 0;i < 7;i++) {
@@ -447,8 +447,8 @@ public class HomePageController extends BaseController {
 		statusList.add(OrderStatus.PAID.getCode());
 		statusList.add(OrderStatus.PART_SENT.getCode());
 		statusList.add(OrderStatus.SENT.getCode());	
-		statusList.add(OrderStatus.SUCCESS.getCode());	
-		Integer salesQuantity[] = new Integer[7];
+		statusList.add(OrderStatus.SUCCESS.getCode());
+        Integer[] salesQuantity = new Integer[7];
 		Float salesMoneyTotal = 0.0f;
 		Integer salesQuantityTotal = 0;
 //		for(int i = 0;i < 7;i++) {
@@ -474,8 +474,8 @@ public class HomePageController extends BaseController {
 	@RequestMapping("/weekNewItem")
 	@ResponseBody
 	public Object weekNewItem() {
-		JsonResult<Integer[]> result = new JsonResult<>();	
-		Integer newItemNum[] = new Integer[7];
+		JsonResult<Integer[]> result = new JsonResult<>();
+        Integer[] newItemNum = new Integer[7];
 		for(int i = 0;i < 7;i++) {
 			newItemNum[i] = itemService.sumNewItemNumByDate(i);
 		}
@@ -493,8 +493,8 @@ public class HomePageController extends BaseController {
 	@RequestMapping("/monthNewItem")
 	@ResponseBody
 	public Object monthNewItem() {
-		JsonResult<Integer[]> result = new JsonResult<>();	
-		Integer newItemNum[] = new Integer[7];
+		JsonResult<Integer[]> result = new JsonResult<>();
+        Integer[] newItemNum = new Integer[7];
 		for(int i = 0;i < 7;i++) {
 			newItemNum[i] = itemService.sumNewItemNumByMonth(i);
 		}

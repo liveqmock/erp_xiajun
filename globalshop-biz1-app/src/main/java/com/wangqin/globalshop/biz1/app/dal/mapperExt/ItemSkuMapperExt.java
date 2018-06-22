@@ -83,4 +83,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
     ItemSkuDO queryBySkuCodeOrUpcAndCompanyNo(@Param("code")String code, @Param("companyNo") String companyNo);
     
     Double querySalePriceByItemCode(String itemCode);
+
+	void inserBatch(List<ItemSkuDO> skuList);
 }

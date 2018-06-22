@@ -51,27 +51,33 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 	private InventoryService iInventoryService;
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return mallSubOrderDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(MallSubOrderDO record){
+	@Override
+    public int insert(MallSubOrderDO record){
 		return mallSubOrderDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(MallSubOrderDO record){
+	@Override
+    public int insertSelective(MallSubOrderDO record){
 		return mallSubOrderDOMapperExt.insertSelective(record);
 	}
 
-	public MallSubOrderDO selectByPrimaryKey(Long id){
+	@Override
+    public MallSubOrderDO selectByPrimaryKey(Long id){
 		return mallSubOrderDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(MallSubOrderDO record){
+	@Override
+    public int updateByPrimaryKeySelective(MallSubOrderDO record){
 		return mallSubOrderDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(MallSubOrderDO record){
+	@Override
+    public int updateByPrimaryKey(MallSubOrderDO record){
 		return mallSubOrderDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 //	/**
@@ -115,7 +121,8 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 //	}
 
 
-	public void insertBatch(List<MallSubOrderDO> outerOrderDetails){
+	@Override
+    public void insertBatch(List<MallSubOrderDO> outerOrderDetails){
 		for(MallSubOrderDO mallSubOrderDO : outerOrderDetails){
 			mallSubOrderDOMapperExt.insert(mallSubOrderDO);
 		}

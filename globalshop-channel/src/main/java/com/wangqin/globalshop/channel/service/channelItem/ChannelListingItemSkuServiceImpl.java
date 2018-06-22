@@ -25,27 +25,33 @@ public class ChannelListingItemSkuServiceImpl  implements IChannelListingItemSku
 		return channelListingItemSkuDOMapperExt;
 	}
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return channelListingItemSkuDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(ChannelListingItemSkuDO record){
+	@Override
+    public int insert(ChannelListingItemSkuDO record){
 		return channelListingItemSkuDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(ChannelListingItemSkuDO record){
+	@Override
+    public int insertSelective(ChannelListingItemSkuDO record){
 		return channelListingItemSkuDOMapperExt.insertSelective(record);
 	}
 
-	public ChannelListingItemSkuDO selectByPrimaryKey(Long id){
+	@Override
+    public ChannelListingItemSkuDO selectByPrimaryKey(Long id){
 		return channelListingItemSkuDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(ChannelListingItemSkuDO record){
+	@Override
+    public int updateByPrimaryKeySelective(ChannelListingItemSkuDO record){
 		return channelListingItemSkuDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(ChannelListingItemSkuDO record){
+	@Override
+    public int updateByPrimaryKey(ChannelListingItemSkuDO record){
 		return channelListingItemSkuDOMapperExt.updateByPrimaryKey(record);
 	}
 

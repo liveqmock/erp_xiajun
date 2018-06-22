@@ -35,12 +35,12 @@ public class DealerTypeController {
         
         List<DealerTypeDO> list = iSellerTypeService.list();
         
-        if(sellerType.getCode().equals("") || sellerType.getCode() == null) {
+        if("".equals(sellerType.getCode()) || sellerType.getCode() == null) {
         	
         	return result.buildIsSuccess(false).buildMsg("DealerType code is null");
         	
         }else {
-        	if(sellerType.getName().equals("") || sellerType.getName() == null) {
+        	if("".equals(sellerType.getName()) || sellerType.getName() == null) {
             	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
             }
         	for(int i = 0; i < list.size(); i ++) {

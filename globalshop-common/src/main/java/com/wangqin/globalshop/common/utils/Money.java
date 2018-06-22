@@ -115,6 +115,7 @@ public class Money implements Serializable, Comparable {
      return centFactors[this.currency.getDefaultFractionDigits()];
  }
 
+ @Override
  public boolean equals(Object other) {
      return other instanceof Money && this.equals((Money)other);
  }
@@ -123,10 +124,12 @@ public class Money implements Serializable, Comparable {
      return this.currency.equals(other.currency) && this.cent == other.cent;
  }
 
+ @Override
  public int hashCode() {
      return (int)(this.cent ^ this.cent >>> 32);
  }
 
+ @Override
  public int compareTo(Object other) {
      return this.compareTo((Money)other);
  }
@@ -268,6 +271,7 @@ public class Money implements Serializable, Comparable {
      return results;
  }
 
+ @Override
  public String toString() {
      return this.getAmount().toString();
  }

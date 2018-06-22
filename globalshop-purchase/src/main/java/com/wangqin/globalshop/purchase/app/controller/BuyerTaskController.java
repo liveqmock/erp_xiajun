@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,26 +25,22 @@ public class BuyerTaskController {
     private IBuyerTaskService buyerTaskService;
 
     @RequestMapping("/improtTask")
-    public Object importTask(HttpServletRequest request, MultipartFile file) {
+    public Object importTask(MultipartFile file) {
         JsonResult<Object> result = new JsonResult<>();
         try {
             if (!file.isEmpty()) {
                 // 文件保存路径
-                String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/"
-                        + file.getOriginalFilename();
-                File baseFile = new File(filePath);
-                file.transferTo(baseFile);
-                List<List<Object>> list = ReadExcel.readExcel(baseFile, 1, 0, 12);
+                List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(),file.getOriginalFilename(),1,0,5);
                 buyerTaskService.importTask(list);
             }
-
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
         } catch (ErpCommonException e) {
-            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+            String str = e.getErrorMsg().replace(",", "</br>");
+            return result.buildIsSuccess(false).buildMsg(str);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
-
     }
-
 }

@@ -55,7 +55,7 @@ public class UploadUtil {
         // 取得当前上传文件的文件名称
         String myFileName = file.getOriginalFilename();
         // 如果名称不为“”,说明该文件存在，否则说明该文件不存在
-        if ((myFileName.trim()).equals("")) {
+        if ("".equals(myFileName.trim())) {
             return null;
         }
         File uploadFile = null;

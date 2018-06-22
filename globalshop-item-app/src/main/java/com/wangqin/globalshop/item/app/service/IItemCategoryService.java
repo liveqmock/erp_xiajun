@@ -54,4 +54,8 @@ public interface IItemCategoryService {
 	   
 	   //根据id删除类目
 	   void deleteItemCategoryById(Long id);
+
+	List<ItemCategoryDO> selectByName(String category1);
+
+	List<ItemCategoryDO> selectByParentAndName(List<ItemCategoryDO> categoryList1, String category2);
 }

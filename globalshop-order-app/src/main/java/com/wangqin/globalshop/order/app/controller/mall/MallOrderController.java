@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static com.wangqin.globalshop.order.app.comm.Constant.*;
 
@@ -103,7 +104,7 @@ public class MallOrderController {
         if (mallOrderVO.getId() != null) {
             //只有状态为新建的订单才能修改
             MallOrderDO selOuterOrder = mallOrderService.selectById(mallOrderVO.getId());
-            if (selOuterOrder == null || selOuterOrder.getStatus() != ORDER_SATUTS_INIT) {
+            if (selOuterOrder == null || !Objects.equals(selOuterOrder.getStatus(), ORDER_SATUTS_INIT)) {
                 return JsonResult.buildFailed("订单不存在或者状态错误");
             }
             //查询是否有发货的订单，有的话订单不能修改
@@ -213,7 +214,7 @@ public class MallOrderController {
         JsonResult<String> result = new JsonResult<>();
         try {
             MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
-            if (outerOrder == null || outerOrder.getStatus() != ORDER_SATUTS_CLOSE) {
+            if (outerOrder == null || !Objects.equals(outerOrder.getStatus(), ORDER_SATUTS_CLOSE)) {
                 return JsonResult.buildFailed("先关闭才能删除订单");
             }
             mallOrderService.delete(outerOrder);
@@ -240,7 +241,7 @@ public class MallOrderController {
             for (Long id : orderIdList) {
                 i++;
                 MallOrderDO outerOrder = mallOrderService.selectById(id);
-                if (outerOrder == null || outerOrder.getStatus() != ORDER_SATUTS_INIT) {
+                if (outerOrder == null || !Objects.equals(outerOrder.getStatus(), ORDER_SATUTS_INIT)) {
                     errorMsg.add("第" + i + "条不存在或者状态错误,");
                 }
                 //查询是否有发货的订单，有的话订单不能修改
