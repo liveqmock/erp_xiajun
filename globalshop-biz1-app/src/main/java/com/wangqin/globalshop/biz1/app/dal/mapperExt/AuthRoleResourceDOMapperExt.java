@@ -17,6 +17,6 @@ public interface AuthRoleResourceDOMapperExt extends AuthRoleResourceDOMapper {
 //    int updateByPrimaryKey(AuthRoleResourceDO record);
 
     //Here are
-    int deleteSelective(AuthRoleResourceDO roleResource);
+    int deleteSelective(Long roleId);
 
 }
