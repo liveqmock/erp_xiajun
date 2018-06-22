@@ -158,31 +158,14 @@ public class ItemSkuController  {
 	@PostMapping("/queryBySkuCodeOrUpc")
 	@ResponseBody
 	public Object queryBySkuCodeOrUpc(String code) {
-		JsonResult<ItemSkuDO> result = new JsonResult<>();
+		JsonResult<List<ItemSkuDO>> result = new JsonResult<>();
 		ItemSkuDO item = iItemSkuService.queryBySkuCodeOrUpcAndCompanyNo(code,AppUtil.getLoginUserCompanyNo());
-		return result.buildData(item).buildIsSuccess(true);
-//		JsonPageResult<List<ItemSkuDO>> result = new JsonPageResult<>();
-//		if(StringUtils.isNoneBlank(code)) {
-//			List<ItemSkuDO> itemSkuList = null;
-//			ItemSkuDO tjItemSku = new ItemSkuDO();
-//			tjItemSku.setSkuCode(code);
-//			ItemSkuDO selItemSku = iItemSkuService.selectByPrimaryKey(tjItemSku.getId());
-//			if(selItemSku != null) {
-//				itemSkuList = new ArrayList<ItemSkuDO>();
-//				itemSkuList.add(selItemSku);
-//			} else {
-//				tjItemSku.setSkuCode(null);
-//				tjItemSku.setUpc(code);
-//
-////				EntityWrapper<ItemSkuDO> entityWrapper = new EntityWrapper<ItemSkuDO>();
-////				entityWrapper.setEntity(tjItemSku);
-//				//itemSkuList = iItemSkuService.selectList(entityWrapper);
-//			}
-//			result.setData(itemSkuList);
-//		} else {
-//			result.buildIsSuccess(false).buildMsg("skuCode 不能为空");
-//		}
-//		return result.buildIsSuccess(true);
+
+		List<ItemSkuDO> skuDOS = new ArrayList<>();
+		skuDOS.add(item);
+
+		return result.buildData(skuDOS).buildIsSuccess(true);
+
 	}
 
 	/**
