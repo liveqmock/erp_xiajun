@@ -364,15 +364,15 @@ public class ItemSkuController  {
     	return result;
 	}
     
+    //查询规格列表，不用的请求
+	@RequestMapping("/scaleTypeList")
+	@ResponseBody
+	public Object scaleTypeList() {
+		JsonResult<String> result = new JsonResult<>();
+		//List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
 
-//	@RequestMapping("/scaleTypeList")
-//	@ResponseBody
-//	public Object scaleTypeList() {
-//		JsonResult<List<ScaleTypeDO>> result = new JsonResult<>();
-//		List<ScaleTypeDO> scaleTypeList= scaleTypeService.scaleTypeList();
-//
-//		return result.buildData(scaleTypeList).buildIsSuccess(true);
-//	}
+		return result.buildData("deprcated request").buildIsSuccess(true).buildMsg("不用的请求");
+	}
 
 
 
