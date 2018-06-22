@@ -20,7 +20,8 @@ public class WarehouseServiceImpl implements IWarehouseService {
 	@Autowired
 	private WarehouseDOMapperExt warehouseDOMapperExt;
 
-	public Map<String,Integer> getWarehousePropeties(String companyNo){
+	@Override
+    public Map<String,Integer> getWarehousePropeties(String companyNo){
 
 		Map<String,Integer> propetiesMap = new HashMap<>();
 

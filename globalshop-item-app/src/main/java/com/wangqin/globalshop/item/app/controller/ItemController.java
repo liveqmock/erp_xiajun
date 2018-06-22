@@ -127,8 +127,12 @@ public class ItemController {
                                 minPrice = itemSku.getSalePrice();
                                 maxPrice = itemSku.getSalePrice();
                             } else {
-                                if (minPrice > itemSku.getSalePrice()) minPrice = itemSku.getSalePrice();
-                                if (maxPrice < itemSku.getSalePrice()) maxPrice = itemSku.getSalePrice();
+                                if (minPrice > itemSku.getSalePrice()) {
+                                    minPrice = itemSku.getSalePrice();
+                                }
+                                if (maxPrice < itemSku.getSalePrice()) {
+                                    maxPrice = itemSku.getSalePrice();
+                                }
                             }
                             //判断颜色，尺寸是否冲突
                             String colorScaleKey = "";
@@ -142,7 +146,9 @@ public class ItemController {
                                 colorScaleKey += scale;
                                 itemSku.setScale(scale);
                             }
-                            if (StringUtil.isBlank(colorScaleKey)) colorScaleKey = "none";
+                            if (StringUtil.isBlank(colorScaleKey)) {
+                                colorScaleKey = "none";
+                            }
                             if (colorScaleMap.get(colorScaleKey) != null) {
                                 return result.buildMsg("SKU颜色尺码重复").buildIsSuccess(false);
                             }

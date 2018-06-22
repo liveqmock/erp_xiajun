@@ -24,11 +24,13 @@ public class ChannelAccountConfigServiceImpl implements IChannelAccountConfigSer
 		return channelAccountConfigDOMapperExt;
 	}
 
-	public ChannelAccountConfigDO queryPo(ChannelAccountConfigSo channelAccountConfigSo){
+	@Override
+    public ChannelAccountConfigDO queryPo(ChannelAccountConfigSo channelAccountConfigSo){
 		return  channelAccountConfigDOMapperExt.queryPo(channelAccountConfigSo);
 	}
 
-	public void createOrupdateConfig(String companyNo, String shopCode){
+	@Override
+    public void createOrupdateConfig(String companyNo, String shopCode){
 		if(StringUtils.isBlank(shopCode)){
              //throw new Exception("shopCode empty error");
 		}

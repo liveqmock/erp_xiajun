@@ -19,43 +19,53 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 	private JdShopOauthDOMapperExt jdShopOauthDOMapperExt;
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return jdShopOauthDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(JdShopOauthDO record){
+	@Override
+    public int insert(JdShopOauthDO record){
 		return jdShopOauthDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(JdShopOauthDO record){
+	@Override
+    public int insertSelective(JdShopOauthDO record){
 		return jdShopOauthDOMapperExt.insertSelective(record);
 	}
 
-	public JdShopOauthDO selectByPrimaryKey(Long id){
+	@Override
+    public JdShopOauthDO selectByPrimaryKey(Long id){
 		return jdShopOauthDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(JdShopOauthDO record){
+	@Override
+    public int updateByPrimaryKeySelective(JdShopOauthDO record){
 		return jdShopOauthDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(JdShopOauthDO record){
+	@Override
+    public int updateByPrimaryKey(JdShopOauthDO record){
 		return jdShopOauthDOMapperExt.updateByPrimaryKey(record);
 	}
 
-	public JdShopOauthDO searchShopOauth(JdShopOauthDO jdShopOauthDO){
+	@Override
+    public JdShopOauthDO searchShopOauth(JdShopOauthDO jdShopOauthDO){
 		return jdShopOauthDOMapperExt.searchShopOauth(jdShopOauthDO);
 	}
 
-	public List<JdShopOauthDO> searchShopOauthList(JdShopOauthDO jdShopOauthDO){
+	@Override
+    public List<JdShopOauthDO> searchShopOauthList(JdShopOauthDO jdShopOauthDO){
 		return jdShopOauthDOMapperExt.searchShopOauthList(jdShopOauthDO);
 	}
 
-	public Long searchShopOauthCount(JdShopOauthDO jdShopOauthDO){
+	@Override
+    public Long searchShopOauthCount(JdShopOauthDO jdShopOauthDO){
 		return jdShopOauthDOMapperExt.searchShopOauthCount(jdShopOauthDO);
 	}
 
-	public JdShopOauthDO searchShopOauthByCCS(String channelNo, String companyNo, String shopCode){
+	@Override
+    public JdShopOauthDO searchShopOauthByCCS(String channelNo, String companyNo, String shopCode){
 		JdShopOauthDO jdShopOauthDO = new JdShopOauthDO();
 		jdShopOauthDO.setChannelNo(channelNo);
 		jdShopOauthDO.setCompanyNo(companyNo);
@@ -68,7 +78,8 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 	 * jdShopOauthDo做成统一标准
 	 * @param jdShopOauthDO
 	 */
-	public void createOrUpdateShopOauth(ChannelType channelType, JdShopOauthDO jdShopOauthDO){
+	@Override
+    public void createOrUpdateShopOauth(ChannelType channelType, JdShopOauthDO jdShopOauthDO){
 		JdShopOauthDO so = new JdShopOauthDO();
 		so.setChannelNo(String.valueOf(channelType.getValue()));
 		so.setShopCode(jdShopOauthDO.getShopCode());

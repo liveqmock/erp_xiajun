@@ -19,7 +19,8 @@ public class Result
 //	@JsonIgnore
 	private String condition = "";
 	
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public Result clone()
 	{
 		Result r = new Result();

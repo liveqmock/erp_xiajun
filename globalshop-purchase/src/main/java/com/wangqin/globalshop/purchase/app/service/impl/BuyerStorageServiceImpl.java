@@ -48,35 +48,42 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
     }
 
 
+    @Override
     public List<BuyerStorageDO> searchList(BuyerStorageDO buyerStorageDO){
         return mapper.searchList(buyerStorageDO);
     }
 
+    @Override
     public BuyerStorageDO search(BuyerStorageDO buyerStorageDO){
         return mapper.search(buyerStorageDO);
     }
 
+    @Override
     public Long searchCount(BuyerStorageDO buyerStorageDO){
         return mapper.searchCount(buyerStorageDO);
     }
 
+    @Override
     public List<BuyerStorageDetailVo> searchByOpenId(Long openId){
 
         List<BuyerStorageDetailVo> voList = doSearchList(openId,null,Integer.valueOf(GeneralStatus.INIT.getCode()));
         return voList;
     }
 
+    @Override
     public List<BuyerStorageDetailVo> searchByopenidAndUpc(Long openId, String upc){
 
         List<BuyerStorageDetailVo> voList = doSearchList(openId,upc,Integer.valueOf(GeneralStatus.INIT.getCode()));
         return voList;
     }
 
+    @Override
     public List<BuyerStorageDetailVo> searchAll(){
         List<BuyerStorageDetailVo> voList = doSearchList(null,null,Integer.valueOf(GeneralStatus.INIT.getCode()));
         return voList;
     }
 
+    @Override
     public List<BuyerStorageDetailVo> queryHasComfirm(){
         List<BuyerStorageDetailVo> voList = doSearchList(null,null,Integer.valueOf(GeneralStatus.CONFIRM.getCode()));
         return voList;
@@ -155,6 +162,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * 确认入库
      * @param detailVo
      */
+    @Override
     public void comfirm(BuyerStorageDetailVo detailVo){
 
         //修改状态

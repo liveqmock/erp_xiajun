@@ -18,20 +18,24 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 	private ChannelShopDOMapperExt channelShopDOMapperExt;
 
 
-	public Long searchShopCount(ChannelShopDO channelShopDO){
+	@Override
+    public Long searchShopCount(ChannelShopDO channelShopDO){
 		return channelShopDOMapperExt.searchShopCount(channelShopDO);
 	}
 
-	public ChannelShopDO searchShop(ChannelShopDO channelShopDO){
+	@Override
+    public ChannelShopDO searchShop(ChannelShopDO channelShopDO){
 		return channelShopDOMapperExt.searchShop(channelShopDO);
 	}
 
-	public List<ChannelShopDO> searchShopList(ChannelShopDO channelShopDO){
+	@Override
+    public List<ChannelShopDO> searchShopList(ChannelShopDO channelShopDO){
 		return channelShopDOMapperExt.searchShopList(channelShopDO);
 	}
 
 
-	public void createOrUpdate(ChannelShopDO channelShopDO){
+	@Override
+    public void createOrUpdate(ChannelShopDO channelShopDO){
 		ChannelShopDO so = new ChannelShopDO();
 		so.setChannelNo(channelShopDO.getChannelNo());
 		so.setCompanyNo(channelShopDO.getCompanyNo());

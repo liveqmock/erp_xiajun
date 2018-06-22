@@ -115,7 +115,7 @@ public class MallSubOrderController {
 				if(erpOrder==null){
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
- 					if( ORDER_SATUTS_INIT == erpOrder.getStatus()){
+ 					if(Objects.equals(ORDER_SATUTS_INIT, erpOrder.getStatus())){
 						try{
 							if(StringUtil.isNotBlank(closeReason)) {
 								erpOrder.setCloseReason(closeReason);
@@ -166,7 +166,7 @@ public class MallSubOrderController {
 			if(erpOrder.getQuantity()==1){
 				return JsonResult.buildFailed("一个商品不能拆分");
 			}
-			if(erpOrder.getStatus()==ORDER_SATUTS_INIT){
+			if(Objects.equals(erpOrder.getStatus(), ORDER_SATUTS_INIT)){
 				try{
 					if(splitCount>=erpOrder.getQuantity()){
 						return JsonResult.buildFailed("拆单数量不能超过订单数量");

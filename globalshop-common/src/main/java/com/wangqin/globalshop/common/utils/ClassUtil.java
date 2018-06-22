@@ -166,6 +166,7 @@ public class ClassUtil {
             return;
         }
         File[] dirfiles = dir.listFiles(new FileFilter() {
+            @Override
             public boolean accept(File file) {
                 return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
             }
@@ -219,20 +220,24 @@ public class ClassUtil {
 
     public static boolean isAnnotationPresent(Class<?> clazz, Class<? extends Annotation> a) {
         for (Class<?> c = clazz; c != null; c = c.getSuperclass()) {
-            if (c.isAnnotationPresent(a))
+            if (c.isAnnotationPresent(a)) {
                 return true;
-            if (isAnnotationPresentOnInterfaces(c, a))
+            }
+            if (isAnnotationPresentOnInterfaces(c, a)) {
                 return true;
+            }
         }
         return false;
     }
 
     private static boolean isAnnotationPresentOnInterfaces(Class<?> clazz, Class<? extends Annotation> a) {
         for (Class<?> i : clazz.getInterfaces()) {
-            if (i.isAnnotationPresent(a))
+            if (i.isAnnotationPresent(a)) {
                 return true;
-            if (isAnnotationPresentOnInterfaces(i, a))
+            }
+            if (isAnnotationPresentOnInterfaces(i, a)) {
                 return true;
+            }
         }
 
         return false;

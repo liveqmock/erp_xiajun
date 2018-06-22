@@ -152,7 +152,7 @@ public class JDAccountInfoController {
 			logger.error("getVenderInfo_error",e);
 			throw new ErpCommonException("getVenderInfo,获取店铺信息时，京东内部出错");
 		}
-		if(!response.getCode().equals("0")){
+		if(!"0".equals(response.getCode())){
 			String errorMsg = "";
 			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc();
 			throw new ErpCommonException("获取店铺信息时，京东内部出错:"+errorMsg);

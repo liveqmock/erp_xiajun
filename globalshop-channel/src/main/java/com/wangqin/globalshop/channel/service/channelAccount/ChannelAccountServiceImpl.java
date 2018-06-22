@@ -51,27 +51,33 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return this.channelAccountDOMapper.deleteByPrimaryKey(id);
 	}
 
-	public int insert(ChannelAccountDO record){
+	@Override
+    public int insert(ChannelAccountDO record){
 		return this.channelAccountDOMapper.insert(record);
 	}
 
-	public int insertSelective(ChannelAccountDO record){
+	@Override
+    public int insertSelective(ChannelAccountDO record){
 		return this.channelAccountDOMapper.insertSelective(record);
 	}
 
-	public ChannelAccountDO selectByPrimaryKey(Long id){
+	@Override
+    public ChannelAccountDO selectByPrimaryKey(Long id){
 		return this.channelAccountDOMapper.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(ChannelAccountDO record){
+	@Override
+    public int updateByPrimaryKeySelective(ChannelAccountDO record){
 		return this.channelAccountDOMapper.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(ChannelAccountDO record){
+	@Override
+    public int updateByPrimaryKey(ChannelAccountDO record){
 		return this.channelAccountDOMapper.updateByPrimaryKey(record);
 	}
 
@@ -83,7 +89,8 @@ public class ChannelAccountServiceImpl  implements IChannelAccountService {
 	 * @param shopCode
 	 * @param cookie
 	 */
-	public void createOrupdateAccount4Taobao(String shopCode, String cookie){
+	@Override
+    public void createOrupdateAccount4Taobao(String shopCode, String cookie){
 
 		ChannelAccountSo entitySo = new ChannelAccountSo();
 		entitySo.setShopCode(shopCode);

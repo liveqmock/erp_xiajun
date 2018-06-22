@@ -23,7 +23,9 @@ public class SpringUtils implements ApplicationContextAware {
 	}
 
 	public static <T> T getBean(Class<T> clazz){
-		if (clazz == null) return null;
+		if (clazz == null) {
+            return null;
+        }
 		return context.getBean(clazz);
 	}
 
@@ -31,17 +33,23 @@ public class SpringUtils implements ApplicationContextAware {
 		if (null == beanName || "".equals(beanName.trim())) {
 			return null;
 		}
-		if (clazz == null) return null;
+		if (clazz == null) {
+            return null;
+        }
 		return (T) context.getBean(beanName, clazz);
 	}
 
 	public static ApplicationContext getContext(){
-		if (context == null) return null;
+		if (context == null) {
+            return null;
+        }
 		return context;
 	}
 
 	public static void publishEvent(ApplicationEvent event) {
-		if (context == null) return;
+		if (context == null) {
+            return;
+        }
 		context.publishEvent(event);
 	}
 

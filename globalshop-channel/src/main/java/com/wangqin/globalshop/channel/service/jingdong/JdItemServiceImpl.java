@@ -29,43 +29,53 @@ public class JdItemServiceImpl implements JdItemService {
 	@Autowired
 	private JdItemDOMapperExt jdItemDOMapperExt;
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return jdItemDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(JdItemDO record){
+	@Override
+    public int insert(JdItemDO record){
 		return jdItemDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(JdItemDO record){
+	@Override
+    public int insertSelective(JdItemDO record){
 		return jdItemDOMapperExt.insertSelective(record);
 	}
 
-	public JdItemDO selectByPrimaryKey(Long id){
+	@Override
+    public JdItemDO selectByPrimaryKey(Long id){
 		return jdItemDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(JdItemDO record){
+	@Override
+    public int updateByPrimaryKeySelective(JdItemDO record){
 		return jdItemDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKeyWithBLOBs(JdItemDO record){
+	@Override
+    public int updateByPrimaryKeyWithBLOBs(JdItemDO record){
 		return jdItemDOMapperExt.updateByPrimaryKeyWithBLOBs(record);
 	}
 
-	public int updateByPrimaryKey(JdItemDO record){
+	@Override
+    public int updateByPrimaryKey(JdItemDO record){
 		return jdItemDOMapperExt.updateByPrimaryKey(record);
 	}
 
-	public JdItemDO searchJdItem(JdItemDO jdItemDO){
+	@Override
+    public JdItemDO searchJdItem(JdItemDO jdItemDO){
 		return jdItemDOMapperExt.searchJdItem(jdItemDO);
 	}
 
-	public List<JdItemDO> searchJdItemList(JdItemDO jdItemDO){
+	@Override
+    public List<JdItemDO> searchJdItemList(JdItemDO jdItemDO){
 		return jdItemDOMapperExt.searchJdItemList(jdItemDO);
 	}
 
-	public Long searchJdItemCount(JdItemDO jdItemDO){
+	@Override
+    public Long searchJdItemCount(JdItemDO jdItemDO){
 		return jdItemDOMapperExt.searchJdItemCount(jdItemDO);
 	}
 
@@ -74,7 +84,8 @@ public class JdItemServiceImpl implements JdItemService {
 	 * 状态修改成request，等待下发
 	 * @param jdItemDOS
 	 */
-	public void saveItems4Task(List<JdItemDO> jdItemDOS){
+	@Override
+    public void saveItems4Task(List<JdItemDO> jdItemDOS){
 		for(JdItemDO Item : jdItemDOS){
 
 			Item.setSendStatus(SendStatus.REQUEST);
@@ -98,7 +109,8 @@ public class JdItemServiceImpl implements JdItemService {
 	}
 
 
-	public void sendJdItem2globalshop4Task(JdItemDO jdItemDO, JdShopOauthDO shopOauth){
+	@Override
+    public void sendJdItem2globalshop4Task(JdItemDO jdItemDO, JdShopOauthDO shopOauth){
 		GlobalShopItemVo globalShopItemVo = null;
 		try {
 			globalShopItemVo = JdShopFactory.getChannel(shopOauth).convertItemJd2Global(jdItemDO.getItemJson());

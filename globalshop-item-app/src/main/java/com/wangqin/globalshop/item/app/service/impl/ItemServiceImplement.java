@@ -319,6 +319,7 @@ public class ItemServiceImplement implements IItemService {
      * @param itemCode
      * @return
      */
+    @Override
     public ItemVo queryAdd(String itemCode) {
 
         ItemVo itemVo = new ItemVo();
@@ -361,6 +362,7 @@ public class ItemServiceImplement implements IItemService {
      * @param itemCode
      * @return
      */
+    @Override
     public GlobalShopItemVo queryUpdate(String itemCode, String shopCode) {
 
         GlobalShopItemVo resultVo = new GlobalShopItemVo();
@@ -407,6 +409,7 @@ public class ItemServiceImplement implements IItemService {
 
     }
 
+    @Override
     public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo) {
 
         ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
@@ -438,6 +441,7 @@ public class ItemServiceImplement implements IItemService {
         }
     }
 
+    @Override
     public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo) {
 
         ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();

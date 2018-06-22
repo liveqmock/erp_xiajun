@@ -18,7 +18,8 @@ public class QrCodeServiceImpl implements QrCodeService {
 
 	public static final String qrcode_common_path = "";
 
-	public String getQrCodeUrl(String companyNo) {
+	@Override
+    public String getQrCodeUrl(String companyNo) {
 
 		String qrCodeUrl = "";
 

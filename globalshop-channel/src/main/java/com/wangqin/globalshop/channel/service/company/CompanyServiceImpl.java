@@ -18,36 +18,44 @@ public class CompanyServiceImpl implements ICompanyService {
 
 	@Autowired CompanyDOMapperExt companyDOMapperExt;
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return companyDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(CompanyDO record){
+	@Override
+    public int insert(CompanyDO record){
 		return companyDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(CompanyDO record){
+	@Override
+    public int insertSelective(CompanyDO record){
 		return companyDOMapperExt.insertSelective(record);
 	}
 
-	public CompanyDO selectByPrimaryKey(Long id){
+	@Override
+    public CompanyDO selectByPrimaryKey(Long id){
 		return companyDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(CompanyDO record){
+	@Override
+    public int updateByPrimaryKeySelective(CompanyDO record){
 		return companyDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKeyWithBLOBs(CompanyDO record){
+	@Override
+    public int updateByPrimaryKeyWithBLOBs(CompanyDO record){
 		return companyDOMapperExt.updateByPrimaryKeyWithBLOBs(record);
 	}
 
-	public int updateByPrimaryKey(CompanyDO record){
+	@Override
+    public int updateByPrimaryKey(CompanyDO record){
 		return companyDOMapperExt.updateByPrimaryKey(record);
 	}
 
 
-	public List<CompanyDO> queryPoList(CompanyDO company){
+	@Override
+    public List<CompanyDO> queryPoList(CompanyDO company){
 		return companyDOMapperExt.queryPoList(company);
 	}
 

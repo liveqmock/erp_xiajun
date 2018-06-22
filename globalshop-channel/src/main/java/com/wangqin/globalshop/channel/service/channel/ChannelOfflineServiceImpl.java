@@ -17,31 +17,38 @@ public class ChannelOfflineServiceImpl implements IChannelOfflineService {
 	@Autowired
 	private ChannelDOMapperExt channelDOMapperExt;
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return channelDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(ChannelDO record){
+	@Override
+    public int insert(ChannelDO record){
 		return channelDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(ChannelDO record){
+	@Override
+    public int insertSelective(ChannelDO record){
 		return channelDOMapperExt.insertSelective(record);
 	}
 
-	public ChannelDO selectByPrimaryKey(Long id){
+	@Override
+    public ChannelDO selectByPrimaryKey(Long id){
 		return channelDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(ChannelDO record){
+	@Override
+    public int updateByPrimaryKeySelective(ChannelDO record){
 		return channelDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(ChannelDO record){
+	@Override
+    public int updateByPrimaryKey(ChannelDO record){
 		return channelDOMapperExt.updateByPrimaryKey(record);
 	}
 
-	public List<ChannelDO> queryChannelList(){
+	@Override
+    public List<ChannelDO> queryChannelList(){
 		return channelDOMapperExt.queryChannelList();
 	}
 

@@ -42,7 +42,7 @@ public class ShareUserController {
 		//JsonResult<List<AuthUserDO>> resultList = new JsonResult<List<AuthUserDO>>();
 
 		List<AuthUserDO> responseUserList = null;
-		if (StringUtils.isNotBlank(type) && type.equals("wechat")) {
+		if (StringUtils.isNotBlank(type) && "wechat".equals(type)) {
 			responseUserList = userService.selectUserByWxOpenId(thirdPartyId);
 			//买手不存在
 			if (null == responseUserList) {

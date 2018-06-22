@@ -18,7 +18,8 @@ public class SequenceServiceImpl  implements ISequenceService {
 	@Autowired
 	private SequenceUtilMapperExt sequenceUtilMapperExt;
 
-	public Long gainORDSequence(){
+	@Override
+    public Long gainORDSequence(){
            return sequenceUtilMapperExt.gainORDSequence();
 	}
 

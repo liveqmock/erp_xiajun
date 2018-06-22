@@ -45,15 +45,18 @@ public class MessageUtil {
         }
     }
     private static XStream xstream = new XStream(new XppDriver() {
+        @Override
         public HierarchicalStreamWriter createWriter(Writer out) {
             return new PrettyPrintWriter(out) {
                 // 对所有xml节点都增加CDATA标记
                 boolean cdata = true;
 
+                @Override
                 public void startNode(String name, Class clazz) {
                     super.startNode(name, clazz);
                 }
 
+                @Override
                 protected void writeText(QuickWriter writer, String text) {
                     if (cdata) {
                         writer.write("<![CDATA[");

@@ -119,11 +119,13 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	}
 
 	// 上架
-	public void syncListingItem(Long itemId) {
+	@Override
+    public void syncListingItem(Long itemId) {
 		ItemVo item = itemService.queryItem(itemId);
 		syncListingItem(item);
 	}
-	public void syncListingItem(ItemVo item) {
+	@Override
+    public void syncListingItem(ItemVo item) {
 		// 查询出第三方平台帐号，上架
 		ChannelListingItemDO outerItemQuery = new ChannelListingItemDO();
 		outerItemQuery.setItemCode(item.getItemCode());
@@ -145,11 +147,13 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	}
 
 	// 下架
-	public void syncDelistingItem(Long itemId) {
+	@Override
+    public void syncDelistingItem(Long itemId) {
 		ItemVo item = itemService.queryItem(itemId);
 		syncDelistingItem(item);
 	}
-	public void syncDelistingItem(ItemVo item) {
+	@Override
+    public void syncDelistingItem(ItemVo item) {
 		ChannelListingItemDO outerItemQuery = new ChannelListingItemDO();
 		outerItemQuery.setItemCode(item.getItemCode());
 		ChannelListingItemDO outerItemDb = this.outerItemService.queryPo(outerItemQuery);
@@ -161,11 +165,13 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 		}
 	}
 	
-	public void syncDelistingSaleOutItems() {
+	@Override
+    public void syncDelistingSaleOutItems() {
 		
 	}
 	
-	public void syncSkuInventory(String itemCode,String skuCode) {
+	@Override
+    public void syncSkuInventory(String itemCode, String skuCode) {
 		//查询是否同步到有赞，并且为已上架状态
 		ChannelListingItemDO outerItemQuery = new ChannelListingItemDO();
 		outerItemQuery.setItemCode(itemCode);

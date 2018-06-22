@@ -33,47 +33,58 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 	private JdItemOperateDOMapperExt jdItemOperateDOMapperExt;
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return jdItemOperateDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(JdItemOperateDO record){
+	@Override
+    public int insert(JdItemOperateDO record){
 		return jdItemOperateDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(JdItemOperateDO record){
+	@Override
+    public int insertSelective(JdItemOperateDO record){
 		return jdItemOperateDOMapperExt.insertSelective(record);
 	}
 
-	public JdItemOperateDO selectByPrimaryKey(Long id){
+	@Override
+    public JdItemOperateDO selectByPrimaryKey(Long id){
 		return jdItemOperateDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(JdItemOperateDO record){
+	@Override
+    public int updateByPrimaryKeySelective(JdItemOperateDO record){
 		return jdItemOperateDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKeyWithBLOBs(JdItemOperateDO record){
+	@Override
+    public int updateByPrimaryKeyWithBLOBs(JdItemOperateDO record){
 		return jdItemOperateDOMapperExt.updateByPrimaryKeyWithBLOBs(record);
 	}
 
-	public int updateByPrimaryKey(JdItemOperateDO record){
+	@Override
+    public int updateByPrimaryKey(JdItemOperateDO record){
 		return jdItemOperateDOMapperExt.updateByPrimaryKey(record);
 	}
 
-	public JdItemOperateDO searchJdItemOperate(JdItemOperateDO jdItemOperateDO){
+	@Override
+    public JdItemOperateDO searchJdItemOperate(JdItemOperateDO jdItemOperateDO){
 		return jdItemOperateDOMapperExt.searchJdItemOperate(jdItemOperateDO);
 	}
 
-	public List<JdItemOperateDO> searchJdItemOperateList(JdItemOperateDO jdItemOperateDO){
+	@Override
+    public List<JdItemOperateDO> searchJdItemOperateList(JdItemOperateDO jdItemOperateDO){
 		return jdItemOperateDOMapperExt.searchJdItemOperateList(jdItemOperateDO);
 	}
 
-	public Long searchJdItemOperateCount(JdItemOperateDO jdItemOperateDO){
+	@Override
+    public Long searchJdItemOperateCount(JdItemOperateDO jdItemOperateDO){
 		return jdItemOperateDOMapperExt.searchJdItemOperateCount(jdItemOperateDO);
 	}
 
-	public void createOrUpdateItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus){
+	@Override
+    public void createOrUpdateItemOpreate(JdShopOauthDO shopOauth, String operateType, String itemCode, String syncStatus, String sendStatus){
 
 		JdItemOperateDO so = new JdItemOperateDO();
 		so.setChannelNo(shopOauth.getChannelNo());
@@ -102,7 +113,8 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 
 	}
 
-	public void queryItemThenSync2Jd4Add(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
+	@Override
+    public void queryItemThenSync2Jd4Add(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
 		Map<String,String> param = new HashMap<>();
 		param.put("itemCode",jdItemOperateDO.getItemCode());
 
@@ -147,7 +159,8 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 		jdItemOperateDOMapperExt.updateByPrimaryKey(jdItemOperateDO);
 	}
 
-	public void queryItemThenSync2Jd4Update(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
+	@Override
+    public void queryItemThenSync2Jd4Update(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
 
 		Map<String,String> param = new HashMap<>();
 		param.put("itemCode",jdItemOperateDO.getItemCode());
@@ -195,7 +208,8 @@ public class JdItemOperateServiceImpl implements JdItemOperateService {
 	}
 
 
-	public void sendItem2Globalshop(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
+	@Override
+    public void sendItem2Globalshop(JdItemOperateDO jdItemOperateDO, JdShopOauthDO shopOauth){
 		GlobalShopItemVo globalShopItemVo = null;
 		try {
 			globalShopItemVo = JdShopFactory.getChannel(shopOauth).convertItemJd2Global(jdItemOperateDO.getItemJson());

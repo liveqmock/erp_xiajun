@@ -17,7 +17,7 @@ public class FreightServiceImpl  implements IFreightService {
 	
 	@Override
 	public Long calculateFreight(Double itemWeight, Double packageWeight) {
-		Long fee = 3500l;
+		Long fee = 3500L;
 		double d = (itemWeight+packageWeight -0.5)/0.1d;
 		long a = (long)Math.ceil(d);
 		if(d >= 0){

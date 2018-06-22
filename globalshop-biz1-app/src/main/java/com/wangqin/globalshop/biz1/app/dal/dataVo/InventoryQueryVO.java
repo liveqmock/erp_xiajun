@@ -22,19 +22,23 @@ public class InventoryQueryVO extends InventoryDO {
 	private String buySite;
 	private Integer pageIndex;
 
-	public String getItemCode() {
+	@Override
+    public String getItemCode() {
 		return itemCode;
 	}
 
-	public void setItemCode(String itemCode) {
+	@Override
+    public void setItemCode(String itemCode) {
 		this.itemCode = itemCode;
 	}
 
-	public String getCompanyNo() {
+	@Override
+    public String getCompanyNo() {
 		return companyNo;
 	}
 
-	public void setCompanyNo(String companyNo) {
+	@Override
+    public void setCompanyNo(String companyNo) {
 		this.companyNo = companyNo;
 	}
 
@@ -54,27 +58,33 @@ public class InventoryQueryVO extends InventoryDO {
 		this.warehouseNo = warehouseNo;
 	}
 
-	public String getSkuCode() {
+	@Override
+    public String getSkuCode() {
 		return skuCode;
 	}
 
-	public void setSkuCode(String skuCode) {
+	@Override
+    public void setSkuCode(String skuCode) {
 		this.skuCode = skuCode;
 	}
 
-	public String getUpc() {
+	@Override
+    public String getUpc() {
 		return upc;
 	}
 
-	public void setUpc(String upc) {
+	@Override
+    public void setUpc(String upc) {
 		this.upc = upc;
 	}
 
-	public String getItemName() {
+	@Override
+    public String getItemName() {
 		return itemName;
 	}
 
-	public void setItemName(String itemName) {
+	@Override
+    public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
 

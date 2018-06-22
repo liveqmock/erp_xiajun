@@ -53,10 +53,10 @@ public class ExcelHelper {
 		
         String ext = filepath.substring(filepath.lastIndexOf("."));
         
-        if ((ext.equals(".xls")) || (ext.equals(".xlsx"))) {
+        if ((".xls".equals(ext)) || (".xlsx".equals(ext))) {
             try {
                 InputStream is = new FileInputStream(filepath);  
-                if(ext.equals(".xls")){  
+                if(".xls".equals(ext)){
                     wbRead = new HSSFWorkbook(is);  
                 } else {  
                     wbRead = new XSSFWorkbook(is);  

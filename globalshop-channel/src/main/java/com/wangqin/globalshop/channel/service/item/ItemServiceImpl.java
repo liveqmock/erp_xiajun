@@ -41,40 +41,49 @@ public class ItemServiceImpl  implements IItemService {
 	@Autowired
 	private ItemSkuScaleMapperExt itemSkuScaleDOMapper;
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return itemDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(ItemDO record){
+	@Override
+    public int insert(ItemDO record){
 		return itemDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(ItemDO record){
+	@Override
+    public int insertSelective(ItemDO record){
 		return itemDOMapperExt.insertSelective(record);
 	}
 
-	public ItemDO selectByPrimaryKey(Long id){
+	@Override
+    public ItemDO selectByPrimaryKey(Long id){
 		return itemDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(ItemDO record){
+	@Override
+    public int updateByPrimaryKeySelective(ItemDO record){
 		return itemDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKeyWithBLOBs(ItemDO record){
+	@Override
+    public int updateByPrimaryKeyWithBLOBs(ItemDO record){
 		return itemDOMapperExt.updateByPrimaryKeyWithBLOBs(record);
 	}
 
-	public int updateByPrimaryKey(ItemDO record){
+	@Override
+    public int updateByPrimaryKey(ItemDO record){
 		return itemDOMapperExt.updateByPrimaryKey(record);
 	}
 
 
-	public List<ItemDO> selectBatchIds(List<Long> idList){
+	@Override
+    public List<ItemDO> selectBatchIds(List<Long> idList){
 		return itemDOMapperExt.selectBatchIds(idList);
 	}
 
-	public void updateBatchById(List<ItemDO> itemDOList){
+	@Override
+    public void updateBatchById(List<ItemDO> itemDOList){
 		itemDOMapperExt.updateBatchById(itemDOList);
 	}
 
@@ -84,7 +93,8 @@ public class ItemServiceImpl  implements IItemService {
 	 * @param id
 	 * @return
 	 */
-	public ItemVo queryItem(Long id){
+	@Override
+    public ItemVo queryItem(Long id){
 		ItemVo itemVo = new ItemVo();
 		ItemDO itemDo = itemDOMapperExt.selectByPrimaryKey(id);
 		BeanUtils.copies(itemDo,itemVo);
@@ -120,7 +130,8 @@ public class ItemServiceImpl  implements IItemService {
 
 
 
-	public List<ItemDO> queryHaihuByUptime(ItemQueryVO itemQueryVO){
+	@Override
+    public List<ItemDO> queryHaihuByUptime(ItemQueryVO itemQueryVO){
 		return itemDOMapperExt.queryHaihuByUptime(itemQueryVO);
 	}
 

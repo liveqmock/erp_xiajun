@@ -82,8 +82,12 @@ public class PayUtil {
     }
 
     private static boolean isValidChar(char ch) {
-        if ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) return true;
-        if ((ch >= 0x4e00 && ch <= 0x7fff) || (ch >= 0x8000 && ch <= 0x952f)) return true;// 简体中文汉字编码
+        if ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
+            return true;
+        }
+        if ((ch >= 0x4e00 && ch <= 0x7fff) || (ch >= 0x8000 && ch <= 0x952f)) {
+            return true;// 简体中文汉字编码
+        }
         return false;
     }
 
@@ -100,8 +104,8 @@ public class PayUtil {
         }
         for (String key : sArray.keySet()) {
             String value = sArray.get(key);
-            if (value == null || value.equals("") || key.equalsIgnoreCase("sign")
-                || key.equalsIgnoreCase("sign_type")) {
+            if (value == null || "".equals(value) || "sign".equalsIgnoreCase(key)
+                || "sign_type".equalsIgnoreCase(key)) {
                 continue;
             }
             result.put(key, value);

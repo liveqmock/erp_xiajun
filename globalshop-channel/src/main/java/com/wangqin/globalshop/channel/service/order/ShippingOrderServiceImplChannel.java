@@ -24,32 +24,39 @@ public class ShippingOrderServiceImplChannel implements ChannelIShippingOrderSer
 	}
 
 
-	public int deleteByPrimaryKey(Long id){
+	@Override
+    public int deleteByPrimaryKey(Long id){
 		return shippingOrderDOMapperExt.deleteByPrimaryKey(id);
 	}
 
-	public int insert(ShippingOrderDO record){
+	@Override
+    public int insert(ShippingOrderDO record){
 		return shippingOrderDOMapperExt.insert(record);
 	}
 
-	public int insertSelective(ShippingOrderDO record){
+	@Override
+    public int insertSelective(ShippingOrderDO record){
 		return shippingOrderDOMapperExt.insertSelective(record);
 	}
 
-	public ShippingOrderDO selectByPrimaryKey(Long id){
+	@Override
+    public ShippingOrderDO selectByPrimaryKey(Long id){
 		return shippingOrderDOMapperExt.selectByPrimaryKey(id);
 	}
 
-	public int updateByPrimaryKeySelective(ShippingOrderDO record){
+	@Override
+    public int updateByPrimaryKeySelective(ShippingOrderDO record){
 		return shippingOrderDOMapperExt.updateByPrimaryKeySelective(record);
 	}
 
-	public int updateByPrimaryKey(ShippingOrderDO record){
+	@Override
+    public int updateByPrimaryKey(ShippingOrderDO record){
 		return shippingOrderDOMapperExt.updateByPrimaryKey(record);
 	}
 
 
-	public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO ShippingOrderVO){
+	@Override
+    public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO ShippingOrderVO){
 		return shippingOrderDOMapperExt.queryShippingOrders(ShippingOrderVO);
 	}
 

@@ -12,26 +12,32 @@ public class YouzanTradeGet extends AbstractAPI {
         this.params = apiParams;
     }
 
+    @Override
     public String getHttpMethod() {
         return "GET";
     }
 
+    @Override
     public String getVersion() {
         return "3.0.0";
     }
 
+    @Override
     public String getName() {
         return "youzan.trade.get";
     }
 
+    @Override
     public Class getResultModelClass() {
         return YouzanTradeGetResult.class;
     }
 
+    @Override
     public Class getParamModelClass() {
         return YouzanTradeGetParams.class;
     }
 
+    @Override
     public boolean hasFiles() {
         return  false ;
     }

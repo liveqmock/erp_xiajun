@@ -97,6 +97,7 @@ public class ChannelAccountDO extends BaseModel {
         return companyNo;
     }
 
+    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -249,6 +250,7 @@ public class ChannelAccountDO extends BaseModel {
         return creator;
     }
 
+    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -257,6 +259,7 @@ public class ChannelAccountDO extends BaseModel {
         return modifier;
     }
 
+    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
