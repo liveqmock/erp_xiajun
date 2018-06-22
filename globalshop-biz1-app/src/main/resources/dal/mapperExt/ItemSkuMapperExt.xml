@@ -664,7 +664,8 @@
          ( T1.sku_code =#{code}
          OR
          T1.upc = #{code})
-
+         AND
+         T1.is_del = 0
      </select>
      
      <!-- 一键分享的商品的价格 -->
