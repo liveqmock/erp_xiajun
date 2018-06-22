@@ -81,7 +81,7 @@ public class ItemDO extends BaseModel {
 
     private String originSalePrice;
 
-    private String commissionMode;
+    private String commissionRate;
 
     private String creator;
 
@@ -403,12 +403,12 @@ public class ItemDO extends BaseModel {
         this.originSalePrice = originSalePrice == null ? null : originSalePrice.trim();
     }
 
-    public String getCommissionMode() {
-        return commissionMode;
+    public String getCommissionRate() {
+        return commissionRate;
     }
 
-    public void setCommissionMode(String commissionMode) {
-        this.commissionMode = commissionMode == null ? null : commissionMode.trim();
+    public void setCommissionRate(String commissionRate) {
+        this.commissionRate = commissionRate == null ? null : commissionRate.trim();
     }
 
     public String getCreator() {

@@ -8,7 +8,7 @@
             <!--location="../../mysql-connector-java-5.1.44.jar"/>-->
     <classPathEntry
 
-            location="../../mysql-connector-java-5.1.44.jar"/>
+            location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
 
            
 
@@ -138,13 +138,13 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-        enableSelectByExample="false" selectByExampleQueryId="false" >
-        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
-            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
-            <ignoreColumn column="is_del" delimitedColumnName=""/>
-        </table>
+        <!--<table tableName="auth_user" domainObjectName="AuthUserDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
 
         <!--<table tableName="auth_user_role" domainObjectName="AuthUserRoleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -355,13 +355,13 @@
         <!--</table>-->
 
 
-        <!--<table tableName="item" domainObjectName="ItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
+        <table tableName="item" domainObjectName="ItemDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+        enableSelectByExample="false" selectByExampleQueryId="false" >
+        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
+            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
+            <ignoreColumn column="is_del" delimitedColumnName=""/>
+        </table>
 
         <!--<table tableName="item_brand" domainObjectName="ItemBrandDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
