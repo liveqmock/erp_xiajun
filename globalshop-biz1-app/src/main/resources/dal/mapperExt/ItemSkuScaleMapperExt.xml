@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt">
 
-  <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
     T1.id, T1.sku_code AS skuCode, T1.item_code AS itemCode, T1.scale_code AS scaleCode,
      T1.scale_name AS scaleName,T1.scale_value AS scaleValue,
     T1.gmt_create AS gmtCreate, T1.gmt_modify AS gmtModify, T1.creator, T1.modifier, T1.is_del
   </sql>
-  
-  <!-- 查询sku对应的所有规格以及规格的值 -->
-  <select id="selectScaleNameValueBySkuCode" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from item_sku_scale T1
-    where T1.sku_code = #{skuCode}
-  </select>
 
-  <insert id="insertBatch" parameterType="java.util.List" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into item_sku_scale(
+    <!-- 查询sku对应的所有规格以及规格的值 -->
+    <select id="selectScaleNameValueBySkuCode"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from item_sku_scale T1
+        where T1.sku_code = #{skuCode}
+    </select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into item_sku_scale(
         item_code,
         sku_code,
         scale_code,
@@ -28,21 +29,21 @@
         scale_value,
         creator,
         modifier
-      )
-    VALUES
-      <foreach collection="list" item="scale" separator=",">
-          (
-          #{scale.item_code},
-          #{scale.sku_code},
-          #{scale.scale_code},
-          #{scale.scale_name},
-          #{scale.scale_value},
-          #{scale.creator},
-          #{scale.modifier}
-          )
-      </foreach>
+        )
+        VALUES
+        <foreach collection="scaleList" item="scale" separator=",">
+            (
+            #{scale.itemCode},
+            #{scale.skuCode},
+            #{scale.scaleCode},
+            #{scale.scaleName},
+            #{scale.scaleValue},
+            #{scale.creator},
+            #{scale.modifier}
+            )
+        </foreach>
 
-  </insert>
-  
-  
+    </insert>
+
+
 </mapper>

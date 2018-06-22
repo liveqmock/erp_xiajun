@@ -179,15 +179,7 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 
     @Override
     public List<ItemCategoryDO> selectByParentAndName(List<ItemCategoryDO> list, String name) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        for (ItemCategoryDO o : list) {
-            sb.append("'").append(o.getId()).append("'");
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append(")");
-       return categoryMapper.selectByPcodeAndName(sb.toString(),name);
+       return categoryMapper.selectByPcodeAndName(list,name);
     }
 
 }
