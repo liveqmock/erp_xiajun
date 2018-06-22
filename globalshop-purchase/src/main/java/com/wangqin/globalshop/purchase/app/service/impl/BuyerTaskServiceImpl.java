@@ -58,6 +58,8 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         BuyerDO buyer = buyerMapper.selectByPrimaryKey(vo.getBuyerId());
         BuyerTaskDO task = new BuyerTaskDO();
         /**封装出一个buyerTaskDO对象*/
+        String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
+        task.setBuyerTaskNo(buyerTaskNo);
         getBuyerTaskDO(task, buyer, vo);
         mapper.insertSelective(task);
         List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
@@ -66,6 +68,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             BuyerDO by = buyerMapper.selectByPrimaryKey(itemTask.getBuyerId());
             BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
             /**封装出一个buyerDetailTaskDO对象*/
+            detail.setBuyerTaskNo(buyerTaskNo);
             getBuyerTaskDetailDO(detail, itemTask, by);
             detailMapper.insertSelective(detail);
         }
@@ -97,8 +100,9 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             /**采购限价*/
             String maxPrice = obj.get(3).toString().trim();
             maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
-            if (isParseToInteger(maxPrice)) {
-                detail.setMaxPrice(BigDecimal.valueOf(Long.valueOf(maxPrice)));
+            if (isParseToDouble(maxPrice)) {
+                BigDecimal decimal = new BigDecimal(maxPrice);
+                detail.setMaxPrice(decimal);
             } else {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第4列的  " + maxPrice);
             }
@@ -182,6 +186,19 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         }
         return true;
     }
+    /**
+     * 判断是否能够转换成Double类型
+     *
+     * @param price
+     */
+    private boolean isParseToDouble(String price) {
+        try {
+            Double.valueOf(price);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
     private void getBuyerTaskDO(BuyerTaskDO task, BuyerDO buyer, BuyerTaskVO vo) {
         task.setTitle(vo.getTaskTitle());
@@ -190,7 +207,6 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         task.setStartTime(vo.getTaskStartTime());
         /**设置采购中*/
         task.setStatus(Constant.TO_BE_PURCHASED);
-        task.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
         task.init();
         task.setBuyerName(buyer.getNickName());
         task.setBuyerOpenId(buyer.getOpenId());
@@ -198,7 +214,6 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     private void getBuyerTaskDetailDO(BuyerTaskDetailDO detail, ItemTask itemTask, BuyerDO by) {
         detail.init();
-        detail.setBuyerTaskNo("TaskNo" + System.currentTimeMillis());
         detail.setBuyerName(by.getNickName());
         detail.setBuyerOpenId(by.getOpenId());
         detail.setCount(itemTask.getCount());

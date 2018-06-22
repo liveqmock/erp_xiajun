@@ -572,7 +572,7 @@ public class ItemServiceImplement implements IItemService {
             /**销售价*/
             String salePrice = obj.get(12).toString();
             salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
-            if (isParseToInteger(salePrice)) {
+            if (isParseToDouble(salePrice)) {
                 itemSku.setSalePrice(Double.valueOf(salePrice));
             } else {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
@@ -580,7 +580,7 @@ public class ItemServiceImplement implements IItemService {
             /**原价*/
             String price = obj.get(13).toString();
             price = StringUtil.isBlank(price) ? "0" : price;
-            if (isParseToInteger(price)) {
+            if (isParseToDouble(price)) {
                 itemSku.setCostPrice(Double.valueOf(price));
             } else {
                 errMsg.add("存在未知格式的数据:第" + i + "行 第14列的  " + price);
@@ -588,7 +588,7 @@ public class ItemServiceImplement implements IItemService {
             /**重量*/
             String weight = obj.get(14).toString();
             weight = StringUtil.isBlank(weight) ? "0" : weight;
-            if (isParseToInteger(weight)) {
+            if (isParseToDouble(weight)) {
                 item.setWeight(Double.valueOf(weight));
                 itemSku.setWeight(Double.valueOf(weight));
             } else {
@@ -628,6 +628,19 @@ public class ItemServiceImplement implements IItemService {
         }
 
 
+    }
+    /**
+     * 判断是否能够转换成Double类型
+     *
+     * @param price
+     */
+    private boolean isParseToDouble(String price) {
+        try {
+            Double.valueOf(price);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
     /**
