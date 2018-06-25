@@ -21,4 +21,31 @@ public class BuyerServiceImpl implements IBuyerService {
     public List<BuyerDO> list() {
         return mapper.list(AppUtil.getLoginUserCompanyNo());
     }
+
+
+
+    @Override
+    public int deleteByPrimaryKey(Long id){
+        return mapper.deleteByPrimaryKey(id);
+    }
+    @Override
+    public int insert(BuyerDO record){
+        return mapper.insert(record);
+    }
+    @Override
+    public int insertSelective(BuyerDO record){
+        return mapper.insertSelective(record);
+    }
+    @Override
+    public BuyerDO selectByPrimaryKey(Long id){
+        return mapper.selectByPrimaryKey(id);
+    }
+    @Override
+    public int updateByPrimaryKeySelective(BuyerDO record){
+        return mapper.updateByPrimaryKeySelective(record);
+    }
+    @Override
+    public int updateByPrimaryKey(BuyerDO record){
+        return mapper.updateByPrimaryKey(record);
+    }
 }

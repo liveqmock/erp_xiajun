@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.purchase.app.service;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
 
@@ -16,4 +17,7 @@ public interface IBuyerTaskService {
     void add(BuyerTaskVO buyerTaskDO);
 
     void importTask(List<List<Object>> list);
+
+
+
 }

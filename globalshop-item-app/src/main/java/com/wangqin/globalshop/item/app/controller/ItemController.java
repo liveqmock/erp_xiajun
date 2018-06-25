@@ -868,6 +868,7 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/improtItem")
+    @ResponseBody
     public Object importTask(MultipartFile file) {
         JsonResult<Object> result = new JsonResult<>();
         try {

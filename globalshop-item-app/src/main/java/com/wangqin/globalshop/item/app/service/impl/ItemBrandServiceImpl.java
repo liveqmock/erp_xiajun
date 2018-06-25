@@ -103,7 +103,7 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 	}
 
 	@Override
-	public List<ItemBrandDO> queryByEnNameAndCnName(String name) {
-		return itemBrandDOMapperExt.queryByEnNameAndCnName(name);
+	public List<ItemBrandDO> queryByEnNameAndCnName(String enName,String cnName) {
+		return itemBrandDOMapperExt.queryByEnNameAndCnName(enName,cnName);
 	}
 }

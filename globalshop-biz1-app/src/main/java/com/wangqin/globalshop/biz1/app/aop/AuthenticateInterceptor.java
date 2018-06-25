@@ -92,7 +92,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                     }
                 } catch (Exception e) {
                     LogWorker.log(log, "从Cache获取session异常，跳转登录页面", "");
-                    response.sendRedirect("127.0.0.1:8000/#/login");
+                    response.setStatus(302);
                     return false;
                 }
             }else
@@ -101,7 +101,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
             }
         }
         if (isJump) {
-            response.sendRedirect("127.0.0.1:8000/#/login");
+            response.setStatus(302);
             return false;
         } else {
             return true;

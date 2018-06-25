@@ -123,14 +123,16 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
             for(BuyerStorageDetailDO detail : detailDOList){
 
-                List<ItemSkuDO> skuDOS = skuDOMapperExt.queryItemSkusByUpc(detail.getUpc());
-                if(EasyUtil.isListEmpty(skuDOS)){
+                ItemSkuDO skuSo = new ItemSkuDO();
+                skuSo.setSkuCode(detail.getSkuCode());
+                skuSo.initCompany();
+                skuSo.setUpc(detail.getUpc());
+
+
+                ItemSkuDO skuDO = skuDOMapperExt.queryItemSku(skuSo);
+                if(skuDO == null){
                     throw new ErpCommonException("未找到对应商品");
                 }
-                if(skuDOS.size() > 1){
-                    throw new ErpCommonException("查找到的UPC商品数量大于1，UPC:"+detail.getUpc());
-                }
-                ItemSkuDO skuDO = skuDOS.get(0);
 
                 BuyerStorageDetailVo vo = new BuyerStorageDetailVo();
 

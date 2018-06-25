@@ -46,5 +46,5 @@ public interface IItemBrandService {
     
     void deleteItemBrandById(Long id);
 
-	List<ItemBrandDO> queryByEnNameAndCnName(String name);
+	List<ItemBrandDO> queryByEnNameAndCnName(String enName,String cnName);
 }

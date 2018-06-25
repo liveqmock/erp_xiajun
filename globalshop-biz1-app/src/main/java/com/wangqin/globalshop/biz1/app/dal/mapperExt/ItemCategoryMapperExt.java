@@ -3,6 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemCategoryDOMapper;
 import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -34,5 +35,5 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
     //根据id删除类目
     void deleteItemCategoryById(Long id);
 
-    List<ItemCategoryDO> selectByPcodeAndName(String pCodes, String name);
+    List<ItemCategoryDO> selectByPcodeAndName(@Param("list") List<ItemCategoryDO> list, @Param("name")String name);
 }
