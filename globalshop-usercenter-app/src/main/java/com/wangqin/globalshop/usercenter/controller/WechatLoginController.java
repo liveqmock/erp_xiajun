@@ -10,6 +10,10 @@ import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import net.sf.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -32,17 +36,17 @@ import java.util.List;
 @ResponseBody
 public class WechatLoginController {
     @Value("#{sys.SESSION_ID}")
-    private   String SESSION_ID ;
+    private String SESSION_ID;
     @Value("#{sys.COMPANY_NO}")
-    private   String COMPANY_NO ;
+    private String COMPANY_NO;
     @Value("#{sys.APPSECRET}")
-    private   String APPSECRET;
+    private String APPSECRET;
     @Value("#{sys.appid}")
-    private   String appid ;
+    private String appid;
     @Value("#{sys.sysurl}")
-    private   String sysurl ;
+    private String sysurl;
     @Value("#{sys.TIMEOUT}")
-    private static long TIMEOUT ;
+    private static long TIMEOUT;
 
     @Autowired
     private IUserService userService;
@@ -133,23 +137,17 @@ public class WechatLoginController {
     }
 
     /**
-     * 获取微信二维码的链接
+     * 获取微信登陆二维码的链接
      *
-     * @param type 授权时 该参数为authorized
-     *             登录时  该参数为login
      * @return
      */
     @RequestMapping("/getUrl")
-    public Object getUrl(String type) {
+    public Object getUrl() {
         JsonResult<Object> result = new JsonResult<>();
         try {
-            String baseUrl = sysurl + "/wechatLogin/" + type;
+            String baseUrl = sysurl + "/wechatLogin/login";
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
             String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-            if ("authorized".equals(type)) {
-                String state = AppUtil.getLoginUserCompanyNo();
-                url = url + "&state=" + state;
-            }
             return result.buildData(url).buildIsSuccess(true);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -158,6 +156,38 @@ public class WechatLoginController {
 
     }
 
+    /**
+     * 获取微信授权二维码的链接
+     *
+     * @return
+     */
+    @RequestMapping("/getImgUrl")
+    public Object getImgUrl() {
+        JsonResult<Object> result = new JsonResult<>();
+        try {
+            String baseUrl = sysurl + "/wechatLogin/authorized";
+            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+            String state = AppUtil.getLoginUserCompanyNo();
+            url = url + "&state=" + state;
+            Document doc = Jsoup.connect(url).get();
+            Elements elements = doc.select("img");
+            if (elements.size() != 1) {
+                return result.buildIsSuccess(false).buildMsg("二维码链接有误");
+            }
+            String img = "";
+            for (Element element : elements) {
+                img = element.attr("src");
+            }
 
+            return result.buildData("https://open.weixin.qq.com" + img).buildIsSuccess(true);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result.buildIsSuccess(false).buildMsg("获取失败");
+
+    }
 
 }

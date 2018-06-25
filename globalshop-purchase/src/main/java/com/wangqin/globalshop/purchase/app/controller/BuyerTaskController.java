@@ -1,11 +1,14 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,5 +45,43 @@ public class BuyerTaskController {
             e.printStackTrace();
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
+    }
+
+
+
+    /**
+     * 查询采购任务的明细
+     * @return
+     */
+    @PostMapping("/queryTaskDailyList")
+    public Object queryTaskDailyList(BuyerTaskDO buyerTaskDO) {
+        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
+        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
+        return result.buildData(list).buildIsSuccess(true);
+    }
+
+    /**
+     * 新增采购任务
+     * @param buyerTaskDO
+     * @return
+     */
+    @PostMapping("/add")
+    public Object addTask(BuyerTaskVO buyerTaskDO) {
+        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
+        buyerTaskService.add(buyerTaskDO);
+        return result.buildIsSuccess(true);
+    }
+
+    /**
+     * 查询该买手的采购任务
+     * @param buyerTaskDO
+     * @return
+     */
+    @PostMapping("/queryBuyerTaskList")
+    public Object queryBuyerTaskList(BuyerTaskDO buyerTaskDO) {
+        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
+        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
+        result.buildData(list);
+        return result.buildIsSuccess(true);
     }
 }
