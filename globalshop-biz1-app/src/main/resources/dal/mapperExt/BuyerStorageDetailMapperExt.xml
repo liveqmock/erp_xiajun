@@ -77,6 +77,9 @@
 			and T.status = #{status}
 		</if>
 
+		<if test="upc != null">
+			and T.upc = #{upc}
+		</if>
 
 		<if test=" isDel == true">
 			and T.is_del is true
