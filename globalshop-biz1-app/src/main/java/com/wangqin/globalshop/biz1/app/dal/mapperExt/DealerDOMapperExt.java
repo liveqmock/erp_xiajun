@@ -11,5 +11,4 @@ public interface DealerDOMapperExt extends DealerDOMapper {
     
     DealerDO selectByCode(String code);
     
-    int insertNoId(DealerDO record);
 }
