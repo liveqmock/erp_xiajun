@@ -86,7 +86,7 @@ public class WarehouseController{
 	 *
 	 * @return
 	 */
-	@GetMapping("/selectWhList")
+	@PostMapping("/selectWhList")
 	@ResponseBody
 	public Object selectWhList() {
 		WarehouseDO warehouse = new WarehouseDO();
