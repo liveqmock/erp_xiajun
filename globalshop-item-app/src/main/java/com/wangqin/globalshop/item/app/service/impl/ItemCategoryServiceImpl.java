@@ -7,8 +7,10 @@ import com.wangqin.globalshop.common.utils.Tree;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,10 +138,14 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
             cates.forEach(cate -> {
                 if (cate.getLevel() == 3) {
                     ItemCategoryDTO category = categoryLevel2.get(cate.getpCode());
-                    category.getChildren().add(cate);
+                    if(null != category) {
+                    	  category.getChildren().add(cate); 
+                    }                                    	              
                 } else if (cate.getLevel() == 2) {
                     ItemCategoryDTO category = categoryLevel1.get(cate.getpCode());
-                    category.getChildren().add(cate);
+                    if(null != category) {
+                        category.getChildren().add(cate); 
+                    }                    
                 }
             });
         }
