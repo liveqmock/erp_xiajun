@@ -11,4 +11,16 @@ import java.util.List;
 public interface IBuyerService {
 
     List<BuyerDO> list();
+
+    public int deleteByPrimaryKey(Long id);
+
+    public int insert(BuyerDO record);
+
+    public int insertSelective(BuyerDO record);
+
+    public BuyerDO selectByPrimaryKey(Long id);
+
+    public int updateByPrimaryKeySelective(BuyerDO record);
+
+    public int updateByPrimaryKey(BuyerDO record);
 }

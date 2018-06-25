@@ -2,16 +2,12 @@ package com.wangqin.globalshop.purchase.app.controller;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.purchase.app.service.IBuyerService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,40 +39,38 @@ public class BuyerController {
 
     }
 
-    /**
-     * 查询采购任务的明细
-     * @return
-     */
-    @PostMapping("/queryTaskDailyList")
-    public Object queryTaskDailyList(BuyerTaskDO buyerTaskDO) {
-        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
-        return result.buildData(list).buildIsSuccess(true);
+
+
+    @PostMapping("/setCommission")
+    public Object setCommission(Long id, String purchaseCommissionStr, Long purchaseCommissionMode) {
+
+        BuyerDO buyer = service.selectByPrimaryKey(id);
+        buyer.setPurchaseCommissionMode(purchaseCommissionMode);
+        buyer.setPurchaseCommissionStr(purchaseCommissionStr);
+        service.updateByPrimaryKey(buyer);
+        return JsonResult.buildSuccess(true);
     }
 
-    /**
-     * 新增采购任务
-     * @param buyerTaskDO
-     * @return
-     */
+    @GetMapping("/queryBuyerById")
+    public Object setCommission(Long id) {
+        BuyerDO buyer = service.selectByPrimaryKey(id);
+        return JsonResult.buildSuccess(buyer);
+    }
+
     @PostMapping("/add")
-    public Object addTask(BuyerTaskVO buyerTaskDO) {
-        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-        buyerTaskService.add(buyerTaskDO);
-        return result.buildIsSuccess(true);
+    public Object add(BuyerDO buyer) {
+        buyer.initCompany();
+        service.insert(buyer);
+        return JsonResult.buildSuccess(buyer);
     }
 
-    /**
-     * 查询该买手的采购任务
-     * @param buyerTaskDO
-     * @return
-     */
-    @PostMapping("/queryBuyerTaskList")
-    public Object queryBuyerTaskList(BuyerTaskDO buyerTaskDO) {
-        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
-        result.buildData(list);
-        return result.buildIsSuccess(true);
+
+    @PostMapping("/update")
+    public Object update(BuyerDO buyer) {
+        buyer.initCompany();
+        service.updateByPrimaryKey(buyer);
+        return JsonResult.buildSuccess(buyer);
     }
+
 
 }
