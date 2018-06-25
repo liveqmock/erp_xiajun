@@ -90,21 +90,12 @@ public class OrganizationServiceImpl implements IOrganizationService {
     }
 
     @Override
-    public JsonPageResult<List<AuthOrganizationDO>> queryOrganizationList(OrganizationQueryVO organizationQueryVO) {
+    public JsonPageResult<List<AuthOrganizationDO>> queryOrganizationList(String companyNo) {
         JsonPageResult<List<AuthOrganizationDO>> result = new JsonPageResult<>();
 
-        Integer totalCount = organizationMapper.queryOrganizationsCount(organizationQueryVO);
+        List<AuthOrganizationDO> list = organizationMapper.queryOrganizationQueryList(companyNo);
+        result.setData(list);
 
-        if ((null != totalCount) && (0L != totalCount)) {
-            result.buildPage(totalCount, organizationQueryVO);
-
-            List<AuthOrganizationDO> list = organizationMapper.queryOrganizationQueryList(organizationQueryVO);
-            result.setData(list);
-        } else {
-            List<AuthOrganizationDO> list = new ArrayList<>();
-            result.setData(list);
-        }
-
-        return result;
+        return result.buildIsSuccess(true);
     }
 }

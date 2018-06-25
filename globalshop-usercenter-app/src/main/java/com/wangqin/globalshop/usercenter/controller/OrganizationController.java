@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.usercenter.service.IOrganizationService;
@@ -150,7 +151,9 @@ public class OrganizationController extends BaseController {
     @RequestMapping("/queryList")
     @ResponseBody
     public Object queryList(OrganizationQueryVO organizationQueryVO) {
-        JsonPageResult<List<AuthOrganizationDO>> result = organizationService.queryOrganizationList(organizationQueryVO);
+    	String companyNo = AppUtil.getLoginUserCompanyNo();
+    	
+        JsonPageResult<List<AuthOrganizationDO>> result = organizationService.queryOrganizationList(companyNo);
 
         return result.buildIsSuccess(true);
     }

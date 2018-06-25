@@ -28,11 +28,10 @@ public interface IResourceService {//extends ISuperService<AuthResourceDO>
     int updateSelectiveById(AuthResourceDO resourceDO);
 
     int deleteById(Long id);
-
-
-    List<AuthResourceDO> queryResourceList();
-
-    List<AuthResourceDO> queryResourceTree(Long pid);
+    
+    List<AuthResourceDO> queryResource();
+    
+    AuthResourceDO queryTreeByResourceId(String resourceId);
 
     /**
      * 获取当前用户的所有资源码
