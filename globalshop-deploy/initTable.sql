@@ -1067,7 +1067,7 @@ CREATE TABLE `item_sku_scale` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT,
   `item_code` varchar(64) NOT NULL,
   `sku_code` varchar(64) NOT NULL,
-  `scale_code` varchar(16) NOT NULL,
+  `scale_code` varchar(32) NOT NULL,
   `scale_name` varchar(16) NOT NULL,
   `scale_value` varchar(64) NOT NULL COMMENT '规格的值',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',

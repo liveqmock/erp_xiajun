@@ -4,6 +4,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemBrandDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -36,5 +37,5 @@ public interface ItemBrandDOMapperExt extends ItemBrandDOMapper {
 
     void deleteItemBrandById(Long id);
 
-    List<ItemBrandDO> queryByEnNameAndCnName(String brandName);
+    List<ItemBrandDO> queryByEnNameAndCnName(@Param("enName") String enName, @Param("cnName") String cnName);
 }

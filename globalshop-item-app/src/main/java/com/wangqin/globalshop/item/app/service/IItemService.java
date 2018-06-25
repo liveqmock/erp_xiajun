@@ -31,6 +31,8 @@ public interface IItemService {
 	 * @param itemSkuList
 	 */
 	void addItem(ItemDO item);
+
+	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
 	
 	
 	
@@ -99,22 +101,27 @@ public interface IItemService {
 	public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
 
 	public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo);
-	
+
 	//一键分享的首页商品列表
-	List<ItemDO> queryItemByStatus(String companyNo, String status, int start, String pageSize);
+	List<ItemDO> queryItemByStatus(String companyNo, String status, int start, int pageSize);
 
 	//一键分享搜索商品
-	List<ItemDO> queryItemByKeyWord(String keyWord, String companyNo, int start, String pageSize);
-	
+	List<ItemDO> queryItemByKeyWord(List<String> keyWord, String companyNo, int start, int pageSize);
+
 	//一键分享商品详情
 	ItemDO itemDetailByItemCode(String itemCode, String companyNo);
-	
+
 	//一键分享，获取商品的图片
 	String queryItemPicByItemCode(String itemCode);
+
+	//一键分享，获取商品的图片
+	String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo);
+
 
 	/**
 	 * 导入商品列表
 	 * @param list
 	 */
     void importItem(List<List<Object>> list);
+
 }

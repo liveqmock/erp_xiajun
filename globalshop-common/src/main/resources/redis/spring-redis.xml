@@ -28,4 +28,8 @@
 		<property name="prefix" value="login" />
 		<property name="expiry" value="86400" />
 	</bean>
+	<bean id="shareCache" parent="cacheTemplate">
+		<property name="prefix" value="share" />
+		<property name="expiry" value="86400" />
+	</bean>
 </beans>

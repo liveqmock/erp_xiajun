@@ -1,25 +1,23 @@
 package com.wangqin.globalshop.item.app.controller;
 
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.constants.enums.TaskDailyStatus;
+import com.wangqin.globalshop.biz1.app.dto.OneWeekSaleDTO;
+import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.item.app.service.IItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.TaskDailyStatus;
-import com.wangqin.globalshop.biz1.app.dto.HomePageDTO;
-import com.wangqin.globalshop.biz1.app.dto.OneWeekSaleDTO;
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
-import com.wangqin.globalshop.item.app.service.IItemService;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 首页controller
@@ -27,6 +25,7 @@ import com.wangqin.globalshop.item.app.service.IItemService;
  * 
  */
 @Controller
+@Authenticated
 @RequestMapping("/home")
 public class HomePageController extends BaseController {
 

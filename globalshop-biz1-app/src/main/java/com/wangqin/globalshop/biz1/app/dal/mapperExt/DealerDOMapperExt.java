@@ -4,11 +4,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.DealerDOMapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DealerDOMapperExt extends DealerDOMapper {
-    List<DealerDO> list();
-    
-    List<DealerDO> list2();
+    List<Map<String, String>> dealerList(String companyNo);
     
     DealerDO selectByCode(String code);
     

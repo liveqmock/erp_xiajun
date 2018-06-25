@@ -2,68 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt">
 
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO" >
-        <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
-        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
-        <result column="upc" property="upc" jdbcType="VARCHAR" />
-        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-        <result column="virtual_inv" property="virtualInv" jdbcType="BIGINT" />
-        <result column="locked_virtual_inv" property="lockedVirtualInv" jdbcType="BIGINT" />
-        <result column="inv" property="inv" jdbcType="BIGINT" />
-        <result column="locked_inv" property="lockedInv" jdbcType="BIGINT" />
-        <result column="trans_inv" property="transInv" jdbcType="BIGINT" />
-        <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT" />
-        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-        <result column="is_del" property="isDel" jdbcType="BIT" />
-        <result column="creator" property="creator" jdbcType="VARCHAR" />
-        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
+        <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+        <result column="upc" property="upc" jdbcType="VARCHAR"/>
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
+        <result column="virtual_inv" property="virtualInv" jdbcType="BIGINT"/>
+        <result column="locked_virtual_inv" property="lockedVirtualInv" jdbcType="BIGINT"/>
+        <result column="inv" property="inv" jdbcType="BIGINT"/>
+        <result column="locked_inv" property="lockedInv" jdbcType="BIGINT"/>
+        <result column="trans_inv" property="transInv" jdbcType="BIGINT"/>
+        <result column="locked_trans_inv" property="lockedTransInv" jdbcType="BIGINT"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
     </resultMap>
-    <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
         id, company_no, item_code, item_name, upc, sku_code, virtual_inv, locked_virtual_inv,
         inv, locked_inv, trans_inv, locked_trans_inv, gmt_create, gmt_modify, is_del, creator,
         modifier
     </sql>
-     <!-- 通用查询结果列，item模块使用-->
+    <!-- 通用查询结果列，item模块使用-->
     <sql id="itemInventoryList">
         T1.id,T1.sku_code AS sku_code,virtual_inv AS virtualInv,locked_virtual_inv AS lockedVirtualInv
     </sql>
 
-	<select id="getInventoryBySkuId" resultMap="BaseResultMap"  >
+    <select id="getInventoryBySkuId" resultMap="BaseResultMap">
         SELECT
-        	 <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM
-            inventory T1
+        inventory T1
         <where>
-        		<if test="itemCode != null" >
-					item_code = #{itemCode}
-        		</if>
-        		<if test="skuCode != null" >
-        			and sku_code = #{skuCode}
-        		</if>
+            <if test="itemCode != null">
+                item_code = #{itemCode}
+            </if>
+            <if test="skuCode != null">
+                and sku_code = #{skuCode}
+            </if>
         </where>
     </select>
-    
-    	<select id="getInventoryBySkuIdLock" resultMap="BaseResultMap"  >
+
+    <select id="getInventoryBySkuIdLock" resultMap="BaseResultMap">
         SELECT
-        	 <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM
-            inventory T1
+        inventory T1
         <where>
-        		<if test="itemId != null" >
-        			item_id = #{itemId}	
-        		</if>
-        		<if test="skuId != null" >
-        			and sku_id = #{skuId}
-        		</if>
+            <if test="itemId != null">
+                item_id = #{itemId}
+            </if>
+            <if test="skuId != null">
+                and sku_id = #{skuId}
+            </if>
         </where>
         for update
     </select>
-    
-    <update id="updateLockInventory" >  
-    <![CDATA[ 
+
+    <update id="updateLockInventory">
+    <![CDATA[
+
 	    UPDATE
 	    		inventory
 	    	SET
@@ -72,18 +73,20 @@
 	    WHERE  
 	    		id = #{id} and inventory - #{booked} >=0  and inventory >= locked_inv + #{booked} 
 	    				   and trans_inv - #{transBooked} >=0  and trans_inv >= locked_trans_inv + #{transBooked} 
-	    		]]> 
-	</update> 
-	
-	<update id="updateInventoryByInventoryArea">
+
+        ]]>
+	</update>
+
+    <update id="updateInventoryByInventoryArea">
 		UPDATE inventory a LEFT JOIN (
 		SELECT t.sku_id,SUM(t.trans_inv) s_trans_inv,SUM(t.locked_inv) s_locked_inv,SUM(t.inventory) s_inventory FROM inventory_area t GROUP BY t.sku_id) b 
 		ON a.`sku_id`=b.sku_id 
 		SET a.`inventory`=b.s_inventory,a.`trans_inv`=b.s_trans_inv,a.`locked_inv`=b.s_locked_inv
 	</update>
-	
-	<update id="updateTransToInventory" >  
-    		<![CDATA[ 
+
+    <update id="updateTransToInventory">
+    		<![CDATA[
+
 	    UPDATE
 	    		inventory
 	    	SET
@@ -93,26 +96,30 @@
 			locked_trans_inv = locked_trans_inv - #{lockedTransToInv}
 	    WHERE  
 	    		item_id = #{itemId}	and sku_id = #{skuId} and trans_inv - #{toTrans} >= 0 and locked_trans_inv = #{lockedTransInv}
-	    		]]> 
-	</update> 
-	
-	<delete id="deleteInventoryBySkuId" parameterType="java.lang.Long">
+
+        ]]>
+	</update>
+
+    <delete id="deleteInventoryBySkuId" parameterType="java.lang.Long">
 		DELETE FROM inventory WHERE sku_id=#{skuId}
 	</delete>
-	
-	<update id="updateInventoryCheck" >  
-    		<![CDATA[ 
+
+    <update id="updateInventoryCheck">
+    		<![CDATA[
+
 	    UPDATE
 	    		inventory
 	    	SET
 			inventory = inventory - #{toCheck}
 	    WHERE  
 	    		id = #{id} and inventory = #{inventory} and inventory - #{toCheck} >= 0
-	    		]]> 
-	</update> 
-	
-	<update id="updateInventoryTransCheck" >  
-    		<![CDATA[ 
+
+        ]]>
+	</update>
+
+    <update id="updateInventoryTransCheck">
+    		<![CDATA[
+
 	    UPDATE
 	    		inventory
 	    	SET
@@ -120,40 +127,40 @@
 			inventory = inventory + #{toCheck}
 	    WHERE  
 	    		id = #{id} and trans_inv = #{transInv} and trans_inv - #{toCheck} >= 0
-	    		]]> 
-	</update> 
-	
-	<update id="updateUpcForInventory" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+
+        ]]>
+	</update>
+
+    <update id="updateUpcForInventory" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
 		UPDATE inventory SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};
     </update>
-    
+
     <!-- item-module -->
     <update id="updateVirtualInvByItemCode" parameterType="java.lang.String">
         UPDATE inventory SET virtual_inv=0 WHERE item_code=#{itemCode}
     </update>
-    
-    
-    
-    
-    <insert id="insertBatch" >  
-    insert into inventory (company_no,creator,modifier)   
-    values   
-    <foreach collection="inventoryList" item="item" index="index" open="(" separator=","  close=")">  
-         #{item.CompanyNo}, 
-         #{item.Creator}, 
-         #{item.Modifier}  
-    </foreach>  
+
+
+    <insert id="insertBatch">
+        insert into inventory (company_no,creator,modifier)
+        values
+        <foreach collection="inventoryList" item="item" index="index" open="(" separator="," close=")">
+            #{item.CompanyNo},
+            #{item.Creator},
+            #{item.Modifier}
+        </foreach>
     </insert>
-    
+
     <select id="queryInventoryBySkuCode">
-       SELECT <include refid="Base_Column_List" />
-       FROM inventory
-       <where>
-       sku_code=#{skuCode}
-       </where>
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory
+        <where>
+            sku_code=#{skuCode}
+        </where>
     </select>
-    
-    
+
+
     <insert id="insertBatchInventory" parameterType="java.util.List" useGeneratedKeys="true">
         <selectKey resultType="long" keyProperty="id" order="AFTER">
             SELECT
@@ -161,34 +168,35 @@
         </selectKey>
         insert into inventory
         (company_no,item_code,sku_code,inv,creator,modifier)
-       
+
         values
-        <foreach collection="list" item="wdSolr" index="index"
-            separator=",">
+        <foreach collection="list" item="wdSolr"
+                 separator=",">
             (
             #{wdSolr.companyNo},#{wdSolr.itemCode},#{wdSolr.skuCode},#{wdSolr.inventory},
             #{wdSolr.creator},#{wdSolr.modifier}
             )
         </foreach>
     </insert>
-    
+
     <!-- item_module -->
-    <select id="queryInvBySkuCode" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.vo.InventoryAddVO">
-    	select
-    	<include refid="itemInventoryList" />
-    	from inventory T1
-   	 	where T1.is_del=0
-    	AND T1.sku_code=#{skuCode}  
+    <select id="queryInvBySkuCode" parameterType="java.lang.String"
+            resultType="com.wangqin.globalshop.biz1.app.vo.InventoryAddVO">
+        select
+        <include refid="itemInventoryList"/>
+        from inventory T1
+        where T1.is_del=0
+        AND T1.sku_code=#{skuCode}
     </select>
-    
-     <!-- item_module -->
+
+    <!-- item_module -->
     <update id="lockVirtualInv" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryAddVO">
     	update `inventory` T1
     	set T1.locked_virtual_inv=#{lockedVirtualInv}
     	where T1.id=#{id}
     </update>
 
- 	<!-- item_module -->
+    <!-- item_module -->
     <update id="deleteInvBySkuCode" parameterType="java.lang.String">
     	update `inventory` T1
     	set T1.is_del=1
@@ -196,58 +204,60 @@
     </update>
 
 
-    <select id="queryInventoryByCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap"  >
+    <select id="queryInventoryByCode"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap">
         SELECT
-        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List" />
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List"/>
         FROM
         inventory T1
         <where>
-            <if test="itemCode != null" >
+            <if test="itemCode != null">
                 item_code = #{itemCode}
             </if>
-            <if test="skuCode != null" >
+            <if test="skuCode != null">
                 and sku_code = #{skuCode}
             </if>
         </where>
     </select>
-    <select id="queryBySkuCodeAndItemCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap"  >
+    <select id="queryBySkuCodeAndItemCode"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap">
         SELECT
-        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List" />
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List"/>
         FROM
         inventory T1
         <where>
-            <if test="itemCode != null" >
+            <if test="itemCode != null">
                 item_code = #{itemCode}
             </if>
-            <if test="skuCode != null" >
+            <if test="skuCode != null">
                 and sku_code = #{skuCode}
             </if>
         </where>
     </select>
-    <select id="queryBySkuCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap"  >
+    <select id="queryBySkuCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap">
         SELECT
-        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List" />
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List"/>
         FROM
         inventory T1
         <where>
-            <if test="skuCode != null" >
+            <if test="skuCode != null">
                 and sku_code = #{skuCode}
             </if>
         </where>
     </select>
-    
+
     <!--  -->
-    <select id="queryBySkuCodeAndCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap">
-    	SELECT 
-    	<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List" />
-    	FROM
-    	inventory T1
-    	<where>
-    		sku_code = #{skuCode}
-    		AND company_no = #{companyNo}
-    	</where>
+    <select id="queryBySkuCodeAndCompanyNo"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.BaseResultMap">
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper.Base_Column_List"/>
+        FROM
+        inventory T1
+        <where>
+            sku_code = #{skuCode}
+            AND company_no = #{companyNo}
+        </where>
     </select>
 
 
-    
 </mapper>

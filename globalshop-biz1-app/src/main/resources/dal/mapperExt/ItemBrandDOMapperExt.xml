@@ -61,7 +61,8 @@
 	<select id="queryByEnNameAndCnName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
 		SELECT <include refid="Base_Column_List_2" />
 		FROM item_brand T1
-		WHERE T1.is_del=0 AND name LIKE  #{brandName}
+		WHERE T1.is_del=0
+        AND T1.name = #{enName} AND T1.name_china = #{cnName}
 	</select>
 
 	<!--总查询 -->

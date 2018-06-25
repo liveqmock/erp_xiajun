@@ -11,7 +11,7 @@
 	<select id="selectByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" parameterType="java.lang.String">
 		SELECT 
 		<include refid="Base_Column_List" />
-		FROM category 
+		FROM item_category
 		WHERE name = #{name}
 	</select>
 	
@@ -105,7 +105,11 @@
 	SELECT
 	<include refid="Base_Column_List" />
 	from item_category T1
-        WHERE p_code IN #{pCodes}
+        WHERE p_code IN (
+        <foreach collection="list" item="category" separator=",">
+            #{category.id}
+        </foreach>
+        )
         AND name = #{name}
 	</select>
 

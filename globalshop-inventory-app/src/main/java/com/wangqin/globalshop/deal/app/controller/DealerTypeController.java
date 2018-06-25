@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.deal.app.controller;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
@@ -33,19 +34,17 @@ public class DealerTypeController {
     	
         JsonResult<DealerTypeDO> result = new JsonResult<>();
         
-        List<DealerTypeDO> list = iSellerTypeService.list();
+        List<DealerTypeDO> list = iSellerTypeService.list(AppUtil.getLoginUserCompanyNo());
         
-        if("".equals(sellerType.getCode()) || sellerType.getCode() == null) {
-        	
-        	return result.buildIsSuccess(false).buildMsg("DealerType code is null");
-        	
+        if(EasyUtil.isStringEmpty(sellerType.getCode())) {
+        	return result.buildIsSuccess(false).buildMsg("类别代码必填");
         }else {
-        	if("".equals(sellerType.getName()) || sellerType.getName() == null) {
-            	return result.buildIsSuccess(false).buildMsg("DealerType name is null");	
+        	if(EasyUtil.isStringEmpty(sellerType.getName())) {
+            	return result.buildIsSuccess(false).buildMsg("类别名称必填");	
             }
         	for(int i = 0; i < list.size(); i ++) {
         		if(sellerType.getCode().equals(list.get(i).getCode())) {
-        			return result.buildIsSuccess(false).buildMsg("DealerType code is exist");
+        			return result.buildIsSuccess(false).buildMsg("类别代码已存在");
         		}
         	}
 		}
@@ -62,7 +61,7 @@ public class DealerTypeController {
     	
     	JsonResult<DealerTypeDO> result = new JsonResult<>();
         
-    	List<DealerTypeDO> list = iSellerTypeService.list();
+    	List<DealerTypeDO> list = iSellerTypeService.list(AppUtil.getLoginUserCompanyNo());
 
 
     	if(EasyUtil.isStringEmpty(sellerType.getCode())){
@@ -108,7 +107,7 @@ public class DealerTypeController {
     @ResponseBody
     public Object querySellerTypeList() {
         JsonResult<List<DealerTypeDO>> result = new JsonResult<>();
-        List<DealerTypeDO> list = iSellerTypeService.list();
+        List<DealerTypeDO> list = iSellerTypeService.list(AppUtil.getLoginUserCompanyNo());
         result.setData(list);
         return result.buildIsSuccess(true);
     }
