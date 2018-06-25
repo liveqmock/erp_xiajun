@@ -29,5 +29,11 @@ public interface IBuyerStorageService {
 
     public List<BuyerStorageDetailVo> queryHasComfirm();
 
+    public List<BuyerStorageDetailVo> queryComfirmWithParam(Long buyerOpenId, String upc);
+
+    public void deleteById(Long id);
+
+    public void updateMem(Long id, String mem);
+
 
 }

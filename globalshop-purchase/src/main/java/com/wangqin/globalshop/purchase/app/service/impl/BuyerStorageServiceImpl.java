@@ -89,6 +89,13 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         return voList;
     }
 
+
+    @Override
+    public List<BuyerStorageDetailVo> queryComfirmWithParam(Long openId, String upc){
+        List<BuyerStorageDetailVo> voList = doSearchList(openId,upc,Integer.valueOf(GeneralStatus.CONFIRM.getCode()));
+        return voList;
+    }
+
     /**
      * 只查询状态为预入库状态的入库单
      * @param openId
@@ -239,6 +246,19 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
             }
         }
         return comfirm;
+    }
+
+
+    public void deleteById(Long id){
+        BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
+        detail.setIsDel(true);
+        detaiMapper.updateByPrimaryKey(detail);
+    }
+
+    public void updateMem(Long id, String mem){
+        BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
+        detail.setMem(EasyUtil.truncateLEFitSize(mem,1000));
+        detaiMapper.updateByPrimaryKey(detail);
     }
 
 

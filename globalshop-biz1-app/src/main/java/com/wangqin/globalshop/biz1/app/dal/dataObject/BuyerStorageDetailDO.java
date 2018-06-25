@@ -39,6 +39,8 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     private Integer status;
 
+    private String mem;
+
     public Long getId() {
         return id;
     }
@@ -171,7 +173,6 @@ public class BuyerStorageDetailDO extends BaseModel {
         return creator;
     }
 
-    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -180,7 +181,6 @@ public class BuyerStorageDetailDO extends BaseModel {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
@@ -191,5 +191,13 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getMem() {
+        return mem;
+    }
+
+    public void setMem(String mem) {
+        this.mem = mem == null ? null : mem.trim();
     }
 }

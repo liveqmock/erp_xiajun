@@ -95,6 +95,47 @@ public class PurchaseStorageController {
     }
 
 
+    @RequestMapping("/queryComfirmWithParam")
+    public Object queryComfirmWithParam(Long buyerOpenId, String upc){
+        JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
+        try {
+            List<BuyerStorageDetailVo> list = service.queryComfirmWithParam(buyerOpenId,upc);
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
+        return result.buildIsSuccess(true);
+    }
+
+
+    /**
+     * 软删除
+     * @param id
+     * @return
+     */
+    @RequestMapping("/delete")
+    public Object delete(Long id){
+        JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
+        try {
+            service.deleteById(id);
+
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
+        return result.buildIsSuccess(true);
+    }
+
+    @RequestMapping("/updateMem")
+    public Object updateMem(Long id, String mem){
+        JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
+        try {
+            service.updateMem(id, mem);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
+        return result.buildIsSuccess(true);
+    }
+
 
 
 
