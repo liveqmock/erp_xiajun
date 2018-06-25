@@ -26,7 +26,7 @@ public class AuthResourceDO extends BaseModel {
     private String creator;
 
     private String modifier;
-
+    
     public Long getId() {
         return id;
     }
@@ -119,7 +119,8 @@ public class AuthResourceDO extends BaseModel {
         return creator;
     }
 
-    @Override
+
+	@Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -132,4 +133,5 @@ public class AuthResourceDO extends BaseModel {
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
+    
 }
