@@ -130,10 +130,7 @@ public class UserController extends BaseController {
     @PostMapping("/update")
     @ResponseBody
     public Object update(UserVo userVo) {
-        AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());
-        if (list != null ) {
-            return renderError("用户名已存在!");
-        }
+     
         String userNo=CodeGenUtil.genUserNo();
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
@@ -243,8 +240,15 @@ public class UserController extends BaseController {
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public Object queryList(UserQueryVO userQueryVO) {
-        JsonPageResult<List<UserQueryVO>> result = userService.queryUserQueryVOList(userQueryVO);
+    public Object queryList() {
+    	String companyNo = AppUtil.getLoginUserCompanyNo();
+        
+    	JsonResult<List<AuthUserDO>> result = new JsonResult<>();
+    	
+    	List<AuthUserDO> userList = userService.queryUserByCompanyNo(companyNo);
+    	
+    	result.setData(userList);
+    	
         return result.buildIsSuccess(true);
     }
 

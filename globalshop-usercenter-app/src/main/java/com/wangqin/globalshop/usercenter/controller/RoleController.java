@@ -1,13 +1,17 @@
 package com.wangqin.globalshop.usercenter.controller;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
+import com.wangqin.globalshop.usercenter.service.IResourceService;
+import com.wangqin.globalshop.usercenter.service.IRoleResourceService;
 import com.wangqin.globalshop.usercenter.service.IRoleService;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +40,10 @@ public class RoleController extends BaseController {
 
     @Autowired
     private IRoleService roleService;
-
+    @Autowired
+    private IRoleResourceService roleResourceService;
+    @Autowired
+    private IResourceService resourceService;
     /**
      * 权限管理页
      *
@@ -232,20 +240,26 @@ public class RoleController extends BaseController {
         return result.buildIsSuccess(true);
     }
 
-//    /**
-//     * 授权页面页面根据角色查询资源
-//     *
-//     * @param id
-//     * @return
-//     */
-//    @RequestMapping("/queryResourceIdListByRoleId")
-//    @ResponseBody
-//    public Object findResourceByRoleId(Long id) {
-//        JsonResult<List<Long>> result = new JsonResult<List<Long>>();
-//        List<Long> resources = roleService.queryResourceIdListByRoleId(id);
-//        result.buildData(resources);
-//        return result;
-//    }
+    /**
+     * 在角色授权的时候要根据不同的公司显示不同的授权的内容
+     * @return
+     */
+    @RequestMapping("/queryTree")
+    @ResponseBody
+    public Object queryTree() {
+    	JsonResult<List<AuthResourceDO>> result = new JsonResult<>();
+    	List<AuthResourceDO> resourceList = new ArrayList<>();
+    	String companyNo = AppUtil.getLoginUserCompanyNo();
+    	
+    	List<AuthRoleResourceDO> roleResourceList = roleResourceService.queryRoleResourceByCompanyNo(companyNo);
+    	for(AuthRoleResourceDO roleResource : roleResourceList) {
+    		 String resourceId = roleResource.getResourceId().toString();
+    		 AuthResourceDO resource = resourceService.queryTreeByResourceId(resourceId);
+    		 resourceList.add(resource);
+    	}
+    	result.setData(resourceList);
+    	return result.buildIsSuccess(true);
+    }
 
     @RequestMapping("/resCodes")
     @ResponseBody

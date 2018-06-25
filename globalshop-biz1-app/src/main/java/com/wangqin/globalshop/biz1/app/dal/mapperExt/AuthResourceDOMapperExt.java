@@ -7,22 +7,16 @@ import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 import java.util.List;
 
 public interface AuthResourceDOMapperExt extends AuthResourceDOMapper {
-//    int deleteByPrimaryKey(Long id);
-//
-//    int insert(AuthResourceDO record);
-//
-//    int insertSelective(AuthResourceDO record);
-//
-//    AuthResourceDO selectByPrimaryKey(Long id);
-//
-//    int updateByPrimaryKeySelective(AuthResourceDO record);
-//
-//    int updateByPrimaryKey(AuthResourceDO record);
+
 
     //Here are
     List<AuthResourceDO> selectList();
-
+    
+    List<AuthResourceDO> queryResource();
+    
     Integer queryResourcesCount(ResourceQueryVO resourceQueryVO);
 
     List<AuthResourceDO> queryResourceQueryList(ResourceQueryVO resourceQueryVO);
+    
+    AuthResourceDO queryTreeByResourceId(String resourceId);
 }

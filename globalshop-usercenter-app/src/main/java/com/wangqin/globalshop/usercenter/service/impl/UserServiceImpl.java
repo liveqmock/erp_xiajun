@@ -267,6 +267,11 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         return userMapper.selectByUnionid(unionid);
     }
 
+	@Override
+	public List<AuthUserDO> queryUserByCompanyNo(String companyNo) {
+		// TODO Auto-generated method stub
+		return userMapper.queryUserByCompanyNo(companyNo);
+	}
     @Override
     public List<AuthUserDO> selectByUnionidAndCompanyNo(String unionid, String companyNo) {
         return userMapper.selectByUnionidAndCompanyNo(unionid,companyNo);

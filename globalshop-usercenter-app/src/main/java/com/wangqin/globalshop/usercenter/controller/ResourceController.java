@@ -170,7 +170,7 @@ public class ResourceController extends BaseController {
     public Object queryList() {
         JsonResult<List<AuthResourceDO>> result = new JsonResult<List<AuthResourceDO>>();
 
-        result.setData(resourceService.queryResourceList());
+        result.setData(resourceService.queryResource());
 
         return result.buildIsSuccess(true);
     }
@@ -185,7 +185,7 @@ public class ResourceController extends BaseController {
     public Object queryTree() {
         JsonResult<List<AuthResourceDO>> result = new JsonResult<List<AuthResourceDO>>();
 
-        result.setData(resourceService.queryResourceTree(null));
+        result.setData(resourceService.queryResource());
 
         return result.buildIsSuccess(true);
     }
