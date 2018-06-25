@@ -61,4 +61,5 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
 
     List<AuthUserDO> selectByUnionid(@Param("unionid") String unionid);
 
+    List<AuthUserDO> selectByUnionidAndCompanyNo(@Param("unionid")String unionid, @Param("companyNo")String companyNo);
 }
