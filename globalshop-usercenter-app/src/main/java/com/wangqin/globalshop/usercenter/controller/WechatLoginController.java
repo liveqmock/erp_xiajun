@@ -162,30 +162,6 @@ public class WechatLoginController {
         String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
         System.out.println(url);
     }
-//
-//    /**
-//     * 获取微信授权二维码的链接
-//     *
-//     * @return
-//     */
-//    @RequestMapping("/getImgUrl")
-//    public Object getImgUrl() {
-//        JsonResult<Object> result = new JsonResult<>();
-//        try {
-//            String baseUrl = sysurl + "/wechatLogin/authorized";
-//            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
-//            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-////            String state = AppUtil.getLoginUserCompanyNo();
-////            url = url + "&state=" + state;
-//
-//
-//            return result.buildData(url).buildIsSuccess(true);
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//        return result.buildIsSuccess(false).buildMsg("获取失败");
-//
-//    }
     /**
      * 获取微信授权二维码的链接
      *
