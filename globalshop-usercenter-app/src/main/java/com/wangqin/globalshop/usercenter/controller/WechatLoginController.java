@@ -135,25 +135,25 @@ public class WechatLoginController {
         return false;
     }
 
-    /**
-     * 获取微信登陆二维码的链接
-     *
-     * @return
-     */
-    @RequestMapping("/getUrl")
-    public Object getUrl() {
-        JsonResult<Object> result = new JsonResult<>();
-        try {
-            String baseUrl = sysurl + "/wechatLogin/login";
-            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
-            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-            return result.buildData(url).buildIsSuccess(true);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return result.buildIsSuccess(false).buildMsg("获取失败");
-
-    }
+//    /**
+//     * 获取微信登陆二维码的链接
+//     *
+//     * @return
+//     */
+//    @RequestMapping("/getUrl")
+//    public Object getUrl() {
+//        JsonResult<Object> result = new JsonResult<>();
+//        try {
+//            String baseUrl = sysurl + "/wechatLogin/login";
+//            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+//            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+//            return result.buildData(url).buildIsSuccess(true);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        return result.buildIsSuccess(false).buildMsg("获取失败");
+//
+//    }
 
     public static void main(String[] args) throws IOException {
         String baseUrl = "https://test.buyer007.cn" + "/wechatLogin/authorized";
@@ -170,15 +170,15 @@ public class WechatLoginController {
      *
      * @return
      */
-    @RequestMapping("/getImgUrl")
+    @RequestMapping("/getUrl")
     public Object getImgUrl() {
         JsonResult<Object> result = new JsonResult<>();
         try {
             String baseUrl = sysurl + "/wechatLogin/authorized";
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
             String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-            String state = AppUtil.getLoginUserCompanyNo();
-            url = url + "&state=" + state;
+//            String state = AppUtil.getLoginUserCompanyNo();
+            url = url + "&state=" + "ktv4bsF7L5";
             Document doc = Jsoup.connect(url).get();
             Elements elements = doc.select("img");
             if (elements.size() != 1) {
