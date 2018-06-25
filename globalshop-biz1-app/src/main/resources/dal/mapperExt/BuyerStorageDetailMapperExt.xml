@@ -21,11 +21,12 @@
 		<result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
 		<result column="creator" property="creator" jdbcType="VARCHAR" />
 		<result column="modifier" property="modifier" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List" >
     id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price,
     currency, upc, quantity, trans_quantity, purchase_storage_no, buyer_task_detail_no,
-    item_code, sku_buysite, creator, modifier
+    item_code, sku_buysite, creator, modifier,status
   </sql>
 
 	
