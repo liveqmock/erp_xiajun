@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerStorageDetailVo;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -20,7 +19,7 @@ import java.util.List;
 @RequestMapping("/purchaseStorage")
 @ResponseBody
 @Controller
-@Authenticated
+//@Authenticated
 public class PurchaseStorageController {
     @Autowired
     private IBuyerStorageService service;
