@@ -45,8 +45,7 @@ public class WechatLoginController {
     private String appid;
     @Value("#{sys.sysurl}")
     private String sysurl;
-    @Value("#{sys.TIMEOUT}")
-    private static long TIMEOUT ;
+    private static long TIMEOUT = 30 * 60 * 1000;
 
     @Autowired
     private IUserService userService;
@@ -156,11 +155,15 @@ public class WechatLoginController {
 
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        String baseUrl = "https://buyer007.cn/wechatLogin/login";
+    public static void main(String[] args) throws IOException {
+        String baseUrl = "https://test.buyer007.cn" + "/wechatLogin/authorized";
         baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
         String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+        url = url + "&state=" + "ktv4bsF7L5";
         System.out.println(url);
+
+
+
     }
     /**
      * 获取微信授权二维码的链接
