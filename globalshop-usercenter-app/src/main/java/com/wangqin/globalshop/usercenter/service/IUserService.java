@@ -19,7 +19,9 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
 //    List<AuthUserDO> selectByLoginName(UserVo userVo);
 
     AuthUserDO selectByLoginName(String userNo);
-
+    
+    List<AuthUserDO> queryUserByCompanyNo(String companyNo);
+    
     void insertByVo(UserVo userVo);
     
     void insertByUserVo(UserVo userVo);

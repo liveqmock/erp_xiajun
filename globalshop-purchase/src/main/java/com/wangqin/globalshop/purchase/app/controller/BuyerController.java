@@ -3,6 +3,7 @@ package com.wangqin.globalshop.purchase.app.controller;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.purchase.app.service.IBuyerService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,7 @@ public class BuyerController {
     @PostMapping("/add")
     public Object add(BuyerDO buyer) {
         buyer.initCompany();
+        buyer.init();
         service.insert(buyer);
         return JsonResult.buildSuccess(buyer);
     }
@@ -67,8 +69,14 @@ public class BuyerController {
 
     @PostMapping("/update")
     public Object update(BuyerDO buyer) {
-        buyer.initCompany();
-        service.updateByPrimaryKey(buyer);
+        BuyerDO buyerOld = service.selectByPrimaryKey(buyer.getId());
+        buyerOld.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+
+        buyerOld.setNickName(buyer.getNickName());
+        //仓库暂时不添加，后续再维护
+        buyerOld.setPurchaseCommissionStr(buyer.getPurchaseCommissionStr());
+
+        service.updateByPrimaryKey(buyerOld);
         return JsonResult.buildSuccess(buyer);
     }
 

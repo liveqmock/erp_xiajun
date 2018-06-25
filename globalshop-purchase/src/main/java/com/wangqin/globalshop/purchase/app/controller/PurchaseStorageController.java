@@ -27,8 +27,12 @@ public class PurchaseStorageController {
     @RequestMapping("/queryPurStorages")
     public Object queryPurStorages(BuyerStorageDO buyerStorage){
         JsonResult<List<BuyerStorageDO>> result = new JsonResult<>();
-        List<BuyerStorageDO> list = service.list(buyerStorage);
-        result.buildData(list);
+        try {
+            List<BuyerStorageDO> list = service.list(buyerStorage);
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true);
 
     }
@@ -37,10 +41,12 @@ public class PurchaseStorageController {
     @RequestMapping("/searchByopenid")
     public Object searchByOpenId(Long buyerOpenId){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
-
-        List<BuyerStorageDetailVo> list = service.searchByOpenId(buyerOpenId);
-
-        result.buildData(list);
+        try {
+            List<BuyerStorageDetailVo> list = service.searchByOpenId(buyerOpenId);
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true);
 
     }
@@ -48,16 +54,24 @@ public class PurchaseStorageController {
     @RequestMapping("/searchByopenidAndUpc")
     public Object searchByopenidAndUpc(Long buyerOpenId, String upc){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
-        List<BuyerStorageDetailVo> list = service.searchByopenidAndUpc(buyerOpenId, upc);
-        result.buildData(list);
+        try {
+            List<BuyerStorageDetailVo> list = service.searchByopenidAndUpc(buyerOpenId, upc);
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true);
     }
 
     @RequestMapping("/searchAll")
     public Object searchAll(){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
-        List<BuyerStorageDetailVo> list = service.searchAll();
-        result.buildData(list);
+        try {
+            List<BuyerStorageDetailVo> list = service.searchAll();
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true);
     }
 
@@ -71,8 +85,12 @@ public class PurchaseStorageController {
     @RequestMapping("/queryHasComfirm")
     public Object queryHasComfirm(){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
-        List<BuyerStorageDetailVo> list = service.queryHasComfirm();
-        result.buildData(list);
+        try {
+            List<BuyerStorageDetailVo> list = service.queryHasComfirm();
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true);
     }
 

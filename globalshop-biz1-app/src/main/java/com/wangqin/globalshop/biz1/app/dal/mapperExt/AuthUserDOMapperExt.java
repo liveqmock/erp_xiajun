@@ -38,6 +38,8 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     UserQueryVO queryUserQueryVOById(@Param("id") Long id);
 
     List<UserQueryVO> queryUserQueryVOList(UserQueryVO userQueryVO);
+    
+    List<AuthUserDO> queryUserByCompanyNo(String companyNo);
 
 //    List<AuthUserDO> selectUserVoPage();
 

@@ -30,8 +30,6 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
     @Autowired
     private AuthUserRoleDOMapperExt userRoleMapper;
     @Autowired
-    private AuthUserDOMapperExt userMapper;
-    @Autowired
     private AuthRoleDOMapperExt roleMapper;
     
     @Override
@@ -161,66 +159,18 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
         return trees;
     }
 
-//	@Override
-//	public Set<String> queryResUrl(ShiroUser loginName) {
-//		Set<String> resCodes = new HashSet<String>();
-//		   // shiro中缓存的用户角色
-//        //获取角色下所有的资源码
-//        //1获取所有的role 的ID
-//        List<Long> roleIdList = userRoleMapper.selectRoleIdListByUserId(loginName.getId());
-//        //2获取资源的集合
-//        List<AuthResourceDO> resourceLists = roleMapper.selectResourceUrlByRoleIdList(roleIdList);
-//        if (resourceLists == null) {
-//            return resCodes;
-//        }
-//
-//        for (AuthResourceDO resource : resourceLists) {
-//        	if(StringUtils.isNotEmpty(resource.getUrl())){
-//        		resCodes.add(resource.getUrl());
-//        	}
-//        }
-//		return resCodes;
-//	}
+	@Override
+	public List<AuthResourceDO> queryResource() {
+		// TODO Auto-generated method stub
+		return resourceMapper.queryResource();
+	}
 
-    @Override
-    public List<AuthResourceDO> queryResourceList()
-    {
-//        EntityWrapper<AuthResourceDO> wrapper = new EntityWrapper<AuthResourceDO>();
-//        wrapper.orderBy("seq");
-//        return resourceMapper.selectList(wrapper);
-        return resourceMapper.selectList();
-    }
+	@Override
+	public AuthResourceDO queryTreeByResourceId(String resourceId) {
+		// TODO Auto-generated method stub
+		return resourceMapper.queryTreeByResourceId(resourceId);
+	}
 
-    @Override
-    public List<AuthResourceDO> queryResourceTree(Long pid) {
-        List<AuthResourceDO> listParent = queryResourceByPid(pid);
 
-//        if ((null != listParent) && (listParent.size() > 0)) {
-//
-//            listParent.forEach(resourceHai -> {
-//                resourceHai.setChildList(queryResourceTree(resourceHai.getId()));
-//            });
-//        }
 
-        return listParent;
-    }
-
-    /**
-     * 递归调用获取子级资源
-     * @param pid
-     * @return
-     */
-    private List<AuthResourceDO> queryResourceByPid(Long pid) {
-//        EntityWrapper<AuthResourceDO> wrapper = new EntityWrapper<AuthResourceDO>();
-//        AuthResourceDO resource = new AuthResourceDO();
-//        wrapper.setEntity(resource);
-//        if (null == pid) {
-//            wrapper.where("pid is null", pid);
-//        } else {
-//            wrapper.where("pid = {0}", pid);
-//        }
-//        wrapper.orderBy("seq");
-//        return resourceMapper.selectList(wrapper);
-        return resourceMapper.selectList();
-    }
 }

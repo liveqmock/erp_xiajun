@@ -30,5 +30,5 @@ public interface AuthOrganizationDOMapperExt extends AuthOrganizationDOMapper {
 
     Integer queryOrganizationsCount(OrganizationQueryVO organizationQueryVO);
 
-    List<AuthOrganizationDO> queryOrganizationQueryList(OrganizationQueryVO organizationQueryVO);
+    List<AuthOrganizationDO> queryOrganizationQueryList(String companyNo);
 }
