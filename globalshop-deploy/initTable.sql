@@ -1847,6 +1847,7 @@ CREATE TABLE `dealer_type` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `code` varchar(64) DEFAULT NULL COMMENT '经销商类型代码',
   `name` varchar(64) DEFAULT NULL COMMENT '经销商类型名称',
+  `company_no` varchar(64) NOT NULL,
   `remark` varchar(64) DEFAULT NULL COMMENT '备注',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
