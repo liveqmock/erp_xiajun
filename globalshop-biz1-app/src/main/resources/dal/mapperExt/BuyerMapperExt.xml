@@ -54,4 +54,58 @@
 		 AND company_no = #{companyNo}
 	</select>
 
+
+	<sql id="tableSection">buyer</sql>
+
+	<sql id="commonSelectSection">
+		1 = 1
+		<if test="companyNo != null">
+			and T.company_no = #{companyNo}
+		</if>
+
+
+		<if test="openId != null">
+			and T.open_id = #{openId}
+		</if>
+
+		<if test=" isDel == true">
+			and T.is_del is true
+		</if>
+		<if test=" isDel == false">
+			and T.is_del is false
+		</if>
+		<if test=" isDel == null">
+			and T.is_del is false
+		</if>
+
+	</sql>
+
+
+	<!--查询总条数 -->
+	<select id="searchBuyer" resultMap="BaseResultMap"
+	>
+		SELECT <include refid="Base_Column_List" />
+		FROM <include refid="tableSection"/> T
+		WHERE
+		<include refid="commonSelectSection"/>
+	</select>
+
+	<!--查询总条数 -->
+	<select id="searchBuyerCount" resultType="java.lang.Long"
+	>
+		SELECT COUNT(*)
+		FROM <include refid="tableSection"/> T
+		WHERE
+		<include refid="commonSelectSection"/>
+	</select>
+
+	<!-- -->
+	<select id="searchBuyerList" resultMap="BaseResultMap">
+		SELECT  <include refid="Base_Column_List" />
+		FROM <include refid="tableSection"/> T
+		WHERE
+		<include refid="commonSelectSection"/>
+		ORDER BY T.id desc
+	</select>
+
 </mapper>
