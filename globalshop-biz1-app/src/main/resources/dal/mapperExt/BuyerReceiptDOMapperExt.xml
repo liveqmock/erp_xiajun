@@ -12,14 +12,14 @@
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
-    <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
+    <result column="open_id" property="openId" jdbcType="BIGINT" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_task_no,company_no, receipt_no, total_price, currency, gmt_create, gmt_modify, purchase_storage_no,
-    status, buyer_id, is_del, creator, modifier
+    status, open_id, is_del, creator, modifier
   </sql>
   <select id="list" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO">
     SELECT <include refid="Base_Column_List"/>

@@ -920,13 +920,12 @@ YouZanChannelServiceImp extends AbstractChannelService implements IChannelServic
 
 
         //补充必填信息
-        outerOrder.setCustomerNo("无");
         outerOrder.setChannelCustomerNo("自定义类型，无买家昵称");
         outerOrder.setIsDel(false);
         outerOrder.setModifier("-1");
 
 
-        outerOrderMapper.insertMallOrder(outerOrder); // 添加主订单
+        outerOrderMapper.insertSelective(outerOrder); // 添加主订单
 
         outOrderIdList.add(outerOrder.getOrderNo()); // 收集主订单ID
 

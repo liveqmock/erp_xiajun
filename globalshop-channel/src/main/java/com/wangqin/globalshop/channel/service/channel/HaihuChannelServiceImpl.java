@@ -367,12 +367,11 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 				outerOrder.setGmtModify(new Date());
 
 
-				outerOrder.setCustomerNo("无");
 				outerOrder.setChannelCustomerNo("自定义类型，无买家昵称");
 				outerOrder.setIsDel(false);
 				outerOrder.setModifier("-1");
 
-				outerOrderMapper.insertMallOrder(outerOrder);  //添加主订单
+				outerOrderMapper.insertSelective(outerOrder);  //添加主订单
 				outOrderIdList.add(outerOrder.getOrderNo());
 
 				List<OuterOrderDetail> outerOrderDetails = outerOrderHh.getOuterOrderDetails();
