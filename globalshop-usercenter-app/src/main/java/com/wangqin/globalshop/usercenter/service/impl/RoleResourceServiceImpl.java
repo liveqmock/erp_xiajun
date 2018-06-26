@@ -25,6 +25,11 @@ public class RoleResourceServiceImpl implements IRoleResourceService {
 		// TODO Auto-generated method stub
 		return roleResourceMapper.queryRoleResourceByCompanyNo(companyNo);
 	}
+	@Override
+	public List<AuthRoleResourceDO> selectRoleResourceByResourceId(Long resourceId) {
+		// TODO Auto-generated method stub
+		return roleResourceMapper.selectRoleResourceByResourceId(resourceId);
+	}
 
 	
 }
