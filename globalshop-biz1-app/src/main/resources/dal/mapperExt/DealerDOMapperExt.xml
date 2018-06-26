@@ -29,7 +29,11 @@
             AND
             D1.type_code = D2.code
             AND
-            D1.company_no = #{companyNo}
+            D1.company_no = #{ companyNo }
+        <if test=" name != null ">
+        	AND
+        	D1.name = #{ name }
+        </if>
         </where>
     </select>
     <select id="selectByCode" resultMap="BaseResultMap">
