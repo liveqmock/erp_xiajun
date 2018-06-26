@@ -174,6 +174,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 if(user != null){
                     vo.setOpUserName(user.getLoginName());
                 }
+                vo.setCompanyNo(buyerStorage.getCompanyNo());
                 voList.add(vo);
             }
         }
