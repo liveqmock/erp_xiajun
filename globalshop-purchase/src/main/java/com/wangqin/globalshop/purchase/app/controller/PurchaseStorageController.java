@@ -9,6 +9,7 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.purchase.app.service.IBuyerStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -76,18 +77,27 @@ public class PurchaseStorageController {
         return result.buildIsSuccess(true);
     }
 
-//    @RequestMapping("/comfirm")
-//    public Object comfirm(@RequestBody BuyerStorageDetailVo detailVo){
-//        JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
-//        service.comfirm(detailVo);
-//        return result.buildIsSuccess(true);
-//    }
+    @PostMapping("/comfirmBody")
+    @ResponseBody
+    public Object comfirmBody(BuyerStorageDetailVo detailVo){
+        JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
+        try {
+            service.comfirm(detailVo);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
+        return result.buildIsSuccess(true);
+    }
 
-    @RequestMapping("/comfirm")
+    @PostMapping("/comfirm")
     public Object comfirm(String  detailVo){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
-        BuyerStorageDetailVo detail = HaiJsonUtils.toBean(detailVo, new TypeReference<BuyerStorageDetailVo>(){});
-        service.comfirm(detail);
+        try {
+            BuyerStorageDetailVo detail = HaiJsonUtils.toBean(detailVo, new TypeReference<BuyerStorageDetailVo>(){});
+            service.comfirm(detail);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true);
     }
 
