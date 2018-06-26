@@ -170,7 +170,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 vo.setStatus(detail.getStatus());
                 vo.setStatusName(GeneralStatus.of(detail.getStatus()).getDescription());
                 vo.setOpTime(detail.getOpTime());
-                vo.setOpUserNo(user.getUserNo());
+                vo.setOpUserNo(detail.getOpUserNo());
                 if(user != null){
                     vo.setOpUserName(user.getLoginName());
                 }
