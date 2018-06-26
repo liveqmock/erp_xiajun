@@ -45,3 +45,5 @@ globalshop-biz1-app/src/main/resources/rebel.xml
 globalshop-biz1-api/src/main/resources/rebel.xml
 rebel.xml
 globalshop-biz1-app/src/main/resources/generatorConfig.xml
+globalshop-web/src/main/resources/props/config-dev.propertie                           s
+globalshop-web/src/main/resources/props/config-prd.propertie                           s

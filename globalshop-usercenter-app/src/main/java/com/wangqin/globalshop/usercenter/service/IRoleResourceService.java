@@ -12,4 +12,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 public interface IRoleResourceService { //extends ISuperService<RoleResource>
 
 	List<AuthRoleResourceDO> queryRoleResourceByCompanyNo(String companyNo);
+	
+	List<AuthRoleResourceDO> selectRoleResourceByResourceId(Long resourceId);
 }

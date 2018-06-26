@@ -19,7 +19,9 @@ public interface IDealerTypeService {
 	DealerTypeDO selectByPrimaryKey(Long id);
 	
     List<DealerTypeDO> list(String companyNo);
-
+    
+    List<DealerTypeDO> listNoCompanyNo();
+    
     void insert(DealerTypeDO sellerType);
     
     //查找销售类别
