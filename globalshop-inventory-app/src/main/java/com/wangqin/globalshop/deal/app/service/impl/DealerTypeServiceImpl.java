@@ -58,6 +58,11 @@ public class DealerTypeServiceImpl implements IDealerTypeService {
 		// TODO Auto-generated method stub
 		return mapper.countRelativeDealerType(typeCode);
 	}
+	@Override
+	public List<DealerTypeDO> listNoCompanyNo() {
+		// TODO Auto-generated method stub
+		return mapper.listNoCompanyNo();
+	}
 
 	
 }

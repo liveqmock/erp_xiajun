@@ -6,6 +6,8 @@ import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
+
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,8 +50,8 @@ public class DealerTypeController {
         		}
         	}
 		}
-        
-     
+        StringBuilder code = new StringBuilder(sellerType.getCode());
+        sellerType.setCode(code.append(AppUtil.getLoginUserCompanyNo()).toString());
         iSellerTypeService.insert(sellerType);
        
         return result.buildIsSuccess(true);

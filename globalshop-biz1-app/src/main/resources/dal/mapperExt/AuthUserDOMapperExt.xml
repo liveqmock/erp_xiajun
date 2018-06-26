@@ -25,7 +25,7 @@
   </resultMap>
   <sql id="Base_Column_List2" >
     id, company_no, user_no, login_name, name, password, sex, age, phone, user_type,
-    status, organization_id, create_time, wx_union_id, email, creator, modifier
+    status, organization_id, create_time, wx_union_id, email, creator, modifier,gmt_create
   </sql>
 
   <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
