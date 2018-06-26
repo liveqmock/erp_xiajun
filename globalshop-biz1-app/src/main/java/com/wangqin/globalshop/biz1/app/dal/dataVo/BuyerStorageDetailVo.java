@@ -49,7 +49,16 @@ public class BuyerStorageDetailVo {
 
 	private String opUserName;
 
+	private String companyNo;
+
 	private Date opTime;
+
+	public String getCompanyNo() {
+		return companyNo;
+	}
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
 	public String getOpUserName() {
 		return opUserName;
 	}
