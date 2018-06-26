@@ -2110,6 +2110,7 @@ CREATE TABLE `buyer_storage` (
   `buyer_task_no` varchar(64) DEFAULT NULL COMMENT '采购任务编号',
   `storage_type` tinyint(4) DEFAULT '0' COMMENT '入库方式：0计划采购入库，1扫描入库',
   `entry_date` datetime DEFAULT NULL COMMENT '入库时间',
+  `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
