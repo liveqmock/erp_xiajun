@@ -145,7 +145,10 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 }
 
 
-                AuthUserDO user = userMapperExt.selectUserVoByUserNo(detail.getOpUserNo());
+                AuthUserDO user = null;
+                if(!EasyUtil.isStringEmpty(detail.getOpUserNo())){
+                    user = userMapperExt.selectUserVoByUserNo(detail.getOpUserNo());
+                }
 
                 BuyerStorageDetailVo vo = new BuyerStorageDetailVo();
 
@@ -171,7 +174,6 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 if(user != null){
                     vo.setOpUserName(user.getLoginName());
                 }
-
                 voList.add(vo);
             }
         }
