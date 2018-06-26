@@ -103,7 +103,7 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/update")
     @ResponseBody
-    public Object update(AuthRoleDO role, BindingResult result, Model model, String resourceIds) {
+    public Object update(AuthRoleDO role, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<ObjectError> list = result.getAllErrors();
             for (ObjectError error : list) {
@@ -111,11 +111,8 @@ public class RoleController extends BaseController {
             }
             return null;
         }
-        role.setRoleId((long)RandomUtils.nextInt(1000000000));
-        
-        AuthRoleDO authRole = roleService.selectById(role.getId());
-        Long roleId = authRole.getRoleId();
-        roleService.updateRoleResource(roleId, resourceIds);
+        role.setRoleId((long)RandomUtils.nextInt(1000000000));        
+        roleService.updateSelectiveById(role);
         return renderSuccess("更新成功！");
     }
     /**
@@ -240,26 +237,26 @@ public class RoleController extends BaseController {
         return result.buildIsSuccess(true);
     }
 
-    /**
-     * 在角色授权的时候要根据不同的公司显示不同的授权的内容
-     * @return
-     */
-    @RequestMapping("/queryTree")
-    @ResponseBody
-    public Object queryTree() {
-    	JsonResult<List<AuthResourceDO>> result = new JsonResult<>();
-    	List<AuthResourceDO> resourceList = new ArrayList<>();
-    	String companyNo = AppUtil.getLoginUserCompanyNo();
-    	
-    	List<AuthRoleResourceDO> roleResourceList = roleResourceService.queryRoleResourceByCompanyNo(companyNo);
-    	for(AuthRoleResourceDO roleResource : roleResourceList) {
-    		 String resourceId = roleResource.getResourceId().toString();
-    		 AuthResourceDO resource = resourceService.queryTreeByResourceId(resourceId);
-    		 resourceList.add(resource);
-    	}
-    	result.setData(resourceList);
-    	return result.buildIsSuccess(true);
-    }
+//    /**
+//     * 在角色授权的时候要根据不同的公司显示不同的授权的内容
+//     * @return
+//     */
+//    @RequestMapping("/queryTree")
+//    @ResponseBody
+//    public Object queryTree() {
+//    	JsonResult<List<AuthResourceDO>> result = new JsonResult<>();
+//    	List<AuthResourceDO> resourceList = new ArrayList<>();
+//    	String companyNo = AppUtil.getLoginUserCompanyNo();
+//    	
+//    	List<AuthRoleResourceDO> roleResourceList = roleResourceService.queryRoleResourceByCompanyNo(companyNo);
+//    	for(AuthRoleResourceDO roleResource : roleResourceList) {
+//    		 String resourceId = roleResource.getResourceId().toString();
+//    		 AuthResourceDO resource = resourceService.queryTreeByResourceId(resourceId);
+//    		 resourceList.add(resource);
+//    	}
+//    	result.setData(resourceList);
+//    	return result.buildIsSuccess(true);
+//    }
 
     @RequestMapping("/resCodes")
     @ResponseBody

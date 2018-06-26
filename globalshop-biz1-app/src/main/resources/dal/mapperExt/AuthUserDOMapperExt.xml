@@ -407,7 +407,7 @@
     from auth_user
     where wx_union_id = #{unionid,jdbcType=VARCHAR}
   </select>
-<<<<<<< HEAD
+
   
   <select id="queryUserByCompanyNo" parameterType="java.lang.String" resultMap="BaseResultMap">
   	select
@@ -417,7 +417,6 @@
   	where
   	company_no = #{companyNo}
   </select>	
-=======
   <select id="selectByUnionidAndCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List2" />
@@ -661,8 +660,6 @@
       <!--modifier = #{modifier,jdbcType=VARCHAR}-->
     <!--where id = #{id,jdbcType=BIGINT}-->
   <!--</update>-->
->>>>>>> 26b6b310d4342b85df63e4709dfd1579e0676eba
-
   <sql id="tableSection">auth_user</sql>
 
   <sql id="commonSelectSection">
