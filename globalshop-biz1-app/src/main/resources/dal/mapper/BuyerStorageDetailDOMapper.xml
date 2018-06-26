@@ -22,11 +22,13 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="mem" property="mem" jdbcType="VARCHAR" />
+    <result column="op_user_no" property="opUserNo" jdbcType="VARCHAR" />
+    <result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price, 
     currency, upc, quantity, trans_quantity, purchase_storage_no, buyer_task_detail_no, 
-    item_code, sku_buysite, creator, modifier, status, mem
+    item_code, sku_buysite, creator, modifier, status, mem, op_user_no, op_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -48,14 +50,16 @@
       quantity, trans_quantity, purchase_storage_no, 
       buyer_task_detail_no, item_code, sku_buysite, 
       creator, modifier, status, 
-      mem)
+      mem, op_user_no, op_time
+      )
     values (#{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
       #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
       #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=TINYINT}, #{upc,jdbcType=VARCHAR}, 
       #{quantity,jdbcType=INTEGER}, #{transQuantity,jdbcType=INTEGER}, #{purchaseStorageNo,jdbcType=VARCHAR}, 
       #{buyerTaskDetailNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{skuBuysite,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{mem,jdbcType=VARCHAR})
+      #{mem,jdbcType=VARCHAR}, #{opUserNo,jdbcType=VARCHAR}, #{opTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -120,6 +124,12 @@
       <if test="mem != null" >
         mem,
       </if>
+      <if test="opUserNo != null" >
+        op_user_no,
+      </if>
+      <if test="opTime != null" >
+        op_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="storageNo != null" >
@@ -178,6 +188,12 @@
       </if>
       <if test="mem != null" >
         #{mem,jdbcType=VARCHAR},
+      </if>
+      <if test="opUserNo != null" >
+        #{opUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null" >
+        #{opTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -241,6 +257,12 @@
       <if test="mem != null" >
         mem = #{mem,jdbcType=VARCHAR},
       </if>
+      <if test="opUserNo != null" >
+        op_user_no = #{opUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null" >
+        op_time = #{opTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -264,7 +286,9 @@
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      mem = #{mem,jdbcType=VARCHAR}
+      mem = #{mem,jdbcType=VARCHAR},
+      op_user_no = #{opUserNo,jdbcType=VARCHAR},
+      op_time = #{opTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import java.util.Date;
+
 public class BuyerStorageDetailDO extends BaseModel {
     private Long id;
 
@@ -40,6 +42,10 @@ public class BuyerStorageDetailDO extends BaseModel {
     private Integer status;
 
     private String mem;
+
+    private String opUserNo;
+
+    private Date opTime;
 
     public Long getId() {
         return id;
@@ -199,5 +205,21 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     public void setMem(String mem) {
         this.mem = mem == null ? null : mem.trim();
+    }
+
+    public String getOpUserNo() {
+        return opUserNo;
+    }
+
+    public void setOpUserNo(String opUserNo) {
+        this.opUserNo = opUserNo == null ? null : opUserNo.trim();
+    }
+
+    public Date getOpTime() {
+        return opTime;
+    }
+
+    public void setOpTime(Date opTime) {
+        this.opTime = opTime;
     }
 }

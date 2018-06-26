@@ -1,11 +1,9 @@
 package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerStorageDetailVo;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDetailMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
@@ -16,8 +14,10 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +36,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
     @Autowired
     private ItemSkuMapperExt skuDOMapperExt;
+
+    @Autowired
+    private AuthUserDOMapperExt userMapperExt;
 
 
     @Autowired
@@ -141,6 +144,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                     throw new ErpCommonException("未找到对应商品");
                 }
 
+
+                AuthUserDO user = userMapperExt.selectUserVoByUserNo(detail.getOpUserNo());
+
                 BuyerStorageDetailVo vo = new BuyerStorageDetailVo();
 
                 vo.setId(detail.getId());
@@ -160,6 +166,11 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
                 vo.setStatus(detail.getStatus());
                 vo.setStatusName(GeneralStatus.of(detail.getStatus()).getDescription());
+                vo.setOpTime(detail.getOpTime());
+                vo.setOpUserNo(user.getUserNo());
+                if(user != null){
+                    vo.setOpUserName(user.getLoginName());
+                }
 
                 voList.add(vo);
             }
@@ -172,6 +183,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @param detailVo
      */
     @Override
+    @Transactional
     public void comfirm(BuyerStorageDetailVo detailVo){
 
         //修改状态
@@ -210,6 +222,11 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         inventory.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 
         inventoryService.outbound(inventory,detail.getWarehouseNo(),detail.getShelfNo());
+
+        //保存明细
+        detail.setOpTime(new Date());
+        detail.setOpUserNo(AppUtil.getLoginUserId());
+        detaiMapper.updateByPrimaryKey(detail);
 
         //记录头部状态，校验
         BuyerStorageDO buyerStorageSo = new BuyerStorageDO();

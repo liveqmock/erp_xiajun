@@ -45,6 +45,29 @@ public class BuyerStorageDetailVo {
 
 	private Integer status;
 
+	private String opUserNo;
+
+	private String opUserName;
+
+	private Date opTime;
+	public String getOpUserName() {
+		return opUserName;
+	}
+	public void setOpUserName(String opUserName) {
+		this.opUserName = opUserName;
+	}
+	public String getOpUserNo() {
+		return opUserNo;
+	}
+	public void setOpUserNo(String opUserNo) {
+		this.opUserNo = opUserNo;
+	}
+	public Date getOpTime() {
+		return opTime;
+	}
+	public void setOpTime(Date opTime) {
+		this.opTime = opTime;
+	}
 	public String getStatusName() {
 		return statusName;
 	}
