@@ -2,60 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDetailMapperExt">
 
-	<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="storage_no" property="storageNo" jdbcType="VARCHAR" />
-		<result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
-		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
-		<result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
-		<result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-		<result column="price" property="price" jdbcType="DOUBLE" />
-		<result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
-		<result column="currency" property="currency" jdbcType="TINYINT" />
-		<result column="upc" property="upc" jdbcType="VARCHAR" />
-		<result column="quantity" property="quantity" jdbcType="INTEGER" />
-		<result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
-		<result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
-		<result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
-		<result column="item_code" property="itemCode" jdbcType="BIGINT" />
-		<result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
-		<result column="creator" property="creator" jdbcType="VARCHAR" />
-		<result column="modifier" property="modifier" jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="INTEGER" />
-	</resultMap>
-	<sql id="Base_Column_List" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="storage_no" property="storageNo" jdbcType="VARCHAR" />
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="DOUBLE" />
+        <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
+        <result column="currency" property="currency" jdbcType="TINYINT" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="quantity" property="quantity" jdbcType="INTEGER" />
+        <result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
+        <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
+        <result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="BIGINT" />
+        <result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
     id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price,
     currency, upc, quantity, trans_quantity, purchase_storage_no, buyer_task_detail_no,
-    item_code, sku_buysite, creator, modifier,status
+    item_code, sku_buysite, creator, modifier, status
   </sql>
 
-	
-    
+
+
     <select id="queryPurStoDetails" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
         	SELECT T1.id as id,T1.sku_id AS skuId,T1.sku_code AS skuCode,T1.quantity,T1.trans_quantity AS transQuantity,T1.price as price,T1.total_price AS totalPrice,T1.warehouse_id AS warehouseId,T1.warehouse_name AS warehouseName,T1.upc as upc,T1.currency AS currency,T1.shelf_no AS shelfNo,T1.sto_order_no AS stoOrderNo,T1.storage_id AS storageId,T1.item_id AS itemId,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.task_daily_detail_id AS taskDailyDetailId,T1.sku_buysite AS skuBuysite,T2.item_name as itemName,T2.sku_pic as skuPic,
 			T2.color as color ,T2.scale as scale,T2.buy_site as buySite,T2.purchase_price AS purchasePrice,T2.cost_price AS costPrice,T2.discount AS discount,T3.count AS taskDailyCount,T3.in_count AS inCount,T3.purchase_upc AS purchaseUpc,T3.pass_reason AS passReason,
-			case T2.scale 
-			 WHEN 'XXS' THEN 1 
-			 WHEN 'XS' THEN 2 
-			 WHEN 'S' THEN 3 
-			 WHEN 'M' THEN 4 
-			 WHEN 'L' THEN 5 
-			 WHEN 'XL' THEN 6 
-			 WHEN 'XXL' THEN 7 
-			end as scale_int 
-			FROM purchase_storage_detail T1 
-			left join item_sku T2 on T1.sku_id=T2.id 
-			left join task_daily_detail T3 on T1.task_daily_detail_id=T3.id 
-	        where 
-     		   T1.storage_id = #{storageId} 
+			case T2.scale
+			 WHEN 'XXS' THEN 1
+			 WHEN 'XS' THEN 2
+			 WHEN 'S' THEN 3
+			 WHEN 'M' THEN 4
+			 WHEN 'L' THEN 5
+			 WHEN 'XL' THEN 6
+			 WHEN 'XXL' THEN 7
+			end as scale_int
+			FROM purchase_storage_detail T1
+			left join item_sku T2 on T1.sku_id=T2.id
+			left join task_daily_detail T3 on T1.task_daily_detail_id=T3.id
+	        where
+     		   T1.storage_id = #{storageId}
      		ORDER BY IFNULL(T2.buy_site, ''),trim(T2.item_name),T2.color,(T2.scale+0),scale_int
     </select>
-    
+
     <update id="updateUpcForPurchaseStorageDetail" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
 		UPDATE purchase_storage_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};
     </update>
 
-	<select id="queryYesterdayPurStoDetail" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO">
+    <select id="queryYesterdayPurStoDetail" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO">
 		SELECT a.sku_id as skuId,SUM(a.quantity) AS quantity FROM purchase_storage_detail a
 		left join purchase_storage b on a.`storage_Id`=b.id
 		WHERE a.gmt_create &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d 00:00:00') AND a.gmt_create &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d 23:59:59') AND b.`status`=1
@@ -63,62 +63,64 @@
 	</select>
 
 
-	<sql id="tableSection">buyer_storage_detail</sql>
+    <sql id="tableSection">buyer_storage_detail</sql>
 
 
-	<sql id="commonSelectSection">
-		1 = 1
+    <sql id="commonSelectSection">
+        1 = 1
 
-		<if test="storageNo != null">
-			and T.storage_no = #{storageNo}
-		</if>
+        <if test="storageNo != null">
+            and T.storage_no = #{storageNo}
+        </if>
 
-		<if test="status != null">
-			and T.status = #{status}
-		</if>
+        <if test="status != null">
+            and T.status = #{status}
+        </if>
 
-		<if test="upc != null">
-			and T.upc = #{upc}
-		</if>
-
-		<if test=" isDel == true">
-			and T.is_del is true
-		</if>
-		<if test=" isDel == false">
-			and T.is_del is false
-		</if>
-		<if test=" isDel == null">
-			and T.is_del is false
-		</if>
-
-	</sql>
+        <if test="upc != null">
+            and T.upc = #{upc}
+        </if>
 
 
-	<!--查询总条数 -->
-	<select id="search" resultMap="BaseResultMap"
-	>
-		SELECT <include refid="Base_Column_List" />
-		FROM <include refid="tableSection"/> T
-		WHERE
-		<include refid="commonSelectSection"/>
-	</select>
 
-	<!--查询总条数 -->
-	<select id="searchCount" resultType="java.lang.Long"
-	>
-		SELECT COUNT(*)
-		FROM <include refid="tableSection"/> T
-		WHERE
-		<include refid="commonSelectSection"/>
-	</select>
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T.is_del is false
+        </if>
 
-	<!-- -->
-	<select id="searchList" resultMap="BaseResultMap">
-		SELECT  <include refid="Base_Column_List" />
-		FROM <include refid="tableSection"/> T
-		WHERE
-		<include refid="commonSelectSection"/>
-		ORDER BY T.id desc
-	</select>
+    </sql>
+
+
+    <!--查询总条数 -->
+    <select id="search" resultMap="BaseResultMap"
+    >
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="tableSection"/> T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="searchCount" resultType="java.lang.Long"
+    >
+        SELECT COUNT(*)
+        FROM <include refid="tableSection"/> T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="searchList" resultMap="BaseResultMap">
+        SELECT  <include refid="Base_Column_List" />
+        FROM <include refid="tableSection"/> T
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T.id desc
+    </select>
 
 </mapper>
