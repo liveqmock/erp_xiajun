@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import java.util.Date;
+
 public class BuyerStorageDetailDO extends BaseModel {
     private Long id;
 
@@ -38,6 +40,12 @@ public class BuyerStorageDetailDO extends BaseModel {
     private String modifier;
 
     private Integer status;
+
+    private String mem;
+
+    private String opUserNo;
+
+    private Date opTime;
 
     public Long getId() {
         return id;
@@ -171,7 +179,6 @@ public class BuyerStorageDetailDO extends BaseModel {
         return creator;
     }
 
-    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -180,7 +187,6 @@ public class BuyerStorageDetailDO extends BaseModel {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
@@ -191,5 +197,29 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getMem() {
+        return mem;
+    }
+
+    public void setMem(String mem) {
+        this.mem = mem == null ? null : mem.trim();
+    }
+
+    public String getOpUserNo() {
+        return opUserNo;
+    }
+
+    public void setOpUserNo(String opUserNo) {
+        this.opUserNo = opUserNo == null ? null : opUserNo.trim();
+    }
+
+    public Date getOpTime() {
+        return opTime;
+    }
+
+    public void setOpTime(Date opTime) {
+        this.opTime = opTime;
     }
 }

@@ -1985,7 +1985,7 @@ DROP TABLE IF EXISTS `channel_account_config`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `channel_account_config` (
-  `id` bigint(19) NOT NULL,】
+  `id` bigint(19) NOT NULL,
   `company_no` varchar(64) DEFAULT NULL,
   `shopCode` varchar(255) NOT NULL,
   `itemKey` varchar(255) DEFAULT NULL,
@@ -2053,6 +2053,8 @@ CREATE TABLE `auth_user` (
   `organization_id` int(11) DEFAULT '0' COMMENT '所属机构',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `wx_user_id` bigint(19) DEFAULT NULL COMMENT '微信用户ID',
+  `wx_open_id` bigint(19) DEFAULT NULL COMMENT '微信openID',
+  `wx_union_id` bigint(19) DEFAULT NULL COMMENT '微信unionID',
   `email` varchar(32) DEFAULT NULL COMMENT '电子邮箱',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

@@ -1,11 +1,9 @@
 package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerStorageDetailVo;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDetailMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
@@ -16,8 +14,10 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +36,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
     @Autowired
     private ItemSkuMapperExt skuDOMapperExt;
+
+    @Autowired
+    private AuthUserDOMapperExt userMapperExt;
 
 
     @Autowired
@@ -89,6 +92,13 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         return voList;
     }
 
+
+    @Override
+    public List<BuyerStorageDetailVo> queryComfirmWithParam(Long openId, String upc){
+        List<BuyerStorageDetailVo> voList = doSearchList(openId,upc,Integer.valueOf(GeneralStatus.CONFIRM.getCode()));
+        return voList;
+    }
+
     /**
      * 只查询状态为预入库状态的入库单
      * @param openId
@@ -134,6 +144,12 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                     throw new ErpCommonException("未找到对应商品");
                 }
 
+
+                AuthUserDO user = null;
+                if(!EasyUtil.isStringEmpty(detail.getOpUserNo())){
+                    user = userMapperExt.selectUserVoByUserNo(detail.getOpUserNo());
+                }
+
                 BuyerStorageDetailVo vo = new BuyerStorageDetailVo();
 
                 vo.setId(detail.getId());
@@ -153,7 +169,12 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
                 vo.setStatus(detail.getStatus());
                 vo.setStatusName(GeneralStatus.of(detail.getStatus()).getDescription());
-
+                vo.setOpTime(detail.getOpTime());
+                vo.setOpUserNo(detail.getOpUserNo());
+                if(user != null){
+                    vo.setOpUserName(user.getLoginName());
+                }
+                vo.setCompanyNo(buyerStorage.getCompanyNo());
                 voList.add(vo);
             }
         }
@@ -165,6 +186,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @param detailVo
      */
     @Override
+    @Transactional
     public void comfirm(BuyerStorageDetailVo detailVo){
 
         //修改状态
@@ -204,6 +226,11 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
         inventoryService.outbound(inventory,detail.getWarehouseNo(),detail.getShelfNo());
 
+        //保存明细
+        detail.setOpTime(new Date());
+        detail.setOpUserNo(AppUtil.getLoginUserId());
+        detaiMapper.updateByPrimaryKey(detail);
+
         //记录头部状态，校验
         BuyerStorageDO buyerStorageSo = new BuyerStorageDO();
         buyerStorageSo.initCompany();
@@ -239,6 +266,19 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
             }
         }
         return comfirm;
+    }
+
+
+    public void deleteById(Long id){
+        BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
+        detail.setIsDel(true);
+        detaiMapper.updateByPrimaryKey(detail);
+    }
+
+    public void updateMem(Long id, String mem){
+        BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
+        detail.setMem(EasyUtil.truncateLEFitSize(mem,1000));
+        detaiMapper.updateByPrimaryKey(detail);
     }
 
 
