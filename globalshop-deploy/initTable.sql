@@ -1985,7 +1985,7 @@ DROP TABLE IF EXISTS `channel_account_config`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `channel_account_config` (
-  `id` bigint(19) NOT NULL,】
+  `id` bigint(19) NOT NULL,
   `company_no` varchar(64) DEFAULT NULL,
   `shopCode` varchar(255) NOT NULL,
   `itemKey` varchar(255) DEFAULT NULL,
