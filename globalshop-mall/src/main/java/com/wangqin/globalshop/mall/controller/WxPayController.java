@@ -175,7 +175,7 @@ public class WxPayController {
         }
         totalFee = outerOrder.getTotalAmount() + outerOrder.getFreight();
         // TODO 需查表
-        openId = outerOrder.getCustomerNo();
+        openId = outerOrder.getOpenId();
         orderInfo = HaiJsonUtils.toJson(outerOrder);
         String appid = "wxdef3e972a4a93e91";// 小程序ID
         String mch_id = "1501900631";// 商户号
@@ -272,7 +272,7 @@ public class WxPayController {
             outerOrderWxPay.setWxPayTradeNo(out_trade_no);
             outerOrderWxPay.setOrderInfo(orderInfo);
             outerOrderWxPay.setStatus(0);
-            outerOrderWxPay.setCustomerNo(outerOrder.getCustomerNo());
+            outerOrderWxPay.setCustomerNo(outerOrder.getOpenId());
             outerOrderWxPay.setGmtCreate(new Date());
             outerOrderWxPay.setGmtModify(new Date());
             mallWxPayBillDOMapperExt.insertSelective(outerOrderWxPay);

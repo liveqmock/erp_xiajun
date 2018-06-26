@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <!--<classPathEntry-->
-            <!--location="../../mysql-connector-java-5.1.44.jar"/>-->
     <classPathEntry
+            location="E:\mavenJar\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+    <!--<classPathEntry-->
 
-            location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+            <!--location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
 
            
 

@@ -774,7 +774,7 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		mallOrderDO.setGmtCreate(DateUtil.convertStr2Date(jdOrder.getOrderStartTime(), DateUtil.formateStr19)); // 创建时间
 		//mallOrderDO.setGmtModify(jdOrder.getti); // 修改时间
 		//补充必填信息
-		mallOrderDO.setCustomerNo("无");
+		mallOrderDO.setOpenId("");
 		mallOrderDO.setChannelCustomerNo("自定义类型，无买家昵称");
 		mallOrderDO.setIsDel(false);
 		mallOrderDO.setModifier("-1");

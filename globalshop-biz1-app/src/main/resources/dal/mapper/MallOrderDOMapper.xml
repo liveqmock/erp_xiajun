@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR" />
     <result column="dealer_name" property="dealerName" jdbcType="VARCHAR" />
-    <result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
     <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
@@ -29,12 +29,13 @@
     <result column="freight_agent" property="freightAgent" jdbcType="DOUBLE" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="union_id" property="unionId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, dealer_code, dealer_name, customer_no, order_no, company_no, channel_no, channel_name, 
+    id, dealer_code, dealer_name, open_id, order_no, company_no, channel_no, channel_name, 
     channel_order_no, channel_customer_no, channel_type, shop_code, wx_pay_trade_no, 
     total_amount, actual_amount, pay_type, order_time, status, memo, id_card, idcard_pic_front, 
-    idcard_pic_reverse, source, freight, freight_agent, modifier, creator
+    idcard_pic_reverse, source, freight, freight_agent, modifier, creator, union_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -50,7 +51,7 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_order (dealer_code, dealer_name, customer_no, 
+    insert into mall_order (dealer_code, dealer_name, open_id, 
       order_no, company_no, channel_no, 
       channel_name, channel_order_no, channel_customer_no, 
       channel_type, shop_code, wx_pay_trade_no, 
@@ -58,8 +59,9 @@
       order_time, status, memo, 
       id_card, idcard_pic_front, idcard_pic_reverse, 
       source, freight, freight_agent, 
-      modifier, creator)
-    values (#{dealerCode,jdbcType=VARCHAR}, #{dealerName,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
+      modifier, creator, union_id
+      )
+    values (#{dealerCode,jdbcType=VARCHAR}, #{dealerName,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
       #{orderNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, 
       #{channelName,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{channelCustomerNo,jdbcType=VARCHAR}, 
       #{channelType,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{wxPayTradeNo,jdbcType=VARCHAR}, 
@@ -67,7 +69,8 @@
       #{orderTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR}, 
       #{idCard,jdbcType=VARCHAR}, #{idcardPicFront,jdbcType=VARCHAR}, #{idcardPicReverse,jdbcType=VARCHAR}, 
       #{source,jdbcType=BIGINT}, #{freight,jdbcType=DOUBLE}, #{freightAgent,jdbcType=DOUBLE}, 
-      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -81,8 +84,8 @@
       <if test="dealerName != null" >
         dealer_name,
       </if>
-      <if test="customerNo != null" >
-        customer_no,
+      <if test="openId != null" >
+        open_id,
       </if>
       <if test="orderNo != null" >
         order_no,
@@ -153,6 +156,9 @@
       <if test="creator != null" >
         creator,
       </if>
+      <if test="unionId != null" >
+        union_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="dealerCode != null" >
@@ -161,8 +167,8 @@
       <if test="dealerName != null" >
         #{dealerName,jdbcType=VARCHAR},
       </if>
-      <if test="customerNo != null" >
-        #{customerNo,jdbcType=VARCHAR},
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
       </if>
       <if test="orderNo != null" >
         #{orderNo,jdbcType=VARCHAR},
@@ -233,6 +239,9 @@
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
+      <if test="unionId != null" >
+        #{unionId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO" >
@@ -244,8 +253,8 @@
       <if test="dealerName != null" >
         dealer_name = #{dealerName,jdbcType=VARCHAR},
       </if>
-      <if test="customerNo != null" >
-        customer_no = #{customerNo,jdbcType=VARCHAR},
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
       </if>
       <if test="orderNo != null" >
         order_no = #{orderNo,jdbcType=VARCHAR},
@@ -316,6 +325,9 @@
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
+      <if test="unionId != null" >
+        union_id = #{unionId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -323,7 +335,7 @@
     update mall_order
     set dealer_code = #{dealerCode,jdbcType=VARCHAR},
       dealer_name = #{dealerName,jdbcType=VARCHAR},
-      customer_no = #{customerNo,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},
       company_no = #{companyNo,jdbcType=VARCHAR},
       channel_no = #{channelNo,jdbcType=VARCHAR},
@@ -346,7 +358,8 @@
       freight = #{freight,jdbcType=DOUBLE},
       freight_agent = #{freightAgent,jdbcType=DOUBLE},
       modifier = #{modifier,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR}
+      creator = #{creator,jdbcType=VARCHAR},
+      union_id = #{unionId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
