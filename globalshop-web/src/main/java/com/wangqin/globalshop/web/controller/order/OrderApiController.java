@@ -61,7 +61,7 @@ public class OrderApiController {
         //获取订单list
         List<MyOrderDTO> myOrderList = mallSubOrderService.queryOrderByShareUserId(userId, start, Integer.parseInt(pageSize));
         if(CollectionUtils.isEmpty(myOrderList)) {//无订单
-            result.put("commission","0");
+           result.put("commission","0");
            jsonResult.buildIsSuccess(true).buildData(result);
            return BaseDto.toString(jsonResult);
         }
@@ -98,7 +98,7 @@ public class OrderApiController {
         int start = (Integer.parseInt(pageNo)-1)*Integer.parseInt(pageSize);
         //订单详情
         List<MallSubOrderDO> orderList = mallSubOrderService.queryOrderDetailByTime(userId, time, start, Integer.parseInt(pageSize));
-        if(null == orderList) {
+        if(CollectionUtils.isEmpty(orderList)) {
         	 entity.setOrderDetailList(orderDetailList);
         	 jsonResult.buildIsSuccess(true).buildData(entity);
         	 String summary =  String.format("%s个订单，佣金%s", 0, 0);
