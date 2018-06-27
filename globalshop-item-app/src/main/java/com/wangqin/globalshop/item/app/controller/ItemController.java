@@ -54,7 +54,8 @@ public class ItemController {
     private InventoryService inventoryService;
     @Autowired
     private IItemSkuService itemSkuService;
-
+    @Autowired
+    private IItemSkuScaleService scaleService;
 
     public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
@@ -204,7 +205,7 @@ public class ItemController {
         iItemService.insertItemSelective(newItem);
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
-        List<String> upcList = new ArrayList<>();
+//        List<String> upcList = new ArrayList<>();
         if (itemSkuList != null && !itemSkuList.isEmpty()) {
             itemSkuList.forEach(itemSku -> {
                 itemSku.setItemCode(newItem.getItemCode());
@@ -249,6 +250,7 @@ public class ItemController {
         return result.buildIsSuccess(true);
 
     }
+
 
     /**
      * 封装ItemSkuScala对象信息
