@@ -1,26 +1,19 @@
 package com.wangqin.globalshop.channel.service.order;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.StockUpStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.channel.Exception.InventoryException;
-import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.service.inventory.ErpOrderUtil;
 import com.wangqin.globalshop.channel.service.inventory.IInventoryBookingRecordChannelService;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.BizResult;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.inventory.app.service.impl.InventoryServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -147,7 +140,7 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 		newErpOrder.setWarehouseNo(null);
 		//获取子订单数量便于产生单号
 		List<MallSubOrderDO> erpOrders = mallSubOrderDOMapperExt.selectByOrderNo(erpOrder.getChannelOrderNo());
-		newErpOrder.setSubOrderNo("O" + erpOrder.getOrderNo().substring(1) + String.format("%0"+4+"d", erpOrders.size()+1));
+		newErpOrder.setSubOrderNo(CodeGenUtil.getSubOrderNo());
 		this.mallSubOrderDOMapperExt.insert(newErpOrder);
 
 		erpOrder.setQuantity(splitCount);
