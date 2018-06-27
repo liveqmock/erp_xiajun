@@ -137,7 +137,6 @@ public class PurchaseStorageController {
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
         try {
             service.deleteById(id);
-
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
