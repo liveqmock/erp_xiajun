@@ -52,7 +52,7 @@ public class ItemQueryVO extends PageQueryVO{
 
 	private String enName;
 	private String brand;
-	private Integer country;
+	private String country;
 	private Integer currency;
 
 	private String buySite;
@@ -385,11 +385,13 @@ public class ItemQueryVO extends PageQueryVO{
 		this.itemSkus = itemSkus;
 	}
 
-	public Integer getCountry() {
-		return country;
-	}
-	public void setCountry(Integer country) {
+	
+	public void setCountry(String country) {
 		this.country = country;
+	}
+	
+	public String getCountry() {
+		return country;
 	}
 	public Integer getCurrency() {
 		return currency;

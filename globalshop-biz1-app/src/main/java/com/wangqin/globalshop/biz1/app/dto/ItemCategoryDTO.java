@@ -36,13 +36,13 @@ public class ItemCategoryDTO {
     private String modifier;
     
 
-	private List<ItemCategoryDTO> children = new ArrayList<>();
+	private List<ItemCategoryDTO> children = new ArrayList<ItemCategoryDTO>();
 
     public List<ItemCategoryDTO> getChildren() {
-    	if(null == this.children) {
-            this.children = new ArrayList<>();
+    	if(this.children.isEmpty()) {
+            this.children = new ArrayList<ItemCategoryDTO>();
         }
-		return children;
+		return this.children;
 	}
 	public void setChildren(List<ItemCategoryDTO> children) {
 		this.children = children;

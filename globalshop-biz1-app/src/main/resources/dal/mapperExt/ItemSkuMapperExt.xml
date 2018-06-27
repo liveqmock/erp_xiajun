@@ -79,7 +79,7 @@
          T1.category_name,  T1.upc, T1.saleable,  T1.purchase_price,  T1.freight, 
           T1.discount,  T1.logistic_type,  T1.cost_price,  T1.brand_name,
          T1.weight,  T1.sku_pic,  T1.package_code,  T1.package_name,  T1.package_en, 
-         T1.package_weight,  T1.package_level_id,
+         T1.package_weight,  T1.package_level_id,T1.weight,
          T1.scale,  T1.model,  T1.sale_type,  T1.sale_price,  T1.creator,  T1.modifier,
           T1.gmt_create,  T1.gmt_modify,  T1.is_del
     </sql>
@@ -324,13 +324,13 @@
             LAST_INSERT_ID()
         </selectKey>
         insert into item_sku
-        (sku_code,cost_price,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
+        (sku_code,cost_price,weight,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
             separator=",">
             (
-            #{wdSolr.skuCode}, #{wdSolr.costPrice},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
+            #{wdSolr.skuCode}, #{wdSolr.costPrice},#{wdSolr.weight},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
             #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice},
             #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId}
             )
