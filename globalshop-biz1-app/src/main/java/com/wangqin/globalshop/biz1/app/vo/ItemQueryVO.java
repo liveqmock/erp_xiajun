@@ -36,6 +36,7 @@ public class ItemQueryVO extends PageQueryVO{
 	
 	private String name;
 	private Date    gmtModify;
+	
 	private Long categoryId;
 
 	private String categoryName;
