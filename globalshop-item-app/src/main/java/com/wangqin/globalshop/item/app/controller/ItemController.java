@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 
 import java.io.*;
 import java.net.URL;
@@ -54,10 +54,6 @@ public class ItemController {
     private InventoryService inventoryService;
     @Autowired
     private IItemSkuService itemSkuService;
-    @Autowired
-    private IItemSkuScaleService scaleService;
-//	@Autowired
-//	private ChannelCommonService channelCommonService;
 
 
     public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
@@ -208,6 +204,7 @@ public class ItemController {
         iItemService.insertItemSelective(newItem);
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
+        List<String> upcList = new ArrayList<>();
         if (itemSkuList != null && !itemSkuList.isEmpty()) {
             itemSkuList.forEach(itemSku -> {
                 itemSku.setItemCode(newItem.getItemCode());
@@ -229,6 +226,14 @@ public class ItemController {
                 itemSku.setSalePrice(itemSku.getSalePrice());
             });
             itemSkuService.insertBatch(itemSkuList);
+            //todo 错误应修改数据库配置  同一公司的upc唯一
+//            //判断用户添加的几个upc之间是否重复
+//            HashSet<String> upcSet = new HashSet<String>(upcList);
+//            if(upcList.size() > upcSet.size()) {
+//                result.buildIsSuccess(false);
+//                result.buildMsg("输入的upc有重复，请再次输入");
+//                return result;
+//            }
             List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
             scaleService.insertBatch(scaleList);
             //inventoryService.insertBatchInventory(inventoryList);
@@ -239,6 +244,7 @@ public class ItemController {
         if (item.getId() != null) {
             voidDimensionCodeUtil(item.getId());
         }
+        
         //新增商品授权买手TODO
         return result.buildIsSuccess(true);
 
@@ -278,19 +284,19 @@ public class ItemController {
         }
         if (item.getId() == null) {
             return result.buildIsSuccess(false).buildMsg("没有商品id");
-        }
+        } 
 
         StringBuffer nameNew = new StringBuffer();
         //品牌
         String[] brandArr = item.getBrand().split("->");
         if (StringUtil.isNotBlank(brandArr[0])) {    //英文品牌
-            nameNew.append(brandArr[0] + " ");
+        	nameNew.append(brandArr[0] + " ");
         }
         if (brandArr.length > 1 && StringUtil.isNotBlank(brandArr[1])) {    //中文品牌
-            nameNew.append(brandArr[1] + " ");
+        	nameNew.append(brandArr[1] + " ");
         }
         if (StringUtil.isNotBlank(item.getSexStyle())) {        //男女款
-            nameNew.append(item.getSexStyle() + " ");
+        	nameNew.append(item.getSexStyle() + " ");
         }
         nameNew.append(item.getName());
         //重新设置商品名称
@@ -370,7 +376,7 @@ public class ItemController {
         try {
             newItem.setStartDate(format.parse(item.getStartDate()));
             newItem.setEndDate(format.parse(item.getEndDate()));
-            if (null != item.getBookingDate()) {
+            if(null != item.getBookingDate()) {
                 newItem.setBookingDate(format.parse(item.getBookingDate()));
             }
         } catch (Exception e) {
@@ -399,7 +405,7 @@ public class ItemController {
         newItem.setItemName(item.getName());
         newItem.setCurrency(item.getCurrency().byteValue());
         newItem.setIdCard(item.getIdCard().byteValue());
-
+    
         newItem.setCountry(item.getCountry());
         newItem.setRemark(item.getRemark());
         newItem.setMainPic(item.getMainPic());
@@ -409,12 +415,13 @@ public class ItemController {
 
         //newItem.setLogisticType(item.getLogisticType().byteValue());
 
-        if (null == AppUtil.getLoginUserId()) {
-            return result.buildIsSuccess(false).buildMsg("请先登录");
+        if(null == AppUtil.getLoginUserId()) {
+        	return result.buildIsSuccess(false).buildMsg("请先登录");
         }
-
+    
         newItem.setModifier(AppUtil.getLoginUserId());
-        iItemService.updateByIdSelective(newItem);
+
+        iItemService.updateByIdSelective(newItem);	
         return result.buildIsSuccess(true);
     }
 
@@ -446,7 +453,7 @@ public class ItemController {
         JsonResult<ItemDTO> result = new JsonResult<>();
         // if haven't item id ,add item
         if (id != null) {
-
+        	
             ItemDTO item = iItemService.queryItemById(id);
             if (item == null) {
                 result.buildIsSuccess(false).buildMsg("没有找到Item");
@@ -613,7 +620,7 @@ public class ItemController {
         JsonResult<ItemDO> result = new JsonResult<>();
         List<ItemSkuDO> list = itemSkuService.queryByItemCodeAndCompanyNo(itemCode, AppUtil.getLoginUserCompanyNo());
         for (ItemSkuDO itemSkuDO : list) {
-            inventoryService.updateVirtualInv(itemSkuDO.getSkuCode(), 0L, itemSkuDO.getCompanyNo());
+            inventoryService.updateVirtualInv(itemSkuDO.getSkuCode(),0L,itemSkuDO.getCompanyNo());
         }
         return result.buildIsSuccess(true);
     }
@@ -746,7 +753,6 @@ public class ItemController {
 
     /**
      * 导入商品
-     *
      * @param file
      * @return
      */
@@ -757,7 +763,7 @@ public class ItemController {
         try {
             if (!file.isEmpty()) {
                 // 文件保存路径
-                List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(), file.getOriginalFilename(), 1, 0, 16);
+                List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(),file.getOriginalFilename(),1,0,16);
                 iItemService.importItem(list);
             }
         } catch (IOException e) {
