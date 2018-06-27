@@ -40,7 +40,7 @@ public class DealerController{
 	private IDealerTypeService iDealerTypeService;
 	@RequestMapping("/add")
 	@ResponseBody
-	public Object add(DealerDO seller) {
+	public Object add(DealerDO seller, String typeName) {
 		 
 		JsonResult<String> result = new JsonResult<>();
 		
@@ -108,12 +108,15 @@ public class DealerController{
 	
 	@RequestMapping("/querySellerList")
 	@ResponseBody
-	public Object queryDealerList(DealerDO seller) {
+	public Object queryDealerList(DealerDO seller, String typeName) {
 		JsonResult<List<Map<String, String>>> result = new JsonResult<>();
 		seller.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		String name = seller.getName();
 		if(!StringUtil.isBlank(name)) {
 			seller.setName(name);
+		}
+		if(!StringUtil.isBlank(typeName)) {
+			seller.setTypeName(typeName);
 		}
 		List<Map<String, String>> list = iDealerService.dealerList(seller);
 		
