@@ -66,9 +66,10 @@ public class ItemApiController {
 
             String originSalePrice = item.getOriginSalePrice();
             if(StringUtils.isBlank(originSalePrice)){
-                originSalePrice = "$0";
+                itemEntity.setOriginPrice(" ");
+            }else{
+                itemEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
             }
-    		itemEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
     		itemEntity.setTitle(item.getItemName());//标题
 
 
@@ -166,9 +167,11 @@ public class ItemApiController {
 
         String originSalePrice = itemDO.getOriginSalePrice();
         if(StringUtils.isBlank(originSalePrice)){
-            originSalePrice = "$0";
+            itemDetailEntity.setOriginPrice("");//外币
+        }else{
+            itemDetailEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
         }
-        itemDetailEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
+
 
         itemDetailEntity.setTitle(itemDO.getItemName());
 
