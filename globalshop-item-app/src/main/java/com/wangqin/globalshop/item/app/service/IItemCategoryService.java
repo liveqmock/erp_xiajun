@@ -58,4 +58,7 @@ public interface IItemCategoryService {
 	List<ItemCategoryDO> selectByName(String category1);
 
 	List<ItemCategoryDO> selectByParentAndName(List<ItemCategoryDO> categoryList1, String category2);
+	
+	   //通过code查询id
+       Long queryCategoryIdByCategoryCode(String categoryCode);
 }
