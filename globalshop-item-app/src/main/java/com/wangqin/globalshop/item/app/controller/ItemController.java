@@ -3,11 +3,10 @@ package com.wangqin.globalshop.item.app.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
@@ -17,17 +16,13 @@ import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.*;
 import net.sf.json.JSONObject;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-
-
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -59,7 +54,8 @@ public class ItemController {
     private InventoryService inventoryService;
     @Autowired
     private IItemSkuService itemSkuService;
-
+    @Autowired
+    private IItemSkuScaleService scaleService;
 
     public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
@@ -74,118 +70,115 @@ public class ItemController {
     @ResponseBody
     public Object add(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();
-        
-        if(null != item.getId()) {
+        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+        String priceRange = "0";
+        if (null != item.getId()) {
             return result.buildMsg("新增不能有ID").buildIsSuccess(false);
         }
         StringBuffer nameNew = new StringBuffer();
-        
+
         //品牌
         String[] brandArr = item.getBrand().split("->");
         if (StringUtil.isNotBlank(brandArr[0])) {    //英文品牌
             nameNew.append(brandArr[0] + " ");
         }
-        
+
         if (brandArr.length > 1 && StringUtil.isNotBlank(brandArr[1])) {    //中文品牌
             nameNew.append(brandArr[1] + " ");
         }
-        
+
         if (StringUtil.isNotBlank(item.getSexStyle())) {        //男女款
-        	nameNew.append(item.getSexStyle() + " ");
+            nameNew.append(item.getSexStyle() + " ");
         }
         nameNew.append(item.getName());
         //重新设置商品名称
         item.setName(nameNew.toString());
-        
+
         //类目处理
         String categoryCode = item.getCategoryCode();
         if (categoryCode != null) {
-        	item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
+            item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
         } else {
-        	return result.buildMsg("没有找到类目").buildIsSuccess(false);
+            return result.buildMsg("没有找到类目").buildIsSuccess(false);
         }
-        
+
         String imgJson = ImageUtil.getImageUrl(item.getMainPic());
         item.setMainPic(imgJson);
-        
+
         //系统自动生成item_code
-        item.setItemCode(RandomUtils.getTimeRandom());
-        
+        String itemCode = RandomUtils.getTimeRandom();
+        item.setItemCode(itemCode);
         // 解析skuList 数组对象
         String skuList = item.getSkuList();
-        Double minPrice = null;
-        Double maxPrice = null;
+
         if (StringUtils.isNotBlank(skuList)) {
-        	try {
-        		String s = skuList.replace("&quot;", "\"");
-        		List<ItemSkuAddVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>() {
-        		});
-        		Map<String, Integer> colorScaleMap = new HashMap<String, Integer>();
-        		int i = 0;
-        		if (skus != null && !skus.isEmpty()) {
-        			for (ItemSkuAddVO itemSku : skus) {                                                      
-        				itemSku.setSkuCode("S" + categoryCode + "Q"+item.getItemCode()+String.format("%0" + 4 + "d", ++i));
-        				itemSku.setLogisticType(item.getLogisticType());
-        				String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
-        				itemSku.setSkuPic(skuPic);
-        				if (StringUtils.isNotBlank(itemSku.getPackageLevelId())) {
-        					List<Long> a = HaiJsonUtils.toBean(itemSku.getPackageLevelId(), new TypeReference<List<Long>>() {
-        					});
-        					itemSku.setPackageId(a.get(a.size() - 1));
-        				}
-        				//计算商品价格区间
-        				if(null == minPrice || null == maxPrice) {
-        					minPrice = itemSku.getSalePrice();
-        					maxPrice = itemSku.getSalePrice();
-        				} else {
-        					minPrice = minPrice>itemSku.getSalePrice()?itemSku.getSalePrice():minPrice;
-            				maxPrice = maxPrice<itemSku.getSalePrice()?itemSku.getSalePrice():maxPrice; 
-        				}				                      
-        				// 如果商品没有图片，默认使用sku上的图片
-        				if (StringUtils.isBlank(imgJson) && StringUtils.isNotBlank(skuPic)) {
-        					imgJson = skuPic;
-        				}
-        			}
-        			item.setItemSkus(skus);
-        		}
-        	} catch (Exception e) {
-        		e.printStackTrace();
-        		return result.buildMsg("解析SKU错误").buildIsSuccess(false);
-        	}
-        }                 
-        
+            try {
+                String s = skuList.replace("&quot;", "\"");
+                List<ItemSkuAddVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>() {
+                });
+                int i = 0;
+
+                if (skus != null && !skus.isEmpty()) {
+                    Double minPrice = skus.get(0).getSalePrice();
+                    Double maxPrice = skus.get(0).getSalePrice();
+                    for (ItemSkuAddVO itemSku : skus) {
+                        i++;
+                        itemSku.setSkuCode(CodeGenUtil.getSkuCode(categoryCode, itemCode, i));
+                        itemSku.setLogisticType(item.getLogisticType());
+                        String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
+                        itemSku.setSkuPic(skuPic);
+                        if (StringUtils.isNotBlank(itemSku.getPackageLevelId())) {
+                            List<Long> a = HaiJsonUtils.toBean(itemSku.getPackageLevelId(), new TypeReference<List<Long>>() {
+                            });
+                            itemSku.setPackageId(a.get(a.size() - 1));
+                        }
+                        minPrice = minPrice > itemSku.getSalePrice() ? itemSku.getSalePrice() : minPrice;
+                        maxPrice = maxPrice < itemSku.getSalePrice() ? itemSku.getSalePrice() : maxPrice;
+                        // 商品价格区间
+                        if (minPrice.equals(maxPrice)) {
+                            priceRange = maxPrice.toString();
+                        } else {
+                            priceRange = minPrice.toString() + "-" + maxPrice.toString();
+                        }
+                        // 如果商品没有图片，默认使用sku上的图片
+                        if (StringUtils.isBlank(imgJson) && StringUtils.isNotBlank(skuPic)) {
+                            imgJson = skuPic;
+                        }
+                    }
+                    item.setItemSkus(skus);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return result.buildMsg("解析SKU错误").buildIsSuccess(false);
+            }
+        }
+
         //对前端传来的时间进行处理
         ItemDO newItem = new ItemDO();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-        	newItem.setStartDate(format.parse(item.getStartDate()));
-        	newItem.setEndDate(format.parse(item.getEndDate()));
-        	if(null != item.getBookingDate()) {//非必填项，空指针检查
-        		newItem.setBookingDate(format.parse(item.getBookingDate()));
-        	}                             
+            newItem.setStartDate(format.parse(item.getStartDate()));
+            newItem.setEndDate(format.parse(item.getEndDate()));
+            if (null != item.getBookingDate()) {//非必填项，空指针检查
+                newItem.setBookingDate(format.parse(item.getBookingDate()));
+            }
         } catch (Exception e) {
-        	//TODO
+            //TODO
         }
-        
-        // 商品价格区间
-        if (minPrice.equals(maxPrice)) {
-        	item.setPriceRange(maxPrice.toString());
-        } else {
-        	item.setPriceRange(minPrice.toString() + "-" + maxPrice.toString());
-        }
-        
+
+
         //判断是否可售
         if (item.getStartDate() == null || item.getEndDate() == null) {
-        	item.setIsSale(0);
+            item.setIsSale(0);
         } else if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), DateUtil.getDateByCalculate(newItem.getEndDate(), Calendar.DATE, 1))) {
-        	item.setIsSale(1);
+            item.setIsSale(1);
         } else {
-        	item.setIsSale(0);
-        }        
-        
+            item.setIsSale(0);
+        }
+
         newItem.setDetail(item.getDetail());
         detailDecoder(newItem);
-        newItem.setPriceRange(item.getPriceRange());
+        newItem.setPriceRange(priceRange);
         newItem.setCategoryName(item.getCategoryName());
         newItem.setCategoryCode(categoryCode);
         newItem.setBrandName(item.getBrand());
@@ -203,8 +196,8 @@ public class ItemController {
         newItem.setMainPic(item.getMainPic());
         newItem.setRemark(item.getRemark());
         newItem.setDetail(item.getDetail());
-        if(null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
-        	return result.buildIsSuccess(false).buildMsg("请先登录");
+        if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
+            return result.buildIsSuccess(false).buildMsg("请先登录");
         }
         newItem.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         newItem.setModifier(AppUtil.getLoginUserId());
@@ -212,47 +205,68 @@ public class ItemController {
         iItemService.insertItemSelective(newItem);
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
-        List<String> upcList = new ArrayList<>();
+//        List<String> upcList = new ArrayList<>();
         if (itemSkuList != null && !itemSkuList.isEmpty()) {
-        	for(ItemSkuAddVO itemSku:itemSkuList) {
-        		itemSku.setItemCode(newItem.getItemCode());
-        		itemSku.setItemName(newItem.getItemName());
-        		itemSku.setItemId(newItem.getId());
-        		itemSku.setCategoryName(item.getCategoryName());
-        		itemSku.setCategoryCode(item.getCategoryCode());
-        		itemSku.setBrand(newItem.getBrandName());                  
-        		itemSku.setModifier(AppUtil.getLoginUserId());
-        		itemSku.setCreator(AppUtil.getLoginUserId()); 
-        		itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo()); 
-        		itemSku.setSalePrice(itemSku.getSalePrice());
-        		//判断upc和库里面已经有的upc是否重复
-        		if(0 < itemSkuService.queryItemCountByUpc(itemSku.getUpc())) {
-        			result.buildIsSuccess(false);
-        			result.buildMsg("upc和已有的upc重复，请再次输入");
-        			return result;
-        		}
-        		upcList.add(itemSku.getUpc());
-        	}
-        	//判断用户添加的几个upc之间是否重复
-        	HashSet<String> upcSet = new HashSet<String>(upcList);
-        	if(upcList.size() > upcSet.size()) {
-        		result.buildIsSuccess(false);
-    			result.buildMsg("输入的upc有重复，请再次输入");
-    			return result;
-        	}
-        	itemSkuService.insertBatch(itemSkuList);
-        	List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
-        	
-        	invService.outbound(inventoryList);
+            itemSkuList.forEach(itemSku -> {
+                itemSku.setItemCode(newItem.getItemCode());
+                /**插入ItemSkuScale*/
+                ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
+                ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+                setInfo(colorObject, itemSku, itemSku.getColor(), "颜色");
+                setInfo(scaleObject, itemSku, itemSku.getScale(), "尺寸");
+                scaleList.add(colorObject);
+                scaleList.add(scaleObject);
+                itemSku.setItemName(newItem.getItemName());
+                itemSku.setItemId(newItem.getId());
+                itemSku.setCategoryName(item.getCategoryName());
+                itemSku.setCategoryCode(item.getCategoryCode());
+                itemSku.setBrand(newItem.getBrandName());
+                itemSku.setModifier(AppUtil.getLoginUserId());
+                itemSku.setCreator(AppUtil.getLoginUserId());
+                itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+                itemSku.setSalePrice(itemSku.getSalePrice());
+            });
+            itemSkuService.insertBatch(itemSkuList);
+            //todo 错误应修改数据库配置  同一公司的upc唯一
+//            //判断用户添加的几个upc之间是否重复
+//            HashSet<String> upcSet = new HashSet<String>(upcList);
+//            if(upcList.size() > upcSet.size()) {
+//                result.buildIsSuccess(false);
+//                result.buildMsg("输入的upc有重复，请再次输入");
+//                return result;
+//            }
+            List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
+            scaleService.insertBatch(scaleList);
+            //inventoryService.insertBatchInventory(inventoryList);
+            invService.outbound(inventoryList);
         }
-        
+
         //同步生成小程序的二维码
         if (item.getId() != null) {
-        	voidDimensionCodeUtil(item.getId());
+            voidDimensionCodeUtil(item.getId());
         }
         
         //新增商品授权买手TODO
         return result.buildIsSuccess(true);
+
+    }
+
+
+    /**
+     * 封装ItemSkuScala对象信息
+     *
+     * @param obj     封装的对象
+     * @param itemSku
+     * @param value   scalaValue
+     * @param name    scalaName
+     */
+    private void setInfo(ItemSkuScaleDO obj, ItemSkuAddVO itemSku, String value, String name) {
+        obj.setSkuCode(itemSku.getSkuCode());
+        obj.setItemCode(itemSku.getItemCode());
+        obj.setScaleCode(CodeGenUtil.getScaleCode());
+        obj.setScaleName(name);
+        obj.setScaleValue(value);
+        obj.init();
 
     }
 

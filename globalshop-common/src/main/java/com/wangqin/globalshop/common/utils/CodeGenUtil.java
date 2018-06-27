@@ -40,4 +40,8 @@ public class CodeGenUtil {
 	public static String getSubOrderNo() {
 		return "SUB" + System.currentTimeMillis();
 	}
+
+	public static String getSkuCode(String categoryCode,String ItemCode,int i ) {
+		return "S" + categoryCode + "Q"+ItemCode+String.format("%0" + 4 + "d", ++i);
+	}
 }
