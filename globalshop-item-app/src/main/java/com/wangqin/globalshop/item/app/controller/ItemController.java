@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
@@ -23,8 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-
 
 import java.io.*;
 import java.net.URL;
@@ -58,7 +56,8 @@ public class ItemController {
     private InventoryService inventoryService;
     @Autowired
     private IItemSkuService itemSkuService;
-
+    @Autowired
+    private IItemSkuScaleService scaleService;
 //	@Autowired
 //	private ChannelCommonService channelCommonService;
 
@@ -76,6 +75,7 @@ public class ItemController {
     @ResponseBody
     public Object add(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();
+        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
         if (item.getId() == null) {
             StringBuffer nameNew = new StringBuffer();
             //品牌
@@ -105,7 +105,8 @@ public class ItemController {
             item.setMainPic(imgJson);
             
             //系统自动生成item_code
-            item.setItemCode(RandomUtils.getTimeRandom());
+            String itemCode = RandomUtils.getTimeRandom();
+            item.setItemCode(itemCode);
             
             // 解析skuList 数组对象
             String skuList = item.getSkuList();
@@ -117,8 +118,9 @@ public class ItemController {
                     Map<String, Integer> colorScaleMap = new HashMap<String, Integer>();
                     int i = 0;
                     if (skus != null && !skus.isEmpty()) {
-                        for (ItemSkuAddVO itemSku : skus) {                                                      
-                            itemSku.setSkuCode("S" + categoryCode + "Q"+item.getItemCode()+String.format("%0" + 4 + "d", ++i));
+                        for (ItemSkuAddVO itemSku : skus) {
+                            i++;
+                            itemSku.setSkuCode(CodeGenUtil.getSkuCode(categoryCode,itemCode,i));
                             itemSku.setLogisticType(item.getLogisticType());
                             String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
                             itemSku.setSkuPic(skuPic);
@@ -194,6 +196,14 @@ public class ItemController {
             if (itemSkuList != null && !itemSkuList.isEmpty()) {
                 itemSkuList.forEach(itemSku -> {
                     itemSku.setItemCode(newItem.getItemCode());
+                    /**插入ItemSkuScale*/
+                    ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
+                    ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+                    setInfo(colorObject,itemSku,itemSku.getColor(),"颜色");
+                    setInfo(scaleObject,itemSku,itemSku.getScale(),"尺寸");
+                    scaleList.add(colorObject);
+                    scaleList.add(scaleObject);
+
                     itemSku.setItemName(newItem.getItemName());
                     itemSku.setItemId(newItem.getId());
                     itemSku.setCategoryName(item.getCategoryName());
@@ -208,6 +218,7 @@ public class ItemController {
                 List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
                 //inventoryService.insertBatchInventory(inventoryList);
                 invService.outbound(inventoryList);
+                scaleService.insertBatch(scaleList);
             }
 
             //同步生成小程序的二维码
@@ -229,6 +240,23 @@ public class ItemController {
         } else {
             return result.buildMsg("新增不能有ID").buildIsSuccess(false);
         }
+
+    }
+
+    /**
+     * 封装ItemSkuScala对象信息
+     * @param obj 封装的对象
+     * @param itemSku
+     * @param value scalaValue
+     * @param name scalaName
+     */
+    private void setInfo(ItemSkuScaleDO obj, ItemSkuAddVO itemSku,String value, String name) {
+        obj.setSkuCode(itemSku.getSkuCode());
+        obj.setItemCode(itemSku.getItemCode());
+        obj.setScaleCode(CodeGenUtil.getScaleCode());
+        obj.setScaleName(name);
+        obj.setScaleValue(value);
+        obj.init();
 
     }
 
