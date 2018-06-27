@@ -14,7 +14,8 @@
     <!-- 2.0版通用查询结果列,xiajun-->
     <sql id="Base_Column_List_2">
         T1.id,T1.item_name AS name,T1.status, T1.spec,T1.model,T1.country,T1.booking_date AS bookingDate,
-        T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
+        T1.category_name AS categoryName,T1.category_code AS categoryCode,T1.item_code AS itemCode,
+        sale_type AS saleType,T1.remark AS remark,T1.detail AS detail,
         main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
         en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
         unit,source,promotion,T1.id_card AS idCard,T1.detail,T1.start_date AS startDate,
@@ -145,7 +146,7 @@
         `remark`,
       </if>
       <if test="detail != null" >
-        detail,
+        `detail`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >

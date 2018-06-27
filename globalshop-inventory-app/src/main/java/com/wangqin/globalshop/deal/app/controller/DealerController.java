@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
 
@@ -39,11 +40,11 @@ public class DealerController{
 	private IDealerTypeService iDealerTypeService;
 	@RequestMapping("/add")
 	@ResponseBody
-	public Object add(DealerDO seller) {
+	public Object add(DealerDO seller, String typeName) {
 		 
 		JsonResult<String> result = new JsonResult<>();
 		
-		List<Map<String, String>> dealerList = iDealerService.dealerList(AppUtil.getLoginUserCompanyNo());
+		List<Map<String, String>> dealerList = iDealerService.dealerList(seller);
 		 
 		 if(EasyUtil.isStringEmpty(seller.getCode())) {
 	        	return result.buildIsSuccess(false).buildMsg("类别代码必填");
@@ -107,10 +108,18 @@ public class DealerController{
 	
 	@RequestMapping("/querySellerList")
 	@ResponseBody
-	public Object queryDealerList() {
+	public Object queryDealerList(DealerDO seller, String typeName) {
 		JsonResult<List<Map<String, String>>> result = new JsonResult<>();
-		List<Map<String, String>> list = iDealerService.dealerList(AppUtil.getLoginUserCompanyNo());
-	
+		seller.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		String name = seller.getName();
+		if(!StringUtil.isBlank(name)) {
+			seller.setName(name);
+		}
+		if(!StringUtil.isBlank(typeName)) {
+			seller.setTypeName(typeName);
+		}
+		List<Map<String, String>> list = iDealerService.dealerList(seller);
+		
 		result.setData(list);
 		
 		return result.buildIsSuccess(true);

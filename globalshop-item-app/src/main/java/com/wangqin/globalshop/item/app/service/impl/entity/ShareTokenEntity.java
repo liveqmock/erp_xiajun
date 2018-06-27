@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.item.app.service.impl.entity;
 
+import com.wangqin.globalshop.common.base.BaseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,14 @@ public class ShareTokenEntity {
         entity.setSaleUserId(userId);
         entity.setSeq(1L);
         return entity;
+    }
+
+    public static void main(String[] args) {
+        String token = "{\"itemCode\":\"1529562233\",\"companyNo\":\"YiJianFenXiang\",\"uuidShare\":\"449536223fd94f79b4b278e06e3b171c\",\"uuidSale\":\"\",\"saleUserId\":\"2\",\"seq\":1}";
+
+        ShareTokenEntity entity = BaseDto.fromJson(token, ShareTokenEntity.class);
+        System.out.println(entity.getUuidShare());
+
     }
 
 }

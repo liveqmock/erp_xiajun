@@ -71,13 +71,12 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 
     @Override
     public int deleteById(Long id) {
-    	AuthResourceDO resource = resourceMapper.selectByPrimaryKey(id);
-    	List<AuthRoleResourceDO> authRoleResourcdeList = roleResource.selectRoleResourceByResourceId(Long.parseLong(resource.getResourceId()));
-        for(AuthRoleResourceDO authRoleResourcde : authRoleResourcdeList) {
-        	Long roleresourceId = authRoleResourcde.getId();
-        	roleResource.deleteByPrimaryKey(roleresourceId);
-        }
-    	
+//    	AuthResourceDO resource = resourceMapper.selectByPrimaryKey(id);
+//    	List<AuthRoleResourceDO> authRoleResourcdeList = roleResource.selectRoleResourceByResourceId(Long.parseLong(resource.getResourceId()));
+//        for(AuthRoleResourceDO authRoleResourcde : authRoleResourcdeList) {
+//        	Long roleresourceId = authRoleResourcde.getId();
+//        	roleResource.deleteByPrimaryKey(roleresourceId);
+//        }
     	
     	return resourceMapper.deleteByPrimaryKey(id);
     }

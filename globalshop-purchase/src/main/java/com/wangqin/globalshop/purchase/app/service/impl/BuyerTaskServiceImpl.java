@@ -55,6 +55,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(BuyerTaskVO vo) throws ErpCommonException {
         /**获取相关买手信息*/
+
         BuyerDO buyer = buyerMapper.selectByPrimaryKey(vo.getBuyerId());
         BuyerTaskDO task = new BuyerTaskDO();
         /**封装出一个buyerTaskDO对象*/
@@ -208,8 +209,11 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         /**设置采购中*/
         task.setStatus(Constant.TO_BE_PURCHASED);
         task.init();
-        task.setBuyerName(buyer.getNickName());
-        task.setBuyerOpenId(buyer.getOpenId());
+        if(buyer != null){
+            task.setBuyerName(buyer.getNickName());
+            task.setBuyerOpenId(buyer.getOpenId());
+        }
+
     }
 
     private void getBuyerTaskDetailDO(BuyerTaskDetailDO detail, ItemTask itemTask, BuyerDO by) {
