@@ -113,8 +113,8 @@ public class ItemController {
         
         // 解析skuList 数组对象
         String skuList = item.getSkuList();
-        Double minPrice = 0.0;
-        Double maxPrice = Double.MAX_VALUE;
+        Double minPrice = null;
+        Double maxPrice = null;
         if (StringUtils.isNotBlank(skuList)) {
         	try {
         		String s = skuList.replace("&quot;", "\"");
@@ -134,8 +134,13 @@ public class ItemController {
         					itemSku.setPackageId(a.get(a.size() - 1));
         				}
         				//计算商品价格区间
-        				minPrice = minPrice>itemSku.getSalePrice()?itemSku.getSalePrice():minPrice;
-        				maxPrice = maxPrice<itemSku.getSalePrice()?itemSku.getSalePrice():maxPrice;                       
+        				if(null == minPrice || null == maxPrice) {
+        					minPrice = itemSku.getSalePrice();
+        					maxPrice = itemSku.getSalePrice();
+        				} else {
+        					minPrice = minPrice>itemSku.getSalePrice()?itemSku.getSalePrice():minPrice;
+            				maxPrice = maxPrice<itemSku.getSalePrice()?itemSku.getSalePrice():maxPrice; 
+        				}				                      
         				// 如果商品没有图片，默认使用sku上的图片
         				if (StringUtils.isBlank(imgJson) && StringUtils.isNotBlank(skuPic)) {
         					imgJson = skuPic;
@@ -207,8 +212,9 @@ public class ItemController {
         iItemService.insertItemSelective(newItem);
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
+        List<String> upcList = new ArrayList<>();
         if (itemSkuList != null && !itemSkuList.isEmpty()) {
-        	itemSkuList.forEach(itemSku -> {
+        	for(ItemSkuAddVO itemSku:itemSkuList) {
         		itemSku.setItemCode(newItem.getItemCode());
         		itemSku.setItemName(newItem.getItemName());
         		itemSku.setItemId(newItem.getId());
@@ -219,7 +225,21 @@ public class ItemController {
         		itemSku.setCreator(AppUtil.getLoginUserId()); 
         		itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo()); 
         		itemSku.setSalePrice(itemSku.getSalePrice());
-        	});
+        		//判断upc和库里面已经有的upc是否重复
+        		if(0 < itemSkuService.queryItemCountByUpc(itemSku.getUpc())) {
+        			result.buildIsSuccess(false);
+        			result.buildMsg("upc和已有的upc重复，请再次输入");
+        			return result;
+        		}
+        		upcList.add(itemSku.getUpc());
+        	}
+        	//判断用户添加的几个upc之间是否重复
+        	HashSet<String> upcSet = new HashSet<String>(upcList);
+        	if(upcList.size() > upcSet.size()) {
+        		result.buildIsSuccess(false);
+    			result.buildMsg("输入的upc有重复，请再次输入");
+    			return result;
+        	}
         	itemSkuService.insertBatch(itemSkuList);
         	List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
         	
