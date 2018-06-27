@@ -47,4 +47,7 @@ public interface IItemBrandService {
     void deleteItemBrandById(Long id);
 
 	List<ItemBrandDO> queryByEnNameAndCnName(String enName,String cnName);
+	
+	//修改之前查询是不是已经有该英文名的品牌
+    List<Long> queryIdListByBrandName(String name);
 }
