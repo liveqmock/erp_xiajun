@@ -1,10 +1,13 @@
---20180622
---增加一张表，修改三张表
---oneshare模块对数据库haidb2new的改动
---在133/111/180了上已经运行过了
+-- 20180622
+-- 增加一张表，修改三张表
+-- oneshare模块对数据库haidb2new的改动
+-- 在133/111/180了上已经运行过了
 
 
----- -- -- -- -- -- -- -- -- -- -- -- -- -- 修改item表-- -- -- -- -- -- -- -- -- 
+---- -- -- -- -- -- -- -- -- -- -- -- -- -- 修改MallOrder表-- -- -- -- -- -- -- -- --
+ALTER TABLE mall_order ADD union_id VARCHAR(64) NULL COMMENT '微信unionId';
+ALTER TABLE mall_order CHANGE customer_no open_id VARCHAR(64) COMMENT '微信open_id';
+---- -- -- -- -- -- -- -- -- -- -- -- -- -- 修改item表-- -- -- -- -- -- -- -- --
 ALTER TABLE `item` ADD COLUMN `origin_sale_price` VARCHAR(64) NULL DEFAULT NULL COMMENT '原始销售价格';
 ALTER TABLE `item` ADD COLUMN `commission_mode` VARCHAR(64) NULL DEFAULT NULL COMMENT '佣金比率';
 

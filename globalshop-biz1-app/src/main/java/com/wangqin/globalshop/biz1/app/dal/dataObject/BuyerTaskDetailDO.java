@@ -48,6 +48,12 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     private String upcPassReason;
 
+    private String creator;
+
+    private String modifier;
+
+    private String companyNo;
+
     public Long getId() {
         return id;
     }
@@ -222,5 +228,29 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     public void setUpcPassReason(String upcPassReason) {
         this.upcPassReason = upcPassReason == null ? null : upcPassReason.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 }

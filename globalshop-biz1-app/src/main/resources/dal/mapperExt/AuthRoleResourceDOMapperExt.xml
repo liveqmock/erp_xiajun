@@ -25,6 +25,16 @@
     r.id = #{id}
   </select>
   
+  <select id="selectRoleResourceByResourceId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	SELECT
+  	<include refid="Base_Column_List2"/>
+  	FROM
+  	auth_role_resource
+  	<where>
+  	resource_id = #{resourceId}
+  	</where>
+  </select>
+  
   <select id="queryRoleResourceByCompanyNo" parameterType="java.lang.String" resultMap="BaseResultMap">
   	SELECT
   	r.role_id, r.resource_id

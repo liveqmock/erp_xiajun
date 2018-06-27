@@ -157,7 +157,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 		outerOrder.setCreator("淘宝task自动抓取订单"); // 创建者
 		outerOrder.setGmtCreate(createTime); // 创建时间
 		outerOrder.setGmtModify(new Date()); // 修改时间
-		outerOrderMapper.insertMallOrder(outerOrder); // 添加主订单
+		outerOrderMapper.insertSelective(outerOrder); // 添加主订单
 		outOrderIdList.add(outerOrder.getOrderNo()); // 收集主订单ID
 					
 		List<Order> tradeDetals = trade.getOrders();

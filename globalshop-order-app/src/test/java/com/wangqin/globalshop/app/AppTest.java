@@ -22,7 +22,6 @@ public class AppTest
 //            new ClassPathXmlApplicationContext("/META-INF/spring/applicationContext.xml");
                 MallOrderVO mallOrderVO = new MallOrderVO();
                 mallOrderVO.setActualAmount(32.23);
-                mallOrderVO.setCustomerNo("customerNo");
                 mallOrderVO.setShopCode("shop_code");
                 mallOrderVO.setChannelOrderNo("channel_order_no");
                 mallOrderVO.setOrderTime(new Date());

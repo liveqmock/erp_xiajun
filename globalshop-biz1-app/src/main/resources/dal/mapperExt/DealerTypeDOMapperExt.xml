@@ -15,30 +15,34 @@
   <sql id="Base_Column_List" >
     id, code, `name`, remark, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
-  <select id="list" resultMap="BaseResultMap" >
-    SELECT
-    <include refid="Base_Column_List"/>
-    FROM dealer_type D1
-    <where>
-    	D1.is_del = 0
-    	AND
-    	D1.company_no = #{companyNo}
-    </where>
- </select>
+   <select id="list" resultMap="BaseResultMap" >
+     SELECT
+     <include refid="Base_Column_List"/>
+     FROM dealer_type D1
+     <where>
+    	 D1.is_del = 0
+    	 AND
+     	 D1.company_no = #{companyNo}
+     </where>
+    </select>
 	
- <select id="countRelativeDealerType" parameterType="java.lang.String" resultType="int">
- 	SELECT 
- 	count(1)
- 	FROM dealer D1
- 	
- 	<where>
- 		D1.is_del = 0
- 		AND
- 		type_code = #{typeCode}
- 	
- 	</where>
- </select>
-
+    <select id="countRelativeDealerType" parameterType="java.lang.String" resultType="int">
+	 	SELECT 
+	 	count(1)
+	 	FROM dealer D1
+	 	
+	 	<where>
+	 		D1.is_del = 0
+	 		AND
+	 		type_code = #{typeCode}
+	 	</where>
+	</select>
+	<select id="listNoCompanyNo" resultMap="BaseResultMap">
+  		SELECT
+  			<include refid="Base_Column_List"/>
+  		FROM
+  			dealer_type
+  	</select>
 	<insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO" >
     insert into dealer_type
     <trim prefix="(" suffix=")" suffixOverrides="," >

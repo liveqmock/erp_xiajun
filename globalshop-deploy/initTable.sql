@@ -266,8 +266,6 @@ CREATE TABLE `site_msg_read` (
   `site_msg_id` bigint(11) NOT NULL,
   `receiver_id` bigint(11) NOT NULL COMMENT '收件人',
   `read_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '阅读状态，0已读，1未读',
-  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  `is_del` tinyint(2) DEFAULT '0',
   `sender_id` bigint(11) NOT NULL COMMENT '发件人',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -382,7 +380,6 @@ CREATE TABLE `site_msg` (
   `send_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '发送时间',
   `send_type` int(11) DEFAULT '0',
   `category` varchar(10) NOT NULL DEFAULT '‘0’',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
@@ -1850,6 +1847,7 @@ CREATE TABLE `dealer_type` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `code` varchar(64) DEFAULT NULL COMMENT '经销商类型代码',
   `name` varchar(64) DEFAULT NULL COMMENT '经销商类型名称',
+  `company_no` varchar(64) NOT NULL,
   `remark` varchar(64) DEFAULT NULL COMMENT '备注',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -1985,7 +1983,7 @@ DROP TABLE IF EXISTS `channel_account_config`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `channel_account_config` (
-  `id` bigint(19) NOT NULL,】
+  `id` bigint(19) NOT NULL,
   `company_no` varchar(64) DEFAULT NULL,
   `shopCode` varchar(255) NOT NULL,
   `itemKey` varchar(255) DEFAULT NULL,
@@ -2053,6 +2051,8 @@ CREATE TABLE `auth_user` (
   `organization_id` int(11) DEFAULT '0' COMMENT '所属机构',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `wx_user_id` bigint(19) DEFAULT NULL COMMENT '微信用户ID',
+  `wx_open_id` bigint(19) DEFAULT NULL COMMENT '微信openID',
+  `wx_union_id` bigint(19) DEFAULT NULL COMMENT '微信unionID',
   `email` varchar(32) DEFAULT NULL COMMENT '电子邮箱',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -2108,9 +2108,9 @@ CREATE TABLE `buyer_storage` (
   `buyer_open_id` bigint(19) DEFAULT '0' COMMENT '买手ID',
   `purchase_storage_no` varchar(64) NOT NULL COMMENT '入库单号',
   `buyer_task_no` varchar(64) DEFAULT NULL COMMENT '采购任务编号',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `storage_type` tinyint(4) DEFAULT '0' COMMENT '入库方式：0计划采购入库，1扫描入库',
   `entry_date` datetime DEFAULT NULL COMMENT '入库时间',
+  `memo` varchar(256) DEFAULT NULL COMMENT '备注',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,

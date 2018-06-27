@@ -9,7 +9,7 @@ public class MallOrderDO extends BaseModel {
 
     private String dealerName;
 
-    private String customerNo;
+    private String openId;
 
     private String orderNo;
 
@@ -57,6 +57,8 @@ public class MallOrderDO extends BaseModel {
 
     private String creator;
 
+    private String unionId;
+
     public Long getId() {
         return id;
     }
@@ -81,12 +83,12 @@ public class MallOrderDO extends BaseModel {
         this.dealerName = dealerName == null ? null : dealerName.trim();
     }
 
-    public String getCustomerNo() {
-        return customerNo;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setCustomerNo(String customerNo) {
-        this.customerNo = customerNo == null ? null : customerNo.trim();
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
     }
 
     public String getOrderNo() {
@@ -101,7 +103,6 @@ public class MallOrderDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -262,7 +263,6 @@ public class MallOrderDO extends BaseModel {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
@@ -271,8 +271,15 @@ public class MallOrderDO extends BaseModel {
         return creator;
     }
 
-    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId == null ? null : unionId.trim();
     }
 }

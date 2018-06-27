@@ -229,7 +229,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         				+ DateUtil.formatDate(mallOrderDO.getOrderTime(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)
         				+ sequenceUtilMapperExt.gainORDSequence()); // 系统自动生成
 
-        mallOrderDOMapper.insertMallOrder(mallOrderDO);
+        mallOrderDOMapper.insertSelective(mallOrderDO);
 
         List<MallSubOrderDO> mallSubOrderDOS = globalshopOrderVo.getMallSubOrderDOS();
         for(MallSubOrderDO mallSubOrderDO : mallSubOrderDOS){

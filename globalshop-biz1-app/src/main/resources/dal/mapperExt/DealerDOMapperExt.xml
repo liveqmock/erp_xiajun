@@ -22,15 +22,23 @@
         D1.id id, D1.name name,D1.code code,D1.company_no companyNo, D1.gmt_create gmtCreate, D1.gmt_modify gmtModify,
         D1.creator creator, D2.name typeName
         FROM dealer D1, dealer_type D2
-        <where>
-            D1.is_del = 0
-            AND
-            D2.is_del = 0
-            AND
-            D1.type_code = D2.code
-            AND
-            D1.company_no = #{companyNo}
-        </where>
+    <where>
+        D1.is_del = 0
+        AND
+        D2.is_del = 0
+        AND
+        D1.type_code = D2.code
+        AND
+        D1.company_no = #{ companyNo }
+    <if test=" name != null ">
+       	AND
+        D1.name = #{ name }
+    </if>
+    <if test=" typeName != null ">
+    	AND
+    	D2.name = #{ typeName }
+    </if>
+    </where>
     </select>
     <select id="selectByCode" resultMap="BaseResultMap">
         SELECT

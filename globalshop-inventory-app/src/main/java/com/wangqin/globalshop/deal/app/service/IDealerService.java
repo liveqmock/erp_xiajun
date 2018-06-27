@@ -18,7 +18,7 @@ import java.util.Map;
 @Authenticated
 public interface IDealerService{
 
-	List<Map<String, String>> dealerList(String companyNo);
+	List<Map<String, String>> dealerList(DealerDO seller);
    
     void insert(DealerDO seller);
 

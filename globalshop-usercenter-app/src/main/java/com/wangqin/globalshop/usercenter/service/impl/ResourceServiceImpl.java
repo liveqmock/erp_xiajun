@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthResourceDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleResourceDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
     private AuthUserRoleDOMapperExt userRoleMapper;
     @Autowired
     private AuthRoleDOMapperExt roleMapper;
+    @Autowired
+    private AuthRoleResourceDOMapperExt roleResource;
     
     @Override
     public List<AuthResourceDO> selectAll() {
@@ -67,7 +71,14 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 
     @Override
     public int deleteById(Long id) {
-        return resourceMapper.deleteByPrimaryKey(id);
+//    	AuthResourceDO resource = resourceMapper.selectByPrimaryKey(id);
+//    	List<AuthRoleResourceDO> authRoleResourcdeList = roleResource.selectRoleResourceByResourceId(Long.parseLong(resource.getResourceId()));
+//        for(AuthRoleResourceDO authRoleResourcde : authRoleResourcdeList) {
+//        	Long roleresourceId = authRoleResourcde.getId();
+//        	roleResource.deleteByPrimaryKey(roleresourceId);
+//        }
+    	
+    	return resourceMapper.deleteByPrimaryKey(id);
     }
 
     @Override
