@@ -32,6 +32,8 @@ public class ItemDTO implements Serializable{
 	private Long categoryId;
 
 	private String categoryName;
+	
+	private String categoryCode;
 
 	private  String itemCode;
 
@@ -202,6 +204,13 @@ public class ItemDTO implements Serializable{
 	}
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+	
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 	public String getCategoryName() {
 		return categoryName;

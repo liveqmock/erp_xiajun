@@ -35,4 +35,9 @@ public class ItemSkuScaleServiceImpl implements IItemSkuScaleService {
 	public List<ItemSkuScaleDO> selectScaleNameValueBySkuCode(String skuCode) {
 		return itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(skuCode);
 	}
+
+	@Override
+	public void insertBatch(List<ItemSkuScaleDO> scaleList) {
+		itemSkuScaleMapperExt.insertBatch(scaleList);
+	}
 }

@@ -55,9 +55,14 @@ public interface IItemCategoryService {
    //根据id删除类目
    void deleteItemCategoryById(Long id);
 
-	List<ItemCategoryDO> selectByName(String category1);
+   List<ItemCategoryDO> selectByName(String category1);
 
-	List<ItemCategoryDO> selectByParentAndName(List<ItemCategoryDO> categoryList1, String category2);
+   List<ItemCategoryDO> selectByParentAndName(List<ItemCategoryDO> categoryList1, String category2);
 	
-	List<ItemCategoryDO> queryItemCategoryByPcode(String pCode);
+
+   List<ItemCategoryDO> queryItemCategoryByPcode(String pCode);
+
+	   //通过code查询id
+   Long queryCategoryIdByCategoryCode(String categoryCode);
+
 }

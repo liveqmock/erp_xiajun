@@ -14,6 +14,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,9 +146,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 		outerOrder.setShopCode(channelAccount.getShopCode());
 
 
-		outerOrder.setOrderNo("P" + String.format("%0" + 2 + "d", 1) + String.format("%0" + 4 + "d", 4) + "D"
-				+ DateUtil.formatDate(createTime, DateUtil.DATE_PARTEN_YYMMDDHHMMSS)
-				+ sequenceUtilService.gainORDSequence()); // 系统自动生成
+		outerOrder.setOrderNo(CodeGenUtil.getOrderNo()); // 系统自动生成
 		outerOrder.setOrderTime(createTime); // 付款时间
 		outerOrder.setStatus(OrderStatus.INIT.getCode()); // 状态：新建
 
@@ -193,7 +192,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 
 			outerOrderDetail.setShopCode(channelAccount.getShopCode());
 			outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
-			outerOrderDetail.setSubOrderNo("O" + outerOrder.getOrderNo().substring(1) + String.format("%0"+4+"d", outerOrderDetails.size()+1));
+			outerOrderDetail.setSubOrderNo(CodeGenUtil.getSubOrderNo());
 
 			outerOrderDetails.add(outerOrderDetail);
 
