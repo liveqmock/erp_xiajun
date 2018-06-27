@@ -76,7 +76,9 @@ public class ItemApiController {
             JSONObject jsonObject = JSONObject.fromObject(item.getMainPic());
             JSONArray array = jsonObject.getJSONArray("picList");
             JSONObject imgObject = array.getJSONObject(0);
-            itemEntity.setImgUrl(imgObject.getString("url"));//商品图片
+
+            String picUrl = imgObject.getString("url");
+            itemEntity.setImgUrl(formImg(picUrl));//商品图片
     		items.add(itemEntity); 
     	}
 
@@ -115,7 +117,8 @@ public class ItemApiController {
             JSONObject jsonObject = JSONObject.fromObject(item.getMainPic());
             JSONArray array = jsonObject.getJSONArray("picList");
             JSONObject imgObject = array.getJSONObject(0);
-            itemEntity.setImgUrl(imgObject.getString("url"));//商品图片
+            String picUrl = imgObject.getString("url");
+            itemEntity.setImgUrl(formImg(picUrl));//商品图片
 
             String originSalePrice = item.getOriginSalePrice();
             if(StringUtils.isBlank(originSalePrice)){
@@ -185,6 +188,7 @@ public class ItemApiController {
         int maxSize = array.size() > 8 ? 8 : array.size();
         for(int i = 0; i < maxSize; i ++) {
             String pic = array.getJSONObject(i).getString("url");
+            pic = formImg(pic);
             picList.add(pic);
         }
 
@@ -192,6 +196,16 @@ public class ItemApiController {
 
         jsonResult.buildIsSuccess(true).buildData(itemDetailEntity);
         return BaseDto.toString(jsonResult);
+    }
+
+    public String formImg(String url){
+        if (url.indexOf("?") == -1){
+            return url;
+        }
+        int len = url.indexOf("?");
+        url = url.substring(0, len);
+        url = url + "@1c_1e_480w.webp";
+        return url;
     }
 
 }

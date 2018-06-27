@@ -73,9 +73,11 @@ public class ShareApiController {
         int maxSize = array.size() > 8 ? 8 : array.size();
         for(int i = 0; i < maxSize; i ++) {
         	String pic = array.getJSONObject(i).getString("url");
+        	pic = formImg(pic);
         	picList.add(pic);
         }
 
+        picUrl = formImg(picUrl);
         //插入分享码图片
         if (picList.size() < 5){
             picList.add(picUrl);
@@ -94,6 +96,16 @@ public class ShareApiController {
         itemShareEntity.setItemImgList(picList);
         jsonResult.buildIsSuccess(true).buildData(itemShareEntity);
         return BaseDto.toString(jsonResult);
+    }
+
+    public String formImg(String url){
+        if (url.indexOf("?") == -1){
+            return url;
+        }
+        int len = url.indexOf("?");
+        url = url.substring(0, len);
+        url = url + "@1c_1e_480w.webp";
+        return url;
     }
 
 }
