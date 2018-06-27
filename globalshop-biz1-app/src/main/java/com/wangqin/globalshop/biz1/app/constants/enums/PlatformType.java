@@ -8,6 +8,7 @@ public enum PlatformType {
 	YOUZAN(1, "有赞"),
 	HAIHU(2, "海狐"),
 	TAOBAO(3, "淘宝"),
+	JingDong(4,"京东"),
 	WEIXIN(101, "微信"),
 	WEIXINXCX(102, "微信小程序");
 	
