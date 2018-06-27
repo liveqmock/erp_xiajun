@@ -10,6 +10,7 @@ import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
@@ -120,7 +121,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         newErpOrder.setWarehouseNo(null);
         //获取子订单数量便于产生单号
         List<MallSubOrderDO> erpOrders = mallSubOrderDOMapper.selectByOrderNo(erpOrder.getOrderNo());
-        newErpOrder.setShopCode("O" + erpOrder.getOrderNo().substring(1) + String.format("%0"+4+"d", erpOrders.size()+1));
+        newErpOrder.setShopCode(CodeGenUtil.getShopCode());
         mallSubOrderDOMapper.insert(newErpOrder);
 
         erpOrder.setQuantity(splitCount);

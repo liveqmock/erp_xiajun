@@ -28,4 +28,16 @@ public class CodeGenUtil {
 	public static String getBuyerTaskNo() {
 		return "TaskNo" + System.currentTimeMillis();
 	}
+
+    public static String getShopCode() {
+		return "SHOP" + RandomUtils.nextInt(10000);
+    }
+
+	public static String getOrderNo() {
+		return "OR" + System.currentTimeMillis();
+	}
+
+	public static String getSubOrderNo() {
+		return "SUB" + System.currentTimeMillis();
+	}
 }
