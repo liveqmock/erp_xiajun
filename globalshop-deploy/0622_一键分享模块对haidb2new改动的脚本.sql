@@ -3,6 +3,37 @@
 -- oneshare模块对数据库haidb2new的改动
 -- 在133/111/180了上已经运行过了
 
+---- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增wx_user表-- -- -- -- -- -- -- -- --
+-- auto-generated definition
+CREATE TABLE wx_user
+(
+  id                 BIGINT AUTO_INCREMENT
+    PRIMARY KEY,
+  open_id            VARCHAR(64)                        NULL
+  COMMENT '微信open_id',
+  union_id           VARCHAR(128)                       NULL
+  COMMENT '微信union_id',
+  nick_name          VARCHAR(64)                        NULL,
+  gender             INT(3)                             NULL
+  COMMENT '0未知,1男,2女',
+  city               VARCHAR(64)                        NULL,
+  province           VARCHAR(64)                        NULL,
+  country            VARCHAR(64)                        NULL,
+  avatar_url         VARCHAR(256)                       NULL,
+  referer            VARCHAR(64)                        NULL
+  COMMENT '用户来源',
+  first_login_time   DATETIME                           NULL,
+  last_login_time    DATETIME                           NULL,
+  first_login_device BIGINT                             NULL,
+  last_login_device  BIGINT                             NULL,
+  gmt_create         DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  gmt_modify         DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  is_del             TINYINT(1) DEFAULT '0'             NOT NULL,
+  creator            VARCHAR(32)                        NOT NULL,
+  modifier           VARCHAR(32)                        NOT NULL,
+  CONSTRAINT OPENID
+  UNIQUE (open_id)
+);
 
 ---- -- -- -- -- -- -- -- -- -- -- -- -- -- 修改MallOrder表-- -- -- -- -- -- -- -- --
 ALTER TABLE mall_order ADD union_id VARCHAR(64) NULL COMMENT '微信unionId';

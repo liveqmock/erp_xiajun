@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+
+
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -73,9 +75,6 @@ public class ItemController {
     @RequestMapping("/add")
     @ResponseBody
     public Object add(ItemQueryVO item) {
-        item.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-        //item.setCompanyNo("1");
-        //logger.info("add item start");
         JsonResult<ItemDO> result = new JsonResult<>();
         if (item.getId() == null) {
             StringBuffer nameNew = new StringBuffer();
@@ -94,22 +93,22 @@ public class ItemController {
             //重新设置商品名称
             item.setName(nameNew.toString());
 
-            //ItemCategoryDO category = categoryService.selectByPrimaryKey(item.getCategoryId());
+            //类目处理
             String categoryCode = item.getCategoryCode();
             if (categoryCode != null) {
                 item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
             } else {
                 return result.buildMsg("没有找到类目").buildIsSuccess(false);
             }
-            //设置item_code栏位的值
-            //item.setItemCode("I" + categoryCode + "Q" + sequenceUtilService.gainItemSequence());
-            item.setItemCode("I" + categoryCode + "Q" + RandomUtils.getTimeRandom());
+            
             String imgJson = ImageUtil.getImageUrl(item.getMainPic());
-
+            item.setMainPic(imgJson);
+            
+            //系统自动生成item_code
+            item.setItemCode(RandomUtils.getTimeRandom());
+            
             // 解析skuList 数组对象
             String skuList = item.getSkuList();
-            Double minPrice = null;
-            Double maxPrice = null;
             if (StringUtils.isNotBlank(skuList)) {
                 try {
                     String s = skuList.replace("&quot;", "\"");
@@ -118,46 +117,9 @@ public class ItemController {
                     Map<String, Integer> colorScaleMap = new HashMap<String, Integer>();
                     int i = 0;
                     if (skus != null && !skus.isEmpty()) {
-                        for (ItemSkuAddVO itemSku : skus) {
-                            //颜色和尺寸不能都为空
-                            if (StringUtil.isBlank(itemSku.getColor()) && StringUtil.isBlank(itemSku.getScale())) {
-                                return result.buildMsg("颜色和尺寸不能都为空").buildIsSuccess(false);
-                            }
-                            if (minPrice == null) {
-                                minPrice = itemSku.getSalePrice();
-                                maxPrice = itemSku.getSalePrice();
-                            } else {
-                                if (minPrice > itemSku.getSalePrice()) {
-                                    minPrice = itemSku.getSalePrice();
-                                }
-                                if (maxPrice < itemSku.getSalePrice()) {
-                                    maxPrice = itemSku.getSalePrice();
-                                }
-                            }
-                            //判断颜色，尺寸是否冲突
-                            String colorScaleKey = "";
-                            if (itemSku.getColor() != null) {
-                                String color = itemSku.getColor().trim();
-                                colorScaleKey += color;
-                                itemSku.setColor(color);
-                            }
-                            if (itemSku.getScale() != null) {
-                                String scale = itemSku.getScale().trim();
-                                colorScaleKey += scale;
-                                itemSku.setScale(scale);
-                            }
-                            if (StringUtil.isBlank(colorScaleKey)) {
-                                colorScaleKey = "none";
-                            }
-                            if (colorScaleMap.get(colorScaleKey) != null) {
-                                return result.buildMsg("SKU颜色尺码重复").buildIsSuccess(false);
-                            }
-                            colorScaleMap.put(colorScaleKey, 1);
-
-                            itemSku.setSkuCode("S" + item.getItemCode().substring(1) + String.format("%0" + 4 + "d", ++i));
+                        for (ItemSkuAddVO itemSku : skus) {                                                      
+                            itemSku.setSkuCode("S" + categoryCode + "Q"+item.getItemCode()+String.format("%0" + 4 + "d", ++i));
                             itemSku.setLogisticType(item.getLogisticType());
-                            itemSku.setBuySite(item.getBuySite());
-
                             String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
                             itemSku.setSkuPic(skuPic);
                             if (StringUtils.isNotBlank(itemSku.getPackageLevelId())) {
@@ -176,25 +138,19 @@ public class ItemController {
                     e.printStackTrace();
                     return result.buildMsg("解析SKU错误").buildIsSuccess(false);
                 }
-            }
-            //商品价格区间
-            if (minPrice.equals(maxPrice)) {
-                item.setPriceRange(maxPrice.toString());
-            } else {
-                item.setPriceRange(minPrice.toString() + "-" + maxPrice.toString());
-            }
-
-            item.setMainPic(imgJson);
+            }                 
 
             //对前端传来的时间进行处理
             ItemDO newItem = new ItemDO();
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
-                newItem.setStartDate(format.parse(item.getStartDate()));
-                newItem.setEndDate(format.parse(item.getEndDate()));
-                newItem.setBookingDate(format.parse(item.getBookingDate()));
+            	newItem.setStartDate(format.parse(item.getStartDate()));
+            	newItem.setEndDate(format.parse(item.getEndDate()));
+            	if(null != item.getBookingDate()) {//非必填项，空指针检查
+            		newItem.setBookingDate(format.parse(item.getBookingDate()));
+            	}                             
             } catch (Exception e) {
-                //
+                //TODO
             }
 
             //判断是否可售
@@ -204,35 +160,11 @@ public class ItemController {
                 item.setIsSale(1);
             } else {
                 item.setIsSale(0);
-            }
-            //item.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
-
-            // 设置销售渠道
-            if (CollectionUtils.isEmpty(item.getSaleOnChannels())) {
-                item.setThirdSale(0);
-                item.setSaleOnYouzan(0);
-            } else {
-                for (Integer type : item.getSaleOnChannels()) {
-                    ChannelType channel = ChannelType.getChannelType(type);
-                    if (channel == null) {
-                        continue;
-                    }
-                    switch (channel) {
-                        case YouZan:
-                            item.setSaleOnYouzan(1);
-                            break;
-                        case HaiHu:
-                            item.setThirdSale(1);
-                            break;
-                        case TaoBao:
-                            break;
-                    }
-                }
-            }
+            }        
 
             newItem.setDetail(item.getDetail());
             detailDecoder(newItem);
-            //newItem.setCategoryCode(categoryService.selectByPrimaryKey(item.getCategoryId()).getCategoryCode());
+           
             newItem.setCategoryName(item.getCategoryName());
             newItem.setCategoryCode(categoryCode);
             newItem.setBrandName(item.getBrand());
@@ -241,15 +173,21 @@ public class ItemController {
             newItem.setItemName(item.getName());
             newItem.setCurrency(item.getCurrency().byteValue());
             newItem.setIdCard(item.getIdCard().byteValue());
-            CountryDO countryDO = new CountryDO();
-            countryDO.setId(item.getCountry());
-            newItem.setCountry(countryService.queryCodeById(item.getCountry()));
-            String itemCode = RandomUtils.getTimeRandom();
-            newItem.setItemCode(itemCode);
-
+            //newItem.setLogisticType(item.getLogisticType().byteValue());
+            newItem.setCountry(item.getCountry());
+            newItem.setItemCode(item.getItemCode());
+            newItem.setWxisSale(item.getWxisSale().byteValue());
             newItem.setRemark(item.getRemark());
-            newItem.init();
+            //newItem.init();
             newItem.setMainPic(item.getMainPic());
+            newItem.setRemark(item.getRemark());
+            newItem.setDetail(item.getDetail());
+            if(null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
+            	return result.buildIsSuccess(false).buildMsg("请先登录");
+            }
+            newItem.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+            newItem.setModifier(AppUtil.getLoginUserId());
+            newItem.setCreator(AppUtil.getLoginUserId());
             iItemService.insertItemSelective(newItem);
             /**插入itemsku和库存**/
             List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
@@ -258,47 +196,18 @@ public class ItemController {
                     itemSku.setItemCode(newItem.getItemCode());
                     itemSku.setItemName(newItem.getItemName());
                     itemSku.setItemId(newItem.getId());
-                    //itemSku.setCategoryId(newItem.getCategoryId());
                     itemSku.setCategoryName(item.getCategoryName());
                     itemSku.setCategoryCode(item.getCategoryCode());
-                    itemSku.setBrand(newItem.getBrandName());
-                    //if(null == AppUtil.getLoginUserId()) {
-                    ///itemSku.setModifier("xiajun");
-                    //itemSku.setCreator("xiajun");
-                    //} else {
+                    itemSku.setBrand(newItem.getBrandName());                  
                     itemSku.setModifier(AppUtil.getLoginUserId());
-                    itemSku.setCreator(AppUtil.getLoginUserId());
-                    //}
-                    Date date = new Date();
-                    itemSku.setGmtCreate(date);
-                    itemSku.setGmtModify(date);
-                    //if(null == AppUtil.getLoginUserCompanyNo()) {
-                    //itemSku.setCompanyNo("1");
-                    //} else {
-                    itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-                    //}
-                    //itemSku.setCompanyId(item.getCompanyId());
-                    //System.out.println("销售价格："+itemSku.getSalePrice());
+                    itemSku.setCreator(AppUtil.getLoginUserId()); 
+                    itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo()); 
                     itemSku.setSalePrice(itemSku.getSalePrice());
-                    //skuFreight(itemSku);
                 });
                 itemSkuService.insertBatch(itemSkuList);
                 List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
                 //inventoryService.insertBatchInventory(inventoryList);
                 invService.outbound(inventoryList);
-            }
-
-            //同步到有赞并上架
-            if (item.getIsSale() != null && item.getIsSale() == 1) {
-                try {
-                    Long currentItemId = iItemService.queryIdByItemCode(itemCode);
-                    //outerItemService.synItemYouzan(item.getId());
-                    //ShiroUser user = ShiroUtil.getShiroUser();
-                    //sendPost("http://localhost:8000/youzanSyn/batchSynItemYouzan?itemIds=["+currentItemId.toString()+"]","");
-                    //channelCommonService.createItem(currentItemId);
-                } catch (Exception e) {
-                    //logger.error("商品添加时同步到有赞：", e);
-                }
             }
 
             //同步生成小程序的二维码
@@ -474,7 +383,7 @@ public class ItemController {
 
 
         newItem.setDetail(item.getDetail());
-        detailDecoder(newItem);
+        //detailDecoder(newItem);
         newItem.setCategoryCode(item.getCategoryCode());
         newItem.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
         newItem.setBrandName(item.getBrand());
@@ -483,9 +392,8 @@ public class ItemController {
         newItem.setItemName(item.getName());
         newItem.setCurrency(item.getCurrency().byteValue());
         newItem.setIdCard(item.getIdCard().byteValue());
-        CountryDO countryDO = new CountryDO();
-        countryDO.setId(item.getCountry());
-        newItem.setCountry(countryService.queryCodeById(item.getCountry()));
+    
+        newItem.setCountry(item.getCountry());
         newItem.setRemark(item.getRemark());
         newItem.setMainPic(item.getMainPic());
         newItem.setId(item.getId());
@@ -550,16 +458,19 @@ public class ItemController {
     @RequestMapping("/query")
     @ResponseBody
     public Object query(Long id) {
-        //logger.info("query item start");
+
         JsonResult<ItemDTO> result = new JsonResult<>();
         // if haven't item id ,add item
         if (id != null) {
+        	
             ItemDTO item = iItemService.queryItemById(id);
             if (item == null) {
                 result.buildIsSuccess(false).buildMsg("没有找到Item");
             }
             String itemName = item.getName();
-
+            //获取商品类目的Id
+            Long categoryId = categoryService.queryCategoryIdByCategoryCode(item.getCategoryCode());
+            item.setCategoryId(categoryId);
 			/*
             if(StringUtils.isNotBlank(buyers)){
             	List<WxPurchaseUser>  wxPurchaseUser = new ArrayList();
@@ -606,7 +517,7 @@ public class ItemController {
             if (StringUtil.isNotBlank(item.getSexStyle())) {        //男女款
                 nameRep.append(item.getSexStyle() + " ");
             }
-            System.out.println(nameRep.toString());
+            //System.out.println(nameRep.toString());
             //重新设置商品名称
             //item.setName(itemName.replace(nameRep.toString(), ""));
             item.setName(nameRep.toString());
