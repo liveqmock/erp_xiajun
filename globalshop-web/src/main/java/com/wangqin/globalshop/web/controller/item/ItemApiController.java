@@ -118,9 +118,11 @@ public class ItemApiController {
 
             String originSalePrice = item.getOriginSalePrice();
             if(StringUtils.isBlank(originSalePrice)){
-                originSalePrice = "$0";
+                itemEntity.setOriginPrice(" ");
+            }else{
+                itemEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
             }
-            itemEntity.setOriginPrice(String.format("(%s)", originSalePrice));//外币
+
 
         	itemEntity.setPrice(price.toString());
         	itemEntity.setTitle(item.getItemName());
