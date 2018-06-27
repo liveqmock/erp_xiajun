@@ -81,8 +81,6 @@
             and T.upc = #{upc}
         </if>
 
-
-
         <if test=" isDel == true">
             and T.is_del is true
         </if>
