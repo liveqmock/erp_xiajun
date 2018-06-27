@@ -106,4 +106,10 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 	public List<ItemBrandDO> queryByEnNameAndCnName(String enName,String cnName) {
 		return itemBrandDOMapperExt.queryByEnNameAndCnName(enName,cnName);
 	}
+	
+	//修改之前查询是不是已经有该英文名的品牌
+	@Override
+	public List<Long> queryIdListByBrandName(String name) {
+    	return itemBrandDOMapperExt.queryIdListByBrandName(name);
+    }
 }

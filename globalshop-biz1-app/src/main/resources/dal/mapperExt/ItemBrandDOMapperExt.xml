@@ -138,4 +138,16 @@
   	set is_del = 1
   	where id = #{id}
   </update>
+  
+  <!-- 修改之前查询是不是已经有该英文名的品牌 -->
+  <select id="queryIdListByBrandName" parameterType="java.lang.String" resultType="java.lang.Long">
+  	SELECT id
+  	FROM
+  	item_brand
+  	<where>
+  		name=#{name}
+  	    AND is_del=0
+  	</where>
+  </select>
+  
 </mapper>
