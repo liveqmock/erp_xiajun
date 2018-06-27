@@ -1,10 +1,11 @@
-package com.wangqin.globalshop.usercenter.controller;
+	package com.wangqin.globalshop.usercenter.controller;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.StringUtil;
@@ -93,11 +94,14 @@ public class OrganizationController extends BaseController {
             }
             return null;
         }
-        if(StringUtil.isBlank(authOrganizationDO.getCompanyNo())) {
+        if(EasyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo())) {
         	return renderError("请登录后查询");
         }
         if(StringUtil.isBlank(authOrganizationDO.getName())) {
         	return renderError("资源名称不能为空");
+        }
+        if(EasyUtil.isStringEmpty(authOrganizationDO.getSeq().toString())) {
+        	return renderError("排序不能为空");
         }
         String org_id=String.format("%1$09d",RandomUtils.nextInt(1000000000));
         authOrganizationDO.setOrgId(org_id);
@@ -129,6 +133,15 @@ public class OrganizationController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public Object edit(AuthOrganizationDO organization) {
+    	if(EasyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo())) {
+        	return renderError("请登录后查询");
+        }
+        if(StringUtil.isBlank(organization.getName())) {
+        	return renderError("资源名称不能为空");
+        }
+        if(EasyUtil.isStringEmpty(organization.getSeq().toString())) {
+        	return renderError("排序不能为空");
+        }
     	organization.setOrgId(organization.getCode());
         organizationService.updateSelectiveById(organization);
         return renderSuccess("编辑成功！");

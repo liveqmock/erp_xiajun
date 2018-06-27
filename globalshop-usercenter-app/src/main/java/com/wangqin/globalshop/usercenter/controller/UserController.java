@@ -107,15 +107,32 @@ public class UserController extends BaseController {
             return renderError("用户名已存在!");
         }
         String userNo=CodeGenUtil.genUserNo();
-
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.insertByVo(userVo);
         
         AuthUserDO authUser = userService.selectUserVoByUserNo(userNo);
-        System.out.println(authUser.getId());
-        
-        
+        if(EasyUtil.isStringEmpty(userVo.getLoginName())) {
+        	return renderError("登录名不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getPassword())) {
+        	return renderError("密码不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getAge().toString())) {
+        	return renderError("年龄不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getName())) {
+        	return renderError("姓名不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getSex().toString())) {
+        	return renderError("性别不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getUserType().toString())) {
+        	return renderError("用户类别不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getStatus().toString())) {
+        	return renderError("状态不能为空");
+        }
         userVo.setId(authUser.getId());
         userService.insertByUserVo(userVo);
         
@@ -135,7 +152,27 @@ public class UserController extends BaseController {
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.updateByVo(userVo);
-        
+        if(EasyUtil.isStringEmpty(userVo.getLoginName())) {
+        	return renderError("登录名不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getPassword())) {
+        	return renderError("密码不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getAge().toString())) {
+        	return renderError("年龄不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getName())) {
+        	return renderError("姓名不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getSex().toString())) {
+        	return renderError("性别不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getUserType().toString())) {
+        	return renderError("用户类别不能为空");
+        }
+        if(EasyUtil.isStringEmpty(userVo.getStatus().toString())) {
+        	return renderError("状态不能为空");
+        }
         userRoleService.deleteUserRoleByUserId(userVo.getId());
         userService.insertByUserVo(userVo);
         

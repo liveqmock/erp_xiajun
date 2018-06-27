@@ -7,6 +7,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
@@ -131,6 +132,16 @@ public class RoleController extends BaseController {
             }
             return null;
         }
+        
+        if(EasyUtil.isStringEmpty(role.getName())) {
+        	return renderError("角色名称");
+        }
+        if(EasyUtil.isStringEmpty(role.getSeq().toString())) {
+        	return renderError("排序不能为空");
+        }
+        if(EasyUtil.isStringEmpty(role.getStatus().toString())) {
+        	return renderError("状态不能为空");
+        }
         role.setRoleId((long)RandomUtils.nextInt(1000000000));
         roleService.insert(role);
         return renderSuccess("添加成功！");
@@ -173,6 +184,15 @@ public class RoleController extends BaseController {
     @ResponseBody
     public Object edit(AuthRoleDO role) {
         roleService.updateSelectiveById(role);
+        if(EasyUtil.isStringEmpty(role.getName())) {
+        	return renderError("角色名称");
+        }
+        if(EasyUtil.isStringEmpty(role.getSeq().toString())) {
+        	return renderError("排序不能为空");
+        }
+        if(EasyUtil.isStringEmpty(role.getStatus().toString())) {
+        	return renderError("状态不能为空");
+        }
         return renderSuccess("编辑成功！");
     }
 

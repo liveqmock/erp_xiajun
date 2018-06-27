@@ -188,4 +188,10 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
        return categoryMapper.selectByPcodeAndName(list,name);
     }
 
+	@Override
+	public List<ItemCategoryDO> queryItemCategoryByPcode(String pCode) {
+		// TODO Auto-generated method stub
+		return categoryMapper.queryItemCategoryByPcode(pCode);
+	}
+
 }

@@ -10,6 +10,7 @@ import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * 
@@ -46,19 +48,20 @@ public class DealerController{
 		
 		List<Map<String, String>> dealerList = iDealerService.dealerList(seller);
 		 
-		 if(EasyUtil.isStringEmpty(seller.getCode())) {
-	        	return result.buildIsSuccess(false).buildMsg("类别代码必填");
-	        }else {
-	        	if(EasyUtil.isStringEmpty(seller.getName())) {
-	            	return result.buildIsSuccess(false).buildMsg("类别名称必填");	
-	            }
-	        	for(int i = 0; i < dealerList.size(); i ++) {
-	        		if(seller.getCode().equals(dealerList.get(i).get("code"))) {
-	        			return result.buildIsSuccess(false).buildMsg("类别代码已存在");
-	        		}
-	        	}
-		 }
-		 
+		if(EasyUtil.isStringEmpty(seller.getCode())) {
+			return result.buildIsSuccess(false).buildMsg("类别代码必填");
+	    }
+		if(EasyUtil.isStringEmpty(seller.getName())) {
+			return result.buildIsSuccess(false).buildMsg("类别名称必填");	
+		}
+
+		String dealerCode = String.format("%1$09d",RandomUtils.nextInt(1000000000));
+		seller.setCode(dealerCode);
+		for(int i = 0; i < dealerList.size(); i ++) {
+			if(seller.getCode().equals(dealerList.get(i).get("code"))) {
+    			return result.buildIsSuccess(false).buildMsg("类别代码已存在");
+    		}
+    	}
 		iDealerService.insert(seller);
 		return result.buildIsSuccess(true);
 	}
@@ -112,10 +115,10 @@ public class DealerController{
 		JsonResult<List<Map<String, String>>> result = new JsonResult<>();
 		seller.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		String name = seller.getName();
-		if(!StringUtil.isBlank(name)) {
+		if(!EasyUtil.isStringEmpty(name)) {
 			seller.setName(name);
 		}
-		if(!StringUtil.isBlank(typeName)) {
+		if(!EasyUtil.isStringEmpty(typeName)) {
 			seller.setTypeName(typeName);
 		}
 		List<Map<String, String>> list = iDealerService.dealerList(seller);

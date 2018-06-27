@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemCategoryMapperExt">
-
+	<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="p_code" property="pCode" jdbcType="VARCHAR" />
+	    <result column="root_code" property="rootCode" jdbcType="VARCHAR" />
+	    <result column="seq" property="seq" jdbcType="INTEGER" />
+	    <result column="level" property="level" jdbcType="INTEGER" />
+	    <result column="status" property="status" jdbcType="INTEGER" />
+	    <result column="all_path" property="allPath" jdbcType="VARCHAR" />
+	    <result column="creator" property="creator" jdbcType="VARCHAR" />
+	    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  	</resultMap>
     <!-- 2.0通用查询结果列-->
     <sql id="Base_Column_List">
         id, category_code AS categoryCode,name, p_code AS pCode,root_code AS rootCode, seq,level,status,all_path as allPath,
@@ -155,4 +167,14 @@
 	</where>
 	</select>
 	<!-- 张子阳写 -->
+	
+	<select id="queryItemCategoryByPcode" parameterType="java.lang.String" resultMap="BaseResultMap">
+	SELECT
+	<include refid="Base_Column_List"/>
+	FROM
+		item_category
+	<where>
+		p_code = #{ pCode }
+	</where>
+	</select>
 </mapper>
