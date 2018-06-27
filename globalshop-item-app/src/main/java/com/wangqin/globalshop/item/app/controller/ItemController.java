@@ -266,6 +266,9 @@ public class ItemController {
     @ResponseBody
     public Object update(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();
+        if(null == AppUtil.getLoginUserId()) {
+        	return result.buildIsSuccess(false).buildMsg("请先登录");
+        }
         ItemDTO oldItem = iItemService.queryItemById(item.getId());
         if (StringUtil.isBlank(item.getDetail()) && StringUtil.isNotBlank(oldItem.getDetail())) {
             return result.buildMsg("商品详情不能为空").buildIsSuccess(false);
@@ -291,12 +294,25 @@ public class ItemController {
         item.setName(nameNew.toString());
 
         String skuList = item.getSkuList();
+        List<String> upcList = new ArrayList<>();
         if (StringUtils.isNotBlank(skuList)) {
             try {
                 String s = skuList.replace("&quot;", "\"");
                 List<ItemSkuQueryVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {
                 });
                 if (skus != null && !skus.isEmpty()) {
+                	//遍历sku，处理upc重复的问题
+                	for (ItemSkuQueryVO newSku : skus) {
+                		//TODO：和数据库里面已有的upc重复
+                    	upcList.add(newSku.getUpc());                    
+                	}
+                	//判断用户添加的几个upc之间是否重复
+                    HashSet<String> upcSet = new HashSet<String>(upcList);
+                    if(upcList.size() > upcSet.size()) {
+                    	result.buildIsSuccess(false);
+                		result.buildMsg("输入的upc有重复，请再次输入");
+                		return result;
+                    }
                     int startIndex = 0;
                     //获取原来绑定该商品的所有sku的skuCode
                     ItemSkuQueryVO itemSkuQueryVO = new ItemSkuQueryVO();
@@ -328,6 +344,7 @@ public class ItemController {
                             itemSkuService.updateById(updateSku);
                         }
                     }
+                    
                     //插入新增的sku
                     for (ItemSkuQueryVO newSku : skus) {
                         if (null == newSku.getSkuCode()) {//需要添加的sku
@@ -335,7 +352,7 @@ public class ItemController {
                             ItemDTO itemDTO = iItemService.queryItemById(item.getId());
                             addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
                             addSku.setItemCode(itemDTO.getItemCode());
-                            addSku.setSkuCode("S" + itemDTO.getItemCode() + "Q" + RandomUtils.getTimeRandom() + (startIndex++));
+                            addSku.setSkuCode("S" + itemDTO.getCategoryCode() + "Q" + RandomUtils.getTimeRandom() + String.format("%0" + 4 + "d", ++startIndex));
                             addSku.setScale(newSku.getScale());
                             addSku.setSalePrice((double) newSku.getSalePrice());
                             addSku.setWeight(newSku.getWeight());
@@ -402,10 +419,6 @@ public class ItemController {
         newItem.setMainPic(item.getMainPic());
 
         //newItem.setLogisticType(item.getLogisticType().byteValue());
-
-        if(null == AppUtil.getLoginUserId()) {
-        	return result.buildIsSuccess(false).buildMsg("请先登录");
-        }
     
         newItem.setModifier(AppUtil.getLoginUserId());
 
