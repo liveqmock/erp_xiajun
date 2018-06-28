@@ -156,6 +156,12 @@ public class RoleController extends BaseController {
     @RequestMapping("/delete")
     @ResponseBody
     public Object delete(Long id) {
+        AuthRoleDO roleDO = roleService.selectById(id);
+        roleResourceService.deleteByRoleId(roleDO.getRoleId());
+//        List<AuthRoleResourceDO> roleResourceDO = roleResourceService.selectRoleResourceByResourceId(roleDO.getRoleId());
+//        for(int i = 0; i < roleResourceDO.size(); i ++) {
+//        	roleResourceService.deleteByRoleId(roleResourceDO.get(i).getRoleId());
+//        }
         roleService.deleteById(id);
         return renderSuccess("删除成功！");
     }

@@ -5,6 +5,8 @@
     <!-- 通用查询结果列-->
     <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
         <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR" />
+        <result column="dealer_name" property="dealerName" jdbcType="VARCHAR" />
         <result column="open_id" property="openId" jdbcType="VARCHAR"/>
         <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
         <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
@@ -35,7 +37,7 @@
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, union_id,open_id, order_no, company_no, channel_no, channel_name, channel_order_no,
+        id, dealer_code, dealer_name, union_id,open_id, order_no, company_no, channel_no, channel_name, channel_order_no,
         channel_customer_no, channel_type, shop_code, wx_pay_trade_no, total_amount, actual_amount,
         pay_type, order_time, status, memo, id_card, idcard_pic_front, idcard_pic_reverse,
         source, freight, freight_agent, gmt_modify, gmt_create, is_del, modifier, creator

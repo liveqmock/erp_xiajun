@@ -227,10 +227,14 @@ public class ItemController {
         newItem.setWxisSale(item.getWxisSale().byteValue());
         newItem.setRemark(item.getRemark());       
         newItem.setMainPic(item.getMainPic());
+
         newItem.setRemark(item.getRemark());
-        newItem.setDetail(item.getDetail());  
+ 
         newItem.setIsSale(item.getIsSale().byteValue());
         newItem.setItemShort(itemNameShort);
+
+        newItem.setRemark(item.getRemark());     
+
         newItem.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setCreator(AppUtil.getLoginUserId());
