@@ -17,6 +17,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
 
+	String queryItemCodeById(Long id);
+	
 	//插入单个商品
 	Long insertItemSelective(ItemDO item);
 	

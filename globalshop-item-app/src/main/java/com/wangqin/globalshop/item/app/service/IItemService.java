@@ -19,6 +19,8 @@ import java.util.Map;
 
 public interface IItemService {
 
+
+	String queryItemCodeById(Long id);
 	//根据id更新商品
 	void updateByIdSelective(ItemDO item);
 	
