@@ -625,6 +625,7 @@
         T1.scale, model, T1.sale_type, T1.sale_price, T1.creator, T1.modifier, T1.gmt_create, T1.gmt_modify, T1.is_del
     </sql>
     
+    <!-- 根据upc查询商品的个数 -->
     <select id="queryItemCountByUpc" parameterType="java.lang.String" resultType="java.lang.Integer">
 		SELECT count(1)
 		FROM `item_sku`
@@ -638,6 +639,17 @@
      	from item_sku T1
      	where T1.item_code = #{itemCode}
      	and T1.is_del=0
+     </select>
+     
+     <!-- 根据id查出该sku对应的商品在sku表里面映射了几个sku，如果只有一个，禁止删除这个sku -->
+     <select id="querySkuNumberBySkuId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     	SELECT count(1) 
+     	FROM item_sku
+     	<where>
+     		item_code in 
+     		(select item_code from item_sku where id=#{skuId}) 
+     		AND is_del=0
+     	</where>     	
      </select>
      
      <select id="querySkuCodeById" parameterType="java.lang.Long" resultType="java.lang.String">
