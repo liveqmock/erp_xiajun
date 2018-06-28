@@ -41,9 +41,8 @@ ALTER TABLE mall_order CHANGE customer_no open_id VARCHAR(64) COMMENT '微信ope
 ---- -- -- -- -- -- -- -- -- -- -- -- -- -- 修改item表-- -- -- -- -- -- -- -- --
 ALTER TABLE `item` ADD COLUMN `origin_sale_price` VARCHAR(64) NULL DEFAULT NULL COMMENT '原始销售价格';
 ALTER TABLE `item` ADD COLUMN `commission_mode` VARCHAR(64) NULL DEFAULT NULL COMMENT '佣金比率';
-
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增share_token_record表-- -- -- -- -- -- -- -- -- 
+ALTER TABLE `item` ADD COLUMN `commission_rate` VARCHAR(64) NULL DEFAULT NULL COMMENT '佣金比率';
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增share_token_record表-- -- -- -- -- -- -- -- --
  CREATE TABLE `share_token_record` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) DEFAULT NULL COMMENT '公司名称',
