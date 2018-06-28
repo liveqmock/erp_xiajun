@@ -14,4 +14,8 @@ public interface IRoleResourceService { //extends ISuperService<RoleResource>
 	List<AuthRoleResourceDO> queryRoleResourceByCompanyNo(String companyNo);
 	
 	List<AuthRoleResourceDO> selectRoleResourceByResourceId(Long resourceId);
+	
+	int deleteSelective(AuthRoleResourceDO roleResource);
+	
+	int deleteByRoleId(Long roleId);
 }

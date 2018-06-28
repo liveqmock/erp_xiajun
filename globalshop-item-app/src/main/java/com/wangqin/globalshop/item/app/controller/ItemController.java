@@ -199,9 +199,7 @@ public class ItemController {
         newItem.setRemark(item.getRemark());
         
         newItem.setMainPic(item.getMainPic());
-        newItem.setRemark(item.getRemark());
-        newItem.setDetail(item.getDetail());
-        
+        newItem.setRemark(item.getRemark());     
         newItem.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setCreator(AppUtil.getLoginUserId());
@@ -408,7 +406,7 @@ public class ItemController {
         }
 
         newItem.setDetail(item.getDetail());
-        //detailDecoder(newItem);
+        detailDecoder(newItem);
         newItem.setCategoryCode(item.getCategoryCode());
         newItem.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
         newItem.setBrandName(item.getBrand());

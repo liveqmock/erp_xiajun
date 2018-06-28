@@ -30,6 +30,16 @@ public class RoleResourceServiceImpl implements IRoleResourceService {
 		// TODO Auto-generated method stub
 		return roleResourceMapper.selectRoleResourceByResourceId(resourceId);
 	}
+	@Override
+	public int deleteSelective(AuthRoleResourceDO roleResource) {
+		// TODO Auto-generated method stub
+		return roleResourceMapper.deleteSelective(roleResource);
+	}
+	@Override
+	public int deleteByRoleId(Long roleId) {
+		// TODO Auto-generated method stub
+		return roleResourceMapper.deleteByRoleId(roleId);
+	}
 
 	
 }
