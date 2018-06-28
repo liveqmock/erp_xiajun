@@ -67,9 +67,8 @@ public class DealerTypeController {
     public Object update(DealerTypeDO sellerType) {
     	
     	JsonResult<DealerTypeDO> result = new JsonResult<>();
-        
+       
     	List<DealerTypeDO> list = iSellerTypeService.list(AppUtil.getLoginUserCompanyNo());
-
 
     	if(EasyUtil.isStringEmpty(sellerType.getCode())){
 			return result.buildIsSuccess(false).buildMsg("类别代码必填");
@@ -77,7 +76,9 @@ public class DealerTypeController {
 		if(EasyUtil.isStringEmpty(sellerType.getName())){
 			return result.buildIsSuccess(false).buildMsg("类别名称必填");
 		}
-
+		String typeCode = String.format("%1$09d", RandomUtils.nextInt(1000000000));
+		sellerType.setCode(typeCode);
+		
     	iSellerTypeService.update(sellerType);
     	
         return result.buildIsSuccess(true);
