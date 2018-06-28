@@ -70,6 +70,11 @@ public class ItemController {
     @ResponseBody
     public Object add(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();
+        
+        if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
+            return result.buildIsSuccess(false).buildMsg("请先登录");
+        }
+        
         List<ItemSkuScaleDO> scaleList = new ArrayList<>();
         String priceRange = "0";
         if (null != item.getId()) {
@@ -192,23 +197,28 @@ public class ItemController {
         newItem.setItemCode(item.getItemCode());
         newItem.setWxisSale(item.getWxisSale().byteValue());
         newItem.setRemark(item.getRemark());
-        //newItem.init();
+        
         newItem.setMainPic(item.getMainPic());
         newItem.setRemark(item.getRemark());
         newItem.setDetail(item.getDetail());
-        if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
-            return result.buildIsSuccess(false).buildMsg("请先登录");
-        }
+        
         newItem.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setCreator(AppUtil.getLoginUserId());
         iItemService.insertItemSelective(newItem);
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
-//        List<String> upcList = new ArrayList<>();
+        List<String> upcList = new ArrayList<>();
         if (itemSkuList != null && !itemSkuList.isEmpty()) {
-            itemSkuList.forEach(itemSku -> {
-                itemSku.setItemCode(newItem.getItemCode());
+        	for(ItemSkuAddVO itemSku:itemSkuList) {
+        		//检测upc是否重复,TODO按公司划分
+        		if(0 < itemSkuService.queryItemCountByUpc(itemSku.getUpc())) {
+        			result.buildIsSuccess(false);
+        			result.buildMsg("upc不可以重复，请再次输入");
+        			return result;
+        		}
+        		upcList.add(itemSku.getUpc());
+        		itemSku.setItemCode(newItem.getItemCode());
                 /**插入ItemSkuScale*/
                 ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
                 ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
@@ -225,19 +235,19 @@ public class ItemController {
                 itemSku.setCreator(AppUtil.getLoginUserId());
                 itemSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
                 itemSku.setSalePrice(itemSku.getSalePrice());
-            });
-            itemSkuService.insertBatch(itemSkuList);
-            //todo 错误应修改数据库配置  同一公司的upc唯一
-//            //判断用户添加的几个upc之间是否重复
-//            HashSet<String> upcSet = new HashSet<String>(upcList);
-//            if(upcList.size() > upcSet.size()) {
-//                result.buildIsSuccess(false);
-//                result.buildMsg("输入的upc有重复，请再次输入");
-//                return result;
-//            }
+        	}
+        	//判断用户添加的几个upc之间是否重复
+            HashSet<String> upcSet = new HashSet<String>(upcList);
+            if(upcList.size() > upcSet.size()) {
+                result.buildIsSuccess(false);
+                result.buildMsg("输入的upc有重复，请再次输入");
+                return result;
+            }
+            
+            itemSkuService.insertBatch(itemSkuList);       
             List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
             scaleService.insertBatch(scaleList);
-            //inventoryService.insertBatchInventory(inventoryList);
+            
             invService.outbound(inventoryList);
         }
 

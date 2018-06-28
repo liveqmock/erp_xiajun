@@ -37,7 +37,10 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
     void deleteItemCategoryById(Long id);
 
     List<ItemCategoryDO> selectByPcodeAndName(@Param("list") List<ItemCategoryDO> list, @Param("name")String name);
-    
+
+    List<ItemCategoryDO> queryItemCategoryByPcode(String pCode);
+
     //通过code查询id
     Long queryCategoryIdByCategoryCode(String categoryCode);
+
 }

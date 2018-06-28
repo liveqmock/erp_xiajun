@@ -194,4 +194,10 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
     	return categoryMapper.queryCategoryIdByCategoryCode(categoryCode);
     }
 
+	@Override
+	public List<ItemCategoryDO> queryItemCategoryByPcode(String pCode) {
+		// TODO Auto-generated method stub
+		return categoryMapper.queryItemCategoryByPcode(pCode);
+	}
+
 }
