@@ -7,10 +7,12 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleResourceDOMapper;
 
 public interface AuthRoleResourceDOMapperExt extends AuthRoleResourceDOMapper {
     //Here are
-    List<AuthRoleResourceDO> selectRoleResourceByResourceId(Long resourceId);
-	
-	int deleteSelective(Long roleId);
+    List<AuthRoleResourceDO> selectRoleResourceByResourceId(Long resourceId);	
     
     List<AuthRoleResourceDO> queryRoleResourceByCompanyNo(String companyNo);
+    
+    int deleteSelective(AuthRoleResourceDO roleResource);
+    
+    int deleteByRoleId(Long roleId);
 
 }
