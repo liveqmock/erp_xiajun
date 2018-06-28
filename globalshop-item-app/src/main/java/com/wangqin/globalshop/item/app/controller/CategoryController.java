@@ -55,9 +55,16 @@ public class CategoryController  {
 				}else{
 					category.setRootCode(categoryP.getRootCode());
 				}
+		   }
+		}
+		//判断同一个级别下类目的名字可以和已有的类目是否相同
+		List<ItemCategoryDO> itemCategoryList = categoryService.queryItemCategoryByPcode(category.getpCode());
+		for(int i = 0; i < itemCategoryList.size(); i ++) {
+			ItemCategoryDO itemcategory = itemCategoryList.get(i);
+			if(itemcategory.getName().equals(category.getName())) {
+				return result.buildIsSuccess(false).buildMsg("同一个级别下类目的名字可以和已有的类目相同");
 			}
 		}
-		
 		category.setCategoryCode(RandomUtils.getTimeRandom());
 		category.setCreator("admin");
 		category.setModifier("admin");
