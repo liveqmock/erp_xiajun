@@ -14,7 +14,7 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 
 /**
  * SKU 数据控制层，item_module use
- * @author zhulu
+ * @author xiajun
  *
  */
 public interface ItemSkuMapperExt extends ItemSkuDOMapper{
@@ -66,8 +66,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	//查询可售的sku
 	List<ItemSkuDO> querySaleableSkus();
 	
-	Integer queryItemCountByUpc(String upc);
-	
 	List<ItemSkuDO> querySkuListByItemCode(String itemCode);
 	
 	List<ItemSkuDO> queryItemSkuListSelective(ItemSkuQueryVO itemSkuQueryVO);
@@ -88,4 +86,10 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	
 	//根据id查出该sku对应的商品在sku表里面映射了几个sku，如果只有一个，禁止删除这个sku
 	Integer querySkuNumberBySkuId(Long skuId);
+	
+	//查询指定的upc对应的item_sku的sku_code,按公司划分,防止重复的upc
+	List<String> querySkuCodeListByUpc(@Param("companyNo")String companyNo,@Param("upc")String upc);
+	
+	//询要更新的upc是否在别的商品名下已经存在,存在则表明出现了upc重复的问题
+	Integer queryRecordCountByUpcCompanyNotInSameItem(@Param("companyNo")String companyNo,@Param("upc")String upc,@Param("itemCode")String itemCode);
 }
