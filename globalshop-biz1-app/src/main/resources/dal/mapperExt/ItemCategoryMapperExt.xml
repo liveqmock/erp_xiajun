@@ -176,7 +176,9 @@
 	<where>
 		p_code = #{ pCode }
 	</where>
-
+    </select>
+    
+    
 	<!-- 通过code查询id -->
 	<select id="queryCategoryIdByCategoryCode" parameterType="java.lang.String" resultType="java.lang.Long">
 		SELECT id
@@ -185,4 +187,6 @@
 			category_code=#{categoryCode}
 		</where>
 	</select>
+	
+	
 </mapper>
