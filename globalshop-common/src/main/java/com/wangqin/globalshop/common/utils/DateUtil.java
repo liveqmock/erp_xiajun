@@ -20,6 +20,7 @@ public class DateUtil {
 	public static final String DATE_PARTEN_YYMMDDHHMMSS = "yyMMddHHmmss";
 	public static final String formateStr19 = "yyyy-MM-dd HH:mm:ss";
 
+
 	public static boolean isToday(Date date) {
 		if (date != null) {
 			Calendar calendar = Calendar.getInstance();
