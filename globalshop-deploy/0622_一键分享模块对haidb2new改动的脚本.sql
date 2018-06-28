@@ -46,7 +46,8 @@ ALTER TABLE `haidb2new`.`mall_sub_order`
   ADD COLUMN `share_time` VARCHAR(16) NULL   COMMENT '分享统计维度日期' ,
   ADD COLUMN `share_close_flag` VARCHAR(1) DEFAULT '0'  NULL   COMMENT '分享分销结算标识' ,
   ADD COLUMN `share_close_time` VARCHAR(16) NULL   COMMENT '分享分销结算时间' ;
-
-ALTER TABLE `haidb2new`.`mall_sub_order`   
   ADD COLUMN `share_money` NUMERIC(16,4) NULL   COMMENT '分享获得的佣金';
 
+
+ALTER TABLE `item` ADD COLUMN `origin_sale_price` VARCHAR(64) NULL DEFAULT NULL COMMENT '原始销售价格';
+ALTER TABLE `item` ADD COLUMN `commission_rate` VARCHAR(64) NULL DEFAULT NULL COMMENT '佣金比率';
