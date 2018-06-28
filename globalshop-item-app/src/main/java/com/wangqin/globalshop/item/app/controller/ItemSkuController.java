@@ -207,6 +207,13 @@ public class ItemSkuController  {
 		}else{
 			return result.buildIsSuccess(false).buildMsg("没有SKU id");
 		}*/
+		if(null == id) {
+			return result.buildIsSuccess(false).buildMsg("要删除的sku的id不能为空");
+		}
+		//如果这个sku对应的商品只有这一个sku，禁止删除该sku
+		if(1 >= iItemSkuService.querySkuNumberBySkuId(id)) {
+			return result.buildIsSuccess(false).buildMsg("商品只有这一个sku,暂时无法删除");
+		}
 		iItemSkuService.deleteById(id);
 		result.buildIsSuccess(true);
 		return result;
