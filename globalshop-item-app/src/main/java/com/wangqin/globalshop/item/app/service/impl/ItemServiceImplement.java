@@ -218,6 +218,18 @@ public class ItemServiceImplement implements IItemService {
     }
 
 
+    public ShareTokenEntity getTokenFromCache(String uuid){
+        ShareTokenEntity entity = null;
+        if (StringUtils.isBlank(uuid)){
+            return entity;
+        }
+        String tokenStr = (String)shareCache.get(uuid);
+        if (StringUtils.isNotBlank(tokenStr)){
+            entity = BaseDto.fromJson(tokenStr, ShareTokenEntity.class);
+        }
+        return entity;
+    }
+
     public String generateItemShareUrl(String userId,  String companyNo,String itemCode, String pages, String accessToken){
 
         String key = String.format("%s-uuid-%s-%s-%s", "token",userId, companyNo, itemCode);

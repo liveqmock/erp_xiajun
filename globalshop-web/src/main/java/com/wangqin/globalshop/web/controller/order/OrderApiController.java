@@ -61,7 +61,7 @@ public class OrderApiController {
         //获取订单list
         List<MyOrderDTO> myOrderList = mallSubOrderService.queryOrderByShareUserId(userId, start, Integer.parseInt(pageSize));
         if(CollectionUtils.isEmpty(myOrderList)) {//无订单
-           result.put("commission","0");
+           result.put("commission","0.00");
            jsonResult.buildIsSuccess(true).buildData(result);
            return BaseDto.toString(jsonResult);
         }
@@ -101,7 +101,7 @@ public class OrderApiController {
         if(CollectionUtils.isEmpty(orderList)) {
         	 entity.setOrderDetailList(orderDetailList);
         	 jsonResult.buildIsSuccess(true).buildData(entity);
-        	 String summary =  String.format("%s个订单，佣金%s", 0, 0);
+        	 String summary =  String.format("%s个订单，佣金%s", 0, 0.00);
              entity.setOrderDetailDesc(summary);
              return BaseDto.toString(jsonResult);
         }

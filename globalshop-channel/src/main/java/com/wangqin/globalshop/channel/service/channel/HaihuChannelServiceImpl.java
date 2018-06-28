@@ -344,7 +344,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 					return result.buildIsSuccess(false).buildMsg("推单重复");
 				}
 				MallOrderDO outerOrder = new MallOrderDO();
-				outerOrder.setOrderNo("P"+String.format("%0"+2+"d", 1)+String.format("%0"+4+"d", 4)+"D"+DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+sequenceUtilService.gainORDSequence());	//系统自动生成
+				outerOrder.setOrderNo(CodeGenUtil.getOrderNo());	//系统自动生成
 				outerOrder.setOrderTime(new Date());
 				outerOrder.setStatus(OrderStatus.INIT.getCode());
 
@@ -394,7 +394,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 					outerOrderDetailTemp.setPostcode(outerOrderHh.getPostcode());
 
 					outerOrderDetailTemp.setOrderNo(outerOrder.getOrderNo());
-					outerOrderDetailTemp.setSubOrderNo("O" + outerOrder.getOrderNo().substring(1) + String.format("%0"+4+"d", outerOrderDetails.size()+1));
+					outerOrderDetailTemp.setSubOrderNo(CodeGenUtil.getSubOrderNo());
 
 
 					outerOrderDetailTemp.setShopCode(channelAccount.getShopCode());

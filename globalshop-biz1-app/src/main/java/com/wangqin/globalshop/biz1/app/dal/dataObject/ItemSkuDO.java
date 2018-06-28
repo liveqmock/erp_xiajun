@@ -60,6 +60,8 @@ public class ItemSkuDO extends BaseModel {
     private String modifier;
 
     private String remark;
+    
+    private Integer virtualInv;
 
     public Long getId() {
         return id;
@@ -303,4 +305,14 @@ public class ItemSkuDO extends BaseModel {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+	public Integer getVirtualInv() {
+		return virtualInv;
+	}
+
+	public void setVirtualInv(Integer virtualInv) {
+		this.virtualInv = virtualInv;
+	}
+    
+    
 }

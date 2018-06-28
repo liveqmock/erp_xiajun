@@ -3,13 +3,13 @@ package com.wangqin.globalshop.web.controller.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.JsonArray;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
@@ -28,6 +28,19 @@ public class ShareApiController {
 
     public static final String ACCESS_TOKENURL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String ACCESS_TOKENPARAM = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
+
+    @RequestMapping("/api/items/share/token")
+    @ResponseBody
+    public String token(@RequestParam("uuid") String uuid){
+
+        ShareTokenEntity tokenEntity = itemService.getTokenFromCache(uuid);
+        JsonResult<String> jsonResult = new JsonResult<>();
+        if (tokenEntity == null){
+            tokenEntity = new ShareTokenEntity();
+        }
+        jsonResult.buildIsSuccess(true).buildData(BaseDto.toString(tokenEntity));
+        return BaseDto.toString(jsonResult);
+    }
 
     @RequestMapping("/api/items/share")
     @ResponseBody
@@ -60,9 +73,11 @@ public class ShareApiController {
         int maxSize = array.size() > 8 ? 8 : array.size();
         for(int i = 0; i < maxSize; i ++) {
         	String pic = array.getJSONObject(i).getString("url");
+        	pic = formImg(pic);
         	picList.add(pic);
         }
 
+        picUrl = formImg(picUrl);
         //插入分享码图片
         if (picList.size() < 5){
             picList.add(picUrl);
@@ -81,6 +96,16 @@ public class ShareApiController {
         itemShareEntity.setItemImgList(picList);
         jsonResult.buildIsSuccess(true).buildData(itemShareEntity);
         return BaseDto.toString(jsonResult);
+    }
+
+    public String formImg(String url){
+        if (url.indexOf("?") == -1){
+            return url;
+        }
+        int len = url.indexOf("?");
+        url = url.substring(0, len);
+        url = url + "@1c_1e_480w.webp";
+        return url;
     }
 
 }

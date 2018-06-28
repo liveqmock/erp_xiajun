@@ -12,6 +12,7 @@ import com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGet;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
@@ -894,9 +895,7 @@ YouZanChannelServiceImp extends AbstractChannelService implements IChannelServic
         outerOrder.setShopCode(channelAccount.getShopCode());
 
         // 有赞平台为01,销售为0000
-        outerOrder.setOrderNo("P" + String.format("%0" + 2 + "d", 1) + String.format("%0" + 4 + "d", 4) + "D"
-                + DateUtil.formatDate(TradeDetail.getPayTime(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)
-                + sequenceUtilService.gainORDSequence()); // 系统自动生成
+        outerOrder.setOrderNo(CodeGenUtil.getOrderNo()); // 系统自动生成
         outerOrder.setOrderTime(TradeDetail.getPayTime()); // 付款时间
         outerOrder.setStatus(OrderStatus.INIT.getCode()); // 状态：新建
 
@@ -954,7 +953,7 @@ YouZanChannelServiceImp extends AbstractChannelService implements IChannelServic
 
             outerOrderDetail.setShopCode(channelAccount.getShopCode());
             outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
-            outerOrderDetail.setSubOrderNo("O" + outerOrder.getOrderNo().substring(1) + String.format("%0" + 4 + "d", outerOrderDetails.size() + 1));
+            outerOrderDetail.setSubOrderNo(CodeGenUtil.getSubOrderNo());
 
             outerOrderDetail.setCustomerNo("无");
             outerOrderDetail.setIsDel(false);

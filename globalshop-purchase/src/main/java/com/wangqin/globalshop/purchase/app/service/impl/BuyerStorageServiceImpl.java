@@ -209,8 +209,8 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         detail.setWarehouseNo(detailVo.getWarehouseNo());
 
         //检验库存
-        if(detailVo.getQuantity() < 0){
-            throw new ErpCommonException("确认入库数量不能小于0");
+        if(detailVo.getQuantity() == null || detailVo.getQuantity() < 0){
+            throw new ErpCommonException("入库数必填");
         }
         detail.setQuantity(detailVo.getQuantity());
 
@@ -275,8 +275,20 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
     public void deleteById(Long id){
         BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
-        detail.setIsDel(true);
-        detaiMapper.updateByPrimaryKey(detail);
+        detaiMapper.deleteByPrimaryKey(id);
+        if(detail != null && !EasyUtil.isStringEmpty(detail.getStorageNo())){
+            BuyerStorageDetailDO detailSo = new BuyerStorageDetailDO();
+            detailSo.setStorageNo(detail.getStorageNo());
+            List<BuyerStorageDetailDO> detailDOList = detaiMapper.searchList(detailSo);
+            if(EasyUtil.isListEmpty(detailDOList)){
+                BuyerStorageDO buyerStorageSo = new BuyerStorageDO();
+                buyerStorageSo.setStorageNo(detail.getStorageNo());
+                BuyerStorageDO buyerStorage = mapper.search(buyerStorageSo);
+                if(buyerStorage != null){
+                    mapper.deleteByPrimaryKey(buyerStorage.getId());
+                }
+            }
+        }
     }
 
     public void updateMem(Long id, String mem){

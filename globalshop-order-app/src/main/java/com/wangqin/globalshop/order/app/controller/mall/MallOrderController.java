@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ShiroUtil;
@@ -74,8 +75,8 @@ public class MallOrderController {
     public Object add(MallOrderVO mallOrderVO) {
         JsonResult<List<MallOrderVO>> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
-            Long ordSequence = sequenceUtilService.gainORDSequence();
-            mallOrderVO.setOrderNo("P" + String.format("%0" + 2 + "d", mallOrderVO.getChannelNo()) + String.format("%0" + 4 + "d", mallOrderVO.getChannelName()) + "D" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + ordSequence);//系统自动生成
+            String setOrderNo = CodeGenUtil.getOrderNo();
+            mallOrderVO.setOrderNo(setOrderNo);
             String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
             String s = outerOrderDetailList.replace("&quot;", "\"");
             List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {

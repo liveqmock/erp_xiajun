@@ -85,4 +85,7 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
     Double querySalePriceByItemCode(String itemCode);
 
 	void inserBatch(List<ItemSkuDO> skuList);
+	
+	//根据id查出该sku对应的商品在sku表里面映射了几个sku，如果只有一个，禁止删除这个sku
+	Integer querySkuNumberBySkuId(Long skuId);
 }

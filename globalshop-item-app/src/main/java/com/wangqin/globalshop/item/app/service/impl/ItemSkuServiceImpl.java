@@ -225,10 +225,17 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	public ItemSkuDO queryBySkuCodeOrUpcAndCompanyNo(String code, String companyNo) {
 		return itemSkuMapperExt.queryBySkuCodeOrUpcAndCompanyNo(code,companyNo);
 	}
+	
 	@Override
 	public Double querySalePriceByItemCode(String itemCode) {
 		// TODO Auto-generated method stub
 		return itemSkuMapperExt.querySalePriceByItemCode(itemCode);
+	}
+	
+	//根据id查出该sku对应的商品在sku表里面映射了几个sku，如果只有一个，禁止删除这个sku
+	@Override
+	public Integer querySkuNumberBySkuId(Long skuId) {
+		return itemSkuMapperExt.querySkuNumberBySkuId(skuId);
 	}
 
 }
