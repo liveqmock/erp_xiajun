@@ -9,6 +9,7 @@ import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -73,6 +74,7 @@ public class BuyerTaskController {
      * @return
      */
     @PostMapping("/add")
+    @Transactional(rollbackFor = Exception.class)
     public Object addTask(BuyerTaskVO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
         try {

@@ -8,7 +8,7 @@
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
     <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
-    <result column="buyer_open_id" property="buyerOpenId" jdbcType="BIGINT" />
+    <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
     <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
     <result column="storage_type" property="storageType" jdbcType="TINYINT" />
@@ -43,7 +43,7 @@
       entry_date, memo, creator, 
       modifier, status)
     values (#{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
-      #{warehouseName,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=BIGINT}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=VARCHAR}, 
       #{purchaseStorageNo,jdbcType=VARCHAR}, #{buyerTaskNo,jdbcType=VARCHAR}, #{storageType,jdbcType=TINYINT}, 
       #{entryDate,jdbcType=TIMESTAMP}, #{memo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
@@ -114,7 +114,7 @@
         #{buyerName,jdbcType=VARCHAR},
       </if>
       <if test="buyerOpenId != null" >
-        #{buyerOpenId,jdbcType=BIGINT},
+        #{buyerOpenId,jdbcType=VARCHAR},
       </if>
       <if test="purchaseStorageNo != null" >
         #{purchaseStorageNo,jdbcType=VARCHAR},
@@ -161,7 +161,7 @@
         buyer_name = #{buyerName,jdbcType=VARCHAR},
       </if>
       <if test="buyerOpenId != null" >
-        buyer_open_id = #{buyerOpenId,jdbcType=BIGINT},
+        buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
@@ -197,7 +197,7 @@
       company_no = #{companyNo,jdbcType=VARCHAR},
       warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       buyer_name = #{buyerName,jdbcType=VARCHAR},
-      buyer_open_id = #{buyerOpenId,jdbcType=BIGINT},
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       buyer_task_no = #{buyerTaskNo,jdbcType=VARCHAR},
       storage_type = #{storageType,jdbcType=TINYINT},

@@ -55,7 +55,6 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(BuyerTaskVO vo) throws ErpCommonException {
         /**获取相关买手信息*/
-
         BuyerDO buyer = buyerMapper.selectByPrimaryKey(vo.getBuyerId());
         BuyerTaskDO task = new BuyerTaskDO();
         /**封装出一个buyerTaskDO对象*/

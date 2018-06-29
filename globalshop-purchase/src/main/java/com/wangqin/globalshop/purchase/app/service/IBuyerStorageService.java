@@ -19,9 +19,9 @@ public interface IBuyerStorageService {
 
     Long searchCount(BuyerStorageDO buyerStorageDO);
 
-    public List<BuyerStorageDetailVo> searchByOpenId(Long openId);
+    public List<BuyerStorageDetailVo> searchByOpenId(String openId);
 
-    public List<BuyerStorageDetailVo> searchByopenidAndUpc(Long openId, String upc);
+    public List<BuyerStorageDetailVo> searchByopenidAndUpc(String openId, String upc);
 
     public List<BuyerStorageDetailVo> searchAll();
 
@@ -29,7 +29,7 @@ public interface IBuyerStorageService {
 
     public List<BuyerStorageDetailVo> queryHasComfirm();
 
-    public List<BuyerStorageDetailVo> queryComfirmWithParam(Long buyerOpenId, String upc);
+    public List<BuyerStorageDetailVo> queryComfirmWithParam(String buyerOpenId, String upc);
 
     public void deleteById(Long id);
 
