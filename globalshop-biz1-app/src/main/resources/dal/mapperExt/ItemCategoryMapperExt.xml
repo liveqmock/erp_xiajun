@@ -179,8 +179,8 @@
     </select>
     
     
-	<!-- 通过code查询id -->
-	<select id="queryCategoryIdByCategoryCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+	<!-- 通过code查询类目 -->
+	<select id="queryCategoryByCategoryCode" parameterType="java.lang.String" resultMap="BaseResultMap">
 		SELECT 
 			<include refid="Base_Column_List"/>
 		FROM 

@@ -117,7 +117,7 @@
 
 
 
-    <!-- -->
+    <!-- 添加商品使用-->
     <select id="queryChannelAccountList" resultMap="BaseResultMap"
     >
         SELECT  <include refid="Base_Column_List2" />

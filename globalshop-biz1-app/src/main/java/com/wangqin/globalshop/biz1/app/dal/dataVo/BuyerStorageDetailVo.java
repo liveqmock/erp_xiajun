@@ -27,7 +27,7 @@ public class BuyerStorageDetailVo {
 
 	private String buyerName; //买手名字
 
-	private Long buyerOpenId; //买手微信ID
+	private String buyerOpenId; //买手微信ID
 
 	protected Date gmtCreate; //创建时间
 
@@ -143,10 +143,10 @@ public class BuyerStorageDetailVo {
 	public void setBuyerName(String buyerName) {
 		this.buyerName = buyerName;
 	}
-	public Long getBuyerOpenId() {
+	public String getBuyerOpenId() {
 		return buyerOpenId;
 	}
-	public void setBuyerOpenId(Long buyerOpenId) {
+	public void setBuyerOpenId(String buyerOpenId) {
 		this.buyerOpenId = buyerOpenId;
 	}
 	public Date getGmtCreate() {

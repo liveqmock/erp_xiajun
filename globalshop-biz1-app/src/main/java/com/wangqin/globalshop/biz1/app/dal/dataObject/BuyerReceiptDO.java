@@ -17,7 +17,7 @@ public class BuyerReceiptDO extends BaseModel {
 
     private Byte status;
 
-    private Long openId;
+    private String openId;
 
     private String creator;
 
@@ -87,12 +87,12 @@ public class BuyerReceiptDO extends BaseModel {
         this.status = status;
     }
 
-    public Long getOpenId() {
+    public String getOpenId() {
         return openId;
     }
 
-    public void setOpenId(Long openId) {
-        this.openId = openId;
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
     }
 
     public String getCreator() {

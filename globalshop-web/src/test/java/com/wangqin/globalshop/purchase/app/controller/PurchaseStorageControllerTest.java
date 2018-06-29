@@ -32,7 +32,7 @@ public class PurchaseStorageControllerTest {
 		dataVo.setSpecifications("规格");
 		dataVo.setQuantity(3);//"实际入库数，客户手工填入的数据"
 		dataVo.setTransQuantity(4);//"预入库数"
-		dataVo.setBuyerOpenId(000L);//"微信ID"
+		dataVo.setBuyerOpenId(000+"");//"微信ID"
 		dataVo.setBuyerName("买手名字");
 		dataVo.setGmtModify(new Date());
 		dataVo.setGmtCreate(new Date());

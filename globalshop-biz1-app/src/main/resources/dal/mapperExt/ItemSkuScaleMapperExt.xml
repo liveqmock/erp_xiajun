@@ -15,6 +15,7 @@
         <include refid="Base_Column_List"/>
         from item_sku_scale T1
         where T1.sku_code = #{skuCode}
+        and is_del=0
     </select>
 
     <insert id="insertBatch" parameterType="java.util.List">
@@ -44,6 +45,7 @@
         </foreach>
 
     </insert>
+
 
 
 </mapper>
