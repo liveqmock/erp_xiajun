@@ -3,6 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ItemFindDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="item_find_no" property="itemFindNo" jdbcType="VARCHAR" />
     <result column="item_name" property="itemName" jdbcType="VARCHAR" />
     <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
@@ -23,7 +24,7 @@
     <result column="wxis_sale" property="wxisSale" jdbcType="TINYINT" />
     <result column="is_find" property="isFind" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="desc_msg" property="descMsg" jdbcType="VARCHAR" />
     <result column="spec" property="spec" jdbcType="VARCHAR" />
     <result column="model" property="model" jdbcType="VARCHAR" />
     <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
@@ -39,10 +40,11 @@
     <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, item_find_no, item_name, item_code, sku_code, is_new, sale_type, currency, buy_site, 
-    origin, logistic_type, contact_person, contact_tel, id_card, start_date, end_date, 
-    booking_date, is_sale, wxis_sale, is_find, status, desc, spec, model, buyer_open_id, 
-    buyer_name, purchase_status, reason, find_address, refuse_reason, creator, modifier
+    id, company_no, item_find_no, item_name, item_code, sku_code, is_new, sale_type, 
+    currency, buy_site, origin, logistic_type, contact_person, contact_tel, id_card, 
+    start_date, end_date, booking_date, is_sale, wxis_sale, is_find, status, desc_msg, 
+    spec, model, buyer_open_id, buyer_name, purchase_status, reason, find_address, refuse_reason, 
+    creator, modifier
   </sql>
   <sql id="Blob_Column_List" >
     detail
@@ -63,28 +65,30 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into item_find (item_find_no, item_name, item_code, 
-      sku_code, is_new, sale_type, 
-      currency, buy_site, origin, 
-      logistic_type, contact_person, contact_tel, 
-      id_card, start_date, end_date, 
-      booking_date, is_sale, wxis_sale, 
-      is_find, status, desc, 
-      spec, model, buyer_open_id, 
-      buyer_name, purchase_status, reason, 
-      find_address, refuse_reason, creator, 
-      modifier, detail)
-    values (#{itemFindNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
-      #{skuCode,jdbcType=VARCHAR}, #{isNew,jdbcType=TINYINT}, #{saleType,jdbcType=TINYINT}, 
-      #{currency,jdbcType=TINYINT}, #{buySite,jdbcType=VARCHAR}, #{origin,jdbcType=VARCHAR}, 
-      #{logisticType,jdbcType=TINYINT}, #{contactPerson,jdbcType=VARCHAR}, #{contactTel,jdbcType=VARCHAR}, 
-      #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
-      #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, #{wxisSale,jdbcType=TINYINT}, 
-      #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{desc,jdbcType=VARCHAR}, 
-      #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{buyerOpenId,jdbcType=VARCHAR}, 
-      #{buyerName,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=TINYINT}, #{reason,jdbcType=VARCHAR}, 
-      #{findAddress,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR})
+    insert into item_find (company_no, item_find_no, item_name, 
+      item_code, sku_code, is_new, 
+      sale_type, currency, buy_site, 
+      origin, logistic_type, contact_person, 
+      contact_tel, id_card, start_date, 
+      end_date, booking_date, is_sale, 
+      wxis_sale, is_find, status, 
+      desc_msg, spec, model, 
+      buyer_open_id, buyer_name, purchase_status, 
+      reason, find_address, refuse_reason, 
+      creator, modifier, detail
+      )
+    values (#{companyNo,jdbcType=VARCHAR}, #{itemFindNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{isNew,jdbcType=TINYINT}, 
+      #{saleType,jdbcType=TINYINT}, #{currency,jdbcType=TINYINT}, #{buySite,jdbcType=VARCHAR}, 
+      #{origin,jdbcType=VARCHAR}, #{logisticType,jdbcType=TINYINT}, #{contactPerson,jdbcType=VARCHAR}, 
+      #{contactTel,jdbcType=VARCHAR}, #{idCard,jdbcType=TINYINT}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{bookingDate,jdbcType=TIMESTAMP}, #{isSale,jdbcType=TINYINT}, 
+      #{wxisSale,jdbcType=TINYINT}, #{isFind,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{descMsg,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{buyerOpenId,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=TINYINT}, 
+      #{reason,jdbcType=VARCHAR}, #{findAddress,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -92,6 +96,9 @@
     </selectKey>
     insert into item_find
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
       <if test="itemFindNo != null" >
         item_find_no,
       </if>
@@ -152,8 +159,8 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="desc != null" >
-        desc,
+      <if test="descMsg != null" >
+        desc_msg,
       </if>
       <if test="spec != null" >
         spec,
@@ -190,6 +197,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="itemFindNo != null" >
         #{itemFindNo,jdbcType=VARCHAR},
       </if>
@@ -250,8 +260,8 @@
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="desc != null" >
-        #{desc,jdbcType=VARCHAR},
+      <if test="descMsg != null" >
+        #{descMsg,jdbcType=VARCHAR},
       </if>
       <if test="spec != null" >
         #{spec,jdbcType=VARCHAR},
@@ -291,6 +301,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
     update item_find
     <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
       <if test="itemFindNo != null" >
         item_find_no = #{itemFindNo,jdbcType=VARCHAR},
       </if>
@@ -351,8 +364,8 @@
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="desc != null" >
-        desc = #{desc,jdbcType=VARCHAR},
+      <if test="descMsg != null" >
+        desc_msg = #{descMsg,jdbcType=VARCHAR},
       </if>
       <if test="spec != null" >
         spec = #{spec,jdbcType=VARCHAR},
@@ -392,7 +405,8 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
     update item_find
-    set item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      item_find_no = #{itemFindNo,jdbcType=VARCHAR},
       item_name = #{itemName,jdbcType=VARCHAR},
       item_code = #{itemCode,jdbcType=VARCHAR},
       sku_code = #{skuCode,jdbcType=VARCHAR},
@@ -412,7 +426,7 @@
       wxis_sale = #{wxisSale,jdbcType=TINYINT},
       is_find = #{isFind,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
-      desc = #{desc,jdbcType=VARCHAR},
+      desc_msg = #{descMsg,jdbcType=VARCHAR},
       spec = #{spec,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
       buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
@@ -428,7 +442,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO" >
     update item_find
-    set item_find_no = #{itemFindNo,jdbcType=VARCHAR},
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      item_find_no = #{itemFindNo,jdbcType=VARCHAR},
       item_name = #{itemName,jdbcType=VARCHAR},
       item_code = #{itemCode,jdbcType=VARCHAR},
       sku_code = #{skuCode,jdbcType=VARCHAR},
@@ -448,7 +463,7 @@
       wxis_sale = #{wxisSale,jdbcType=TINYINT},
       is_find = #{isFind,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
-      desc = #{desc,jdbcType=VARCHAR},
+      desc_msg = #{descMsg,jdbcType=VARCHAR},
       spec = #{spec,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
       buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},

@@ -5,6 +5,8 @@ import java.util.Date;
 public class ItemFindDO extends BaseModel {
     private Long id;
 
+    private String companyNo;
+
     private String itemFindNo;
 
     private String itemName;
@@ -45,7 +47,7 @@ public class ItemFindDO extends BaseModel {
 
     private Byte status;
 
-    private String desc;
+    private String descMsg;
 
     private String spec;
 
@@ -75,6 +77,14 @@ public class ItemFindDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
     public String getItemFindNo() {
@@ -237,12 +247,12 @@ public class ItemFindDO extends BaseModel {
         this.status = status;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescMsg() {
+        return descMsg;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setDescMsg(String descMsg) {
+        this.descMsg = descMsg == null ? null : descMsg.trim();
     }
 
     public String getSpec() {
@@ -313,7 +323,6 @@ public class ItemFindDO extends BaseModel {
         return creator;
     }
 
-    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -322,7 +331,6 @@ public class ItemFindDO extends BaseModel {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
