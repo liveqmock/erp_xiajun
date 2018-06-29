@@ -87,4 +87,10 @@ public class ItemPackagePatternServiceImpl implements IItemPackagePatternService
 	public void updateLevelSelectiveById(ItemPackagePatternDTO shippingPackingPatternDO) {
 		itemPackagePatternMapperExt.updateLevelSelectiveById(shippingPackingPatternDO);
 	}
+
+	@Override
+	public Integer countPatternsByScaleNo(String packagingScaleNo) {
+		// TODO Auto-generated method stub
+		return itemPackagePatternMapperExt.countPatternsByScaleNo(packagingScaleNo);
+	}
 }

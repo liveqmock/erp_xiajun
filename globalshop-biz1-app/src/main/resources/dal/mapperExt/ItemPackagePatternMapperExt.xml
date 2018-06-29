@@ -11,6 +11,17 @@
 		package_level AS packageLevel,weight AS weight
 	</sql>
 	
+	<select id="countPatternsByScaleNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM
+			shipping_packing_pattern
+		WHERE
+			packaging_scale_no = #{packagingScaleNo}
+			AND
+			is_del = 0
+	</select>
+	
 	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO">
         SELECT
         	count(1)

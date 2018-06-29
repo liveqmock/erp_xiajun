@@ -11,6 +11,7 @@ import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
 
 
 public interface ItemPackageScaleMapperExt {
+	ItemPackageScaleDTO selectById(Long id);
 	
 	List<ItemPackageScaleDTO> queryAllPackageScale();
 	

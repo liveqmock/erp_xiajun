@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
@@ -545,8 +546,8 @@ public class ItemController {
             }
             String itemName = item.getName();
             //获取商品类目的Id
-            Long categoryId = categoryService.queryCategoryIdByCategoryCode(item.getCategoryCode());
-            item.setCategoryId(categoryId);
+            ItemCategoryDO itemCategory = categoryService.queryCategoryIdByCategoryCode(item.getCategoryCode());
+            item.setCategoryCode(itemCategory.getAllPath());
 
             if (itemName.contains("婴儿款")) {
                 item.setSexStyle("婴儿款");
@@ -677,10 +678,12 @@ public class ItemController {
     @ResponseBody
     public Object queryItemList(ItemQueryVO itemQueryVO) {
         //logger.info("itemsPush start");
-        
+    	EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
+    	if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
+            return jsonResult.buildIsSuccess(false).buildMsg("请先登陆");
+        }
         itemQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
-        EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
         jsonResult.setTotal(result.getTotalCount());
         jsonResult.setRows(result.getData());
 //		/ShiroUser shiroUser = this.getShiroUser();

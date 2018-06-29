@@ -80,4 +80,10 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 	public String queryNoById(Long id) {
 		return packageScaleMapperExt.queryNoById(id);
 	}
+
+	@Override
+	public ItemPackageScaleDTO selectById(Long id) {
+		// TODO Auto-generated method stub
+		return packageScaleMapperExt.selectById(id);
+	}
 }
