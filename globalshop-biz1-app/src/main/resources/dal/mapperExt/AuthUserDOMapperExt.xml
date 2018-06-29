@@ -179,7 +179,7 @@
         #{modifier,jdbcType=VARCHAR},
       </if>
     </trim>
-  </insert>	
+  </insert>
 	
   <select id="selectByLoginName" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select 
