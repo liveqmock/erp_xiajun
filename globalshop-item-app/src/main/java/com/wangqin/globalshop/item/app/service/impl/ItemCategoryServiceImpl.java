@@ -187,17 +187,17 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
     public List<ItemCategoryDO> selectByParentAndName(List<ItemCategoryDO> list, String name) {
        return categoryMapper.selectByPcodeAndName(list,name);
     }
-    
-    //通过code查询id
-    @Override
-    public Long queryCategoryIdByCategoryCode(String categoryCode) {
-    	return categoryMapper.queryCategoryIdByCategoryCode(categoryCode);
-    }
 
 	@Override
 	public List<ItemCategoryDO> queryItemCategoryByPcode(String pCode) {
 		// TODO Auto-generated method stub
 		return categoryMapper.queryItemCategoryByPcode(pCode);
+	}
+
+	@Override
+	public ItemCategoryDO queryCategoryIdByCategoryCode(String categoryCode) {
+		// TODO Auto-generated method stub
+		return categoryMapper.queryCategoryIdByCategoryCode(categoryCode);
 	}
 
 }

@@ -16,7 +16,8 @@ public interface IItemPackageScaleService {
 	
 	JsonPageResult<List<ItemPackageScaleDTO>> queryPackageScaleList();
 	
-
+	ItemPackageScaleDTO selectById(Long id); 
+	
 	void insertPackageScale(ItemPackageScaleDTO itemPackageScaleDTO);
 	
 	void delete(Long id);

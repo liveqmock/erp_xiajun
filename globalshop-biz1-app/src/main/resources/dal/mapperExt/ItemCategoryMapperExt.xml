@@ -180,9 +180,11 @@
     
     
 	<!-- 通过code查询id -->
-	<select id="queryCategoryIdByCategoryCode" parameterType="java.lang.String" resultType="java.lang.Long">
-		SELECT id
-		FROM item_category
+	<select id="queryCategoryIdByCategoryCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT 
+			<include refid="Base_Column_List"/>
+		FROM 
+			item_category
 		<where>
 			category_code=#{categoryCode}
 		</where>

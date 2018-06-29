@@ -63,6 +63,6 @@ public interface IItemCategoryService {
    List<ItemCategoryDO> queryItemCategoryByPcode(String pCode);
 
 	   //通过code查询id
-   Long queryCategoryIdByCategoryCode(String categoryCode);
+   ItemCategoryDO queryCategoryIdByCategoryCode(String categoryCode);
 
 }
