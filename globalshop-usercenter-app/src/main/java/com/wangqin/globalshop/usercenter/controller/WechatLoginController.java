@@ -251,7 +251,7 @@ public class WechatLoginController {
                     "          appid: " + appid + ",\n" +
                     "          scope: \"snsapi_login\",\n" +
                     "          redirect_uri: "+baseUrl+",\n" +
-                    "          state: "+1233+",\n" +
+                    "          state: "+AppUtil.getLoginUserCompanyNo()+",\n" +
                     "          style: \"black\", \n" +
                     "      });\n" +
                     "    </script>\n" +
