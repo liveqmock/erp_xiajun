@@ -411,9 +411,10 @@
   	select
   	<include refid="Base_Column_List2"/>
   	from 
-  	auth_user
-  	where
-  	company_no = #{companyNo}
+  		auth_user
+  	<where>
+  		company_no = #{companyNo}
+  	</where>
   </select>	
   <select id="selectByUnionidAndCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select

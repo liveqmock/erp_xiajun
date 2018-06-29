@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
@@ -555,6 +556,7 @@ public class ItemController {
     @ResponseBody
     public Object query(Long id) {
         JsonResult<ItemDTO> result = new JsonResult<>();
+
         if(null == id) {
         	return result.buildIsSuccess(false).buildMsg("id不能为空");
         }       	
@@ -688,10 +690,12 @@ public class ItemController {
     @RequestMapping("/queryItemList")
     @ResponseBody
     public Object queryItemList(ItemQueryVO itemQueryVO) {
-        
+    	EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
+    	if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
+            return jsonResult.buildIsSuccess(false).buildMsg("请先登陆");
+        }
         itemQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
-        EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
         jsonResult.setTotal(result.getTotalCount());
         jsonResult.setRows(result.getData());
         

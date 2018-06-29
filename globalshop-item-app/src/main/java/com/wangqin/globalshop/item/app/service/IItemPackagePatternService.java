@@ -16,10 +16,10 @@ import com.wangqin.globalshop.common.utils.JsonPageResult;
  */
 
 public interface IItemPackagePatternService {
-
+	
+	Integer countPatternsByScaleNo(String packagingScaleNo);
+	
     Integer queryPackageLevelsCount(ShippingPackingPatternQueryVO packageLevelQueryVO);
-
-   
 
     // Boolean updatePackageScaleByEnName(Long packageId, String newEnName);
 
