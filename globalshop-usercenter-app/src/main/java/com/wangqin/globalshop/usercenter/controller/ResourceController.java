@@ -7,6 +7,7 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.usercenter.service.IResourceService;
 
 import ch.qos.logback.classic.pattern.Util;
@@ -88,10 +89,10 @@ public class ResourceController extends BaseController {
     		return renderError("请先登陆");
     	}
     	
-    	if(null != resource.getId()) {
+    	if(StringUtil.isBlank(resource.getId().toString())) {
     		return renderError("新增不能有ID");
     	}
-    	if(null == resource.getPid()) {
+    	if(StringUtil.isBlank(resource.getPid().toString())) {
     		resource.setPid(00000000L);
     	}else {
     		AuthResourceDO resourceDO = resourceService.queryTreeByResourceId(resource.getPid().toString());
@@ -153,7 +154,7 @@ public class ResourceController extends BaseController {
     public Object edit(AuthResourceDO resource) {
         // 选择菜单时将openMode设置为null
         Integer type = resource.getResourceType().intValue();
-        if (null != type && type == 0) {
+        if (StringUtil.isBlank(type.toString())) {
             resource.setOpenMode(null);
         }
         resourceService.updateSelectiveById(resource);
