@@ -11,6 +11,8 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -187,11 +189,6 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	}
 	
 	@Override
-	public Integer queryItemCountByUpc(String upc) {
-		return itemSkuMapperExt.queryItemCountByUpc(upc);
-	}
-	
-	@Override
 	public List<ItemSkuDO> querySkuListByItemCode(String itemCode) {
 		return itemSkuMapperExt.querySkuListByItemCode(itemCode);
 	}
@@ -236,6 +233,17 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	@Override
 	public Integer querySkuNumberBySkuId(Long skuId) {
 		return itemSkuMapperExt.querySkuNumberBySkuId(skuId);
+	}
+	
+	//查询指定的upc对应的item_sku的sku_code,按公司划分,防止重复的upc
+	@Override
+	public List<String> querySkuCodeListByUpc(String companyNo,String upc) {
+		return itemSkuMapperExt.querySkuCodeListByUpc(companyNo, upc);
+	}
+	
+	@Override
+	public Integer queryRecordCountByUpcCompanyNotInSameItem(String companyNo,String upc,String itemCode) {
+		return itemSkuMapperExt.queryRecordCountByUpcCompanyNotInSameItem(companyNo, upc, itemCode);
 	}
 
 }

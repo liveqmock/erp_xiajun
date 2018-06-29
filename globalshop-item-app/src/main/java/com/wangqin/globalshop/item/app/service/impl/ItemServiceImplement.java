@@ -81,18 +81,22 @@ public class ItemServiceImplement implements IItemService {
     private Cache shareCache;
 
 
-   //根据id更新商品
-
     @Override
+	public String queryItemCodeById(Long id) {
+		return itemDOMapperExt.queryItemCodeById(id);
+	}
+	
+    //根据id更新商品(在用)
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateByIdSelective(ItemDO item) {
         itemDOMapperExt.updateByIdSelective(item);
     }
 
-    //插入单个商品
+    //插入单个商品(在用)
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long insertItemSelective(ItemDO item) {
-        item.setCreator("admin");
-        item.setModifier("admin");
         return itemDOMapperExt.insertItemSelective(item);
     }
 

@@ -30,6 +30,11 @@
  	where item_code = #{itemCode}
  	</select>
  	
+ 	<select id="queryItemCodeById" parameterType="java.lang.Long" resultType="java.lang.String">
+ 		SELECT item_code from item
+ 	    where id = #{id}
+ 	</select>
+ 	
     <!-- 插入单个商品 -->
     <insert id="insertItemSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO" >
     insert into item
