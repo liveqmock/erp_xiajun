@@ -200,6 +200,8 @@
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
         	 T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,
+        	 T1.upc,T1.sale_price AS salePrice,T1.sku_pic AS skuPic,
+        	 T1.package_level_id AS packageLevelId,
              inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
 			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
@@ -324,13 +326,14 @@
             LAST_INSERT_ID()
         </selectKey>
         insert into item_sku
-        (sku_code,cost_price,weight,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
+        (sku_code,sku_pic,cost_price,weight,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
             separator=",">
             (
-            #{wdSolr.skuCode}, #{wdSolr.costPrice},#{wdSolr.weight},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
+            #{wdSolr.skuCode}, #{wdSolr.skuPic}, #{wdSolr.costPrice},#{wdSolr.weight},
+            #{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
             #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice},
             #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId}
             )
@@ -625,19 +628,46 @@
         T1.scale, model, T1.sale_type, T1.sale_price, T1.creator, T1.modifier, T1.gmt_create, T1.gmt_modify, T1.is_del
     </sql>
     
-    <select id="queryItemCountByUpc" parameterType="java.lang.String" resultType="java.lang.Integer">
-		SELECT count(1)
+    <!-- 查询指定的upc对应的item_sku的sku_code,按公司划分-->
+    <select id="querySkuCodeListByUpc"  resultType="java.lang.String">
+		SELECT sku_code
 		FROM `item_sku`
-		where upc=#{upc}
+		<where>
+		upc=#{upc}
+		AND company_no=#{companyNo}
 		AND is_del=0
+		</where>
+	</select>
+	
+	<!-- 查询要更新的upc是否在别的商品名下已经存在,存在则表明出现了upc重复的问题-->
+    <select id="queryRecordCountByUpcCompanyNotInSameItem"  resultType="java.lang.Integer">
+		SELECT count(1) 
+		FROM item_sku 
+		<where>
+			<![CDATA[ item_code <> #{itemCode} ]]>
+			AND upc=#{upc}
+			AND company_no=#{companyNo}
+			AND is_del=0
+		</where>
 	</select>
 
-<!-- 根据itemCode查询sku列表 -->
+     <!-- 根据itemCode查询sku列表 -->
      <select id="querySkuListByItemCode" parameterType="java.lang.String" resultMap="BaseResultMap">
      	select  <include refid="Base_Column_List" />
      	from item_sku T1
      	where T1.item_code = #{itemCode}
      	and T1.is_del=0
+     </select>
+     
+     <!-- 根据id查出该sku对应的商品在sku表里面映射了几个sku，如果只有一个，禁止删除这个sku -->
+     <select id="querySkuNumberBySkuId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     	SELECT count(1) 
+     	FROM item_sku
+     	<where>
+     		item_code in 
+     		(select item_code from item_sku where id=#{skuId}) 
+     		AND is_del=0
+     	</where>     	
      </select>
      
      <select id="querySkuCodeById" parameterType="java.lang.Long" resultType="java.lang.String">

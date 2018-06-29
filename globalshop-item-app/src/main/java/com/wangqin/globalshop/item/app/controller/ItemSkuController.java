@@ -29,6 +29,7 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
@@ -63,9 +64,13 @@ public class ItemSkuController  {
 	@RequestMapping("/update")
 	@ResponseBody
 	public Object update(ItemSkuQueryVO itemSku) {
-		itemSku.setModifier("admin");
-		itemSku.setCreator("admin");
 		JsonResult<String> result = new JsonResult<>();
+		if(null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserCompanyNo()) {
+			return result.buildIsSuccess(false).buildMsg("请先登录");
+		}
+		if(null == itemSku.getId()){
+			return result.buildIsSuccess(false).buildMsg("没有SKU id");
+		}
          /**
 		//if haven't item id ,add item
 		if(itemSku.getId()==null){
@@ -106,35 +111,27 @@ public class ItemSkuController  {
 
 			//同步到有赞并上架
 			/*
-			if(item.getIsSale()!=null && item.getIsSale()==1) {
-				if (item.getSaleOnYouzan() == 1) {
-					try {
-						IChannelService channelService = ChannelFactory.getChannel(user.getCompanyId(), ChannelType.YouZan);
-						if (item.getSaleOnYouzan() == 1 && item.getIsSale() != null && item.getIsSale() == 1) { //同步到有赞并上架
-							channelService.syncItem(item.getId());
-						} else { // 下架
-							channelService.syncDelistingItem(item.getId());
-						}
-					} catch (Exception e) {
-						logger.error("商品添加时同步到有赞：", e);
-					}
-				}
-			}*/
+			*/
 
 			//return result.buildIsSuccess(true);
 		//}
-		result.buildIsSuccess(true);
-		result.buildMsg("更新成功");
-		//检测upc是否重复
-		if(0 < iItemSkuService.queryItemCountByUpc(itemSku.getUpc())) {
-			result.buildIsSuccess(false);
-			result.buildMsg("upc不可以重复，请再次输入");
-			return result;
-		}
+		
+		//检测upc是否重复,一个公司旗下的upc不能重复
+		String companyNo = AppUtil.getLoginUserCompanyNo();
+		List<String> skuCodeList = iItemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
+		if(!EasyUtil.isListEmpty(skuCodeList)) {//查到数据库里面有这个upc
+			String currentSkuCode = iItemSkuService.querySkuCodeById(itemSku.getId());
+			for(String skuCode:skuCodeList) {
+				if(!skuCode.equals(currentSkuCode)) {//而且这个upc不是当前正在更新的sku的upc
+					return result.buildIsSuccess(false).buildMsg("更新失败，更新的upc不能和已有的upc重复");
+				}
+			}			
+		} 
 		//更新虚拟库存
-		inventoryService.updateVirtualInv(iItemSkuService.querySkuCodeById(itemSku.getId()), itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());		
+		inventoryService.updateVirtualInv(iItemSkuService.querySkuCodeById(itemSku.getId()), itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());	
+		itemSku.setModifier(AppUtil.getLoginUserId());
 		iItemSkuService.updateById(itemSku);
-		return result;
+		return result.buildIsSuccess(true).buildMsg("更新成功");
 	}
 
 	/**
@@ -207,6 +204,13 @@ public class ItemSkuController  {
 		}else{
 			return result.buildIsSuccess(false).buildMsg("没有SKU id");
 		}*/
+		if(null == id) {
+			return result.buildIsSuccess(false).buildMsg("要删除的sku的id不能为空");
+		}
+		//如果这个sku对应的商品只有这一个sku，禁止删除该sku
+		if(1 >= iItemSkuService.querySkuNumberBySkuId(id)) {
+			return result.buildIsSuccess(false).buildMsg("商品只有这一个sku,暂时无法删除");
+		}
 		iItemSkuService.deleteById(id);
 		result.buildIsSuccess(true);
 		return result;

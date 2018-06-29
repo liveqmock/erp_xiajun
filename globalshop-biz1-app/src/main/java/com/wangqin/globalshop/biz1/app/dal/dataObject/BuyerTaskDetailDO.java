@@ -8,6 +8,8 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     private String buyerTaskNo;
 
+    private String buyerTaskDetailNo;
+
     private String itemCode;
 
     private String upc;
@@ -68,6 +70,14 @@ public class BuyerTaskDetailDO extends BaseModel {
 
     public void setBuyerTaskNo(String buyerTaskNo) {
         this.buyerTaskNo = buyerTaskNo == null ? null : buyerTaskNo.trim();
+    }
+
+    public String getBuyerTaskDetailNo() {
+        return buyerTaskDetailNo;
+    }
+
+    public void setBuyerTaskDetailNo(String buyerTaskDetailNo) {
+        this.buyerTaskDetailNo = buyerTaskDetailNo == null ? null : buyerTaskDetailNo.trim();
     }
 
     public String getItemCode() {

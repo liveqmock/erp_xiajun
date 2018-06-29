@@ -44,9 +44,17 @@
   	r.company_no = #{companyNo}
   </select>
 
-  <delete id="deleteSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO" >
+  <delete id="deleteSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO"  >
   delete from auth_role_resource
   where role_id = #{roleId,jdbcType=BIGINT}
   </delete>
 	
+	
+  <delete id="deleteByRoleId" parameterType="java.lang.Long">
+  delete 
+  from 
+  	auth_role_resource
+  where
+  	role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
 </mapper>
