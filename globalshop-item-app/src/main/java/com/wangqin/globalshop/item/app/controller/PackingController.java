@@ -133,7 +133,15 @@ public class PackingController {
 	@ResponseBody
 	public Object deleteById(Long id) {
 		JsonResult<String> result = new JsonResult<>();
-		
+		//通过包装规格类别的id查到一个包装规格类别
+		ItemPackageScaleDTO itemPackageSacle = shippingPackingScaleService.selectById(id);
+		String packagingScaleNo = itemPackageSacle.getPackagingScaleNo();
+		//通过打包规格查询是否存在这个包装规格
+		int count = iPackageLevelService.countPatternsByScaleNo(packagingScaleNo);
+		//如果返回的记录数超过0条就不能删除
+		if(0 < count) {
+			return result.buildIsSuccess(false).buildMsg("错误！此包装规格类别下有包装规格不能删除");
+		}
 		shippingPackingScaleService.delete(id);
 		result.buildMsg("删除成功");
 		return result.buildIsSuccess(true);
