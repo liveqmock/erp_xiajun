@@ -566,7 +566,7 @@ public class ItemController {
         }
         String itemName = item.getName();
         //获取商品类目的Id
-        Long categoryId = categoryService.queryCategoryIdByCategoryCode(item.getCategoryCode());
+        Long categoryId = categoryService.queryCategoryByCategoryCode(item.getCategoryCode()).getId();
         item.setCategoryId(categoryId);
         
         if (itemName.contains("婴儿款")) {
