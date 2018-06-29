@@ -195,9 +195,9 @@ public class ItemCategoryServiceImpl implements IItemCategoryService {
 	}
 
 	@Override
-	public ItemCategoryDO queryCategoryIdByCategoryCode(String categoryCode) {
+	public ItemCategoryDO queryCategoryByCategoryCode(String categoryCode) {
 		// TODO Auto-generated method stub
-		return categoryMapper.queryCategoryIdByCategoryCode(categoryCode);
+		return categoryMapper.queryCategoryByCategoryCode(categoryCode);
 	}
 
 }
