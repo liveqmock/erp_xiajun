@@ -76,7 +76,7 @@ ALTER TABLE `haidb2new`.`mall_sub_order`
   ADD COLUMN `share_token` VARCHAR(2048) NULL   COMMENT '分销token' ,
   ADD COLUMN `share_time` VARCHAR(16) NULL   COMMENT '分享统计维度日期' ,
   ADD COLUMN `share_close_flag` VARCHAR(1) DEFAULT '0'  NULL   COMMENT '分享分销结算标识' ,
-  ADD COLUMN `share_close_time` VARCHAR(16) NULL   COMMENT '分享分销结算时间' ;
+  ADD COLUMN `share_close_time` VARCHAR(16) NULL   COMMENT '分享分销结算时间' ,
   ADD COLUMN `share_money` NUMERIC(16,4) NULL   COMMENT '分享获得的佣金';
 
 
