@@ -9,7 +9,8 @@ import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;import com.wangqin
 
 
 public interface ItemPackagePatternMapperExt  {
-
+	Integer countPatternsByScaleNo(String packagingScaleNo);
+	
 	List<ItemPackagePatternDTO> queryPatternsByScaleNo(String no);
 	
 	Integer queryPackageLevelsCount(PackageLevelQueryVO packageLevelQueryVO);

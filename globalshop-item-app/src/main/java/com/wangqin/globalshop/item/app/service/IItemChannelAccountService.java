@@ -5,7 +5,7 @@ import com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO;
 
 import java.util.List;
 
-public interface IChannelAccountServ {
+public interface IItemChannelAccountService {
 
 	List<ChannelAccountDO> queryChannelAccountList(ChannelAccountVO channelAccountVO);
 }

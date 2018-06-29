@@ -12,25 +12,17 @@
 		 T1.id,T1.packaging_scale_no AS packagingScaleNo,T1.name,T1.name_en AS nameEn,
 		 T1.weight,T1.size_level AS sizeLevel
 	</sql>
-
-    <!--  
-	<select id="queryPackageScalesCount" resultType="java.lang.Integer">
-        SELECT
-        	count(1)
-        FROM
-            `package_scale` T1
-        where
-     		   1=1
-            <if test=" name != null and name != '' ">
-                and T1.name = #{name}
-            </if>
-            <if test=" enName != null and enName != '' ">
-            	and T1.en_name = #{enName}
-            </if>
-            
-    </select>
-    -->
     
+   <select id="selectById" parameterType="java.lang.Long" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO">
+   		SELECT
+   			<include refid="Base_Column_List"/>
+   		FROM
+   			shipping_packing_scale
+   		WHERE
+   			id = #{ id }
+   			AND
+   			is_del = 0
+   </select>
    
     <select id="queryAllPackageScale" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO" >
         SELECT

@@ -413,11 +413,8 @@
             item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         where
      		   T1.is_del=0
-     		<!-- 
-     		<if test="companyId != null">
-     			and T1.company_id = #{companyId}
-     		</if>
-     		 -->
+
+
             <if test=" name != null and name != '' ">
                 and T1.item_name LIKE concat('%',#{name},'%')
             </if>
@@ -468,7 +465,9 @@
     <!-- 按条件查询商品(fin) -->
     <select id="queryItems" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
         SELECT
-        	 <include refid="Base_Column_List_2" />
+        	 <include refid="Base_Column_List_2" />,
+        	 IFNULL(sum(IFNULL(T3.inv,0)),0) AS inventory,
+        	 IFNULL(sum(IFNULL(T3.virtual_inv,0)),0) AS virtualInv
         FROM
             item T1  LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         where
@@ -524,6 +523,7 @@
             <if test="hasVirtualInventory > 0">
            	and	<![CDATA[ T3.virtual_inv > 0 ]]>
             </if>
+            GROUP BY T3.item_code
 		order by T1.gmt_modify desc;
            
     </select>

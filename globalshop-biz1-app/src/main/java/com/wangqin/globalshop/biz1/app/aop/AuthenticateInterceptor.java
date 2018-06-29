@@ -46,7 +46,7 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         //设置不拦截的对象
         String[] noFilters = new String[] {  "js",
-                "images", "css", "/login" };
+                "images", "ico","css", "/login" };
         boolean beFilter = true;
         for (String s : noFilters) {
             if (uri.contains(s)) {
@@ -86,9 +86,12 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
                     // redis 缓存尝试取
                     String userId = (String) loginCache.get(sessionId);
                     String companyNo = (String) loginCache.get(COMPANY_NO + sessionId);
-                    if (userId != null) {
+                    if (StringUtils.isNotBlank(userId)) {
                         AppUtil.setLoginUser(userId, companyNo);
                         return true;
+                    }else{
+                        response.setStatus(302);
+                        return false;
                     }
                 } catch (Exception e) {
                     LogWorker.log(log, "从Cache获取session异常，跳转登录页面", "");
