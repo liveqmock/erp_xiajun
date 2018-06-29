@@ -40,7 +40,7 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
 
     List<ItemCategoryDO> queryItemCategoryByPcode(String pCode);
 
-    //通过code查询id
-    ItemCategoryDO queryCategoryIdByCategoryCode(String categoryCode);
+    //通过code查询category
+    ItemCategoryDO queryCategoryByCategoryCode(String categoryCode);
 
 }
