@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -228,7 +227,8 @@ public class WechatLoginController {
      * @return
      */
     @RequestMapping("/getHtml")
-    public void getImgHtml(HttpServletResponse response) {
+    public void getImgHtml() {
+        JsonResult<String> result = new JsonResult<>();
         String baseUrl = sysurl + "/wechatLogin/authorized";
         try {
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
@@ -251,18 +251,15 @@ public class WechatLoginController {
                     "          scope: \"snsapi_login\",\n" +
                     "          redirect_uri: "+baseUrl+",\n" +
                     "          state: "+1233+",\n" +
-                    "          style: \"black\",//二维码黑白风格        \n" +
-                    "          href: \"https://某个域名下的css文件\"\n" +
+                    "          style: \"black\", \n" +
+//                    "          href: \"https://某个域名下的css文件\"\n" +
                     "      });\n" +
                     "    </script>\n" +
                     "</body>\n" +
                     "</html>\n";
-            response.setContentType("text/html");
-            PrintWriter writer = response.getWriter();
-            writer.print(str);
+
+            result.buildData(str).buildMsg("成功").buildIsSuccess(true);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
