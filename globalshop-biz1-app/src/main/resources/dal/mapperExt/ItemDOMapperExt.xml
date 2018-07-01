@@ -14,7 +14,8 @@
     <!-- 2.0版通用查询结果列,xiajun-->
     <sql id="Base_Column_List_2">
         T1.id,T1.item_name AS name,T1.status, T1.spec,T1.model,T1.country,T1.booking_date AS bookingDate,
-        T1.category_name AS categoryName,T1.item_code AS itemCode,sale_type AS saleType,
+        T1.category_name AS categoryName,T1.category_code AS categoryCode,T1.item_code AS itemCode,
+        sale_type AS saleType,T1.remark AS remark,T1.detail AS detail,
         main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
         en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
         unit,source,promotion,T1.id_card AS idCard,T1.detail,T1.start_date AS startDate,
@@ -27,6 +28,11 @@
  	<select id="queryIdByItemCode" parameterType="java.lang.String" resultType="java.lang.Long">
  	select id from item
  	where item_code = #{itemCode}
+ 	</select>
+ 	
+ 	<select id="queryItemCodeById" parameterType="java.lang.Long" resultType="java.lang.String">
+ 		SELECT item_code from item
+ 	    where id = #{id}
  	</select>
  	
     <!-- 插入单个商品 -->
@@ -145,7 +151,7 @@
         `remark`,
       </if>
       <if test="detail != null" >
-        detail,
+        `detail`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -407,11 +413,8 @@
             item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         where
      		   T1.is_del=0
-     		<!-- 
-     		<if test="companyId != null">
-     			and T1.company_id = #{companyId}
-     		</if>
-     		 -->
+
+
             <if test=" name != null and name != '' ">
                 and T1.item_name LIKE concat('%',#{name},'%')
             </if>
@@ -462,7 +465,9 @@
     <!-- 按条件查询商品(fin) -->
     <select id="queryItems" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
         SELECT
-        	 <include refid="Base_Column_List_2" />
+        	 <include refid="Base_Column_List_2" />,
+        	 IFNULL(sum(IFNULL(T3.inv,0)),0) AS inventory,
+        	 IFNULL(sum(IFNULL(T3.virtual_inv,0)),0) AS virtualInv
         FROM
             item T1  LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         where
@@ -518,6 +523,7 @@
             <if test="hasVirtualInventory > 0">
            	and	<![CDATA[ T3.virtual_inv > 0 ]]>
             </if>
+            GROUP BY T3.item_code
 		order by T1.gmt_modify desc;
            
     </select>
@@ -639,7 +645,7 @@
 	SELECT
 		<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
 	FROM item T1
-    where T1.company_no = #{companyNo} and T1.status = '1'
+    where T1.company_no = #{companyNo} and T1.status = '1' and T1.wxis_sale=1
     <if test="type != null">
        and DATE_FORMAT(T1.gmt_create,'%Y-%m-%d') &gt; DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -30 DAY),'%Y-%m-%d')
     </if>
@@ -653,6 +659,7 @@
     FROM item T1
     where   T1.company_no = #{companyNo}
             and T1.status = '1'
+            and T1.wxis_sale=1
             and
       <if test="keyWord != null">
         <foreach collection="keyWord" item="kw" separator="or" open="(" close=")" index="index" >

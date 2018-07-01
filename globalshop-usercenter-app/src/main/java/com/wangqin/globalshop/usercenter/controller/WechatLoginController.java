@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -159,14 +160,14 @@ public class WechatLoginController {
         String baseUrl = "https://test.buyer007.cn" + "/wechatLogin/authorized";
         baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
         String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-        url = url + "&state=" + "ktv4bsF7L5";
+        url = url + "&state=" + "ZeYbipA0xN";
         System.out.println(url);
 
 
     }
 
     /**
-     * 获取微信授权二维码的链接
+     * 获取微信授权二维码的图片链接
      *
      * @return
      */
@@ -196,6 +197,76 @@ public class WechatLoginController {
             e.printStackTrace();
         }
         return result.buildIsSuccess(false).buildMsg("获取失败");
+
+    }
+
+    /**
+     * 获取微信授权二维码的链接
+     *
+     * @return
+     */
+    @RequestMapping("/getAuthorizedUrl")
+    public Object getAuthorizedUrl() {
+        JsonResult<Object> result = new JsonResult<>();
+        try {
+            String baseUrl = sysurl + "/wechatLogin/authorized";
+            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+            String state = AppUtil.getLoginUserCompanyNo();
+            url = url + "&state=" + state;
+            return result.buildData(url).buildIsSuccess(true).buildMsg("获取成功");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("获取失败");
+        }
+
+    }
+
+    /**
+     * 获取微信授权二维码的网页
+     *
+     * @return
+     */
+    @RequestMapping("/getHtml")
+    public void getImgHtml(HttpServletResponse response) {
+        JsonResult<String> result = new JsonResult<>();
+        String baseUrl = sysurl + "/wechatLogin/authorized";
+        try {
+            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+
+            String str = "<!DOCTYPE html>\n" +
+                    "<html lang=\"en\">\n" +
+                    "<head>\n" +
+                    "  <meta charset=\"UTF-8\">\n" +
+                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                    "  <title></title>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "    <script src=\"http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
+                    "    <div id=\"login_container\"></div>\n" +
+                    "    <script>\n" +
+                    "      var obj = new WxLogin\n" +
+                    "      ({\n" +
+                    "          id:\"login_container\",//div的id\n" +
+                    "          appid: " + appid + ",\n" +
+                    "          scope: \"snsapi_login\",\n" +
+                    "          redirect_uri: "+baseUrl+",\n" +
+                    "          state: "+AppUtil.getLoginUserCompanyNo()+",\n" +
+                    "          style: \"black\", \n" +
+                    "      });\n" +
+                    "    </script>\n" +
+                    "</body>\n" +
+                    "</html>\n";
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter writer = response.getWriter();
+            writer.print(str);
+            writer.flush();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

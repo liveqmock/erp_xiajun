@@ -40,18 +40,23 @@ public class DealerTypeController {
         
         if(EasyUtil.isStringEmpty(sellerType.getCode())) {
         	return result.buildIsSuccess(false).buildMsg("类别代码必填");
-        }else {
-        	if(EasyUtil.isStringEmpty(sellerType.getName())) {
-            	return result.buildIsSuccess(false).buildMsg("类别名称必填");	
-            }
-        	for(int i = 0; i < list.size(); i ++) {
-        		if(sellerType.getCode().equals(list.get(i).getCode())) {
-        			return result.buildIsSuccess(false).buildMsg("类别代码已存在");
-        		}
-        	}
+        }
+        if(EasyUtil.isStringEmpty(sellerType.getName())){
+            return result.buildIsSuccess(false).buildMsg("类别名称必填");	
 		}
-        StringBuilder code = new StringBuilder(sellerType.getCode());
-        sellerType.setCode(code.append(AppUtil.getLoginUserCompanyNo()).toString());
+        
+        
+        String typeCode=String.format("%1$09d",RandomUtils.nextInt(1000000000));
+        sellerType.setCode(typeCode);
+        for(int i = 0; i < list.size(); i ++) {
+        	DealerTypeDO dealerTypeList = list.get(i);
+    		if(sellerType.getCode().equals(dealerTypeList.getCode())) {
+    			return result.buildIsSuccess(false).buildMsg("类别代码已存在");
+    		}
+    		if(sellerType.getName().equals(dealerTypeList.getName())) {
+    			return result.buildIsSuccess(false).buildMsg("类别名称已存在");
+    		}
+    	}
         iSellerTypeService.insert(sellerType);
        
         return result.buildIsSuccess(true);
@@ -62,9 +67,8 @@ public class DealerTypeController {
     public Object update(DealerTypeDO sellerType) {
     	
     	JsonResult<DealerTypeDO> result = new JsonResult<>();
-        
+       
     	List<DealerTypeDO> list = iSellerTypeService.list(AppUtil.getLoginUserCompanyNo());
-
 
     	if(EasyUtil.isStringEmpty(sellerType.getCode())){
 			return result.buildIsSuccess(false).buildMsg("类别代码必填");
@@ -72,7 +76,9 @@ public class DealerTypeController {
 		if(EasyUtil.isStringEmpty(sellerType.getName())){
 			return result.buildIsSuccess(false).buildMsg("类别名称必填");
 		}
-
+		String typeCode = String.format("%1$09d", RandomUtils.nextInt(1000000000));
+		sellerType.setCode(typeCode);
+		
     	iSellerTypeService.update(sellerType);
     	
         return result.buildIsSuccess(true);

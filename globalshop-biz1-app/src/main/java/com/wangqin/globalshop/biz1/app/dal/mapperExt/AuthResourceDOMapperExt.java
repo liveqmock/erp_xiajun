@@ -19,4 +19,5 @@ public interface AuthResourceDOMapperExt extends AuthResourceDOMapper {
     List<AuthResourceDO> queryResourceQueryList(ResourceQueryVO resourceQueryVO);
     
     AuthResourceDO queryTreeByResourceId(String resourceId);
+   
 }

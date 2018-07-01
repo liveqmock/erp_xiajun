@@ -34,8 +34,12 @@ public class BuyerController {
     @PostMapping(value = {"/queryBuyers"})
     public Object queryWxPurchaseUser() {
         JsonResult<List<BuyerDO>> result = new JsonResult<>();
-        List<BuyerDO> list = service.list();
-        result.buildData(list);
+        try {
+            List<BuyerDO> list = service.list();
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.toString());
+        }
         return result.buildIsSuccess(true);
 
     }
@@ -44,11 +48,14 @@ public class BuyerController {
 
     @PostMapping("/setCommission")
     public Object setCommission(Long id, String purchaseCommissionStr, Long purchaseCommissionMode) {
-
-        BuyerDO buyer = service.selectByPrimaryKey(id);
-        buyer.setPurchaseCommissionMode(purchaseCommissionMode);
-        buyer.setPurchaseCommissionStr(purchaseCommissionStr);
-        service.updateByPrimaryKey(buyer);
+        try {
+            BuyerDO buyer = service.selectByPrimaryKey(id);
+            buyer.setPurchaseCommissionMode(purchaseCommissionMode);
+            buyer.setPurchaseCommissionStr(purchaseCommissionStr);
+            service.updateByPrimaryKey(buyer);
+        } catch (Exception e) {
+            return JsonResult.buildSuccess(false).buildMsg(e.toString());
+        }
         return JsonResult.buildSuccess(true);
     }
 
@@ -60,24 +67,40 @@ public class BuyerController {
 
     @PostMapping("/add")
     public Object add(BuyerDO buyer) {
-        buyer.initCompany();
-        buyer.init();
-        service.insert(buyer);
+        try {
+            buyer.initCompany();
+            buyer.init();
+            service.insert(buyer);
+        } catch (Exception e) {
+            return JsonResult.buildSuccess(false).buildMsg(e.toString());
+        }
         return JsonResult.buildSuccess(buyer);
     }
 
 
     @PostMapping("/update")
     public Object update(BuyerDO buyer) {
-        BuyerDO buyerOld = service.selectByPrimaryKey(buyer.getId());
-        buyerOld.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-
-        buyerOld.setNickName(buyer.getNickName());
-        //仓库暂时不添加，后续再维护
-        buyerOld.setPurchaseCommissionStr(buyer.getPurchaseCommissionStr());
-
-        service.updateByPrimaryKey(buyerOld);
+        try {
+            BuyerDO buyerOld = service.selectByPrimaryKey(buyer.getId());
+            buyerOld.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+            buyerOld.setNickName(buyer.getNickName());
+            //仓库暂时不添加，后续再维护
+            buyerOld.setPurchaseCommissionStr(buyer.getPurchaseCommissionStr());
+            service.updateByPrimaryKey(buyerOld);
+        } catch (Exception e) {
+            return JsonResult.buildSuccess(false).buildMsg(e.toString());
+        }
         return JsonResult.buildSuccess(buyer);
+    }
+
+    @PostMapping("/delete")
+    public Object delete(Long id) {
+        try {
+            service.deleteByPrimaryKey(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return JsonResult.buildSuccess(true);
     }
 
 

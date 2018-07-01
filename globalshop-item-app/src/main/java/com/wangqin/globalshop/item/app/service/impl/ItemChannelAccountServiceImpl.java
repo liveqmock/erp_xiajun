@@ -9,10 +9,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO;
-import com.wangqin.globalshop.item.app.service.IChannelAccountServ;
+import com.wangqin.globalshop.item.app.service.IItemChannelAccountService;
 
 @Service
-public class ChannelAccountServiceImplement implements IChannelAccountServ{
+public class ItemChannelAccountServiceImpl implements IItemChannelAccountService{
 
 	@Autowired
 	private ChannelAccountDOMapperExt channelAccountDOMapperExt;

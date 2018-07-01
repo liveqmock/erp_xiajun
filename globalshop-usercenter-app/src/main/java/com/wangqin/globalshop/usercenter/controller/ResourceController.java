@@ -4,8 +4,14 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.usercenter.service.IResourceService;
+
+import ch.qos.logback.classic.pattern.Util;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,7 +85,28 @@ public class ResourceController extends BaseController {
     @ResponseBody
     public Object add(AuthResourceDO resource, String code) {
         // 选择菜单时将openMode设置为null
-        resource.setResourceId(code);
+    	if(null == AppUtil.getLoginUserId() || null == AppUtil.getLoginUserCompanyNo()) {
+    		return renderError("请先登陆");
+    	}
+    	
+    	if(StringUtil.isBlank(resource.getId().toString())) {
+    		return renderError("新增不能有ID");
+    	}
+    	if(StringUtil.isBlank(resource.getPid().toString())) {
+    		resource.setPid(00000000L);
+    	}else {
+    		AuthResourceDO resourceDO = resourceService.queryTreeByResourceId(resource.getPid().toString());
+    		if(!EasyUtil.isStringEmpty(resourceDO.getUrl())) {
+    			resource.setUrl(resourceDO.getName() + "/" + resource.getUrl());
+    		}else {
+    			resource.setUrl(resourceDO.getName() + "/" + resource.getName());
+    		}
+    		
+    		resource.setPid(Long.parseLong(resourceDO.getResourceId()));
+    		
+    	}
+    	
+        resource.setResourceId(RandomUtils.getTimeRandom());
         resourceService.insert(resource);
         return renderSuccess("添加成功！");
     }
@@ -127,7 +154,7 @@ public class ResourceController extends BaseController {
     public Object edit(AuthResourceDO resource) {
         // 选择菜单时将openMode设置为null
         Integer type = resource.getResourceType().intValue();
-        if (null != type && type == 0) {
+        if (StringUtil.isBlank(type.toString())) {
             resource.setOpenMode(null);
         }
         resourceService.updateSelectiveById(resource);

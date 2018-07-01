@@ -50,7 +50,7 @@
     T1.id, T1.item_find_no, T1.item_name, T1.item_code, T1.sku_code, T1.is_new, 
     T1.sale_type, T1.currency, T1.buy_site, T1.origin, T1.logistic_type, 
     T1.contact_person, T1.contact_tel, T1.id_card, T1.start_date, T1.end_date, 
-    T1.booking_date, T1.is_sale, T1.wxis_sale, T1.is_find, T1.status, T1.desc, 
+    T1.booking_date, T1.is_sale, T1.wxis_sale, T1.is_find, T1.status, T1.desc_msg, 
     T1.spec, T1.model, T1.buyer_open_id, T1.buyer_name, T1.purchase_status, T1.reason,
      T1.find_address, T1.refuse_reason, T1.creator, T1.modifier, 
     T1.gmt_create, T1.gmt_modify, T1.is_del

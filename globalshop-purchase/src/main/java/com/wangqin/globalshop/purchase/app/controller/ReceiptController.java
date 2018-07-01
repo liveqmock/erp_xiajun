@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDetailDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.purchase.app.service.IReceiptDetailService;
 import com.wangqin.globalshop.purchase.app.service.IReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,25 @@ public class ReceiptController {
     @RequestMapping("/queryReceipt")
     public Object queryReceipt(BuyerReceiptDO receipt){
         JsonResult<List<BuyerReceiptDO>> result = new JsonResult<>();
-        List<BuyerReceiptDO> list = service.list(receipt);
+        List<BuyerReceiptDO> list = null;
+        try {
+            receipt.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+            list = service.list(receipt);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true).buildData(list);
     }
     @RequestMapping("/queryTaskReceipt")
     public Object queryReceiptDetail(BuyerReceiptDetailDO receipt){
         JsonResult<List<BuyerReceiptDetailDO>> result = new JsonResult<>();
-        List<BuyerReceiptDetailDO> list = detailService.list(receipt);
+        List<BuyerReceiptDetailDO> list = null;
+        try {
+            receipt.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+            list = detailService.list(receipt);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true).buildData(list);
     }
 

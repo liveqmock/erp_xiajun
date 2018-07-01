@@ -73,12 +73,14 @@
 		WHERE is_del=0
 	</select>
 
+    <!-- 根据品牌的英文名查询品牌的编码 -->
 	<select id="selectNoByName" resultType="java.lang.String" parameterType="java.lang.String">
 		SELECT 
 		T1.brand_no
 		FROM item_brand T1 
 		WHERE T1.name = #{name}
 		AND T1.is_del=0
+		LIMIT 0,1
 	</select>
 	
 	<insert id="insertBrandSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
@@ -138,4 +140,16 @@
   	set is_del = 1
   	where id = #{id}
   </update>
+  
+  <!-- 修改之前查询是不是已经有该英文名的品牌 -->
+  <select id="queryIdListByBrandName" parameterType="java.lang.String" resultType="java.lang.Long">
+  	SELECT id
+  	FROM
+  	item_brand
+  	<where>
+  		name=#{name}
+  	    AND is_del=0
+  	</where>
+  </select>
+  
 </mapper>

@@ -208,8 +208,11 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         /**设置采购中*/
         task.setStatus(Constant.TO_BE_PURCHASED);
         task.init();
-        task.setBuyerName(buyer.getNickName());
-        task.setBuyerOpenId(buyer.getOpenId());
+        if(buyer != null){
+            task.setBuyerName(buyer.getNickName());
+            task.setBuyerOpenId(buyer.getOpenId());
+        }
+
     }
 
     private void getBuyerTaskDetailDO(BuyerTaskDetailDO detail, ItemTask itemTask, BuyerDO by) {

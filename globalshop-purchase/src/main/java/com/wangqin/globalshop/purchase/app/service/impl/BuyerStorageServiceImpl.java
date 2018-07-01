@@ -1,12 +1,10 @@
 package com.wangqin.globalshop.purchase.app.service.impl;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerStorageDetailVo;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerStorageDetailMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -40,6 +38,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
     @Autowired
     private AuthUserDOMapperExt userMapperExt;
 
+    @Autowired
+    private BuyerDOMapperExt buyerDOMapperExt;
+
 
     @Autowired
     private InventoryService inventoryService;
@@ -67,14 +68,14 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
     }
 
     @Override
-    public List<BuyerStorageDetailVo> searchByOpenId(Long openId){
+    public List<BuyerStorageDetailVo> searchByOpenId(String openId){
 
         List<BuyerStorageDetailVo> voList = doSearchList(openId,null,Integer.valueOf(GeneralStatus.INIT.getCode()));
         return voList;
     }
 
     @Override
-    public List<BuyerStorageDetailVo> searchByopenidAndUpc(Long openId, String upc){
+    public List<BuyerStorageDetailVo> searchByopenidAndUpc(String openId, String upc){
 
         List<BuyerStorageDetailVo> voList = doSearchList(openId,upc,Integer.valueOf(GeneralStatus.INIT.getCode()));
         return voList;
@@ -94,7 +95,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
 
     @Override
-    public List<BuyerStorageDetailVo> queryComfirmWithParam(Long openId, String upc){
+    public List<BuyerStorageDetailVo> queryComfirmWithParam(String openId, String upc){
         List<BuyerStorageDetailVo> voList = doSearchList(openId,upc,Integer.valueOf(GeneralStatus.CONFIRM.getCode()));
         return voList;
     }
@@ -105,7 +106,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @param upc
      * @return
      */
-    private List<BuyerStorageDetailVo> doSearchList(Long openId, String upc, Integer status){
+    private List<BuyerStorageDetailVo> doSearchList(String openId, String upc, Integer status){
         List<BuyerStorageDetailVo> voList = new ArrayList<>();
 
         BuyerStorageDO buyerStorageSo = new BuyerStorageDO();
@@ -154,8 +155,17 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
                 vo.setId(detail.getId());
 
+                BuyerDO buyerSo = new BuyerDO();
+                buyerSo.setOpenId(buyerStorage.getBuyerOpenId()+"");
+                buyerSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+
+                BuyerDO buyer = buyerDOMapperExt.searchBuyer(buyerSo);
+
                 vo.setBuyerName(buyerStorage.getBuyerName());
                 vo.setBuyerOpenId(buyerStorage.getBuyerOpenId());
+
+
+
                 vo.setGmtCreate(detail.getGmtCreate());
                 vo.setGmtModify(detail.getGmtModify());
                 vo.setStorageNo(buyerStorage.getStorageNo());
@@ -209,8 +219,8 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         detail.setWarehouseNo(detailVo.getWarehouseNo());
 
         //检验库存
-        if(detailVo.getQuantity() < 0){
-            throw new ErpCommonException("确认入库数量不能小于0");
+        if(detailVo.getQuantity() == null || detailVo.getQuantity() < 0){
+            throw new ErpCommonException("入库数必填");
         }
         detail.setQuantity(detailVo.getQuantity());
 
@@ -275,8 +285,20 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
     public void deleteById(Long id){
         BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
-        detail.setIsDel(true);
-        detaiMapper.updateByPrimaryKey(detail);
+        detaiMapper.deleteByPrimaryKey(id);
+        if(detail != null && !EasyUtil.isStringEmpty(detail.getStorageNo())){
+            BuyerStorageDetailDO detailSo = new BuyerStorageDetailDO();
+            detailSo.setStorageNo(detail.getStorageNo());
+            List<BuyerStorageDetailDO> detailDOList = detaiMapper.searchList(detailSo);
+            if(EasyUtil.isListEmpty(detailDOList)){
+                BuyerStorageDO buyerStorageSo = new BuyerStorageDO();
+                buyerStorageSo.setStorageNo(detail.getStorageNo());
+                BuyerStorageDO buyerStorage = mapper.search(buyerStorageSo);
+                if(buyerStorage != null){
+                    mapper.deleteByPrimaryKey(buyerStorage.getId());
+                }
+            }
+        }
     }
 
     public void updateMem(Long id, String mem){

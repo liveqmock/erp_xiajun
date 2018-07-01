@@ -11,6 +11,7 @@ import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 
 
 
@@ -21,10 +22,12 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
  */
 public class ItemDTO implements Serializable{
 
+	//库存,商品列表展示需要的字段
+	private Long inventory;
+	//虚拟库存,商品列表展示需要的字段
+	private Long virtualInv;
 
 	private Long id;
-
-	
 	private Long companyId;
 	
 	private String name;
@@ -32,6 +35,8 @@ public class ItemDTO implements Serializable{
 	private Long categoryId;
 
 	private String categoryName;
+	
+	private String categoryCode;
 
 	private  String itemCode;
 
@@ -78,7 +83,7 @@ public class ItemDTO implements Serializable{
 
 	private String userModify;
 
-	private  List<ItemSkuDO> itemSkus = new ArrayList<ItemSkuDO>();
+	private  List<ItemSkuQueryVO> itemSkus = new ArrayList<ItemSkuQueryVO>();
 
 	private   String skuList;
 	//商品状态 0新档 1上架 2下架 3删除
@@ -150,6 +155,18 @@ public class ItemDTO implements Serializable{
 	
 
 	
+	public Long getInventory() {
+		return inventory;
+	}
+	public void setInventory(Long inventory) {
+		this.inventory = inventory;
+	}
+	public Long getVirtualInv() {
+		return virtualInv;
+	}
+	public void setVirtualInv(Long virtualInv) {
+		this.virtualInv = virtualInv;
+	}
 	public String getSkuColor() {
 		return skuColor;
 	}
@@ -202,6 +219,13 @@ public class ItemDTO implements Serializable{
 	}
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+	
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 	public String getCategoryName() {
 		return categoryName;
@@ -346,13 +370,14 @@ public class ItemDTO implements Serializable{
 	public void setUserModify(String userModify) {
 		this.userModify = userModify;
 	}
-	public List<ItemSkuDO> getItemSkus() {
+	
+
+	public List<ItemSkuQueryVO> getItemSkus() {
 		return itemSkus;
 	}
-	public void setItemSkus(List<ItemSkuDO> itemSkus) {
+	public void setItemSkus(List<ItemSkuQueryVO> itemSkus) {
 		this.itemSkus = itemSkus;
 	}
-
 	public Integer getCountry() {
 		return country;
 	}

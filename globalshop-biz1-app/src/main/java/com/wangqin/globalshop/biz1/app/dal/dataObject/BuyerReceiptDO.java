@@ -17,7 +17,7 @@ public class BuyerReceiptDO extends BaseModel {
 
     private Byte status;
 
-    private Long buyerId;
+    private String openId;
 
     private String creator;
 
@@ -43,7 +43,6 @@ public class BuyerReceiptDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -88,19 +87,18 @@ public class BuyerReceiptDO extends BaseModel {
         this.status = status;
     }
 
-    public Long getBuyerId() {
-        return buyerId;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setBuyerId(Long buyerId) {
-        this.buyerId = buyerId;
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
     }
 
     public String getCreator() {
         return creator;
     }
 
-    @Override
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
     }
@@ -109,7 +107,6 @@ public class BuyerReceiptDO extends BaseModel {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }

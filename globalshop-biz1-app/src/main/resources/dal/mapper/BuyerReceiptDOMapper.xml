@@ -10,13 +10,13 @@
     <result column="currency" property="currency" jdbcType="VARCHAR" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
-    <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_task_no, company_no, receipt_no, total_price, currency, purchase_storage_no, 
-    status, buyer_id, creator, modifier
+    status, open_id, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -34,11 +34,11 @@
     </selectKey>
     insert into buyer_receipt (buyer_task_no, company_no, receipt_no, 
       total_price, currency, purchase_storage_no, 
-      status, buyer_id, creator, 
+      status, open_id, creator, 
       modifier)
     values (#{buyerTaskNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{receiptNo,jdbcType=VARCHAR}, 
       #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=VARCHAR}, #{purchaseStorageNo,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{buyerId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{openId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO" >
@@ -68,8 +68,8 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="buyerId != null" >
-        buyer_id,
+      <if test="openId != null" >
+        open_id,
       </if>
       <if test="creator != null" >
         creator,
@@ -100,8 +100,8 @@
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="buyerId != null" >
-        #{buyerId,jdbcType=BIGINT},
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -135,8 +135,8 @@
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="buyerId != null" >
-        buyer_id = #{buyerId,jdbcType=BIGINT},
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -156,7 +156,7 @@
       currency = #{currency,jdbcType=VARCHAR},
       purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
-      buyer_id = #{buyerId,jdbcType=BIGINT},
+      open_id = #{openId,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

@@ -70,12 +70,18 @@ public class ItemBrandController {
 	public Object update(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
 		if (StringUtil.isBlank(brand.getName())) {
-			return result.buildMsg("英文品牌不能为空").buildIsSuccess(false);
+			return result.buildMsg("皮牌英文名不能为空").buildIsSuccess(false);
 		}
-		/**zhangziyang**/
-		if(itemBrandService.selectBrandNoByName(brand.getName()) != null || !"".equals(itemBrandService.selectBrandNoByName(brand.getName()))) {
-			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
-		 }
+//		/**zhangziyang**/
+//		if(itemBrandService.selectBrandNoByName(brand.getName()) != null || !"".equals(itemBrandService.selectBrandNoByName(brand.getName()))) {
+//			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+//		 }
+		List<Long> idList = itemBrandService.queryIdListByBrandName(brand.getName());
+		for(Long id:idList) {
+			if(!id.equals(brand.getId())) {
+				return result.buildIsSuccess(false).buildMsg("品牌英文名不能和已有的品牌重合");
+			}
+		}
 		itemBrandService.updateBrand(brand);
 		return result.buildIsSuccess(true);
 	}

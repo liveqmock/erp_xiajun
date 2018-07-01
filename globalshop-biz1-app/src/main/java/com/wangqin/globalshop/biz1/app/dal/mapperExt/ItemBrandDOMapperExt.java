@@ -38,4 +38,8 @@ public interface ItemBrandDOMapperExt extends ItemBrandDOMapper {
     void deleteItemBrandById(Long id);
 
     List<ItemBrandDO> queryByEnNameAndCnName(@Param("enName") String enName, @Param("cnName") String cnName);
+	
+    //修改之前查询是不是已经有该英文名的品牌
+    List<Long> queryIdListByBrandName(String name);
+    
 }

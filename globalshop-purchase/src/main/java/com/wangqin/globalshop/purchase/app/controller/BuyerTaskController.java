@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -8,6 +9,7 @@ import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +25,7 @@ import java.util.List;
 @Controller
 @ResponseBody
 @RequestMapping("/purchaseTask")
+@Authenticated
 public class BuyerTaskController {
     @Autowired
     private IBuyerTaskService buyerTaskService;
@@ -56,7 +59,12 @@ public class BuyerTaskController {
     @PostMapping("/queryTaskDailyList")
     public Object queryTaskDailyList(BuyerTaskDO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
+        List<BuyerTaskDO> list = null;
+        try {
+            list = buyerTaskService.list(buyerTaskDO);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildData(list).buildIsSuccess(true);
     }
 
@@ -66,9 +74,14 @@ public class BuyerTaskController {
      * @return
      */
     @PostMapping("/add")
+    @Transactional(rollbackFor = Exception.class)
     public Object addTask(BuyerTaskVO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-        buyerTaskService.add(buyerTaskDO);
+        try {
+            buyerTaskService.add(buyerTaskDO);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.toString());
+        }
         return result.buildIsSuccess(true);
     }
 
@@ -80,8 +93,12 @@ public class BuyerTaskController {
     @PostMapping("/queryBuyerTaskList")
     public Object queryBuyerTaskList(BuyerTaskDO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-        List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
-        result.buildData(list);
+        try {
+            List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
+            result.buildData(list);
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        }
         return result.buildIsSuccess(true);
     }
 }

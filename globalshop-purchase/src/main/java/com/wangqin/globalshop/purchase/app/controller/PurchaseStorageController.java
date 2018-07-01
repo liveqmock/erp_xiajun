@@ -41,7 +41,7 @@ public class PurchaseStorageController {
 
 
     @RequestMapping("/searchByopenid")
-    public Object searchByOpenId(Long buyerOpenId){
+    public Object searchByOpenId(String buyerOpenId){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
         try {
             List<BuyerStorageDetailVo> list = service.searchByOpenId(buyerOpenId);
@@ -54,7 +54,7 @@ public class PurchaseStorageController {
     }
 
     @RequestMapping("/searchByopenidAndUpc")
-    public Object searchByopenidAndUpc(Long buyerOpenId, String upc){
+    public Object searchByopenidAndUpc(String buyerOpenId, String upc){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
         try {
             List<BuyerStorageDetailVo> list = service.searchByopenidAndUpc(buyerOpenId, upc);
@@ -115,7 +115,7 @@ public class PurchaseStorageController {
 
 
     @RequestMapping("/queryComfirmWithParam")
-    public Object queryComfirmWithParam(Long buyerOpenId, String upc){
+    public Object queryComfirmWithParam(String buyerOpenId, String upc){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
         try {
             List<BuyerStorageDetailVo> list = service.queryComfirmWithParam(buyerOpenId,upc);
@@ -137,7 +137,6 @@ public class PurchaseStorageController {
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
         try {
             service.deleteById(id);
-
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }

@@ -10,7 +10,7 @@ public interface DealerTypeDOMapperExt extends DealerTypeDOMapper {
     
     int countRelativeDealerType(String typeCode);
     
-    int inserByNoId(DealerTypeDO record);
+//    int inserByNoId(DealerTypeDO record);
     
     List<DealerTypeDO> listNoCompanyNo();
 }

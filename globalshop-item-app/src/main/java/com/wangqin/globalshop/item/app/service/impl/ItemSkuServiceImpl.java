@@ -11,6 +11,8 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -187,13 +189,16 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	}
 	
 	@Override
-	public Integer queryItemCountByUpc(String upc) {
-		return itemSkuMapperExt.queryItemCountByUpc(upc);
-	}
-	
-	@Override
 	public List<ItemSkuDO> querySkuListByItemCode(String itemCode) {
 		return itemSkuMapperExt.querySkuListByItemCode(itemCode);
+	}
+	
+	//根据itemCode查询sku列表,包含虚拟库存、颜色、尺寸这3个不在item_sku表里面的字段
+    //商品编辑的时候使用
+    //TODO颜色尺寸的查询 
+	@Override
+	public List<ItemSkuQueryVO> querySkuListByItemCodeContainsVirtualInvScale(String itemCode) {
+		return itemSkuMapperExt.querySkuListByItemCodeContainsVirtualInvScale(itemCode);
 	}
 	
 	@Override
@@ -225,10 +230,28 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	public ItemSkuDO queryBySkuCodeOrUpcAndCompanyNo(String code, String companyNo) {
 		return itemSkuMapperExt.queryBySkuCodeOrUpcAndCompanyNo(code,companyNo);
 	}
+	
 	@Override
 	public Double querySalePriceByItemCode(String itemCode) {
 		// TODO Auto-generated method stub
 		return itemSkuMapperExt.querySalePriceByItemCode(itemCode);
+	}
+	
+	//根据id查出该sku对应的商品在sku表里面映射了几个sku，如果只有一个，禁止删除这个sku
+	@Override
+	public Integer querySkuNumberBySkuId(Long skuId) {
+		return itemSkuMapperExt.querySkuNumberBySkuId(skuId);
+	}
+	
+	//查询指定的upc对应的item_sku的sku_code,按公司划分,防止重复的upc
+	@Override
+	public List<String> querySkuCodeListByUpc(String companyNo,String upc) {
+		return itemSkuMapperExt.querySkuCodeListByUpc(companyNo, upc);
+	}
+	
+	@Override
+	public Integer queryRecordCountByUpcCompanyNotInSameItem(String companyNo,String upc,String itemCode) {
+		return itemSkuMapperExt.queryRecordCountByUpcCompanyNotInSameItem(companyNo, upc, itemCode);
 	}
 
 }

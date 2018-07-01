@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * catagory 数据控制层
+ * item 模块使用
  * 
  * @author zhulu
  */
@@ -36,4 +37,10 @@ public interface ItemCategoryMapperExt extends ItemCategoryDOMapper{
     void deleteItemCategoryById(Long id);
 
     List<ItemCategoryDO> selectByPcodeAndName(@Param("list") List<ItemCategoryDO> list, @Param("name")String name);
+
+    List<ItemCategoryDO> queryItemCategoryByPcode(String pCode);
+
+    //通过code查询category
+    ItemCategoryDO queryCategoryByCategoryCode(String categoryCode);
+
 }

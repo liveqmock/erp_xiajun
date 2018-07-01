@@ -106,11 +106,12 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public void updateRoleResource(Long roleId, String resourceIds) {
+    public void updateRoleResource(Long id, String resourceIds) {
         // 先删除后添加,有点爆力
+        AuthRoleDO roleDO = roleMapper.selectByPrimaryKey(id);
+        Long roleId = roleDO.getRoleId();
+        roleResourceMapper.deleteByRoleId(roleId);
         AuthRoleResourceDO roleResource = new AuthRoleResourceDO();
-        roleResourceMapper.deleteSelective(roleId);
-        
         String[] resourceIdArray = resourceIds.split(",");
         for (String resourceId : resourceIdArray) {
             roleResource = new AuthRoleResourceDO();

@@ -21,8 +21,8 @@ public class DealerServiceImpl implements IDealerService {
     @Autowired
     private DealerDOMapperExt mapper;
     @Override
-    public List<Map<String, String>> dealerList(String companyNo) {
-        return mapper.dealerList(companyNo);
+    public List<Map<String, String>> dealerList(DealerDO seller) {
+        return mapper.dealerList(seller);
     }
     
     @Override

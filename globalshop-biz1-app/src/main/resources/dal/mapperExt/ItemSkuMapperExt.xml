@@ -79,9 +79,22 @@
          T1.category_name,  T1.upc, T1.saleable,  T1.purchase_price,  T1.freight, 
           T1.discount,  T1.logistic_type,  T1.cost_price,  T1.brand_name,
          T1.weight,  T1.sku_pic,  T1.package_code,  T1.package_name,  T1.package_en, 
-         T1.package_weight,  T1.package_level_id,
+         T1.package_weight,  T1.package_level_id,T1.weight,
          T1.scale,  T1.model,  T1.sale_type,  T1.sale_price,  T1.creator,  T1.modifier,
           T1.gmt_create,  T1.gmt_modify,  T1.is_del
+    </sql>
+    
+    <!-- 商品编辑使用 -->
+    <sql id="Base_Column_List_For_Item_Edit" >
+        T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
+        T1.item_name AS itemName,T1.company_no AS companyNo, 
+        T1.category_code AS itemCode, 
+        T1.category_name AS categoryName,  
+        T1.upc AS upc,               
+        T1.weight AS weight,T1.sku_pic AS skuPic, 
+        T1.package_level_id AS packageLevelId,
+        T1.sale_price AS salePrice,
+        inv.virtual_inv AS virtualInv
     </sql>
     
     <!-- 查询可售的sku -->
@@ -200,6 +213,8 @@
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
         	 T1.category_name AS categoryName,T1.item_code AS itemCode,T1.sku_code AS skuCode,
+        	 T1.upc,T1.sale_price AS salePrice,T1.sku_pic AS skuPic,
+        	 T1.package_level_id AS packageLevelId,
              inv.locked_inv as lockedInv,inv.inv as inventory
 			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
 			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
@@ -324,13 +339,14 @@
             LAST_INSERT_ID()
         </selectKey>
         insert into item_sku
-        (sku_code,cost_price,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
+        (sku_code,sku_pic,cost_price,weight,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
             separator=",">
             (
-            #{wdSolr.skuCode}, #{wdSolr.costPrice},#{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
+            #{wdSolr.skuCode}, #{wdSolr.skuPic}, #{wdSolr.costPrice},#{wdSolr.weight},
+            #{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
             #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice},
             #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId}
             )
@@ -625,19 +641,57 @@
         T1.scale, model, T1.sale_type, T1.sale_price, T1.creator, T1.modifier, T1.gmt_create, T1.gmt_modify, T1.is_del
     </sql>
     
-    <select id="queryItemCountByUpc" parameterType="java.lang.String" resultType="java.lang.Integer">
-		SELECT count(1)
+    <!-- 查询指定的upc对应的item_sku的sku_code,按公司划分-->
+    <select id="querySkuCodeListByUpc"  resultType="java.lang.String">
+		SELECT sku_code
 		FROM `item_sku`
-		where upc=#{upc}
+		<where>
+		upc=#{upc}
+		AND company_no=#{companyNo}
 		AND is_del=0
+		</where>
+	</select>
+	
+	<!-- 查询要更新的upc是否在别的商品名下已经存在,存在则表明出现了upc重复的问题-->
+    <select id="queryRecordCountByUpcCompanyNotInSameItem"  resultType="java.lang.Integer">
+		SELECT count(1) 
+		FROM item_sku 
+		<where>
+			<![CDATA[ item_code <> #{itemCode} ]]>
+			AND upc=#{upc}
+			AND company_no=#{companyNo}
+			AND is_del=0
+		</where>
 	</select>
 
-<!-- 根据itemCode查询sku列表 -->
+     <!-- 根据itemCode查询sku列表 -->
      <select id="querySkuListByItemCode" parameterType="java.lang.String" resultMap="BaseResultMap">
      	select  <include refid="Base_Column_List" />
      	from item_sku T1
      	where T1.item_code = #{itemCode}
      	and T1.is_del=0
+     </select>
+     
+     
+     <!-- 根据itemCode查询sku列表,包含虚拟库存、颜色、尺寸这3个不在item_sku表里面的字段-->
+     <!-- 商品编辑的时候使用 -->
+     <!-- TODO颜色尺寸的查询 -->
+     <select id="querySkuListByItemCodeContainsVirtualInvScale" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
+     	select  <include refid="Base_Column_List_For_Item_Edit" />
+     	from item_sku T1 LEFT JOIN inventory inv ON T1.sku_code=inv.sku_code
+     	where T1.item_code = #{itemCode}
+     	and T1.is_del=0
+     </select>
+     
+     <!-- 根据id查出该sku对应的商品在sku表里面映射了几个sku，如果只有一个，禁止删除这个sku -->
+     <select id="querySkuNumberBySkuId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     	SELECT count(1) 
+     	FROM item_sku
+     	<where>
+     		item_code in 
+     		(select item_code from item_sku where id=#{skuId}) 
+     		AND is_del=0
+     	</where>     	
      </select>
      
      <select id="querySkuCodeById" parameterType="java.lang.Long" resultType="java.lang.String">

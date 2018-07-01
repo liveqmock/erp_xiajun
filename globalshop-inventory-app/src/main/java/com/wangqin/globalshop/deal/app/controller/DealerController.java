@@ -6,9 +6,11 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * 
@@ -39,25 +42,26 @@ public class DealerController{
 	private IDealerTypeService iDealerTypeService;
 	@RequestMapping("/add")
 	@ResponseBody
-	public Object add(DealerDO seller) {
+	public Object add(DealerDO seller, String typeName) {
 		 
 		JsonResult<String> result = new JsonResult<>();
 		
-		List<Map<String, String>> dealerList = iDealerService.dealerList(AppUtil.getLoginUserCompanyNo());
+		List<Map<String, String>> dealerList = iDealerService.dealerList(seller);
 		 
-		 if(EasyUtil.isStringEmpty(seller.getCode())) {
-	        	return result.buildIsSuccess(false).buildMsg("类别代码必填");
-	        }else {
-	        	if(EasyUtil.isStringEmpty(seller.getName())) {
-	            	return result.buildIsSuccess(false).buildMsg("类别名称必填");	
-	            }
-	        	for(int i = 0; i < dealerList.size(); i ++) {
-	        		if(seller.getCode().equals(dealerList.get(i).get("code"))) {
-	        			return result.buildIsSuccess(false).buildMsg("类别代码已存在");
-	        		}
-	        	}
-		 }
-		 
+		if(EasyUtil.isStringEmpty(seller.getCode())) {
+			return result.buildIsSuccess(false).buildMsg("类别代码必填");
+	    }
+		if(EasyUtil.isStringEmpty(seller.getName())) {
+			return result.buildIsSuccess(false).buildMsg("类别名称必填");	
+		}
+
+		String dealerCode = String.format("%1$09d",RandomUtils.nextInt(1000000000));
+		seller.setCode(dealerCode);
+		for(int i = 0; i < dealerList.size(); i ++) {
+			if(seller.getCode().equals(dealerList.get(i).get("code"))) {
+    			return result.buildIsSuccess(false).buildMsg("类别代码已存在");
+    		}
+    	}
 		iDealerService.insert(seller);
 		return result.buildIsSuccess(true);
 	}
@@ -107,10 +111,18 @@ public class DealerController{
 	
 	@RequestMapping("/querySellerList")
 	@ResponseBody
-	public Object queryDealerList() {
+	public Object queryDealerList(DealerDO seller, String typeName) {
 		JsonResult<List<Map<String, String>>> result = new JsonResult<>();
-		List<Map<String, String>> list = iDealerService.dealerList(AppUtil.getLoginUserCompanyNo());
-	
+		seller.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		String name = seller.getName();
+		if(!EasyUtil.isStringEmpty(name)) {
+			seller.setName(name);
+		}
+		if(!EasyUtil.isStringEmpty(typeName)) {
+			seller.setTypeName(typeName);
+		}
+		List<Map<String, String>> list = iDealerService.dealerList(seller);
+		
 		result.setData(list);
 		
 		return result.buildIsSuccess(true);

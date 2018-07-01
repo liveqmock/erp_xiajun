@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.*;
 import com.wangqin.globalshop.common.base.BaseDto;
@@ -15,6 +16,7 @@ import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
 
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 
 import com.wangqin.globalshop.item.app.service.*;
@@ -68,6 +70,8 @@ public class ItemServiceImplement implements IItemService {
 
     @Autowired
     private IUploadFileService uploadFileService;
+    
+ 
 
     @Autowired
     private ItemSkuMapperExt itemSkuMapperExt;
@@ -81,18 +85,22 @@ public class ItemServiceImplement implements IItemService {
     private Cache shareCache;
 
 
-   //根据id更新商品
-
     @Override
+	public String queryItemCodeById(Long id) {
+		return itemDOMapperExt.queryItemCodeById(id);
+	}
+	
+    //根据id更新商品(在用)
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateByIdSelective(ItemDO item) {
         itemDOMapperExt.updateByIdSelective(item);
     }
 
-    //插入单个商品
+    //插入单个商品(在用)
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long insertItemSelective(ItemDO item) {
-        item.setCreator("admin");
-        item.setModifier("admin");
         return itemDOMapperExt.insertItemSelective(item);
     }
 
@@ -138,12 +146,10 @@ public class ItemServiceImplement implements IItemService {
         return item;
     }
 
+    //商品列表
     @Override
     public JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO) {
         JsonPageResult<List<ItemDTO>> itemResult = new JsonPageResult<>();
-
-        // itemQueryVO.setCompanyId(ShiroUtil.getShiroUser().getCompanyId());
-
         // 1、查询总的记录数量
         Integer totalCount = itemDOMapperExt.queryItemsCount(itemQueryVO);
 
@@ -164,23 +170,31 @@ public class ItemServiceImplement implements IItemService {
      */
     @Override
     public ItemDTO queryItemById(Long id) {
-        //return itemDOMapperExt.queryItemById(id);
         if (null == id) {
             throw new RuntimeException("商品的id不能为空");
         }
         ItemDTO item = itemDOMapperExt.queryItemById(id);
-        if (item != null) {
-            List<ItemSkuDO> itemSkus = itemSkuService.querySkuListByItemCode(item.getItemCode());
-            //查询分渠道销售价格
-//			itemSkus.forEach(sku -> {
-//				if(ChannelSaleType.DIFFERENT.getValue() == sku.getSaleMode()) {
-//					sku.setChannelSalePriceList(channelSalePriceService.queryPriceListBySkuCode(sku.getSkuCode()));
-//				}
-//			});
-            if (itemSkus != null) {
-                item.setItemSkus(itemSkus);
-            }
+        if(null == item) {
+        	throw new RuntimeException("商品不存在或者已删除");
         }
+        List<ItemSkuQueryVO> itemSkus = itemSkuService.querySkuListByItemCodeContainsVirtualInvScale(item.getItemCode());
+        if(EasyUtil.isListEmpty(itemSkus)) {
+        	throw new RuntimeException("商品无sku，无法编辑");
+        }
+        for(ItemSkuQueryVO sku:itemSkus) {
+        	List<ItemSkuScaleDO> skuScaleList = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
+        	if(!EasyUtil.isListEmpty(skuScaleList)) {
+        		for(ItemSkuScaleDO scale:skuScaleList) {
+        			if("颜色".equals(scale.getScaleName())) {
+        				sku.setColor(scale.getScaleValue());
+        			}
+        			if("尺寸".equals(scale.getScaleName())) {
+        				sku.setScale(scale.getScaleValue());
+        			}
+        		}
+        	}
+        }
+        item.setItemSkus(itemSkus);
         return item;
     }
 
@@ -217,6 +231,18 @@ public class ItemServiceImplement implements IItemService {
         return result;
     }
 
+
+    public ShareTokenEntity getTokenFromCache(String uuid){
+        ShareTokenEntity entity = null;
+        if (StringUtils.isBlank(uuid)){
+            return entity;
+        }
+        String tokenStr = (String)shareCache.get(uuid);
+        if (StringUtils.isNotBlank(tokenStr)){
+            entity = BaseDto.fromJson(tokenStr, ShareTokenEntity.class);
+        }
+        return entity;
+    }
 
     public String generateItemShareUrl(String userId,  String companyNo,String itemCode, String pages, String accessToken){
 

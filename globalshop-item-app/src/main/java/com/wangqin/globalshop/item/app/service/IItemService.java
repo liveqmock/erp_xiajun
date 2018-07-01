@@ -7,6 +7,7 @@ import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
+import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import java.util.Map;
 
 public interface IItemService {
 
+
+	String queryItemCodeById(Long id);
 	//根据id更新商品
 	void updateByIdSelective(ItemDO item);
 	
@@ -33,7 +36,9 @@ public interface IItemService {
 	void addItem(ItemDO item);
 
 	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
-	
+
+	public ShareTokenEntity getTokenFromCache(String uuid);
+
 	
 	
 	
