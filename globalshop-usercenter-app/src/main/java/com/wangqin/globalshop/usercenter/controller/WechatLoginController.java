@@ -82,9 +82,9 @@ public class WechatLoginController {
                 response.sendRedirect(sysurl);
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
-
         } catch (IOException e) {
-            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("跳转地址错误："+sysurl);
+//            e.printStackTrace();
         }
         return result.buildIsSuccess(false).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆");
 
@@ -102,7 +102,7 @@ public class WechatLoginController {
             return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
         }
         String unionid = o.getString("unionid");
-        List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid,state);
+        List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid, state);
         if (hasAuthUser(list, state)) {
             return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
         }
@@ -163,8 +163,8 @@ public class WechatLoginController {
         System.out.println(url);
 
 
-
     }
+
     /**
      * 获取微信授权二维码的链接
      *
