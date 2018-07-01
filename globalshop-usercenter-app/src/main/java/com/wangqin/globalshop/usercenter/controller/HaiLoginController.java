@@ -74,6 +74,7 @@ public class HaiLoginController extends BaseController {
             loginCache.putEx(sessionId, username, TIMEOUT);
             loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
             AppUtil.setLoginUser(username, user.getCompanyNo());
+            logger.info(username+user.getCompanyNo()+"登录成功");
             return renderSuccess();
 
         }
