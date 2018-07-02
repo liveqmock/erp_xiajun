@@ -70,7 +70,7 @@
             	and T1.package_id = #{packageId}
             </if>
             -->
-          order by T1.id 
+          order by T1.id DESC
           	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
     

@@ -451,8 +451,8 @@ public class ItemController {
         			ItemSkuDO addSku = new ItemSkuDO();
         			ItemDTO itemDTO = iItemService.queryItemById(item.getId());
         			addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-        			addSku.setItemCode(itemDTO.getItemCode());
-        			addSku.setSkuCode("S" + item.getCategoryCode() + "Q" + RandomUtils.getTimeRandom() + String.format("%0" + 2 + "d", (startIndex++)));
+        			addSku.setItemCode(itemDTO.getItemCode());		
+        			addSku.setSkuCode("S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandom() + "Q"+String.format("%0" + 2 + "d", (startIndex++)));
         			addSku.setScale(newSku.getScale());
         			addSku.setSalePrice((double) newSku.getSalePrice());
         			addSku.setWeight(newSku.getWeight());
@@ -462,6 +462,7 @@ public class ItemController {
         			addSku.setCreator(AppUtil.getLoginUserId());
         			addSku.setModifier(AppUtil.getLoginUserId());
         			addSku.setItemName(itemDTO.getName());
+        			//插入规格TODO
         			itemSkuService.insertItemSkuSelective(addSku);
         		}
         	}        		      	     		
