@@ -68,7 +68,7 @@ public class CategoryController  {
 				}
 		   }
 		}
-		//判断同一个级别下类目的名字可以和已有的类目是否相同
+		//判断同一个级别下类目的名字可以和已有的类目是否相同，@Author:ZhangZiYang
 		List<ItemCategoryDO> itemCategoryList = categoryService.queryItemCategoryByPcode(category.getpCode());
 		for(int i = 0; i < itemCategoryList.size(); i ++) {
 			ItemCategoryDO itemcategory = itemCategoryList.get(i);
@@ -123,6 +123,15 @@ public class CategoryController  {
 			}
 		}
 
+		//判断同一个级别下类目的名字可以和已有的类目是否相同，@Author:ZhangZiYang
+		List<ItemCategoryDO> itemCategoryList = categoryService.queryItemCategoryByPcode(category.getpCode());
+		for(int i = 0; i < itemCategoryList.size(); i ++) {
+			ItemCategoryDO itemcategory = itemCategoryList.get(i);
+			if(itemcategory.getName().equals(category.getName())) {
+				return result.buildIsSuccess(false).buildMsg("同一个级别下类目的名字不可以和已有的类目相同");
+			}
+		}
+				
 		category.setModifier(AppUtil.getLoginUserId());
 		categoryService.update(category);
 		return result.buildIsSuccess(true);
