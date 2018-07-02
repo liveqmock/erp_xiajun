@@ -145,16 +145,18 @@
             </if>
     </select>
     
+    <!-- 查询sku列表 -->
+    <!-- 可售库存=现货库存+虚拟库存-占用库存 -->
     <select id="queryItemSkus" resultType="com.wangqin.globalshop.biz1.app.dto.ISkuDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
         SELECT
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
         	 T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,
         	 T1.sku_code AS skuCode,T1.sale_price AS salePrice,T1.gmt_modify AS gmtModify,
-             inv.locked_inv as lockedInv,inv.inv as inventory
-			 ,inv.virtual_inv as virtualInv,inv.locked_virtual_inv lockedVirtualInv,
-			 inv.trans_inv as transInv,inv.locked_trans_inv as lockedTransInv,
-			 (inv.inv-inv.locked_inv+inv.trans_inv-inv.locked_trans_inv) as totalAvailableInv
+        	 (inv.inv+inv.virtual_inv-inv.locked_inv) as totalAvailableInv,<!-- 可售库存 -->           
+			 inv.virtual_inv as virtualInv,<!-- 虚拟库存 --> 
+			 inv.inv AS inventory,<!-- 现货库存 --> 
+			 inv.locked_inv AS lockedInv<!-- 占用库存 --> 		 
         FROM
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
