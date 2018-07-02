@@ -83,9 +83,9 @@ public class WechatLoginController {
                 response.sendRedirect(sysurl);
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
-
         } catch (IOException e) {
-            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("跳转地址错误："+sysurl);
+//            e.printStackTrace();
         }
         return result.buildIsSuccess(false).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆");
 
