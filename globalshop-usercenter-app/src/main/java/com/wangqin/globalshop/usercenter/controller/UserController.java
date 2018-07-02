@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
@@ -10,9 +11,14 @@ import com.wangqin.globalshop.usercenter.service.IUserRoleService;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.service.QrCodeService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 /**
  * @description：用户管理
  */
@@ -30,7 +38,8 @@ import java.util.Map;
 @RequestMapping("/user")
 @Authenticated
 public class UserController extends BaseController {
-
+	
+	protected static Logger log = LoggerFactory.getLogger("System");
     @Autowired
     private IUserService userService;
     @Autowired
@@ -60,7 +69,8 @@ public class UserController extends BaseController {
      */
     @PostMapping("/dataGrid")
     @ResponseBody
-    public Object dataGrid(UserVo userVo, Integer page, Integer rows, String sort, String order) {
+    public Object dataGrid( UserVo userVo, Integer page, Integer rows, String sort, String order) {
+    	LogWorker.logStart(log, "配置", "userVo:{}", userVo);
     	rows = 1000;
         PageInfo pageInfo = new PageInfo(page, rows);
         Map<String, Object> condition = new HashMap<String, Object>();
@@ -79,6 +89,7 @@ public class UserController extends BaseController {
         }
         pageInfo.setCondition(condition);
         userService.selectDataGrid(pageInfo);
+        LogWorker.logEnd(log, "配置", "userVo:{}", userVo);
         return pageInfo;
     }
 
@@ -100,42 +111,35 @@ public class UserController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Object add(UserVo userVo) {
-    	
+    public Object add(@Valid UserVo userVo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "userVo:{}", userVo);
+    	String userNo=CodeGenUtil.genUserNo();
+        userVo.setUserNo(userNo);
+        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
+        
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
+        
         AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
         if (authUserLoginName != null ) {
             return renderError("用户名已存在!");
         }
-        String userNo=CodeGenUtil.genUserNo();
-        userVo.setUserNo(userNo);
-        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
+        
         userService.insertByVo(userVo);
         
         AuthUserDO authUser = userService.selectUserVoByUserNo(userNo);
-        if(EasyUtil.isStringEmpty(userVo.getLoginName())) {
-        	return renderError("登录名不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getPassword())) {
-        	return renderError("密码不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getAge().toString())) {
-        	return renderError("年龄不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getName())) {
-        	return renderError("姓名不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getSex().toString())) {
-        	return renderError("性别不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getUserType().toString())) {
-        	return renderError("用户类别不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getStatus().toString())) {
-        	return renderError("状态不能为空");
-        }
+ 
         userVo.setId(authUser.getId());
         userService.insertByUserVo(userVo);
         
+        LogWorker.logEnd(log, "配置", "userVo:{}", userVo);
         return renderSuccess("添加成功");
     }
     /**
@@ -146,35 +150,26 @@ public class UserController extends BaseController {
      */
     @PostMapping("/update")
     @ResponseBody
-    public Object update(UserVo userVo) {
-     
+    public Object update(@Valid UserVo userVo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "userVo{}", userVo);
         String userNo=CodeGenUtil.genUserNo();
         userVo.setUserNo(userNo);
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
+        
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
         userService.updateByVo(userVo);
-        if(EasyUtil.isStringEmpty(userVo.getLoginName())) {
-        	return renderError("登录名不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getPassword())) {
-        	return renderError("密码不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getAge().toString())) {
-        	return renderError("年龄不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getName())) {
-        	return renderError("姓名不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getSex().toString())) {
-        	return renderError("性别不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getUserType().toString())) {
-        	return renderError("用户类别不能为空");
-        }
-        if(EasyUtil.isStringEmpty(userVo.getStatus().toString())) {
-        	return renderError("状态不能为空");
-        }
         userRoleService.deleteUserRoleByUserId(userVo.getId());
         userService.insertByUserVo(userVo);
+        
+        LogWorker.logEnd(log, "配置", "userVo{}", userVo);
         
         return renderSuccess("修改成功");
     }
@@ -208,15 +203,30 @@ public class UserController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Object edit(UserVo userVo) {
-        AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());
+    public Object edit(@Valid UserVo userVo, BindingResult result) {
+        LogWorker.logStart(log, "配置", "userVo{}", userVo);
+    	
+    	AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());
         if (list == null ) {
             return renderError("用户不存在!");
         }
         if (StringUtils.isNotBlank(userVo.getPassword())) {
             userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         }
+        
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
         userService.updateByVo(userVo);
+        
+        LogWorker.logEnd(log, "配置", "userVo{}", userVo);
+        
         return renderSuccess("修改成功！");
     }
 

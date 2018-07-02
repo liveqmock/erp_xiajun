@@ -10,11 +10,14 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.LogWorker;
 import com.wangqin.globalshop.common.utils.PageInfo;
 import com.wangqin.globalshop.usercenter.service.IResourceService;
 import com.wangqin.globalshop.usercenter.service.IRoleResourceService;
 import com.wangqin.globalshop.usercenter.service.IRoleService;
 import org.apache.commons.lang.math.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 /**
  * @description：权限管理
  */
@@ -38,7 +43,8 @@ import java.util.Set;
 @RequestMapping("/role")
 @Authenticated
 public class RoleController extends BaseController {
-
+	
+	protected static Logger log = LoggerFactory.getLogger("System");
     @Autowired
     private IRoleService roleService;
     @Autowired
@@ -124,7 +130,9 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Object add(AuthRoleDO role, BindingResult result, Model model) {
+    public Object add(@Valid RoleQueryVO roleVo,AuthRoleDO roleDo ,BindingResult result, Model model) {
+    	LogWorker.logStart(log, "配置", "roleVo", roleVo);
+    	
         if (result.hasErrors()) {
             List<ObjectError> list = result.getAllErrors();
             for (ObjectError error : list) {
@@ -133,17 +141,20 @@ public class RoleController extends BaseController {
             return null;
         }
         
-        if(EasyUtil.isStringEmpty(role.getName())) {
+        if(EasyUtil.isStringEmpty(roleVo.getName())) {
         	return renderError("角色名称");
         }
-        if(EasyUtil.isStringEmpty(role.getSeq().toString())) {
+        if(EasyUtil.isStringEmpty(roleVo.getSeq().toString())) {
         	return renderError("排序不能为空");
         }
-        if(EasyUtil.isStringEmpty(role.getStatus().toString())) {
+        if(EasyUtil.isStringEmpty(roleVo.getStatus().toString())) {
         	return renderError("状态不能为空");
         }
-        role.setRoleId((long)RandomUtils.nextInt(1000000000));
-        roleService.insert(role);
+        roleVo.setRoleId((long)RandomUtils.nextInt(1000000000));
+        roleService.insert(roleDo);
+        
+        LogWorker.logEnd(log, "配置", "roleVo", roleVo);
+        
         return renderSuccess("添加成功！");
     }
 
@@ -254,11 +265,11 @@ public class RoleController extends BaseController {
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public Object queryList(RoleQueryVO roleQueryVO) {
+    public Object queryList(RoleQueryVO roleVO) {
         String companyNo=AppUtil.getLoginUserCompanyNo();
         logger.info("current CompanyNo is " + companyNo);
-        roleQueryVO.setCompanyNo(companyNo);
-        JsonPageResult<List<AuthRoleDO>> result = roleService.queryRoleList(roleQueryVO);
+        roleVO.setCompanyNo(companyNo);
+        JsonPageResult<List<RoleQueryVO>> result = roleService.queryRoleList(roleVO);
 
         return result.buildIsSuccess(true);
     }

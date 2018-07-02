@@ -3,6 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper;
+import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,26 +27,26 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
 //    List<AuthRoleDO> selectRoleList(page, pageInfo.getSort(), pageInfo.getOrder());
 
     //Here are
-    List<AuthRoleDO> selectList();
+    List<RoleQueryVO> selectList();
 
     Map<String, Set<String>> selectResourceMapByUserId(String loginName);
 
-    List<AuthResourceDO> selectResourceListByRoleIdList(List<Long> roleIdList);
+    List<ResourceQueryVO> selectResourceListByRoleIdList(List<Long> roleIdList);
 
     List<Long> selectResourceIdListByRoleId(Long id);
 
     List<Long> queryResourceIdListByRoleId(@Param("id") Long id);
 
 
-    Integer queryRolesCount(RoleQueryVO roleQueryVO);
+    Integer queryRolesCount(RoleQueryVO roleVO);
 
-    List<AuthRoleDO> queryRoleQueryList(RoleQueryVO roleQueryVO);
+    List<RoleQueryVO> queryRoleQueryList(RoleQueryVO roleVO);
 
-    AuthRoleDO searchAuthRole(AuthRoleDO authRole);
+    RoleQueryVO searchAuthRole(RoleQueryVO roleVO);
 
-    Long searchAuthRoleCount(AuthRoleDO authRole);
+    Long searchAuthRoleCount(RoleQueryVO roleVO);
 
-    List<AuthRoleDO> searchAuthRoleList(AuthRoleDO authRoleDO);
+    List<RoleQueryVO> searchAuthRoleList(RoleQueryVO roleVO);
 
-    AuthRoleDO selectByNameAndCompanyNo(@Param("newOne") String newOne, @Param("companyNo") String companyNo);
+    RoleQueryVO selectByNameAndCompanyNo(@Param("newOne") String newOne, @Param("companyNo") String companyNo);
 }
