@@ -5,15 +5,13 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, code, `name`, remark, gmt_create, gmt_modify, is_del, creator, modifier
+    id, code, name, company_no, remark, creator, modifier
   </sql>
    <select id="list" resultMap="BaseResultMap" >
      SELECT
@@ -43,60 +41,61 @@
   		FROM
   			dealer_type
   	</select>
-	<insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO" >
-    insert into dealer_type
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      id,
-      <if test="code != null" >
-        code,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModify != null" >
-        gmt_modify,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="creator != null" >
-        creator,
-      </if>
-      <if test="modifier != null" >
-        modifier,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="code != null" >
-        #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModify != null" >
-        #{gmtModify,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null" >
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+	<!--<insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO" >-->
+    <!--insert into dealer_type-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--id,-->
+      <!--<if test="code != null" >-->
+        <!--code,-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name,-->
+      <!--</if>-->
+      <!--</if>-->
+      <!--<if test="remark != null" >-->
+        <!--remark,-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--gmt_create,-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--gmt_modify,-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--is_del,-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--creator,-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--modifier,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--<if test="code != null" >-->
+        <!--#{code,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="remark != null" >-->
+        <!--#{remark,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="gmtCreate != null" >-->
+        <!--#{gmtCreate,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="gmtModify != null" >-->
+        <!--#{gmtModify,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="isDel != null" >-->
+        <!--#{isDel,jdbcType=BIT},-->
+      <!--</if>-->
+      <!--<if test="creator != null" >-->
+        <!--#{creator,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="modifier != null" >-->
+        <!--#{modifier,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
 </mapper>
