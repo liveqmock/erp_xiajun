@@ -29,6 +29,10 @@ public class CodeGenUtil {
 		return "TaskNo" + System.currentTimeMillis();
 	}
 
+	public static String getBuyerTaskDetailNo() {
+		return "TaskDetailNo" + System.currentTimeMillis();
+	}
+
     public static String getShopCode() {
 		return "SHOP" + RandomUtils.nextInt(10000);
     }
