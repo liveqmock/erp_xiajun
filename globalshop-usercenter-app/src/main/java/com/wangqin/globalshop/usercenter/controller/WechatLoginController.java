@@ -229,7 +229,6 @@ public class WechatLoginController {
      */
     @RequestMapping("/getHtml")
     public void getImgHtml(HttpServletResponse response) {
-        JsonResult<String> result = new JsonResult<>();
         String baseUrl = sysurl + "/wechatLogin/authorized";
         try {
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
@@ -248,11 +247,11 @@ public class WechatLoginController {
                     "      var obj = new WxLogin\n" +
                     "      ({\n" +
                     "          id:\"login_container\",//div的id\n" +
-                    "          appid: " + appid + ",\n" +
-                    "          scope: \"snsapi_login\",\n" +
-                    "          redirect_uri: "+baseUrl+",\n" +
-                    "          state: "+AppUtil.getLoginUserCompanyNo()+",\n" +
-                    "          style: \"black\", \n" +
+                    "          appid: \""+appid+"\",\n" +
+                    "          scope: \"snsapi_login\",//写死\n" +
+                    "          redirect_uri: '"+baseUrl+"',\n" +
+                    "          state: \""+AppUtil.getLoginUserCompanyNo()+"\",\n" +
+                    "          style: \"black\",\n" +
                     "      });\n" +
                     "    </script>\n" +
                     "</body>\n" +
