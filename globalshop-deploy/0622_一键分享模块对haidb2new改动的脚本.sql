@@ -3,6 +3,26 @@
 -- oneshare模块对数据库haidb2new的改动
 -- 在133/111/180了上已经运行过了
 
+---- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增applet_config表-- -- -- -- -- -- -- -- --
+CREATE TABLE applet_config
+(
+  id          BIGINT(64) AUTO_INCREMENT
+    PRIMARY KEY,
+  company_no  VARCHAR(64)                        NOT NULL
+  COMMENT '公司代号',
+  secret      VARCHAR(64)                        NOT NULL
+  COMMENT '小程序secret',
+  appid       VARCHAR(64)                        NOT NULL
+  COMMENT '小程序appid',
+  applet_type VARCHAR(5)                         NOT NULL
+  COMMENT '小程序的类型  1: 采购 2.商城',
+  is_del      TINYINT(1) DEFAULT '0'             NULL,
+  creator     VARCHAR(32) DEFAULT 'system'       NULL,
+  modifier    VARCHAR(32) DEFAULT 'system'       NULL,
+  gmt_create  DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+  gmt_modify  DATETIME DEFAULT CURRENT_TIMESTAMP NULL
+);
+
 ---- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增wx_user表-- -- -- -- -- -- -- -- --
 -- auto-generated definition
 CREATE TABLE wx_user
