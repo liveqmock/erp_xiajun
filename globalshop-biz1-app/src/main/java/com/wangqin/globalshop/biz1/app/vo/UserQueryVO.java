@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.biz1.app.vo;
+ package com.wangqin.globalshop.biz1.app.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
@@ -8,6 +8,11 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.utils.PageQueryVO;
 import java.util.Date;
 import java.util.List;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 
@@ -19,39 +24,49 @@ import java.util.List;
  *
  */
 public class UserQueryVO extends PageQueryVO {
-
+	
+	@NotNull(message = "id不能为空")
 	private Long id;
-
+	@NotNull(message = "用户编号不能为空")
+	private String userNo;
+	@Size(max = 64,min = 1,message = "登陆名不能为空也不能大于64位")
 	private String loginName;
-
+	@Size(max = 64,min = 1,message = "用户名不能为空也不能大于64位")
 	private String name;
-
+	@Size(max = 64, min = 1, message = "所属公司不能为空也不能大于64位")
+	private String companyNo;
 	@JsonIgnore
+	@Size(max = 64, min = 1, message = "密码不能为空也不能大于64位")
 	private String password;
-
+	@Max(value = 0, message = "用户类别，0是男")
+	@Min(value = 1, message = "用户类别，1是女")
 	private Integer sex;
-
+	@Max(value = 0, message = "年龄最小只能写0")
+	@Min(value = 120, message = "年龄最大只能写120")
 	private Integer age;
-
 	private Integer userType;
-
+	
 	private Integer status;
-
 	private Integer organizationId;
-
+	@NotNull(message = "创建时间不能为空")
 	private Date createTime;
-
-	private Date gmtCreate;
-
+	@Size(max = 11, min = 0, message = "电话最多11位")
 	private String phone;
 
 	private List<AuthRoleDO> rolesList;
-
+	
 	private String organizationName;
 
 	private String roleIds;
-
+	@NotNull(message = "不能为空")
+	private Date createdateStart;
+	@NotNull(message = "不能为空")
+	private Date createdateEnd;
+	@NotNull(message = "不能为空")
+	private Date gmtCreate;
+	@NotNull(message = "不能为空")
 	private Date startTime;
+	@NotNull(message = "不能为空")
 	private Date endTime;
 
 	public Long getId() {

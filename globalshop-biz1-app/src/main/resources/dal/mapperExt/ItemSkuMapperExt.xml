@@ -75,13 +75,13 @@
     </resultMap>
     
     <sql id="Base_Column_List" >
-        T1.id,  T1.sku_code,  T1.item_code,  T1.item_name,  T1.company_no,  T1.category_code, 
-         T1.category_name,  T1.upc, T1.saleable,  T1.purchase_price,  T1.freight, 
-          T1.discount,  T1.logistic_type,  T1.cost_price,  T1.brand_name,
-         T1.weight,  T1.sku_pic,  T1.package_code,  T1.package_name,  T1.package_en, 
-         T1.package_weight,  T1.package_level_id,T1.weight,
-         T1.scale,  T1.model,  T1.sale_type,  T1.sale_price,  T1.creator,  T1.modifier,
-          T1.gmt_create,  T1.gmt_modify,  T1.is_del
+       	 id,  sku_code,  item_code,  item_name,  company_no,  category_code, 
+         category_name,  upc, saleable,  purchase_price,  freight, 
+         discount,  logistic_type,  cost_price,  brand_name,
+         weight,  sku_pic,  package_code,  package_name,  package_en, 
+         package_weight,  package_level_id,weight,
+         scale,  model,  sale_type,  sale_price,  creator,  modifier,
+          gmt_create,  gmt_modify,  is_del
     </sql>
     
     <!-- 查询可售的sku -->

@@ -6,12 +6,13 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
+
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
@@ -43,7 +44,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     private ItemSkuMapperExt itemSkuMapper;
 
     @Override
-    public List<BuyerTaskDO> list(BuyerTaskDO buyerTask) {
+    public List<BuyerTaskVO> list(BuyerTaskVO buyerTask) {
         buyerTask.initCompany();
         return mapper.list(buyerTask);
     }

@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.purchase.app.service;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
+
 
 import java.util.List;
+
+import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 
 /**
  * @author biscuit
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface IBuyerTaskService {
 
-    List<BuyerTaskDO> list(BuyerTaskDO buyerTaskDO);
+    List<BuyerTaskVO> list(BuyerTaskVO buyerTaskVO);
 
     void add(BuyerTaskVO buyerTaskDO);
 

@@ -3,7 +3,7 @@ package com.wangqin.globalshop.purchase.app.controller;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
+import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
@@ -56,11 +56,11 @@ public class BuyerTaskController {
      * @return
      */
     @PostMapping("/queryTaskDailyList")
-    public Object queryTaskDailyList(BuyerTaskDO buyerTaskDO) {
-        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
-        List<BuyerTaskDO> list = null;
+    public Object queryTaskDailyList(BuyerTaskVO buyerTaskVO) {
+        JsonResult<List<BuyerTaskVO>> result = new JsonResult<>();
+        List<BuyerTaskVO> list = null;
         try {
-            list = buyerTaskService.list(buyerTaskDO);
+            list = buyerTaskService.list(buyerTaskVO);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
@@ -89,10 +89,10 @@ public class BuyerTaskController {
      * @return
      */
     @PostMapping("/queryBuyerTaskList")
-    public Object queryBuyerTaskList(BuyerTaskDO buyerTaskDO) {
-        JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
+    public Object queryBuyerTaskList(BuyerTaskVO buyerTaskVO) {
+        JsonResult<List<BuyerTaskVO>> result = new JsonResult<>();
         try {
-            List<BuyerTaskDO> list = buyerTaskService.list(buyerTaskDO);
+            List<BuyerTaskVO> list = buyerTaskService.list(buyerTaskVO);
             result.buildData(list);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());

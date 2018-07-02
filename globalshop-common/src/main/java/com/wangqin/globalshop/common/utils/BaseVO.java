@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.common.utils;
 
+
 public class BaseVO {
 
     private String companyNo = null;
