@@ -50,6 +50,7 @@ public class ResourceController extends BaseController {
     @PostMapping("/tree")
     @ResponseBody
     public Object tree() {
+        logger.debug("/resource/tree");
         return resourceService.selectTree(AppUtil.getLoginUserId());
     }
 

@@ -82,6 +82,11 @@ public interface IItemSkuService  {
 	 
 	 List<ItemSkuDO> querySkuListByItemCode(String itemCode);
 	 
+	 //根据itemCode查询sku列表,包含虚拟库存、颜色、尺寸这3个不在item_sku表里面的字段
+	 //商品编辑的时候使用
+	 //TODO颜色尺寸的查询 
+     List<ItemSkuQueryVO> querySkuListByItemCodeContainsVirtualInvScale(String itemCode);
+	 
 	 List<ItemSkuDO> queryItemSkuListSelective(ItemSkuQueryVO itemSkuQueryVO);
 	 
 	 void deleteItemSkuBySkuCode(String skuCode);

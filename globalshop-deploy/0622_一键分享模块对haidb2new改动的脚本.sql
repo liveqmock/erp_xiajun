@@ -3,6 +3,26 @@
 -- oneshare模块对数据库haidb2new的改动
 -- 在133/111/180了上已经运行过了
 
+---- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增applet_config表-- -- -- -- -- -- -- -- --
+CREATE TABLE applet_config
+(
+  id          BIGINT(64) AUTO_INCREMENT
+    PRIMARY KEY,
+  company_no  VARCHAR(64)                        NOT NULL
+  COMMENT '公司代号',
+  secret      VARCHAR(64)                        NOT NULL
+  COMMENT '小程序secret',
+  appid       VARCHAR(64)                        NOT NULL
+  COMMENT '小程序appid',
+  applet_type VARCHAR(5)                         NOT NULL
+  COMMENT '小程序的类型  1: 采购 2.商城',
+  is_del      TINYINT(1) DEFAULT '0'             NULL,
+  creator     VARCHAR(32) DEFAULT 'system'       NULL,
+  modifier    VARCHAR(32) DEFAULT 'system'       NULL,
+  gmt_create  DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+  gmt_modify  DATETIME DEFAULT CURRENT_TIMESTAMP NULL
+);
+
 ---- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增wx_user表-- -- -- -- -- -- -- -- --
 -- auto-generated definition
 CREATE TABLE wx_user
@@ -76,9 +96,19 @@ ALTER TABLE `haidb2new`.`mall_sub_order`
   ADD COLUMN `share_token` VARCHAR(2048) NULL   COMMENT '分销token' ,
   ADD COLUMN `share_time` VARCHAR(16) NULL   COMMENT '分享统计维度日期' ,
   ADD COLUMN `share_close_flag` VARCHAR(1) DEFAULT '0'  NULL   COMMENT '分享分销结算标识' ,
-  ADD COLUMN `share_close_time` VARCHAR(16) NULL   COMMENT '分享分销结算时间' ;
+  ADD COLUMN `share_close_time` VARCHAR(16) NULL   COMMENT '分享分销结算时间' ,
   ADD COLUMN `share_money` NUMERIC(16,4) NULL   COMMENT '分享获得的佣金';
 
 
 ALTER TABLE `item` ADD COLUMN `origin_sale_price` VARCHAR(64) NULL DEFAULT NULL COMMENT '原始销售价格';
 ALTER TABLE `item` ADD COLUMN `commission_rate` VARCHAR(64) NULL DEFAULT NULL COMMENT '佣金比率';
+
+ALTER TABLE `buyer_task_detail` ADD COLUMN `buyer_task_detail_no` VARCHAR(64) NULL DEFAULT NULL COMMENT '采购明细的编码，和小票明细有关联';
+
+
+ALTER TABLE `haidb2new`.`buyer_task`
+MODIFY COLUMN `buyer_open_id` varchar(64) DEFAULT NULL AFTER `gmt_modify`;
+
+
+ALTER TABLE `haidb2new`.`buyer_storage`
+MODIFY COLUMN `buyer_open_id` varchar(64) DEFAULT 0 COMMENT '买手ID' AFTER `buyer_name`;

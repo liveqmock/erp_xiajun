@@ -2,6 +2,7 @@ package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
@@ -13,6 +14,12 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
+
+import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
@@ -43,6 +50,9 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Autowired
     private ItemSkuMapperExt itemSkuMapper;
 
+    @Autowired
+    private AuthUserDOMapperExt authUserMapper;
+
     @Override
     public List<BuyerTaskVO> list(BuyerTaskVO buyerTask) {
         buyerTask.initCompany();
@@ -56,7 +66,6 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(BuyerTaskVO vo) throws ErpCommonException {
         /**获取相关买手信息*/
-
         BuyerDO buyer = buyerMapper.selectByPrimaryKey(vo.getBuyerId());
         BuyerTaskDO task = new BuyerTaskDO();
         /**封装出一个buyerTaskDO对象*/
@@ -71,6 +80,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
             /**封装出一个buyerDetailTaskDO对象*/
             detail.setBuyerTaskNo(buyerTaskNo);
+            detail.setBuyerTaskDetailNo(CodeGenUtil.getBuyerTaskDetailNo());
             getBuyerTaskDetailDO(detail, itemTask, by);
             detailMapper.insertSelective(detail);
         }
@@ -211,13 +221,22 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         task.setStatus(Constant.TO_BE_PURCHASED);
         task.init();
         if(buyer != null){
+            //默认分配的买手
             task.setBuyerName(buyer.getNickName());
             task.setBuyerOpenId(buyer.getOpenId());
         }
 
+        //任务创建人，买手主管，具备新增采购任务的人
+        task.setOwnerNo(AppUtil.getLoginUserId());
     }
 
     private void getBuyerTaskDetailDO(BuyerTaskDetailDO detail, ItemTask itemTask, BuyerDO by) {
+
+        detail.setOwnerNo(AppUtil.getLoginUserId());
+        AuthUserDO user = authUserMapper.selectUserVoByUserNo(AppUtil.getLoginUserId());
+        if(user != null){
+            detail.setOwnerName(user.getName());
+        }
         detail.init();
         detail.setBuyerName(by.getNickName());
         detail.setBuyerOpenId(by.getOpenId());

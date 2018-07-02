@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -82,9 +83,9 @@ public class WechatLoginController {
                 response.sendRedirect(sysurl);
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
-
         } catch (IOException e) {
-            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("跳转地址错误："+sysurl);
+//            e.printStackTrace();
         }
         return result.buildIsSuccess(false).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆");
 
@@ -102,7 +103,7 @@ public class WechatLoginController {
             return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
         }
         String unionid = o.getString("unionid");
-        List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid,state);
+        List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid, state);
         if (hasAuthUser(list, state)) {
             return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
         }
@@ -156,17 +157,17 @@ public class WechatLoginController {
     }
 
     public static void main(String[] args) throws IOException {
-        String baseUrl = "https://erp.buyer007.com" + "/wechatLogin/authorized";
+        String baseUrl = "https://test.buyer007.cn" + "/wechatLogin/authorized";
         baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
         String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-        url = url + "&state=" + "yijianfenxiang";
+        url = url + "&state=" + "ZeYbipA0xN";
         System.out.println(url);
 
 
-
     }
+
     /**
-     * 获取微信授权二维码的链接
+     * 获取微信授权二维码的图片链接
      *
      * @return
      */
@@ -196,6 +197,75 @@ public class WechatLoginController {
             e.printStackTrace();
         }
         return result.buildIsSuccess(false).buildMsg("获取失败");
+
+    }
+
+    /**
+     * 获取微信授权二维码的链接
+     *
+     * @return
+     */
+    @RequestMapping("/getAuthorizedUrl")
+    public Object getAuthorizedUrl() {
+        JsonResult<Object> result = new JsonResult<>();
+        try {
+            String baseUrl = sysurl + "/wechatLogin/authorized";
+            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+            String state = AppUtil.getLoginUserCompanyNo();
+            url = url + "&state=" + state;
+            return result.buildData(url).buildIsSuccess(true).buildMsg("获取成功");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("获取失败");
+        }
+
+    }
+
+    /**
+     * 获取微信授权二维码的网页
+     *
+     * @return
+     */
+    @RequestMapping("/getHtml")
+    public void getImgHtml(HttpServletResponse response) {
+        String baseUrl = sysurl + "/wechatLogin/authorized";
+        try {
+            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+
+            String str = "<!DOCTYPE html>\n" +
+                    "<html lang=\"en\">\n" +
+                    "<head>\n" +
+                    "  <meta charset=\"UTF-8\">\n" +
+                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                    "  <title></title>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "    <script src=\"http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
+                    "    <div id=\"login_container\"></div>\n" +
+                    "    <script>\n" +
+                    "      var obj = new WxLogin\n" +
+                    "      ({\n" +
+                    "          id:\"login_container\",//div的id\n" +
+                    "          appid: \""+appid+"\",\n" +
+                    "          scope: \"snsapi_login\",//写死\n" +
+                    "          redirect_uri: '"+baseUrl+"',\n" +
+                    "          state: \""+AppUtil.getLoginUserCompanyNo()+"\",\n" +
+                    "          style: \"black\",\n" +
+                    "      });\n" +
+                    "    </script>\n" +
+                    "</body>\n" +
+                    "</html>\n";
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter writer = response.getWriter();
+            writer.print(str);
+            writer.flush();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

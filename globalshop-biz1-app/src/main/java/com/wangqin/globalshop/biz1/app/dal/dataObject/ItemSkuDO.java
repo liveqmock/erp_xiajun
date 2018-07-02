@@ -8,6 +8,8 @@ public class ItemSkuDO extends BaseModel {
     private String itemCode;
 
     private String itemName;
+    
+    private String color;
 
     private String companyNo;
 
@@ -85,9 +87,17 @@ public class ItemSkuDO extends BaseModel {
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode == null ? null : itemCode.trim();
-    }
+    }    
+    
+    public String getColor() {
+		return color;
+	}
 
-    public String getItemName() {
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getItemName() {
         return itemName;
     }
 

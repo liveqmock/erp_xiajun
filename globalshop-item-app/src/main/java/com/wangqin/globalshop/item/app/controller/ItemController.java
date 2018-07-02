@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.item.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
@@ -16,14 +17,17 @@ import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.*;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -32,7 +36,9 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * 商品处理器
@@ -60,7 +66,6 @@ public class ItemController {
     private IItemSkuService itemSkuService;
     @Autowired
     private IItemSkuScaleService scaleService;
-
     public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
 //    public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wx56e36d38aff90280&secret=9269561bae6e1b59c8107c35a669016c";
@@ -73,8 +78,7 @@ public class ItemController {
     @RequestMapping("/add")
     @ResponseBody
     public Object add(ItemQueryVO item) {
-        JsonResult<ItemDO> result = new JsonResult<>();
-        
+        JsonResult<ItemDO> result = new JsonResult<>();       
         if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
         }
@@ -247,12 +251,12 @@ public class ItemController {
         	return result.buildIsSuccess(false).buildMsg("最少需要提供一个sku");
         }
         for(ItemSkuAddVO itemSku:itemSkuList) {
-        		//检测upc是否重复,TODO按公司划分
-//        		if(0 < itemSkuService.queryItemCountByUpc(itemSku.getUpc())) {
-//        			result.buildIsSuccess(false);
-//        			result.buildMsg("upc不可以重复，请再次输入");
-//        			return result;
-//        		}
+            //检测upc是否和数据库里面已有的upc重复,按公司划分
+        	Integer duplcatedCountNumber = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(
+    				AppUtil.getLoginUserCompanyNo(),itemSku.getUpc(), itemCode);
+    		if(0 < duplcatedCountNumber) {
+    			return result.buildIsSuccess(false).buildMsg("新增失败，添加的upc和已有的upc重复");
+    		}
         	upcList.add(itemSku.getUpc());
         	itemSku.setItemCode(newItem.getItemCode());
         	/**插入ItemSkuScale*/
@@ -290,6 +294,22 @@ public class ItemController {
 //        if (item.getId() != null) {
 //            voidDimensionCodeUtil(item.getId());
 //        }
+        
+    	//处理第三方销售平台，TEMP
+    	List<Integer> channelList = item.getSaleOnChannels();
+        if (CollectionUtils.isEmpty(channelList)) {
+            item.setThirdSale(0);
+            item.setSaleOnYouzan(0);
+        } else {
+            for(Integer channelId:channelList) {
+            	if(1 == channelId) {//有赞
+            		newItem.setSaleOnYouzan(1);
+            	}
+            	if(2 == channelId) {//海狐
+            		newItem.setThirdSale(1);
+            	}
+            }
+        }
         
         iItemService.insertItemSelective(newItem);
         return result.buildIsSuccess(true);
@@ -431,8 +451,8 @@ public class ItemController {
         			ItemSkuDO addSku = new ItemSkuDO();
         			ItemDTO itemDTO = iItemService.queryItemById(item.getId());
         			addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-        			addSku.setItemCode(itemDTO.getItemCode());
-        			addSku.setSkuCode("S" + item.getCategoryCode() + "Q" + RandomUtils.getTimeRandom() + String.format("%0" + 2 + "d", (startIndex++)));
+        			addSku.setItemCode(itemDTO.getItemCode());		
+        			addSku.setSkuCode("S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandom() + "Q"+String.format("%0" + 2 + "d", (startIndex++)));
         			addSku.setScale(newSku.getScale());
         			addSku.setSalePrice((double) newSku.getSalePrice());
         			addSku.setWeight(newSku.getWeight());
@@ -442,6 +462,7 @@ public class ItemController {
         			addSku.setCreator(AppUtil.getLoginUserId());
         			addSku.setModifier(AppUtil.getLoginUserId());
         			addSku.setItemName(itemDTO.getName());
+        			//插入规格TODO
         			itemSkuService.insertItemSkuSelective(addSku);
         		}
         	}        		      	     		
@@ -535,64 +556,57 @@ public class ItemController {
     @RequestMapping("/query")
     @ResponseBody
     public Object query(Long id) {
-
         JsonResult<ItemDTO> result = new JsonResult<>();
-        // if haven't item id ,add item
-        if (id != null) {
-        	
-            ItemDTO item = iItemService.queryItemById(id);
-            if (item == null) {
-                result.buildIsSuccess(false).buildMsg("没有找到Item");
-            }
-            String itemName = item.getName();
-            //获取商品类目的Id
-            ItemCategoryDO itemCategory = categoryService.queryCategoryIdByCategoryCode(item.getCategoryCode());
-            item.setCategoryCode(itemCategory.getAllPath());
 
-            if (itemName.contains("婴儿款")) {
-                item.setSexStyle("婴儿款");
-            } else if (itemName.contains("大童男款")) {
-                item.setSexStyle("大童男款");
-            } else if (itemName.contains("大童女款")) {
-                item.setSexStyle("大童女款");
-            } else if (itemName.contains("小童男款")) {
-                item.setSexStyle("小童男款");
-            } else if (itemName.contains("小童女款")) {
-                item.setSexStyle("小童女款");
-            } else if (itemName.contains("男款")) {
-                item.setSexStyle("男款");
-            } else if (itemName.contains("女款")) {
-                item.setSexStyle("女款");
-            } else if (itemName.contains("大童款")) {
-                item.setSexStyle("大童款");
-            } else if (itemName.contains("小童款")) {
-                item.setSexStyle("小童款");
-            }
-
-            StringBuffer nameRep = new StringBuffer();
-            //品牌
-            String[] brandArr = item.getBrand().split("->");
-
-            if (StringUtil.isNotBlank(brandArr[0])) {    //英文品牌
-                nameRep.append(brandArr[0] + " ");
-            }
-            if (brandArr.length > 1 && StringUtil.isNotBlank(brandArr[1])) {    //中文品牌
-                nameRep.append(brandArr[1] + " ");
-            }
-            if (StringUtil.isNotBlank(item.getSexStyle())) {        //男女款
-                nameRep.append(item.getSexStyle() + " ");
-            }
-            //重新设置商品名称
-            item.setName(itemName.replace(nameRep.toString(), ""));
-          
-
-            //item.setSaleOnChannels(item.generateSaleOnChannels());
-
-            result.setData(item);
-            return result.buildIsSuccess(true);
-        } else {
-            return result.buildIsSuccess(false).buildMsg("没有Item id");
+        if(null == id) {
+        	return result.buildIsSuccess(false).buildMsg("id不能为空");
+        }       	
+        ItemDTO item = iItemService.queryItemById(id);
+        if (item == null) {
+        	result.buildIsSuccess(false).buildMsg("没有找到商品，商品可能已删除");
         }
+        String itemName = item.getName();
+        //获取商品类目的Id
+        Long categoryId = categoryService.queryCategoryByCategoryCode(item.getCategoryCode()).getId();
+        item.setCategoryId(categoryId);
+        
+        if (itemName.contains("婴儿款")) {
+        	item.setSexStyle("婴儿款");
+        } else if (itemName.contains("大童男款")) {
+        	item.setSexStyle("大童男款");
+        } else if (itemName.contains("大童女款")) {
+        	item.setSexStyle("大童女款");
+        } else if (itemName.contains("小童男款")) {
+        	item.setSexStyle("小童男款");
+        } else if (itemName.contains("小童女款")) {
+        	item.setSexStyle("小童女款");
+        } else if (itemName.contains("男款")) {
+        	item.setSexStyle("男款");
+        } else if (itemName.contains("女款")) {
+        	item.setSexStyle("女款");
+        } else if (itemName.contains("大童款")) {
+        	item.setSexStyle("大童款");
+        } else if (itemName.contains("小童款")) {
+        	item.setSexStyle("小童款");
+        }
+        
+        StringBuffer nameRep = new StringBuffer();
+        //品牌
+        String[] brandArr = item.getBrand().split("->");
+        
+        if (StringUtil.isNotBlank(brandArr[0])) {    //英文品牌
+        	nameRep.append(brandArr[0] + " ");
+        }
+        if (brandArr.length > 1 && StringUtil.isNotBlank(brandArr[1])) {    //中文品牌
+        	nameRep.append(brandArr[1] + " ");
+        }
+        if (StringUtil.isNotBlank(item.getSexStyle())) {        //男女款
+        	nameRep.append(item.getSexStyle() + " ");
+        }
+        //重新设置商品名称
+        item.setName(itemName.replace(nameRep.toString(), ""));     
+        result.setData(item);
+        return result.buildIsSuccess(true);         
     }
 
     /**
@@ -677,7 +691,6 @@ public class ItemController {
     @RequestMapping("/queryItemList")
     @ResponseBody
     public Object queryItemList(ItemQueryVO itemQueryVO) {
-        //logger.info("itemsPush start");
     	EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
     	if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
             return jsonResult.buildIsSuccess(false).buildMsg("请先登陆");
@@ -686,11 +699,6 @@ public class ItemController {
         JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
         jsonResult.setTotal(result.getTotalCount());
         jsonResult.setRows(result.getData());
-//		/ShiroUser shiroUser = this.getShiroUser();
-        //Set<String> roles = shiroUser.getRoles();
-        //	if(roles.contains("cgpm")){
-        //		jsonResult.setProductRoler(true);
-        //	}
         
         return jsonResult.buildIsSuccess(true);
     }
