@@ -17,7 +17,6 @@ import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.*;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -37,7 +36,9 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * 商品处理器
@@ -65,7 +66,6 @@ public class ItemController {
     private IItemSkuService itemSkuService;
     @Autowired
     private IItemSkuScaleService scaleService;
-
     public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
 //    public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wx56e36d38aff90280&secret=9269561bae6e1b59c8107c35a669016c";
