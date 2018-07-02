@@ -8,15 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 
 @Controller
 @RequestMapping(value = "/item/brand")
+@Authenticated
 public class ItemBrandController {
 
 	@Autowired
@@ -35,8 +38,8 @@ public class ItemBrandController {
 	public Object add(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
 		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
-		brand.setCreator("admin");
-		brand.setModifier("admin");
+		brand.setCreator(AppUtil.getLoginUserId());
+		brand.setModifier(AppUtil.getLoginUserId());
 		 if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
 			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
 		 }
@@ -82,6 +85,7 @@ public class ItemBrandController {
 				return result.buildIsSuccess(false).buildMsg("品牌英文名不能和已有的品牌重合");
 			}
 		}
+		brand.setModifier(AppUtil.getLoginUserId());
 		itemBrandService.updateBrand(brand);
 		return result.buildIsSuccess(true);
 	}

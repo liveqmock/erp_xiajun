@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO;
 import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
 import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
@@ -27,6 +29,7 @@ import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
  *
  */
 @Controller
+@Authenticated
 public class PackingController {
 
 	@Autowired
@@ -93,8 +96,8 @@ public class PackingController {
 				if ((count1 > 0) || (count2 > 0)) {
 					result.buildData("包装规格名称或英文名称不可以重复").buildIsSuccess(false);
 				} else {
-					packageScale.setCreator("admin");
-					packageScale.setModifier("admin");
+					packageScale.setCreator(AppUtil.getLoginUserId());
+					packageScale.setModifier(AppUtil.getLoginUserId());
 					packageScale.setPackagingScaleNo(RandomUtils.getTimeRandom());
 					shippingPackingScaleService.insertPackageScale(packageScale);
 					result.buildIsSuccess(true);
@@ -118,8 +121,8 @@ public class PackingController {
 	public Object updateScale(ItemPackageScaleDTO packageScale) {
 		JsonResult<String> result = new JsonResult<>();
 		
-		packageScale.setCreator("admin");
-		packageScale.setModifier("admin");
+
+		packageScale.setModifier(AppUtil.getLoginUserId());
 		shippingPackingScaleService.updateScaleSelectiveById(packageScale);
 		result.buildIsSuccess(true);
 		return result;
@@ -204,6 +207,7 @@ public class PackingController {
 		*/
 		String packagingScaleNo = shippingPackingScaleService.queryNoById(packageLevel.getPackageId());
 		packageLevel.setPackagingScaleNo(packagingScaleNo);
+		packageLevel.setModifier(AppUtil.getLoginUserId());
 		iPackageLevelService.updateLevelSelectiveById(packageLevel);
 		result.buildIsSuccess(true);
 		return result;
@@ -240,7 +244,8 @@ public class PackingController {
 				//shippingPackingPatternDO.setPackagingScaleNo(packageLevel.getPackagingScaleNo());
 				String packagingScaleNo = shippingPackingScaleService.queryNoById(packageLevel.getPackageId());
 				shippingPackingPatternDO.setPackagingScaleNo(packagingScaleNo);
-				
+				shippingPackingPatternDO.setCreator(AppUtil.getLoginUserId());
+				shippingPackingPatternDO.setModifier(AppUtil.getLoginUserId());
 				iPackageLevelService.insertPattern(shippingPackingPatternDO);
 			} else {
 				result.buildData("包装规格名称和包装规格类别英文名称不可以为空").buildIsSuccess(false);
