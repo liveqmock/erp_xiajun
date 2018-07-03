@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,9 +132,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 detailSo.setUpc(upc);
             }
             List<BuyerStorageDetailDO> detailDOList = detaiMapper.searchList(detailSo);
-
+            
             for(BuyerStorageDetailDO detail : detailDOList){
-
+            	System.out.println(detail.getSkuCode() + ":" + detail.getUpc());
                 ItemSkuDO skuSo = new ItemSkuDO();
                 skuSo.setSkuCode(detail.getSkuCode());
                 skuSo.initCompany();
@@ -141,6 +142,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
 
                 ItemSkuDO skuDO = skuDOMapperExt.queryItemSku(skuSo);
+                System.out.println(skuDO);
                 if(skuDO == null){
                     throw new ErpCommonException("未找到对应商品");
                 }

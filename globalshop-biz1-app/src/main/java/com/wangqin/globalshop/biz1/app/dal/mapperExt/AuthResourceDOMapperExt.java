@@ -10,13 +10,13 @@ public interface AuthResourceDOMapperExt extends AuthResourceDOMapper {
 
 
     //Here are
-    List<AuthResourceDO> selectList();
+    List<ResourceQueryVO> selectList();
     
-    List<AuthResourceDO> queryResource();
+    List<ResourceQueryVO> queryResource();
     
-    Integer queryResourcesCount(ResourceQueryVO resourceQueryVO);
+    Integer queryResourcesCount(ResourceQueryVO resourceVO);
 
-    List<AuthResourceDO> queryResourceQueryList(ResourceQueryVO resourceQueryVO);
+    List<ResourceQueryVO> queryResourceQueryList(ResourceQueryVO resourceVO);
     
     AuthResourceDO queryTreeByResourceId(String resourceId);
    

@@ -5,6 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BaseModel;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
+
 import java.util.Date;
 
 /**
@@ -12,7 +15,7 @@ import java.util.Date;
  */
 @Getter@Setter
 @ToString
-public class BuyerTaskVO {
+public class BuyerTaskVO extends BuyerTaskDO{
     /**买手ID*/
     private Long buyerId;
     /**商品详情*/
@@ -25,7 +28,6 @@ public class BuyerTaskVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date taskEndTime;
     private String taskTitle;
-
 }
 //@Getter@Setter
 //class ItemTask {
