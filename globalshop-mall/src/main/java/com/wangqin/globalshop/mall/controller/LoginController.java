@@ -5,6 +5,7 @@ import java.util.Date;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,6 +14,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallWxCustomerTrackDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallCustomerDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 
 import net.sf.json.JSONObject;
@@ -46,6 +48,7 @@ public class LoginController {
 
     @RequestMapping("/setUserInfo")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object setUserInfo(MallCustomerDO mallCustomerDO, String xcxCookieId) {
         JsonResult<MallCustomerDO> result = new JsonResult<>();
         if (StringUtil.isBlank(xcxCookieId) || "undefined".equals(xcxCookieId) || "null".equals(xcxCookieId)) {

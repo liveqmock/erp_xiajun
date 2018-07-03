@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,6 +14,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingCartDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.mall.dal.mapperExt.MallItemSkuDOMapperExt;
 import com.wangqin.globalshop.mall.dal.mapperExt.MallShippingCartDOMapperExt;
@@ -34,6 +36,7 @@ public class WxShoppingCartController {
      */
     @RequestMapping("/addToShoppingCart")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object addToShoppingCart(MallShippingCartDO shoppingCart) {
         JsonResult<String> result = new JsonResult<>();
         ItemSkuDO sku = mallItemSkuDOMapperExt.selectByCode(shoppingCart.getSkuCode());

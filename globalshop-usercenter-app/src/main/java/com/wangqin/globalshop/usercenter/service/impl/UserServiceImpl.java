@@ -60,7 +60,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
-//    @Transactional
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void insertByVo(UserVo userVo) {
         AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
         user.init();
@@ -75,6 +75,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void insertByUserVo(UserVo userVo) {
         // TODO Auto-generated method stub
         AuthUserDO user = BeanUtils.copy(userVo, AuthUserDO.class);
@@ -97,6 +98,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void updateByVo(UserVo userVo) {
     	
         AuthUserDO authUser = userMapper.selectByPrimaryKey(userVo.getId());
@@ -180,6 +182,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public JsonPageResult<List<UserQueryVO>> queryUserQueryVOList(UserQueryVO userQueryVO) {
         JsonPageResult<List<UserQueryVO>> userResult = new JsonPageResult<>();
 

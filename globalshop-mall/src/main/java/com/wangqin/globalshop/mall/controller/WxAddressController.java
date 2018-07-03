@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.YesOrNoEnum;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.mall.dal.mapperExt.MallShippingAddressDOMapperExt;
 
 @Controller
@@ -22,6 +24,7 @@ public class WxAddressController {
 
     @RequestMapping("/addMallShippingAddressDO")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object addMallShippingAddressDO(MallShippingAddressDO MallShippingAddressDO) {
         JsonResult<MallShippingAddressDO> result = new JsonResult<>();
         Integer addressCountInteger = mallShippingAddressDOMapperExt.countMallShippingAddressDOByOpenId(MallShippingAddressDO.getOpenId());
@@ -61,6 +64,7 @@ public class WxAddressController {
 
     @RequestMapping("/queryMallShippingAddressDOById")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object queryMallShippingAddressDOById(String openId, Integer id) {
         JsonResult<MallShippingAddressDO> result = new JsonResult<>();
         if (id == null) {
@@ -76,6 +80,7 @@ public class WxAddressController {
 
     @RequestMapping("/updateMallShippingAddressDOById")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object updateMallShippingAddressDOById(MallShippingAddressDO MallShippingAddressDO) {
         JsonResult<String> result = new JsonResult<>();
         MallShippingAddressDO selMallShippingAddressDO = mallShippingAddressDOMapperExt.selectByPrimaryKey(MallShippingAddressDO.getId());
@@ -100,6 +105,7 @@ public class WxAddressController {
 
     @RequestMapping("/deleteMallShippingAddressDOById")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object deleteMallShippingAddressDOById(Integer id) {
         JsonResult<String> result = new JsonResult<>();
         if (id != null) {

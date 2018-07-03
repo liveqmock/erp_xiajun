@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -95,6 +96,7 @@ public class SiFangServiceImpl implements ISiFangService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public String createOrder(String shippingOrderNo) {
 		ShippingOrderDO shippingOrder = shippingOrderService.selectByShippingNO(shippingOrderNo);
 		if (shippingOrder == null) {
@@ -270,6 +272,7 @@ public class SiFangServiceImpl implements ISiFangService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public void shippingTrack(String shipperOrderNo) throws ParseException {
 		if (shipperOrderNo == null) {
 			throw new ErpCommonException("物流单号异常");

@@ -17,8 +17,11 @@ import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.result.Tree;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.usercenter.service.IResourceService;
 
 /**
@@ -78,6 +81,7 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public List<Tree> selectAllMenu() {
         List<Tree> trees = new ArrayList<Tree>();
         // 查询所有菜单
@@ -98,6 +102,7 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
     }
     
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public List<Tree> selectAllTree() {
         // 获取所有的资源 tree形式，展示
         List<Tree> trees = new ArrayList<Tree>();
@@ -118,6 +123,7 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
     }
     
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public List<Tree> selectTree(String loginName) {
         List<Tree> trees = new ArrayList<Tree>();
         // shiro中缓存的用户角色

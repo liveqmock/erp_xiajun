@@ -16,11 +16,14 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleResourceDOMapperExt
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.usercenter.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.result.Tree;
 import com.wangqin.globalshop.common.utils.PageInfo;
 import com.wangqin.globalshop.common.utils.StringUtils;
@@ -93,6 +96,7 @@ public class RoleServiceImpl implements IRoleService {
 
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object selectTree() {
         List<Tree> trees = new ArrayList<Tree>();
         List<RoleQueryVO> roles = this.selectAll();
@@ -107,6 +111,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void updateRoleResource(Long id, String resourceIds) {
         // 先删除后添加,有点爆力
         AuthRoleDO roleDO = roleMapper.selectByPrimaryKey(id);
@@ -130,6 +135,7 @@ public class RoleServiceImpl implements IRoleService {
   
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public JsonPageResult<List<RoleQueryVO>> queryRoleList(RoleQueryVO roleQueryVO) {
         JsonPageResult<List<RoleQueryVO>> result = new JsonPageResult<>();
 

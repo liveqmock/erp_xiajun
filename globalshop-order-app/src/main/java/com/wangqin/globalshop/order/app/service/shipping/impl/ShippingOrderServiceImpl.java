@@ -261,6 +261,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public List<MallSubOrderDO> queryShippingOrderDetail(String mallOrders) {
         if (StringUtil.isBlank(mallOrders)) {
             throw new ErpCommonException("子订单号为空");
@@ -279,6 +280,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void updateOuterstatus(Set<String> mainIds) {
         for (String mainId : mainIds) {
             if (mainId != null) {
@@ -325,6 +327,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Map<String, Set<String>> batchDelivery(ShippingOrderDO shippingOrder) throws InventoryException {
         String erpOrderIds = shippingOrder.getMallOrders();
         String s = erpOrderIds.replace("&quot;", "\"");
@@ -474,6 +477,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(ShippingOrderDO shippingOrder) throws ErpCommonException {
         String shippingNo = "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence();
         StringBuffer erpNos = new StringBuffer();

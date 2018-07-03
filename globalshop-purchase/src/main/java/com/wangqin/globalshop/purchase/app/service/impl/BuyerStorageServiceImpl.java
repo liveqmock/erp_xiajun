@@ -107,6 +107,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @param upc
      * @return
      */
+    @Transactional(rollbackFor = ErpCommonException.class)
     private List<BuyerStorageDetailVo> doSearchList(String openId, String upc, Integer status){
         List<BuyerStorageDetailVo> voList = new ArrayList<>();
 
@@ -202,7 +203,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @param detailVo
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void comfirm(BuyerStorageDetailVo detailVo){
 
         //修改状态
@@ -284,7 +285,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         return comfirm;
     }
 
-
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void deleteById(Long id){
         BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
         detaiMapper.deleteByPrimaryKey(id);
@@ -302,7 +303,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
             }
         }
     }
-
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void updateMem(Long id, String mem){
         BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
         detail.setMem(EasyUtil.truncateLEFitSize(mem,1000));

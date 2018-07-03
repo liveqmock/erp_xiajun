@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackagePatternMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemPackageScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
 
@@ -27,6 +29,7 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 	//}
 	
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public JsonPageResult<List<ItemPackageScaleDTO>>  queryPackageScaleTree() {
 		JsonPageResult<List<ItemPackageScaleDTO>> result = new JsonPageResult<>();
 		

@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemFindDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemFindDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IFindItemService;
 
@@ -34,6 +36,7 @@ public class FindItemServiceImpl implements IFindItemService {
 	private ItemFindDOMapperExt itemFindDOMapperExt;
 	
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public JsonPageResult<List<ItemFindDO>> queryFindItems(ItemQueryVO itemQueryVO) {
 		JsonPageResult<List<ItemFindDO>> itemResult = new JsonPageResult<>();
 		//1、查询总的记录数量

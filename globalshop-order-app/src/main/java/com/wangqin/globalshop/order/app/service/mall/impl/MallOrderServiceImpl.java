@@ -232,6 +232,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void dealOrder(JdCommonParam jdCommonParam, GlobalshopOrderVo globalshopOrderVo) {
 
         MallOrderDO mallOrderDO = globalshopOrderVo.getMallOrderDO();

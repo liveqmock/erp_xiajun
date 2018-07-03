@@ -3,6 +3,7 @@ package com.wangqin.globalshop.order.app.service.kuaidi100.impl;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.Md5Util;
 import com.wangqin.globalshop.order.app.kuaidi_bean.*;
 import com.wangqin.globalshop.order.app.kuaidi_bean._4px.LogisticsStatus;
@@ -13,6 +14,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
@@ -67,6 +69,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 
 
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public void subscribe(ShippingOrderDO order) {
 		String shippingNo = order.getShippingNo();
 		if (order == null) {
@@ -318,7 +321,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 
 		return code;
 	}
-	
+	@Transactional(rollbackFor = ErpCommonException.class)
 	private void handleTrackList(Result result){
 		String logisticsNo = result.getNu();
 		if (StringUtils.isEmpty(logisticsNo)) {
