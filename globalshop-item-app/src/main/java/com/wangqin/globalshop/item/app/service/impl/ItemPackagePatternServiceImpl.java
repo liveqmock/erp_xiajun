@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
@@ -13,6 +14,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingPackingPatternDOMap
 import com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO;
 import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IItemPackagePatternService;
 
@@ -35,6 +37,7 @@ public class ItemPackagePatternServiceImpl implements IItemPackagePatternService
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public JsonPageResult<List<ItemPackagePatternDTO>> queryPackageLevelList(PackageLevelQueryVO packageLevelQueryVO) {
         JsonPageResult<List<ItemPackagePatternDTO>> packageLevelResult = new JsonPageResult<>();
 

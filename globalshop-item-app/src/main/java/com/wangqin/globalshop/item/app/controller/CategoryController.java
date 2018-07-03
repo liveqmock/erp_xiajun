@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
@@ -13,6 +14,7 @@ import com.wangqin.globalshop.common.utils.czh.Util;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -92,6 +94,7 @@ public class CategoryController  {
 	 */
 	@RequestMapping("/update")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object update(ItemCategoryDO category) {
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
 		if(StringUtils.isBlank(AppUtil.getLoginUserCompanyNo()) || StringUtil.isBlank(AppUtil.getLoginUserId())) {
@@ -145,6 +148,7 @@ public class CategoryController  {
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object delete(ItemCategoryDO category) {
 		JsonResult<ItemCategoryDO> result = new JsonResult<>();
 		if(StringUtils.isBlank(AppUtil.getLoginUserCompanyNo()) || StringUtil.isBlank(AppUtil.getLoginUserId())) {

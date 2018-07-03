@@ -130,6 +130,7 @@ public class ItemServiceImplement implements IItemService {
 
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public ItemDO queryIte(Long id) {
         if (id == null) {
             throw new RuntimeException("the item id is null");
@@ -148,6 +149,7 @@ public class ItemServiceImplement implements IItemService {
 
     //商品列表
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO) {
         JsonPageResult<List<ItemDTO>> itemResult = new JsonPageResult<>();
         // 1、查询总的记录数量
@@ -169,6 +171,7 @@ public class ItemServiceImplement implements IItemService {
      * 根据id查询商品，商品编辑使用(fin)
      */
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public ItemDTO queryItemById(Long id) {
         if (null == id) {
             throw new RuntimeException("商品的id不能为空");
@@ -320,6 +323,7 @@ public class ItemServiceImplement implements IItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public JsonPageResult<List<ItemDO>> queryHaihuItems(ItemQueryVO itemQueryVO) {
         JsonPageResult<List<ItemDO>> itemResult = new JsonPageResult<>();
         // 1、查询总的记录数量
@@ -376,6 +380,7 @@ public class ItemServiceImplement implements IItemService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public ItemVo queryAdd(String itemCode) {
 
         ItemVo itemVo = new ItemVo();
@@ -419,6 +424,7 @@ public class ItemServiceImplement implements IItemService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public GlobalShopItemVo queryUpdate(String itemCode, String shopCode) {
 
         GlobalShopItemVo resultVo = new GlobalShopItemVo();
@@ -466,6 +472,7 @@ public class ItemServiceImplement implements IItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void dealItemAndChannelItem4JdAdd(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo) {
 
         ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();
@@ -498,6 +505,7 @@ public class ItemServiceImplement implements IItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void dealItemAndChannelItem4JdTask(JdCommonParam jdCommonParam, GlobalShopItemVo globalShopItemVo) {
 
         ChannelListingItemVo channelListingItemVo = globalShopItemVo.getChannelListingItemVo();

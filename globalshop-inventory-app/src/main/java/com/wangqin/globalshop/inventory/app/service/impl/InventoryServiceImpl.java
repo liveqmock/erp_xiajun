@@ -243,6 +243,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param orderDO
      */
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(MallSubOrderDO orderDO) throws ErpCommonException {
         /**修改库存  和  库存占用*/
         InventoryDO inventoryDO = mapper.queryBySkuCode(orderDO.getSkuCode());
@@ -347,6 +348,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param inventoryDO 包含增加的实体信息
      * @param inv         新增的数目
      */
+    @Transactional(rollbackFor = ErpCommonException.class)
     private void insertInv(InventoryDO inventoryDO, Long inv) {
         InventoryDO inventory = mapper.queryBySkuCodeAndItemCode(inventoryDO.getSkuCode(), inventoryDO.getItemCode());
         if (inventory == null) {

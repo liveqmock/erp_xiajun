@@ -7,10 +7,13 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthOrganizationDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.result.Tree;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wangqin.globalshop.usercenter.service.IOrganizationService;
 
 /**
@@ -22,10 +25,11 @@ import com.wangqin.globalshop.usercenter.service.IOrganizationService;
 @Authenticated
 public class OrganizationServiceImpl implements IOrganizationService {
 
-    @Autowired
-    private AuthOrganizationDOMapperExt organizationMapper;
+	@Autowired
+	private AuthOrganizationDOMapperExt organizationMapper;
 
-    @Override
+	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
     public List<Tree> selectTree() {
         List<Tree> trees = new ArrayList<Tree>();
 

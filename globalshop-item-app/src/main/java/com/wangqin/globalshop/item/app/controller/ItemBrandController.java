@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,6 +14,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
@@ -35,6 +37,7 @@ public class ItemBrandController {
 	 */
 	@RequestMapping("/add")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object add(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
 		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
@@ -70,6 +73,7 @@ public class ItemBrandController {
 	 */
 	@RequestMapping("/update")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object update(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
 		if (StringUtil.isBlank(brand.getName())) {

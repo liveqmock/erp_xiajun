@@ -5,12 +5,14 @@ import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IUploadFileService;
 
@@ -32,6 +34,7 @@ public class ItemUploadFileController {
 	 */
 	@PostMapping("/uploadFile/picUpload")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public 	Object picUpload(MultipartFile pic) {
 		JsonResult<String> result = new JsonResult<>();
 		String picUrl = "";

@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.usercenter.service.IUserRoleService;
 import com.wangqin.globalshop.usercenter.service.IUserService;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -111,6 +113,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object add(@Valid UserVo userVo, BindingResult result) {
     	LogWorker.logStart(log, "配置", "userVo:{}", userVo);
     	String userNo=CodeGenUtil.genUserNo();
@@ -150,6 +153,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/update")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(@Valid UserVo userVo, BindingResult result) {
     	LogWorker.logStart(log, "配置", "userVo{}", userVo);
         String userNo=CodeGenUtil.genUserNo();
@@ -203,6 +207,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object edit(@Valid UserVo userVo, BindingResult result) {
         LogWorker.logStart(log, "配置", "userVo{}", userVo);
     	

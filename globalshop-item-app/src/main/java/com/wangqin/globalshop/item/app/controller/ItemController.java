@@ -23,6 +23,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,6 +78,7 @@ public class ItemController {
      */
     @RequestMapping("/add")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object add(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();       
         if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
@@ -343,6 +345,7 @@ public class ItemController {
      */
     @RequestMapping("/update")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();
         
@@ -555,6 +558,7 @@ public class ItemController {
      */
     @RequestMapping("/query")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object query(Long id) {
         JsonResult<ItemDTO> result = new JsonResult<>();
 
@@ -711,6 +715,7 @@ public class ItemController {
      */
     @RequestMapping("/updateVirtualInvByItemId")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object updateVirtualInvByItemId(String itemCode) {
         //logger.info("updateVirtualInvByItemId start");
         JsonResult<ItemDO> result = new JsonResult<>();
@@ -730,6 +735,7 @@ public class ItemController {
      */
     @RequestMapping("/getDimensionCodeUtil")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object getDimensionCodeUtil(Long itemId) {
         //logger.info("getDimensionCodeUtil start");
         JsonResult<Object> result = new JsonResult<>();
@@ -755,6 +761,7 @@ public class ItemController {
      *
      * @param itemId
      */
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void voidDimensionCodeUtil(Long itemId) {
 //		/logger.info("voidDimensionCodeUtil start");
         String reponse = DimensionCodeUtil.sendGet(getaccess_tokenurl, getaccess_tokenparam);

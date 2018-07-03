@@ -78,6 +78,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public InventoryOnWareHouseDO insertInventory(InventoryDO inventory,Long inv, String warehouseNo, String positionNo) {
         inventory.initCompany();
         InventoryOnWareHouseDO warehouse = mapper.selectByCompanyNoAndSkuCodeAndWarehouseNo(inventory.getCompanyNo(),inventory.getSkuCode(), warehouseNo);

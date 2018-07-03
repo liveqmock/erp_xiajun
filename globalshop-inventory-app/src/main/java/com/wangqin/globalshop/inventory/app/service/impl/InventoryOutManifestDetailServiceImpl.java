@@ -13,6 +13,7 @@ import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailS
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -76,6 +77,7 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Set<String> updateInventoryOutConfirm(InventoryOutManifestDO inventoryOut) {
         //修改出库单
         mapper.updateByPrimaryKeySelective(inventoryOut);

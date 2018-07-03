@@ -4,9 +4,11 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemBrandDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +54,7 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 
 	//分页查询
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public JsonPageResult<List<ItemBrandDO>> queryBrands(ItemBrandQueryVO brandQueryVO) {
 		JsonPageResult<List<ItemBrandDO>> brandResult = new JsonPageResult<>();
 		// 查询总条数

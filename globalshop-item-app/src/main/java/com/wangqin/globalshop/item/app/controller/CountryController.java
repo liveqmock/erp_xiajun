@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 
@@ -26,6 +28,7 @@ public class CountryController {
 	 */
 	@RequestMapping("/add")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object add(CountryDO country) {
 		JsonResult<CountryDO> result = new JsonResult<>();		
 		if(countryService.queryCountrySelective(country) != null) {
