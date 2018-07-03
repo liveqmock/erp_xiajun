@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
@@ -72,12 +73,23 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/dataGrid")
     @ResponseBody
-    public Object dataGrid(Integer page, Integer rows, String sort, String order) {
+    public Object dataGrid(Integer page, Integer rows, String sort, String order,@Valid AuthRoleDO roleDo, BindingResult result ) {
+    	LogWorker.logStart(log, "配置", "roleDo:{}", roleDo);
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
         PageInfo pageInfo = new PageInfo(page, rows, sort, order);
         Map<String, Object> condition = new HashMap<String, Object>();
         pageInfo.setCondition(condition);
 
         roleService.selectDataGrid(pageInfo);
+        LogWorker.logEnd(log, "配置", "roleDo:{}", roleDo);
         return pageInfo;
     }
 
@@ -88,7 +100,19 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/tree")
     @ResponseBody
-    public Object tree() {
+    public Object tree(@Valid AuthRoleDO roleDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "roleDo:{}", roleDo);
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
+
+        LogWorker.logEnd(log, "配置", "roleDo:{}", roleDo);
         return roleService.selectTree();
     }
 
@@ -130,28 +154,22 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Object add(@Valid RoleQueryVO roleVo,AuthRoleDO roleDo ,BindingResult result, Model model) {
+    public Object add(@Valid RoleQueryVO roleVo, AuthRoleDO roleDo ,BindingResult result, Model model) {
     	LogWorker.logStart(log, "配置", "roleVo", roleVo);
-    	
-        if (result.hasErrors()) {
-            List<ObjectError> list = result.getAllErrors();
-            for (ObjectError error : list) {
-                System.out.println(error.getDefaultMessage());
-            }
-            return null;
+    	roleVo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
         }
         
-        if(EasyUtil.isStringEmpty(roleVo.getName())) {
-        	return renderError("角色名称");
-        }
-        if(EasyUtil.isStringEmpty(roleVo.getSeq().toString())) {
-        	return renderError("排序不能为空");
-        }
-        if(EasyUtil.isStringEmpty(roleVo.getStatus().toString())) {
-        	return renderError("状态不能为空");
-        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
         roleVo.setRoleId((long)RandomUtils.nextInt(1000000000));
-        roleService.insert(roleDo);
+       
+        roleService.insertByRoleVo(roleVo);
         
         LogWorker.logEnd(log, "配置", "roleVo", roleVo);
         
@@ -166,14 +184,25 @@ public class RoleController extends BaseController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Object delete(Long id) {
-        AuthRoleDO roleDO = roleService.selectById(id);
+    public Object delete(Long id, @Valid AuthRoleDO roleDo, BindingResult result) {
+        LogWorker.logStart(log, "配置", "roleDo:{}", roleDo);
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
+    	AuthRoleDO roleDO = roleService.selectById(id);
         roleResourceService.deleteByRoleId(roleDO.getRoleId());
 //        List<AuthRoleResourceDO> roleResourceDO = roleResourceService.selectRoleResourceByResourceId(roleDO.getRoleId());
 //        for(int i = 0; i < roleResourceDO.size(); i ++) {
 //        	roleResourceService.deleteByRoleId(roleResourceDO.get(i).getRoleId());
 //        }
         roleService.deleteById(id);
+        LogWorker.logEnd(log, "配置", "roleDo:{}", roleDo);
         return renderSuccess("删除成功！");
     }
 
@@ -199,17 +228,23 @@ public class RoleController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Object edit(AuthRoleDO role) {
-        roleService.updateSelectiveById(role);
-        if(EasyUtil.isStringEmpty(role.getName())) {
-        	return renderError("角色名称");
+    public Object edit(@Valid RoleQueryVO roleVo, AuthRoleDO role, BindingResult result) {
+        LogWorker.logStart(log, "配置", "roleVo:{}", roleVo);
+        
+    	roleService.updateByRoleVo(roleVo);
+      
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
         }
-        if(EasyUtil.isStringEmpty(role.getSeq().toString())) {
-        	return renderError("排序不能为空");
-        }
-        if(EasyUtil.isStringEmpty(role.getStatus().toString())) {
-        	return renderError("状态不能为空");
-        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
+    	
+        LogWorker.logEnd(log, "配置", "roleVo:{}", roleVo);
+        
         return renderSuccess("编辑成功！");
     }
 
@@ -234,8 +269,19 @@ public class RoleController extends BaseController {
      */
     @RequestMapping("/findResourceIdListByRoleId")
     @ResponseBody
-    public Object findResourceByRoleId(Long id) {
+    public Object findResourceByRoleId(Long id, @Valid AuthRoleDO roleDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "roleDo:{}", roleDo);
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
         List<Long> resources = roleService.selectResourceIdListByRoleId(id);
+        LogWorker.logEnd(log, "配置", "roleDo:{}", roleDo);
         return renderSuccess(resources);
     }
 
@@ -248,8 +294,19 @@ public class RoleController extends BaseController {
      */
     @RequestMapping("/updateGrant")
     @ResponseBody
-    public Object grant(Long id, String resourceIds) {
+    public Object grant(Long id, String resourceIds, @Valid AuthRoleDO roleDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "roleDo:{}", roleDo);
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
         roleService.updateRoleResource(id, resourceIds);
+        LogWorker.logEnd(log, "配置", "roleDo:{}", roleDo);
         return renderSuccess("授权成功！");
     }
     
@@ -257,20 +314,41 @@ public class RoleController extends BaseController {
 
     @RequestMapping("/query")
     @ResponseBody
-    public Object query(Long id) {
+    public Object query(Long id,  @Valid AuthRoleDO roleDo, BindingResult bindResult) {
+    	LogWorker.logStart(log, "配置", "roleDo:{}", roleDo);
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
         JsonResult<AuthRoleDO> result = new JsonResult<>();
-
+        LogWorker.logEnd(log, "配置", "roleDo:{}", roleDo);
         return result.buildData(roleService.selectById(id)).buildIsSuccess(true);
     }
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public Object queryList(RoleQueryVO roleVO) {
+    public Object queryList(RoleQueryVO roleVO, @Valid AuthRoleDO roleDo, BindingResult bindResult) {
+    	LogWorker.logStart(log, "配置", "roleDo:{}", roleDo);
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
+	
         String companyNo=AppUtil.getLoginUserCompanyNo();
         logger.info("current CompanyNo is " + companyNo);
         roleVO.setCompanyNo(companyNo);
         JsonPageResult<List<RoleQueryVO>> result = roleService.queryRoleList(roleVO);
-
+        LogWorker.logEnd(log, "配置", "roleDo:{}", roleDo);
         return result.buildIsSuccess(true);
     }
 

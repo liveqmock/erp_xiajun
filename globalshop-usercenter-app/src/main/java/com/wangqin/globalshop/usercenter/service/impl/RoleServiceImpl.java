@@ -153,4 +153,24 @@ public class RoleServiceImpl implements IRoleService {
 
         return result;
     }
+
+	@Override
+	public int insertByRoleVo(RoleQueryVO roleVo) {
+		// TODO Auto-generated method stub
+		roleVo.setModifier(AppUtil.getLoginUserId());
+		roleVo.setCreator(AppUtil.getLoginUserId());
+		roleVo.setIsDel(true);
+		
+		return roleMapper.insertByRoleVo(roleVo);
+	}
+
+	@Override
+	public int updateByRoleVo(RoleQueryVO roleVo) {
+		// TODO Auto-generated method stub
+		roleVo.setModifier(AppUtil.getLoginUserId());
+		roleVo.setCreator(AppUtil.getLoginUserId());
+		roleVo.setIsDel(true);
+		roleVo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		return roleMapper.updateByRoleVo(roleVo);
+	}
 }

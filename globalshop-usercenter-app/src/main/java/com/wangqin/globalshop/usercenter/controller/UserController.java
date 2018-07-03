@@ -13,6 +13,8 @@ import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.service.QrCodeService;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 
+import lombok.val;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +73,16 @@ public class UserController extends BaseController {
      */
     @PostMapping("/dataGrid")
     @ResponseBody
-    public Object dataGrid( UserVo userVo, Integer page, Integer rows, String sort, String order) {
+    public Object dataGrid( UserVo userVo, Integer page, Integer rows, String sort, String order, @Valid AuthUserDO userDo, BindingResult result) {
     	LogWorker.logStart(log, "配置", "userVo:{}", userVo);
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+    	BaseResp resp = BaseResp.createSuccess("");
     	rows = 1000;
         PageInfo pageInfo = new PageInfo(page, rows);
         Map<String, Object> condition = new HashMap<String, Object>();
@@ -116,19 +126,19 @@ public class UserController extends BaseController {
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object add(@Valid UserVo userVo, BindingResult result) {
     	LogWorker.logStart(log, "配置", "userVo:{}", userVo);
-    	String userNo=CodeGenUtil.genUserNo();
-        userVo.setUserNo(userNo);
-        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
-        
-        if(result.hasErrors()) {
+    	if(result.hasErrors()) {
         	StringBuffer sb = new StringBuffer();
         	for(ObjectError error : result.getAllErrors()) {
         		sb.append(error.getDefaultMessage()).append(",");
         	}
         	return BaseResp.createFailure(sb.toString());
         }
+    	BaseResp resp = BaseResp.createSuccess("");
+    	String userNo=CodeGenUtil.genUserNo();
+        userVo.setUserNo(userNo);
+        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         
-        BaseResp resp = BaseResp.createSuccess("");
+        
         
         AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
         if (authUserLoginName != null ) {
@@ -156,18 +166,23 @@ public class UserController extends BaseController {
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(@Valid UserVo userVo, BindingResult result) {
     	LogWorker.logStart(log, "配置", "userVo{}", userVo);
-        String userNo=CodeGenUtil.genUserNo();
-        userVo.setUserNo(userNo);
-        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
-        
-        if(result.hasErrors()) {
+    	if(result.hasErrors()) {
         	StringBuffer sb = new StringBuffer();
         	for(ObjectError error : result.getAllErrors()) {
         		sb.append(error.getDefaultMessage()).append(",");
         	}
         	return BaseResp.createFailure(sb.toString());
         }
+    	
         BaseResp resp = BaseResp.createSuccess("");
+    	String userNo=CodeGenUtil.genUserNo();
+        userVo.setUserNo(userNo);
+        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
+        
+        AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
+        if (authUserLoginName != null ) {
+            return renderError("用户名已存在!");
+        }
         
         userService.updateByVo(userVo);
         userRoleService.deleteUserRoleByUserId(userVo.getId());
@@ -241,8 +256,9 @@ public class UserController extends BaseController {
      * @return
      */
     @GetMapping("/editPwdPage")
-    public String editPwdPage() {
-        return "admin/userEditPwd";
+    public String editPwdPage(@Valid AuthUserDO userDo, BindingResult bindResult) {
+        
+    	return "admin/userEditPwd";
     }
 
     /**
@@ -254,8 +270,18 @@ public class UserController extends BaseController {
      */
     @RequestMapping("/editUserPwd")
     @ResponseBody
-    public Object editUserPwd(String oldPwd, String pwd) {
-        AuthUserDO user = userService.selectByLoginName(AppUtil.getLoginUserId());
+    public Object editUserPwd(String oldPwd, String pwd, @Valid AuthUserDO userDo, BindingResult bindResult) {
+    	LogWorker.logStart(log, "配置", "userVo:{}", userDo);
+    	
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+    	AuthUserDO user = userService.selectByLoginName(AppUtil.getLoginUserId());
         if (user ==null ) {
             return renderError("该用户不存在!");
         }
@@ -264,6 +290,7 @@ public class UserController extends BaseController {
         }
 
         userService.changePasswordByLoginName(AppUtil.getLoginUserId(), DigestUtils.md5Hex(pwd));
+        LogWorker.logEnd(log, "配置", "userDo:{}", userDo);
         return renderSuccess("密码修改成功！");
     }
 
@@ -275,10 +302,20 @@ public class UserController extends BaseController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Object delete(Long id) {
-        userService.deleteUserById(id);
+    public Object delete(Long id, @Valid AuthUserDO userDo, BindingResult bindResult) {
+    	LogWorker.logStart(log, "配置", "userVo:{}", userDo);
+    	
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+    	userService.deleteUserById(id);
         userRoleService.deleteUserRoleByUserId(id);
-      
+        LogWorker.logEnd(log, "配置", "userVo:{}", userDo);
         return renderSuccess("删除成功！");
     }
 
@@ -292,7 +329,18 @@ public class UserController extends BaseController {
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public Object queryList() {
+    public Object queryList(@Valid AuthUserDO userDo, BindingResult bindResult) {
+    	LogWorker.logStart(log, "配置", "userVo:{}", userDo);
+    	
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
     	String companyNo = AppUtil.getLoginUserCompanyNo();
         
     	JsonResult<List<AuthUserDO>> result = new JsonResult<>();
@@ -300,15 +348,24 @@ public class UserController extends BaseController {
     	List<AuthUserDO> userList = userService.queryUserByCompanyNo(companyNo);
     	
     	result.setData(userList);
-    	
+    	LogWorker.logEnd(log, "配置", "userVo:{}", userDo);
         return result.buildIsSuccess(true);
     }
 
 
     @RequestMapping("/getqrcode")
     @ResponseBody
-    public Object getQrcode() {
-        JsonPageResult<String> result = new JsonPageResult<>();
+    public Object getQrcode(@Valid AuthUserDO userDo, BindingResult bindResult) {
+    	LogWorker.logStart(log, "配置", "userVo:{}", userDo);    	
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+    	JsonPageResult<String> result = new JsonPageResult<>();
 
         String qrCodeUrl = qrCodeService.getQrCodeUrl(AppUtil.getLoginUserCompanyNo());
 
@@ -317,6 +374,7 @@ public class UserController extends BaseController {
         }
 
         result.setData(qrCodeUrl);
+        LogWorker.logEnd(log, "配置", "userVo:{}", userDo);
         return result.buildIsSuccess(true);
     }
 

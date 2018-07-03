@@ -49,4 +49,8 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
     List<RoleQueryVO> searchAuthRoleList(RoleQueryVO roleVO);
 
     RoleQueryVO selectByNameAndCompanyNo(@Param("newOne") String newOne, @Param("companyNo") String companyNo);
+    
+    int insertByRoleVo(RoleQueryVO roleVo);
+    
+    int updateByRoleVo(RoleQueryVO roleVo);
 }

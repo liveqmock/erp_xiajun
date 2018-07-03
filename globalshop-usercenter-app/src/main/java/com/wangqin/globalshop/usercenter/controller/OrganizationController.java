@@ -1,5 +1,6 @@
 	package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
@@ -8,9 +9,12 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.LogWorker;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.usercenter.service.IOrganizationService;
 import org.apache.commons.lang.math.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +36,8 @@ import java.util.List;
 @RequestMapping("/organization")
 @Authenticated
 public class OrganizationController extends BaseController {
-
+	
+	protected static Logger log = LoggerFactory.getLogger("System");
     @Autowired
     private IOrganizationService organizationService;
 
@@ -53,7 +58,19 @@ public class OrganizationController extends BaseController {
      */
     @PostMapping(value = "/tree")
     @ResponseBody
-    public Object tree() {
+    public Object tree(@Valid AuthOrganizationDO organizationDo, BindingResult result) {
+    		LogWorker.logStart(log, "配置", "organizationDo:{}", organizationDo);
+    		
+    		if(result.hasErrors()) {
+            	StringBuffer sb = new StringBuffer();
+            	for(ObjectError error : result.getAllErrors()) {
+            		sb.append(error.getDefaultMessage()).append(",");
+            	}
+            	return BaseResp.createFailure(sb.toString());
+            }
+            BaseResp resp = BaseResp.createSuccess("");
+    		
+    		LogWorker.logEnd(log, "配置", "organizationDo:{}", organizationDo);
             return organizationService.selectTree();
     }
 
@@ -64,7 +81,19 @@ public class OrganizationController extends BaseController {
      */
     @RequestMapping("/treeGrid")
     @ResponseBody
-    public Object treeGrid() {
+    public Object treeGrid(@Valid AuthOrganizationDO organizationDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "organizationDo:{}", organizationDo);
+		
+		if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+		
+		LogWorker.logEnd(log, "配置", "organizationDo:{}", organizationDo);
         return organizationService.selectTreeGrid();
     }
 
@@ -86,27 +115,24 @@ public class OrganizationController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Object add(@Valid AuthOrganizationDO authOrganizationDO, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            List<ObjectError> list = result.getAllErrors();
-            for (ObjectError error : list) {
-                System.out.println(error.getDefaultMessage());
-            }
-            return null;
+    public Object add(@Valid OrganizationQueryVO organizationVo, AuthOrganizationDO authOrganizationDO, BindingResult result, Model model) {
+        LogWorker.logStart(log, "部署", "organizationVo:{}", organizationVo);
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
         }
-        if(EasyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo())) {
-        	return renderError("请登录后查询");
-        }
-        if(StringUtil.isBlank(authOrganizationDO.getName())) {
-        	return renderError("资源名称不能为空");
-        }
-        if(EasyUtil.isStringEmpty(authOrganizationDO.getSeq().toString())) {
-        	return renderError("排序不能为空");
-        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
         String org_id=String.format("%1$09d",RandomUtils.nextInt(1000000000));
-        authOrganizationDO.setOrgId(org_id);
-        authOrganizationDO.setCode(org_id);
-        organizationService.insert(authOrganizationDO);
+        organizationVo.setOrgId(org_id);
+        organizationVo.setCode(org_id);
+        organizationService.insertByOrganizationVo(organizationVo);
+
+        LogWorker.logEnd(log, "部署", "organ", organizationVo);
+        
         return renderSuccess("添加成功！");
     }
 
@@ -132,18 +158,19 @@ public class OrganizationController extends BaseController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Object edit(AuthOrganizationDO organization) {
-    	if(EasyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo())) {
-        	return renderError("请登录后查询");
+    public Object edit(@Valid OrganizationQueryVO organizationVo, AuthOrganizationDO organization, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "organizetionVo:{}", organizationVo);
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
         }
-        if(StringUtil.isBlank(organization.getName())) {
-        	return renderError("资源名称不能为空");
-        }
-        if(EasyUtil.isStringEmpty(organization.getSeq().toString())) {
-        	return renderError("排序不能为空");
-        }
-    	organization.setOrgId(organization.getCode());
-        organizationService.updateSelectiveById(organization);
+        BaseResp resp = BaseResp.createSuccess("");
+        organizationVo.setOrgId(organizationVo.getCode());
+        organizationService.updateByOrganizationVo(organizationVo);
+        LogWorker.logEnd(log, "配置", "organizationVo:{}", organizationVo);
         return renderSuccess("编辑成功！");
     }
 
@@ -155,9 +182,22 @@ public class OrganizationController extends BaseController {
      */
     @PostMapping("/delete")
     @ResponseBody
-    public Object delete(Long id) {
-        organizationService.deleteById(id);
-        return renderSuccess("删除成功！");
+    public Object delete(Long id, @Valid AuthOrganizationDO organizationDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "organizationDo:{}", organizationDo);
+		
+		if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+		
+    	organizationService.deleteById(id);
+        
+    	LogWorker.logEnd(log, "配置", "organizationDo:{}", organizationDo);
+    	return renderSuccess("删除成功！");
     }
 
     @RequestMapping("/query")
@@ -170,11 +210,22 @@ public class OrganizationController extends BaseController {
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public Object queryList(OrganizationQueryVO organizationQueryVO) {
+    public Object queryList(OrganizationQueryVO organizationQueryVO, @Valid AuthOrganizationDO organizationDo, BindingResult bindResult) {
+    	LogWorker.logStart(log, "配置", "organizationDo:{}", organizationDo);
+		
+		if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+		
     	String companyNo = AppUtil.getLoginUserCompanyNo();
     	
         JsonPageResult<List<AuthOrganizationDO>> result = organizationService.queryOrganizationList(companyNo);
-
+        LogWorker.logEnd(log, "配置", "organizationDo:{}", organizationDo);
         return result.buildIsSuccess(true);
     }
 }

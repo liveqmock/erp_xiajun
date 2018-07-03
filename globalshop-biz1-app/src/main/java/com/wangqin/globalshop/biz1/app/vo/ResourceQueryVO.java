@@ -46,13 +46,14 @@ public class ResourceQueryVO extends PageQueryVO {
 	private Long pid;
 
 	/** 资源类别 */
-	@Max(value = 0, message = "0是菜单")
-	@Min(value = 1, message = "1是按钮")
+	@Max(value = 1, message = "0是菜单")
+	@Min(value = 0, message = "1是按钮")
 	private Integer resourceType;
 
 	private Date startGmt;
 	private Date endGmt;
 	
+	private Boolean IsDel;
 	/**
 	 * 资源编码
 	 */
@@ -186,5 +187,14 @@ public class ResourceQueryVO extends PageQueryVO {
 		this.modifier = modifier;
 	}
 
+	public Boolean getIsDel() {
+		return IsDel;
+	}
+
+	public void setIsDel(Boolean isDel) {
+		IsDel = isDel;
+	}
+
+	
 	
 }

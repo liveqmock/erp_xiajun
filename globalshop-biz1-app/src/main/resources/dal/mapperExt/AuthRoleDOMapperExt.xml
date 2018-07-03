@@ -223,5 +223,27 @@
     company_no = #{companyNo}
     AND name = #{newOne}
   </select>
-
+	
+  <insert id="insertByRoleVo" parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO" >
+    insert into auth_role (role_id, company_no, name, 
+      seq, description, status, 
+      creator, modifier)
+    values (#{roleId,jdbcType=BIGINT}, #{companyNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{seq,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateByRoleVo" parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO" >
+    update auth_role
+    set role_id = #{roleId,jdbcType=BIGINT},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=TINYINT},
+      description = #{description,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
 </mapper>

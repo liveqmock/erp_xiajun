@@ -27,8 +27,11 @@ public interface AuthOrganizationDOMapperExt extends AuthOrganizationDOMapper {
 
     List<AuthOrganizationDO> selectList();
 
-
     Integer queryOrganizationsCount(OrganizationQueryVO organizationQueryVO);
 
     List<AuthOrganizationDO> queryOrganizationQueryList(String companyNo);
+    
+    int insertByOrganizationVo(OrganizationQueryVO organizationQueryVO);
+    
+    int updateByOrganizationVo(OrganizationQueryVO organizationQueryVO);
 }

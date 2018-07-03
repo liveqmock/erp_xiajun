@@ -33,7 +33,9 @@ public interface IResourceService {//extends ISuperService<AuthResourceDO>
     
     AuthResourceDO queryTreeByResourceId(String resourceId);
 
- 
+    int insertByNoId(ResourceQueryVO resouceVo);
+    
+    ResourceQueryVO queryTreeVoByResourceId(String resourceId);
 
-
+    int updateByResourceVo(ResourceQueryVO resourceVO);
 }
