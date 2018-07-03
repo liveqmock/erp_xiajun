@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AuthResourceDOMapperExt extends AuthResourceDOMapper {
 
-
+	int insertByNoId(ResourceQueryVO resouceVo);
     //Here are
     List<ResourceQueryVO> selectList();
     
@@ -19,5 +19,8 @@ public interface AuthResourceDOMapperExt extends AuthResourceDOMapper {
     List<ResourceQueryVO> queryResourceQueryList(ResourceQueryVO resourceVO);
     
     AuthResourceDO queryTreeByResourceId(String resourceId);
-   
+    
+    ResourceQueryVO queryTreeVoByResourceId(String resourceId);
+    
+    int updateByResourceVo(ResourceQueryVO resourceVO);
 }

@@ -182,12 +182,14 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 	@Override
 	public int insert(AuthResourceDO resourceDO) {
 		// TODO Auto-generated method stub
+		resourceDO.init();
 		return resourceMapper.insertSelective(resourceDO);
 	}
 
 	@Override
 	public int updateSelectiveById(AuthResourceDO resourceDO) {
 		// TODO Auto-generated method stub
+		resourceDO.init();
 		return resourceMapper.updateByPrimaryKey(resourceDO);
 	}
 
@@ -195,6 +197,32 @@ public class ResourceServiceImpl  implements IResourceService {//extends SuperSe
 	public List<ResourceQueryVO> queryResource() {
 		// TODO Auto-generated method stub
 		return resourceMapper.queryResource();
+	}
+
+	@Override
+	public int insertByNoId(ResourceQueryVO resourceVO) {
+		// TODO Auto-generated method stub
+		resourceVO.setModifier(AppUtil.getLoginUserId());
+		resourceVO.setCreator(AppUtil.getLoginUserId());
+		resourceVO.setIsDel(false);
+		resourceVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		return resourceMapper.insertByNoId(resourceVO);
+	}
+
+	@Override
+	public ResourceQueryVO queryTreeVoByResourceId(String resourceId) {
+		// TODO Auto-generated method stub
+		return resourceMapper.queryTreeVoByResourceId(resourceId);
+	}
+
+	@Override
+	public int updateByResourceVo(ResourceQueryVO resourceVO) {
+		// TODO Auto-generated method stub
+		resourceVO.setModifier(AppUtil.getLoginUserId());
+		resourceVO.setCreator(AppUtil.getLoginUserId());
+		resourceVO.setIsDel(false);
+		resourceVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		return resourceMapper.updateByResourceVo(resourceVO);
 	}
 
 

@@ -9,6 +9,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthOrganizationDOMapperExt
 import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.result.Tree;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,42 +65,63 @@ public class OrganizationServiceImpl implements IOrganizationService {
         return trees;
     }
 
-    @Override
-    public List<AuthOrganizationDO> selectTreeGrid() {
-//        EntityWrapper<AuthOrganizationDO> wrapper = new EntityWrapper<AuthOrganizationDO>();
-//        wrapper.orderBy("seq");
-        return organizationMapper.selectList();
-    }
+	@Override
+	public List<AuthOrganizationDO> selectTreeGrid() {
+		// EntityWrapper<AuthOrganizationDO> wrapper = new
+		// EntityWrapper<AuthOrganizationDO>();
+		// wrapper.orderBy("seq");
+		return organizationMapper.selectList();
+	}
 
-    @Override
-    public int deleteById(Long id) {
-        return organizationMapper.deleteByPrimaryKey(id);
-    }
+	@Override
+	public int deleteById(Long id) {
+		return organizationMapper.deleteByPrimaryKey(id);
+	}
 
-    @Override
-    public int updateSelectiveById(AuthOrganizationDO organization) {
-    	organization.init();
-        return organizationMapper.updateByPrimaryKey(organization);
-    }
+	@Override
+	public int updateSelectiveById(AuthOrganizationDO organization) {
+		organization.init();
+		return organizationMapper.updateByPrimaryKey(organization);
+	}
 
-    @Override
-    public int insert(AuthOrganizationDO organization) {
-    	organization.init();
-        return organizationMapper.insert(organization);
-    }
+	@Override
+	public int insert(AuthOrganizationDO organization) {
+		organization.init();
+		return organizationMapper.insert(organization);
+	}
 
-    @Override
-    public AuthOrganizationDO selectById(Long id) {
-        return organizationMapper.selectByPrimaryKey(id);
-    }
+	@Override
+	public AuthOrganizationDO selectById(Long id) {
+		return organizationMapper.selectByPrimaryKey(id);
+	}
 
-    @Override
-    public JsonPageResult<List<AuthOrganizationDO>> queryOrganizationList(String companyNo) {
-        JsonPageResult<List<AuthOrganizationDO>> result = new JsonPageResult<>();
+	@Override
+	public JsonPageResult<List<AuthOrganizationDO>> queryOrganizationList(String companyNo) {
+		JsonPageResult<List<AuthOrganizationDO>> result = new JsonPageResult<>();
 
-        List<AuthOrganizationDO> list = organizationMapper.queryOrganizationQueryList(companyNo);
-        result.setData(list);
+		List<AuthOrganizationDO> list = organizationMapper.queryOrganizationQueryList(companyNo);
+		result.setData(list);
 
-        return result.buildIsSuccess(true);
-    }
+		return result.buildIsSuccess(true);
+	}
+
+	@Override
+	public int insertByOrganizationVo(OrganizationQueryVO organizationQueryVO) {
+		// TODO Auto-generated method stub
+		organizationQueryVO.setModifier(AppUtil.getLoginUserId());
+		organizationQueryVO.setCreator(AppUtil.getLoginUserId());
+		organizationQueryVO.setIsDel(false);
+		organizationQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		return organizationMapper.insertByOrganizationVo(organizationQueryVO);
+	}
+
+	@Override
+	public int updateByOrganizationVo(OrganizationQueryVO organizationQueryVO) {
+		// TODO Auto-generated method stub
+		organizationQueryVO.setModifier(AppUtil.getLoginUserId());
+		organizationQueryVO.setCreator(AppUtil.getLoginUserId());
+		organizationQueryVO.setIsDel(false);
+		organizationQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		return organizationMapper.updateByOrganizationVo(organizationQueryVO);
+	}
 }

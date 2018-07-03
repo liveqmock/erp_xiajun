@@ -34,5 +34,8 @@ public interface IRoleService {//extends ISuperService<AuthRoleDO>
     int updateSelectiveById(AuthRoleDO role);
 
     JsonPageResult<List<RoleQueryVO>> queryRoleList(RoleQueryVO roleVO);
-
+    
+    int insertByRoleVo(RoleQueryVO roleVo);
+    
+    int updateByRoleVo(RoleQueryVO roleVo);
 }

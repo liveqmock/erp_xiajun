@@ -3,14 +3,18 @@ package com.wangqin.globalshop.usercenter.controller;
 import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.DigestUtils;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.LogWorker;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IResourceService;
 
 import ch.qos.logback.classic.pattern.Util;
@@ -19,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -49,8 +54,21 @@ public class ResourceController extends BaseController {
      */
     @PostMapping("/tree")
     @ResponseBody
-    public Object tree() {
+    public Object tree(@Valid AuthResourceDO resourceDo, BindingResult result) {
+    	
+    	LogWorker.logStart(log, "配置", "userVo{}", resourceDo);
+        
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");  
+   	
         logger.debug("/resource/tree");
+        LogWorker.logEnd(log, "配置", "usreDo:{}", resourceDo);
         return resourceService.selectTree(AppUtil.getLoginUserId());
     }
 
@@ -71,7 +89,19 @@ public class ResourceController extends BaseController {
      */
     @PostMapping("/treeGrid")
     @ResponseBody
-    public Object treeGrid() {
+    public Object treeGrid(@Valid AuthResourceDO resourceDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "userVo{}", resourceDo);
+        
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
+        LogWorker.logEnd(log, "配置", "usreDo:{}", resourceDo);
         return resourceService.selectAll();
     }
 
@@ -93,9 +123,10 @@ public class ResourceController extends BaseController {
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Object add(@Valid ResourceQueryVO resourceVo, AuthResourceDO resourceDo, String code, BindingResult result) {
-        LogWorker.logStart(log, "配置", "resourceVo:{}", resourceVo);
-    	
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public Object add(@Valid ResourceQueryVO resouceVo, AuthResourceDO resourceDo, String code, BindingResult result) {
+        LogWorker.logStart(log, "配置", "resourceVo:{}", resourceDo);
+        
         if(result.hasErrors()) {
         	StringBuffer sb = new StringBuffer();
         	for(ObjectError error : result.getAllErrors()) {
@@ -103,7 +134,7 @@ public class ResourceController extends BaseController {
         	}
         	return BaseResp.createFailure(sb.toString());
         }
-
+        
         BaseResp resp = BaseResp.createSuccess("");
         
         // 选择菜单时将openMode设置为null
@@ -111,26 +142,23 @@ public class ResourceController extends BaseController {
     		return renderError("请先登陆");
     	}
     	
-    	if(StringUtil.isBlank(resourceVo.getId().toString())) {
-    		return renderError("新增不能有ID");
-    	}
-    	if(StringUtil.isBlank(resourceVo.getPid().toString())) {
-    		resourceVo.setPid(00000000L);
+    	if(resouceVo.getPid() == null) {
+    		resouceVo.setPid(00000000L);
     	}else {
-    		AuthResourceDO resourceDO = resourceService.queryTreeByResourceId(resourceVo.getPid().toString());
-    		if(!EasyUtil.isStringEmpty(resourceDO.getUrl())) {
-    			resourceVo.setUrl(resourceDO.getName() + "/" + resourceVo.getUrl());
+    		ResourceQueryVO resourceQueryVo = resourceService.queryTreeVoByResourceId(resourceDo.getPid().toString());
+    		if(!EasyUtil.isStringEmpty(resourceQueryVo.getUrl())) {
+    			resouceVo.setUrl(resourceQueryVo.getName() + "/" + resourceDo.getUrl());
     		}else {
-    			resourceVo.setUrl(resourceDO.getName() + "/" + resourceVo.getName());
+    			resouceVo.setUrl(resourceQueryVo.getName() + "/" + resourceDo.getName());
     		}
     		
-    		resourceVo.setPid(Long.parseLong(resourceDO.getResourceId()));
+    		resouceVo.setPid(Long.parseLong(resourceQueryVo.getResourceId()));
     		
     	}
     	
-    	resourceVo.setResourceId(RandomUtils.getTimeRandom());
-        resourceService.insert(resourceDo);
-        LogWorker.logEnd(log, "配置", "resourceVo:{}", resourceVo);
+    	resouceVo.setResourceId(RandomUtils.getTimeRandom());
+        resourceService.insertByNoId(resouceVo);
+        LogWorker.logEnd(log, "配置", "resourceVo:{}", resouceVo);
         return renderSuccess("添加成功！");
     }
 
@@ -139,7 +167,19 @@ public class ResourceController extends BaseController {
      */
     @RequestMapping("/allTree")
     @ResponseBody
-    public Object allMenu() {
+    public Object allMenu(@Valid AuthResourceDO resourceDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "userVo{}", resourceDo);
+        
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
+        LogWorker.logEnd(log, "配置", "usreDo:{}", resourceDo);
         return resourceService.selectAllMenu();
     }
 
@@ -148,7 +188,19 @@ public class ResourceController extends BaseController {
      */
     @RequestMapping("/allTrees")
     @ResponseBody
-    public Object allTree() {
+    public Object allTree(@Valid AuthResourceDO resourceDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "userVo{}", resourceDo);
+        
+        if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        BaseResp resp = BaseResp.createSuccess("");
+        
+        LogWorker.logEnd(log, "配置", "usreDo:{}", resourceDo);
         return resourceService.selectAllTree();
     }
 
@@ -191,7 +243,7 @@ public class ResourceController extends BaseController {
         if (StringUtil.isBlank(type.toString())) {
         	resourceVo.setOpenMode(null);
         }
-        resourceService.updateSelectiveById(resourceDo);
+        resourceService.updateByResourceVo(resourceVo);
         LogWorker.logEnd(log, "配置", "resourceVo:{}", resourceVo);
         return renderSuccess("编辑成功！");
     }
@@ -204,17 +256,40 @@ public class ResourceController extends BaseController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Object delete(Long id) {
+    public Object delete(Long id, @Valid AuthResourceDO resourceDo, BindingResult result) {
+    	LogWorker.logStart(log, "配置", "resourceDo:{}", resourceDo);
+    	if(result.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : result.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
         resourceService.deleteById(id);
+        LogWorker.logEnd(log, "配置", "resourceVo:{}", resourceDo);
         return renderSuccess("删除成功！");
     }
 
 
     @RequestMapping("/query")
     @ResponseBody
-    public Object query(Long id) {
+    public Object query(Long id, @Valid AuthResourceDO resourceDo, BindingResult bindResult) {
+    	
+    	LogWorker.logStart(log, "配置", "resourceDo:{}", resourceDo);
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess("");
+    	
         JsonResult<AuthResourceDO> result = new JsonResult<>();
-
+        LogWorker.logEnd(log, "配置", "resourceVo:{}", resourceDo);
         return result.buildData(resourceService.selectById(id)).buildIsSuccess(true);
     }
 
@@ -225,11 +300,23 @@ public class ResourceController extends BaseController {
      */
     @RequestMapping("/queryList")
     @ResponseBody
-    public Object queryList() {
+    public Object queryList( @Valid AuthResourceDO resourceDo, BindingResult bindResult) {
+    	
+    	LogWorker.logStart(log, "配置", "resourceDo:{}", resourceDo);
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess(""); 	
+    	
         JsonResult<List<ResourceQueryVO>> result = new JsonResult<List<ResourceQueryVO>>();
 
         result.setData(resourceService.queryResource());
-
+        LogWorker.logEnd(log, "配置", "resourceVo:{}", resourceDo);
         return result.buildIsSuccess(true);
     }
 
@@ -240,11 +327,23 @@ public class ResourceController extends BaseController {
      */
     @RequestMapping("/queryTree")
     @ResponseBody
-    public Object queryTree() {
-        JsonResult<List<ResourceQueryVO>> result = new JsonResult<List<ResourceQueryVO>>();
+    public Object queryTree(@Valid AuthResourceDO resourceDo, BindingResult bindResult) {
+    	
+    	LogWorker.logStart(log, "配置", "resourceDo:{}", resourceDo);
+    	if(bindResult.hasErrors()) {
+        	StringBuffer sb = new StringBuffer();
+        	for(ObjectError error : bindResult.getAllErrors()) {
+        		sb.append(error.getDefaultMessage()).append(",");
+        	}
+        	return BaseResp.createFailure(sb.toString());
+        }
+        
+        BaseResp resp = BaseResp.createSuccess(""); 	
+       
+    	JsonResult<List<ResourceQueryVO>> result = new JsonResult<List<ResourceQueryVO>>();
 
         result.setData(resourceService.queryResource());
-
+        LogWorker.logEnd(log, "配置", "resourceVo:{}", resourceDo);
         return result.buildIsSuccess(true);
     }
 }
