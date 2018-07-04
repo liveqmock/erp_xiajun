@@ -29,11 +29,11 @@ public interface IItemService {
 		
 
 	/**
-	 * add item 
+	 * 添加商品
 	 * @param item
 	 * @param itemSkuList
 	 */
-	void addItem(ItemDO item);
+	Object addItem(ItemQueryVO item);
 
 	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
 
