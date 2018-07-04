@@ -14,7 +14,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
-
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
@@ -233,7 +233,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     private void getBuyerTaskDetailDO(BuyerTaskDetailDO detail, ItemTask itemTask, BuyerDO by) {
 
         detail.setOwnerNo(AppUtil.getLoginUserId());
-        AuthUserDO user = authUserMapper.selectUserVoByUserNo(AppUtil.getLoginUserId());
+        UserQueryVO user = authUserMapper.selectUserVoByUserNo(AppUtil.getLoginUserId());
         if(user != null){
             detail.setOwnerName(user.getName());
         }

@@ -40,7 +40,7 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
 
     JsonPageResult<List<UserQueryVO>> queryUserQueryVOList(UserQueryVO userQueryVO);
     
-    AuthUserDO selectUserVoByUserNo(String userNo);
+    UserQueryVO selectUserVoByUserNo(String userNo);
 
     //一键分享登录
     List<AuthUserDO> selectUserByWxUnionId(String wxUnionId);

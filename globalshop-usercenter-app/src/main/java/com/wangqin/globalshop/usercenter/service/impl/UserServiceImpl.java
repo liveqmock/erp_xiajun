@@ -202,7 +202,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     }
 
 	@Override
-	public AuthUserDO selectUserVoByUserNo(String userNo) {
+	public UserQueryVO selectUserVoByUserNo(String userNo) {
 		// TODO Auto-generated method stub
 		return userMapper.selectUserVoByUserNo(userNo);
 	}
@@ -251,14 +251,14 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         user.setName(wxUser.getNickName());
         user.setLoginName("#init#"+companyNo+RandomUtils.nextInt(100000));
         userMapper.insertSelective(user);
-        AuthUserDO userDO = userMapper.selectUserVoByUserNo(userNo);
+        UserQueryVO userVo = userMapper.selectUserVoByUserNo(userNo);
 
 
         RoleQueryVO role = authRoleDOMapper.selectByNameAndCompanyNo("新成员", companyNo);
         AuthUserRoleDO authUserRole = new AuthUserRoleDO();
         authUserRole.setRoleId(role.getRoleId());
         authUserRole.setCompanyNo(companyNo);
-        authUserRole.setUserId(userDO.getId());
+        authUserRole.setUserId(userVo.getId());
         authUserRole.init4NoLogin();
         userRoleDOMapperExt.insert(authUserRole);
 

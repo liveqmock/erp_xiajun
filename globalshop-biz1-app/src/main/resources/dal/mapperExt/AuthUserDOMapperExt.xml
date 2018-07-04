@@ -181,7 +181,7 @@
     </trim>
   </insert>
 	
-  <select id="selectByLoginName" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List2" />
     from auth_user
@@ -376,7 +376,7 @@
   </select>
   
   
-  <select id="selectUserVoByUserNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectUserVoByUserNo" resultType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List2" />
     from auth_user
