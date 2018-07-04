@@ -45,7 +45,13 @@ CREATE PROCEDURE createUser(
     FROM auth_role;
     INSERT INTO auth_role (role_id, company_no, name, creator, modifier)
     VALUES (roleid, companyno, '公司管理员', 'SYSTEM', 'SYSTEM');
-#     创建默认角色
+#     创建买手角色
+    SELECT max(role_id) + 1
+    INTO roleid_buyer
+    FROM auth_role;
+    INSERT INTO auth_role (role_id, company_no, name, creator, modifier)
+    VALUES (roleid_buyer, companyno, '买手', 'SYSTEM', 'SYSTEM');
+#     创建新成员角色
     SELECT max(role_id) + 1
     INTO roleid_default
     FROM auth_role;
