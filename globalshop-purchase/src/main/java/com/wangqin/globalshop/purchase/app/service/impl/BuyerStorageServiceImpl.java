@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerStorageDetailVo;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -149,7 +150,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 }
 
 
-                AuthUserDO user = null;
+                UserQueryVO user = null;
                 if(!EasyUtil.isStringEmpty(detail.getOpUserNo())){
                     user = userMapperExt.selectUserVoByUserNo(detail.getOpUserNo());
                 }
