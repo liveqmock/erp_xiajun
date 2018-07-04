@@ -254,7 +254,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         UserQueryVO userVo = userMapper.selectUserVoByUserNo(userNo);
 
 
-        AuthUserDO role = authRoleDOMapper.selectByNameAndCompanyNo("新成员", companyNo);
+        AuthRoleDO role = authRoleDOMapper.selectByNameAndCompanyNo("新成员", companyNo);
         if (role==null){
             throw new ErpCommonException("找不到预置角色,请联系网站管理员");
         } else {
