@@ -147,9 +147,9 @@ public class UserController extends BaseController {
         
         userService.insertByVo(userVo);
         
-        AuthUserDO authUser = userService.selectUserVoByUserNo(userNo);
+        UserQueryVO userQueryVo = userService.selectUserVoByUserNo(userNo);
  
-        userVo.setId(authUser.getId());
+        userVo.setId(userQueryVo.getId());
         userService.insertByUserVo(userVo);
         
         LogWorker.logEnd(log, "配置", "userVo:{}", userVo);
