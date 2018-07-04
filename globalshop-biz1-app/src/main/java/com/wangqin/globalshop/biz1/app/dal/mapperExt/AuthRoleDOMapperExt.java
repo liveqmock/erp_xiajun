@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
@@ -48,7 +47,7 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
 
     List<RoleQueryVO> searchAuthRoleList(RoleQueryVO roleVO);
 
-    RoleQueryVO selectByNameAndCompanyNo(@Param("newOne") String newOne, @Param("companyNo") String companyNo);
+    AuthUserDO selectByNameAndCompanyNo(@Param("newOne") String newOne, @Param("companyNo") String companyNo);
     
     int insertByRoleVo(RoleQueryVO roleVo);
     
