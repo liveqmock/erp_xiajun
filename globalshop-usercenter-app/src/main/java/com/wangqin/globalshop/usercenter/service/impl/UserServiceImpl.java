@@ -224,7 +224,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void addUserByqrcode(String companyNo, WxUserDO wxUser) {
+    public void addUserByqrcode(String companyNo, WxUserDO wxUser)throws ErpCommonException {
 
         WxUserDO existWxUser = wxUserDOMapper.queryByUnionId(wxUser.getUnionId());
 
@@ -255,12 +255,17 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
 
         RoleQueryVO role = authRoleDOMapper.selectByNameAndCompanyNo("新成员", companyNo);
-        AuthUserRoleDO authUserRole = new AuthUserRoleDO();
-        authUserRole.setRoleId(role.getRoleId());
-        authUserRole.setCompanyNo(companyNo);
-        authUserRole.setUserId(userVo.getId());
-        authUserRole.init4NoLogin();
-        userRoleDOMapperExt.insert(authUserRole);
+        if (role==null){
+            throw new ErpCommonException("找不到预置角色,请联系网站管理员");
+        } else {
+            AuthUserRoleDO authUserRole = new AuthUserRoleDO();
+            authUserRole.setRoleId(role.getRoleId());
+            authUserRole.setCompanyNo(companyNo);
+            authUserRole.setUserId(userVo.getId());
+            authUserRole.init4NoLogin();
+            userRoleDOMapperExt.insert(authUserRole);
+        }
+
 
 
     }

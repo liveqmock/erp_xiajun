@@ -3,6 +3,7 @@ package com.wangqin.globalshop.usercenter.controller;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CookieUtil;
@@ -123,7 +124,11 @@ public class WechatLoginController {
         user.setOpenId(openid);
         user.setUnionId(unionid);
         user.setAvatarUrl(object.getString("headimgurl"));
-        userService.addUserByqrcode(state, user);
+        try {
+            userService.addUserByqrcode(state, user);
+        } catch (ErpCommonException e){
+            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        }
         return result.buildIsSuccess(true).buildMsg("授权成功");
     }
 
