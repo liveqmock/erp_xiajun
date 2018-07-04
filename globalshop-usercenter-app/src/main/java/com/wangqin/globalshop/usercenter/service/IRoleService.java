@@ -25,7 +25,7 @@ public interface IRoleService {//extends ISuperService<AuthRoleDO>
 
     Set<String> queryUserResCodes(String userNo);
 
-    int insert(AuthRoleDO role);
+    int insert(AuthRoleDO roleDO);
 
     int deleteById(Long id);
 
@@ -33,6 +33,9 @@ public interface IRoleService {//extends ISuperService<AuthRoleDO>
 
     int updateSelectiveById(AuthRoleDO role);
 
-    JsonPageResult<List<AuthRoleDO>> queryRoleList(RoleQueryVO roleQueryVO);
-
+    JsonPageResult<List<RoleQueryVO>> queryRoleList(RoleQueryVO roleVO);
+    
+    int insertByRoleVo(RoleQueryVO roleVo);
+    
+    int updateByRoleVo(RoleQueryVO roleVo);
 }

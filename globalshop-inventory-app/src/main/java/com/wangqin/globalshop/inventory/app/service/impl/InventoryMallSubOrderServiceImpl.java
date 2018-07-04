@@ -2,12 +2,14 @@ package com.wangqin.globalshop.inventory.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.inventory.app.service.InventoryIMallSubOrderService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author biscuit
@@ -32,6 +34,7 @@ public class InventoryMallSubOrderServiceImpl implements InventoryIMallSubOrderS
     }
 //
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public JsonResult lockErpOrderBySkuId(String skuCode) throws InventoryException {
         MallSubOrderDO erpOrder = mallSubOrderDOMapper.selectBySkuCode(skuCode);
         inventoryService.order(erpOrder);

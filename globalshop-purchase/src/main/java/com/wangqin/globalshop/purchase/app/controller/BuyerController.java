@@ -3,11 +3,13 @@ package com.wangqin.globalshop.purchase.app.controller;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.purchase.app.service.IBuyerService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,6 +49,7 @@ public class BuyerController {
 
 
     @PostMapping("/setCommission")
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object setCommission(Long id, String purchaseCommissionStr, Long purchaseCommissionMode) {
         try {
             BuyerDO buyer = service.selectByPrimaryKey(id);
@@ -79,6 +82,7 @@ public class BuyerController {
 
 
     @PostMapping("/update")
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(BuyerDO buyer) {
         try {
             BuyerDO buyerOld = service.selectByPrimaryKey(buyer.getId());

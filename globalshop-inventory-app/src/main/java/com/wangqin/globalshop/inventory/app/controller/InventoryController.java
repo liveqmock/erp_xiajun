@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -150,6 +151,7 @@ public class InventoryController {
 
     @RequestMapping("/lock")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object lockOrder(Long orderId) throws InventoryException {
         MallSubOrderDO order = erpOrderService.selectById(orderId);
         inventoryService.order(order);
@@ -158,6 +160,7 @@ public class InventoryController {
 
     @RequestMapping("/release")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object releaseOrder(Long orderId) throws InventoryException {
         MallSubOrderDO order = erpOrderService.selectById(orderId);
         inventoryService.release(order);
@@ -230,6 +233,7 @@ public class InventoryController {
 
     @RequestMapping("/record/queryList")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object queryInventoryRecords(Long id) {
         JsonResult<Object> result = new JsonResult<>();
         MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(id);
@@ -384,6 +388,7 @@ public class InventoryController {
      */
     @RequestMapping("/changePositionNo")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object changePositionNo(Long inventoryAreaId, String positionNo) {
         if (StringUtil.isBlank(positionNo)) {
             return JsonResult.buildFailed("货架号不能为空！");
@@ -521,6 +526,7 @@ public class InventoryController {
      */
     @RequestMapping("/inventoryOutConfirm")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object inventoryOutConfirm(InventoryOutManifestDO inventoryOut) throws InventoryException {
         JsonResult<String> result = new JsonResult<>();
         Set<String> skuIdSet = null;

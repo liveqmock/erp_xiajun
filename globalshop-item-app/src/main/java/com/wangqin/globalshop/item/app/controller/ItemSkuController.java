@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +29,7 @@ import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
@@ -63,6 +65,7 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/update")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object update(ItemSkuQueryVO itemSku) {
 		JsonResult<String> result = new JsonResult<>();
 		if(null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserCompanyNo()) {
@@ -144,6 +147,7 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/query")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object query(String skuCode) {
 		JsonResult<ISkuDTO> result = new JsonResult<>();
 		//if haven't item id ,add item
@@ -194,6 +198,7 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object delete(Long id) {
 		JsonResult<String> result = new JsonResult<>();
 		/*
@@ -340,6 +345,7 @@ public class ItemSkuController  {
 	 */
     @RequestMapping("/queryItemSkuByUpc")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object queryItemSkuByUpc(String upc) {
     	JsonResult<ItemSkuDO> result = new JsonResult<>();
     	List<ItemSkuDO> itemSkuList = iItemSkuService.queryItemSkusByUpc(upc);
@@ -386,6 +392,7 @@ public class ItemSkuController  {
 
 	@RequestMapping("/saleable")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object getSaleAble() {
 		JsonResult<List<ItemSkuDO>> result = new JsonResult<>();
 		List<ItemSkuDO> skuList = iItemSkuService.querySaleableSkus();

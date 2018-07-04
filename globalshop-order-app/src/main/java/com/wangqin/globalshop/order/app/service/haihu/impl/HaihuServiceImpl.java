@@ -18,6 +18,7 @@ import net.sf.json.JSONObject;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +33,7 @@ public class HaihuServiceImpl implements IHaihuService {
 	@Autowired
 	private IMallSubOrderService erpOrderService;
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public void createOrder(Long id) {
 		ShippingOrderDO shippingOrder = shippingOrderService.selectById(id);
 
@@ -108,6 +110,7 @@ public class HaihuServiceImpl implements IHaihuService {
 		return String.format("%.2f", salePrice);
 	}
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public void shippingTrack(String shipperOrderNo) throws ParseException {
 		if(shipperOrderNo == null) {
 			throw new ErpCommonException("物流单号异常");

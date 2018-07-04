@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,6 +20,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
@@ -39,6 +41,7 @@ public class GoodsController {
 
     @RequestMapping("/query")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object query(Long id, String openId) {
         JsonResult<ItemDO> result = new JsonResult<>();
         ItemDO ItemDO = mallItemDOMapperExt.selectByPrimaryKey(id);
@@ -115,6 +118,7 @@ public class GoodsController {
 
     @RequestMapping("/queryRecommend")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object queryRecommend() {
         MallSubOrderDO outerOrderDetail = mallSubOrderDOMapperExt.selectByRecommend();
         ItemDO ItemDO = new ItemDO();
@@ -135,6 +139,7 @@ public class GoodsController {
 
     @RequestMapping("/queryItemsByCategory")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object queryItemsByCategory(Long categoryId, Long itemId) {
         JsonResult<List<ItemDO>> result = new JsonPageResult<List<ItemDO>>();
         Integer limit = 32;

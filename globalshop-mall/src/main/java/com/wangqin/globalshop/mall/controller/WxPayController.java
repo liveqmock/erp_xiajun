@@ -19,6 +19,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,6 +29,7 @@ import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxPayBillDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.MoneyUtil;
 import com.wangqin.globalshop.common.utils.WxPay.MessageUtil;
@@ -115,6 +117,7 @@ public class WxPayController {
 
     @RequestMapping("/notify_url")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object notifyUrl(HttpServletRequest request) {
         int size = request.getContentLength();
         if (size == -1) {
@@ -162,6 +165,7 @@ public class WxPayController {
 
     @RequestMapping("/unifiedorder")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object pay(HttpServletRequest request, String outOrderId) throws UnsupportedEncodingException,
                                                                      DocumentException {
         String openId = "";

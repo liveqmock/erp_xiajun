@@ -14,12 +14,16 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleResourceDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.usercenter.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.result.Tree;
 import com.wangqin.globalshop.common.utils.PageInfo;
 import com.wangqin.globalshop.common.utils.StringUtils;
@@ -40,7 +44,7 @@ public class RoleServiceImpl implements IRoleService {
     @Autowired
     private AuthRoleResourceDOMapperExt roleResourceMapper;
     
-    public List<AuthRoleDO> selectAll() {
+    public List<RoleQueryVO> selectAll() {
 //        EntityWrapper<AuthRoleDO> wrapper = new EntityWrapper<AuthRoleDO>();
 //        wrapper.orderBy("seq");
          return roleMapper.selectList();
@@ -55,10 +59,10 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public int insert(AuthRoleDO role) {
-        role.init();
-        role.setIsDel(true);
-        return roleMapper.insert(role);
+    public int insert(AuthRoleDO roleDO) {
+    	roleDO.init();
+    	roleDO.setIsDel(true);
+        return roleMapper.insert(roleDO);
 
     }
 
@@ -92,10 +96,11 @@ public class RoleServiceImpl implements IRoleService {
 
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object selectTree() {
         List<Tree> trees = new ArrayList<Tree>();
-        List<AuthRoleDO> roles = this.selectAll();
-        for (AuthRoleDO role : roles) {
+        List<RoleQueryVO> roles = this.selectAll();
+        for (RoleQueryVO role : roles) {
             Tree tree = new Tree();
             tree.setId(role.getId());
             tree.setText(role.getName());
@@ -106,6 +111,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void updateRoleResource(Long id, String resourceIds) {
         // 先删除后添加,有点爆力
         AuthRoleDO roleDO = roleMapper.selectByPrimaryKey(id);
@@ -129,21 +135,42 @@ public class RoleServiceImpl implements IRoleService {
   
 
     @Override
-    public JsonPageResult<List<AuthRoleDO>> queryRoleList(RoleQueryVO roleQueryVO) {
-        JsonPageResult<List<AuthRoleDO>> result = new JsonPageResult<>();
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public JsonPageResult<List<RoleQueryVO>> queryRoleList(RoleQueryVO roleQueryVO) {
+        JsonPageResult<List<RoleQueryVO>> result = new JsonPageResult<>();
 
         Integer totalCount = roleMapper.queryRolesCount(roleQueryVO);
 
         if ((null != totalCount) && (0L != totalCount)) {
             result.buildPage(totalCount, roleQueryVO);
 
-            List<AuthRoleDO> roles = roleMapper.queryRoleQueryList(roleQueryVO);
+            List<RoleQueryVO> roles = roleMapper.queryRoleQueryList(roleQueryVO);
             result.setData(roles);
         } else {
-            List<AuthRoleDO> roles = new ArrayList<>();
+            List<RoleQueryVO> roles = new ArrayList<>();
             result.setData(roles);
         }
 
         return result;
     }
+
+	@Override
+	public int insertByRoleVo(RoleQueryVO roleVo) {
+		// TODO Auto-generated method stub
+		roleVo.setModifier(AppUtil.getLoginUserId());
+		roleVo.setCreator(AppUtil.getLoginUserId());
+		roleVo.setIsDel(true);
+		
+		return roleMapper.insertByRoleVo(roleVo);
+	}
+
+	@Override
+	public int updateByRoleVo(RoleQueryVO roleVo) {
+		// TODO Auto-generated method stub
+		roleVo.setModifier(AppUtil.getLoginUserId());
+		roleVo.setCreator(AppUtil.getLoginUserId());
+		roleVo.setIsDel(true);
+		roleVo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		return roleMapper.updateByRoleVo(roleVo);
+	}
 }

@@ -2,6 +2,7 @@ package com.wangqin.globalshop.usercenter.controller;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CookieUtil;
@@ -12,6 +13,7 @@ import com.wangqin.globalshop.usercenter.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +49,7 @@ public class HaiLoginController extends BaseController {
     @PostMapping({"/haiLogin/login", "/login"})
 //    @RequestMapping("/login")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object loginPost(HttpServletRequest request, String username, String password, String captcha,
                             @RequestParam(value = "rememberMe", defaultValue = "1") Integer rememberMe) {
         logger.info("POST请求登录");

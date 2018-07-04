@@ -26,9 +26,12 @@ public interface IOrganizationService {//extends ISuperService<AuthOrganizationD
     int insert(AuthOrganizationDO organization);
 
     AuthOrganizationDO selectById(Long id);
-
+    
+    int insertByOrganizationVo(OrganizationQueryVO organizationQueryVO);
 
     JsonPageResult<List<AuthOrganizationDO>> queryOrganizationList(String companyNo);
+    
+    int updateByOrganizationVo(OrganizationQueryVO organizationQueryVO);
 //        organizationService.deleteById(id);
 //        organizationService.updateSelectiveById(organization);
 //        organizationService.insert(organization);

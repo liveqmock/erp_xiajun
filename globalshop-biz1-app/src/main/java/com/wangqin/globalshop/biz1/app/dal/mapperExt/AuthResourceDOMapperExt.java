@@ -8,16 +8,19 @@ import java.util.List;
 
 public interface AuthResourceDOMapperExt extends AuthResourceDOMapper {
 
-
+	int insertByNoId(ResourceQueryVO resouceVo);
     //Here are
-    List<AuthResourceDO> selectList();
+    List<ResourceQueryVO> selectList();
     
-    List<AuthResourceDO> queryResource();
+    List<ResourceQueryVO> queryResource();
     
-    Integer queryResourcesCount(ResourceQueryVO resourceQueryVO);
+    Integer queryResourcesCount(ResourceQueryVO resourceVO);
 
-    List<AuthResourceDO> queryResourceQueryList(ResourceQueryVO resourceQueryVO);
+    List<ResourceQueryVO> queryResourceQueryList(ResourceQueryVO resourceVO);
     
     AuthResourceDO queryTreeByResourceId(String resourceId);
-   
+    
+    ResourceQueryVO queryTreeVoByResourceId(String resourceId);
+    
+    int updateByResourceVo(ResourceQueryVO resourceVO);
 }

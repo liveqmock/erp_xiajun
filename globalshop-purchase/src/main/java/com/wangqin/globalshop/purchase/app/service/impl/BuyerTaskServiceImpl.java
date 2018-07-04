@@ -2,11 +2,24 @@ package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+
+import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
+
 import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
@@ -41,7 +54,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     private AuthUserDOMapperExt authUserMapper;
 
     @Override
-    public List<BuyerTaskDO> list(BuyerTaskDO buyerTask) {
+    public List<BuyerTaskVO> list(BuyerTaskVO buyerTask) {
         buyerTask.initCompany();
         return mapper.list(buyerTask);
     }

@@ -9,6 +9,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -96,7 +97,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void closeErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
         erpOrder.setStatus(ORDER_SATUTS_CLOSE);
         erpOrder.setGmtModify(new Date());
@@ -110,6 +111,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void splitErpOrder(MallSubOrderDO erpOrder, Integer splitCount) throws InventoryException {
 
         MallSubOrderDO newErpOrder = new MallSubOrderDO();

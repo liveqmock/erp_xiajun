@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @param upc
      * @return
      */
+    @Transactional(rollbackFor = ErpCommonException.class)
     private List<BuyerStorageDetailVo> doSearchList(String openId, String upc, Integer status){
         List<BuyerStorageDetailVo> voList = new ArrayList<>();
 
@@ -131,9 +133,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 detailSo.setUpc(upc);
             }
             List<BuyerStorageDetailDO> detailDOList = detaiMapper.searchList(detailSo);
-
+            
             for(BuyerStorageDetailDO detail : detailDOList){
-
+            	System.out.println(detail.getSkuCode() + ":" + detail.getUpc());
                 ItemSkuDO skuSo = new ItemSkuDO();
                 skuSo.setSkuCode(detail.getSkuCode());
                 skuSo.initCompany();
@@ -141,6 +143,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
 
                 ItemSkuDO skuDO = skuDOMapperExt.queryItemSku(skuSo);
+                System.out.println(skuDO);
                 if(skuDO == null){
                     throw new ErpCommonException("未找到对应商品");
                 }
@@ -200,7 +203,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @param detailVo
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void comfirm(BuyerStorageDetailVo detailVo){
 
         //修改状态
@@ -282,7 +285,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         return comfirm;
     }
 
-
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void deleteById(Long id){
         BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
         detaiMapper.deleteByPrimaryKey(id);
@@ -300,7 +303,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
             }
         }
     }
-
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void updateMem(Long id, String mem){
         BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
         detail.setMem(EasyUtil.truncateLEFitSize(mem,1000));

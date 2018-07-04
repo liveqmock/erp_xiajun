@@ -82,13 +82,13 @@
         </if>
 
         <if test=" isDel == true">
-            and T.is_del is true
+            and T.is_del = 0
         </if>
         <if test=" isDel == false">
-            and T.is_del is false
+            and T.is_del = 1
         </if>
         <if test=" isDel == null">
-            and T.is_del is false
+            and T.is_del = 1
         </if>
 
     </sql>

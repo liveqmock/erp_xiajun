@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,6 +14,7 @@ import com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO;
 import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
 import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
@@ -134,6 +136,7 @@ public class PackingController {
 	 */
 	@RequestMapping("/packageScale/delete")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object deleteById(Long id) {
 		JsonResult<String> result = new JsonResult<>();
 		//通过包装规格类别的id查到一个包装规格类别
@@ -186,6 +189,7 @@ public class PackingController {
 	 */
 	@RequestMapping("/packageLevel/update")
 	@ResponseBody
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object update(ItemPackagePatternDTO packageLevel) {
 		JsonResult<String> result = new JsonResult<>();
 		/*
@@ -220,7 +224,7 @@ public class PackingController {
 	 */
 	@RequestMapping("/packageLevel/add")
 	@ResponseBody
-	
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object add(ItemPackagePatternDTO packageLevel) {
 		JsonResult<String> result = new JsonResult<>();
 		

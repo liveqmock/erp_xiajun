@@ -2,6 +2,8 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import java.util.Date;
 
+import javax.validation.constraints.Size;
+
 public class AuthUserDO extends BaseModel {
     private Long id;
 
@@ -12,7 +14,7 @@ public class AuthUserDO extends BaseModel {
     private String loginName;
 
     private String name;
-
+    
     private String password;
 
     private Byte sex;

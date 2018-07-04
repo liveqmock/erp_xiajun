@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.deal.app.controller;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerTypeDO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
@@ -10,6 +11,7 @@ import com.wangqin.globalshop.deal.app.service.IDealerTypeService;
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,6 +66,7 @@ public class DealerTypeController {
 
     @RequestMapping("/update")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(DealerTypeDO sellerType) {
     	
     	JsonResult<DealerTypeDO> result = new JsonResult<>();
@@ -86,6 +89,7 @@ public class DealerTypeController {
 
     @RequestMapping("/delete")
     @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object delete(DealerTypeDO sellerType) {
    
     	JsonResult<DealerTypeDO> result = new JsonResult<>();

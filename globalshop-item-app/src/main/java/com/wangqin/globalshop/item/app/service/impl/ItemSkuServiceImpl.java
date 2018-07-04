@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
@@ -15,6 +16,7 @@ import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	 * 按条件查询sku列表(分页）
 	 */
 	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
 	public JsonPageResult<List<ISkuDTO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
 		JsonPageResult<List<ISkuDTO>> itemResult = new JsonPageResult<>();
 		//1、查询总的记录数量

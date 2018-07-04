@@ -82,7 +82,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
             /**商品相关Star*/
             ItemSkuDO itemSku = itemSkuService.selectBySkuCode(o.getSkuCode());
             o.setSalePrice(itemSku.getSalePrice());
-            o.setFreight(Double.valueOf(itemSku.getFreight()));
+            Long freight = itemSku.getFreight();
+            o.setFreight(Double.valueOf(freight == null ? 0L : freight));
             o.setItemCode(itemSku.getItemCode());
             o.setItemName(itemSku.getItemName());
             o.setSkuPic(itemSku.getSkuPic());
@@ -231,6 +232,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
 
     @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void dealOrder(JdCommonParam jdCommonParam, GlobalshopOrderVo globalshopOrderVo) {
 
         MallOrderDO mallOrderDO = globalshopOrderVo.getMallOrderDO();

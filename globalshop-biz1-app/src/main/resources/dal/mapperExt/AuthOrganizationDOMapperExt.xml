@@ -77,4 +77,31 @@
     where
    	T1.company_no = #{companyNo}
   </select>
+  
+  <insert id="insertByOrganizationVo" parameterType="com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO" >
+    insert into auth_organization (company_no, org_id, name, 
+      address, code, icon, 
+      pid, seq, creator, modifier
+      )
+    values (#{companyNo,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+      #{pid,jdbcType=BIGINT}, #{seq,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="updateByOrganizationVo" parameterType="com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO" >
+    update auth_organization
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=BIGINT},
+      seq = #{seq,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
 </mapper>
