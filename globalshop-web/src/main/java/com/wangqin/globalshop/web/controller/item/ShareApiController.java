@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.web.dto.api.ItemShareEntity;
 
@@ -25,9 +27,14 @@ public class ShareApiController {
 
     @Autowired
     private IItemService itemService;
+    
+    @Autowired
+    private IAppletConfigService appletConfigService;
 
+    private static final String TYPE_OF_MALL_APPLET = "2";
     public static final String ACCESS_TOKENURL = "https://api.weixin.qq.com/cgi-bin/token";
-    public static final String ACCESS_TOKENPARAM = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
+    //public static final String ACCESS_TOKENPARAM = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
+    private static final String ACCESS_TOKENPARAM_PART = "grant_type=client_credential&appid=";
 
     @RequestMapping("/api/items/share/token")
     @ResponseBody
@@ -50,9 +57,13 @@ public class ShareApiController {
 
         JsonResult<ItemShareEntity> jsonResult = new JsonResult<>();
 
+        //获取商城小程序的appid和screat
+        AppletConfigDO appletConfigDO = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, TYPE_OF_MALL_APPLET);
+        String accessTokenParam = ACCESS_TOKENPARAM_PART+appletConfigDO.getAppid()+"&secret="+appletConfigDO.getSecret();
+        System.out.println("config:"+accessTokenParam);
         //TODO refactor
         //生成分享
-        String reponse = DimensionCodeUtil.sendGet(ACCESS_TOKENURL, ACCESS_TOKENPARAM);
+        String reponse = DimensionCodeUtil.sendGet(ACCESS_TOKENURL, accessTokenParam);
         JSONObject myJson = JSONObject.fromObject(reponse);
         String token = (String) myJson.get("access_token");
         String picUrl = itemService.generateItemShareUrl(userId, companyNo, itemCode, "pages/item/detail", token);
