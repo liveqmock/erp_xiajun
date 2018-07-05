@@ -92,7 +92,7 @@ public class ItemController {
      */
     @RequestMapping("/update")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
+   // @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();
         
@@ -127,6 +127,9 @@ public class ItemController {
         if (!StringUtils.isNotBlank(skuList)) {
         	return result.buildMsg("需要至少提供一个sku").buildIsSuccess(false);
         }
+        
+        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+        
         try {
         	String s = skuList.replace("&quot;", "\"");
         	List<ItemSkuQueryVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {
@@ -186,12 +189,36 @@ public class ItemController {
         	diffList.addAll(oldSkuCodeList);
         	diffList.removeAll(newSkuCodeList);
         	//删除sku
-        	diffList.forEach(skuCode -> {
+        	for(String skuCode:diffList) {
         		itemSkuService.deleteItemSkuBySkuCode(skuCode);
-        	});
+        		//删除虚拟库存TODO
+        		//暂时用更新虚拟库存为0代替
+        		try {
+        			inventoryService.updateVirtualInv(skuCode, 0L, AppUtil.getLoginUserCompanyNo());
+        		} catch (Exception e) {
+        			return result.buildIsSuccess(false).buildMsg("您试图删除不能删除的sku，这样的操作导致了库存异常");
+				}
+        	}
         	//更新需要更新的sku
         	for (ItemSkuQueryVO updateSku : skus) {
         		if (null != updateSku.getSkuCode()) {//需要更新的sku
+        			//先更新虚拟库存
+        			String skuCode = itemSkuService.querySkuCodeById(updateSku.getId());
+        			if(null != updateSku.getVirtualInv()) {
+        				try {
+            				inventoryService.updateVirtualInv(skuCode, updateSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());
+            			} catch (ErpCommonException e) {
+    						return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+    					}
+        			}        			
+        			//再更新规格
+        			if(IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {
+        				scaleService.updateSkuScaleBySkuCodeAndScaleName(skuCode, "颜色", updateSku.getColor());
+        			}
+        			if(IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {
+        				scaleService.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", updateSku.getScale());
+        			}
+        			//最后更新其他的sks项目
         			itemSkuService.updateById(updateSku);
         		}
         	}
@@ -212,7 +239,25 @@ public class ItemController {
         			addSku.setCreator(AppUtil.getLoginUserId());
         			addSku.setModifier(AppUtil.getLoginUserId());
         			addSku.setItemName(itemDTO.getName());
-        			//插入规格TODO
+        			//插入item_sku_scale表
+        			ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
+                	ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+                	setInfo(colorObject, addSku, newSku.getColor(), "颜色");
+                	setInfo(scaleObject, addSku, newSku.getScale(), "尺寸");
+                	scaleList.add(colorObject);
+                	scaleList.add(scaleObject);
+                	scaleService.insertBatch(scaleList); 
+                	//插入库存   
+                	List<InventoryDO> inventoryList = new ArrayList<InventoryDO>();
+        			InventoryDO inventory = new InventoryDO();
+        			inventory.setItemName(item.getName());
+        		    inventory.setItemCode(itemDTO.getItemCode());
+        			inventory.setSkuCode(addSku.getSkuCode());
+        			inventory.setUpc(newSku.getUpc());
+        			inventory.setVirtualInv(Long.valueOf(newSku.getVirtualInv()));
+        			inventoryList.add(inventory);                               
+                    inventoryService.outbound(inventoryList);
+        			//插入sku
         			itemSkuService.insertItemSkuSelective(addSku);
         		}
         	}        		      	     		
@@ -280,6 +325,24 @@ public class ItemController {
     
         iItemService.updateByIdSelective(newItem);	
         return result.buildIsSuccess(true);
+    }
+    
+    /**
+     * 封装ItemSkuScala对象信息
+     * @author ChenZiHao
+     * @param obj     封装的对象
+     * @param itemSku
+     * @param value   scalaValue
+     * @param name    scalaName
+     */
+    private void setInfo(ItemSkuScaleDO obj, ItemSkuDO itemSku, String value, String name) {
+        obj.setSkuCode(itemSku.getSkuCode());
+        obj.setItemCode(itemSku.getItemCode());
+        obj.setScaleCode(CodeGenUtil.getScaleCode());
+        obj.setScaleName(name);
+        obj.setScaleValue(value);
+        obj.init();
+
     }
 
     /*

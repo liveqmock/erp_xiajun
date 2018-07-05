@@ -131,9 +131,9 @@ public class ItemSkuController  {
 			}			
 		} 
 		//更新虚拟库存
-		System.out.println("skucode"+iItemSkuService.querySkuCodeById(itemSku.getId()));
-		System.out.println("v"+itemSku.getVirtualInv());
-		System.out.println("companyNo"+AppUtil.getLoginUserCompanyNo());
+//		System.out.println("skucode"+iItemSkuService.querySkuCodeById(itemSku.getId()));
+//		System.out.println("v"+itemSku.getVirtualInv());
+//		System.out.println("companyNo"+AppUtil.getLoginUserCompanyNo());
 		inventoryService.updateVirtualInv(iItemSkuService.querySkuCodeById(itemSku.getId()), itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());	
 		itemSku.setModifier(AppUtil.getLoginUserId());
 		iItemSkuService.updateById(itemSku);
