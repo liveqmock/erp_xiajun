@@ -113,7 +113,11 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private Cache shareCache;
 
-
+    @Override
+   	public ItemDO queryItemDOByItemCode(String itemCode) {
+    	return itemDOMapperExt.queryItemDOByItemCode(itemCode);
+    }
+    
     @Override
 	public String queryItemCodeById(Long id) {
 		return itemDOMapperExt.queryItemCodeById(id);
@@ -222,7 +226,7 @@ public class ItemServiceImplement implements IItemService {
                     if (StringUtils.isNotBlank(itemSku.getPackageLevelId())) {
                         List<Long> a = HaiJsonUtils.toBean(itemSku.getPackageLevelId(), new TypeReference<List<Long>>() {
                         });
-                        itemSku.setPackageId(a.get(a.size() - 1));
+                        //itemSku.setPackageId(a.get(a.size() - 1));
                     }
                     minPrice = minPrice > itemSku.getSalePrice() ? itemSku.getSalePrice() : minPrice;
                     maxPrice = maxPrice < itemSku.getSalePrice() ? itemSku.getSalePrice() : maxPrice;
@@ -326,6 +330,7 @@ public class ItemServiceImplement implements IItemService {
         	scaleList.add(scaleObject);
         	itemSku.setItemName(newItem.getItemName());
         	itemSku.setItemId(newItem.getId());
+        	itemSku.setBrand(newItem.getBrandName());
         	itemSku.setCategoryName(item.getCategoryName());
         	itemSku.setCategoryCode(item.getCategoryCode());
         	itemSku.setBrand(newItem.getBrandName());
