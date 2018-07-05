@@ -23,6 +23,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hamcrest.core.Is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -534,13 +535,16 @@ public class ItemController {
     @RequestMapping("/updateVirtualInvByItemId")
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
-    public Object updateVirtualInvByItemId(String itemCode) {
+    public Object updateVirtualInvByItemId(Long id) {
         //logger.info("updateVirtualInvByItemId start");
         JsonResult<ItemDO> result = new JsonResult<>();
-        List<ItemSkuDO> list = itemSkuService.queryByItemCodeAndCompanyNo(itemCode, AppUtil.getLoginUserCompanyNo());
-        for (ItemSkuDO itemSkuDO : list) {
-            inventoryService.updateVirtualInv(itemSkuDO.getSkuCode(),0L,itemSkuDO.getCompanyNo());
-        }
+        String itemCode = iItemService.queryItemCodeById(id);
+        if(IsEmptyUtil.isStringNotEmpty(itemCode)) {
+        	List<ItemSkuDO> list = itemSkuService.queryByItemCodeAndCompanyNo(itemCode, AppUtil.getLoginUserCompanyNo());
+            for (ItemSkuDO itemSkuDO : list) {
+                inventoryService.updateVirtualInv(itemSkuDO.getSkuCode(),0L,itemSkuDO.getCompanyNo());
+            }
+        }      
         return result.buildIsSuccess(true);
     }
 

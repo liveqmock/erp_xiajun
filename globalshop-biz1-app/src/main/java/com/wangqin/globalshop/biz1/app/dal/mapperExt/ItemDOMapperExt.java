@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 
 
@@ -17,6 +18,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
 
+	ItemDO queryItemDOByItemCode(String itemCode);
+	
 	String queryItemCodeById(Long id);
 	
 	//插入单个商品
