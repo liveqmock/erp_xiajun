@@ -40,4 +40,11 @@ public class ItemSkuScaleServiceImpl implements IItemSkuScaleService {
 	public void insertBatch(List<ItemSkuScaleDO> scaleList) {
 		itemSkuScaleMapperExt.insertBatch(scaleList);
 	}
+	
+	//更新skuscale
+	@Override
+    public void updateSkuScaleBySkuCodeAndScaleName(String skuCode,
+    		String scaleName,String scaleValue) {
+		itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, scaleName, scaleValue);
+	}
 }

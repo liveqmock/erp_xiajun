@@ -46,6 +46,17 @@
 
     </insert>
 
+    <!-- 更细sku对应的某个规格的值 -->
+    <update id="updateSkuScaleBySkuCodeAndScaleName" parameterType="java.lang.String">
+        UPDATE 
+        item_sku_scale 
+        set scale_value=#{scaleValue}
+        <where>
+        sku_code = #{skuCode}
+        AND
+        scale_name = #{scaleName}
+        </where>
+    </update>
 
 
 </mapper>
