@@ -13,7 +13,6 @@ public class WebApplication {
 
     public static void main(String[] args) {
         System.setProperty("DEPLOY_ENV", "dev");
-
         SpringApplication.run(WebApplication.class, args);
     }
 
