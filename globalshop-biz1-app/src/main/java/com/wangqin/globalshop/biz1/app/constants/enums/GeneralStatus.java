@@ -7,11 +7,11 @@ package com.wangqin.globalshop.biz1.app.constants.enums;
  */
 public enum GeneralStatus {
 
-	INIT(0, "新建"),
-	CONFIRM(1,"已确认"),
-	SUCCESS(2,"成功"),
-	CLOSE(-1, "关闭"),
-	CONFIRMING(3,"入库中");
+	INIT(0, "预入库"),//
+	CONFIRM(1,"已确认"),//buyer_storage_detail单条明细入库确认
+	SUCCESS(2,"成功"),//buyer_storage数量全部入库
+	CLOSE(-1, "关闭"),//buyer_storage，和buyer_storage_detail
+	CONFIRMING(3,"入库中");//buyer_storage和buyer_storage_detail数量部分确认
     private int code;
     private String description;
     GeneralStatus(int code,String description){
