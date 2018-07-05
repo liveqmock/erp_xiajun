@@ -545,37 +545,39 @@
                  t2.receiver_address addressDetail,
                  t2.telephone,
                  t1.memo remark,
-                 t2.sku_code skuCode
+                 t2.sku_code skuCode,
+                 t1.pay_type payType
                FROM mall_order t1, mall_sub_order t2
                WHERE t1.order_no = t2.order_no AND t1.is_del != '1'
-               <if test="companyNo!=null and companyNo!=''">
+               <if test="companyNo!=null ">
                    AND t1.company_no = #{companyNo}
                </if>
-               <if test="orderNo != null and orderNo != ''">
+               <if test="orderNo != null">
                	   AND
                	   t2.order_no = #{orderNo}
                </if>
-               <if test="channelOrderNo != null and channelOrderNo != ''">
+               <if test="channelOrderNo != null">
                	   AND
                	   t1.channel_order_no = #{channelOrderNo}
                </if>
-              <!--  <if test="status != null and status != ''">
-               	   AND
-               	   t1.status = #{status}
-               </if> -->
-               <if test="receiver != null and receiver != ''">
+               <!-- <if test="status == 10">
+               		
+              	   AND
+              	   !FIND_IN_SET(#{status},t1.status)	  
+               </if>  -->
+               <if test="receiver != null">
                	   AND
                	   t2.receiver = #{receiver}
                </if>
-               <if test="telephone != null and telephone != ''">
+               <if test="telephone != null">
                	   AND
                	   t2.telephone = #{telephone}
                </if>
-               <if test="dealerName != null and dealerName != ''">
+               <if test="dealerName != null">
                	  AND
                	  t1.dealerName = #{dealerName}
                </if>
-               <if test="skuCode != null and skuCode != ''">
+               <if test="skuCode != null ">
                	 AND
                	 t1.sku_code = #{skuCode}
                </if>

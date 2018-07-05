@@ -72,7 +72,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         List<MallSubOrderDO> os = outerOrder.getOuterOrderDetails();
         Double totalPrice = 0.0;
         String shopCode = CodeGenUtil.getShopCode();
-        DealerDO deal = iDealerService.selectByCode(outerOrder.getDealerCode());
+//        DealerDO deal = iDealerService.selectByCode(outerOrder.getDealerCode());
         outerOrder.init();
         for (MallSubOrderDO o : os) {
             totalPrice += o.getSalePrice() * o.getQuantity();
@@ -104,7 +104,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
             mallSubOrderDOMapper.insert(o);
         }
 
-        outerOrder.setDealerName(deal.getName());
+//        outerOrder.setDealerName(deal.getName());
         outerOrder.setShopCode(shopCode);
         outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
