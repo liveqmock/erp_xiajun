@@ -300,9 +300,8 @@ public class InventoryServiceImpl implements InventoryService {
         }
         /**查出对应库存的仓库记录*/
         InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(skuCode, companyNo);
-        Long inv = inventory.getInv() - inventory.getLockedInv();
-        if (inv < virInv) {
-            throw new ErpCommonException("当前允许虚拟库存最小值为" + inv);
+        if (inventory.getInv() - inventory.getLockedInv() + virInv < 0) {
+            throw new ErpCommonException("当前允许虚拟库存最小值为" + (inventory.getLockedInv() - inventory.getInv()));
         }
         inventory.setVirtualInv(virInv);
         mapper.updateByPrimaryKey(inventory);
