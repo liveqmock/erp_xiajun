@@ -38,6 +38,7 @@
     	AND
     	D2.name = #{ typeName }
     </if>
+    
     </where>
     </select>
     <select id="selectByCode" resultMap="BaseResultMap">
