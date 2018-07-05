@@ -92,8 +92,9 @@ public class ItemController {
      */
     @RequestMapping("/update")
     @ResponseBody
-   // @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(ItemQueryVO item) {
+    	
         JsonResult<ItemDO> result = new JsonResult<>();
         
         if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
@@ -104,6 +105,7 @@ public class ItemController {
         }
         
         ItemDTO oldItem = iItemService.queryItemById(item.getId());
+        
         if (StringUtil.isBlank(item.getDetail()) && StringUtil.isNotBlank(oldItem.getDetail())) {
             return result.buildMsg("商品详情不能为空").buildIsSuccess(false);
         }
@@ -198,6 +200,9 @@ public class ItemController {
         		} catch (Exception e) {
         			return result.buildIsSuccess(false).buildMsg("您试图删除不能删除的sku，这样的操作导致了库存异常");
 				}
+        		//删除规格
+        		scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
+        		scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
         	}
         	//更新需要更新的sku
         	for (ItemSkuQueryVO updateSku : skus) {
@@ -227,6 +232,7 @@ public class ItemController {
         		if (null == newSku.getSkuCode()) {//需要添加的sku
         			ItemSkuDO addSku = new ItemSkuDO();
         			ItemDTO itemDTO = iItemService.queryItemById(item.getId());
+        			
         			addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         			addSku.setItemCode(itemDTO.getItemCode());		
         			addSku.setSkuCode("S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandom() + "Q"+String.format("%0" + 2 + "d", (startIndex++)));
@@ -239,6 +245,8 @@ public class ItemController {
         			addSku.setCreator(AppUtil.getLoginUserId());
         			addSku.setModifier(AppUtil.getLoginUserId());
         			addSku.setItemName(itemDTO.getName());
+        			addSku.setCategoryCode(itemDTO.getCategoryCode());
+        			addSku.setCategoryName(itemDTO.getCategoryName());
         			//插入item_sku_scale表
         			ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
                 	ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();

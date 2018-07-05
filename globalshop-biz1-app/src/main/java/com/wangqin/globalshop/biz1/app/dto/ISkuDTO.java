@@ -17,6 +17,7 @@ import com.wangqin.globalshop.common.utils.Money;
  */
 public class ISkuDTO implements Serializable {
 
+	
 	private Long id;
 
 	private Long itemId;

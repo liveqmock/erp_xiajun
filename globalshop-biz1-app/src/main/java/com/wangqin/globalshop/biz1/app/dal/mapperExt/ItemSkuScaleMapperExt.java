@@ -25,4 +25,8 @@ public interface ItemSkuScaleMapperExt extends ItemSkuScaleDOMapper {
     //更新skuscale
     void updateSkuScaleBySkuCodeAndScaleName(@Param("skuCode")String skuCode,
     		@Param("scaleName")String scaleName,@Param("scaleValue")String scaleValue);
+    
+    //删除item_sku_scale
+    void deleteItemSkuScaleBySkuCodeAndScaleName(@Param("skuCode")String skuCode,
+    		@Param("scaleName")String scaleName);
 }

@@ -26,4 +26,7 @@ public interface IItemSkuScaleService {
     //更新skuscale
     void updateSkuScaleBySkuCodeAndScaleName(String skuCode,
     		String scaleName,String scaleValue);
+    
+    //删除item_sku_scale
+    void deleteItemSkuScaleBySkuCodeAndScaleName(String skuCode,String scaleName);
 }

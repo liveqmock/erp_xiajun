@@ -57,6 +57,18 @@
         scale_name = #{scaleName}
         </where>
     </update>
+    
+     <!-- 根据skuCode和规格的名字删除规格 -->
+    <update id="deleteItemSkuScaleBySkuCodeAndScaleName" parameterType="java.lang.String">
+        UPDATE 
+        item_sku_scale 
+        set is_del=1
+        <where>
+        sku_code = #{skuCode}
+        AND
+        scale_name = #{scaleName}
+        </where>
+    </update>
 
 
 </mapper>

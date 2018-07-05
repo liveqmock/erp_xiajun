@@ -47,4 +47,10 @@ public class ItemSkuScaleServiceImpl implements IItemSkuScaleService {
     		String scaleName,String scaleValue) {
 		itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, scaleName, scaleValue);
 	}
+	
+	//删除item_sku_scale
+	@Override
+    public void deleteItemSkuScaleBySkuCodeAndScaleName(String skuCode,String scaleName) {
+		itemSkuScaleMapperExt.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, scaleName);
+	}
 }
