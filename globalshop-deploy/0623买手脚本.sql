@@ -8,9 +8,13 @@ ADD COLUMN `company_no`  varchar(64) NULL AFTER `id`;
 ALTER TABLE `buyer_receipt`
 CHANGE COLUMN `buyer_id` `open_id`  varchar(64) NULL DEFAULT NULL COMMENT '买手ID' AFTER `status`;
 
+ALTER TABLE `haidb2new`.`buyer_receipt`
+MODIFY COLUMN `open_id` varchar(64) DEFAULT NULL COMMENT '买手ID,根据openID，与buyer关联' AFTER `status`;
+
 ##3 buyer_storage  最好加上备注： COMMENT '-1关闭，0新建，1已确认入库，2.成功，3入库中'
 ALTER TABLE `buyer_storage`
-ADD COLUMN `status`  int(4) NULL AFTER `modifier`;
+ADD COLUMN `status`  int(4) NULL AFTER `modifier`,
+MODIFY COLUMN `buyer_open_id` varchar(64) DEFAULT NULL;
 
 ##4 buyer_storage_detail
 ALTER TABLE `buyer_storage_detail`
@@ -36,7 +40,8 @@ CHANGE COLUMN `desc` `desc_msg`  varchar(500) CHARACTER SET utf8 COLLATE utf8_ge
 ADD COLUMN `company_no`  varchar(64) NULL AFTER `id`;
 
 
-
+ALTER TABLE `haidb2new`.`item_find`
+MODIFY COLUMN `sku_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci AFTER `item_code`;
 
 
 
