@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import org.junit.validator.PublicClassValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
