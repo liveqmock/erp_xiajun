@@ -237,10 +237,14 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         if(user != null){
             detail.setOwnerName(user.getName());
         }
+
+        ItemSkuDO sku = itemSkuMapper.queryItemBySkuCode(itemTask.getSkucode());
+
         detail.init();
         detail.setBuyerName(by.getNickName());
         detail.setBuyerOpenId(by.getOpenId());
         detail.setCount(itemTask.getCount());
+        detail.setItemCode(sku.getItemCode());
         detail.setSkuCode(itemTask.getSkucode());
         detail.setMaxCount(itemTask.getTaskMaxCount());
         detail.setPrice(itemTask.getTaskPrice());
