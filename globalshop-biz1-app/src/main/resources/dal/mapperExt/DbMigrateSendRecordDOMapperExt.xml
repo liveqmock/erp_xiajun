@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.DbMigrateSendRecordDOMapperExt">
+	
+	<sql id="Base_Column_List" >
+    id, token, db_script, retry_times, status, modifier, creator
+    </sql>
+  
+	<select id="queryDbMigrateSendRecordByStatusRetryTimes" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.DbMigrateSendRecordDO">
+    	SELECT 
+    	<include refid="Base_Column_List"/>
+    	FROM 
+    	db_migrate_send_record T1
+    	where
+			T1.status= '0'
+			or
+			(T1.status = '2' AND <![CDATA[T1.retry_times < 5]]>)
+		ORDER BY T1.id
+    </select>
+	
+	<update id="updateDbMigrateSendRecordById">
+		UPDATE
+		db_migrate_send_record T1
+		SET
+		T1.status=#{status},T1.retry_times=T1.retry_times+1
+		<where>
+			T1.id=#{id}
+		</where>
+	</update>
+	
+</mapper>

@@ -341,7 +341,8 @@
             LAST_INSERT_ID()
         </selectKey>
         insert into item_sku
-        (sku_code,sku_pic,cost_price,weight,item_code,item_name,company_no,upc,creator,modifier,sale_price,category_name,category_code,package_level_id)
+        (sku_code,sku_pic,cost_price,weight,item_code,item_name,company_no,upc,creator,modifier,
+        sale_price,category_name,category_code,package_level_id,brand_name)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
@@ -350,7 +351,7 @@
             #{wdSolr.skuCode}, #{wdSolr.skuPic}, #{wdSolr.costPrice},#{wdSolr.weight},
             #{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
             #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice},
-            #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId}
+            #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId},#{wdSolr.brand}
             )
         </foreach>
 </insert>
