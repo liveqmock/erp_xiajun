@@ -7,13 +7,13 @@ import org.springframework.context.annotation.PropertySource;
 
 
 @SpringBootApplication
-@PropertySource("classpath:props/config-${DEPLOY_ENV}.properties")
+@PropertySource("classpath:props/${BIZ_SYSTEM}-config-${DEPLOY_ENV}.properties")
 @ImportResource("classpath:spring/applicationContext.xml")
 public class WebApplication {
 
     public static void main(String[] args) {
+        System.setProperty("BIZ_SYSTEM", "globalshop");
         System.setProperty("DEPLOY_ENV", "dev");
-
         SpringApplication.run(WebApplication.class, args);
     }
 
