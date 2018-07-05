@@ -33,9 +33,11 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
 /**
@@ -56,6 +58,9 @@ public class ItemSkuController  {
 
 	@Autowired
 	private InventoryService inventoryService;
+	
+	@Autowired
+	private IItemSkuScaleService scaleService;
 
 	/**
 	 * 更新sku
@@ -219,6 +224,18 @@ public class ItemSkuController  {
 		if(1 >= iItemSkuService.querySkuNumberBySkuId(id)) {
 			return result.buildIsSuccess(false).buildMsg("商品只有这一个sku,暂时无法删除");
 		}
+		String skuCode = iItemSkuService.querySkuCodeById(id);
+		if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
+			//删除虚拟库存，用更新虚拟库存为0代替
+			try {
+				inventoryService.updateVirtualInv(skuCode, 0L, AppUtil.getLoginUserCompanyNo());
+			} catch (Exception e) {
+				return result.buildIsSuccess(false).buildMsg("删除失败，删除会导致库存异常");
+			}		
+			//删除item_sku_scale
+			scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
+			scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
+		}		
 		iItemSkuService.deleteById(id);
 		result.buildIsSuccess(true);
 		return result;
