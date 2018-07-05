@@ -246,7 +246,7 @@ public class WechatLoginController {
                     "  <title></title>\n" +
                     "</head>\n" +
                     "<body>\n" +
-                    "    <script src=\"http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
+                    "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
                     "    <div id=\"login_container\"></div>\n" +
                     "    <script>\n" +
                     "      var obj = new WxLogin\n" +
@@ -293,7 +293,7 @@ public class WechatLoginController {
                     "  <title></title>\n" +
                     "</head>\n" +
                     "<body>\n" +
-                    "    <script src=\"http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
+                    "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
                     "    <div id=\"login_container\"></div>\n" +
                     "    <script>\n" +
                     "      var obj = new WxLogin\n" +
