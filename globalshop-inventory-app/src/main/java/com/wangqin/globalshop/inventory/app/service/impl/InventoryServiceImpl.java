@@ -293,19 +293,18 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void updateVirtualInv(String skuCode, Long virInv, String companyNo) {
-        /**如果virInv 为负数  不允许修改*/
-        if (virInv < 0) {
-            throw new ErpCommonException("虚拟库存必须大于0");
+    	/**如果virInv 为负数  不允许修改*/
+    	if (virInv < 0) {
+    	    throw new ErpCommonException("虚拟库存必须大于0");
 
-        }
-        /**查出对应库存的仓库记录*/
-        InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(skuCode, companyNo);
-        Long inv = inventory.getInv() - inventory.getLockedInv();
-        if (inv < virInv) {
-            throw new ErpCommonException("当前允许虚拟库存最小值为" + inv);
-        }
-        inventory.setVirtualInv(virInv);
-        mapper.updateByPrimaryKey(inventory);
+    	}
+    	/**查出对应库存的仓库记录*/
+    	InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(skuCode, companyNo);
+    	if (inventory.getInv() - inventory.getLockedInv() + virInv < 0) {
+    	    throw new ErpCommonException("当前允许虚拟库存最小值为" + (inventory.getLockedInv() - inventory.getInv()));
+    	}
+    	inventory.setVirtualInv(virInv);
+    	mapper.updateByPrimaryKey(inventory);
 
     }
 

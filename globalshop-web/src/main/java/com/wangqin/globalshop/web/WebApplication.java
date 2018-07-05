@@ -14,7 +14,6 @@ public class WebApplication {
     public static void main(String[] args) {
         System.setProperty("BIZ_SYSTEM", "globalshop");
         System.setProperty("DEPLOY_ENV", "dev");
-
         SpringApplication.run(WebApplication.class, args);
     }
 

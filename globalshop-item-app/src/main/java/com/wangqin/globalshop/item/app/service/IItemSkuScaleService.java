@@ -7,6 +7,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 
  * @author Xiajun
@@ -19,4 +21,12 @@ public interface IItemSkuScaleService {
 	List<ItemSkuScaleDO> selectScaleNameValueBySkuCode(String skuCode);
 
     void insertBatch(List<ItemSkuScaleDO> scaleList);
+    
+
+    //更新skuscale
+    void updateSkuScaleBySkuCodeAndScaleName(String skuCode,
+    		String scaleName,String scaleValue);
+    
+    //删除item_sku_scale
+    void deleteItemSkuScaleBySkuCodeAndScaleName(String skuCode,String scaleName);
 }
