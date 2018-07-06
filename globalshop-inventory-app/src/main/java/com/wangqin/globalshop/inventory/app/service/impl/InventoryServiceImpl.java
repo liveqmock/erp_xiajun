@@ -160,6 +160,7 @@ public class InventoryServiceImpl implements InventoryService {
 
         if (inventoryDO.getInv() + inventoryDO.getVirtualInv() - inventoryDO.getLockedInv() >= mallSubOrderDO.getQuantity()) {
             /**修改库存占用*/
+            invOnWarehouseService.order(inventoryDO,mallSubOrderDO.getQuantity());
             inventoryDO.setLockedInv(inventoryDO.getLockedInv() + mallSubOrderDO.getQuantity());
             mapper.updateByPrimaryKeySelective(inventoryDO);
         } else {

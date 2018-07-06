@@ -10,16 +10,16 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperE
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author biscuit
@@ -111,7 +111,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     @Transactional(rollbackFor = ErpCommonException.class)
     public Map<InventoryOnWareHouseDO, Long> ship(InventoryDO inventoryDO, Long quantity) {
         //按照升序获得所有和该商品相关  该公司的记录
-        List<InventoryOnWareHouseDO> list = mapper.selectBySkuCode(inventoryDO.getSkuCode());
+        List<InventoryOnWareHouseDO> list = mapper.selectByCompanyNoAndSkuCode(AppUtil.getLoginUserCompanyNo(),inventoryDO.getSkuCode());
         if (list.size()==0){
             throw new ErpCommonException("找不到相关商品库存");
         }
@@ -129,7 +129,22 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
         return mapper.selectByCompanyNoAndSkuCode(companyNo, skuCode);
     }
 
-    /**Map   Long的意思是需要出的*/
+    @Override
+    public void order(InventoryDO inventoryDO, Integer quantity) {
+
+        List<InventoryOnWareHouseDO> list = mapper.selectByCompanyNoAndSkuCode(AppUtil.getLoginUserCompanyNo(),inventoryDO.getSkuCode());
+        if (list.size()==0){
+            throw new ErpCommonException("找不到相关商品库存");
+        }
+        Map<InventoryOnWareHouseDO, Long> map = chooseWarehouse(list, Long.valueOf(quantity));
+        for (InventoryOnWareHouseDO house : map.keySet()) {
+            house.setLockedInv(Long.valueOf(quantity));
+            mapper.updateByPrimaryKeySelective(house);
+        }
+
+    }
+
+    /**Map   Long的意思是需要出的数目*/
     private Map<InventoryOnWareHouseDO, Long> chooseWarehouse(List<InventoryOnWareHouseDO> list, Long quantity) {
         //        有限找刚好够分配的记录
         //如果不存在   则向前找  尽量从少的仓库发货
