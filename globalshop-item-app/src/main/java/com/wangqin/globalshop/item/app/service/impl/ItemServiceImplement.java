@@ -686,7 +686,7 @@ public class ItemServiceImplement implements IItemService {
                 BeanUtils.copies(sku, itemSkuVo);
             }
             //库存
-            InventoryDO inventoryDO = inventoryDOMapperExt.queryInventoryByCode(sku.getItemCode(), sku.getSkuCode());
+            InventoryDO inventoryDO = inventoryDOMapperExt.queryBySkuCodeAndCompanyNo(sku.getSkuCode(),itemDo.getCompanyNo());
             itemSkuVo.setInventoryDO(inventoryDO);
 
             //规格尺寸
