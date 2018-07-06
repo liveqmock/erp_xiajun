@@ -2,9 +2,9 @@ package com.wangqin.globalshop.purchase.app.service;
 
 
 
-import java.util.List;
-
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
+
+import java.util.List;
 
 /**
  * @author biscuit
@@ -16,7 +16,7 @@ public interface IBuyerTaskService {
 
     void add(BuyerTaskVO buyerTaskDO);
 
-    void importTask(List<List<Object>> list);
+    void importTask(List<List<Object>> list) throws Exception;
 
 
 

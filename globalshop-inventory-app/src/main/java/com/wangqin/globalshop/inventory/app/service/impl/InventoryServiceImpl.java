@@ -3,6 +3,7 @@ package com.wangqin.globalshop.inventory.app.service.impl;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,9 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * 采购入库
      *
-     * @param inventory
-     * @param warehouseNo
+     * @param inventory 封装库存信息的对象
+     * @param warehouseNo 仓库号
+     * @param positionNo 货架号
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -50,7 +52,7 @@ public class InventoryServiceImpl implements InventoryService {
         Long inv = inventory.getInv();
         /**更新具体仓库的库存*/
         InventoryOnWareHouseDO wareHouseDO = invOnWarehouseService.insertInventory(inventory, inv, warehouseNo, positionNo);
-        InventoryDO exitInventory = mapper.queryBySkuCodeAndItemCode(inventory.getSkuCode(), inventory.getItemCode());
+        InventoryDO exitInventory=  mapper.queryBySkuCodeAndCompanyNo(inventory.getSkuCode(), AppUtil.getLoginUserCompanyNo());
         /**如果有虚拟库存,表示已有库存记录  需要更新
          * 反之  则没有库存记录  需要新增
          * */
@@ -90,7 +92,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void returns(MallSubOrderDO orderDO, Long inv) {
         /**修改库存*/
-        InventoryDO inventory = mapper.queryBySkuCode(orderDO.getSkuCode());
+        InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(orderDO.getSkuCode(),AppUtil.getLoginUserCompanyNo());
         if (inventory == null) {
             throw new ErpCommonException("找不到相关库存");
         }
@@ -151,7 +153,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void order(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(),AppUtil.getLoginUserCompanyNo());
         if (inventoryDO == null) {
             throw new ErpCommonException("库存不足，下单失败");
         }
@@ -189,7 +191,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void release(MallSubOrderDO mallSubOrderDO) {
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getItemCode());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
         if (inventoryDO == null) {
             throw new ErpCommonException("找不到对应的库存");
         }
@@ -206,7 +208,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void checkIn(String skuCode, Long warehouseId, String positionNo, Long quantity) {
         /**增加实际库存*/
-        InventoryDO inventoryDO = mapper.queryBySkuCode(skuCode);
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(skuCode,AppUtil.getLoginUserCompanyNo());
         insertInv(inventoryDO, quantity);
         /**增加仓库库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByPrimaryKey(warehouseId);
@@ -229,12 +231,17 @@ public class InventoryServiceImpl implements InventoryService {
         houseDO.setInventory(houseDO.getLockedInv() + quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**减少实际库存*/
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndItemCode(houseDO.getSkuCode(), houseDO.getItemCode());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(houseDO.getSkuCode(),AppUtil.getLoginUserCompanyNo());
         insertInv(inventoryDO, quantity);
 
         /**新增流水*/
         Integer opeatory = 202;
         saveInventoryInOut(inventoryDO, houseDO, opeatory, quantity, "盘点出库");
+    }
+
+    @Override
+    public InventoryDO selectBySkuCodeAndCompanyNo(String skuCode, String companyNo) {
+        return mapper.queryBySkuCodeAndCompanyNo(skuCode,companyNo);
     }
 
     /**
@@ -246,7 +253,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(MallSubOrderDO orderDO) throws ErpCommonException {
         /**修改库存  和  库存占用*/
-        InventoryDO inventoryDO = mapper.queryBySkuCode(orderDO.getSkuCode());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(orderDO.getSkuCode(),AppUtil.getLoginUserCompanyNo());
         /**
          * 库存逻辑
          * */
@@ -288,7 +295,6 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * 提供给sku修改的时候修改虚拟库存
      *
-     * @param outManifestDO
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -311,7 +317,7 @@ public class InventoryServiceImpl implements InventoryService {
     private void outOfWarehouse(List<InventoryOutManifestDetailDO> list) {
         for (InventoryOutManifestDetailDO aDo : list) {
             /**修改库存*/
-            InventoryDO inventory = mapper.queryBySkuCodeAndItemCode(aDo.getSkuCode(), aDo.getItemCode());
+            InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(aDo.getSkuCode(), AppUtil.getLoginUserCompanyNo());
             long inv = inventory.getInv() - aDo.getQuantity();
             if (inv < 0) {
                 throw new ErpCommonException("库存不足，出库失败");
@@ -337,7 +343,7 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     public InventoryDO selectByItemCodeAndSkuCode(String itemCode, String skuCode) {
-        return mapper.queryBySkuCodeAndItemCode(skuCode, itemCode);
+        return mapper.queryBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
     }
 
 
@@ -349,7 +355,7 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Transactional(rollbackFor = ErpCommonException.class)
     private void insertInv(InventoryDO inventoryDO, Long inv) {
-        InventoryDO inventory = mapper.queryBySkuCodeAndItemCode(inventoryDO.getSkuCode(), inventoryDO.getItemCode());
+        InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(inventoryDO.getSkuCode(),AppUtil.getLoginUserCompanyNo());
         if (inventory == null) {
             ItemSkuDO itemSkuDO = itemSkuMapper.queryItemBySkuCode(inventoryDO.getSkuCode());
             inventoryDO.setItemName(itemSkuDO.getItemName());

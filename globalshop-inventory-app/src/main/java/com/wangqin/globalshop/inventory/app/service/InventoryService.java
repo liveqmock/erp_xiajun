@@ -38,5 +38,5 @@ public interface InventoryService {
     void inventoryCheckOut(Long inventoryAreaId, Long quantity);
 
 
-
+    InventoryDO selectBySkuCodeAndCompanyNo(String skuCode, String loginUserCompanyNo);
 }

@@ -90,75 +90,81 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void importTask(List<List<Object>> list) throws ErpCommonException {
-        List<String> errMsg = new ArrayList<>();
-        List<BuyerTaskDO> taskList = new ArrayList<>();
-        List<BuyerTaskDetailDO> detailList = new ArrayList<>();
-        int i = 0;
-        for (List<Object> obj : list) {
-            i++;
-            BuyerTaskDO task = new BuyerTaskDO();
-            BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
-            /**采购任务名称*/
-            task.setTitle(obj.get(0).toString());
-            /**upc*/
-            String upc = obj.get(1).toString();
-            /**根据upc*/
-            /**根据UPC来获取商品信息*/
-            String status = setDetailInfo(detail, upc);
-            if (status != null) {
-                errMsg.add(status + "位于第" + i + "行 第2列");
-            }
-            /**采购限价*/
-            String maxPrice = obj.get(3).toString().trim();
-            maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
-            if (isParseToDouble(maxPrice)) {
-                BigDecimal decimal = new BigDecimal(maxPrice);
-                detail.setMaxPrice(decimal);
-            } else {
-                errMsg.add("存在未知格式的数据:第" + i + "行 第4列的  " + maxPrice);
-            }
-            /**采购数目*/
-            String maxCount = obj.get(4).toString().trim();
-            maxCount = StringUtil.isBlank(maxCount) ? "0" : maxCount;
-            if (isParseToInteger(maxCount)) {
-                detail.setMaxCount(Integer.valueOf(maxCount));
-            }  else {
-                errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + maxCount);
-            }
-            /**任务的有效天数*/
-            String limitTime = obj.get(5).toString().trim();
-            limitTime = StringUtil.isBlank(limitTime) ? "0" : limitTime;
-            if (isParseToInteger(limitTime)) {
-                Date date = new Date();
-                detail.setStartTime(date);
-                Calendar rightNow = Calendar.getInstance();
-                rightNow.setTime(date);
-                rightNow.add(Calendar.DAY_OF_YEAR, Integer.valueOf(limitTime));
-                detail.setEndTime(rightNow.getTime());
-            } else {
-                errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
-            }
-            task.setStatus(Constant.TO_BE_PURCHASED);
-            String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
-            task.setBuyerTaskNo(buyerTaskNo);
-            task.init();
-            taskList.add(task);
+    public void importTask(List<List<Object>> list) throws Exception {
+        try {
+            List<String> errMsg = new ArrayList<>();
+            List<BuyerTaskDO> taskList = new ArrayList<>();
+            List<BuyerTaskDetailDO> detailList = new ArrayList<>();
+            int i = 0;
+            for (List<Object> obj : list) {
+                i++;
+                BuyerTaskDO task = new BuyerTaskDO();
+                BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
+                /**采购任务名称*/
+                task.setTitle(obj.get(0).toString());
+                /**upc*/
+                String upc = obj.get(1).toString();
+                /**根据upc*/
+                /**根据UPC来获取商品信息*/
+                String status = setDetailInfo(detail, upc);
+                if (status != null) {
+                    errMsg.add(status + "位于第" + i + "行 第2列");
+                }
+                /**采购限价*/
+                String maxPrice = obj.get(3).toString().trim();
+                maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
+                if (isParseToDouble(maxPrice)) {
+                    BigDecimal decimal = new BigDecimal(maxPrice);
+                    detail.setMaxPrice(decimal);
+                } else {
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第4列的  " + maxPrice);
+                }
+                /**采购数目*/
+                String maxCount = obj.get(4).toString().trim();
+                maxCount = StringUtil.isBlank(maxCount) ? "0" : maxCount;
+                if (isParseToInteger(maxCount)) {
+                    detail.setMaxCount(Integer.valueOf(maxCount));
+                }  else {
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + maxCount);
+                }
+                /**任务的有效天数*/
+                String limitTime = obj.get(5).toString().trim();
+                limitTime = StringUtil.isBlank(limitTime) ? "0" : limitTime;
+                if (isParseToInteger(limitTime)) {
+                    Date date = new Date();
+                    detail.setStartTime(date);
+                    Calendar rightNow = Calendar.getInstance();
+                    rightNow.setTime(date);
+                    rightNow.add(Calendar.DAY_OF_YEAR, Integer.valueOf(limitTime));
+                    detail.setEndTime(rightNow.getTime());
+                } else {
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
+                }
+                task.setStatus(Constant.TO_BE_PURCHASED);
+                String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
+                task.setBuyerTaskNo(buyerTaskNo);
+                task.init();
+                taskList.add(task);
 
-            detail.init();
-            detail.setBuyerTaskNo(buyerTaskNo);
-            detail.setMode((byte) 1);
-            detailList.add(detail);
-        }
+                detail.init();
+                detail.setBuyerTaskNo(buyerTaskNo);
+                detail.setMode((byte) 1);
+                detailList.add(detail);
+            }
 
-        int size = errMsg.size();
-        if (size == 0) {
-            detailMapper.inserBatch(detailList);
-            mapper.insertBatch(taskList);
-        } else if (size < 10) {
-            throw new ErpCommonException(errMsg.toString());
-        } else {
-            throw new ErpCommonException("上传文件错误过多,请验证后再次上传");
+            int size = errMsg.size();
+            if (size == 0) {
+                detailMapper.inserBatch(detailList);
+                mapper.insertBatch(taskList);
+            } else if (size < 10) {
+                throw new ErpCommonException(errMsg.toString());
+            } else {
+                throw new ErpCommonException("上传文件错误过多,请验证后再次上传");
+            }
+        } catch (ErpCommonException e){
+            throw new ErpCommonException(e.getErrorMsg());
+        } catch (Exception e){
+            throw new Exception(e.getMessage());
         }
 
     }
