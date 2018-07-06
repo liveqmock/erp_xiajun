@@ -115,24 +115,27 @@ public class OrganizationController extends BaseController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Object add(@Valid OrganizationQueryVO organizationVo, AuthOrganizationDO authOrganizationDO, BindingResult result, Model model) {
-        LogWorker.logStart(log, "部署", "organizationVo:{}", organizationVo);
-        if(result.hasErrors()) {
-        	StringBuffer sb = new StringBuffer();
-        	for(ObjectError error : result.getAllErrors()) {
-        		sb.append(error.getDefaultMessage()).append(",");
-        	}
-        	return BaseResp.createFailure(sb.toString());
+    public Object add(@Valid AuthOrganizationDO authOrganizationDO, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            for (ObjectError error : list) {
+                System.out.println(error.getDefaultMessage());
+            }
+            return null;
         }
-        BaseResp resp = BaseResp.createSuccess("");
-        
+        if(EasyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo())) {
+            return renderError("请登录后查询");
+        }
+        if(StringUtil.isBlank(authOrganizationDO.getName())) {
+            return renderError("资源名称不能为空");
+        }
+        if(EasyUtil.isStringEmpty(authOrganizationDO.getSeq().toString())) {
+            return renderError("排序不能为空");
+        }
         String org_id=String.format("%1$09d",RandomUtils.nextInt(1000000000));
-        organizationVo.setOrgId(org_id);
-        organizationVo.setCode(org_id);
-        organizationService.insertByOrganizationVo(organizationVo);
-
-        LogWorker.logEnd(log, "部署", "organ", organizationVo);
-        
+        authOrganizationDO.setOrgId(org_id);
+        authOrganizationDO.setCode(org_id);
+        organizationService.insert(authOrganizationDO);
         return renderSuccess("添加成功！");
     }
 

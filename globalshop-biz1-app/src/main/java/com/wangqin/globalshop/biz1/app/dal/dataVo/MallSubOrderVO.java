@@ -23,6 +23,8 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	 * sku_code
 	 */
 	private String skuCode;
+
+	private String skuImg;
 	/**
 	 * 订单开始时间
 	 */
@@ -89,5 +91,13 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	@Override
 	public void setCloseReason(String closeReason) {
 		this.closeReason = closeReason;
+	}
+
+	public String getSkuImg() {
+		return skuImg;
+	}
+
+	public void setSkuImg(String skuImg) {
+		this.skuImg = skuImg;
 	}
 }
