@@ -195,7 +195,11 @@ CREATE TABLE `haidb2new`.`db_migrate_send_record` (
 
 
 
+ALTER TABLE `haidb2new`.`inventory_inout`
+  CHANGE COLUMN `inventory_on_warehouse_no` `inventory_on_warehouse_no` VARCHAR(64) NULL COMMENT '仓库库存id' ;
 
+ALTER TABLE `haidb2new`.`mall_order`
+  CHANGE COLUMN `dealer_name` `dealer_name` VARCHAR(64) NULL COMMENT '销售人员名称' ;
 
 
 

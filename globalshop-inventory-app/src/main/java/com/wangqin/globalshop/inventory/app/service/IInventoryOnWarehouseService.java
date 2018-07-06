@@ -1,19 +1,20 @@
 package com.wangqin.globalshop.inventory.app.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author biscuit
  * @data 2018/06/01
  */
 public interface IInventoryOnWarehouseService {
-    List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
+    List<InventoryOnWarehouseVO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
 
     InventoryOnWareHouseDO selectById(Long inventoryAreaId);
 
@@ -34,4 +35,6 @@ public interface IInventoryOnWarehouseService {
     Map<InventoryOnWareHouseDO,Long> ship(InventoryDO inventoryDO, Long quantity);
 
     List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(String companyNo, String skuCode);
+
+    void order(InventoryDO inventoryDO, Integer quantity);
 }

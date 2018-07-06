@@ -10,14 +10,13 @@ import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.common.utils.PicModel;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -29,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -54,6 +54,37 @@ public class MallSubOrderController {
 	private InventoryService inventoryService;
 	@Autowired
 	private IShippingOrderService shippingOrderService;
+
+
+	@RequestMapping(value = "/detail",method = RequestMethod.GET)
+	@ResponseBody
+	public Object detail(@RequestParam("orderNo") String orderNo){
+		JsonResult<List<MallSubOrderVO>> result = new JsonResult<>();
+		MallSubOrderVO erpOrderQueryVO = new MallSubOrderVO();
+		erpOrderQueryVO.setOrderNo(orderNo);
+		List<MallSubOrderDO> subOrderDOS = erpOrderService.queryErpOrders(erpOrderQueryVO);
+		if (CollectionUtils.isNotEmpty(subOrderDOS)){
+			List<MallSubOrderVO> voList  = new ArrayList<>();
+			for (MallSubOrderDO orderDO : subOrderDOS){
+				MallSubOrderVO tmpVO = new MallSubOrderVO();
+				BeanUtils.copy(orderDO, tmpVO);
+				if (StringUtils.isNotBlank(tmpVO.getSkuPic())){
+					JSONObject jsonObject = JSONObject.fromObject(tmpVO.getSkuPic());
+					JSONArray array = jsonObject.getJSONArray("picList");
+					JSONObject imgObject = array.getJSONObject(0);
+					String picUrl = imgObject.getString("url");
+					tmpVO.setSkuImg(picUrl);
+				}
+				voList.add(tmpVO);
+			}
+			result .buildData(voList);
+		}else{
+			result.buildData(Collections.emptyList());
+		}
+		result.setSuccess(true);
+		return result;
+	}
+
 
 	@RequestMapping(value = "/query",method = RequestMethod.POST)
 	@ResponseBody

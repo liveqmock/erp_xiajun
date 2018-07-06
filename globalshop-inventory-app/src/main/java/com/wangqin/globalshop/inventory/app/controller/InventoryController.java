@@ -1,18 +1,15 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.shiro.ShiroUser;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.inventory.app.service.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.imageio.ImageIO;
+
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,14 +21,39 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.shiro.ShiroUser;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.PicModel;
+import com.wangqin.globalshop.common.utils.Underline2Camel;
+import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
+import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
+import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailService;
+import com.wangqin.globalshop.inventory.app.service.IWarehouseService;
+import com.wangqin.globalshop.inventory.app.service.InventoryBookingRecordService;
+import com.wangqin.globalshop.inventory.app.service.InventoryIMallSubOrderService;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
 
 /**
  * 库存处理器
@@ -60,13 +82,15 @@ public class InventoryController {
     private InventoryIMallSubOrderService erpOrderService;
     @Autowired
     private MallSubOrderMapperExt mallSubOrderMapper;
+    @Autowired
+    private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
 
 
     @RequestMapping("/query")
     @ResponseBody
-    public Object query(String itemCode, String skuCode) {
+    public Object query(String skuCode) {
         if (skuCode != null) {
-            InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(itemCode, skuCode);
+            InventoryDO inventory = inventoryService.selectBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
             return JsonResult.buildSuccess(inventory);
         } else {
             return JsonResult.buildFailed("没有SKU id");
@@ -76,24 +100,35 @@ public class InventoryController {
     @RequestMapping("/area/queryList")
     @ResponseBody
     public Object queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
-        JsonResult<List<InventoryOnWareHouseDO>> result = new JsonResult<>();
-        try {
-            if (StringUtil.isNotBlank(inventoryQueryVO.getBuySite())) {
-                String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getBuySite());
-                inventoryQueryVO.setBuySite(orderBy);
+        JsonResult<List<InventoryOnWarehouseVO>> result = new JsonResult<>();
+        System.out.println("queryInventoryAreas");
+//        try {
+//            if (StringUtil.isNotBlank(inventoryQueryVO.getBuySite())) {
+//                String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getBuySite());
+//                inventoryQueryVO.setBuySite(orderBy);
+//            }
+            List<InventoryOnWarehouseVO> list = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
+            System.out.println("size:"+list.size());
+            /**查规格**/
+            for(InventoryOnWarehouseVO inv:list) {
+            	List<ItemSkuScaleDO> scaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(inv.getSkuCode());
+            	if(IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
+            		scaleList.forEach(skuScale -> {
+            			if("颜色".equals(skuScale.getScaleName())) {
+            				inv.setColor(skuScale.getScaleValue());
+            			}
+            			if("尺寸".equals(skuScale.getScaleName())) {
+            				inv.setScale(skuScale.getScaleValue());
+            			}
+            		});
+            	}
             }
-//				inventoryQueryVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
-            List<InventoryOnWareHouseDO> list = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
             result.buildData(list);
             result.buildIsSuccess(true);
-//			ShiroUser shiroUser = this.getShiroUser();
-//			Set<String> roles = shiroUser.getRoles();
-//			if(roles.contains("irhdaili")){
-//				result.setAgentRoler(true);
-//			}
-        } catch (Exception e) {
-            result.buildIsSuccess(false);
-        }
+
+//        } catch (Exception e) {
+//            result.buildIsSuccess(false);
+//        }
         return result;
     }
 
@@ -122,12 +157,19 @@ public class InventoryController {
     // ------------test------------------------
     // http://localhost:8080/haierp1/inventory/add?itemId=73&skuId=352&warehouseId=16&positionNo=S001&inventory=10&transInv=5
 
+    /***
+     * 导入的接口
+     * @param skuCode
+     * @param warehouseNo
+     * @param positionNo 货架号
+     * @param inventory 入库数目
+     * @return
+     */
     @RequestMapping("/add")
     @ResponseBody
-    public Object add(String itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory) {
+    public Object add( String skuCode, String warehouseNo, String positionNo, Long inventory) {
         InventoryDO inventoryDO = new InventoryDO();
         inventoryDO.setSkuCode(skuCode);
-        inventoryDO.setItemCode(itemCode);
         inventoryDO.setInv(inventory);
         inventoryService.outbound(inventoryDO, warehouseNo, positionNo);
 //		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
