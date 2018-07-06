@@ -19,7 +19,7 @@ import com.wangqin.globalshop.item.app.service.*;
 
 
 
-import lombok.extern.slf4j.Slf4j;
+//import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -52,7 +52,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/item")
 @Authenticated
-@Slf4j
+//@Slf4j
 public class ItemController {
 
     @Autowired
@@ -80,7 +80,7 @@ public class ItemController {
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object add(ItemQueryVO item) {
-    	log.info("---->start to add item---->");
+    	//log.info("---->start to add item---->");
         return iItemService.addItem(item);
     }
 
