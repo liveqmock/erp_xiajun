@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
@@ -17,13 +16,14 @@ import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.*;
-import com.wangqin.globalshop.item.app.service.impl.ItemServiceImplement;
 
+
+
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.hamcrest.core.Is;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +52,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/item")
 @Authenticated
+@Slf4j
 public class ItemController {
 
     @Autowired
@@ -79,6 +80,7 @@ public class ItemController {
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object add(ItemQueryVO item) {
+    	log.info("---->start to add item---->");
         return iItemService.addItem(item);
     }
 
@@ -109,6 +111,13 @@ public class ItemController {
         
         if (StringUtil.isBlank(item.getDetail()) && StringUtil.isNotBlank(oldItem.getDetail())) {
             return result.buildMsg("商品详情不能为空").buildIsSuccess(false);
+        }
+        
+        //商品图片不能为空，TODO：在前端处理
+        JSONObject jsonObject = JSONObject.fromObject(item.getMainPic());
+        JSONArray jsonArray = jsonObject.getJSONArray("picList");
+        if(0 == jsonArray.size()) {
+        	return result.buildIsSuccess(false).buildMsg("请添加商品的图片");
         }
 
         //商品名称处理
