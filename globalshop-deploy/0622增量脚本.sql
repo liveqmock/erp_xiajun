@@ -100,9 +100,6 @@ ALTER TABLE `haidb2new`.`mall_sub_order`
   ADD COLUMN `share_money` NUMERIC(16,4) NULL   COMMENT '分享获得的佣金';
 
 
-ALTER TABLE `item` ADD COLUMN `origin_sale_price` VARCHAR(64) NULL DEFAULT NULL COMMENT '原始销售价格';
-ALTER TABLE `item` ADD COLUMN `commission_rate` VARCHAR(64) NULL DEFAULT NULL COMMENT '佣金比率';
-
 ALTER TABLE `buyer_task_detail` ADD COLUMN `buyer_task_detail_no` VARCHAR(64) NULL DEFAULT NULL COMMENT '采购明细的编码，和小票明细有关联';
 
 

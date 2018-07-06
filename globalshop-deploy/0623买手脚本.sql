@@ -31,8 +31,7 @@ CHANGE COLUMN `desc` `remark`  varchar(200) CHARACTER SET utf8 COLLATE utf8_gene
 ADD COLUMN `company_no`  varchar(64) NULL AFTER `buyer_task_detail_no`;
 
 ##5 dealer_type
-ALTER TABLE `dealer_type`
-ADD COLUMN `company_no`  varchar(64) NULL AFTER `modifier`;
+## existed.
 
 ##6 item_find
 ALTER TABLE `item_find`

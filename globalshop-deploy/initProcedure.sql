@@ -12,6 +12,7 @@ CREATE PROCEDURE createUser(
     DECLARE userno VARCHAR(64) DEFAULT '';
     DECLARE roleid BIGINT DEFAULT 0;
     DECLARE roleid_default BIGINT DEFAULT 0;
+    DECLARE roleid_buyer BIGINT DEFAULT 0;
     DECLARE userId BIGINT DEFAULT 0;
     DECLARE i INT DEFAULT 0;
     /** 标记是否出错 */
