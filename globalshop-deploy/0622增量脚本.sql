@@ -3,6 +3,9 @@
 -- oneshare模块对数据库haidb2new的改动
 -- 在133/111/180了上已经运行过了
 
+
+use haidb2new;
+
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 新增applet_config表-- -- -- -- -- -- -- -- --
 CREATE TABLE applet_config
 (
@@ -109,3 +112,90 @@ MODIFY COLUMN `buyer_open_id` varchar(64) DEFAULT NULL AFTER `gmt_modify`;
 
 ALTER TABLE `haidb2new`.`buyer_storage`
 MODIFY COLUMN `buyer_open_id` varchar(64) DEFAULT 0 COMMENT '买手ID' AFTER `buyer_name`;
+
+
+##1 buyer_entry_manifest
+ALTER TABLE `buyer_entry_manifest`
+  ADD COLUMN `company_no`  varchar(64) NULL AFTER `id`;
+
+##2 buyer_receipt
+ALTER TABLE `buyer_receipt`
+  CHANGE COLUMN `buyer_id` `open_id`  varchar(64) NULL DEFAULT NULL COMMENT '买手ID' AFTER `status`;
+
+ALTER TABLE `haidb2new`.`buyer_receipt`
+  MODIFY COLUMN `open_id` varchar(64) DEFAULT NULL COMMENT '买手ID,根据openID，与buyer关联' AFTER `status`;
+
+##3 buyer_storage  最好加上备注： COMMENT '-1关闭，0新建，1已确认入库，2.成功，3入库中'
+ALTER TABLE `buyer_storage`
+  ADD COLUMN `status`  int(4) NULL AFTER `modifier`,
+  MODIFY COLUMN `buyer_open_id` varchar(64) DEFAULT NULL;
+
+##4 buyer_storage_detail
+ALTER TABLE `buyer_storage_detail`
+  MODIFY COLUMN `item_code`  varchar(64) NULL DEFAULT NULL COMMENT 'itemcode' AFTER `buyer_task_detail_no`,
+  ADD COLUMN `status`  int(4) NULL AFTER `modifier`,
+  ADD COLUMN `mem`  varchar(1024) NULL AFTER `status`,
+  ADD COLUMN `op_user_no`  varchar(64) NULL AFTER `mem`,
+  ADD COLUMN `op_time`  datetime NULL AFTER `op_user_no`;
+
+##4 buyer_task_detail
+ALTER TABLE `buyer_task_detail`
+  MODIFY COLUMN `buyer_open_id`  varchar(64) NULL DEFAULT NULL COMMENT '买手微信ID' AFTER `buyer_name`,
+  CHANGE COLUMN `desc` `remark`  varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '说明' AFTER `sku_code`,
+  ADD COLUMN `company_no`  varchar(64) NULL AFTER `buyer_task_detail_no`;
+
+##5 dealer_type
+## existed.
+
+##6 item_find
+ALTER TABLE `item_find`
+  CHANGE COLUMN `desc` `desc_msg`  varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品描述信息' AFTER `status`,
+  ADD COLUMN `company_no`  varchar(64) NULL AFTER `id`;
+
+
+ALTER TABLE `haidb2new`.`item_find`
+  MODIFY COLUMN `sku_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci AFTER `item_code`;
+
+
+
+ALTER TABLE `haidb2new`.`mall_shipping_address` ADD COLUMN company_no VARCHAR(64) NOT NULL COMMENT '商户号';
+
+ALTER TABLE `haidb2new`.`item_find`
+  MODIFY COLUMN `sku_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci AFTER `item_code`;
+
+
+
+
+CREATE TABLE `haidb2new`.`db_migrate_receive_record` (
+  `id` bigint(64) NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) DEFAULT NULL,
+  `db_script` varchar(4096) DEFAULT NULL,
+  `status` varchar(2) DEFAULT '1',
+  `gmt_modify` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modifier` varchar(32) DEFAULT 'sys',
+  `creator` varchar(32) DEFAULT 'sys',
+  `is_del` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `haidb2new`.`db_migrate_send_record` (
+  `id` bigint(64) NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) DEFAULT NULL,
+  `db_script` varchar(4096) DEFAULT NULL,
+  `retry_times` int(2) DEFAULT '0',
+  `status` varchar(2) DEFAULT '0' COMMENT '0 新增 1 成功 2 失败',
+  `gmt_modify` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modifier` varchar(32) DEFAULT 'sys',
+  `creator` varchar(32) DEFAULT 'sys',
+  `is_del` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+
