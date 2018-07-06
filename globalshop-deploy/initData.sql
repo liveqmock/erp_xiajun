@@ -2,6 +2,20 @@ CREATE DATABASE  IF NOT EXISTS `haidb2new` /*!40100 DEFAULT CHARACTER SET utf8 *
 USE `haidb2new`;  
 
 --
+-- init data for `sequence`
+--
+
+INSERT INTO `sequence`(name,current_value,increment,creator,modifier) VALUES
+ ('ERPO',10000,1,'SYSTEM','SYSTEM'),
+ ('ITEM',100000,1,'SYSTEM','SYSTEM'),
+ ('ITEM_BRAND',10000,1,'SYSTEM','SYSTEM'),
+('ORD',10000,1,'SYSTEM','SYSTEM'),
+('PKG',10000,1,'SYSTEM','SYSTEM'),
+('PO',10000,1,'SYSTEM','SYSTEM'),
+('RECO',10000,1,'SYSTEM','SYSTEM'),
+('SKU',10000,1,'SYSTEM','SYSTEM'),
+('TASK',10000,1,'SYSTEM','SYSTEM');
+--
 -- init data for `auth_role`
 --
 

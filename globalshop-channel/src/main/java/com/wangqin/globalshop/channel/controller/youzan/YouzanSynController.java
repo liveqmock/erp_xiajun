@@ -20,6 +20,7 @@ import org.apache.xpath.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
@@ -100,7 +101,7 @@ public class YouzanSynController extends BaseController {
 	 */
 	@RequestMapping("/batchListingYouzan")
 	@ResponseBody
-	public Object batchListingYouzan(String itemIds) {
+	public Object batchListingYouzan(@RequestParam("itemIds")String itemIds) {
 		JsonResult<String> result = new JsonResult<>();
 		StringBuilder sb = new StringBuilder();
 		if (StringUtil.isNotEmpty(itemIds)) {
