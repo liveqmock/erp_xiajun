@@ -549,22 +549,17 @@
                  t1.pay_type payType
                FROM mall_order t1, mall_sub_order t2
                WHERE t1.order_no = t2.order_no AND t1.is_del != '1'
-               <if test="companyNo!=null ">
-                   AND t1.company_no = #{companyNo}
-               </if>
+                    AND t1.company_no = #{companyNo}
                <if test="orderNo != null">
-               	   AND
-               	   t2.order_no = #{orderNo}
+               	   AND t2.order_no = #{orderNo}
                </if>
                <if test="channelOrderNo != null">
                	   AND
                	   t1.channel_order_no = #{channelOrderNo}
                </if>
-               <!-- <if test="status == 10">
-               		
-              	   AND
-              	   !FIND_IN_SET(#{status},t1.status)	  
-               </if>  -->
+               <if test="status != null">
+                   and t1.status = #{status}
+               </if>
                <if test="receiver != null">
                	   AND
                	   t2.receiver = #{receiver}
