@@ -89,7 +89,11 @@ public class MallOrderServiceImpl implements IMallOrderService {
             o.setSkuPic(itemSku.getSkuPic());
             o.setUpc(itemSku.getUpc());
             o.setScale(itemSku.getScale());
-            o.setLogisticType(Integer.valueOf(itemSku.getLogisticType()));
+            if(itemSku.getLogisticType()!=null) {
+                o.setLogisticType(Integer.valueOf(itemSku.getLogisticType()));
+            }else {
+                o.setLogisticType(0);//default type value
+            }
             o.setWeight(itemSku.getWeight());
             /**商品相关End*/
             o.setCompanyNo(outerOrder.getCompanyNo());
