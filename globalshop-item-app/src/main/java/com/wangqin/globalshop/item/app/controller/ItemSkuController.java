@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.poi.hssf.record.SCLRecord;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ScaleTypeDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
@@ -37,6 +38,7 @@ import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
@@ -52,6 +54,9 @@ public class ItemSkuController  {
 
 	@Autowired
 	private IItemSkuService iItemSkuService;
+	
+	@Autowired
+	private IItemService itemService;
 
 //	@Autowired
 //	private IScaleTypeService scaleTypeService;
@@ -62,6 +67,8 @@ public class ItemSkuController  {
 	@Autowired
 	private IItemSkuScaleService scaleService;
 
+	@Autowired
+	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
 	/**
 	 * 更新sku
 	 *
@@ -136,10 +143,41 @@ public class ItemSkuController  {
 			}			
 		} 
 		//更新虚拟库存
-//		System.out.println("skucode"+iItemSkuService.querySkuCodeById(itemSku.getId()));
-//		System.out.println("v"+itemSku.getVirtualInv());
-//		System.out.println("companyNo"+AppUtil.getLoginUserCompanyNo());
-		inventoryService.updateVirtualInv(iItemSkuService.querySkuCodeById(itemSku.getId()), itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());	
+		String skuCode = iItemSkuService.querySkuCodeById(itemSku.getId());
+		try {
+			inventoryService.updateVirtualInv(skuCode, itemSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());	
+		} catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg("您填入的虚拟库存数据错误");
+		}
+		//更新尺寸
+		if(IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
+			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "颜色", itemSku.getColor());
+		}
+		if(IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
+			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", itemSku.getScale());
+		}	
+		//更新一下item(商品表)的price_range(价格区间)字段TODO
+//		ISkuDTO sku = iItemSkuService.queryItemSkuBySkuCode(skuCode);
+//		if(null != sku) {
+//			String itemCode = sku.getItemCode();
+//			if(IsEmptyUtil.isStringNotEmpty(itemCode)) {
+//				ItemDO itemDO = itemService.queryItemDOByItemCode(itemCode);
+//				String priceRange = itemDO.getPriceRange();
+//				//处理价格区间
+//				if(priceRange.contains("-")) {
+//					int middium = priceRange.indexOf("-");
+//					Double minPrice = Double.parseDouble(priceRange.substring(0, middium+1));
+//					Double maxPrice = Double.parseDouble(priceRange.substring(middium+1));
+//					minPrice = minPrice > itemSku.getSalePrice() ? itemSku.getSalePrice() : minPrice;
+//					maxPrice = maxPrice < itemSku.getSalePrice() ? itemSku.getSalePrice() : maxPrice;
+//					itemDO.setPriceRange(minPrice.toString()+"-"+maxPrice.toString());
+//				} else {
+//					if(Double.parseDouble(priceRange) > itemSku.getSalePrice()) {
+//						itemSk
+//					}
+//				}
+//			}
+//		}
 		itemSku.setModifier(AppUtil.getLoginUserId());
 		iItemSkuService.updateById(itemSku);
 		return result.buildIsSuccess(true).buildMsg("更新成功");
@@ -158,6 +196,17 @@ public class ItemSkuController  {
 		//if haven't item id ,add item
 		if(null != skuCode) {
 			ISkuDTO itemSku = iItemSkuService.queryItemSkuBySkuCode(skuCode);
+			List<ItemSkuScaleDO> skuScaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
+        	if(!EasyUtil.isListEmpty(skuScaleList)) {
+        		for(ItemSkuScaleDO scale:skuScaleList) {
+        			if("颜色".equals(scale.getScaleName())) {
+        				itemSku.setColor(scale.getScaleValue());
+        			}
+        			if("尺寸".equals(scale.getScaleName())) {
+        				itemSku.setScale(scale.getScaleValue());
+        			}
+        		}
+        	}
 			result.setData(itemSku);
 		}else{
 			result.buildIsSuccess(false).buildMsg("没有skuCode");
