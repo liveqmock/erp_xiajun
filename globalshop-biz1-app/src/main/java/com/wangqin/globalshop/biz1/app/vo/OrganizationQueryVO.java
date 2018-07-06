@@ -38,7 +38,8 @@ public class OrganizationQueryVO extends PageQueryVO {
     @Size(max = 64, min = 1, message = "编号不能为空也不能大于64位")
 	/** 编号 */
 	private String code;
-    @NotNull(message = "父级主键不能为空")
+//    @NotNull(message = "父级主键不能为空")
+	//可以为空，表示一级
 	/** 父级主键 */
 	private Long pid;
 

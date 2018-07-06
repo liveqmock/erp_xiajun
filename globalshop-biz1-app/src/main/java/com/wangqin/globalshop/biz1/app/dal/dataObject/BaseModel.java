@@ -60,6 +60,7 @@ public class BaseModel implements ICheackParam {
     	this.setCreator(AppUtil.getLoginUserId());
         this.setIsDel(false);
         this.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+
      
     }
     public void initCompany() {

@@ -706,7 +706,7 @@ public class ItemController {
             String str = e.getErrorMsg().replace(",", "</br>");
             return result.buildIsSuccess(false).buildMsg(str);
         } catch (Exception e) {
-            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
     }

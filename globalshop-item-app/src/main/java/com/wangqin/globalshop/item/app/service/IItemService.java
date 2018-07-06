@@ -129,6 +129,6 @@ public interface IItemService {
 	 * 导入商品列表
 	 * @param list
 	 */
-    void importItem(List<List<Object>> list);
+    void importItem(List<List<Object>> list) throws Exception;
 
 }

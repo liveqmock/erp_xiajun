@@ -35,4 +35,6 @@ public interface IInventoryOnWarehouseService {
     Map<InventoryOnWareHouseDO,Long> ship(InventoryDO inventoryDO, Long quantity);
 
     List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(String companyNo, String skuCode);
+
+    void order(InventoryDO inventoryDO, Integer quantity);
 }

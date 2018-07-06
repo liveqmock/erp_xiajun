@@ -38,6 +38,7 @@ import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.shiro.ShiroUser;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
@@ -87,9 +88,9 @@ public class InventoryController {
 
     @RequestMapping("/query")
     @ResponseBody
-    public Object query(String itemCode, String skuCode) {
+    public Object query(String skuCode) {
         if (skuCode != null) {
-            InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(itemCode, skuCode);
+            InventoryDO inventory = inventoryService.selectBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
             return JsonResult.buildSuccess(inventory);
         } else {
             return JsonResult.buildFailed("没有SKU id");
@@ -156,12 +157,19 @@ public class InventoryController {
     // ------------test------------------------
     // http://localhost:8080/haierp1/inventory/add?itemId=73&skuId=352&warehouseId=16&positionNo=S001&inventory=10&transInv=5
 
+    /***
+     * 导入的接口
+     * @param skuCode
+     * @param warehouseNo
+     * @param positionNo 货架号
+     * @param inventory 入库数目
+     * @return
+     */
     @RequestMapping("/add")
     @ResponseBody
-    public Object add(String itemCode, String skuCode, String warehouseNo, String positionNo, Long inventory) {
+    public Object add( String skuCode, String warehouseNo, String positionNo, Long inventory) {
         InventoryDO inventoryDO = new InventoryDO();
         inventoryDO.setSkuCode(skuCode);
-        inventoryDO.setItemCode(itemCode);
         inventoryDO.setInv(inventory);
         inventoryService.outbound(inventoryDO, warehouseNo, positionNo);
 //		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
