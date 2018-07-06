@@ -10,4 +10,13 @@
         where logistic_no = #{logisticNo}
         order by gmt_create desc;
     </select>
+
+    <select id="queryShippingTrack" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackDOMapper.BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ShippingTrackDOMapper.Base_Column_List" />
+        from shipping_track
+        where logistic_no = #{logisticNo}
+        order by gmt_create desc;
+    </select>
+
 </mapper>
