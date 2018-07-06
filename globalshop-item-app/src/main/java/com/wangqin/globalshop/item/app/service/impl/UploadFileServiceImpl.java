@@ -1,12 +1,17 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.springframework.stereotype.Service;
+
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.wangqin.globalshop.item.app.service.IUploadFileService;
-import org.springframework.stereotype.Service;
-
-import java.io.*;
 
 @Service("uploadFileService")
 public class UploadFileServiceImpl implements IUploadFileService {
