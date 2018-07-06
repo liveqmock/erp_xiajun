@@ -31,6 +31,19 @@
     sku_pic, inventory, locked_inv, trans_inv, locked_trans_inv, warehouse_no, warehouse_name,
     shelf_no, batch_no, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
+  
+   <!-- xiajun,库存管理页面展示 -->
+   <sql id="Base_Column_List_For_Inventory_Mange" >
+    inv.id, inv.inventory_on_warehouse_no AS inventoryOnWarehouseNo,
+    inv.company_no AS companyNo, inv.item_code AS itemCode, inv.item_name AS itemName,
+    inv.upc, inv.scale, inv.sku_code AS skuCode,
+    inv.sku_pic AS skuPic, inv.inventory, inv.locked_inv AS lockedInv, 
+    inv.trans_inv AS transInv, inv.locked_trans_inv AS lockedTransInv, 
+    inv.warehouse_no AS warehouseNo, inv.warehouse_name AS warehouseName,
+    inv.shelf_no AS shelfNo, inv.batch_no AS batchNo,
+    (inv.inventory-inv.locked_inv) AS totalAvailableInv,
+    T1.sale_price AS salePrice
+   </sql>
 
     <!--<select id="getInventoryArea" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
     <!--SELECT-->
@@ -303,30 +316,30 @@
         WHERE company_no = #{companyNo}
         AND sku_code = #{skuCode}
     </select>
-    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"
+    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO"
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List_For_Inventory_Mange"/>
         FROM
-        inventory_on_warehouse
+        inventory_on_warehouse inv LEFT JOIN item_sku T1 ON inv.sku_code = T1.sku_code
         <where>
             <if test="warehouseNo!=null and warehouseNo!=''">
-                and warehouse_no = #{warehouseNo}
+                and inv.warehouse_no = #{warehouseNo}
             </if>
             <if test="companyNo!=null and companyNo!=''">
-                and company_no = #{companyNo}
+                and inv.company_no = #{companyNo}
             </if>
             <if test="skuCode!=null and skuCode!=''">
-                and sku_code = #{skuCode}
+                and inv.sku_code = #{skuCode}
             </if>
             <if test="itemName!=null and itemName!=''">
-                and item_name = #{itemName}
+                and inv.item_name = #{itemName}
             </if>
             <if test="positionNo!=null and positionNo!=''">
-                and shelf_no = #{positionNo}
+                and inv.shelf_no = #{positionNo}
             </if>
             <if test="companyNo!=null and companyNo!=''">
-                and company_no = #{companyNo}
+                and inv.company_no = #{companyNo}
             </if>
         </where>
     </select>

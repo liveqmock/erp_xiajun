@@ -1,10 +1,19 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
@@ -12,6 +21,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  * @author biscuit
@@ -36,7 +47,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     private ItemSkuMapperExt itemSkuMapper;
 
     @Override
-    public List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
+    public List<InventoryOnWarehouseVO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
         inventoryQueryVO.init();
         return mapper.queryInventoryAreas(inventoryQueryVO);
     }
