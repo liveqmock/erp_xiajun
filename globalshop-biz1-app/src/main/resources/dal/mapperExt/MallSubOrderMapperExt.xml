@@ -407,6 +407,15 @@
     	</where>
     	<![CDATA[ LIMIT #{start},#{pageSize} ]]>
     </select>
+    <!-- 查询已发货的订单数目 -->
+    <select id="selectCountWithStateAndOrderNo" resultMap="BaseResultMap" >
+    	SELECT
+    	count(*)
+    	FROM mall_sub_order
+    	WHERE
+    	order_no = #{orderNo}
+    	AND status = #{status}
+    </select>
 
   
 

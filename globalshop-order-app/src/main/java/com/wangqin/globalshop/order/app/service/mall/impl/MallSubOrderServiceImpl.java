@@ -341,13 +341,13 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    public int selectCountWithStateAndOrderNo(MallSubOrderDO erpOrderQuery) {
-        return mallSubOrderDOMapper.findAlreadyShipped(erpOrderQuery.getOrderNo());
-    }
-
-    @Override
     public List<MallSubOrderDO> list() {
         return mallSubOrderDOMapper.list();
 
+    }
+
+    @Override
+    public int selectCountWithStateAndOrderNo(String orderNo, Integer statuts) {
+        return mallSubOrderDOMapper.selectCountWithStateAndOrderNo(orderNo,statuts);
     }
 }
