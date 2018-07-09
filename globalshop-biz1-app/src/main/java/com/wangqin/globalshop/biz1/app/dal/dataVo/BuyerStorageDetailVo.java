@@ -21,9 +21,9 @@ public class BuyerStorageDetailVo {
 
 	private String specifications;//规格
 
-	private Integer quantity; //实际入库数
+	private Integer quantity; //小程序端，这个是线下数量，现在它和globalshop前端，查询后置=BuyerStorageDetailDo.quantity+BuyerStorageDetailDo.transQuantity
 
-	private Integer transQuantity; //在途，预入库数
+	private Integer transQuantity; //在途，预入库数，小程序段，这里是在途数量，现在是前端置为BuyerStorageDetailDo.quantity+BuyerStorageDetailDo.transQuantity
 
 	private String buyerName; //买手名字
 
