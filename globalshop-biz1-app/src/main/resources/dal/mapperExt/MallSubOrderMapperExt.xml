@@ -44,20 +44,26 @@
         <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR" />
         <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR" />
         <result column="memo" property="memo" jdbcType="VARCHAR" />
-        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
         <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-        <result column="is_del" property="isDel" jdbcType="BIT" />
+        <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+        <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
+        <result column="share_user_id" property="shareUserId" jdbcType="VARCHAR" />
+        <result column="share_token" property="shareToken" jdbcType="VARCHAR" />
+        <result column="share_time" property="shareTime" jdbcType="VARCHAR" />
+        <result column="share_close_flag" property="shareCloseFlag" jdbcType="VARCHAR" />
+        <result column="share_close_time" property="shareCloseTime" jdbcType="VARCHAR" />
+        <result column="share_money" property="shareMoney" jdbcType="DECIMAL" />
     </resultMap>
     <sql id="Base_Column_List" >
-        id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code,
-        channel_order_no, order_time, item_code, item_name, sku_code, channel_sku_code, upc,
-        scale, sku_pic, logistic_type, freight, freight_real, weight, sale_price, sale_price_agent,
-        quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no,
-        receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address,
-        telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, gmt_create,
-        gmt_modify, creator, modifier, is_del
+    id, order_no, mall_return_order_no, customer_no, open_id, company_no, shop_code,
+    channel_order_no, order_time, item_code, item_name, sku_code, channel_sku_code, upc,
+    scale, sku_pic, logistic_type, freight, freight_real, weight, sale_price, sale_price_agent,
+    quantity, status, close_reason, warehouse_no, stock_status, shipping_order_no, shipping_no,
+    receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address,
+    telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, creator,
+    modifier, sub_order_no, channel_sub_order_no, share_user_id, share_token, share_time,
+    share_close_flag, share_close_time, share_money
     </sql>
     <update id="updateOuterOrderDetailByItemSku">
         UPDATE mall_sub_order a

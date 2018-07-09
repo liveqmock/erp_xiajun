@@ -2,6 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserRoleDOMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -38,5 +39,5 @@ public interface AuthUserRoleDOMapperExt extends AuthUserRoleDOMapper {
 
     List<AuthUserRoleDO> searchUserRoleList(AuthUserRoleDO record);
 
+    void deleteRoleByUserId(@Param("userId") Long userId);
 }
-

@@ -255,4 +255,9 @@
   </select>
 
 
+  <delete id="deleteRoleByUserId"  parameterType="java.lang.Long">
+    delete from auth_user_role
+    where
+    user_id = #{userId}
+  </delete>
 </mapper>
