@@ -178,8 +178,8 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 vo.setSkuName(skuDO.getItemName());
                 vo.setSpecifications(skuDO.getScale());
                 vo.setSkuCode(skuDO.getSkuCode());
-                vo.setQuantity(detail.getQuantity());
-                vo.setTransQuantity(detail.getTransQuantity());
+                vo.setQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途,实际需要入库的数量
+                vo.setTransQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途，预入库数量
 
                 vo.setStatus(detail.getStatus());
                 vo.setStatusName(GeneralStatus.of(detail.getStatus()).getDescription());
@@ -226,7 +226,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         if(detailVo.getQuantity() == null || detailVo.getQuantity() < 0){
             throw new ErpCommonException("入库数必填");
         }
-        detail.setQuantity(detailVo.getQuantity());
+        //detail.setQuantity(detailVo.getQuantity());
 
         //记录货架号
         if(EasyUtil.isStringEmpty(detailVo.getShelfNo())){
@@ -237,7 +237,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         // 记录流水inventory_inout
         InventoryDO inventory = new InventoryDO();
 
-        inventory.setInv(Long.valueOf(detail.getQuantity()));
+        inventory.setInv(Long.valueOf(detailVo.getQuantity()));//客户实际改写后的数量
         inventory.setItemCode(detail.getItemCode());
         inventory.setSkuCode(detail.getSkuCode());
         inventory.setCompanyNo(AppUtil.getLoginUserCompanyNo());

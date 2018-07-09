@@ -44,5 +44,11 @@
         </foreach>
     </insert>
 
+    <update id="updateTaskDetailDailyStatus" >
+        UPDATE buyer_task_detail
+        SET status=#{status}
+        WHERE buyer_task_no = #{buyerTaskNo}
+    </update>
+
 
 </mapper>

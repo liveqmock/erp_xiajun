@@ -82,7 +82,7 @@ public class MallSubOrderController {
 			result.buildData(Collections.emptyList());
 		}
 		result.setSuccess(true);
-		return result;
+		return result.buildIsSuccess(true);
 	}
 
 
@@ -100,7 +100,7 @@ public class MallSubOrderController {
 
 		result .buildData(erpOrderService.queryErpOrders(mallSubOrderVO));
 		result.setSuccess(true);
-		return result;
+		return result.buildIsSuccess(true);
 	}
 
 	@RequestMapping("/queryById")
@@ -109,7 +109,7 @@ public class MallSubOrderController {
 		JsonResult<MallSubOrderDO> result = new JsonResult<>();
 		MallSubOrderDO erpOrder = erpOrderService.selectById(id);
 		result.buildIsSuccess(true).setData(erpOrder);
-		return result;
+		return result.buildIsSuccess(true);
 	}
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
 	@ResponseBody
@@ -122,7 +122,7 @@ public class MallSubOrderController {
 		orderDO.setQuantity(null);//不能修改销售数量，需要在主订单哪里修改数量
 		erpOrderService.update(orderDO);
 		result.setSuccess(true);
-		return result;
+		return result.buildIsSuccess(true);
 	}
 	
 	
@@ -427,7 +427,7 @@ public class MallSubOrderController {
 		map.put("skuCode",subOrder.getSkuCode());
 		result.setData(map);
 		result.setSuccess(true);
-		return result;
+		return result.buildIsSuccess(true);
 
 	}
 
