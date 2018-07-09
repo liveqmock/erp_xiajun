@@ -83,7 +83,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
             ItemSkuDO itemSku = itemSkuService.selectBySkuCode(o.getSkuCode());
             o.setSalePrice(itemSku.getSalePrice());
             Long freight = itemSku.getFreight();
-            o.setFreight((double) (freight == null ? 0L : freight));
+            o.setFreight(Double.valueOf(freight == null ? 0L : freight));
             o.setItemCode(itemSku.getItemCode());
             o.setItemName(itemSku.getItemName());
             o.setSkuPic(itemSku.getSkuPic());
