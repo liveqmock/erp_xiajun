@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.purchase.app.service;
 
-
-
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 
 import java.util.List;
@@ -18,6 +16,6 @@ public interface IBuyerTaskService {
 
     void importTask(List<List<Object>> list) throws Exception;
 
-
+    void updateTaskStatus(Integer status,List<Long> taskDailyIdList);
 
 }

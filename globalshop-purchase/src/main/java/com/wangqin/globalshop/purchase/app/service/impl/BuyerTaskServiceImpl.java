@@ -25,6 +25,7 @@ import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -258,5 +259,20 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         detail.setRemark(itemTask.getRemark());
         detail.setSkuPicUrl(itemTask.getImageUrl());
         detail.setMode(itemTask.getMode());
+    }
+
+
+    //统一订单状态修改接口
+    @Override
+    @Transactional
+    public void updateTaskStatus(Integer status, List<Long> taskDailyIdList) {
+        for(Long id : taskDailyIdList){
+            BuyerTaskDO buyerTask = mapper.selectByPrimaryKey(id);
+            if(buyerTask != null){
+                buyerTask.setStatus(status);
+                this.mapper.updateByPrimaryKeySelective(buyerTask);
+                detailMapper.updateTaskDetailDailyStatus(status, buyerTask.getBuyerTaskNo());
+            }
+        }
     }
 }
