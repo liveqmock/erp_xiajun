@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -12,6 +13,7 @@ import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.vo.*;
 import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.enums.AppletType;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -19,7 +21,7 @@ import com.wangqin.globalshop.item.app.service.*;
 
 
 
-import lombok.extern.slf4j.Slf4j;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -52,7 +54,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/item")
 @Authenticated
-@Slf4j
 public class ItemController {
 
     @Autowired
@@ -67,8 +68,13 @@ public class ItemController {
     private IItemSkuService itemSkuService;
     @Autowired
     private IItemSkuScaleService scaleService;
-    public static final String getaccess_tokenurl = "https://api.weixin.qq.com/cgi-bin/token";
-    public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
+    @Autowired
+    private IAppletConfigService appletConfigService;
+    
+    public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
+    //public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
+    public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
+    public static final String ACCESS_TOKEN_MI = "&secret=";
 //    public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wx56e36d38aff90280&secret=9269561bae6e1b59c8107c35a669016c";
 
     /**
@@ -80,7 +86,7 @@ public class ItemController {
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object add(ItemQueryVO item) {
-    	log.info("---->start to add item---->");
+    	//log.info("---->start to add item---->");
         return iItemService.addItem(item);
     }
 
@@ -96,13 +102,13 @@ public class ItemController {
     @RequestMapping("/update")
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
-    public Object update(ItemQueryVO item) {
-    	
+    public Object update(ItemQueryVO item) {   	
         JsonResult<ItemDO> result = new JsonResult<>();
         
-        if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
-            return result.buildIsSuccess(false).buildMsg("请先登录");
-        }       
+        if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        	return result.buildIsSuccess(false).buildMsg("请先登录");
+        }
+            
         if (null == item.getId()) {
             return result.buildMsg("更新商品需要提供商品ID").buildIsSuccess(false);
         }
@@ -390,6 +396,10 @@ public class ItemController {
     public Object query(Long id) {
         JsonResult<ItemDTO> result = new JsonResult<>();
 
+        if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        	return result.buildIsSuccess(false).buildMsg("请先登录");
+        }
+        
         if(null == id) {
         	return result.buildIsSuccess(false).buildMsg("id不能为空");
         }       	
@@ -524,8 +534,8 @@ public class ItemController {
     @ResponseBody
     public Object queryItemList(ItemQueryVO itemQueryVO) {
     	EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
-    	if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
-            return jsonResult.buildIsSuccess(false).buildMsg("请先登陆");
+    	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        	return jsonResult.buildIsSuccess(false).buildMsg("请先登录");
         }
         itemQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
@@ -547,6 +557,9 @@ public class ItemController {
     public Object updateVirtualInvByItemId(Long id) {
         //logger.info("updateVirtualInvByItemId start");
         JsonResult<ItemDO> result = new JsonResult<>();
+        if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        	return result.buildIsSuccess(false).buildMsg("请先登录");
+        }
         String itemCode = iItemService.queryItemCodeById(id);
         if(IsEmptyUtil.isStringNotEmpty(itemCode)) {
         	List<ItemSkuDO> list = itemSkuService.queryByItemCodeAndCompanyNo(itemCode, AppUtil.getLoginUserCompanyNo());
@@ -570,7 +583,20 @@ public class ItemController {
     public Object getDimensionCodeUtil(Long itemId) {
         //logger.info("getDimensionCodeUtil start");
         JsonResult<Object> result = new JsonResult<>();
-        String reponse = DimensionCodeUtil.sendGet(getaccess_tokenurl, getaccess_tokenparam);
+        if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        	return result.buildIsSuccess(false).buildMsg("请先登录");
+        }
+        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
+        if(null == appletConfig) {
+        	return result.buildIsSuccess(false).buildMsg("失败，没有本公司的商城小程序的appid记录");
+        }
+        String appId = appletConfig.getAppid();
+        String secret = appletConfig.getSecret();
+        if(IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
+        	return result.buildIsSuccess(false).buildMsg("失败，没有本公司的商城小程序的appid记录");
+        }
+        String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
+        System.out.println("part:"+ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
         JSONObject myJson = JSONObject.fromObject(reponse);
         String token = (String) myJson.get("access_token");
         String picUrl = iItemService.insertIntoItemDimension(itemId.toString(), "pages/item/detail", token);
@@ -595,7 +621,19 @@ public class ItemController {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void voidDimensionCodeUtil(Long itemId) {
 //		/logger.info("voidDimensionCodeUtil start");
-        String reponse = DimensionCodeUtil.sendGet(getaccess_tokenurl, getaccess_tokenparam);
+    	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        	return;
+        }
+        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
+        if(null == appletConfig) {
+        	return;
+        }
+        String appId = appletConfig.getAppid();
+        String secret = appletConfig.getSecret();
+        if(IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
+        	return;
+        }
+        String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
         JSONObject myJson = JSONObject.fromObject(reponse);
         String token = (String) myJson.get("access_token");
         String picUrl = iItemService.insertIntoItemDimension(itemId.toString(), "pages/item/detail", token);
@@ -609,23 +647,6 @@ public class ItemController {
         }
 
     }
-//
-//    /**
-//     * 查询买手列表
-//     *
-//     * @return
-//     */
-//    @RequestMapping("/queryAllItaliaBuyer")
-//    @ResponseBody
-//    public Object queryAllItaliaBuyer() {
-//        //logger.info("voidDimensionCodeUtil start");
-//        //EntityWrapper<BuyerDO> entityWrapper = new EntityWrapper<BuyerDO>();
-//        //entityWrapper.orderBy("gmt_create");
-//        //Integer powerCode = 0;
-//        //entityWrapper.where("power_code > {0}",powerCode);
-//        List<BuyerDO> buyers = buyerService.queryAllBuyers();
-//        return JsonResult.buildSuccess(buyers);
-//    }
 
 
     /**

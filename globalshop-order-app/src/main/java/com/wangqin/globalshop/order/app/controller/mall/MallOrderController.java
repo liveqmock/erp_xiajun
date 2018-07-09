@@ -85,7 +85,6 @@ public class MallOrderController {
             if (CollectionUtils.isEmpty(outerOrderDetails)) {
                 return JsonResult.buildFailed("没有商品信息");
             }
-            /**注入部门no*/
             //创建外部订单
             mallOrderService.addOuterOrder(mallOrderVO);
         } else {
@@ -109,10 +108,7 @@ public class MallOrderController {
                 return JsonResult.buildFailed("订单不存在或者状态错误");
             }
             //查询是否有发货的订单，有的话订单不能修改
-            MallSubOrderDO erpOrderQuery = new MallSubOrderDO();
-            erpOrderQuery.setOrderNo(mallOrderVO.getOrderNo());
-            erpOrderQuery.setStatus(ORDER_SATUTS_SENT);
-            int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
+            int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(mallOrderVO.getOrderNo(),ORDER_SATUTS_SENT);
             if (sendOrder > 0) {
                 return JsonResult.buildFailed("有子订单发货不能修改");
             }
@@ -246,10 +242,7 @@ public class MallOrderController {
                     errorMsg.add("第" + i + "条不存在或者状态错误,");
                 }
                 //查询是否有发货的订单，有的话订单不能修改
-                MallSubOrderDO erpOrderQuery = new MallSubOrderDO();
-                erpOrderQuery.setOrderNo(outerOrder.getOrderNo());
-                erpOrderQuery.setStatus(ORDER_SATUTS_SENT);
-                int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(erpOrderQuery);
+                int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(outerOrder.getOrderNo(),ORDER_SATUTS_SENT);;
                 if (sendOrder > 0) {
                     return result.buildMsg("第" + i + "条有子订单发货不能关闭").buildIsSuccess(false);
                 }

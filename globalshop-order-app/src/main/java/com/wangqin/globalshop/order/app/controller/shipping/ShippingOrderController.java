@@ -41,7 +41,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -171,7 +170,6 @@ public class ShippingOrderController {
     // 合单发货(将多个子订单合并成一个包裹)
     @RequestMapping("/multiDelivery")
     @ResponseBody
-    @Transactional
     public Object multiDelivery(ShippingOrderDO shippingOrder) {
         JsonResult<String> result = new JsonResult<>();
         try {

@@ -43,12 +43,11 @@ public interface IMallSubOrderService {
 
     List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
 
-    /**
-     * 根据订单号找出已发货的单数
-     * @param erpOrderQuery
-     * @return
-     */
-    int selectCountWithStateAndOrderNo(MallSubOrderDO erpOrderQuery);
 
     List<MallSubOrderDO> list();
+    /**
+     * 根据订单号找出已发货的单数
+     * @return
+     */
+    int selectCountWithStateAndOrderNo(String orderNo, Integer orderSatutsSent);
 }

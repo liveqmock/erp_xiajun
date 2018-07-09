@@ -25,6 +25,7 @@ import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -246,17 +247,39 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
         ItemSkuDO sku = itemSkuMapper.queryItemBySkuCode(itemTask.getSkucode());
 
+        if(itemTask.getCount() == null || itemTask.getCount() <= 0){
+            throw new ErpCommonException("采购数量要大于0");
+        }
+        if(itemTask.getTaskPrice() == null || itemTask.getTaskPrice().doubleValue() <= 0){
+            throw new ErpCommonException("采购价要大于0");
+        }
+
         detail.init();
         detail.setBuyerName(by.getNickName());
         detail.setBuyerOpenId(by.getOpenId());
         detail.setCount(itemTask.getCount());
         detail.setItemCode(sku.getItemCode());
         detail.setSkuCode(itemTask.getSkucode());
-        detail.setMaxCount(itemTask.getTaskMaxCount());
+        detail.setMaxCount(itemTask.getTaskMaxCount() == null ? itemTask.getCount() : itemTask.getTaskMaxCount());
         detail.setPrice(itemTask.getTaskPrice());
-        detail.setMaxPrice(itemTask.getTaskMaxPrice());
+        detail.setMaxPrice(itemTask.getTaskMaxPrice() == null ? itemTask.getTaskPrice() : itemTask.getTaskMaxPrice());
         detail.setRemark(itemTask.getRemark());
         detail.setSkuPicUrl(itemTask.getImageUrl());
         detail.setMode(itemTask.getMode());
+    }
+
+
+    //统一订单状态修改接口
+    @Override
+    @Transactional
+    public void updateTaskStatus(Integer status, List<Long> taskDailyIdList) {
+        for(Long id : taskDailyIdList){
+            BuyerTaskDO buyerTask = mapper.selectByPrimaryKey(id);
+            if(buyerTask != null){
+                buyerTask.setStatus(status);
+                this.mapper.updateByPrimaryKeySelective(buyerTask);
+                detailMapper.updateTaskDetailDailyStatus(status, buyerTask.getBuyerTaskNo());
+            }
+        }
     }
 }

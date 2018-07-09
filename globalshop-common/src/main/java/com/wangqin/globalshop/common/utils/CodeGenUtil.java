@@ -48,4 +48,12 @@ public class CodeGenUtil {
 	public static String getSkuCode(String categoryCode,String ItemCode,int i ) {
 		return "S" + categoryCode + "Q"+ItemCode+String.format("%0" + 4 + "d", ++i);
 	}
+
+    public static String getShippingNO(Long aLong) {
+		return  "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+aLong;
+    }
+
+	public static String getInvOnWarehouseNo() {
+		return "INVONWARE" + System.currentTimeMillis();
+	}
 }

@@ -55,7 +55,7 @@
     currency, origin, freight, weight, logistic_type, price_range, unit, source, promotion, 
     id_card, start_date, end_date, booking_date, is_sale, sale_on_youzan, third_sale, 
     wxis_sale, is_find, status, spec, model, buyer_open_id, origin_sale_price, commission_rate, 
-    creator, modifier
+    creator, modifier	
   </sql>
   <sql id="Blob_Column_List" >
     remark, detail

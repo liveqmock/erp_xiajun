@@ -91,7 +91,7 @@ public class InventoryController {
     public Object query(String skuCode) {
         if (skuCode != null) {
             InventoryDO inventory = inventoryService.selectBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
-            return JsonResult.buildSuccess(inventory);
+            return JsonResult.buildSuccess(true).buildData(inventory);
         } else {
             return JsonResult.buildFailed("没有SKU id");
         }
@@ -158,35 +158,20 @@ public class InventoryController {
     // http://localhost:8080/haierp1/inventory/add?itemId=73&skuId=352&warehouseId=16&positionNo=S001&inventory=10&transInv=5
 
     /***
-     * 导入的接口
+     * 直接新增的接口
      * @param skuCode
      * @param warehouseNo
      * @param positionNo 货架号
-     * @param inventory 入库数目
+     * @param quantity 入库数目
      * @return
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Object add( String skuCode, String warehouseNo, String positionNo, Long inventory) {
+    public Object add( String skuCode, String warehouseNo, String positionNo, Long quantity) {
         InventoryDO inventoryDO = new InventoryDO();
         inventoryDO.setSkuCode(skuCode);
-        inventoryDO.setInv(inventory);
+        inventoryDO.setInv(quantity);
         inventoryService.outbound(inventoryDO, warehouseNo, positionNo);
-//		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
-//		inventoryArea.setItemCode(itemCode);
-//		// inventoryArea.setItemName("test");
-//		inventoryArea.setSkuCode(skuCode);
-//		// inventoryArea.setSkuCode("testskuCode");
-//		// inventoryArea.setSkuPic(skuPic);
-//		// inventoryArea.setUpc(upc);
-//		inventoryArea.setInventory(inventory);
-//		inventoryArea.setTransInv(transInv);
-//		inventoryArea.setWarehouseNo(warehouseNo);
-//		// inventoryArea.setWarehouseName(warehouseName);
-////		inventoryArea.setPositionNo(positionNo);
-//		inventoryArea.setGmtCreate(new Date());
-//		inventoryArea.setGmtModify(new Date());
-//		inventoryAreaService.addInventoryArea(inventoryArea, InoutOperatorType.PURCHASE_IN);
         return JsonResult.buildSuccess(null);
 
     }

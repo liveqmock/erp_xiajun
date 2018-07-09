@@ -46,6 +46,9 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
         //1新增一个退款单
         mapper.insertSelective(erpReturnOrder);
         MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(erpReturnOrder.getErpOrderId());
+        if (orderDO == null){
+            throw new ErpCommonException("找不到对应订单,请联系网站管理员");
+        }
         //更新了子订单状态
         orderDO.update();
         orderDO.setStatus(ORDER_SATUTS_RETURNDONE);

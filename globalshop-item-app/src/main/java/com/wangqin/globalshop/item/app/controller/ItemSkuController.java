@@ -2,6 +2,7 @@ package com.wangqin.globalshop.item.app.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.sql.ast.expr.SQLCaseExpr.Item;
+import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -142,6 +145,7 @@ public class ItemSkuController  {
 				}
 			}			
 		} 
+		itemSku.setModifier(AppUtil.getLoginUserId());
 		//更新虚拟库存
 		String skuCode = iItemSkuService.querySkuCodeById(itemSku.getId());
 		try {
@@ -155,31 +159,22 @@ public class ItemSkuController  {
 		}
 		if(IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
 			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", itemSku.getScale());
-		}	
-		//更新一下item(商品表)的price_range(价格区间)字段TODO
-//		ISkuDTO sku = iItemSkuService.queryItemSkuBySkuCode(skuCode);
-//		if(null != sku) {
-//			String itemCode = sku.getItemCode();
-//			if(IsEmptyUtil.isStringNotEmpty(itemCode)) {
-//				ItemDO itemDO = itemService.queryItemDOByItemCode(itemCode);
-//				String priceRange = itemDO.getPriceRange();
-//				//处理价格区间
-//				if(priceRange.contains("-")) {
-//					int middium = priceRange.indexOf("-");
-//					Double minPrice = Double.parseDouble(priceRange.substring(0, middium+1));
-//					Double maxPrice = Double.parseDouble(priceRange.substring(middium+1));
-//					minPrice = minPrice > itemSku.getSalePrice() ? itemSku.getSalePrice() : minPrice;
-//					maxPrice = maxPrice < itemSku.getSalePrice() ? itemSku.getSalePrice() : maxPrice;
-//					itemDO.setPriceRange(minPrice.toString()+"-"+maxPrice.toString());
-//				} else {
-//					if(Double.parseDouble(priceRange) > itemSku.getSalePrice()) {
-//						itemSk
-//					}
-//				}
-//			}
-//		}
-		itemSku.setModifier(AppUtil.getLoginUserId());
+		}		
+		//更新sku
 		iItemSkuService.updateById(itemSku);
+		
+		//更新一下item(商品表)的price_range(价格区间)字段
+		List<Double> skuPriceList = iItemSkuService.querySalePriceListBySkuCode(skuCode);
+		ISkuDTO sku = iItemSkuService.queryItemSkuBySkuCode(skuCode);		
+		ItemDO itemDO = itemService.queryItemDOByItemCode(sku.getItemCode());
+		//更新价格区间
+		String newPriceRange = calNewPriceRange(skuPriceList);
+		ItemDO updateItem = new ItemDO();
+		updateItem.setId(itemDO.getId());
+		updateItem.setModifier(AppUtil.getLoginUserId());
+		updateItem.setPriceRange(newPriceRange);
+		itemService.updateByIdSelective(updateItem);
+		
 		return result.buildIsSuccess(true).buildMsg("更新成功");
 	}
 
@@ -426,6 +421,26 @@ public class ItemSkuController  {
     	}
     	return result;
 	}
+    
+    /**
+     * 重新计算商品的价格区间
+     * @param newSkuPrice 当前sku的价格List
+     * @return
+     */
+    private static String calNewPriceRange(List<Double> newSkuPrice) {
+    	BigDecimal minPrice = new BigDecimal(newSkuPrice.get(0));
+		BigDecimal maxPrice = new BigDecimal(newSkuPrice.get(0));		
+		for(Double newPirce:newSkuPrice) {		
+			BigDecimal curSkuPrice = new BigDecimal(newPirce);
+			maxPrice = maxPrice.compareTo(curSkuPrice) < 0 ? curSkuPrice : maxPrice;
+			minPrice = minPrice.compareTo(curSkuPrice) > 0 ? curSkuPrice : minPrice;
+		}   		 
+		if(0 == maxPrice.compareTo(minPrice)) {
+			return maxPrice.toString();
+		} else {
+			return minPrice.toString()+"-"+maxPrice;
+		}
+    }
     
     //查询规格列表，不用的请求
 	@RequestMapping("/scaleTypeList")

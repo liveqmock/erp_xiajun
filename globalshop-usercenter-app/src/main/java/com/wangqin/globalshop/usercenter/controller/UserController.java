@@ -133,22 +133,19 @@ public class UserController extends BaseController {
         	}
         	return BaseResp.createFailure(sb.toString());
         }
-    	BaseResp resp = BaseResp.createSuccess("");
-    	String userNo=CodeGenUtil.genUserNo();
-        userVo.setUserNo(userNo);
-        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
-        
-        
-        
+
         AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
         if (authUserLoginName != null ) {
             return renderError("用户名已存在!");
         }
-        
+
+        BaseResp resp = BaseResp.createSuccess("");
+    	String userNo=CodeGenUtil.genUserNo();
+        userVo.setUserNo(userNo);
+        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.insertByVo(userVo);
-        
+        //添加角色
         UserQueryVO userQueryVo = userService.selectUserVoByUserNo(userNo);
- 
         userVo.setId(userQueryVo.getId());
         userService.insertByUserVo(userVo);
         
@@ -225,7 +222,13 @@ public class UserController extends BaseController {
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object edit(@Valid UserVo userVo, BindingResult result) {
         LogWorker.logStart(log, "配置", "userVo{}", userVo);
-    	
+        if(result.hasErrors()) {
+            StringBuffer sb = new StringBuffer();
+            for(ObjectError error : result.getAllErrors()) {
+                sb.append(error.getDefaultMessage()).append(",");
+            }
+            return BaseResp.createFailure(sb.toString());
+        }
     	AuthUserDO list = userService.selectByLoginName(userVo.getLoginName());
         if (list == null ) {
             return renderError("用户不存在!");
@@ -233,14 +236,7 @@ public class UserController extends BaseController {
         if (StringUtils.isNotBlank(userVo.getPassword())) {
             userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         }
-        
-        if(result.hasErrors()) {
-        	StringBuffer sb = new StringBuffer();
-        	for(ObjectError error : result.getAllErrors()) {
-        		sb.append(error.getDefaultMessage()).append(",");
-        	}
-        	return BaseResp.createFailure(sb.toString());
-        }
+
         BaseResp resp = BaseResp.createSuccess("");
         
         userService.updateByVo(userVo);
