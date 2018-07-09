@@ -206,8 +206,8 @@ public class ItemServiceImplement implements IItemService {
             int i = 0;
 
             if (skus != null && !skus.isEmpty()) {
-            	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice());
-            	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice());
+            	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
+            	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
                 for (ItemSkuAddVO itemSku : skus) {
                     i++;
                     itemSku.setSkuCode("S" + itemCode.substring(1) + "Q" + String.format("%0" + 2 + "d", ++i));
@@ -229,7 +229,7 @@ public class ItemServiceImplement implements IItemService {
                         });
                         //itemSku.setPackageId(a.get(a.size() - 1));
                     }
-                    BigDecimal temp = new BigDecimal(itemSku.getSalePrice());
+                    BigDecimal temp = new BigDecimal(itemSku.getSalePrice().toString());
             		maxPrice = maxPrice.compareTo(temp) < 0 ? temp : maxPrice;
             		minPrice = minPrice.compareTo(temp) > 0 ? temp : minPrice;
 //                    // 如果商品没有图片，默认使用sku上的图片
@@ -238,9 +238,9 @@ public class ItemServiceImplement implements IItemService {
 //                    }
             		//价格区间处理
                     if(0 == minPrice.compareTo(maxPrice)) {
-                    	item.setPriceRange(minPrice.toString());
+                    	item.setPriceRange(minPrice.stripTrailingZeros().toPlainString());
                     } else {
-                    	item.setPriceRange(minPrice.toString()+"-"+maxPrice.toString());
+                    	item.setPriceRange(minPrice.stripTrailingZeros().toPlainString()+"-"+maxPrice.stripTrailingZeros().toPlainString());
                     }
                 }
                 item.setItemSkus(skus);

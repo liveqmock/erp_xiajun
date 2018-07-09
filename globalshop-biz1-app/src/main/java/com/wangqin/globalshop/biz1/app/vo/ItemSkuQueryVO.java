@@ -96,7 +96,7 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	
 	private String buySite;
 	
-	private float salePrice;
+	private Double salePrice;
 	private String scale;
 
 	private Double weight;
@@ -254,11 +254,12 @@ public class ItemSkuQueryVO extends PageQueryVO{
 		this.lockedVirtualInv = lockedVirtualInv;
 	}
 
-	public float getSalePrice() {
+
+	public Double getSalePrice() {
 		return salePrice;
 	}
 
-	public void setSalePrice(float salePrice) {
+	public void setSalePrice(Double salePrice) {
 		this.salePrice = salePrice;
 	}
 
