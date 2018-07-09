@@ -1,12 +1,16 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.TaskDailyStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
+import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,5 +104,52 @@ public class BuyerTaskController {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
         return result.buildIsSuccess(true);
+    }
+
+    /**
+     * 完成采购按钮：采购中->采购结束
+     *
+     * @return
+     */
+    @RequestMapping("/finishTaskDaily")
+    @ResponseBody
+    public Object finishTaskDaily(String taskDailyIds) {
+        JsonResult<String> result = new JsonResult<>();
+        if (StringUtil.isBlank(taskDailyIds)) {
+            return result.buildIsSuccess(false).buildMsg("未选中采购任务");
+        }
+        String s = taskDailyIds.replace("&quot;", "\"");
+        List<Long> taskDailyIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+        });
+        try {
+            buyerTaskService.updateTaskStatus(TaskDailyStatus.CONFIRM.getCode(),taskDailyIdList);
+            return result.buildIsSuccess(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("未知异常");
+        }
+    }
+
+    /**
+     * 取消采购，任意状态->采购取消
+     *
+     * @return
+     */
+    @RequestMapping("/closeTaskDaily")
+    @ResponseBody
+    public Object closeTaskDaily(String taskDailyIds) {
+        JsonResult<String> result = new JsonResult<>();
+        if (StringUtil.isBlank(taskDailyIds)) {
+            return result.buildIsSuccess(false).buildMsg("未选中采购任务");
+        }
+        String s = taskDailyIds.replace("&quot;", "\"");
+        List<Long> taskDailyIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
+        });
+        try {
+            buyerTaskService.updateTaskStatus(TaskDailyStatus.CLOSE.getCode(),taskDailyIdList);
+            return result.buildIsSuccess(true);
+        } catch (Exception ex) {
+            return result.buildIsSuccess(false).buildMsg("未知异常");
+        }
     }
 }

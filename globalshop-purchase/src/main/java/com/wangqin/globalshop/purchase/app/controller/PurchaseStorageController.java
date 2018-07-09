@@ -26,6 +26,8 @@ import java.util.List;
 public class PurchaseStorageController {
     @Autowired
     private IBuyerStorageService service;
+
+
     @RequestMapping("/queryPurStorages")
     public Object queryPurStorages(BuyerStorageDO buyerStorage){
         JsonResult<List<BuyerStorageDO>> result = new JsonResult<>();
@@ -153,8 +155,6 @@ public class PurchaseStorageController {
         }
         return result.buildIsSuccess(true);
     }
-
-
 
 
 
