@@ -253,7 +253,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         detail.setCount(itemTask.getCount());
         detail.setItemCode(sku.getItemCode());
         detail.setSkuCode(itemTask.getSkucode());
-        detail.setMaxCount(itemTask.getTaskMaxCount());
+        detail.setMaxCount(itemTask.getTaskMaxCount() == null ? itemTask.getCount() : itemTask.getTaskMaxCount());
         detail.setPrice(itemTask.getTaskPrice());
         detail.setMaxPrice(itemTask.getTaskMaxPrice());
         detail.setRemark(itemTask.getRemark());
