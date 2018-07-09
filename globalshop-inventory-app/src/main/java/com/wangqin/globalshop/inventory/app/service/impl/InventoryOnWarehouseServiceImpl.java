@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +23,6 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -102,13 +95,14 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
             warehouse.setScale(itemSkuDO.getScale());
             warehouse.setSkuPic(itemSkuDO.getSkuPic());
             warehouse.setShelfNo(positionNo);
-            warehouse.setInventoryOnWarehouseNo("INVONWARE" + System.currentTimeMillis());
+            warehouse.setInventoryOnWarehouseNo(CodeGenUtil.getInvOnWarehouseNo());
             warehouse.setInventory(inv);
             warehouse.setSkuCode(inventory.getSkuCode());
             warehouse.setItemCode(inventory.getItemCode());
             warehouse.setWarehouseName(warehouseDO.getName());
             warehouse.setWarehouseNo(warehouseNo);
             warehouse.init();
+            // TODO: 2018/7/9
             warehouse.setBatchNo("123213");
             mapper.insertSelective(warehouse);
         } else {

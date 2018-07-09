@@ -85,7 +85,6 @@ public class MallOrderController {
             if (CollectionUtils.isEmpty(outerOrderDetails)) {
                 return JsonResult.buildFailed("没有商品信息");
             }
-            /**注入部门no*/
             //创建外部订单
             mallOrderService.addOuterOrder(mallOrderVO);
         } else {
