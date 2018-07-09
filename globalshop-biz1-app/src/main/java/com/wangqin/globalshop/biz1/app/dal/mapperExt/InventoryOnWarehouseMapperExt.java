@@ -1,12 +1,14 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOnWareHouseDOMapper;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOnWareHouseDOMapper;
 
 
 /**
@@ -111,7 +113,7 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 
     InventoryOnWareHouseDO selectById(Long inventoryAreaId);
     /**new-------------------------------------------------------------------*/
-	List<InventoryOnWareHouseDO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
+	List<InventoryOnWarehouseVO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
 	InventoryOnWareHouseDO selectByCompanyNoAndSkuCodeAndWarehouseNo(@Param("companyNo")String companyNo, @Param("skuCode")String skuCode, @Param("warehouseNo")String warehouseNo);
 
     List<InventoryOnWareHouseDO> getINvOnWarehouseListOfShip(@Param("skuCode")String skuCode, @Param("companyNo")String companyNo);
