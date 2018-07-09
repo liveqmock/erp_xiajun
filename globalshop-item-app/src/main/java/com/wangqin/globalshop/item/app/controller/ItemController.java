@@ -21,7 +21,7 @@ import com.wangqin.globalshop.item.app.service.*;
 
 
 
-//import lombok.extern.slf4j.Slf4j;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -54,7 +54,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/item")
 @Authenticated
-//@Slf4j
 public class ItemController {
 
     @Autowired
