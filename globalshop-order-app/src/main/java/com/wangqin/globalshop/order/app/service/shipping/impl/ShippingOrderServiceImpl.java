@@ -18,10 +18,7 @@ import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountServ
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.NumberUtil;
-import com.wangqin.globalshop.common.utils.ShiroUtil;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.czh.Util;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
@@ -479,7 +476,8 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(ShippingOrderDO shippingOrder) throws ErpCommonException {
-        String shippingNo = "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS) + sequenceUtilService.gainPKGSequence();
+
+        String shippingNo = CodeGenUtil.getShippingNO(sequenceUtilService.gainPKGSequence());
         StringBuffer erpNos = new StringBuffer();
         String mallOrders = shippingOrder.getMallOrders();
         if (Util.isEmpty(mallOrders)){

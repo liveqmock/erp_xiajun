@@ -127,15 +127,15 @@ public class InventoryController {
      * @param skuCode
      * @param warehouseNo
      * @param positionNo 货架号
-     * @param inventory 入库数目
+     * @param quantity 入库数目
      * @return
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Object add( String skuCode, String warehouseNo, String positionNo, Long inventory) {
+    public Object add( String skuCode, String warehouseNo, String positionNo, Long quantity) {
         InventoryDO inventoryDO = new InventoryDO();
         inventoryDO.setSkuCode(skuCode);
-        inventoryDO.setInv(inventory);
+        inventoryDO.setInv(quantity);
         inventoryService.outbound(inventoryDO, warehouseNo, positionNo);
 //		InventoryOnWareHouseDO inventoryArea = new InventoryOnWareHouseDO();
 //		inventoryArea.setItemCode(itemCode);

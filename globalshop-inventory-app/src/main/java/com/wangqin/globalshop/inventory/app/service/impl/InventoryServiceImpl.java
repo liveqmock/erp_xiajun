@@ -314,7 +314,7 @@ public class InventoryServiceImpl implements InventoryService {
         mapper.updateByPrimaryKey(inventory);
 
     }
-
+    //todo
     private void outOfWarehouse(List<InventoryOutManifestDetailDO> list) {
         for (InventoryOutManifestDetailDO aDo : list) {
             /**修改库存*/
@@ -354,7 +354,6 @@ public class InventoryServiceImpl implements InventoryService {
      * @param inventoryDO 包含增加的实体信息
      * @param inv         新增的数目
      */
-    @Transactional(rollbackFor = ErpCommonException.class)
     private void insertInv(InventoryDO inventoryDO, Long inv) {
         InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(inventoryDO.getSkuCode(),AppUtil.getLoginUserCompanyNo());
         if (inventory == null) {
