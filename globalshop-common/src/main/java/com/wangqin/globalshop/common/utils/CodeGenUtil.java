@@ -52,4 +52,8 @@ public class CodeGenUtil {
     public static String getShippingNO(Long aLong) {
 		return  "PKG" + DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS)+aLong;
     }
+
+	public static String getInvOnWarehouseNo() {
+		return "INVONWARE" + System.currentTimeMillis();
+	}
 }
