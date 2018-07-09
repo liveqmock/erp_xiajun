@@ -59,7 +59,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/shippingOrder")
-@Authenticated
+//@Authenticated
 public class ShippingOrderController {
 
     @Autowired
