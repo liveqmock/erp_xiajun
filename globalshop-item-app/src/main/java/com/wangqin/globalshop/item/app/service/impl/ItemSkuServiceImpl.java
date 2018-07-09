@@ -36,7 +36,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	@Autowired
 	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
 
-	//查询和本sku同属一个商品的所有sku的sale_price（自己除外）
+	//查询和本sku同属一个商品的所有sku的sale_price
 	@Override
 	public List<Double> querySalePriceListBySkuCode(String skuCode) {
 		return itemSkuMapperExt.querySalePriceListBySkuCode(skuCode);

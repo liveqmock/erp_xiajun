@@ -159,23 +159,22 @@ public class ItemSkuController  {
 		}
 		if(IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
 			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", itemSku.getScale());
-		}	
+		}		
+		//更新sku
+		iItemSkuService.updateById(itemSku);
+		
 		//更新一下item(商品表)的price_range(价格区间)字段
 		List<Double> skuPriceList = iItemSkuService.querySalePriceListBySkuCode(skuCode);
-		skuPriceList.add((double) itemSku.getSalePrice());
-		//获取旧的价格区间
 		ISkuDTO sku = iItemSkuService.queryItemSkuBySkuCode(skuCode);		
 		ItemDO itemDO = itemService.queryItemDOByItemCode(sku.getItemCode());
-		String oldPriceRange = itemDO.getPriceRange();
 		//更新价格区间
-		String newPriceRange = calNewPriceRange(oldPriceRange, skuPriceList);
+		String newPriceRange = calNewPriceRange(skuPriceList);
 		ItemDO updateItem = new ItemDO();
 		updateItem.setId(itemDO.getId());
 		updateItem.setModifier(AppUtil.getLoginUserId());
 		updateItem.setPriceRange(newPriceRange);
 		itemService.updateByIdSelective(updateItem);
 		
-		iItemSkuService.updateById(itemSku);
 		return result.buildIsSuccess(true).buildMsg("更新成功");
 	}
 
@@ -425,26 +424,21 @@ public class ItemSkuController  {
     
     /**
      * 重新计算商品的价格区间
-     * @param oldPriceRange 旧的商品价格区间
      * @param newSkuPrice 当前sku的价格List
      * @return
      */
-    private static String calNewPriceRange(String oldPriceRange,List<Double> newSkuPrice) {
-    	System.out.println("oldPriceRangeInner:"+oldPriceRange);
-    	String priceArray[] = oldPriceRange.split("-");
-    	System.out.println("priceArray[0]"+priceArray[0]);
-    	System.out.println("priceArray[0]"+priceArray[priceArray.length-1]);
-    	BigDecimal oldMinPrice = new BigDecimal(priceArray[0]);
-		BigDecimal oldMaxPrice = new BigDecimal(priceArray[priceArray.length-1]);		
+    private static String calNewPriceRange(List<Double> newSkuPrice) {
+    	BigDecimal minPrice = new BigDecimal(newSkuPrice.get(0));
+		BigDecimal maxPrice = new BigDecimal(newSkuPrice.get(0));		
 		for(Double newPirce:newSkuPrice) {		
 			BigDecimal curSkuPrice = new BigDecimal(newPirce);
-			oldMaxPrice = oldMaxPrice.compareTo(curSkuPrice) < 0 ? curSkuPrice : oldMaxPrice;
-			oldMinPrice = oldMinPrice.compareTo(curSkuPrice) > 0 ? curSkuPrice : oldMinPrice;
+			maxPrice = maxPrice.compareTo(curSkuPrice) < 0 ? curSkuPrice : maxPrice;
+			minPrice = minPrice.compareTo(curSkuPrice) > 0 ? curSkuPrice : minPrice;
 		}   		 
-		if(0 == oldMaxPrice.compareTo(oldMinPrice)) {
-			return oldMaxPrice.toString();
+		if(0 == maxPrice.compareTo(minPrice)) {
+			return maxPrice.toString();
 		} else {
-			return oldMinPrice.toString()+"-"+oldMaxPrice;
+			return minPrice.toString()+"-"+maxPrice;
 		}
     }
     

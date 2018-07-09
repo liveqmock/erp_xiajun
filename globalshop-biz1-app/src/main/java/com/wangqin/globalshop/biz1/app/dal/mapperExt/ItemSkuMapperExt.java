@@ -19,7 +19,7 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
  */
 public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
-	//查询和本sku同属一个商品的所有sku的sale_price（自己除外）
+	//查询和本sku同属一个商品的所有sku的sale_price
 	List<Double> querySalePriceListBySkuCode(String skuCode);
 	
 	Integer queryItemSkusCount(ItemSkuQueryVO itemSkuQueryVO);

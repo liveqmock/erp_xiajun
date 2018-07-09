@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface IItemSkuService  {
 
-	//查询和本sku同属一个商品的所有sku的sale_price（自己除外）
+	//查询和本sku同属一个商品的所有sku的sale_price
 	List<Double> querySalePriceListBySkuCode(String skuCode);
 		
 	/**

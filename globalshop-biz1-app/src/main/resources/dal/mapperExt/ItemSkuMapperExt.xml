@@ -97,7 +97,7 @@
         inv.virtual_inv AS virtualInv
     </sql>
     
-    <!-- 查询和本sku同属一个商品的所有sku的sale_price（自己除外） -->
+    <!-- 查询和本sku同属一个商品的所有sku的sale_price -->
     <select id="querySalePriceListBySkuCode" resultType="java.lang.Double" parameterType="java.lang.String">
     	select sale_price 
     	from item_sku 
@@ -106,7 +106,6 @@
     	  select item_code from item_sku
           where sku_code = #{skuCode}
         ) 
-        and <![CDATA[sku_code <> #{skuCode}]]>
         and is_del=0;
     </select>
     
