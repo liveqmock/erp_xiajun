@@ -264,7 +264,7 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	@Transactional(rollbackFor = ErpCommonException.class)
+	//@Transactional(rollbackFor = ErpCommonException.class)
 	public Object delete(Long id) {
 		JsonResult<String> result = new JsonResult<>();
 		/*
