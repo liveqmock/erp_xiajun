@@ -25,9 +25,11 @@ public class BuyerReceiptDetailDO extends BaseModel {
 
     private String purchaseStorageNo;
 
+    private String modifier;
+
     private String creator;
 
-    private String modifier;
+    private Integer batchNum;
 
     public Long getId() {
         return id;
@@ -89,7 +91,6 @@ public class BuyerReceiptDetailDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -126,21 +127,27 @@ public class BuyerReceiptDetailDO extends BaseModel {
         this.purchaseStorageNo = purchaseStorageNo == null ? null : purchaseStorageNo.trim();
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public Integer getBatchNum() {
+        return batchNum;
+    }
+
+    public void setBatchNum(Integer batchNum) {
+        this.batchNum = batchNum;
     }
 }

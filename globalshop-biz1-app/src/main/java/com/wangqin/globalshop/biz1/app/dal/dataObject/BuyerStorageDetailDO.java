@@ -35,9 +35,9 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     private String skuBuysite;
 
-    private String creator;
-
     private String modifier;
+
+    private String creator;
 
     private Integer status;
 
@@ -46,6 +46,8 @@ public class BuyerStorageDetailDO extends BaseModel {
     private String opUserNo;
 
     private Date opTime;
+
+    private Integer batchNum;
 
     public Long getId() {
         return id;
@@ -175,20 +177,20 @@ public class BuyerStorageDetailDO extends BaseModel {
         this.skuBuysite = skuBuysite == null ? null : skuBuysite.trim();
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 
     public Integer getStatus() {
@@ -221,5 +223,13 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     public void setOpTime(Date opTime) {
         this.opTime = opTime;
+    }
+
+    public Integer getBatchNum() {
+        return batchNum;
+    }
+
+    public void setBatchNum(Integer batchNum) {
+        this.batchNum = batchNum;
     }
 }
