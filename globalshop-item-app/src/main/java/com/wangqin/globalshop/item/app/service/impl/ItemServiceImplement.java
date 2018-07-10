@@ -293,7 +293,9 @@ public class ItemServiceImplement implements IItemService {
         newItem.setItemName(item.getName());
         newItem.setCurrency(item.getCurrency().byteValue());
         newItem.setIdCard(item.getIdCard().byteValue());
-        //newItem.setLogisticType(item.getLogisticType().byteValue());
+        if(null != item.getLogisticType()) {
+        	newItem.setLogisticType(item.getLogisticType().byteValue());
+        }      
         newItem.setCountry(item.getCountry());
         newItem.setItemCode(item.getItemCode());
         newItem.setWxisSale(item.getWxisSale().byteValue());

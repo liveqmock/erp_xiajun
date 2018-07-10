@@ -345,8 +345,9 @@ public class ItemController {
         newItem.setMainPic(item.getMainPic());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setIsSale(item.getIsSale().byteValue());
-        //newItem.setLogisticType(item.getLogisticType().byteValue());
-    
+        if(null != item.getLogisticType()) {
+        	newItem.setLogisticType(item.getLogisticType().byteValue());
+        }    
         iItemService.updateByIdSelective(newItem);	
         return result.buildIsSuccess(true);
     }
