@@ -291,7 +291,7 @@ public class ItemSkuController  {
 			try {
 				inventoryService.updateVirtualInv(skuCode, 0L, AppUtil.getLoginUserCompanyNo());
 			} catch (Exception e) {
-				return result.buildIsSuccess(false).buildMsg("删除失败，删除会导致库存异常");
+				return result.buildIsSuccess(false).buildMsg("禁止删除，删除会导致库存异常");
 			}		
 			//删除item_sku_scale
 			scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
