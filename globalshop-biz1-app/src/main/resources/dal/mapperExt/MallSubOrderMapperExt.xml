@@ -414,7 +414,7 @@
     	<![CDATA[ LIMIT #{start},#{pageSize} ]]>
     </select>
     <!-- 查询已发货的订单数目 -->
-    <select id="selectCountWithStateAndOrderNo" resultMap="BaseResultMap" >
+    <select id="selectCountWithStateAndOrderNo" resultType="java.lang.Integer" >
     	SELECT
     	count(*)
     	FROM mall_sub_order
@@ -423,6 +423,12 @@
     	AND status = #{status}
     </select>
 
-  
+  	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    	DELETE 
+    	FROM 
+    		mall_sub_order
+    	WHERE
+    		id = #{id,jdbcType=BIGINT}	
+  	</delete>
 
 </mapper>

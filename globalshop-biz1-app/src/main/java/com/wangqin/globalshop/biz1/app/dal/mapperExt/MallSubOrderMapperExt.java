@@ -94,5 +94,5 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
     		@Param("shareTime")String shareTime,
     		@Param("start")int start,@Param("pageSize")int pageSize);
 
-	int selectCountWithStateAndOrderNo(@Param("orderNo")String orderNo,@Param("statuts") Integer statuts);
+	int selectCountWithStateAndOrderNo(@Param("orderNo")String orderNo,@Param("status") Integer status);
 }
