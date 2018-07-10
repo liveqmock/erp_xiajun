@@ -8,7 +8,6 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WxUserDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -100,16 +98,17 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void updateByVo(UserVo userVo) {
-    	
-        AuthUserDO authUser = userMapper.selectByPrimaryKey(userVo.getId());
+
+//        AuthUserDO authUser = userMapper.selectByPrimaryKey(userVo.getId());
+        AuthUserDO authUser = userMapper.selectByLoginName(userVo.getLoginName());
         
-        authUser.setLoginName(userVo.getLoginName());
+//        authUser.setLoginName(userVo.getLoginName());
         authUser.setName(userVo.getName());
-        if (StringUtils.isBlank(userVo.getPassword())) {
-            authUser.setPassword(null);
+        if (StringUtils.isNotBlank(userVo.getPassword())) {
+            authUser.setPassword(userVo.getPassword().trim());
         }
-        
-        authUser.setPassword(userVo.getPassword());
+
+//        authUser.setPassword(userVo.getPassword());
         authUser.setSex((byte)userVo.getSex().intValue());
         authUser.setAge((byte)userVo.getAge().intValue());
         authUser.setUserType((byte)userVo.getUserType().intValue());
@@ -117,11 +116,15 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         authUser.setPhone(userVo.getPhone());
         authUser.setStatus((byte)userVo.getStatus().intValue());
         authUser.setIsDel(false);
-   
-        
-       
+
+
+
         userMapper.updateByPrimaryKey(authUser);
-        
+        //先全删
+        userRoleMapper.deleteRoleByUserId(authUser.getId());
+        //再全加
+        userVo.setId(authUser.getId());
+        insertByUserVo(userVo);
 //        System.out.println(userVo.getId());
 //        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByUserId(userVo.getId());
 //        for(AuthUserRoleDO userRole : userRoles) {

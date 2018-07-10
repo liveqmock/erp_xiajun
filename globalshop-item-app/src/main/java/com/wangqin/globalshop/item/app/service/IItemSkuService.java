@@ -13,6 +13,9 @@ import org.apache.ibatis.annotations.Param;
 
 public interface IItemSkuService  {
 
+	//查询和本sku同属一个商品的所有sku的sale_price
+	List<Double> querySalePriceListBySkuCode(String skuCode);
+		
 	/**
 	 * 按照条件分页查询商品(分页)
 	 * @param itemQueryVO

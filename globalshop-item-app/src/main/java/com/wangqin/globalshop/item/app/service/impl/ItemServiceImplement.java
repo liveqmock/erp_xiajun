@@ -65,6 +65,7 @@ import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
+import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
@@ -206,8 +207,8 @@ public class ItemServiceImplement implements IItemService {
             int i = 0;
 
             if (skus != null && !skus.isEmpty()) {
-            	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice());
-            	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice());
+            	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
+            	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
                 for (ItemSkuAddVO itemSku : skus) {
                     i++;
                     itemSku.setSkuCode("S" + itemCode.substring(1) + "Q" + String.format("%0" + 2 + "d", ++i));
@@ -229,7 +230,7 @@ public class ItemServiceImplement implements IItemService {
                         });
                         //itemSku.setPackageId(a.get(a.size() - 1));
                     }
-                    BigDecimal temp = new BigDecimal(itemSku.getSalePrice());
+                    BigDecimal temp = new BigDecimal(itemSku.getSalePrice().toString());
             		maxPrice = maxPrice.compareTo(temp) < 0 ? temp : maxPrice;
             		minPrice = minPrice.compareTo(temp) > 0 ? temp : minPrice;
 //                    // 如果商品没有图片，默认使用sku上的图片
@@ -238,9 +239,9 @@ public class ItemServiceImplement implements IItemService {
 //                    }
             		//价格区间处理
                     if(0 == minPrice.compareTo(maxPrice)) {
-                    	item.setPriceRange(minPrice.toString());
+                    	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString()));
                     } else {
-                    	item.setPriceRange(minPrice.toString()+"-"+maxPrice.toString());
+                    	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString())+"-"+PriceUtil.formatPrice(maxPrice.toPlainString()));
                     }
                 }
                 item.setItemSkus(skus);
@@ -293,7 +294,9 @@ public class ItemServiceImplement implements IItemService {
         newItem.setItemName(item.getName());
         newItem.setCurrency(item.getCurrency().byteValue());
         newItem.setIdCard(item.getIdCard().byteValue());
-        //newItem.setLogisticType(item.getLogisticType().byteValue());
+        if(null != item.getLogisticType()) {
+        	newItem.setLogisticType(item.getLogisticType().byteValue());
+        }      
         newItem.setCountry(item.getCountry());
         newItem.setItemCode(item.getItemCode());
         newItem.setWxisSale(item.getWxisSale().byteValue());
