@@ -135,8 +135,8 @@ public class MallOrderController {
                     //2,删除子订单
                     mallSubOrderService.delete(erpOrder);
                 }
-                //3,重新生成子订单并分配库存。
-                mallOrderService.review(mallOrderVO.getOrderNo());
+//                //3,重新生成子订单并分配库存。
+//                mallOrderService.review(mallOrderVO.getOrderNo());
             }
             result.buildIsSuccess(true);
         } else {
