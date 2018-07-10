@@ -244,7 +244,23 @@ public class ItemSkuController  {
 		result.buildIsSuccess(true);
 		return result;
 	}
-
+	/**
+	 * 订单管理中要修改订单时添加商品的接口
+	 * 新添加
+	 */
+	@RequestMapping("/queryItemList")
+	@ResponseBody
+	public Object queryItemList(ItemSkuQueryVO itemSkuQueryVO) {
+		JsonPageResult<List<ISkuDTO>> result = new JsonPageResult<>();
+		if(null == AppUtil.getLoginUserCompanyNo()) {
+			return result.buildIsSuccess(false).buildMsg("请登录");
+		}
+		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
+		result.buildIsSuccess(true);
+		return result;
+	}
+	
 	/**
 	 * 删除
 	 * @param id
