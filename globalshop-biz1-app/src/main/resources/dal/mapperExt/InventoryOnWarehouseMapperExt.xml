@@ -20,16 +20,13 @@
         <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
         <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
         <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-        <result column="is_del" property="isDel" jdbcType="BIT" />
         <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
     id, inventory_on_warehouse_no, company_no, item_code, item_name, upc, scale, sku_code,
     sku_pic, inventory, locked_inv, trans_inv, locked_trans_inv, warehouse_no, warehouse_name,
-    shelf_no, batch_no, gmt_create, gmt_modify, is_del, creator, modifier
+    shelf_no, batch_no, creator, modifier
   </sql>
   
    <!-- xiajun,库存管理页面展示 -->
