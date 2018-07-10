@@ -3,6 +3,7 @@ package com.wangqin.globalshop.purchase.app.controller;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDetailDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerReceiptDetailVo;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.purchase.app.service.IReceiptDetailService;
@@ -42,11 +43,11 @@ public class ReceiptController {
     }
     @RequestMapping("/queryTaskReceipt")
     public Object queryReceiptDetail(BuyerReceiptDetailDO receipt){
-        JsonResult<List<BuyerReceiptDetailDO>> result = new JsonResult<>();
-        List<BuyerReceiptDetailDO> list = null;
+        JsonResult<List<BuyerReceiptDetailVo>> result = new JsonResult<>();
+        List<BuyerReceiptDetailVo> list = null;
         try {
             receipt.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-            list = detailService.list(receipt);
+            list = detailService.getVoList(receipt);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }

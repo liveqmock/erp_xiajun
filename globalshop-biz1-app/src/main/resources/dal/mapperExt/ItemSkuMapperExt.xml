@@ -597,7 +597,7 @@
 
 
     <!--查询总条数 -->
-    <select id="queryItemSku" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+    <select id="queryItemSku" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
         SELECT <include refid="Base_Column_List" />
         FROM <include refid="tableSection"/> T1
         WHERE
