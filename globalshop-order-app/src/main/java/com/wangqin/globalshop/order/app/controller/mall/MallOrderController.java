@@ -97,6 +97,10 @@ public class MallOrderController {
     /**
      * 更新订单
      */
+    /**
+     * @param mallOrderVO
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public Object update(MallOrderVO mallOrderVO) {
@@ -128,15 +132,24 @@ public class MallOrderController {
 //            EntityWrapper<ErpOrder> entityWrapper = new EntityWrapper<>();
 //            entityWrapper.where("outer_order_id = {0} ", outerOrder.getId());
             List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
+
             if (CollectionUtils.isNotEmpty(erpOrders)) {
                 for (MallSubOrderDO erpOrder : erpOrders) {
-                    //1,释放子订单库存
+                    erpOrder.setOrderTime(mallOrderVO.getOrderTime());
+                    erpOrder.setReceiver(mallOrderVO.getReceiver());
+                    erpOrder.setReceiverCity(mallOrderVO.getReceiverCity());
+                    erpOrder.setReceiverDistrict(mallOrderVO.getReceiverDistrict());
+                    erpOrder.setReceiverState(mallOrderVO.getReceiverState());
+                    erpOrder.setShopCode(mallOrderVO.getShopCode());
+                    erpOrder.setTelephone(mallOrderVO.getTelephone());
+                	//1,释放子订单库存
                     inventoryService.release(erpOrder);
-                    //2,删除子订单
-                    mallSubOrderService.delete(erpOrder);
+                    //2,修改子订单
+                    mallSubOrderService.update(erpOrder);
+                    //3,重新生成子订单并分配库存。
+                    inventoryService.order(erpOrder);
                 }
-                //3,重新生成子订单并分配库存。
-                mallOrderService.review(mallOrderVO.getOrderNo());
+
             }
             result.buildIsSuccess(true);
         } else {
