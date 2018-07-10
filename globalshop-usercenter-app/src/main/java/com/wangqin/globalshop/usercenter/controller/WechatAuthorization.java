@@ -24,8 +24,8 @@ public class WechatAuthorization {
         System.out.println("postData=========="+postData);
         WXBizMsgCrypt pc = null;
         try {
-            //前两个是微信开放平台的账户  第三个是当前小程序的appid
-            pc = new WXBizMsgCrypt("FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc", "FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc7wud647ryu1", "wx43020a9d04042b56");
+            //前两个是微信开放平台的账户  第三个是公众平台的appid
+                pc = new WXBizMsgCrypt("FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc", "FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc7wud647ryu1", "wx43020a9d04042b56");
 //            String msgSignature = nodelist2.item(0).getTextContent();
 
             String result2 = pc.DecryptMsg(msgSignature, timestamp, nonce, postData);
