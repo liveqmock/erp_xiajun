@@ -33,7 +33,7 @@ public class UserVo implements Serializable {
 	private String companyNo;
 
 	@JsonIgnore
-	@Size(max = 64, min = 1, message = "密码不能为空也不能大于64位")
+//	@Size(max = 64, min = 1, message = "密码不能为空也不能大于64位")
 	private String password;
 	private Integer sex;
 	@Min(value = 0, message = "年龄最小只能写0")
