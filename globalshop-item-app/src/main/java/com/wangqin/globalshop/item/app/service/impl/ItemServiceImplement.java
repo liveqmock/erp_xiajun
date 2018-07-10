@@ -65,6 +65,7 @@ import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
+import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
@@ -238,9 +239,9 @@ public class ItemServiceImplement implements IItemService {
 //                    }
             		//价格区间处理
                     if(0 == minPrice.compareTo(maxPrice)) {
-                    	item.setPriceRange(minPrice.stripTrailingZeros().toPlainString());
+                    	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString()));
                     } else {
-                    	item.setPriceRange(minPrice.stripTrailingZeros().toPlainString()+"-"+maxPrice.stripTrailingZeros().toPlainString());
+                    	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString())+"-"+PriceUtil.formatPrice(maxPrice.toPlainString()));
                     }
                 }
                 item.setItemSkus(skus);
