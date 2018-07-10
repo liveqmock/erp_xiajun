@@ -247,15 +247,22 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
         ItemSkuDO sku = itemSkuMapper.queryItemBySkuCode(itemTask.getSkucode());
 
+        if(itemTask.getCount() == null || itemTask.getCount() <= 0){
+            throw new ErpCommonException("采购数量要大于0");
+        }
+        if(itemTask.getTaskPrice() == null || itemTask.getTaskPrice().doubleValue() <= 0){
+            throw new ErpCommonException("采购价要大于0");
+        }
+
         detail.init();
         detail.setBuyerName(by.getNickName());
         detail.setBuyerOpenId(by.getOpenId());
         detail.setCount(itemTask.getCount());
         detail.setItemCode(sku.getItemCode());
         detail.setSkuCode(itemTask.getSkucode());
-        detail.setMaxCount(itemTask.getTaskMaxCount());
+        detail.setMaxCount(itemTask.getTaskMaxCount() == null ? itemTask.getCount() : itemTask.getTaskMaxCount());
         detail.setPrice(itemTask.getTaskPrice());
-        detail.setMaxPrice(itemTask.getTaskMaxPrice());
+        detail.setMaxPrice(itemTask.getTaskMaxPrice() == null ? itemTask.getTaskPrice() : itemTask.getTaskMaxPrice());
         detail.setRemark(itemTask.getRemark());
         detail.setSkuPicUrl(itemTask.getImageUrl());
         detail.setMode(itemTask.getMode());

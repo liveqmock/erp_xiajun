@@ -97,6 +97,18 @@
         inv.virtual_inv AS virtualInv
     </sql>
     
+    <!-- 查询和本sku同属一个商品的所有sku的sale_price -->
+    <select id="querySalePriceListBySkuCode" resultType="java.lang.Double" parameterType="java.lang.String">
+    	select sale_price 
+    	from item_sku 
+    	where item_code = 
+    	(
+    	  select item_code from item_sku
+          where sku_code = #{skuCode}
+        ) 
+        and is_del=0;
+    </select>
+    
     <!-- 查询可售的sku -->
      <select id="querySaleableSkus" resultMap="SaleableMap" >
         SELECT
@@ -115,6 +127,7 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
+           AND T1.status=1
             <if test=" categoryCode != null and categoryCode != '' ">
                 and T1.category_code = #{categoryCode}
             </if>
@@ -161,6 +174,7 @@
             item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
         where
            T1.is_del=0
+           AND T1.status=1
             <if test=" categoryCode != null and categoryCode != '' ">
                 and T1.category_code = #{categoryCode}
             </if>

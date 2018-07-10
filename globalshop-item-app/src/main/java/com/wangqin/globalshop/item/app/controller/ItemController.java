@@ -21,7 +21,7 @@ import com.wangqin.globalshop.item.app.service.*;
 
 
 
-//import lombok.extern.slf4j.Slf4j;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -54,7 +54,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/item")
 @Authenticated
-//@Slf4j
 public class ItemController {
 
     @Autowired
@@ -159,8 +158,8 @@ public class ItemController {
         	//更新商品的价格区间,同时判断用户传来的upc是否相互之间有重复，同时判断upc和数据库里面已有的upc是否重复
         	String itemCode = iItemService.queryItemCodeById(item.getId());
         	List<String> upcList = new ArrayList<>();
-        	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice());
-        	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice());
+        	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
+        	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
         	for(ItemSkuQueryVO sku:skus) {
         		Integer duplcatedCountNumber = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(
         				AppUtil.getLoginUserCompanyNo(),sku.getUpc(), itemCode);
@@ -168,7 +167,7 @@ public class ItemController {
         			return result.buildIsSuccess(false).buildMsg("更新失败，添加的upc和已有的upc重复");
         		}
         		upcList.add(sku.getUpc());
-        		BigDecimal temp = new BigDecimal(sku.getSalePrice());
+        		BigDecimal temp = new BigDecimal(sku.getSalePrice().toString());
         		maxPrice = maxPrice.compareTo(temp) < 0 ? temp : maxPrice;
         		minPrice = minPrice.compareTo(temp) > 0 ? temp : minPrice;
         	}
@@ -179,9 +178,9 @@ public class ItemController {
             	return result;
             }
             if(0 == minPrice.compareTo(maxPrice)) {
-            	item.setPriceRange(minPrice.toString());
+            	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString()));
             } else {
-            	item.setPriceRange(minPrice.toString()+"-"+maxPrice.toString());
+            	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString())+"-"+PriceUtil.formatPrice(maxPrice.toPlainString()));
             }
             
             //检查更新的这些upc是否和数据库里面(除了正在更新的这个商品的sku)的重复
@@ -346,8 +345,9 @@ public class ItemController {
         newItem.setMainPic(item.getMainPic());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setIsSale(item.getIsSale().byteValue());
-        //newItem.setLogisticType(item.getLogisticType().byteValue());
-    
+        if(null != item.getLogisticType()) {
+        	newItem.setLogisticType(item.getLogisticType().byteValue());
+        }    
         iItemService.updateByIdSelective(newItem);	
         return result.buildIsSuccess(true);
     }
@@ -732,6 +732,8 @@ public class ItemController {
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
     }
+    
+    //给价格区间接口加上0
 
 }
 
