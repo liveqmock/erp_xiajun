@@ -38,6 +38,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
     private ItemSkuMapperExt skuDOMapperExt;
 
     @Autowired
+    private ItemSkuScaleMapperExt skuScaleMapperExt;
+
+    @Autowired
     private AuthUserDOMapperExt userMapperExt;
 
     @Autowired
@@ -144,6 +147,9 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
 
                 ItemSkuDO skuDO = skuDOMapperExt.queryItemSku(skuSo);
+
+                List<ItemSkuScaleDO> scaleList = skuScaleMapperExt.selectScaleNameValueBySkuCode(skuDO.getSkuCode());
+
                 System.out.println(skuDO);
                 if(skuDO == null){
                     throw new ErpCommonException("未找到对应商品");
@@ -165,10 +171,8 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
                 BuyerDO buyer = buyerDOMapperExt.searchBuyer(buyerSo);
 
-                vo.setBuyerName(buyerStorage.getBuyerName());
-                vo.setBuyerOpenId(buyerStorage.getBuyerOpenId());
-
-
+                vo.setBuyerName(buyer.getNickName());
+                vo.setBuyerOpenId(buyer.getOpenId());
 
                 vo.setGmtCreate(detail.getGmtCreate());
                 vo.setGmtModify(detail.getGmtModify());
@@ -176,7 +180,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 vo.setItemCode(detail.getItemCode());
                 vo.setUpc(detail.getUpc());
                 vo.setSkuName(skuDO.getItemName());
-                vo.setSpecifications(skuDO.getScale());
+                vo.setSpecifications(getScaleString(scaleList));
                 vo.setSkuCode(skuDO.getSkuCode());
                 vo.setQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途,实际需要入库的数量
                 vo.setTransQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途，预入库数量
@@ -188,6 +192,10 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
                 vo.setGmtCreate(detail.getGmtCreate());
                 vo.setGmtModify(detail.getGmtModify());
+
+                vo.setBatchNum(detail.getBatchNum());
+
+                vo.setBuyerTaskNo(buyerStorage.getBuyerTaskNo());
 
                 if(user != null){
                     vo.setOpUserName(user.getLoginName());
@@ -311,5 +319,15 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         detaiMapper.updateByPrimaryKey(detail);
     }
 
+
+    private String getScaleString(List<ItemSkuScaleDO> scaleList){
+        String result = "";
+        if(!EasyUtil.isListEmpty(scaleList)){
+            for(ItemSkuScaleDO scale : scaleList){
+                result += scale.getScaleName()+"-"+scale.getScaleValue()+";";
+            }
+        }
+        return result;
+    }
 
 }
