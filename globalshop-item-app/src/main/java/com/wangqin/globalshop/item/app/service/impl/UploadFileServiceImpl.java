@@ -37,7 +37,7 @@ public class UploadFileServiceImpl implements IUploadFileService {
         // objectMeta.setContentLength(inputStream.);
         objectMeta.setContentType("image/jpeg");
         ossClient.putObject(bucketName, picKey, inputStream, objectMeta);
-        return urlhead + picKey + "?x-oss-process=image";
+        return urlhead + picKey;
     }
 
     @Override

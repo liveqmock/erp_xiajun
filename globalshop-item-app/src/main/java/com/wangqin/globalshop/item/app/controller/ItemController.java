@@ -178,9 +178,9 @@ public class ItemController {
             	return result;
             }
             if(0 == minPrice.compareTo(maxPrice)) {
-            	item.setPriceRange(minPrice.stripTrailingZeros().toPlainString());
+            	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString()));
             } else {
-            	item.setPriceRange(minPrice.stripTrailingZeros().toPlainString()+"-"+maxPrice.stripTrailingZeros().toPlainString());
+            	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString())+"-"+PriceUtil.formatPrice(maxPrice.toPlainString()));
             }
             
             //检查更新的这些upc是否和数据库里面(除了正在更新的这个商品的sku)的重复
@@ -345,8 +345,9 @@ public class ItemController {
         newItem.setMainPic(item.getMainPic());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setIsSale(item.getIsSale().byteValue());
-        //newItem.setLogisticType(item.getLogisticType().byteValue());
-    
+        if(null != item.getLogisticType()) {
+        	newItem.setLogisticType(item.getLogisticType().byteValue());
+        }    
         iItemService.updateByIdSelective(newItem);	
         return result.buildIsSuccess(true);
     }
@@ -731,6 +732,8 @@ public class ItemController {
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
     }
+    
+    //给价格区间接口加上0
 
 }
 
