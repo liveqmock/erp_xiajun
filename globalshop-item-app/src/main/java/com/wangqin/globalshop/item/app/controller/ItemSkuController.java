@@ -39,6 +39,7 @@ import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.PicModel;
+import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
@@ -168,7 +169,7 @@ public class ItemSkuController  {
 		ISkuDTO sku = iItemSkuService.queryItemSkuBySkuCode(skuCode);		
 		ItemDO itemDO = itemService.queryItemDOByItemCode(sku.getItemCode());
 		//更新价格区间
-		String newPriceRange = calNewPriceRange(skuPriceList);
+		String newPriceRange = PriceUtil.calNewPriceRange(skuPriceList);
 		ItemDO updateItem = new ItemDO();
 		updateItem.setId(itemDO.getId());
 		updateItem.setModifier(AppUtil.getLoginUserId());
@@ -443,20 +444,20 @@ public class ItemSkuController  {
      * @param newSkuPrice 当前sku的价格List
      * @return
      */
-    private static String calNewPriceRange(List<Double> newSkuPrice) {
-    	BigDecimal minPrice = new BigDecimal(newSkuPrice.get(0).toString());
-		BigDecimal maxPrice = new BigDecimal(newSkuPrice.get(0).toString());		
-		for(Double newPirce:newSkuPrice) {		
-			BigDecimal curSkuPrice = new BigDecimal(newPirce.toString());
-			maxPrice = maxPrice.compareTo(curSkuPrice) < 0 ? curSkuPrice : maxPrice;
-			minPrice = minPrice.compareTo(curSkuPrice) > 0 ? curSkuPrice : minPrice;
-		}   		 
-		if(0 == maxPrice.compareTo(minPrice)) {
-			return maxPrice.stripTrailingZeros().toPlainString();
-		} else {
-			return minPrice.stripTrailingZeros().toPlainString()+"-"+maxPrice.stripTrailingZeros().toPlainString();
-		}
-    }
+//    private static String calNewPriceRange(List<Double> newSkuPrice) {
+//    	BigDecimal minPrice = new BigDecimal(newSkuPrice.get(0).toString());
+//		BigDecimal maxPrice = new BigDecimal(newSkuPrice.get(0).toString());		
+//		for(Double newPirce:newSkuPrice) {		
+//			BigDecimal curSkuPrice = new BigDecimal(newPirce.toString());
+//			maxPrice = maxPrice.compareTo(curSkuPrice) < 0 ? curSkuPrice : maxPrice;
+//			minPrice = minPrice.compareTo(curSkuPrice) > 0 ? curSkuPrice : minPrice;
+//		}   		 
+//		if(0 == maxPrice.compareTo(minPrice)) {
+//			return maxPrice.toPlainString();
+//		} else {
+//			return minPrice.toPlainString()+"-"+maxPrice.stripTrailingZeros().toPlainString();
+//		}
+//    }
     
     //查询规格列表，不用的请求
 	@RequestMapping("/scaleTypeList")
