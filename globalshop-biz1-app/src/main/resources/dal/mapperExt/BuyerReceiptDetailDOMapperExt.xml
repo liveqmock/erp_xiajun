@@ -14,16 +14,15 @@
     <result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
     <result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="batch_num" property="batchNum" jdbcType="INTEGER" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, sku_code, item_code,company_no, price, quantity, upc, receipt_no, buyer_task_detail_no,
-    trans_quantity, sku_buysite, purchase_storage_no, gmt_create, gmt_modify, is_del, 
-    creator, modifier
+    id, sku_code, item_code, price, quantity, upc, receipt_no, company_no, buyer_task_detail_no,
+    trans_quantity, sku_buysite, purchase_storage_no, modifier, creator, batch_num, gmt_modify, gmt_create
   </sql>
   <select id="list" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDetailDO">
     SELECT <include refid="Base_Column_List"/>
@@ -31,6 +30,6 @@
     WHERE
     company_no=#{companyNo}
     and is_del = 0
-
+    ORDER BY gmt_create desc
   </select>
 </mapper>

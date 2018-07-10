@@ -76,8 +76,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    public void delete(MallSubOrderDO erpOrder) {
-        mallSubOrderDOMapper.deleteByPrimaryKey(erpOrder.getId());
+    public void delete(MallSubOrderDO order) {
+        mallSubOrderDOMapper.deleteByPrimaryKey(order.getId());
     }
 
     @Override

@@ -53,6 +53,23 @@ public class BuyerStorageDetailVo {
 
 	private Date opTime;
 
+	private Integer batchNum;
+
+	private String buyerTaskNo;
+
+
+	public String getBuyerTaskNo() {
+		return buyerTaskNo;
+	}
+	public void setBuyerTaskNo(String buyerTaskNo) {
+		this.buyerTaskNo = buyerTaskNo;
+	}
+	public Integer getBatchNum() {
+		return batchNum;
+	}
+	public void setBatchNum(Integer batchNum) {
+		this.batchNum = batchNum;
+	}
 	public String getCompanyNo() {
 		return companyNo;
 	}

@@ -250,7 +250,7 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void ship(MallSubOrderDO orderDO) throws ErpCommonException {
+    public Map<InventoryOnWareHouseDO, Long> ship(MallSubOrderDO orderDO) throws ErpCommonException {
         /**修改库存  和  库存占用*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(orderDO.getSkuCode(),AppUtil.getLoginUserCompanyNo());
         /**
@@ -275,6 +275,7 @@ public class InventoryServiceImpl implements InventoryService {
             mallSubOrderMapper.updateByPrimaryKeySelective(orderDO);
             saveInventoryInOut(inventoryDO, houseDO, opeatory, map.get(houseDO), "发货出库");
         }
+        return map;
     }
 
 
