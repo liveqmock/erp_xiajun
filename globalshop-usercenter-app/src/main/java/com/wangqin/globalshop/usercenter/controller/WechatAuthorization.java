@@ -1,7 +1,11 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.usercenter.wechat_sdk.AesException;
 import com.wangqin.globalshop.usercenter.wechat_sdk.WXBizMsgCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/account")
 public class WechatAuthorization {
+    @Autowired
+    private InventoryOnWarehouseMapperExt mapper;
     @RequestMapping("/authorization")
     public void getComponentVerifyTicket(@RequestParam("timestamp")String timestamp, @RequestParam("nonce")String nonce,
                                            @RequestParam("msg_signature")String msgSignature, @RequestBody String postData){
@@ -34,8 +40,11 @@ public class WechatAuthorization {
             e.printStackTrace();
         }
 
-
-
+    }
+    @RequestMapping("index")
+    public String aa(){
+        InventoryOnWareHouseDO inventoryOnWareHouseDO = mapper.selectByCompanyNoAndSkuCodeAndWarehouseNo("k6mtqfCUkK", "S0201001T1531213797Q02", "WARE1530156030191");
+        return JSON.toJSONString(inventoryOnWareHouseDO);
     }
 
 }
