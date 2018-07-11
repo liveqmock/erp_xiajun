@@ -166,6 +166,14 @@ public class MallSubOrderController {
 			if(CollectionUtils.isNotEmpty(mainIds)) {
 				shippingOrderService.updateOuterstatus(mainIds);
 			}
+			//更新子订单相应的占用库存
+			for(Long orderId:orderIdList){
+				i++;
+				MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
+				if(erpOrder!=null){
+					inventoryService.release(erpOrder);
+				}
+			}
 			String rmsg = "";
 			if(CollectionUtils.isNotEmpty(errorMsg)){
 				for(String a:errorMsg){
