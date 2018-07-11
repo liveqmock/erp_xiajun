@@ -35,8 +35,10 @@ public class WechatAuthorization {
         try {
             pc = new WXBizMsgCrypt("FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc", "FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc7wud647ryu1", "wx43020a9d04042b56");
 
+            postData = postData.replace("AppId", "ToUserName");
             String result2 = pc.DecryptMsg(msgSignature, timestamp, nonce, postData);
             System.out.println("解密后明文:" + result2);
+            //todo componentVerifyTicket
         } catch (AesException e) {
             e.printStackTrace();
         }
@@ -91,9 +93,10 @@ public class WechatAuthorization {
         System.out.println("----------------授权回调接口-------------");
         System.out.println(s);
         System.out.println("----------------授权回调接口-------------");
+        String s1 = "{\"authorization_info\":{\"authorizer_appid\":\"wx43020a9d04042b56\",\"authorizer_access_token\":\"11_pY9m-8ud84q_VSCwvifhB99BADkQLlzdszjmQkigXZcq4hcEKakJ-LTh-kiXz_0HyyS99vADeTO_hlfGfcNKJTD_Ulru7qH49-ulY84DQtkPp9ygw_67WzZ0Qvlub5-JoFJZ4ccAGPK4jYKMKRGaAEDQXM\",\"expires_in\":7200,\"authorizer_refresh_token\":\"refreshtoken@@@uY_TylS98nDRZxV4sjMOmXOxidIVsBSA-f9vhxdGCx4\",\"func_info\":[{\"funcscope_category\":{\"id\":17}},{\"funcscope_category\":{\"id\":18},\"confirm_info\":{\"need_confirm\":0,\"already_confirm\":0,\"can_confirm\":0}},{\"funcscope_category\":{\"id\":19}},{\"funcscope_category\":{\"id\":25},\"confirm_info\":{\"need_confirm\":0,\"already_confirm\":0,\"can_confirm\":0}},{\"funcscope_category\":{\"id\":30},\"confirm_info\":{\"need_confirm\":0,\"already_confirm\":0,\"can_confirm\":0}},{\"funcscope_category\":{\"id\":31},\"confirm_info\":{\"need_confirm\":0,\"already_confirm\":0,\"can_confirm\":0}},{\"funcscope_category\":{\"id\":36}},{\"funcscope_category\":{\"id\":37}},{\"funcscope_category\":{\"id\":40}}]}}\n";
         return "success";
     }
-
+    private String accessToken ="11_pY9m-8ud84q_VSCwvifhB99BADkQLlzdszjmQkigXZcq4hcEKakJ-LTh-kiXz_0HyyS99vADeTO_hlfGfcNKJTD_Ulru7qH49-ulY84DQtkPp9ygw_67WzZ0Qvlub5-JoFJZ4ccAGPK4jYKMKRGaAEDQXM";
 
     private String getToken() {
         String componentAccessToken = (String)loginCache.get("component_access_token");
