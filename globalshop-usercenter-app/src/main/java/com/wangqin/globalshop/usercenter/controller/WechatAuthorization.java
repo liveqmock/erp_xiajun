@@ -62,7 +62,11 @@ public class WechatAuthorization {
             for (Element element : elementList) {
                 resultMap.put(element.getName(), element.getText());
             }
+            System.out.println("resultMap");
+            System.out.println(resultMap);
             String componentVerifyTicket = resultMap.get("ComponentVerifyTicket");
+            System.out.println("componentVerifyTicket");
+            System.out.print(componentVerifyTicket);
             loginCache.put("componentVerifyTicket", componentVerifyTicket);
         } catch (AesException | DocumentException e) {
             e.printStackTrace();
