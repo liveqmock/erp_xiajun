@@ -2,15 +2,30 @@ package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
 import java.util.Date;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
+
 /**
  * 库存流水查询返回
  * @author zhulu
  *
  */
-public class InventoryInoutVO {
+public class InventoryInoutVO extends PageQueryVO{
 
-	
-	private Long id;
+    private Long id;
+
+    private String companyNo;
+
+    private String itemCode;
+
+    private String inventoryOnWarehouseNo;
+
+    private String remark;
+
+    private Long quantity;
+
+    private String creator;
+
+    private String modifier;
 
 	/**
 	 * skuCode
@@ -19,9 +34,6 @@ public class InventoryInoutVO {
 	/**
 	 * 出入库数量
 	 */
-	private int quantity;
-
-
 	private String itemName;
 	
 	private String upc;
@@ -58,12 +70,6 @@ public class InventoryInoutVO {
 	}
 	public void setSkuCode(String skuCode) {
 		this.skuCode = skuCode;
-	}
-	public int getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 	public String getItemName() {
 		return itemName;
@@ -116,5 +122,48 @@ public class InventoryInoutVO {
 	public void setShelfNo(String shelfNo) {
 		this.shelfNo = shelfNo;
 	}
+	public String getCompanyNo() {
+		return companyNo;
+	}
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
+	public String getItemCode() {
+		return itemCode;
+	}
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+	public String getInventoryOnWarehouseNo() {
+		return inventoryOnWarehouseNo;
+	}
+	public void setInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+		this.inventoryOnWarehouseNo = inventoryOnWarehouseNo;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public Long getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Long quantity) {
+		this.quantity = quantity;
+	}
+	public String getCreator() {
+		return creator;
+	}
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+	public String getModifier() {
+		return modifier;
+	}
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
+	}
+	
 	
 }

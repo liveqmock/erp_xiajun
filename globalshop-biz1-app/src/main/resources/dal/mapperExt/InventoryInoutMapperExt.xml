@@ -17,6 +17,22 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
+   <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
+    <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+    <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
+    <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="BIT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
   <!-- 2.0 -->
   <sql id="Base_Column_List" >
     id, company_no, item_code, sku_code, inventory_on_warehouse_no, warehouse_no, shelf_no, 
@@ -71,9 +87,6 @@
 			<if test="positionNo!=null and positionNo!=''">
 				and shelf_no = #{positionNo}
 			</if>
-			<if test="companyNo!=null and companyNo!=''">
-				and company_no = #{companyNo}
-			</if>
 		</where>
 
     </select>
@@ -95,5 +108,19 @@
 			<![CDATA[ T1.gmt_create >= #{today} ]]>
 		</if>
 		</where>
+    </select>
+    <!-- 通过skucode 查出商品的名称 upc sku图片 -->
+    <select id="selectItemBySkuCode" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+    	SELECT
+    		item_name itemName,
+    		upc,
+    		sku_pic skuPic
+    	FROM
+    		item_sku
+    	WHERE
+    		sku_code = #{skuCode}
+    		AND
+    		is_del = 0
+    		
     </select>
 </mapper>

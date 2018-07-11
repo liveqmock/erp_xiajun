@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import com.wangqin.globalshop.common.utils.*;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,8 +28,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
@@ -38,14 +41,6 @@ import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.shiro.ShiroUser;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.JsonPageResult;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.common.utils.PicModel;
-import com.wangqin.globalshop.common.utils.Underline2Camel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
@@ -210,46 +205,36 @@ public class InventoryController {
      */
     @RequestMapping("/inventoryCheckIn")
     @ResponseBody
-    public Object inventoryCheckIn(String skuCode, Long warehouseId, String positionNo, Long quantity)
+    public Object inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity, String shelfNo)
             throws InventoryException {
-        inventoryService.checkIn(skuCode, warehouseId, positionNo, quantity);
-//		// 非空校验
-//		if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
-//			return JsonResult.buildFailed("有空数据");
-//		} else {
-//			if (quantity <= 0) {
-//				return	JsonResult.buildFailed("增加库存要为正数");
-//			}
-//			try {
-//				inventoryAreaService.inventoryCheckIn(skuCode, warehouseId, positionNo, quantity);
-//			} catch (ErpCommonException e) {
-//				return JsonResult.buildFailed(e.getErrorMsg());
-//			} catch (Exception ex) {
-//				return JsonResult.buildFailed("未知异常");
-//			}
+        try {
+            inventoryService.inventoryCheckIn(inventoryOnWarehouseNo, skuCode, quantity);
+            // 修改货架
+            inventoryService.updateSelfNo(inventoryOnWarehouseNo, shelfNo);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        } catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
+        }
+
+
+
 //			//对子订单进行库存分配
 //			erpOrderService.queryBySkuCode(skuCode);
-
 //		}
         return JsonResult.buildSuccess(null);
     }
 
     @RequestMapping("/inventoryCheckOut")
     @ResponseBody
-    public Object inventoryCheckOut(Long inventoryAreaId, Long quantity) throws InventoryException {
-        inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
-//		// 非空校验
-//		if (inventoryAreaId== null ||quantity == null) {
-//			return JsonResult.buildFailed("有空数据");
-//		}else{
-//			if (quantity <= 0) {
-//				return JsonResult.buildFailed("减少的库存要为正数");
-//			}
-//			try {
-//				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
-//			} catch (Exception ex) {
-//				return JsonResult.buildFailed("未知异常");
-//			}
+    public Object inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity) throws InventoryException {
+        try {
+            inventoryService.inventoryCheckOut(inventoryOnWarehouseNo, skuCode, quantity);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        } catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
+        }
 //
 //			//对子订单进行库存分配
 //			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectByNo(inventoryAreaId);
@@ -301,14 +286,31 @@ public class InventoryController {
     @RequestMapping("/queryInventoryInout")
     @ResponseBody
     public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-        JsonResult<List<InventoryInoutDO>> result = new JsonResult<>();
+    	JsonResult<List<InventoryInoutDO>> result = new JsonResult<>();
         try {
 //			Integer count =  inventoryInoutService.queryInventoryInoutCount(inventoryQueryVO);
 //			if(count!=null&&count!=0L){
 //				result.buildPage(count, inventoryQueryVO);
-//            ItemSkuDO item = itemSkuService.selectItemByItemCode(inventoryQueryVO.getItemName());
-            List<InventoryInoutDO> list = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
-//            list.forEach(inout ->
+//            ItemSkuDO item = itemSkuService.selectItemByItemCode(inventoryQueryVO.getItemName());            
+        	List<InventoryInoutDO> list = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
+        	List<InventoryInoutVO> listVO = new ArrayList<>();
+        	InventoryInoutVO invVO = new InventoryInoutVO();
+        	ItemSkuDO itemSkuDO = new ItemSkuDO();
+        	for(int i = 0; i < list.size(); i ++) {
+        		InventoryInoutDO inventoryInoutDO = list.get(i);
+        		itemSkuDO = inventoryInoutService.selectItemBySkuCode(inventoryInoutDO.getSkuCode());
+        		invVO.setSkuCode(inventoryInoutDO.getSkuCode());
+        		invVO.setItemName(itemSkuDO.getItemName());
+        		invVO.setUpc(itemSkuDO.getUpc());
+        		invVO.setSkuPic(itemSkuDO.getSkuPic());
+        		invVO.setCompanyNo(inventoryInoutDO.getCompanyNo());
+        		invVO.setCreator(inventoryInoutDO.getCreator());
+        		invVO.setGmtCreate(inventoryInoutDO.getGmtCreate());
+        		invVO.setShelfNo(inventoryInoutDO.getShelfNo());
+        		invVO.setOperatorType(inventoryInoutDO.getOperatorType());
+        		listVO.add(invVO);
+        	}
+            //            list.forEach(inout ->
 //                    inout.setWarehouseName(warehouseService.selectByWarehouseNo(inout.getWarehouseNo()))
 //            );
             result.setData(list);
@@ -409,26 +411,44 @@ public class InventoryController {
     /**
      * 修改货架号
      *
-     * @param inventoryAreaId
-     * @param positionNo
-     * @return
      */
     @RequestMapping("/changePositionNo")
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
-    public Object changePositionNo(Long inventoryAreaId, String positionNo) {
-        if (StringUtil.isBlank(positionNo)) {
-            return JsonResult.buildFailed("货架号不能为空！");
+    public Object changePositionNo(String inventoryOnWarehouseNo, String shelfNo) {
+        try {
+            inventoryService.updateSelfNo(inventoryOnWarehouseNo, shelfNo);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        } catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
         }
-        InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
-        if (inventoryArea.getInventory() > 0 || inventoryArea.getLockedInv() > 0) {
-            return JsonResult.buildFailed("此库存已有现货库存，不能更改货架号！");
-        } else {
-//    		inventoryArea.setPositionNo(positionNo);
-            inventoryAreaService.changePositionNo(inventoryArea);
-            return JsonResult.buildSuccess(null);
-        }
+        return JsonResult.buildSuccess(null);
     }
+
+//    /**
+//     * 修改货架号
+//     *
+//     * @param inventoryAreaId
+//     * @param positionNo
+//     * @return
+//     */
+//    @RequestMapping("/changePositionNo")
+//    @ResponseBody
+//    @Transactional(rollbackFor = ErpCommonException.class)
+//    public Object changePositionNo(Long inventoryAreaId, String positionNo) {
+//        if (StringUtil.isBlank(positionNo)) {
+//            return JsonResult.buildFailed("货架号不能为空！");
+//        }
+//        InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+//        if (inventoryArea.getInventory() > 0 || inventoryArea.getLockedInv() > 0) {
+//            return JsonResult.buildFailed("此库存已有现货库存，不能更改货架号！");
+//        } else {
+////    		inventoryArea.setPositionNo(positionNo);
+//            inventoryAreaService.changePositionNo(inventoryArea);
+//            return JsonResult.buildSuccess(null);
+//        }
+//    }
 
     /**
      * 添加出库单
