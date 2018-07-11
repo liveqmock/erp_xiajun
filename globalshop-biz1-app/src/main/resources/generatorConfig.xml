@@ -699,21 +699,21 @@
         <!--</table>-->
 
 
-        <table tableName="db_migrate_receive_record" domainObjectName="DbMigrateReceiveRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
-            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
-            <ignoreColumn column="is_del" delimitedColumnName=""/>
-        </table>
+        <!--<table tableName="db_migrate_receive_record" domainObjectName="DbMigrateReceiveRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
 
-        <table tableName="db_migrate_send_record" domainObjectName="DbMigrateSendRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
-            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
-            <ignoreColumn column="is_del" delimitedColumnName=""/>
-        </table>
+        <!--<table tableName="db_migrate_send_record" domainObjectName="DbMigrateSendRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
 
         <!--<table tableName="applet_config" domainObjectName="AppletConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
