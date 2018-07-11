@@ -37,10 +37,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/account")
 public class WechatAuthorization {
-//    @Resource
-//    private Cache loginCache;
-    @Autowired
-    private RedisTemplate redisTemplate;
+    @Resource
+    private Cache loginCache;
+//    @Autowired
+//    private RedisTemplate redisTemplate;
 
     @RequestMapping("/authorization")
     public void getComponentVerifyTicket(@RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce,
@@ -66,13 +66,12 @@ public class WechatAuthorization {
             for (Element element : elementList) {
                 resultMap.put(element.getName(), element.getText());
             }
-            System.out.println("resultMap");
-            System.out.println(resultMap);
+            System.out.println("resultMap+++++++++++");
+            System.out.println(resultMap.toString());
             String componentVerifyTicket = resultMap.get("ComponentVerifyTicket");
-            System.out.println("componentVerifyTicket");
-            System.out.print(componentVerifyTicket);
-            ValueOperations ops = redisTemplate.opsForValue();
-            ops.set("componentVerifyTicket", componentVerifyTicket);
+            System.out.println("componentVerifyTicket+++++++++++++++");
+            System.out.println(componentVerifyTicket);
+            loginCache.put("componentVerifyTicket", componentVerifyTicket);
         } catch (AesException | DocumentException e) {
             e.printStackTrace();
         } finally {
@@ -103,10 +102,11 @@ public class WechatAuthorization {
             JSONObject object = JSON.parseObject(post);
             /**预授权码*/
             String preAuthCode = object.getString("pre_auth_code");
-
+            System.out.println("预授权码:"+preAuthCode);
             re_url = URLEncoder.encode("http://test.buyer007.cn/account/queryAuth", "UTF-8");
 
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
+            System.out.println("回调地址:"+reUrl);
             return "<html><head><title>Title</title></head><body><a href=\"" + reUrl + "\">授权小程序</a></body>\n" +
                     "</html>";
         } catch (UnsupportedEncodingException e) {
@@ -141,14 +141,13 @@ public class WechatAuthorization {
 
 
     private String getToken() {
-        ValueOperations ops = redisTemplate.opsForValue();
-        String componentAccessToken = (String) ops.get("component_access_token");
+        String componentAccessToken = (String) loginCache.get("component_access_token");
         /**判断数据库中是否存在component_access_token*/
         if (!EasyUtil.isStringEmpty(componentAccessToken)) {
             /**如果存在，直接返回token的值*/
             return componentAccessToken;
         }
-        String componentVerifyTicket = (String) ops.get("componentVerifyTicket");
+        String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
         String url = "https://api.weixin.qq.com/cgi-bin/component/api_component_token";
         String param = "{\"component_appid\":\"" + componentAppid + "\",\"component_appsecret\": \"" + componentAppsecret + "\",\"component_verify_ticket\":\"" + componentVerifyTicket + "\"}";
         String s = PayUtil.httpRequest(url, "POST", param);
@@ -158,7 +157,7 @@ public class WechatAuthorization {
         /**在返回结果中获取token*/
         /**保存token，并设置有效时间*/
 
-        ops.set("component_access_token", componentAccessToken, 7200000L);
+        loginCache.putEx("component_access_token", componentAccessToken, 7200000L);
         return componentAccessToken;
 
     }
