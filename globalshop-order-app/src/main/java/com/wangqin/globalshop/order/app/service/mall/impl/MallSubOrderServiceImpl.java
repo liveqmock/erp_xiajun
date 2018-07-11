@@ -363,4 +363,10 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 		// TODO Auto-generated method stub
 		return mallSubOrderDOMapper.selectByOrderNoVo(ordderNo);
 	}
+
+	@Override
+	public void deleteByHardSub(Long id) {
+		// TODO Auto-generated method stub
+		mallSubOrderDOMapper.deleteByPrimaryKey(id);
+	}
 }
