@@ -293,6 +293,14 @@
     <!--<update id="updateUpcForInventoryArea" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">-->
     <!--UPDATE inventory_area SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId}-->
     <!--</update>-->
+    <select id="getByInventoryOnWarehouseNo"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        WHERE inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
+    </select>
     <select id="selectByCompanyNoAndSkuCodeAndWarehouseNo"
             resultMap="BaseResultMap">
         SELECT
