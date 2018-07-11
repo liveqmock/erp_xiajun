@@ -144,6 +144,7 @@ public class WechatAuthorization {
         String componentAccessToken = (String) loginCache.get("component_access_token");
         /**判断数据库中是否存在component_access_token*/
         if (!EasyUtil.isStringEmpty(componentAccessToken)) {
+            System.out.println("token============"+componentAccessToken);
             /**如果存在，直接返回token的值*/
             return componentAccessToken;
         }
@@ -153,10 +154,9 @@ public class WechatAuthorization {
         String s = PayUtil.httpRequest(url, "POST", param);
         JSONObject obj = JSON.parseObject(s);
         componentAccessToken = obj.getString("component_access_token");
-        System.out.println(componentAccessToken);
         /**在返回结果中获取token*/
         /**保存token，并设置有效时间*/
-
+        System.out.println("token============"+componentAccessToken);
         loginCache.putEx("component_access_token", componentAccessToken, 7200000L);
         return componentAccessToken;
 
