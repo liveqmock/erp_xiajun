@@ -80,7 +80,7 @@ public class WechatAuthorization {
 
 
     private String getToken() {
-        String componentAccessToken = loginCache.get("component_access_token").toString();
+        String componentAccessToken = (String)loginCache.get("component_access_token");
 //        String componentVerifyTicket = ops.get("component_verify_ticket");
         /**判断数据库中是否存在component_access_token*/
         if (!EasyUtil.isStringEmpty(componentAccessToken)) {
@@ -97,7 +97,7 @@ public class WechatAuthorization {
         String param = "{\"component_appid\":\"" + componentAppid + "\",\"component_appsecret\": \"" + componentAppsecret + "\",\"component_verify_ticket\":\""+componentVerifyTicket +"\"}";
         String s = PayUtil.httpRequest(url, "POST", param);
         JSONObject obj = JSON.parseObject(s);
-        componentAccessToken = obj.getString("access_token");
+        componentAccessToken = obj.getString("component_access_token");
         System.out.println(componentAccessToken);
         /**在返回结果中获取token*/
         /**保存token，并设置有效时间*/
