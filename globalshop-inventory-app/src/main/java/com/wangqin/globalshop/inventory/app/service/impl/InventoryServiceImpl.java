@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -211,6 +211,10 @@ public class InventoryServiceImpl implements InventoryService {
         insertInv(inventoryDO, quantity);
         /**增加仓库库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByPrimaryKey(warehouseId);
+        /**校验仓库是否存在*/
+        if(houseDO == null) {
+            throw new ErpCommonException("仓库不存在");
+        }
         houseDO.setInventory(houseDO.getLockedInv() + quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**新增流水*/

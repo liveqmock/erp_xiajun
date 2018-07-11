@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import com.wangqin.globalshop.common.utils.*;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -38,14 +39,6 @@ import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.shiro.ShiroUser;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.JsonPageResult;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.common.utils.PicModel;
-import com.wangqin.globalshop.common.utils.Underline2Camel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
@@ -212,7 +205,21 @@ public class InventoryController {
     @ResponseBody
     public Object inventoryCheckIn(String skuCode, Long warehouseId, String positionNo, Long quantity)
             throws InventoryException {
-        inventoryService.checkIn(skuCode, warehouseId, positionNo, quantity);
+        // 增加非空校验
+        if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
+            return JsonResult.buildFailed("有空数据");
+        }
+        if (quantity <= 0) {
+            return JsonResult.buildFailed("增加库存要为正数");
+        }
+        try {
+            inventoryService.checkIn(skuCode, warehouseId, positionNo, quantity);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        }
+        catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
+        }
 //		// 非空校验
 //		if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
 //			return JsonResult.buildFailed("有空数据");
