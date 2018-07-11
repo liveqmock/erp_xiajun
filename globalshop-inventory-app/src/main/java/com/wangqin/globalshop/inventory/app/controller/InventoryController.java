@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import com.wangqin.globalshop.common.utils.*;
-import org.apache.ibatis.annotations.Param;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
@@ -205,39 +203,20 @@ public class InventoryController {
      */
     @RequestMapping("/inventoryCheckIn")
     @ResponseBody
-    public Object inventoryCheckIn(String skuCode, @RequestParam("warehouseId") String warehouseNo, String positionNo, Long quantity)
+    public Object inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity, String shelfNo)
             throws InventoryException {
-        // 新表 position_no 改为 shelf_no
-        String shelfNo = positionNo;
-        // 增加非空校验
-        if (skuCode == null || warehouseNo == null || StringUtils.isBlank(shelfNo) || quantity == null) {
-            return JsonResult.buildFailed("有空数据");
-        }
-        if (quantity <= 0) {
-            return JsonResult.buildFailed("增加库存要为正数");
-        }
         try {
-            inventoryService.checkIn(skuCode, quantity, warehouseNo, shelfNo);
+            inventoryService.inventoryCheckIn(inventoryOnWarehouseNo, skuCode, quantity);
+            // 修改货架
+            inventoryService.updateSelfNo(inventoryOnWarehouseNo, shelfNo);
         } catch (ErpCommonException e) {
             return JsonResult.buildFailed(e.getErrorMsg());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return JsonResult.buildFailed("未知异常");
         }
-//		// 非空校验
-//		if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
-//			return JsonResult.buildFailed("有空数据");
-//		} else {
-//			if (quantity <= 0) {
-//				return	JsonResult.buildFailed("增加库存要为正数");
-//			}
-//			try {
-//				inventoryAreaService.inventoryCheckIn(skuCode, warehouseId, positionNo, quantity);
-//			} catch (ErpCommonException e) {
-//				return JsonResult.buildFailed(e.getErrorMsg());
-//			} catch (Exception ex) {
-//				return JsonResult.buildFailed("未知异常");
-//			}
+
+
+
 //			//对子订单进行库存分配
 //			erpOrderService.queryBySkuCode(skuCode);
 //		}
@@ -246,34 +225,14 @@ public class InventoryController {
 
     @RequestMapping("/inventoryCheckOut")
     @ResponseBody
-    public Object inventoryCheckOut(Long inventoryAreaId, Long quantity) throws InventoryException {
-        // 增加非空校验
-        if (inventoryAreaId == null || quantity == null) {
-            return JsonResult.buildFailed("有空数据");
-        } else {
-            if (quantity < 0) {
-                return JsonResult.buildFailed("减少库存要为正数");
-            }
-        }
+    public Object inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity) throws InventoryException {
         try {
-            inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
+            inventoryService.inventoryCheckOut(inventoryOnWarehouseNo, skuCode, quantity);
         } catch (ErpCommonException e) {
             return JsonResult.buildFailed(e.getErrorMsg());
         } catch (Exception ex) {
             return JsonResult.buildFailed("未知异常");
         }
-//		// 非空校验
-//		if (inventoryAreaId== null ||quantity == null) {
-//			return JsonResult.buildFailed("有空数据");
-//		}else{
-//			if (quantity <= 0) {
-//				return JsonResult.buildFailed("减少的库存要为正数");
-//			}
-//			try {
-//				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
-//			} catch (Exception ex) {
-//				return JsonResult.buildFailed("未知异常");
-//			}
 //
 //			//对子订单进行库存分配
 //			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectByNo(inventoryAreaId);
@@ -433,26 +392,44 @@ public class InventoryController {
     /**
      * 修改货架号
      *
-     * @param inventoryAreaId
-     * @param positionNo
-     * @return
      */
     @RequestMapping("/changePositionNo")
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
-    public Object changePositionNo(Long inventoryAreaId, String positionNo) {
-        if (StringUtil.isBlank(positionNo)) {
-            return JsonResult.buildFailed("货架号不能为空！");
+    public Object changePositionNo(String inventoryOnWarehouseNo, String shelfNo) {
+        try {
+            inventoryService.updateSelfNo(inventoryOnWarehouseNo, shelfNo);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        } catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
         }
-        InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
-        if (inventoryArea.getInventory() > 0 || inventoryArea.getLockedInv() > 0) {
-            return JsonResult.buildFailed("此库存已有现货库存，不能更改货架号！");
-        } else {
-//    		inventoryArea.setPositionNo(positionNo);
-            inventoryAreaService.changePositionNo(inventoryArea);
-            return JsonResult.buildSuccess(null);
-        }
+        return JsonResult.buildSuccess(null);
     }
+
+//    /**
+//     * 修改货架号
+//     *
+//     * @param inventoryAreaId
+//     * @param positionNo
+//     * @return
+//     */
+//    @RequestMapping("/changePositionNo")
+//    @ResponseBody
+//    @Transactional(rollbackFor = ErpCommonException.class)
+//    public Object changePositionNo(Long inventoryAreaId, String positionNo) {
+//        if (StringUtil.isBlank(positionNo)) {
+//            return JsonResult.buildFailed("货架号不能为空！");
+//        }
+//        InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+//        if (inventoryArea.getInventory() > 0 || inventoryArea.getLockedInv() > 0) {
+//            return JsonResult.buildFailed("此库存已有现货库存，不能更改货架号！");
+//        } else {
+////    		inventoryArea.setPositionNo(positionNo);
+//            inventoryAreaService.changePositionNo(inventoryArea);
+//            return JsonResult.buildSuccess(null);
+//        }
+//    }
 
     /**
      * 添加出库单

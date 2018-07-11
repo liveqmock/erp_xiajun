@@ -4,14 +4,13 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.java2d.opengl.OGLContext;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -205,18 +204,24 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void checkIn(String skuCode, Long quantity, String warehouseNo, String shelfNo) {
-
+    public void inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity) {
+        /**增加校验*/
+        if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(skuCode) || quantity == null) {
+            throw new ErpCommonException("有空数据");
+        }
+        if (quantity <= 0) {
+            throw new ErpCommonException("增加库存要为正数");
+        }
         /**增加实际库存*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
         insertInv(inventoryDO, quantity);
-//        /**增加仓库库存*/
-//        InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNo(AppUtil.getLoginUserCompanyNo(),skuCode,warehouseNo);
+        // /**增加仓库库存*/
+        // InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNo(AppUtil.getLoginUserCompanyNo(),skuCode,warehouseNo);
         /**增加仓库对应货架库存*/
-        InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNoAndSelfNo(AppUtil.getLoginUserCompanyNo(), skuCode, warehouseNo, shelfNo);
+        InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
         /**检查仓库及对应货架是否存在*/
         if (houseDO == null) {
-            throw new ErpCommonException("仓库不存在");
+            throw new ErpCommonException("该商品对应仓库货架不存在");
         }
         houseDO.setInventory(houseDO.getInventory() + quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
@@ -225,24 +230,55 @@ public class InventoryServiceImpl implements InventoryService {
         saveInventoryInOut(inventoryDO, houseDO, opeatory, quantity, "盘点入库");
     }
 
+    @Override
+    public void inventoryCheckOut(Long inventoryAreaId, Long quantity) {
+
+    }
+
     /**
      * 盘点减少
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void inventoryCheckOut(Long inventoryAreaId, Long quantity) {
+    public void inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity) {
+        // 增加校验
+        if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(skuCode) || quantity == null) {
+            throw new ErpCommonException("有空数据");
+        }
+        if (quantity <= 0) {
+            throw new ErpCommonException("减少库存要为正数");
+        }
         /**减少仓库库存*/
-        InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByPrimaryKey(inventoryAreaId);
-        houseDO.setInventory(houseDO.getLockedInv() + quantity);
+        InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+        houseDO.setInventory(houseDO.getInventory() - quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**减少实际库存*/
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(houseDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
-        insertInv(inventoryDO, quantity);
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
+        insertInv(inventoryDO, inventoryDO.getInv() - quantity);
 
         /**新增流水*/
         Integer opeatory = 202;
         saveInventoryInOut(inventoryDO, houseDO, opeatory, quantity, "盘点出库");
     }
+
+    /**
+     * 修改货架号
+     *
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void updateSelfNo(String inventoryOnWarehouseNo, String shelfNo) {
+        // 增加校验
+        if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(shelfNo)) {
+            throw new ErpCommonException("有空数据");
+        }
+        InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+        if (!houseDO.getShelfNo().trim().equals(shelfNo.trim())) {
+            houseDO.setShelfNo(shelfNo);
+            invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
+        }
+    }
+
 
     @Override
     public InventoryDO selectBySkuCodeAndCompanyNo(String skuCode, String companyNo) {

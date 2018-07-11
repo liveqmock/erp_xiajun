@@ -116,11 +116,10 @@ public interface InventoryOnWarehouseMapperExt extends InventoryOnWareHouseDOMap
 	List<InventoryOnWarehouseVO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
 	InventoryOnWareHouseDO selectByCompanyNoAndSkuCodeAndWarehouseNo(@Param("companyNo")String companyNo, @Param("skuCode")String skuCode, @Param("warehouseNo")String warehouseNo);
 
-	InventoryOnWareHouseDO selectByCompanyNoAndSkuCodeAndWarehouseNoAndSelfNo(@Param("companyNo")String companyNo, @Param("skuCode")String skuCode, @Param("warehouseNo")String warehouseNo, @Param("shelfNo") String shelfNo);
-
 	List<InventoryOnWareHouseDO> getINvOnWarehouseListOfShip(@Param("skuCode")String skuCode, @Param("companyNo")String companyNo);
 
 //    List<InventoryOnWareHouseDO> selectBySkuCode(@Param("skuCode")String skuCode);
+	InventoryOnWareHouseDO getByInventoryOnWarehouseNo(String inventoryOnWarehouseNo);
 
 	List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(@Param("companyNo") String companyNo,@Param("skuCode") String skuCode);
 }

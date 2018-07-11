@@ -34,10 +34,16 @@ public interface InventoryService {
     /**取消订单*/
     void release(MallSubOrderDO order);
 
-    void checkIn(String skuCode, Long quantity,String warehouseNo, String selfNo);
+    /**库存盘入*/
+    void inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity);
 
+    /**库存盘出*/
     void inventoryCheckOut(Long inventoryAreaId, Long quantity);
 
+    void inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity);
+
+    /**修改货架号*/
+    void updateSelfNo(String inventoryOnWarehouseNo, String selfNo);
 
     InventoryDO selectBySkuCodeAndCompanyNo(String skuCode, String loginUserCompanyNo);
 }
