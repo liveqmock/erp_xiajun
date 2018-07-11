@@ -35,18 +35,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/account")
 public class WechatAuthorization {
-    @Autowired
-    private InventoryOnWarehouseMapperExt mapper;
     @Resource
     private Cache loginCache;
 
     @RequestMapping("/authorization")
     public void getComponentVerifyTicket(@RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce,
                                          @RequestParam("msg_signature") String msgSignature, @RequestBody String postData) {
+        System.out.println("微信轮询开始");
         WXBizMsgCrypt pc;
         InputStream in = null;
         try {
-            pc = new WXBizMsgCrypt("FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc", "FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc7wud647ryu1", "wx43020a9d04042b56");
+            pc = new WXBizMsgCrypt("FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc", "FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc7wud647ryu1", componentAppid);
 
             postData = postData.replace("AppId", "ToUserName");
             String result = pc.DecryptMsg(msgSignature, timestamp, nonce, postData);
