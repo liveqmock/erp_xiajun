@@ -35,9 +35,9 @@ public class InventoryOnWareHouseDO extends BaseModel {
 
     private String batchNo;
 
-    private String creator;
-
     private String modifier;
+
+    private String creator;
 
     public Long getId() {
         return id;
@@ -59,7 +59,6 @@ public class InventoryOnWareHouseDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -176,21 +175,19 @@ public class InventoryOnWareHouseDO extends BaseModel {
         this.batchNo = batchNo == null ? null : batchNo.trim();
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 }

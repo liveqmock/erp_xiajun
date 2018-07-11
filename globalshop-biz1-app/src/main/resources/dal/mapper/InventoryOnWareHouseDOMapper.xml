@@ -19,13 +19,13 @@
     <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
     <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, inventory_on_warehouse_no, company_no, item_code, item_name, upc, scale, sku_code, 
     sku_pic, inventory, locked_inv, trans_inv, locked_trans_inv, warehouse_no, warehouse_name, 
-    shelf_no, batch_no, creator, modifier
+    shelf_no, batch_no, modifier, creator
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -46,15 +46,15 @@
       scale, sku_code, sku_pic, 
       inventory, locked_inv, trans_inv, 
       locked_trans_inv, warehouse_no, warehouse_name, 
-      shelf_no, batch_no, creator, 
-      modifier)
+      shelf_no, batch_no, modifier, 
+      creator)
     values (#{inventoryOnWarehouseNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, 
       #{scale,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{skuPic,jdbcType=VARCHAR}, 
       #{inventory,jdbcType=BIGINT}, #{lockedInv,jdbcType=BIGINT}, #{transInv,jdbcType=BIGINT}, 
       #{lockedTransInv,jdbcType=BIGINT}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
-      #{shelfNo,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+      #{shelfNo,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -110,11 +110,11 @@
       <if test="batchNo != null" >
         batch_no,
       </if>
-      <if test="creator != null" >
-        creator,
-      </if>
       <if test="modifier != null" >
         modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -166,11 +166,11 @@
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null" >
-        #{creator,jdbcType=VARCHAR},
-      </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -225,11 +225,11 @@
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null" >
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -252,8 +252,8 @@
       warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       shelf_no = #{shelfNo,jdbcType=VARCHAR},
       batch_no = #{batchNo,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
