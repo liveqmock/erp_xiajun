@@ -36,6 +36,41 @@
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
     </resultMap>
+    
+    <resultMap id="BaseResultVOMap" type="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR" />
+        <result column="dealer_name" property="dealerName" jdbcType="VARCHAR" />
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="channel_no" property="channelNo" jdbcType="VARCHAR"/>
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR"/>
+        <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR"/>
+        <result column="channel_customer_no" property="channelCustomerNo" jdbcType="VARCHAR"/>
+        <result column="channel_type" property="channelType" jdbcType="VARCHAR"/>
+        <result column="shop_code" property="shopCode" jdbcType="VARCHAR"/>
+        <result column="wx_pay_trade_no" property="wxPayTradeNo" jdbcType="VARCHAR"/>
+        <result column="total_amount" property="totalAmount" jdbcType="DOUBLE"/>
+        <result column="actual_amount" property="actualAmount" jdbcType="DOUBLE"/>
+        <result column="pay_type" property="payType" jdbcType="TINYINT"/>
+        <result column="order_time" property="orderTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="id_card" property="idCard" jdbcType="VARCHAR"/>
+        <result column="idcard_pic_front" property="idcardPicFront" jdbcType="VARCHAR"/>
+        <result column="idcard_pic_reverse" property="idcardPicReverse" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="BIGINT"/>
+        <result column="freight" property="freight" jdbcType="DOUBLE"/>
+        <result column="freight_agent" property="freightAgent" jdbcType="DOUBLE"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+    </resultMap>
+    
     <sql id="Base_Column_List">
         id, dealer_code, dealer_name, union_id,open_id, order_no, company_no, channel_no, channel_name, channel_order_no,
         channel_customer_no, channel_type, shop_code, wx_pay_trade_no, total_amount, actual_amount,
@@ -347,6 +382,39 @@
     <update id="updateWeightForErpOrder" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
     UPDATE mall_sub_order SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_code=#{skuCode}
     </update>
+    <update id="updateByIsDel" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+    	update mall_order
+    set dealer_code = #{dealerCode,jdbcType=VARCHAR},
+      dealer_name = #{dealerName,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR},
+      channel_no = #{channelNo,jdbcType=VARCHAR},
+      channel_name = #{channelName,jdbcType=VARCHAR},
+      channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      channel_customer_no = #{channelCustomerNo,jdbcType=VARCHAR},
+      channel_type = #{channelType,jdbcType=VARCHAR},
+      shop_code = #{shopCode,jdbcType=VARCHAR},
+      wx_pay_trade_no = #{wxPayTradeNo,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DOUBLE},
+      actual_amount = #{actualAmount,jdbcType=DOUBLE},
+      pay_type = #{payType,jdbcType=INTEGER},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      memo = #{memo,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      idcard_pic_front = #{idcardPicFront,jdbcType=VARCHAR},
+      idcard_pic_reverse = #{idcardPicReverse,jdbcType=VARCHAR},
+      source = #{source,jdbcType=BIGINT},
+      freight = #{freight,jdbcType=DOUBLE},
+      freight_agent = #{freightAgent,jdbcType=DOUBLE},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      union_id = #{unionId,jdbcType=VARCHAR},
+      is_del = #{isDel}
+    where id = #{id,jdbcType=BIGINT}
+    </update>
+    
     <select id="selectPositionNoByErpOrderId" resultType="java.lang.String" parameterType="java.lang.Long">
 		select group_concat(CONCAT(position_no, ':', booked)) from inventory_record t where t.erp_order_id=#{erpOrderId}
     </select>
@@ -443,6 +511,15 @@
         WHERE
         order_no = #{orderNo}
 
+    </select>
+    
+    <select id="selectByOrderNoVO" resultMap="BaseResultVOMap" parameterType="java.lang.String">
+    	SELECT
+    	<include refid="Base_Column_List"/>
+    	FROM
+    		mall_order
+    	WHERE
+    		order_no = #{orderNo}
     </select>
     <!-- 今日发货订单表(我也不知道这句话什么意思),XiaJun -->
     <select id="todaySendOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
@@ -548,7 +625,8 @@
                  t2.sku_code skuCode,
                  t1.pay_type payType
                FROM mall_order t1, mall_sub_order t2
-               WHERE t1.order_no = t2.order_no AND t1.is_del != '1'
+               WHERE t1.order_no = t2.order_no AND t1.is_del = 0
+               		AND t2.is_del = 0
                     AND t1.company_no = #{companyNo}
                <if test="orderNo != null">
                	   AND t2.order_no = #{orderNo}
