@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import com.wangqin.globalshop.common.utils.*;
+import org.apache.ibatis.annotations.Param;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
@@ -203,17 +205,19 @@ public class InventoryController {
      */
     @RequestMapping("/inventoryCheckIn")
     @ResponseBody
-    public Object inventoryCheckIn(String skuCode, Long warehouseId, String positionNo, Long quantity)
+    public Object inventoryCheckIn(String skuCode, @RequestParam("warehouseId") String warehouseNo, String positionNo, Long quantity)
             throws InventoryException {
+        // 新表 position_no 改为 shelf_no
+        String shelfNo = positionNo;
         // 增加非空校验
-        if (skuCode == null || warehouseId == null || StringUtils.isBlank(positionNo) || quantity == null) {
+        if (skuCode == null || warehouseNo == null || StringUtils.isBlank(shelfNo) || quantity == null) {
             return JsonResult.buildFailed("有空数据");
         }
         if (quantity <= 0) {
             return JsonResult.buildFailed("增加库存要为正数");
         }
         try {
-            inventoryService.checkIn(skuCode, warehouseId, positionNo, quantity);
+            inventoryService.checkIn(skuCode, quantity, warehouseNo, shelfNo);
         } catch (ErpCommonException e) {
             return JsonResult.buildFailed(e.getErrorMsg());
         }
@@ -236,7 +240,6 @@ public class InventoryController {
 //			}
 //			//对子订单进行库存分配
 //			erpOrderService.queryBySkuCode(skuCode);
-
 //		}
         return JsonResult.buildSuccess(null);
     }
@@ -244,7 +247,21 @@ public class InventoryController {
     @RequestMapping("/inventoryCheckOut")
     @ResponseBody
     public Object inventoryCheckOut(Long inventoryAreaId, Long quantity) throws InventoryException {
-        inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
+        // 增加非空校验
+        if (inventoryAreaId == null || quantity == null) {
+            return JsonResult.buildFailed("有空数据");
+        } else {
+            if (quantity < 0) {
+                return JsonResult.buildFailed("减少库存要为正数");
+            }
+        }
+        try {
+            inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        } catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
+        }
 //		// 非空校验
 //		if (inventoryAreaId== null ||quantity == null) {
 //			return JsonResult.buildFailed("有空数据");

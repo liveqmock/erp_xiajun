@@ -34,7 +34,7 @@ public interface InventoryService {
     /**取消订单*/
     void release(MallSubOrderDO order);
 
-    void checkIn(String skuCode, Long warehouseId, String positionNo, Long quantity);
+    void checkIn(String skuCode, Long quantity,String warehouseNo, String selfNo);
 
     void inventoryCheckOut(Long inventoryAreaId, Long quantity);
 

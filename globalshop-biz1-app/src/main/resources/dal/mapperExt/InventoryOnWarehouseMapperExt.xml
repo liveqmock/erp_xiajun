@@ -303,6 +303,17 @@
         AND sku_code = #{skuCode}
         AND warehouse_no=#{warehouseNo}
     </select>
+    <select id="selectByCompanyNoAndSkuCodeAndWarehouseNoAndSelfNo"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        WHERE company_no = #{companyNo}
+        AND sku_code = #{skuCode}
+        AND warehouse_no=#{warehouseNo}
+        AND shelf_no=#{shelfNo}
+    </select>
     <select id="selectByCompanyNoAndSkuCode"
             resultMap="BaseResultMap">
         SELECT
