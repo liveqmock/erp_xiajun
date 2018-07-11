@@ -2,6 +2,7 @@ package com.wangqin.globalshop.inventory.app.service.impl;
 
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryInoutMapperExt;
@@ -33,4 +34,10 @@ public class InventoryInoutServiceImpl implements IInventoryInoutService {
         inventoryQueryVO.init();
        return inventoryInoutMapperExt.queryInventoryInouts(inventoryQueryVO);
     }
+
+	@Override
+	public ItemSkuDO selectItemBySkuCode(String skuCode) {
+		// TODO Auto-generated method stub
+		return inventoryInoutMapperExt.selectItemBySkuCode(skuCode);
+	}
 }
