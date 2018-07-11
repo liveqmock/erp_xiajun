@@ -597,13 +597,17 @@ public class ItemController {
         	return result.buildIsSuccess(false).buildMsg("失败，没有本公司的商城小程序的appid记录");
         }
         String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
-        System.out.println("part:"+ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
+        //System.out.println("part:"+ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
         JSONObject myJson = JSONObject.fromObject(reponse);
         String token = (String) myJson.get("access_token");
-        String picUrl = iItemService.insertIntoItemDimension(itemId.toString(), "pages/item/detail", token);
+        String itemCode = iItemService.queryItemCodeById(itemId);
+        if(IsEmptyUtil.isStringEmpty(itemCode)) {
+        	return result.buildIsSuccess(false).buildMsg("失败，商品已被删除");
+        }
+        String picUrl = iItemService.insertIntoItemDimension(itemCode, "pages/item/detail", token);
         if (StringUtil.isNotBlank(picUrl)) {
             if (itemId != null) {
-                System.out.println(picUrl);
+                //System.out.println(picUrl);
                 ItemDO item = new ItemDO();
                 item.setId(itemId);
                 item.setQrCodeUrl(picUrl);
