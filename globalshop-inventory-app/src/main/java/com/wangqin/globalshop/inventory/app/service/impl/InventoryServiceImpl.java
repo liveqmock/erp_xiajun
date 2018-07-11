@@ -62,7 +62,7 @@ public class InventoryServiceImpl implements InventoryService {
             exitInventory.setInv(exitInventory.getInv() + inv);
             exitInventory.update();
             /**减少虚拟库存  保证可售不变*/
-            if (virtualInv < inv) {
+            if (virtualInv > inv) {
                 exitInventory.setVirtualInv(virtualInv - inv);
             } else {
                 exitInventory.setVirtualInv(0L);

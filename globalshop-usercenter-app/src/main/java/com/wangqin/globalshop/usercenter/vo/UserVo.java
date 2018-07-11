@@ -25,15 +25,15 @@ public class UserVo implements Serializable {
 	private Long id;
 //	@NotNull(message = "用户编号不能为空")
 	private String userNo;
-	@Size(max = 64,min = 1,message = "登陆名不能为空也不能大于64位")
+//	@Size(max = 64,min = 1,message = "登陆名不能为空也不能大于64位")
 	private String loginName;
-	@Size(max = 64,min = 1,message = "用户名不能为空也不能大于64位")
+//	@Size(max = 64,min = 1,message = "用户名不能为空也不能大于64位")
 	private String name;
-	@Size(max = 64, min = 1, message = "所属公司不能为空也不能大于64位")
+//	@Size(max = 64, min = 1, message = "所属公司不能为空也不能大于64位")
 	private String companyNo;
 
 	@JsonIgnore
-	@Size(max = 64, min = 1, message = "密码不能为空也不能大于64位")
+//	@Size(max = 64, min = 1, message = "密码不能为空也不能大于64位")
 	private String password;
 	private Integer sex;
 	@Min(value = 0, message = "年龄最小只能写0")

@@ -17,7 +17,9 @@ public interface IMallOrderService  {
     void updateById(MallOrderDO outerOrder);
 
     MallOrderDO selectByOrderNo(String orderNo);
-
+    
+    MallOrderVO selectByOrderNoVO(String orderNo);
+    
     List<MallOrderDO> queryByStatus(byte b);
 
     void addOuterOrder(MallOrderVO outerOrder);
@@ -40,4 +42,8 @@ public interface IMallOrderService  {
 
 
     public void dealOrder(JdCommonParam jdCommonParam, GlobalshopOrderVo globalshopOrderVo);
+    
+    void deleteByIsDel(MallOrderVO mallOrderVO);
+    
+    void deleteByHard(MallOrderVO mallOrderVO);
 }

@@ -44,6 +44,9 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
 
 
 	MallOrderDO selectByOrderNo(String orderNo);
+	
+	MallOrderVO selectByOrderNoVO(String orderNo);
+	
 	List<MallOrderDO> queryByStatus(byte status);
 
 	Integer queryOuterOrdersCount(MallOrderVO outerOrderQueryVO);
@@ -61,4 +64,6 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
 
 
     List<MallOrderVO> list(MallOrderVO vo);
+    
+    void updateByIsDel(MallOrderVO mallOrderVO);
 }
