@@ -162,32 +162,37 @@ public class UserController extends BaseController {
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object update(@Valid UserVo userVo, BindingResult result) {
-    	LogWorker.logStart(log, "配置", "userVo{}", userVo);
-    	if(result.hasErrors()) {
-        	StringBuffer sb = new StringBuffer();
-        	for(ObjectError error : result.getAllErrors()) {
-        		sb.append(error.getDefaultMessage()).append(",");
-        	}
-        	return BaseResp.createFailure(sb.toString());
-        }
-    	
-        BaseResp resp = BaseResp.createSuccess("");
-    	String userNo=CodeGenUtil.genUserNo();
-        userVo.setUserNo(userNo);
-        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
-        
-        AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
-        if (authUserLoginName != null ) {
-            return renderError("用户名已存在!");
-        }
-        
-        userService.updateByVo(userVo);
-        userRoleService.deleteUserRoleByUserId(userVo.getId());
-        userService.insertByUserVo(userVo);
-        
-        LogWorker.logEnd(log, "配置", "userVo{}", userVo);
-        
-        return renderSuccess("修改成功");
+
+        //本接口功能与/edit重复，而且实现不对，为保持前端不变，改为调用edit方法去重。
+        return edit(userVo,result);
+
+
+//    	LogWorker.logStart(log, "配置", "userVo{}", userVo);
+//    	if(result.hasErrors()) {
+//        	StringBuffer sb = new StringBuffer();
+//        	for(ObjectError error : result.getAllErrors()) {
+//        		sb.append(error.getDefaultMessage()).append(",");
+//        	}
+//        	return BaseResp.createFailure(sb.toString());
+//        }
+//
+//        BaseResp resp = BaseResp.createSuccess("");
+//    	String userNo=CodeGenUtil.genUserNo();
+//        userVo.setUserNo(userNo);
+//        userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
+//
+//        AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
+//        if (authUserLoginName != null ) {
+//            return renderError("用户名已存在!");
+//        }
+//
+//        userService.updateByVo(userVo);
+//        userRoleService.deleteUserRoleByUserId(userVo.getId());
+//        userService.insertByUserVo(userVo);
+//
+//        LogWorker.logEnd(log, "配置", "userVo{}", userVo);
+//
+//        return renderSuccess("修改成功");
     }
 
     /**
