@@ -40,5 +40,6 @@ public class MallOrderVO extends MallOrderDO {
     private String remark;
     private String addressDetail;
     private String skuCode;
+    private boolean isDel;
 
 }

@@ -40,6 +40,8 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	List<MallSubOrderDO> queryErpOrders(MallSubOrderVO erpOrderQueryVO);
 
 	List<MallSubOrderDO> selectByOrderNo(String orderNo);
+	
+	List<MallSubOrderVO> selectByOrderNoVo(String ordderNo);
 
 	List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
 	void updateOuterOrderDetailByItemSku(@Param("erpOrderIdList")List<String> erpOrderIdList);
@@ -94,5 +96,7 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
     		@Param("shareTime")String shareTime,
     		@Param("start")int start,@Param("pageSize")int pageSize);
 
-	int selectCountWithStateAndOrderNo(@Param("orderNo")String orderNo,@Param("statuts") Integer statuts);
+	int selectCountWithStateAndOrderNo(@Param("orderNo")String orderNo,@Param("status") Integer status);
+	
+	void updateByIsDel(MallSubOrderVO mallSubOrderVO);
 }

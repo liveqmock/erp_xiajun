@@ -50,4 +50,11 @@ public interface IMallSubOrderService {
      * @return
      */
     int selectCountWithStateAndOrderNo(String orderNo, Integer orderSatutsSent);
+    
+    void updateByIsDel(MallSubOrderVO mallSubOrderVO); 
+    
+    List<MallSubOrderVO> selectByOrderNoVo(String ordderNo);
+    
+    void deleteByHardSub(Long id);
 }
+

@@ -76,8 +76,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    public void delete(MallSubOrderDO erpOrder) {
-        mallSubOrderDOMapper.deleteByPrimaryKey(erpOrder.getId());
+    public void delete(MallSubOrderDO order) {
+        mallSubOrderDOMapper.deleteByPrimaryKey(order.getId());
     }
 
     @Override
@@ -350,4 +350,23 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     public int selectCountWithStateAndOrderNo(String orderNo, Integer statuts) {
         return mallSubOrderDOMapper.selectCountWithStateAndOrderNo(orderNo,statuts);
     }
+
+	@Override
+	public void updateByIsDel(MallSubOrderVO mallSubOrderVO) {
+		// TODO Auto-generated method stub
+		
+		mallSubOrderDOMapper.updateByIsDel(mallSubOrderVO);
+	}
+
+	@Override
+	public List<MallSubOrderVO> selectByOrderNoVo(String ordderNo) {
+		// TODO Auto-generated method stub
+		return mallSubOrderDOMapper.selectByOrderNoVo(ordderNo);
+	}
+
+	@Override
+	public void deleteByHardSub(Long id) {
+		// TODO Auto-generated method stub
+		mallSubOrderDOMapper.deleteByPrimaryKey(id);
+	}
 }

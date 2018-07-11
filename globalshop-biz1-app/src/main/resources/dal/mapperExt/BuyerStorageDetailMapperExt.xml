@@ -17,16 +17,22 @@
         <result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
         <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
         <result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
-        <result column="item_code" property="itemCode" jdbcType="BIGINT" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
         <result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
-        <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="mem" property="mem" jdbcType="VARCHAR" />
+        <result column="op_user_no" property="opUserNo" jdbcType="VARCHAR" />
+        <result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
+        <result column="batch_num" property="batchNum" jdbcType="INTEGER" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     </resultMap>
     <sql id="Base_Column_List" >
     id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price,
     currency, upc, quantity, trans_quantity, purchase_storage_no, buyer_task_detail_no,
-    item_code, sku_buysite, creator, modifier, status
+    item_code, sku_buysite, modifier, creator, status, mem, op_user_no, op_time, batch_num, gmt_modify, gmt_create
   </sql>
 
 
@@ -118,7 +124,7 @@
         FROM <include refid="tableSection"/> T
         WHERE
         <include refid="commonSelectSection"/>
-        ORDER BY T.id desc
+        ORDER BY T.gmt_create desc
     </select>
 
 </mapper>

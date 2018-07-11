@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author biscuit
@@ -15,7 +16,7 @@ public interface InventoryService {
     /**超售入库*/
     void outbound(List<InventoryDO> list);
     /**发货*/
-    void ship(MallSubOrderDO mallSubOrderDO) throws ErpCommonException;
+    Map<InventoryOnWareHouseDO, Long> ship(MallSubOrderDO mallSubOrderDO) throws ErpCommonException;
     /**下单*/
     void order(MallOrderDO mallOrderDO);
     /**下单*/
