@@ -5,15 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.EasyUtil;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.WxPay.PayUtil;
 import com.wangqin.globalshop.usercenter.wechat_sdk.AesException;
 import com.wangqin.globalshop.usercenter.wechat_sdk.WXBizMsgCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
@@ -64,7 +60,7 @@ public class WechatAuthorization {
             /**预授权码*/
             String preAuthCode = object.getString("pre_auth_code");
 
-            re_url = URLEncoder.encode("http://test.buyer007.cn", "UTF-8");
+            re_url = URLEncoder.encode("http://test.buyer007.cn/account/queryAuth", "UTF-8");
 
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             return "<html><head><title>Title</title></head><body><a href=\"" + reUrl + "\">授权小程序</a></body>\n" +
@@ -76,6 +72,26 @@ public class WechatAuthorization {
         return "";
 
 
+    }
+
+    /**
+     * 根据auth_code查询授权信息
+     * @param authCode 授权成功时获得的授权码
+     * @param expiresIn 存活时间
+     * @return
+     */
+    @RequestMapping(value = "/queryAuth")
+    public String queryAuth(@RequestParam("auth_code")String authCode, @RequestParam("expires_in")String expiresIn){
+        System.out.println("进入授权回调");
+        System.out.println("auth_code="+authCode);
+        System.out.println("expires_in="+expiresIn);
+        String url = "https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token="+getToken();
+        String param = "{\"component_appid\":\""+componentAppid+"\",\"authorization_code\":\""+authCode+"\"}";
+        String s = PayUtil.httpRequest(url, "POST", param);
+        System.out.println("----------------授权回调接口-------------");
+        System.out.println(s);
+        System.out.println("----------------授权回调接口-------------");
+        return "success";
     }
 
 
