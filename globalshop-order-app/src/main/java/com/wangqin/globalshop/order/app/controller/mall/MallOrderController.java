@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.gargoylesoftware.htmlunit.javascript.host.Set;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
@@ -67,7 +66,7 @@ public class MallOrderController {
         List<MallOrderVO> outerOrder = mallOrderService.list(vo);
         return result.buildData(outerOrder).buildIsSuccess(true);
     }
-     
+
     /**
      * 增加订单
      */
@@ -103,9 +102,9 @@ public class MallOrderController {
      * @return
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody	
+    @ResponseBody
     public Object update(MallOrderVO mallOrderVO) {
-    	
+
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() != null) {
             MallOrderVO selouterOrderVO = mallOrderService.selectByOrderNoVO(mallOrderVO.getOrderNo());
@@ -136,29 +135,27 @@ public class MallOrderController {
                 if (CollectionUtils.isEmpty(outerOrderDetails)) {
                     return JsonResult.buildFailed("没有商品信息");
                 }
-                //创建外部订单
-                selouterOrderVO.setOrderTime(mallOrderVO.getOrderTime());
-                selouterOrderVO.setReceiver(mallOrderVO.getReceiver());
-                selouterOrderVO.setTelephone(mallOrderVO.getTelephone());
-                selouterOrderVO.setPayType(mallOrderVO.getPayType());
-                selouterOrderVO.setAddressDetail(mallOrderVO.getAddressDetail());
-                selouterOrderVO.setReceiverState(mallOrderVO.getReceiverState());
-                selouterOrderVO.setReceiverCity(mallOrderVO.getReceiverCity());
-                selouterOrderVO.setReceiverDistrict(mallOrderVO.getReceiverDistrict());
-                selouterOrderVO.setIdCard(mallOrderVO.getIdCard());
-                selouterOrderVO.setMemo(mallOrderVO.getMemo());
-                mallOrderService.addOuterOrder(selouterOrderVO);
+                    //创建外部订单
+                    selouterOrderVO.setOrderTime(mallOrderVO.getOrderTime());
+	                selouterOrderVO.setOrderTime(mallOrderVO.getOrderTime());
+	                selouterOrderVO.setReceiver(mallOrderVO.getReceiver());
+	                selouterOrderVO.setTelephone(mallOrderVO.getTelephone());
+	                selouterOrderVO.setPayType(mallOrderVO.getPayType());
+	                selouterOrderVO.setAddressDetail(mallOrderVO.getAddressDetail());
+	                selouterOrderVO.setReceiverState(mallOrderVO.getReceiverState());
+	                selouterOrderVO.setReceiverCity(mallOrderVO.getReceiverCity());
+	                selouterOrderVO.setReceiverDistrict(mallOrderVO.getReceiverDistrict());
+	                selouterOrderVO.setIdCard(mallOrderVO.getIdCard());
+	                selouterOrderVO.setMemo(mallOrderVO.getMemo());
+	                mallOrderService.addOuterOrder(selouterOrderVO);
 
             }
-            
             result.buildIsSuccess(true);
-        } else {
-            result.buildData("错误数据").buildIsSuccess(false);
+            } else {
+            	result.buildData("错误数据").buildIsSuccess(false);
+        	}
+        	return result;
         }
-
-        return result;
-    }
-
     /**
      * 查询单个订单
      */

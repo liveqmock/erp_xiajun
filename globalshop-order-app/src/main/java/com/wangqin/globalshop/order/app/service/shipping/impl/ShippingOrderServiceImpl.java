@@ -517,7 +517,11 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 /**物流出库*/
                 erpOrder.setStatus(ORDER_SATUTS_SENT);
                 erpOrder.setShippingNo(shippingNo);
-                inventoryService.ship(erpOrder);
+                Map<InventoryOnWareHouseDO, Long> ship = inventoryService.ship(erpOrder);
+                for (InventoryOnWareHouseDO inventoryOnWareHouseDO : ship.keySet()) {
+
+                    erpOrder.setWarehouseNo(inventoryOnWareHouseDO.getWarehouseNo());
+                }
                 /**拼接erp*/
                 mallSubOrderMapper.updateByPrimaryKey(erpOrder);
                 erpNos.append(erpOrder.getShopCode()).append(",");
