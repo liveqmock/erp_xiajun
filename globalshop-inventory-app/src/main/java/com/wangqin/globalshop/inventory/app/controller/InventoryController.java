@@ -28,8 +28,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
@@ -284,14 +286,31 @@ public class InventoryController {
     @RequestMapping("/queryInventoryInout")
     @ResponseBody
     public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-        JsonResult<List<InventoryInoutDO>> result = new JsonResult<>();
+    	JsonResult<List<InventoryInoutDO>> result = new JsonResult<>();
         try {
 //			Integer count =  inventoryInoutService.queryInventoryInoutCount(inventoryQueryVO);
 //			if(count!=null&&count!=0L){
 //				result.buildPage(count, inventoryQueryVO);
-//            ItemSkuDO item = itemSkuService.selectItemByItemCode(inventoryQueryVO.getItemName());
-            List<InventoryInoutDO> list = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
-//            list.forEach(inout ->
+//            ItemSkuDO item = itemSkuService.selectItemByItemCode(inventoryQueryVO.getItemName());            
+        	List<InventoryInoutDO> list = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
+        	List<InventoryInoutVO> listVO = new ArrayList<>();
+        	InventoryInoutVO invVO = new InventoryInoutVO();
+        	ItemSkuDO itemSkuDO = new ItemSkuDO();
+        	for(int i = 0; i < list.size(); i ++) {
+        		InventoryInoutDO inventoryInoutDO = list.get(i);
+        		itemSkuDO = inventoryInoutService.selectItemBySkuCode(inventoryInoutDO.getSkuCode());
+        		invVO.setSkuCode(inventoryInoutDO.getSkuCode());
+        		invVO.setItemName(itemSkuDO.getItemName());
+        		invVO.setUpc(itemSkuDO.getUpc());
+        		invVO.setSkuPic(itemSkuDO.getSkuPic());
+        		invVO.setCompanyNo(inventoryInoutDO.getCompanyNo());
+        		invVO.setCreator(inventoryInoutDO.getCreator());
+        		invVO.setGmtCreate(inventoryInoutDO.getGmtCreate());
+        		invVO.setShelfNo(inventoryInoutDO.getShelfNo());
+        		invVO.setOperatorType(inventoryInoutDO.getOperatorType());
+        		listVO.add(invVO);
+        	}
+            //            list.forEach(inout ->
 //                    inout.setWarehouseName(warehouseService.selectByWarehouseNo(inout.getWarehouseNo()))
 //            );
             result.setData(list);
