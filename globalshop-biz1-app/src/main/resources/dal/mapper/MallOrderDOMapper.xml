@@ -360,6 +360,7 @@
       modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       union_id = #{unionId,jdbcType=VARCHAR}
+      is_del = #{isDel}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

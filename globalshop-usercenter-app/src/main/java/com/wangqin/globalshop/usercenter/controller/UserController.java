@@ -271,28 +271,21 @@ public class UserController extends BaseController {
      */
     @RequestMapping("/editUserPwd")
     @ResponseBody
-    public Object editUserPwd(String oldPwd, String pwd, @Valid AuthUserDO userDo, BindingResult bindResult) {
-    	LogWorker.logStart(log, "配置", "userVo:{}", userDo);
-    	
-    	if(bindResult.hasErrors()) {
-        	StringBuffer sb = new StringBuffer();
-        	for(ObjectError error : bindResult.getAllErrors()) {
-        		sb.append(error.getDefaultMessage()).append(",");
-        	}
-        	return BaseResp.createFailure(sb.toString());
-        }
-        BaseResp resp = BaseResp.createSuccess("");
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public Object editUserPwd(String oldPwd, String pwd) {
+    	JsonResult<AuthUserDO> result = new JsonResult<>();
     	AuthUserDO user = userService.selectByLoginName(AppUtil.getLoginUserId());
         if (user ==null ) {
-            return renderError("该用户不存在!");
+            return result.buildIsSuccess(false).buildMsg("该用户不存在!");
         }
         if (!user.getPassword().equals(DigestUtils.md5Hex(oldPwd))) {
-            return renderError("老密码不正确!");
+            return result.buildIsSuccess(false).buildMsg("老密码不正确!");
         }
 
         userService.changePasswordByLoginName(AppUtil.getLoginUserId(), DigestUtils.md5Hex(pwd));
-        LogWorker.logEnd(log, "配置", "userDo:{}", userDo);
-        return renderSuccess("密码修改成功！");
+        
+        return result.buildIsSuccess(true).buildMsg("密码修改成功");
+        
     }
 
     /**
