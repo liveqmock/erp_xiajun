@@ -99,6 +99,7 @@ public class WechatAuthorization {
             //language=JSON
             String param = "{\"component_appid\":\"" + componentAppid + "\"}";
             String post = PayUtil.httpRequest(url, "POST", param);
+            System.out.println("获取预授权码回调:"+post);
             JSONObject object = JSON.parseObject(post);
             /**预授权码*/
             String preAuthCode = object.getString("pre_auth_code");
@@ -138,6 +139,7 @@ public class WechatAuthorization {
         System.out.println("----------------授权回调接口-------------");
         return "success";
     }
+//    {"authorization_info":{"authorizer_appid":"wx43020a9d04042b56","authorizer_access_token":"11_ENumAbXuzu28zKh-Hf8WJ1dCG3UGJwYhT9fjFASwRpfHDxioituzWxN4TG5NT6tODvXplVTSEqyjGIpQXEfVcF2dUNvL4hdjkTPrh1ALjuC7xIdqMl1zjC0_cOhwn7hvYMeCaIWITysYpHi5HYHiAEDQHQ","expires_in":7200,"authorizer_refresh_token":"refreshtoken@@@pHG_ZxB_wknyZNjSERpeL5Crc5fOlCn098pmRARTiQg","func_info":[{"funcscope_category":{"id":17}},{"funcscope_category":{"id":18},"confirm_info":{"need_confirm":0,"already_confirm":0,"can_confirm":0}},{"funcscope_category":{"id":19}},{"funcscope_category":{"id":25},"confirm_info":{"need_confirm":0,"already_confirm":0,"can_confirm":0}},{"funcscope_category":{"id":30},"confirm_info":{"need_confirm":0,"already_confirm":0,"can_confirm":0}},{"funcscope_category":{"id":31},"confirm_info":{"need_confirm":0,"already_confirm":0,"can_confirm":0}},{"funcscope_category":{"id":36}},{"funcscope_category":{"id":37}},{"funcscope_category":{"id":40}}]}}
 
 
     private String getToken() {
@@ -157,11 +159,29 @@ public class WechatAuthorization {
         /**在返回结果中获取token*/
         /**保存token，并设置有效时间*/
         System.out.println("token============"+componentAccessToken);
-        loginCache.putEx("component_access_token", componentAccessToken, 7200000L);
+        loginCache.putEx("component_access_token", componentAccessToken, 7200L);
         return componentAccessToken;
 
     }
 
+    public static void main(String[] args) {
+        String k = "ticket@@@2J33clY2wz9SA8iQPPHUmO9r2BXVmilvhhhhiZZiI7j_o2wNSrg0wamwqadIiwyVayS5vfGM-6fFSC-r5Oge7A";
+        String componentAppid = "wxe25c15397f0ec710";
+        String componentAppsecret = "8eb667a448cb3226d57878acfaca84a0";
+        String url = "https://api.weixin.qq.com/cgi-bin/component/api_component_token";
+        String param = "{\"component_appid\":\"" + componentAppid + "\",\"component_appsecret\": \"" + componentAppsecret + "\",\"component_verify_ticket\":\"" + k + "\"}";
+        String s = PayUtil.httpRequest(url, "POST", param);
+        JSONObject obj = JSON.parseObject(s);
+        String component_access_token = obj.getString("component_access_token");
+
+
+        String url1 = "https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=" + component_access_token;
+        //language=JSON
+        String param1 = "{\"component_appid\":\"" + componentAppid + "\"}";
+        String post = PayUtil.httpRequest(url1, "POST", param1);
+        System.out.println("获取预授权码回调:"+post);
+
+    }
 //    public static void main(String[] args) {
 //        ByteArrayInputStream in = new ByteArrayInputStream(result.getBytes());
 //        // 读取输入流
