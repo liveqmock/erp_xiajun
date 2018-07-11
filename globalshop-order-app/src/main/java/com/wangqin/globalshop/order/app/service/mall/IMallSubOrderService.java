@@ -54,5 +54,7 @@ public interface IMallSubOrderService {
     void updateByIsDel(MallSubOrderVO mallSubOrderVO); 
     
     List<MallSubOrderVO> selectByOrderNoVo(String ordderNo);
+    
+    void deleteByHardSub(Long id);
 }
 
