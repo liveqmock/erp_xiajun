@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
@@ -174,6 +175,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
             mallSubOrderDOMapper.updateByPrimaryKeySelective(mallSubOrderDO);
         }
         outerOrder.setIsDel(true);
+        outerOrder.init();
         mallOrderDOMapper.updateByPrimaryKey(outerOrder);
     }
 
@@ -256,5 +258,24 @@ public class MallOrderServiceImpl implements IMallOrderService {
         }
 
     }
+
+	@Override
+	public void deleteByIsDel(MallOrderVO mallOrderVO) {
+		// TODO Auto-generated method stub
+		List<MallSubOrderVO> mallSubOrderVOList = mallSubOrderDOMapper.selectByOrderNoVo(mallOrderVO.getOrderNo());
+        for (MallSubOrderVO mallSubOrderVO : mallSubOrderVOList) {
+        	mallSubOrderVO.setIsDel(true);
+            mallSubOrderDOMapper.updateByIsDel(mallSubOrderVO);
+        }
+        mallOrderVO.setIsDel(true);
+        mallOrderVO.init();
+        mallOrderDOMapper.updateByIsDel(mallOrderVO);
+	}
+
+	@Override
+	public MallOrderVO selectByOrderNoVO(String orderNo) {
+		// TODO Auto-generated method stub
+		return mallOrderDOMapper.selectByOrderNoVO(orderNo);
+	}
 
 }

@@ -36,7 +36,8 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	private Date endGmtCreate;
 	
 	private String closeReason;
-
+	
+	private boolean isDel;
 	@Override
 	public Integer getStatus() {
 		return status;
@@ -100,4 +101,14 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	public void setSkuImg(String skuImg) {
 		this.skuImg = skuImg;
 	}
+
+	public boolean isDel() {
+		return isDel;
+	}
+
+	public void setDel(boolean isDel) {
+		this.isDel = isDel;
+	}
+	
+	
 }

@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.gargoylesoftware.htmlunit.javascript.host.Set;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
@@ -102,8 +103,9 @@ public class MallOrderController {
      * @return
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody
+    @ResponseBody	
     public Object update(MallOrderVO mallOrderVO) {
+    	
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() != null) {
             //只有状态为新建的订单才能修改
@@ -118,13 +120,19 @@ public class MallOrderController {
             }
 
             mallOrderVO.setGmtModify(new Date());
-//			ShiroUser shiroUser = this.getShiroUser();
-//			outerOrder.setUserModify(shiroUser.getLoginName());
+            List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
+            for (MallSubOrderDO mallSubOrderDO : erpOrders) {
+            	//1,释放子订单库存
+                inventoryService.release(mallSubOrderDO);
+                mallSubOrderService.delete(mallSubOrderDO);
+                mallOrderService.delete(mallOrderVO);
+			}
             //订单详情
+            List<MallSubOrderDO> outerOrderDetails = null;
             String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
             if (StringUtils.isNotBlank(outerOrderDetailList)) {
                 String s = outerOrderDetailList.replace("&quot;", "\"");
-                List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
+                outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
                 });
                 mallOrderVO.setOuterOrderDetails(outerOrderDetails);
             }
@@ -151,6 +159,30 @@ public class MallOrderController {
                 }
 
             }
+           
+            
+//            if (CollectionUtils.isNotEmpty(outerOrderDetails)) {
+//                for (MallSubOrderDO erpOrder : outerOrderDetails) {
+//                    erpOrder.setOrderTime(mallOrderVO.getOrderTime());
+//                    erpOrder.setReceiver(mallOrderVO.getReceiver());
+//                    erpOrder.setReceiverCity(mallOrderVO.getReceiverCity());
+//                    erpOrder.setReceiverDistrict(mallOrderVO.getReceiverDistrict());
+//                    erpOrder.setReceiverState(mallOrderVO.getReceiverState());
+//                    erpOrder.setShopCode(mallOrderVO.getShopCode());
+//                    erpOrder.setTelephone(mallOrderVO.getTelephone());
+//                	
+//                    //2,修改子订单
+//                    mallSubOrderService.update(erpOrder);
+//                    //3,重新生成子订单并分配库存。
+////                    inventoryService.order(erpOrder);
+//                }
+//                
+//            }
+            
+            
+            
+            
+            
             result.buildIsSuccess(true);
         } else {
             result.buildData("错误数据").buildIsSuccess(false);
@@ -223,11 +255,12 @@ public class MallOrderController {
     public Object delete(String orderNo) {
         JsonResult<String> result = new JsonResult<>();
         try {
-            MallOrderDO outerOrder = mallOrderService.selectByOrderNo(orderNo);
+            MallOrderVO outerOrder = mallOrderService.selectByOrderNoVO(orderNo);
+            outerOrder.setOrderNo(orderNo);
             if (outerOrder == null || !Objects.equals(outerOrder.getStatus(), ORDER_SATUTS_CLOSE)) {
                 return JsonResult.buildFailed("先关闭才能删除订单");
             }
-            mallOrderService.delete(outerOrder);
+            mallOrderService.deleteByIsDel(outerOrder);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
