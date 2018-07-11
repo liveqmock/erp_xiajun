@@ -2,9 +2,11 @@ package com.wangqin.globalshop.usercenter.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.EasyUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.common.utils.WxPay.PayUtil;
 import com.wangqin.globalshop.usercenter.wechat_sdk.AesException;
 import com.wangqin.globalshop.usercenter.wechat_sdk.WXBizMsgCrypt;
@@ -12,6 +14,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -36,24 +40,33 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/account")
-public class WechatAuthorization {
+public class Wechat3rdPartyAuthorization {
     @Resource
     private Cache loginCache;
-//    @Autowired
-//    private RedisTemplate redisTemplate;
+    private static Logger log = LoggerFactory.getLogger("Wechat3rdPartyAuthorization");
+
+
+    /**
+     * 回调拿Ticket
+     *
+     * @param timestamp
+     * @param nonce
+     * @param msgSignature
+     * @param postData
+     */
 
     @RequestMapping("/authorization")
     public void getComponentVerifyTicket(@RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce,
                                          @RequestParam("msg_signature") String msgSignature, @RequestBody String postData) {
-        System.out.println("微信轮询开始");
+        log.info("-----------------微信回调开始----------------");
         WXBizMsgCrypt pc;
         InputStream in = null;
         try {
             pc = new WXBizMsgCrypt("FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc", "FBDctXZiRWQYjrXMm5txJPAFWsEdkYnc7wud647ryu1", componentAppid);
-
+            log.info("微信回调:postData密文="+postData);
             postData = postData.replace("AppId", "ToUserName");
             String result = pc.DecryptMsg(msgSignature, timestamp, nonce, postData);
-            System.out.println("解密后明文:" + result);
+            log.info("微信回调:postData明文="+postData);
             in = new ByteArrayInputStream(result.getBytes());
             // 读取输入流
             SAXReader reader = new SAXReader();
@@ -66,12 +79,13 @@ public class WechatAuthorization {
             for (Element element : elementList) {
                 resultMap.put(element.getName(), element.getText());
             }
-            System.out.println("resultMap+++++++++++");
-            System.out.println(resultMap.toString());
+
             String componentVerifyTicket = resultMap.get("ComponentVerifyTicket");
-            System.out.println("componentVerifyTicket+++++++++++++++");
-            System.out.println(componentVerifyTicket);
-            loginCache.put("componentVerifyTicket", componentVerifyTicket);
+            log.info("微信回调:component_verify_ticket="+componentVerifyTicket);
+            if (!StringUtils.isBlank(componentVerifyTicket)) {
+                loginCache.put("componentVerifyTicket", componentVerifyTicket);
+            }
+            log.info("-----------------微信回调结束----------------------------");
         } catch (AesException | DocumentException e) {
             e.printStackTrace();
         } finally {
@@ -95,26 +109,29 @@ public class WechatAuthorization {
     public String getHtml() {
         String re_url = null;
         try {
-            String url = "https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=" + getToken();
+            String token = getToken();
+            log.info("获取小程序授权二维码:token==="+token);
+            String url = "https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=" + token;
             //language=JSON
             String param = "{\"component_appid\":\"" + componentAppid + "\"}";
             String post = PayUtil.httpRequest(url, "POST", param);
-            System.out.println("获取预授权码回调:"+post);
+            log.info("获取预授权码结果:" + post);
             JSONObject object = JSON.parseObject(post);
             /**预授权码*/
             String preAuthCode = object.getString("pre_auth_code");
-            System.out.println("预授权码:"+preAuthCode);
-            re_url = URLEncoder.encode("http://test.buyer007.cn/account/queryAuth", "UTF-8");
-
+            log.info("预授权码:" + preAuthCode);
+            //todo 配置的是http://test.buyer007.cn/account/queryAuth 微信文档显示 该回调地址必须是http
+            re_url = URLEncoder.encode("http://test.buyer007.cn/account/authcallback", "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
-            System.out.println("回调地址:"+reUrl);
-            return "<html><head><title>Title</title></head><body><a href=\"" + reUrl + "\">授权小程序</a></body>\n" +
-                    "</html>";
+            //todo 有待优化
+            String html = "<html><head><title>Title</title></head><body><a href=\"" + reUrl + "\">授权小程序</a></body></html>";
+            log.info("html:" + html);
+            return html;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        //todo
-        return "";
+        //todo 有待优化
+        return "<html><head><title>Title</title></head><body>获取授权页面失败</body></html>";
 
 
     }
@@ -126,7 +143,7 @@ public class WechatAuthorization {
      * @param expiresIn 存活时间
      * @return
      */
-    @RequestMapping(value = "/queryAuth")
+    @RequestMapping(value = "/authcallback")
     public String queryAuth(@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn) {
         System.out.println("进入授权回调");
         System.out.println("auth_code=" + authCode);
@@ -146,20 +163,25 @@ public class WechatAuthorization {
         String componentAccessToken = (String) loginCache.get("component_access_token");
         /**判断数据库中是否存在component_access_token*/
         if (!EasyUtil.isStringEmpty(componentAccessToken)) {
-            System.out.println("token============"+componentAccessToken);
+            System.out.println("token============" + componentAccessToken);
             /**如果存在，直接返回token的值*/
             return componentAccessToken;
         }
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
+        if (StringUtils.isBlank(componentVerifyTicket)){
+            throw new ErpCommonException("componentVerifyTicket为空");
+        }
         String url = "https://api.weixin.qq.com/cgi-bin/component/api_component_token";
         String param = "{\"component_appid\":\"" + componentAppid + "\",\"component_appsecret\": \"" + componentAppsecret + "\",\"component_verify_ticket\":\"" + componentVerifyTicket + "\"}";
+        log.info("获取component_access_token:参数==="+param);
         String s = PayUtil.httpRequest(url, "POST", param);
+        log.info("获取component_access_token:结果==="+s);
         JSONObject obj = JSON.parseObject(s);
         componentAccessToken = obj.getString("component_access_token");
+        log.info("获取component_access_token:componentAccessToken==="+componentAccessToken);
         /**在返回结果中获取token*/
         /**保存token，并设置有效时间*/
-        System.out.println("token============"+componentAccessToken);
-        loginCache.putEx("component_access_token", componentAccessToken, 7200L);
+        loginCache.putEx("component_access_token", componentAccessToken, 7100L);
         return componentAccessToken;
 
     }
@@ -179,7 +201,7 @@ public class WechatAuthorization {
         //language=JSON
         String param1 = "{\"component_appid\":\"" + componentAppid + "\"}";
         String post = PayUtil.httpRequest(url1, "POST", param1);
-        System.out.println("获取预授权码回调:"+post);
+        System.out.println("获取预授权码回调:" + post);
 
     }
 //    public static void main(String[] args) {
