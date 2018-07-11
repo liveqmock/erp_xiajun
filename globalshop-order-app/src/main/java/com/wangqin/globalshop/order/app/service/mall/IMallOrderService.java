@@ -44,4 +44,6 @@ public interface IMallOrderService  {
     public void dealOrder(JdCommonParam jdCommonParam, GlobalshopOrderVo globalshopOrderVo);
     
     void deleteByIsDel(MallOrderVO mallOrderVO);
+    
+    void deleteByHard(MallOrderVO mallOrderVO);
 }

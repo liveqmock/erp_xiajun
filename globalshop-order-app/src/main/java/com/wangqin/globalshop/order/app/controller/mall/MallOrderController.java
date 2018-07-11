@@ -107,9 +107,8 @@ public class MallOrderController {
 
         JsonResult<String> result = new JsonResult<>();
         if (mallOrderVO.getId() != null) {
-            //只有状态为新建的订单才能修改
-            MallOrderDO selOuterOrder = mallOrderService.selectById(mallOrderVO.getId());
-            if (selOuterOrder == null || !Objects.equals(selOuterOrder.getStatus(), ORDER_SATUTS_INIT)) {
+            MallOrderVO selouterOrderVO = mallOrderService.selectByOrderNoVO(mallOrderVO.getOrderNo());
+            if (selouterOrderVO == null || !Objects.equals(selouterOrderVO.getStatus(), ORDER_SATUTS_INIT)) {
                 return JsonResult.buildFailed("订单不存在或者状态错误");
             }
             //查询是否有发货的订单，有的话订单不能修改
@@ -118,14 +117,13 @@ public class MallOrderController {
                 return JsonResult.buildFailed("有子订单发货不能修改");
             }
 
-            mallOrderVO.setGmtModify(new Date());
+            selouterOrderVO.setGmtModify(new Date());
             List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
             for (MallSubOrderDO mallSubOrderDO : erpOrders) {
-                //1,释放子订单库存
-                inventoryService.release(mallSubOrderDO);
-                mallSubOrderService.delete(mallSubOrderDO);
-                mallOrderService.delete(mallOrderVO);
-            }
+            	//1,释放子订单库存       
+                inventoryService.release(mallSubOrderDO);            
+			}
+            mallOrderService.deleteByHard(selouterOrderVO);
             //订单详情
             List<MallSubOrderDO> outerOrderDetails = null;
             String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
@@ -133,44 +131,31 @@ public class MallOrderController {
                 String s = outerOrderDetailList.replace("&quot;", "\"");
                 outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
                 });
-                mallOrderVO.setOuterOrderDetails(outerOrderDetails);
-                for(int i = 0; i < mallOrderVO.getOuterOrderDetails().size(); i ++) {
-                    mallOrderVO.setSkuCode(mallOrderVO.getOuterOrderDetails().get(i).getSkuCode());
-                    mallOrderService.addOuterOrder(mallOrderVO);
+                selouterOrderVO.setOuterOrderDetails(outerOrderDetails);
+                if (CollectionUtils.isEmpty(outerOrderDetails)) {
+                    return JsonResult.buildFailed("没有商品信息");
                 }
+                    //创建外部订单
+                    selouterOrderVO.setOrderTime(mallOrderVO.getOrderTime());
+	                selouterOrderVO.setOrderTime(mallOrderVO.getOrderTime());
+	                selouterOrderVO.setReceiver(mallOrderVO.getReceiver());
+	                selouterOrderVO.setTelephone(mallOrderVO.getTelephone());
+	                selouterOrderVO.setPayType(mallOrderVO.getPayType());
+	                selouterOrderVO.setAddressDetail(mallOrderVO.getAddressDetail());
+	                selouterOrderVO.setReceiverState(mallOrderVO.getReceiverState());
+	                selouterOrderVO.setReceiverCity(mallOrderVO.getReceiverCity());
+	                selouterOrderVO.setReceiverDistrict(mallOrderVO.getReceiverDistrict());
+	                selouterOrderVO.setIdCard(mallOrderVO.getIdCard());
+	                selouterOrderVO.setMemo(mallOrderVO.getMemo());
+	                mallOrderService.addOuterOrder(selouterOrderVO);
+
             }
-
-
-//            if (CollectionUtils.isNotEmpty(outerOrderDetails)) {
-//                for (MallSubOrderDO erpOrder : outerOrderDetails) {
-//                    erpOrder.setOrderTime(mallOrderVO.getOrderTime());
-//                    erpOrder.setReceiver(mallOrderVO.getReceiver());
-//                    erpOrder.setReceiverCity(mallOrderVO.getReceiverCity());
-//                    erpOrder.setReceiverDistrict(mallOrderVO.getReceiverDistrict());
-//                    erpOrder.setReceiverState(mallOrderVO.getReceiverState());
-//                    erpOrder.setShopCode(mallOrderVO.getShopCode());
-//                    erpOrder.setTelephone(mallOrderVO.getTelephone());
-//                	
-//                    //2,修改子订单
-//                    mallSubOrderService.update(erpOrder);
-//                    //3,重新生成子订单并分配库存。
-////                    inventoryService.order(erpOrder);
-//                }
-//                
-//            }
-
-
-
-
-
             result.buildIsSuccess(true);
-        } else {
-            result.buildData("错误数据").buildIsSuccess(false);
+            } else {
+            	result.buildData("错误数据").buildIsSuccess(false);
+        	}
+        	return result;
         }
-
-        return result;
-    }
-
     /**
      * 查询单个订单
      */

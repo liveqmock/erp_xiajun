@@ -105,6 +105,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
             o.setReceiverAddress(outerOrder.getAddressDetail());
             o.setTelephone(outerOrder.getTelephone());
             o.setStatus(0);
+            o.setIdCard(outerOrder.getIdCard());
+            o.setMemo(outerOrder.getMemo());
             inventoryService.order(o);
             mallSubOrderDOMapper.insert(o);
         }
@@ -114,6 +116,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
         outerOrder.setActualAmount(0.0);
+        outerOrder.setIdCard(outerOrder.getIdCard());
         mallOrderDOMapper.insertSelective(outerOrder);
 
     }
@@ -276,6 +279,18 @@ public class MallOrderServiceImpl implements IMallOrderService {
 	public MallOrderVO selectByOrderNoVO(String orderNo) {
 		// TODO Auto-generated method stub
 		return mallOrderDOMapper.selectByOrderNoVO(orderNo);
+	}
+
+	@Override
+	public void deleteByHard(MallOrderVO mallOrderVO) {
+		// TODO Auto-generated method stub
+		List<MallSubOrderVO> mallSubOrderVOList = mallSubOrderDOMapper.selectByOrderNoVo(mallOrderVO.getOrderNo());
+        for (MallSubOrderVO mallSubOrderVO : mallSubOrderVOList) {
+            mallSubOrderDOMapper.deleteByPrimaryKey(mallSubOrderVO.getId());
+        }
+        mallOrderVO.init();
+        mallOrderDOMapper.deleteByPrimaryKey(mallOrderVO.getId());
+        
 	}
 
 }
