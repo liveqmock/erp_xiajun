@@ -200,7 +200,11 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     /**
-     * 盘点增加
+     * 库存盘入
+     *
+     * @param inventoryOnWarehouseNo
+     * @param skuCode
+     * @param quantity
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -210,7 +214,7 @@ public class InventoryServiceImpl implements InventoryService {
             throw new ErpCommonException("有空数据");
         }
         if (quantity <= 0) {
-            throw new ErpCommonException("增加库存要为正数");
+            throw new ErpCommonException("盘入库存要为正数");
         }
         /**增加实际库存*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
@@ -230,13 +234,34 @@ public class InventoryServiceImpl implements InventoryService {
         saveInventoryInOut(inventoryDO, houseDO, opeatory, quantity, "盘点入库");
     }
 
+    /**
+     * 库存盘入带货架修改
+     *
+     * @param inventoryOnWarehouseNo
+     * @param skuCode
+     * @param quantity
+     * @param shelfNo
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity, String shelfNo) {
+        // 库存盘入
+        inventoryCheckIn(inventoryOnWarehouseNo, skuCode, quantity);
+        // 修改货架
+        updateSelfNo(inventoryOnWarehouseNo, shelfNo);
+    }
+
     @Override
     public void inventoryCheckOut(Long inventoryAreaId, Long quantity) {
 
     }
 
     /**
-     * 盘点减少
+     * 库存盘出
+     *
+     * @param inventoryOnWarehouseNo
+     * @param skuCode
+     * @param quantity
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -246,10 +271,13 @@ public class InventoryServiceImpl implements InventoryService {
             throw new ErpCommonException("有空数据");
         }
         if (quantity <= 0) {
-            throw new ErpCommonException("减少库存要为正数");
+            throw new ErpCommonException("盘出库存要为正数");
         }
         /**减少仓库库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+        if (houseDO.getInventory() - quantity < 0) {
+            throw new ErpCommonException("盘出库存不能大于实际库存");
+        }
         houseDO.setInventory(houseDO.getInventory() - quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**减少实际库存*/
@@ -264,6 +292,8 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * 修改货架号
      *
+     * @param inventoryOnWarehouseNo
+     * @param shelfNo
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)

@@ -208,9 +208,7 @@ public class InventoryController {
     public Object inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity, String shelfNo)
             throws InventoryException {
         try {
-            inventoryService.inventoryCheckIn(inventoryOnWarehouseNo, skuCode, quantity);
-            // 修改货架
-            inventoryService.updateSelfNo(inventoryOnWarehouseNo, shelfNo);
+            inventoryService.inventoryCheckIn(inventoryOnWarehouseNo, skuCode, quantity, shelfNo);
         } catch (ErpCommonException e) {
             return JsonResult.buildFailed(e.getErrorMsg());
         } catch (Exception ex) {
