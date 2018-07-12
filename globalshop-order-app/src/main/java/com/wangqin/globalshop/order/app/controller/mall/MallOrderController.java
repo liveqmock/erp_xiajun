@@ -8,10 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ShiroUtil;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
@@ -320,9 +317,9 @@ public class MallOrderController {
     }
 
     //主订单导出
-    @RequestMapping(value = "/OuterOrderExportExcel", method = RequestMethod.POST)
+    @RequestMapping(value = "/OuterOrderExportExcel")
     @ResponseBody
-    public ResponseEntity<byte[]> OuterOrderExportExcel(MallOrderVO mallOrderVO) throws Exception {
+    public ResponseEntity<byte[]> OuterOrderExportExcel(MallOrderVO mallOrderVO) throws Exception {//
         if (mallOrderVO.getStartGmtCreate() == null || mallOrderVO.getEndGmtCreate() == null) {
             throw new ErpCommonException("必须选择创建时间段");
         }
@@ -332,7 +329,7 @@ public class MallOrderController {
         String endGmtCreateStr = DateUtil.ymdFormat(mallOrderVO.getEndGmtCreate());
         Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");
         mallOrderVO.setEndGmtCreate(endGmtCreate);
-        mallOrderVO.setCompanyNo(ShiroUtil.getShiroUser().getCompanyNo());
+        mallOrderVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 
         List<List<Object>> rowDatas = new ArrayList<>();
         List<MallOrderDO> outerOrderlist = mallOrderService.queryOuterOrderForExcel(mallOrderVO);
@@ -345,7 +342,7 @@ public class MallOrderController {
                 list.add(outerOrder.getTotalAmount());    //订单金额
                 list.add(outerOrder.getGmtCreate());        //下单时间
                 list.add(outerOrder.getStatus());  //订单状态
-                list.add(outerOrder.getIdcardPicReverse());            //收件人
+                list.add(outerOrder.getIdCard());            //收件人
 //                list.add(outerOrder.getTelephone());        //手机
 //                list.add(outerOrder.getSt());    //省
 //                list.add(outerOrder.getReceiverCity());        //市
