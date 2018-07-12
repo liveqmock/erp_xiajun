@@ -290,7 +290,11 @@ public class Wechat3rdPartyAuthorization {
                     "\"authorizer_appid\":\"" + appid + "\"," +
                     "\"authorizer_refresh_token\":\"" + refreshToken + "\"" +
                     "}";
+            log.info("============appid->"+appid+"=================");
+            log.info("param================="+param);
             String post = PayUtil.httpRequest(url, "POST", param);
+            log.info("回调结果==============="+post);
+            log.info("============appid<-"+appid+"=================");
             JSONObject object = JSON.parseObject(post);
             applet.setAuthorizerRefreshToken(object.getString("authorizer_refresh_token"));
             applet.setAuthorizerAccessToken(object.getString("authorizer_access_token"));
@@ -309,6 +313,7 @@ public class Wechat3rdPartyAuthorization {
      */
     @Scheduled(cron = "* */59 * * * ?")
     private void publicapplet() {
+        log.info("发布小程序定时任务启动");
         //todo 遍历相关数据库  拿到所有审核中的小程序的 auditid 和相应的 authorizer_access_token
 
         String accessToken = "";
