@@ -348,6 +348,9 @@
             <if test="companyNo!=null and companyNo!=''">
                 and inv.company_no = #{companyNo}
             </if>
+            <if test="upc!=null and upc!=''">
+                and inv.upc = #{upc}
+            </if>
         </where>
     </select>
     <select id="getINvOnWarehouseListOfShip"
