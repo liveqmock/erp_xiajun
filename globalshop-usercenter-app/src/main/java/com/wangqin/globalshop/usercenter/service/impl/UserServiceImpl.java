@@ -125,7 +125,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
         AuthRoleDO buyerRoleDO= authRoleDOMapper.selectByNameAndCompanyNo("买手",AppUtil.getLoginUserCompanyNo());
 
-        boolean asBuyer= checkIfNeedAddBuyer(userVo.getRoleIds(), (buyerRoleDO==null)?null:buyerRoleDO.getRoleId());
+        boolean asBuyer= checkIfNeedAddBuyer(userVo.getRoleIds(), (buyerRoleDO==null)?null:buyerRoleDO.getId());
         if(asBuyer && authUser.getWxUnionId()!=null){
             BuyerDO buyerQueryDO=new BuyerDO();
             buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
