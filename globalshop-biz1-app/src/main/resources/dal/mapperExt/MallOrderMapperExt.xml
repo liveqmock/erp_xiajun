@@ -159,9 +159,8 @@
         SELECT
         <include refid="Base_Column_List"/>,T2.logistic_no AS logisticNo,T2.logistic_company AS logisticCompany
         FROM
-        `erp_order` T1
-        LEFT JOIN `shipping_order` T2 ON T1.shipping_order_id=T2.id
-        LEFT JOIN `outer_order` T3 ON T1.outer_order_id=T3.id
+        `mall_order` T1
+        LEFT JOIN `shipping_order` T2 ON T1.shipping_order_no=T2.id
         <where>
             <if test="status != null">
                 T1.status = #{status}
@@ -250,7 +249,7 @@
         categoryName,T4.brand,T3.name as warehouseName ,T2.order_time as orderTime,T2.sku_pic as skuPic,T2.logistic_type
         as logisticType , T2.item_id as itemId
         FROM
-        erp_order T2
+        mall_order T2
         LEFT JOIN warehouse T3 ON T2.warehouse_id=T3.id
         LEFT JOIN item T4 ON T2.item_id=T4.id
         WHERE
@@ -264,7 +263,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-        `erp_order` T1
+        `mall_order` T1
         WHERE
         T1.stock_status in (0,1,2,9) and status = 0
         <if test="skuId!=null">
@@ -277,7 +276,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-        `erp_order` T1
+        `mall_order` T1
         WHERE
         T1.stock_status in (2, 3, 4) and status = 0
         <if test="skuId!=null">
@@ -294,7 +293,7 @@
         receiverDistrict,T1.address_detail as addressDetail,T4.name as warehouseName,T2.shipping_no as
         shippingNo,T3.logistic_type as logisticType,T2.logistic_no as logisticNo,T2.logistic_company as
         logisticCompany,T5.nick_name AS nickName,T2.type As type
-        FROM erp_order T1
+        FROM mall_order T1
         LEFT JOIN shipping_order T2 ON T1.shipping_order_id=T2.id
         LEFT JOIN item_sku T3 ON T1.sku_id=T3.id
         LEFT JOIN warehouse T4 ON T1.warehouse_id=T4.id
@@ -318,7 +317,7 @@
         <include refid="Base_Column_List"/>
         , T2.nick_name AS nickName
         FROM
-        `erp_order` T1
+        `mall_order` T1
         LEFT JOIN wx_user T2 ON T1.open_id = T2.open_id
         <where>
             <if test="status != null">
@@ -414,7 +413,7 @@
       is_del = #{isDel}
     where id = #{id,jdbcType=BIGINT}
     </update>
-    
+
     <select id="selectPositionNoByErpOrderId" resultType="java.lang.String" parameterType="java.lang.Long">
 		select group_concat(CONCAT(position_no, ':', booked)) from inventory_record t where t.erp_order_id=#{erpOrderId}
     </select>
@@ -423,7 +422,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-        `erp_order` T1
+        `mall_order` T1
         WHERE
         T1.receiver='地址稍后' and T1.sales_name='海狐海淘' and T1.status=0
         <if test="skuCode!=null">
@@ -439,7 +438,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-        `erp_order` T1
+        `mall_order` T1
         WHERE
         T1.sales_name = '海狐海淘'
         <if test="skuCode!=null">
@@ -512,7 +511,7 @@
         order_no = #{orderNo}
 
     </select>
-    
+
     <select id="selectByOrderNoVO" resultMap="BaseResultVOMap" parameterType="java.lang.String">
     	SELECT
     	<include refid="Base_Column_List"/>
@@ -525,7 +524,7 @@
     <select id="todaySendOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM `erp_order` T1
+        FROM `mall_order` T1
         <where>
             1=1
             AND

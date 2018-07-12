@@ -371,4 +371,23 @@
         sku_code = #{skuCode}
         ORDER BY inventory ASC
     </select>
+    
+    <select id="selectByWarehouseNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    	SELECT
+    		<include refid="Base_Column_List"/>
+    	FROM
+    		inventory_on_warehouse
+    	WHERE
+    		 warehouse_no = #{warehouseNo}
+    
+    </select>
+    
+    <select id="selectByInventoryOnWarehouseNo" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    	SELECT
+    		<include refid="Base_Column_List"/>
+    	FROM
+    		inventory_on_warehouse
+    	WHERE
+    		 inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
+    </select>
 </mapper>

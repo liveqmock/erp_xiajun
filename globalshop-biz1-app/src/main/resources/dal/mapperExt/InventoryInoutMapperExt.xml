@@ -17,21 +17,24 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
-   <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO" >
+   <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
     <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
     <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
-    <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
-    <result column="quantity" property="quantity" jdbcType="BIGINT" />
-    <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
     <result column="is_del" property="isDel" jdbcType="BIT" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="upc" property="upc" jdbcType="VARCHAR"/>
+    <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+    <result column="sku_pic" property="skuPic" jdbcType="VARCHAR"/>
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
+    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR"/>
+    <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
+    <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
   </resultMap>
   <!-- 2.0 -->
   <sql id="Base_Column_List" >
@@ -39,7 +42,7 @@
     quantity, operator_type, gmt_create, gmt_modify, is_del, creator, modifier
   </sql>
   
-   <select id="queryInventoryInoutCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+   <select id="queryInventoryInoutCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
         SELECT
         		count(1)
         FROM
@@ -91,6 +94,31 @@
 
     </select>
     
+    <!-- 查询出库商品详情 -->
+    <select id="queryInventoryInoutsVo"  resultMap="BaseResultMapVO">
+    	SELECT
+			<include refid="Base_Column_List"/>,inventory_on_warehouse_no
+        FROM
+            inventory_inout
+		<where>
+			<if test="warehouseNo!=null and warehouseNo!=''">
+				and warehouse_no = #{warehouseNo}
+			</if>
+			<if test="companyNo!=null and companyNo!=''">
+				and company_no = #{companyNo}
+			</if>
+			<if test="skuCode!=null and skuCode!=''">
+				and sku_code = #{skuCode}
+			</if>
+			<if test="itemName!=null and itemName!=''">
+				and item_name = #{itemName}
+			</if>
+			<if test="positionNo!=null and positionNo!=''">
+				and shelf_no = #{positionNo}
+			</if>
+		</where>
+    </select>
+    
     <!-- 查询 入库商品数,XiaJun-->
     <select id="countTodayInInventoryItemNum" resultType="java.lang.Integer">
     SELECT
@@ -114,7 +142,8 @@
     	SELECT
     		item_name itemName,
     		upc,
-    		sku_pic skuPic
+    		sku_pic skuPic,
+    		creator
     	FROM
     		item_sku
     	WHERE

@@ -78,4 +78,10 @@ public class WarehouseServiceImpl implements IWarehouseService {
 		whList = mapper.selectWhList(warehouseDO);
 		return whList;
 	}
+
+	@Override
+	public WarehouseDO selectByWarehouseNo(String warehouseNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectByWarehouseNo(warehouseNo);
+	}
 }
