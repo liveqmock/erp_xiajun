@@ -48,7 +48,7 @@ public class Wechat3rdPartyAuthorization {
     @Autowired
     private RedisTemplate cacheRedis;
     @Autowired
-    private IAppletConfigService appletConfigService;
+    private IAppletConfigService appletConfigServiceImplement;
     private static Logger log = LoggerFactory.getLogger("Wechat3rdPartyAuthorization");
 
 
@@ -163,7 +163,7 @@ public class Wechat3rdPartyAuthorization {
         JSONObject info = o.getJSONObject("authorization_info");
         AppletConfigDO applet = getAppletDO(info,APPLET_TYPE);
 
-        appletConfigService.insert(applet);
+        appletConfigServiceImplement.insert(applet);
         System.out.println("----------------授权回调接口-------------");
         return "success";
     }
@@ -171,7 +171,7 @@ public class Wechat3rdPartyAuthorization {
     @PostMapping("/...")
     public String initApplet(){
         //    设置小程序服务器域名
-        AppletConfigDO applet = appletConfigService.selectByCompanyNoAndType(AppUtil.getLoginUserCompanyNo(), APPLET_TYPE);
+        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(AppUtil.getLoginUserCompanyNo(), APPLET_TYPE);
         String accessToken = applet.getAuthorizerAccessToken();
         String url1 = "https://api.weixin.qq.com/wxa/modify_domain?access_token=" + accessToken;
         String param1 = "{\"action\":\"add\",\"requestdomain\":[\"https://test.buyer007.cn\"],\"wsrequestdomain\":[\"wss://test.buyer007.cn\"],\"uploaddomain\":[\"https://test.buyer007.cn\"], \"downloaddomain\":[\"https://test.buyer007.cn\"]}";

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class AppletConfigServiceImpl implements IAppletConfigService {
+public class AppletConfigServiceImplement implements IAppletConfigService {
 	@Autowired
 	private AppletConfigDOMapperExt mapper;
 
