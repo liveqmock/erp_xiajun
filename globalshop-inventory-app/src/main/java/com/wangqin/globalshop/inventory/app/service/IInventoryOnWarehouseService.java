@@ -37,4 +37,8 @@ public interface IInventoryOnWarehouseService {
     List<InventoryOnWareHouseDO> selectByCompanyNoAndSkuCode(String companyNo, String skuCode);
 
     void order(InventoryDO inventoryDO, Integer quantity);
+
+    InventoryOnWareHouseDO selectByWarehouseNo(String warehouseNo);
+    
+    InventoryOnWareHouseDO selectByInventoryOnWarehouseNo(String inventoryOnWarehouseNo);
 }

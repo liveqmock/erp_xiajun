@@ -123,12 +123,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         userVo.setId(authUser.getId());
         insertByUserVo(userVo);
 
-        AuthRoleDO authRoleDO= authRoleDOMapper.selectByNameAndCompanyNo("买手",userVo.getCompanyNo());
+        AuthRoleDO buyerRoleDO= authRoleDOMapper.selectByNameAndCompanyNo("买手",AppUtil.getLoginUserCompanyNo());
 
-        boolean isBuyer= checkIfNeedAddBuyer(userVo.getRoleIds(), authRoleDO.getRoleId());
-        if(isBuyer && authUser.getWxUnionId()!=null){
+        boolean asBuyer= checkIfNeedAddBuyer(userVo.getRoleIds(), (buyerRoleDO==null)?null:buyerRoleDO.getRoleId());
+        if(asBuyer && authUser.getWxUnionId()!=null){
             BuyerDO buyerQueryDO=new BuyerDO();
-            buyerQueryDO.setCompanyNo(userVo.getCompanyNo());
+            buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
             buyerQueryDO.setUnionId(authUser.getWxUnionId());
             BuyerDO buyerDO=buyerDOMapperExt.searchBuyer(buyerQueryDO);
             if(buyerDO!=null){
@@ -139,9 +139,9 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
             buyerQueryDO.init();
             buyerDOMapperExt.insertSelective(buyerQueryDO);
         }
-        else {
+        else if(!asBuyer){
             BuyerDO buyerQueryDO=new BuyerDO();
-            buyerQueryDO.setCompanyNo(userVo.getCompanyNo());
+            buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
             buyerQueryDO.setUnionId(authUser.getWxUnionId());
             BuyerDO buyerDO=buyerDOMapperExt.searchBuyer(buyerQueryDO);
             if(buyerDO!=null){
