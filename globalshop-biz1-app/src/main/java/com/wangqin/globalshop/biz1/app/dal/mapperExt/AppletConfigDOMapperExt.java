@@ -9,4 +9,6 @@ public interface AppletConfigDOMapperExt extends AppletConfigDOMapper {
 
 	AppletConfigDO queryWxMallConfigInfoByCompanyNo(@Param("companyNo")String companyNo,
 			@Param("appletType")String appletType);
+
+	AppletConfigDO selectByCompanyNoAndType(@Param("companyNo") String companyNo, @Param("type") String type);
 }

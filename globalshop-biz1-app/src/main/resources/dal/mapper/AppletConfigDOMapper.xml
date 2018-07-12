@@ -9,9 +9,15 @@
     <result column="applet_type" property="appletType" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
+    <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
+    <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, secret, appid, applet_type, creator, modifier
+    id, company_no, secret, appid, applet_type, creator, modifier, mch_id, status, pay_key, 
+    authorizer_access_token, authorizer_refresh_token
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -28,10 +34,14 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into applet_config (company_no, secret, appid, 
-      applet_type, creator, modifier
+      applet_type, creator, modifier, 
+      mch_id, status, pay_key, 
+      authorizer_access_token, authorizer_refresh_token
       )
     values (#{companyNo,jdbcType=VARCHAR}, #{secret,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR}, 
-      #{appletType,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      #{appletType,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{mchId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{payKey,jdbcType=VARCHAR}, 
+      #{authorizerAccessToken,jdbcType=VARCHAR}, #{authorizerRefreshToken,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" >
@@ -58,6 +68,21 @@
       <if test="modifier != null" >
         modifier,
       </if>
+      <if test="mchId != null" >
+        mch_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payKey != null" >
+        pay_key,
+      </if>
+      <if test="authorizerAccessToken != null" >
+        authorizer_access_token,
+      </if>
+      <if test="authorizerRefreshToken != null" >
+        authorizer_refresh_token,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="companyNo != null" >
@@ -77,6 +102,21 @@
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="payKey != null" >
+        #{payKey,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizerAccessToken != null" >
+        #{authorizerAccessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizerRefreshToken != null" >
+        #{authorizerRefreshToken,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -101,6 +141,21 @@
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
+      <if test="mchId != null" >
+        mch_id = #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="payKey != null" >
+        pay_key = #{payKey,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizerAccessToken != null" >
+        authorizer_access_token = #{authorizerAccessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizerRefreshToken != null" >
+        authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -111,7 +166,12 @@
       appid = #{appid,jdbcType=VARCHAR},
       applet_type = #{appletType,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      modifier = #{modifier,jdbcType=VARCHAR},
+      mch_id = #{mchId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      pay_key = #{payKey,jdbcType=VARCHAR},
+      authorizer_access_token = #{authorizerAccessToken,jdbcType=VARCHAR},
+      authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
