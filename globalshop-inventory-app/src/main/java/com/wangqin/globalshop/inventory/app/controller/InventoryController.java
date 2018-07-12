@@ -286,40 +286,18 @@ public class InventoryController {
     @RequestMapping("/queryInventoryInout")
     @ResponseBody
     public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-    	JsonResult<List<InventoryInoutDO>> result = new JsonResult<>();
-        try {
-//			Integer count =  inventoryInoutService.queryInventoryInoutCount(inventoryQueryVO);
-//			if(count!=null&&count!=0L){
-//				result.buildPage(count, inventoryQueryVO);
-//            ItemSkuDO item = itemSkuService.selectItemByItemCode(inventoryQueryVO.getItemName());            
-        	List<InventoryInoutDO> list = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
-        	List<InventoryInoutVO> listVO = new ArrayList<>();
-        	InventoryInoutVO invVO = new InventoryInoutVO();
-        	ItemSkuDO itemSkuDO = new ItemSkuDO();
-        	for(int i = 0; i < list.size(); i ++) {
-        		InventoryInoutDO inventoryInoutDO = list.get(i);
-        		itemSkuDO = inventoryInoutService.selectItemBySkuCode(inventoryInoutDO.getSkuCode());
-        		invVO.setSkuCode(inventoryInoutDO.getSkuCode());
-        		invVO.setItemName(itemSkuDO.getItemName());
-        		invVO.setUpc(itemSkuDO.getUpc());
-        		invVO.setSkuPic(itemSkuDO.getSkuPic());
-        		invVO.setCompanyNo(inventoryInoutDO.getCompanyNo());
-        		invVO.setCreator(inventoryInoutDO.getCreator());
-        		invVO.setGmtCreate(inventoryInoutDO.getGmtCreate());
-        		invVO.setShelfNo(inventoryInoutDO.getShelfNo());
-        		invVO.setOperatorType(inventoryInoutDO.getOperatorType());
-        		listVO.add(invVO);
-        	}
-            //            list.forEach(inout ->
-//                    inout.setWarehouseName(warehouseService.selectByWarehouseNo(inout.getWarehouseNo()))
-//            );
-            result.setData(list);
-//			}
-            result.buildIsSuccess(true);
-        } catch (Exception e) {
-            result.buildIsSuccess(false);
-        }
-        return result;
+    	JsonResult<List<InventoryOnWareHouseDO>> result = new JsonResult<>();
+    	List<InventoryInoutDO> inventoryInoutDO = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
+    	List<InventoryOnWareHouseDO> inventoryOnWareHouseDOs = null;
+    	for(int i = 0; i < inventoryInoutDO.size(); i ++) {
+    		InventoryInoutDO inventoryInout = inventoryInoutDO.get(i);
+    		inventoryOnWareHouseDOs = inventoryRecordService.selectByCompanyNoAndSkuCode(inventoryInout.getCompanyNo(), inventoryInout.getSkuCode());
+    		result.setData(inventoryOnWareHouseDOs);
+    	}
+    	
+    	return result.buildIsSuccess(true);
+    	
+    	
     }
 
     /**
