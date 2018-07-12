@@ -1,13 +1,7 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.WxUserDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
@@ -44,6 +38,9 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
     @Autowired
     private AuthUserRoleDOMapperExt userRoleDOMapperExt;
+
+    @Autowired
+    private BuyerDOMapperExt buyerDOMapperExt;
 
     @Override
     public AuthUserDO selectByLoginName(String userNo) {
@@ -125,6 +122,36 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         //再全加
         userVo.setId(authUser.getId());
         insertByUserVo(userVo);
+
+        AuthRoleDO authRoleDO= authRoleDOMapper.selectByNameAndCompanyNo("买手",userVo.getCompanyNo());
+
+        boolean isBuyer= checkIfNeedAddBuyer(userVo.getRoleIds(), authRoleDO.getRoleId());
+        if(isBuyer && authUser.getWxUnionId()!=null){
+            BuyerDO buyerQueryDO=new BuyerDO();
+            buyerQueryDO.setCompanyNo(userVo.getCompanyNo());
+            buyerQueryDO.setUnionId(authUser.getWxUnionId());
+            BuyerDO buyerDO=buyerDOMapperExt.searchBuyer(buyerQueryDO);
+            if(buyerDO!=null){
+                //no change
+                return;
+            }
+            //add buyer
+            buyerQueryDO.init();
+            buyerDOMapperExt.insertSelective(buyerQueryDO);
+        }
+        else {
+            BuyerDO buyerQueryDO=new BuyerDO();
+            buyerQueryDO.setCompanyNo(userVo.getCompanyNo());
+            buyerQueryDO.setUnionId(authUser.getWxUnionId());
+            BuyerDO buyerDO=buyerDOMapperExt.searchBuyer(buyerQueryDO);
+            if(buyerDO!=null){
+                //delete buyer
+                buyerDOMapperExt.deleteByPrimaryKey(buyerDO.getId());
+                return;
+            }
+        }
+
+
 //        System.out.println(userVo.getId());
 //        List<AuthUserRoleDO> userRoles = userRoleMapper.selectByUserId(userVo.getId());
 //        for(AuthUserRoleDO userRole : userRoles) {
@@ -134,6 +161,20 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 
         
         
+    }
+
+    private boolean checkIfNeedAddBuyer(String roleIds, Long roleId) {
+        if(roleId==null  && roleIds==null) {
+            return false;
+        }
+        String[] roles = roleIds.split(",");
+        for(String role: roles){
+            if(String.valueOf(roleId).equals(role)) {
+                //exists
+                return true;
+            }
+        }
+        return false;
     }
 
 //    @Override
