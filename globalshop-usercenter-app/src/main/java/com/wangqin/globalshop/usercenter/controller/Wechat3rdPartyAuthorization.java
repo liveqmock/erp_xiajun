@@ -277,13 +277,14 @@ public class Wechat3rdPartyAuthorization {
         log.info("开始刷新各个授权商户的token");
         initToken();
         List<AppletConfigDO> list = appletConfigServiceImplement.list();
+        String token = getToken();
         for (AppletConfigDO applet : list) {
             String appid = applet.getAppid();
             String refreshToken = applet.getAuthorizerRefreshToken();
             if (StringUtils.isBlank(refreshToken)) {
                 continue;
             }
-            String url = "https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=" + getToken();
+            String url = "https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=" + token;
             //language=JSON
             String param = "{\n" +
                     "\"component_appid\":\"" + componentAppid + "\"," +
@@ -299,14 +300,16 @@ public class Wechat3rdPartyAuthorization {
             applet.setAuthorizerRefreshToken(object.getString("authorizer_refresh_token"));
             applet.setAuthorizerAccessToken(object.getString("authorizer_access_token"));
             try {
+                log.info("开始更新");
                 appletConfigServiceImplement.update(applet);
+                log.info("结束更新");
             } catch (Exception e) {
                 log.error("appid为" + appid + "刷新token失败");
             }
 
         }
 
-
+//    11_E-AmSYNCYcn-HjhDMboOnVZ3afXdNKZ_0GPmrZYE7od728dFJJu1DKVF2u4IB83310RCNZ1aFyK4ecduBqlY5jLUOql3LZbET5NJP612kiLblFa5qedDPUhNjfZdhCCett8J8iFlXP7GFB6oVEWaAFDLUM
     }
     /***
      * 获取各个审核中通过的
