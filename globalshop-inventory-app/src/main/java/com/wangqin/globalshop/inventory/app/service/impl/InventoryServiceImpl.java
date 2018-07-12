@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
+import com.google.gson.JsonObject;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -202,9 +203,9 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * 库存盘入
      *
-     * @param inventoryOnWarehouseNo
-     * @param skuCode
-     * @param quantity
+     * @param inventoryOnWarehouseNo inventoryOnWarehouseNo
+     * @param skuCode                skuCode
+     * @param quantity               盘入数量
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -237,10 +238,10 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * 库存盘入带货架修改
      *
-     * @param inventoryOnWarehouseNo
-     * @param skuCode
-     * @param quantity
-     * @param shelfNo
+     * @param inventoryOnWarehouseNo inventoryOnWarehouseNo
+     * @param skuCode                skuCode
+     * @param quantity               盘入数量
+     * @param shelfNo                货架号
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -259,9 +260,9 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * 库存盘出
      *
-     * @param inventoryOnWarehouseNo
-     * @param skuCode
-     * @param quantity
+     * @param inventoryOnWarehouseNo inventoryOnWarehouseNo
+     * @param skuCode                skuCode
+     * @param quantity               盘出数量
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -290,10 +291,28 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     /**
+     * 出库单确认出库
+     *
+     * @param inventoryOutDetailListStr
+     * @param desc
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void inventoryOutConfirm(JsonObject[] inventoryOutDetailListStr, String desc) {
+        // 增加校验
+        if (inventoryOutDetailListStr == null || inventoryOutDetailListStr.length == 0 || StringUtils.isBlank(desc)) {
+            throw new ErpCommonException("有空数据");
+        }
+        for (JsonObject inventoryOutDetail : inventoryOutDetailListStr) {
+            // TODO
+        }
+    }
+
+    /**
      * 修改货架号
      *
-     * @param inventoryOnWarehouseNo
-     * @param shelfNo
+     * @param inventoryOnWarehouseNo inventoryOnWarehouseNo
+     * @param shelfNo                货架号
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)

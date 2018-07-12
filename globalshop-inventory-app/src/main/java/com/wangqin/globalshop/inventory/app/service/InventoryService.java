@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.inventory.app.service;
 
+import com.google.gson.JsonObject;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 
@@ -25,8 +26,10 @@ public interface InventoryService {
     void order(List<MallSubOrderDO> outerOrderDetails);
     /**退货*/
     void returns(MallSubOrderDO mallReturnOrderDO,Long inv);
+
     /**出库单出库*/
     void outOfStorehouse(InventoryOutManifestDO outManifestDO);
+
     /**SKU修改虚拟库存*/
     void updateVirtualInv(String skuCode,Long virInv,String companyNo);
 
@@ -44,6 +47,9 @@ public interface InventoryService {
     void inventoryCheckOut(Long inventoryAreaId, Long quantity);
 
     void inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity);
+
+    /**出库单确认出库*/
+    void inventoryOutConfirm(JsonObject[] inventoryOutDetailListStr, String desc);
 
     /**修改货架号*/
     void updateSelfNo(String inventoryOnWarehouseNo, String selfNo);

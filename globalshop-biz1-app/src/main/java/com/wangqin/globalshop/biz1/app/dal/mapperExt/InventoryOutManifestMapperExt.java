@@ -10,4 +10,6 @@ public interface InventoryOutManifestMapperExt {
 	Integer queryInventoryOutCount(InventoryOutVO inventoryOutVO);
 	
 	List<InventoryOutManifestDO> queryInventoryOutList(InventoryOutVO inventoryOutVO);
+
+//	InventoryOutManifestDO insertInventoryOutManifest(InventoryOutManifestVO inventoryOutManifestDO);
 }

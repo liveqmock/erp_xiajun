@@ -9,16 +9,12 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
  *
  */
 public class InventoryQueryVO extends InventoryDO {
-	/**配合前端*/
-	private Long warehouseid;
-	/**配合前端*/
 	private String warehouseNo;
 	private String companyNo;
 	private String skuCode;
 	private String upc;
 	private String itemName;
 	private String itemCode;
-	private String positionNo;
 	private String buySite;
 	private Integer pageIndex;
 	private String skuPic;
@@ -47,23 +43,16 @@ public class InventoryQueryVO extends InventoryDO {
 		this.companyNo = companyNo;
 	}
 
-	public Long getWarehouseid() {
-		return warehouseid;
-	}
-
-	public void setWarehouseid(Long warehouseid) {
-		this.warehouseid = warehouseid;
-	}
-
-	public String getWarehouseNo() {
-		return warehouseNo;
-	}
+    public String getWarehouseNo() {
+        return warehouseNo;
+    }
 
 	public void setWarehouseNo(String warehouseNo) {
 		this.warehouseNo = warehouseNo;
 	}
 
-	@Override
+
+    @Override
     public String getSkuCode() {
 		return skuCode;
 	}
@@ -93,25 +82,18 @@ public class InventoryQueryVO extends InventoryDO {
 		this.itemName = itemName;
 	}
 
-	public String getPositionNo() {
-		return positionNo;
-	}
 
-	public void setPositionNo(String positionNo) {
-		this.positionNo = positionNo;
-	}
+    public String getBuySite() {
+        return buySite;
+    }
 
-	public String getBuySite() {
-		return buySite;
-	}
+    public void setBuySite(String buySite) {
+        this.buySite = buySite;
+    }
 
-	public void setBuySite(String buySite) {
-		this.buySite = buySite;
-	}
-
-	public Integer getPageIndex() {
-		return pageIndex;
-	}
+    public Integer getPageIndex() {
+        return pageIndex;
+    }
 
 	public void setPageIndex(Integer pageIndex) {
 		this.pageIndex = pageIndex;
@@ -164,5 +146,5 @@ public class InventoryQueryVO extends InventoryDO {
 	public void setOperatorType(String operatorType) {
 		this.operatorType = operatorType;
 	}
-	
+
 }

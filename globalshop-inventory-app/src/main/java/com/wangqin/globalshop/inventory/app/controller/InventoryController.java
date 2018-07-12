@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.JsonObject;
 import com.wangqin.globalshop.common.utils.*;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
@@ -120,7 +122,6 @@ public class InventoryController {
             			}
             		});
             	}
-         
             }
             result.buildData(list);
             result.buildIsSuccess(true);
@@ -303,8 +304,8 @@ public class InventoryController {
         }
     	result.buildData(inventoryList);
     	return result.buildIsSuccess(true);
-    	
-    	
+
+
     }
 
     /**
@@ -548,6 +549,29 @@ public class InventoryController {
             result.buildIsSuccess(false);
         }
         return result;
+    }
+
+
+    /**
+     * 确认出库
+     *
+     * @param inventoryOutDetailListStr inventoryOnWarehouseNo + quantity
+     * @param desc
+     * @return
+     * @throws InventoryException
+     */
+//    @RequestMapping("/inventoryOutConfirm")
+    @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public Object inventoryOutConfirm(JsonObject[] inventoryOutDetailListStr, String desc) throws InventoryException {
+        try {
+            inventoryService.inventoryOutConfirm(inventoryOutDetailListStr, desc);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        } catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
+        }
+        return JsonResult.buildSuccess(null);
     }
 
     /**
