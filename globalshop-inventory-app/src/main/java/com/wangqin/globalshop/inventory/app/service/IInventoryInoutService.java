@@ -16,4 +16,6 @@ public interface IInventoryInoutService {
     List<InventoryInoutDO> queryInventoryInouts(InventoryQueryVO inventoryQueryVO);
     
     ItemSkuDO selectItemBySkuCode(String skuCode);
+    
+    List<InventoryQueryVO> queryInventoryInoutsVo(InventoryQueryVO inventoryQueryVO);
 }
