@@ -272,7 +272,7 @@ public class Wechat3rdPartyAuthorization {
     /***
      * 每三十分钟刷新第三方平台的token和各个授权商户的token
      */
-    @Scheduled(cron = "* */30 * * * ?")
+    @Scheduled(cron = "* */5 * * * ?")
     private void freashToken() {
         log.info("开始刷新各个授权商户的token");
         initToken();
