@@ -68,13 +68,14 @@ public class MallSubOrderController {
 			for (MallSubOrderDO orderDO : subOrderDOS){
 				MallSubOrderVO tmpVO = new MallSubOrderVO();
 				BeanUtils.copy(orderDO, tmpVO);
-				if (StringUtils.isNotBlank(tmpVO.getSkuPic())){
-					JSONObject jsonObject = JSONObject.fromObject(tmpVO.getSkuPic());
-					JSONArray array = jsonObject.getJSONArray("picList");
-					JSONObject imgObject = array.getJSONObject(0);
-					String picUrl = imgObject.getString("url");
-					tmpVO.setSkuImg(picUrl);
-				}
+				//修改原来是将json格式转换成url格式 现在直接使用json格式
+//				if (StringUtils.isNotBlank(tmpVO.getSkuPic())){
+//					JSONObject jsonObject = JSONObject.fromObject(tmpVO.getSkuPic());
+//					JSONArray array = jsonObject.getJSONArray("picList");
+//					JSONObject imgObject = array.getJSONObject(0);
+//					String picUrl = imgObject.getString("url");
+//					tmpVO.setSkuImg(picUrl);
+//				}
 				voList.add(tmpVO);
 			}
 			result .buildData(voList);
