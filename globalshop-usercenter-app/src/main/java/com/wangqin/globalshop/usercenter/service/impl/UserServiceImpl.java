@@ -143,12 +143,14 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
             BuyerDO buyerQueryDO=new BuyerDO();
             buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
             buyerQueryDO.setUnionId(authUser.getWxUnionId());
-            BuyerDO buyerDO=buyerDOMapperExt.searchBuyer(buyerQueryDO);
-            if(buyerDO!=null){
+            List<BuyerDO> buyerDOList=buyerDOMapperExt.searchBuyerList(buyerQueryDO);
+            if(buyerDOList!=null ){
                 //delete buyer
-                buyerDOMapperExt.deleteByPrimaryKey(buyerDO.getId());
-                return;
+                for(BuyerDO buyerDO:buyerDOList) {
+                    buyerDOMapperExt.deleteByPrimaryKey(buyerDO.getId());
+                }
             }
+            return;
         }
 
 

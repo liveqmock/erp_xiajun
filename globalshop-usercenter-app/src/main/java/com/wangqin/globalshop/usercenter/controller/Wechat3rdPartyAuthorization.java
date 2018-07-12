@@ -272,7 +272,7 @@ public class Wechat3rdPartyAuthorization {
     /***
      * 每三十分钟刷新第三方平台的token和各个授权商户的token
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/3 * * * ?")
     private void freashToken() {
         log.info("开始刷新各个授权商户的token");
         initToken();
@@ -339,10 +339,6 @@ public class Wechat3rdPartyAuthorization {
 
     }
 
-    @Scheduled(cron = "0 0/1 * * * ?")
-    private void publicapplet1212123123313() {
-        System.out.println(33333);
-    }
 
     /***
      * 封装小程序配置类对象
