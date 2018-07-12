@@ -15,6 +15,16 @@ public class AppletConfigDO extends BaseModel {
 
     private String modifier;
 
+    private String mchId;
+
+    private String status;
+
+    private String payKey;
+
+    private String authorizerAccessToken;
+
+    private String authorizerRefreshToken;
+
     public Long getId() {
         return id;
     }
@@ -69,5 +79,45 @@ public class AppletConfigDO extends BaseModel {
 
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(String mchId) {
+        this.mchId = mchId == null ? null : mchId.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+
+    public String getPayKey() {
+        return payKey;
+    }
+
+    public void setPayKey(String payKey) {
+        this.payKey = payKey == null ? null : payKey.trim();
+    }
+
+    public String getAuthorizerAccessToken() {
+        return authorizerAccessToken;
+    }
+
+    public void setAuthorizerAccessToken(String authorizerAccessToken) {
+        this.authorizerAccessToken = authorizerAccessToken == null ? null : authorizerAccessToken.trim();
+    }
+
+    public String getAuthorizerRefreshToken() {
+        return authorizerRefreshToken;
+    }
+
+    public void setAuthorizerRefreshToken(String authorizerRefreshToken) {
+        this.authorizerRefreshToken = authorizerRefreshToken == null ? null : authorizerRefreshToken.trim();
     }
 }
