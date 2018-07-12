@@ -9,6 +9,7 @@ CREATE PROCEDURE createUser(
   BEGIN
     DECLARE chars_str VARCHAR(100) DEFAULT 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     DECLARE companyno VARCHAR(64) DEFAULT '';
+    DECLARE orgid BIGINT DEFAULT 0;
     DECLARE userno VARCHAR(64) DEFAULT '';
     DECLARE roleid BIGINT DEFAULT 0;
     DECLARE roleid_default BIGINT DEFAULT 0;
@@ -36,9 +37,14 @@ CREATE PROCEDURE createUser(
       (companyno, companyName, 0, 1, '13777828256', '微信',
        'SYSTEM', 'SYSTEM');
 
-    #     创建用户
-    INSERT INTO auth_user (company_no, user_no, login_name, name, password, creator, modifier)
-    VALUES (companyno, userno, loginName, '公司管理员', 'e10adc3949ba59abbe56e057f20f883e', 'SYSTEM', 'SYSTEM');
+    #     创建部门 (待测试)
+    SELECT max(org_id) + 1
+    INTO orgid
+    FROM auth_organization;
+    INSERT INTO auth_organization (company_no, org_id, name, address,code,seq, creator, modifier)
+    VALUES (companyno, orgid, '公司总部', '公司地址',orgid+100000000,1, 'SYSTEM', 'SYSTEM');
+
+
     #     创建角色
 #     创建管理员
     SELECT max(role_id) + 1
@@ -58,6 +64,13 @@ CREATE PROCEDURE createUser(
     FROM auth_role;
     INSERT INTO auth_role (role_id, company_no, name, creator, modifier)
     VALUES (roleid_default, companyno, '新成员', 'SYSTEM', 'SYSTEM');
+
+
+    #     创建用户
+    INSERT INTO auth_user (company_no, user_no, login_name, name, password, creator, modifier)
+    VALUES (companyno, userno, loginName, '公司管理员', 'e10adc3949ba59abbe56e057f20f883e', 'SYSTEM', 'SYSTEM');
+
+
     #用户角色的对应
     SELECT id
     INTO userId
