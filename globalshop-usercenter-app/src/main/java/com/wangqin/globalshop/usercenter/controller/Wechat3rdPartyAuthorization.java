@@ -339,6 +339,10 @@ public class Wechat3rdPartyAuthorization {
 
     }
 
+    @Scheduled(cron = "0 0/1 * * * ?")
+    private void publicapplet1212123123313() {
+        System.out.println(33333);
+    }
 
     /***
      * 封装小程序配置类对象
