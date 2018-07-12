@@ -178,4 +178,16 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
         throw new ErpCommonException("发货失败");
 
     }
+
+	@Override
+	public InventoryOnWareHouseDO selectByWarehouseNo(String warehouseNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectByWarehouseNo(warehouseNo);
+	}
+
+	@Override
+	public InventoryOnWareHouseDO selectByInventoryOnWarehouseNo(String inventoryOnWarehouseNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+	}
 }

@@ -40,4 +40,11 @@ public class InventoryInoutServiceImpl implements IInventoryInoutService {
 		// TODO Auto-generated method stub
 		return inventoryInoutMapperExt.selectItemBySkuCode(skuCode);
 	}
+
+	@Override
+	public List<InventoryQueryVO> queryInventoryInoutsVo(InventoryQueryVO inventoryQueryVO) {
+		// TODO Auto-generated method stub
+		inventoryQueryVO.init();
+		return inventoryInoutMapperExt.queryInventoryInoutsVo(inventoryQueryVO);
+	}
 }

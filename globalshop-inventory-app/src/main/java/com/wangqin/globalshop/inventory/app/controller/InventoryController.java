@@ -31,12 +31,16 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -79,7 +83,8 @@ public class InventoryController {
     private MallSubOrderMapperExt mallSubOrderMapper;
     @Autowired
     private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
-
+    @Autowired
+    private ItemSkuMapperExt itemSkuMapperExt;
 
     @RequestMapping("/query")
     @ResponseBody
@@ -96,14 +101,12 @@ public class InventoryController {
     @ResponseBody
     public Object queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
         JsonResult<List<InventoryOnWarehouseVO>> result = new JsonResult<>();
-        System.out.println("queryInventoryAreas");
 //        try {
 //            if (StringUtil.isNotBlank(inventoryQueryVO.getBuySite())) {
 //                String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getBuySite());
 //                inventoryQueryVO.setBuySite(orderBy);
 //            }
             List<InventoryOnWarehouseVO> list = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
-            System.out.println("size:"+list.size());
             /**查规格**/
             for(InventoryOnWarehouseVO inv:list) {
             	List<ItemSkuScaleDO> scaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(inv.getSkuCode());
@@ -117,6 +120,7 @@ public class InventoryController {
             			}
             		});
             	}
+         
             }
             result.buildData(list);
             result.buildIsSuccess(true);
@@ -284,15 +288,20 @@ public class InventoryController {
     @RequestMapping("/queryInventoryInout")
     @ResponseBody
     public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-    	JsonResult<List<InventoryOnWareHouseDO>> result = new JsonResult<>();
-    	List<InventoryInoutDO> inventoryInoutDO = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
-    	List<InventoryOnWareHouseDO> inventoryOnWareHouseDOs = null;
-    	for(int i = 0; i < inventoryInoutDO.size(); i ++) {
-    		InventoryInoutDO inventoryInout = inventoryInoutDO.get(i);
-    		inventoryOnWareHouseDOs = inventoryRecordService.selectByCompanyNoAndSkuCode(inventoryInout.getCompanyNo(), inventoryInout.getSkuCode());
-    		result.setData(inventoryOnWareHouseDOs);
-    	}
-    	
+    	JsonResult<List<InventoryQueryVO>> result = new JsonResult<>();
+    	List<InventoryQueryVO> inventoryList = inventoryInoutService.queryInventoryInoutsVo(inventoryQueryVO);
+    	for(InventoryQueryVO inv:inventoryList) {
+    		ItemSkuDO itemSku = inventoryInoutService.selectItemBySkuCode(inv.getSkuCode());
+    		InventoryOnWareHouseDO warehouseDO = inventoryAreaService.selectByInventoryOnWarehouseNo(inv.getInventoryOnWarehouseNo());
+    		if(IsEmptyUtil.isCollectionNotEmpty(inventoryList)) {
+    			inv.setItemName(itemSku.getItemName());
+    			inv.setUpc(itemSku.getUpc());
+    			inv.setSkuPic(itemSku.getSkuPic());
+    			inv.setWarehouseName(warehouseDO.getWarehouseName());
+    			inv.setCreator(itemSku.getCreator());
+    		}
+        }
+    	result.buildData(inventoryList);
     	return result.buildIsSuccess(true);
     	
     	
