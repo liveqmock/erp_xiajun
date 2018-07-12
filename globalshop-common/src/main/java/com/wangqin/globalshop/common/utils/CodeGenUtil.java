@@ -56,4 +56,8 @@ public class CodeGenUtil {
 	public static String getInvOnWarehouseNo() {
 		return "INVONWARE" + System.currentTimeMillis();
 	}
+
+	public static String getInventoryOutNo() {
+		return "INVENTORYOUTNO" + System.currentTimeMillis();
+	}
 }
