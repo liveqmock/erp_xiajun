@@ -37,6 +37,9 @@ public interface InventoryService {
     /**库存盘入*/
     void inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity);
 
+    /**库存盘入带货架修改*/
+    void inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity, String shelfNo);
+
     /**库存盘出*/
     void inventoryCheckOut(Long inventoryAreaId, Long quantity);
 
