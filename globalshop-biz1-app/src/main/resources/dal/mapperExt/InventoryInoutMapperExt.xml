@@ -64,8 +64,8 @@
        		<if test="operatorType != null">
         			and T1.operator_type = #{operatorType}	
         	</if>
-        	<if test="positionNo != null">
-        			and T1.shelf_no = #{positionNo}	
+        	<if test="shelfNo != null">
+        			and T1.shelf_no = #{shelfNo}
         	</if>
     </select>
     
@@ -87,8 +87,8 @@
 			<if test="itemName!=null and itemName!=''">
 				and item_name = #{itemName}
 			</if>
-			<if test="positionNo!=null and positionNo!=''">
-				and shelf_no = #{positionNo}
+			<if test="shelfNo!=null and shelfNo!=''">
+				and shelf_no = #{shelfNo}
 			</if>
 		</where>
 
@@ -113,8 +113,8 @@
 			<if test="itemName!=null and itemName!=''">
 				and item_name = #{itemName}
 			</if>
-			<if test="positionNo!=null and positionNo!=''">
-				and shelf_no = #{positionNo}
+			<if test="shelfNo!=null and shelfNo!=''">
+				and shelf_no = #{shelfNo}
 			</if>
 		</where>
     </select>
