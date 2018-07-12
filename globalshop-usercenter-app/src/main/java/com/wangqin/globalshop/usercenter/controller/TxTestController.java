@@ -48,4 +48,22 @@ public class TxTestController {
         }
         return "success";
     }
+
+//    callBack----timestamp=========1531313697
+//    callBack----nonce=========1253080875
+//    callBack----msg_signature=========2f7970efe4b931fda3a7302b2dba3dee4f066cda
+//    callBack----appid=========wx43020a9d04042b56
+//    callBack----postData=========<xml>
+//    <ToUserName><![CDATA[gh_526a327ebd0d]]></ToUserName>
+//    <Encrypt><![CDATA[Ve9qceR0/K6QX0cSxLmVZzCfBoJx2ivzEMF0CtgCzW9+/XX5AhE8nSC2mvLZYWzbsK6GLoInLAy3G6dD7+Tf3PT0Q15G7vAbIUpVAWp6NPohWok4vzHdWh4YYbF5Mm9m5YTT53SGXfzfCNqV1ewU+HkkpXgH7yxE6AHGtA0Ddx2EusGrBL5S/x0u1lDJLvwiIki86taprMy4PLM65SdMlsKi+WygjIHE7RLAYflm2lUgh/CxVrh290fMZ/F/0R2YWojY0EGICJNBf3xQ5Q2NsyZWq6Xo9GqJrZPiuYVhLRPstUBDeJNWMSvyo4iQW5eb/1OhvzE/fUHnmAGsxS6SyVTfcmfYj22c9hr6NXbE3dP+kmlBDkNmffPthGUTR+uz08dfzGWM+G36G8/IXVgIANAq9HYvQ3k+Wuvqf9eaGtr245I82IB8VpC2ABYXxGjE2DhLrfoMH9nQnAzDspOrrw==]]></Encrypt>
+//</xml>
+//
+//    callBack----resultData=========<xml><ToUserName><![CDATA[gh_526a327ebd0d]]></ToUserName>
+//<FromUserName><![CDATA[oePJ65dA7l3M1edSeF-Ep0Vng3nQ]]></FromUserName>
+//<CreateTime>1531313697</CreateTime>
+//<MsgType><![CDATA[event]]></MsgType>
+//<Event><![CDATA[weapp_audit_success]]></Event>
+//<SuccTime>1531313697</SuccTime>
+//</xml>
+
 }
