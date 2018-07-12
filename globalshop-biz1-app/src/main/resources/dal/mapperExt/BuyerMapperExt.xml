@@ -63,6 +63,9 @@
 			and T.company_no = #{companyNo}
 		</if>
 
+		<if test="unionId != null">
+			and T.union_id = #{unionId}
+		</if>
 
 		<if test="openId != null">
 			and T.open_id = #{openId}
