@@ -76,4 +76,5 @@ public class BaseModel implements ICheackParam {
         this.setCreator("-1");
         this.setIsDel(false);
     }
+
 }

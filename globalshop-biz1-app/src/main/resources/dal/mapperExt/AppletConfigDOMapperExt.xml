@@ -24,5 +24,10 @@
     where company_no = #{companyNo,jdbcType=VARCHAR}
     AND applet_type =#{type,jdbcType=VARCHAR}
   </select>
-  
+  <select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO">
+    select
+    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AppletConfigDOMapper.Base_Column_List"/>
+    from applet_config
+  </select>
+
 </mapper>

@@ -6,6 +6,8 @@ import com.wangqin.globalshop.usercenter.service.IAppletConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  *
  *	@author biscuits
@@ -26,5 +28,16 @@ public class AppletConfigServiceImplement implements IAppletConfigService {
 	@Override
 	public AppletConfigDO selectByCompanyNoAndType(String companyNo,String type) {
 		return mapper.selectByCompanyNoAndType(companyNo,type);
+	}
+
+	@Override
+	public List<AppletConfigDO> list() {
+		return mapper.list();
+	}
+
+	@Override
+	public void update(AppletConfigDO applet) {
+		mapper.updateByPrimaryKeySelective(applet);
+
 	}
 }
