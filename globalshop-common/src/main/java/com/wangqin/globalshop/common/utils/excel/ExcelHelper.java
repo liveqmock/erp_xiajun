@@ -811,6 +811,71 @@ public class ExcelHelper {
 		return bIsSuccess;
 	}
     
+    /**
+     * 定制导出子订单excel,apex公司专用
+     * @param sheetName		sheet名称
+     * @param columnTitles	首行标题
+     * @param rowDatas		单元格数据
+     * @param columnWidth	单元宽度
+     * @return
+     */
+    public boolean setErpOrderToSheetForAPEX(String sheetName, String[] columnTitles, List<List<Object>> rowDatas, Integer[] columnWidth) {
+    	boolean bIsSuccess = true;
+    	if (null == wbWrite) {
+    		wbWrite = new XSSFWorkbook();
+		}
+    	try {
+        	Sheet sheet = wbWrite.createSheet(sheetName);
+        	
+        	//设置单元格样式
+        	CellStyle cellStyle = wbWrite.createCellStyle();
+        	cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        	cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        	cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+        	cellStyle.setBorderTop(CellStyle.BORDER_THIN);
+        	cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+        	cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+        	cellStyle.setWrapText(true);
+        	
+        	//第一行
+        	Row row = sheet.createRow(0);
+        	row.setHeightInPoints(30);
+        	for (int i = 0; i < columnTitles.length; i++) {
+    			Cell cell = row.createCell(i);
+    			cell.setCellValue(columnTitles[i]);
+    			cell.setCellStyle(cellStyle);
+    		}
+        	//图片相关准备
+        	CreationHelper helper = wbWrite.getCreationHelper();
+        	Drawing drawing = sheet.createDrawingPatriarch();
+        	
+        	//第二行开始
+        	for (int i = 1; i <= rowDatas.size(); i++) {
+        		row = sheet.createRow(i);
+        		//设置高度
+        		row.setHeightInPoints(60);
+        		List<Object> rowData = rowDatas.get(i-1);
+        		for (int j = 0; j < rowData.size(); j++) {
+        			Cell cell = row.createCell(j);
+        			//设置宽度
+        			sheet.setColumnWidth(j, columnWidth[j]*256);
+        			
+        			if(rowData.get(j) == null) {
+        				cell.setCellValue("");
+        			} else {
+        				cell.setCellValue(rowData.get(j).toString());
+        			}    		
+        			cell.setCellStyle(cellStyle);
+    			}
+    		}
+		} catch (Exception e) {
+			bIsSuccess = false;
+			e.printStackTrace();
+		}
+    	
+		return bIsSuccess;
+	}
+    
     public boolean setItemToSheet(String sheetName, String[] columnTitles, List<List<Object>> rowDatas, Integer[] columnWidth) {
     	boolean bIsSuccess = true;
     	if (null == wbWrite) {

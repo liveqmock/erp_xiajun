@@ -1,14 +1,16 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper;
 import com.wangqin.globalshop.biz1.app.dto.MyOrderDTO;
+import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 
 /**
@@ -48,8 +50,11 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	List<MallSubOrderDO> selectByOrderNo(String orderNo);
 	
 	List<MallSubOrderVO> selectByOrderNoVo(String ordderNo);
-
-	List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
+	//导出子订单1
+	List<MallSubOrderExcelVO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
+	//导出子订单2
+	List<MallSubOrderExcelVO> queryErpOrderForExcelByIdList(List<Long> idList);
+	
 	void updateOuterOrderDetailByItemSku(@Param("erpOrderIdList")List<String> erpOrderIdList);
 
 	List<MallSubOrderDO> selectOuterOrderDetailByOuterOrderId(@Param("outerOrderId") Long outerOrderId);

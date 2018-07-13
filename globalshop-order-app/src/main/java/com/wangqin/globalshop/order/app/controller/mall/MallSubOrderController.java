@@ -1,21 +1,15 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.common.enums.StockUpStatus;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -30,11 +24,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.util.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
+import com.wangqin.globalshop.common.enums.StockUpStatus;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.order.app.service.item.OrderItemSkuScaleService;
+import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
+import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 
 
 /**
@@ -46,12 +61,22 @@ import java.util.*;
 @Authenticated
 public class MallSubOrderController {
 
+	//APEX使用,@author:xiajun
+	private static final Double GROSS_GAIN = 300.0;//毛重比净重大300克
+	private static final String SENDER = "爱派客官方微店";//发货人
+	private static final String SENDER_ADDRESS = "香港新界元朗流浮山廈村屏廈路丈量約份第129約第3141號地段";//发货人地址
+	private static final String SENDER_PHONE = "21561899";//发货人电话
+		
 	@Autowired
 	private IMallSubOrderService erpOrderService;
 	@Autowired
 	private InventoryService inventoryService;
 	@Autowired
 	private IShippingOrderService shippingOrderService;
+	@Autowired
+	private OrderItemSkuService orderItemSkuService;
+	@Autowired
+	private OrderItemSkuScaleService orderItemSkuScaleService;
 
 
 	@RequestMapping(value = "/detail",method = RequestMethod.GET)
@@ -346,79 +371,140 @@ public class MallSubOrderController {
 	
 	/**
 	 * 导出excel
+	 * @author:xiajun
 	 */
 	@RequestMapping("/erpOrderExport")
     public ResponseEntity<byte[]> erpOrderExport(MallSubOrderVO erpOrderQueryVO) throws Exception {
+    	String companyNo = AppUtil.getLoginUserCompanyNo();
+    	if(IsEmptyUtil.isStringEmpty(companyNo)) {
+    		throw new ErpCommonException("请先登录");
+    	}
+    	erpOrderQueryVO.setCompanyNo(companyNo);
+    	
+    	List<MallSubOrderExcelVO> erpOrderList = new ArrayList<MallSubOrderExcelVO>();
     	List<List<Object>> rowDatas = new ArrayList<>();
-    	if(erpOrderQueryVO.getStartGmtCreate()==null || erpOrderQueryVO.getEndGmtCreate()==null) {
-			throw new ErpCommonException("必须选择创建时间段");
-		}
-    	String startGmtCreateStr = DateUtil.ymdFormat(erpOrderQueryVO.getStartGmtCreate());
-		Date startGmtCreate = DateUtil.parseDate(startGmtCreateStr + " 00:00:00");
-		erpOrderQueryVO.setStartGmtCreate(startGmtCreate);
-		String endGmtCreateStr = DateUtil.ymdFormat(erpOrderQueryVO.getEndGmtCreate());
-		Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");
-		erpOrderQueryVO.setEndGmtCreate(endGmtCreate);
-		
-    	List<MallSubOrderDO> erpOrderList = erpOrderService.queryErpOrderForExcel(erpOrderQueryVO);
+    	//如果勾选了，不考虑时间范围，只导出勾选的几项
+    	if(IsEmptyUtil.isStringNotEmpty(erpOrderQueryVO.getCheckedSubOrderIdString())) {
+    		String ids[] = erpOrderQueryVO.getCheckedSubOrderIdString().split(",");
+    		List<Long> idList = new ArrayList<Long>();
+    		for(String id:ids) {
+    			idList.add(Long.parseLong(id));
+    		}
+    		erpOrderList = erpOrderService.queryErpOrderForExcelByIdList(idList);
+    	} else {//如果没勾选，考虑时间范围  		
+        	if(null != erpOrderQueryVO.getStartGmtCreate() && null != erpOrderQueryVO.getEndGmtCreate()) {
+        		String startGmtCreateStr = DateUtil.ymdFormat(erpOrderQueryVO.getStartGmtCreate());
+        		Date startGmtCreate = DateUtil.parseDate(startGmtCreateStr + " 00:00:00");
+        		erpOrderQueryVO.setStartGmtCreate(startGmtCreate);
+        		String endGmtCreateStr = DateUtil.ymdFormat(erpOrderQueryVO.getEndGmtCreate());
+        		Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");
+        		erpOrderQueryVO.setEndGmtCreate(endGmtCreate);
+        	} 	
+    		
+        	erpOrderList = erpOrderService.queryErpOrderForExcel(erpOrderQueryVO);
+    	}
+     	
     	if(erpOrderList != null) {
-    		for (MallSubOrderDO erpOrder : erpOrderList) {
-    			List<Object> list = new ArrayList<>();
-    			//sku图片
-    			String skuPic = erpOrder.getSkuPic();
-    			if(StringUtil.isNotBlank(skuPic)) {
-    				PicModel pm = HaiJsonUtils.toBean(skuPic, PicModel.class);
-        			String imgSrc = pm.getPicList().get(0).getUrl();
-        			String imgType = imgSrc.substring(imgSrc.lastIndexOf(".") + 1).toUpperCase();
-        			if(imgSrc.contains("aliyuncs.com")) {
-        				imgSrc += "?x-oss-process=image/resize,m_lfit,h_100,w_100";
-        			} else {
-        				imgSrc = imgSrc.replaceAll("Resource", "Thumbnail");
-        			}
-        			//System.out.println(imgSrc);
-        			URL url = new URL(imgSrc);
-        			BufferedImage image = ImageIO.read(url);
-        			ByteArrayOutputStream output = new ByteArrayOutputStream();
-        	        ImageIO.write(image, imgType, output);
-        	        output.flush();
-        	        list.add(output.toByteArray());
-        	        output.close();
+    		for (MallSubOrderExcelVO erpOrder : erpOrderList) {
+    			List<Object> list = new ArrayList<>();	
+    			list.add(null);//清关批次
+    			list.add(erpOrder.getOrderNo());
+    			list.add(null);//运单号
+    			String skuCode = erpOrder.getSkuCode();
+    			//从item_sku表读取重量
+    			if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
+    				ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
+    				if(null != itemSkuDoWeight) {
+    					list.add(itemSkuDoWeight.getWeight());
+    					list.add(itemSkuDoWeight.getWeight()+GROSS_GAIN);
+    				} else {
+    					list.add(0.0);
+        				list.add(0.0+GROSS_GAIN);
+    				}
     			} else {
-    				list.add(null);
+    				list.add(0.0);
+    				list.add(0.0+GROSS_GAIN);
     			}
-    			
-    	        list.add(erpOrder.getItemName());	//商品名称
-    	        list.add(erpOrder.getScale());		//尺码
-    	        list.add(erpOrder.getOrderNo());	//主订单号
-    	        list.add(erpOrder.getSkuCode());	//商品条码
-    	        list.add(erpOrder.getQuantity());	//销售数量
-    	        list.add(erpOrder.getSalePrice());	//销售价格
-    	        list.add(erpOrder.getQuantity()*(erpOrder.getSalePrice()==null ?0:erpOrder.getSalePrice()));               //销售总价
-    	        list.add(erpOrder.getStatus());		//订单状态
-				//目前备货状态为空，暂时屏蔽，后续一起添上
-//    	        list.add(StockUpStatus.of(erpOrder.getStockStatus()).getDescription());	//备货状态
-    	        list.add("-");	//备货状态
-    	        list.add(DateUtil.ymdFormat(erpOrder.getOrderTime()));					//创建时间
-    	        list.add(erpOrder.getReceiver());	//收件人
-    	        list.add(erpOrder.getTelephone());	//收件人电话
-    	        list.add(""+erpOrder.getReceiverState() + erpOrder.getReceiverCity() + erpOrder.getReceiverDistrict() + "\r\n" + erpOrder.getReceiverAddress());		//地址
-    	        list.add(erpOrder.getMemo());				//备注
-    	        
-    	        
+    	        list.add(erpOrder.getQuantity());
+    	        list.add(erpOrder.getSalePrice());	
+    	        //从item_sku表读取upc
+    			if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
+    				ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
+    				if(null != itemSkuDoWeight) {
+    					list.add(itemSkuDoWeight.getUpc());
+    				} else {
+    					list.add("");
+    				}
+    			} else {
+    				list.add("");
+    			}	
+    	        list.add(erpOrder.getItemName());
+    	        //求出品牌
+    	        if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
+    	        	ItemSkuDO itemSkuDO = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
+    	        	if(null != itemSkuDO) {
+    	        		list.add(itemSkuDO.getBrandName());
+    	        	}
+    	        	else {
+    	        		list.add("");//没有品牌的商品暂时以""代替
+    	        	}
+    	        } else {
+    	        	list.add("");
+    	        }
+    	        list.add(erpOrder.getReceiver());
+    	        list.add(erpOrder.getReceiverState());
+    	        list.add(erpOrder.getReceiverCity());
+    	        list.add(erpOrder.getReceiverDistrict());
+    	        list.add(erpOrder.getReceiverAddress());
+    	        list.add(erpOrder.getTelephone());
+    	        list.add(erpOrder.getIdCard());
+    	        list.add(SENDER);
+    	        list.add(SENDER_ADDRESS);
+    	        list.add(SENDER_PHONE);
+    	        list.add(null);
+    	        list.add(null);
+    	        list.add(null);
+    	        list.add(null);
+    	        //读取规格信息
+    	        if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
+    	        	List<ItemSkuScaleDO> scaleList = orderItemSkuScaleService.selectScaleNameValueBySkuCode(skuCode);
+    	        	if(IsEmptyUtil.isCollectionNotEmpty(scaleList) && 2 == scaleList.size()) {
+    	        		String color = "";
+    	        		String scale = "";
+    	        		for(ItemSkuScaleDO scaleDO:scaleList) {
+    	        			if("颜色".equals(scaleDO.getScaleName())) {
+    	        				color = scaleDO.getScaleValue();
+    	        			}
+    	        			if("尺寸".equals(scaleDO.getScaleName())) {
+    	        				scale = scaleDO.getScaleValue();
+    	        			}   	        			
+    	        		}
+    	        		list.add(color+"，"+scale);
+    	        	} else {
+    	        		list.add("");//没有规格信息用""代替
+    	        	}
+    	        } else {
+    	        	list.add("");//没有规格信息用""代替
+    	        }
+    	        list.add(null);
+    	        list.add(null);
     			rowDatas.add(list);
     		}
     	}
     	ExcelHelper excelHelper = new ExcelHelper();
-    	String[] columnTitles = new String[]{"商品图片", "商品名称", "颜色", "尺码", "主订单号", "子订单号", "SKU代码", "订单来源", "销售数量",  "商品价格", "销售总价", "订单状态", "备货状态", "创建时间", "外部订单号","小程序客户", "收件人", "手机", "地址", "备注"};
-    	Integer[] columnWidth = new Integer[]{10, 30, 10, 10, 20, 20 , 20, 12, 10, 10, 10, 10, 10, 12, 20,20 ,15, 15, 30, 20};
-    	excelHelper.setErpOrderToSheet("Erp Order", columnTitles, rowDatas, columnWidth);
+    	String[] columnTitles = new String[]{"清关批次","订单号","运单号","净重", "毛重", "数量", "市场价", "商品条码", 
+    			"备注商品名称","商品品牌", "收件人姓名","省", "市", "区", "地址", "收件人电话", "收件人证件","发货人名称", 
+    			"发货人地址", "发货人电话", "商品货号","商品原产国","计量单位","商品备案号","规格型号","国检备案号","购买时间"};
+    	Integer[] columnWidth = new Integer[]{10, 15, 10, 10, 10, 10, 10, 15, 20, 10, 12, 10, 10, 10, 
+    			10, 10, 12, 20,20 ,15, 10, 10, 10, 10, 25, 10, 10};
+    	excelHelper.setErpOrderToSheetForAPEX("Erp Order", columnTitles, rowDatas, columnWidth);
     	//excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
     	
     	ResponseEntity<byte[]> filebyte = null;
     	ByteArrayOutputStream  out = excelHelper.writeToByteArrayOutputStream();
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-    	String fileName = "子订单(" + DateUtil.formatDate(startGmtCreate, "yyyyMMdd") + ").xlsx";
+    	String fileName = "子订单(" + DateUtil.formatDate(new Date(), "yyyyMMdd") + ").xlsx";
         headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("utf-8"), "ISO8859-1"));
         
         filebyte = new ResponseEntity<byte[]>(out.toByteArray(), headers, HttpStatus.OK);
@@ -426,6 +512,7 @@ public class MallSubOrderController {
         excelHelper.close();
         return filebyte;
     }
+    
     @RequestMapping("/listChoice")
 	private Object listChoice(Long id){
 		JsonResult<Map<String, String>> result = new JsonResult();

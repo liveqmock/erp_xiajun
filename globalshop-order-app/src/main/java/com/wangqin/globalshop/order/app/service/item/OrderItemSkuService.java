@@ -1,9 +1,14 @@
 package com.wangqin.globalshop.order.app.service.item;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 
 public interface OrderItemSkuService {
     ItemSkuDO selectBySkuCode(String skuCode);
+    
+    //根据sku_code查询一条item_sku表里面的记录，不关联其他的表，不做分页，只查一条记录，@author:xiajun
+    ItemSkuDO queryItemSkuDOBySkuCodeAndCompanyNo(String skuCode,String companyNo);
 
 //	/**
 //	 * 按照条件分页查询商品
