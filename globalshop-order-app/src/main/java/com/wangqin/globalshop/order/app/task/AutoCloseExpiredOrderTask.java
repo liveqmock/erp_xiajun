@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.order.app.task;
 
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -12,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_CLOSE;
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
 
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
@@ -36,12 +36,12 @@ public class AutoCloseExpiredOrderTask {
 
     //先5分钟检查一次，后续缩小间隔到1分钟
     @Scheduled(cron = "0 0/5 * * * ?")
-    @Transactional
+    @Transactional(rollbackFor = ErpCommonException.class)
     public void autoCloseExpiredOrder() {
-        mallOrderService.changeOrderStatus(ORDER_SATUTS_INIT, ORDER_SATUTS_CLOSE);
-        List<MallSubOrderDO> mallSubOrderDOList = mallSubOrderService.queryExpiredSubOrders(ORDER_SATUTS_INIT);
+        mallOrderService.changeOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+        List<MallSubOrderDO> mallSubOrderDOList = mallSubOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode());
 
-        mallSubOrderService.updateSubOrderStatus(ORDER_SATUTS_INIT, ORDER_SATUTS_CLOSE);
+        mallSubOrderService.updateSubOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
         for (MallSubOrderDO mallSubOrderDO : mallSubOrderDOList) {
             inventoryService.tryRelease(mallSubOrderDO);
         }

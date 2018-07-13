@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderReturnStatus;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
@@ -16,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_RETURNDONE;
 
 /**
  * @author biscuit
@@ -46,14 +47,22 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
         //1新增一个退款单
 
         MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(erpReturnOrder.getErpOrderId());
-        if (orderDO == null){
+        if (orderDO == null) {
             throw new ErpCommonException("找不到对应订单,请联系网站管理员");
         }
         //更新了子订单状态
         orderDO.update();
-        orderDO.setStatus(ORDER_SATUTS_RETURNDONE);
+        if (erpReturnOrder.getStatus() == null) {
+            throw new ErpCommonException("退单状态不能为空");
+        }
+        if (OrderReturnStatus.CLOSE.getCode() == erpReturnOrder.getStatus()) {
+            orderDO.setStatus(OrderStatus.RETURNDONE.getCode());
+        } else {
+            orderDO.setStatus(OrderStatus.RETURNING.getCode());
+        }
+
         mallSubOrderMapper.updateByPrimaryKeySelective(orderDO);
-        if (orderDO.getQuantity() < erpReturnOrder.getReturnQuantity()){
+        if (orderDO.getQuantity() < erpReturnOrder.getReturnQuantity()) {
             throw new ErpCommonException("退货的数目大于订单数目,请确认后重新操作");
         }
         mapper.insertSelective(erpReturnOrder);

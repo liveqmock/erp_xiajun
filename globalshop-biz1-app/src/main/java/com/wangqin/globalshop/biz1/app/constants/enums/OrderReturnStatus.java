@@ -1,10 +1,11 @@
 package com.wangqin.globalshop.biz1.app.constants.enums;
 
 public enum OrderReturnStatus {
-	INIT(0, "待审核"),
-	RECEIVE(1, "审核通过,退款中"),
-	PAY(2, "退款成功"),
-	CLOSE(-1, "关闭");
+	INIT(0, "售后待审核"),
+	RECEIVE(1, "审核通过"),
+	PAY(2, "退款完成"),
+    RETURN_COMPLETED(3, "退货完成"),
+	CLOSE(-1, "售后完成");
     private int code;
     private String description;
     OrderReturnStatus(int code, String description){

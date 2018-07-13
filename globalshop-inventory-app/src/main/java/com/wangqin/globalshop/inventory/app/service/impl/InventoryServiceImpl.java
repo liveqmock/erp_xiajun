@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
-import com.google.gson.JsonObject;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -10,7 +9,6 @@ import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService
 import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailService;
 import com.wangqin.globalshop.inventory.app.service.InventoryOutManifestService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.inventory.app.vo.InventoryOutDetailVO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -328,12 +326,12 @@ public class InventoryServiceImpl implements InventoryService {
      * @param inventoryOutDetailArray inventoryOutDetailList
      * @param warehouseNo             仓库编号
      * @param warehouseName           仓库名
-     * @param desc                    备注/描述
+     * @param remark                  备注
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void inventoryOutConfirm(JSONArray inventoryOutDetailArray, String warehouseNo,
-                                    String warehouseName, String desc) {
+                                    String warehouseName, String remark) {
         // 增加校验
         if (inventoryOutDetailArray == null || StringUtils.isBlank(warehouseNo)
                 || StringUtils.isBlank(warehouseName)) {
@@ -341,7 +339,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
         try {
             InventoryOutManifestDO inventoryOutManifestDO =
-                    inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, desc);
+                    inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, remark);
             for (int i = 0; i < inventoryOutDetailArray.size(); i++) {
                 JSONObject inventoryOutDetail = inventoryOutDetailArray.getJSONObject(i);
                 String inventoryOnWarehouseNo = inventoryOutDetail.getString("inventoryOnWarehouseNo");
