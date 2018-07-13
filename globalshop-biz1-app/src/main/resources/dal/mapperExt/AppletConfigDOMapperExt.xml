@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AppletConfigDOMapperExt" >
-  
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="secret" property="secret" jdbcType="VARCHAR" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="applet_type" property="appletType" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
+    <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
+    <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, secret, appid, applet_type, creator, modifier, mch_id, status, pay_key,
+    authorizer_access_token, authorizer_refresh_token
+  </sql>
   <!-- 一键分享：查询公司对应的商城小程序的appid和screat -->
-  <select id="queryWxMallConfigInfoByCompanyNo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO"
+  <select id="queryWxMallConfigInfoByCompanyNo" resultMap="BaseResultMap"
     parameterType="java.lang.String">
     SELECT 
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AppletConfigDOMapper.Base_Column_List"/>
+    <include refid="Base_Column_List"/>
     FROM 
     applet_config
     <where>
@@ -17,12 +34,17 @@
     LIMIT 0,1
   </select>
 
-  <select id="selectByCompanyNoAndType" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" parameterType="java.lang.String">
+  <select id="selectByCompanyNoAndType" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
-    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.AppletConfigDOMapper.Base_Column_List"/>
+    <include refid="Base_Column_List"/>
     from applet_config
     where company_no = #{companyNo,jdbcType=VARCHAR}
     AND applet_type =#{type,jdbcType=VARCHAR}
   </select>
-  
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from applet_config
+  </select>
+
 </mapper>

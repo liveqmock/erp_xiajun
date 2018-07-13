@@ -15,6 +15,7 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.ImgUtil;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
@@ -31,6 +32,9 @@ import java.util.List;
  */
 @Service
 public class MallOrderServiceImpl implements IMallOrderService {
+
+    //in seconds
+    private static final long NEW_TASK_TIMEOUT = 600;
     @Autowired
     private MallOrderMapperExt mallOrderDOMapper;
     @Autowired
@@ -87,7 +91,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
             o.setFreight((double) (freight == null ? 0L : freight));
             o.setItemCode(itemSku.getItemCode());
             o.setItemName(itemSku.getItemName());
-            o.setSkuPic(itemSku.getSkuPic());
+            o.setSkuPic(ImgUtil.initImg2Json(itemSku.getSkuPic()));
             o.setUpc(itemSku.getUpc());
             o.setScale(itemSku.getScale());
             if(itemSku.getLogisticType()!=null) {
@@ -292,5 +296,12 @@ public class MallOrderServiceImpl implements IMallOrderService {
         mallOrderDOMapper.deleteByPrimaryKey(mallOrderVO.getId());
         
 	}
+
+
+    @Override
+    public void changeOrderStatus(Integer oldStatus, Integer newStatus){
+        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus,newStatus);
+
+    }
 
 }

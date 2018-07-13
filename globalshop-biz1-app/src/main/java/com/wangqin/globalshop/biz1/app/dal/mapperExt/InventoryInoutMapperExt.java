@@ -19,4 +19,6 @@ Integer queryInventoryInoutCount(InventoryQueryVO inventoryQueryVO);
 	Integer countTodayInInventoryItemNum(@Param("typeList")List<Integer> typeList,@Param("today")Date today);
 
 	ItemSkuDO selectItemBySkuCode(String skuCode);
+	
+	List<InventoryQueryVO> queryInventoryInoutsVo(InventoryQueryVO inventoryQueryVO);
 }

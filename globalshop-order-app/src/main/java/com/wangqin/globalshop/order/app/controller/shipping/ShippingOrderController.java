@@ -23,6 +23,7 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.ImgUtil;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
@@ -175,7 +176,7 @@ public class ShippingOrderController {
         try {
             shippingOrderService.ship(shippingOrder);
         } catch (ErpCommonException e) {
-            result.buildMsg(e.getMessage()).buildIsSuccess(false);
+            return result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
         }
 
         return result.buildMsg("发货成功").buildIsSuccess(true);
@@ -744,6 +745,9 @@ public class ShippingOrderController {
             ShippingOrderDO shippingOrder = shippingOrderService.selectById(shippingOrderId);
             String erpOrderIds = shippingOrder.getMallOrders();
             List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(erpOrderIds);
+            for(MallSubOrderDO mallSubOrder : ErpOrderList) {
+            	mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
+            }
             result.setData(ErpOrderList);
             return result.buildIsSuccess(true);
         } catch (ErpCommonException e) {

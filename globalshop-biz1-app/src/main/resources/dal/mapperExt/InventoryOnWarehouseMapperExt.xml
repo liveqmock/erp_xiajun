@@ -330,6 +330,9 @@
             <if test="warehouseNo!=null and warehouseNo!=''">
                 and inv.warehouse_no = #{warehouseNo}
             </if>
+            <if test="warehouseName!=null and warehouseName!=''">
+                and inv.warehouse_name = #{warehouseName}
+            </if>
             <if test="companyNo!=null and companyNo!=''">
                 and inv.company_no = #{companyNo}
             </if>
@@ -339,11 +342,14 @@
             <if test="itemName!=null and itemName!=''">
                 and inv.item_name = #{itemName}
             </if>
-            <if test="positionNo!=null and positionNo!=''">
-                and inv.shelf_no = #{positionNo}
+            <if test="shelfNo!=null and shelfNo!=''">
+                and inv.shelf_no = #{shelfNo}
             </if>
             <if test="companyNo!=null and companyNo!=''">
                 and inv.company_no = #{companyNo}
+            </if>
+            <if test="upc!=null and upc!=''">
+                and inv.upc = #{upc}
             </if>
         </where>
     </select>
@@ -367,5 +373,24 @@
         WHERE
         sku_code = #{skuCode}
         ORDER BY inventory ASC
+    </select>
+    
+    <select id="selectByWarehouseNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    	SELECT
+    		<include refid="Base_Column_List"/>
+    	FROM
+    		inventory_on_warehouse
+    	WHERE
+    		 warehouse_no = #{warehouseNo}
+    
+    </select>
+    
+    <select id="selectByInventoryOnWarehouseNo" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    	SELECT
+    		<include refid="Base_Column_List"/>
+    	FROM
+    		inventory_on_warehouse
+    	WHERE
+    		 inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
     </select>
 </mapper>

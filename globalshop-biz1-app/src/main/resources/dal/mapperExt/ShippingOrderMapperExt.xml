@@ -187,19 +187,19 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM shipping_order
-        WHERE shipping_no = ${shippingNO}
+        WHERE shipping_no = #{shippingNO}
     </select>
-    <select id="selectCount" >
+    <select id="selectCount" resultType="java.lang.Integer" >
         SELECT
         count(*)
         FROM shipping_order
-        WHERE id_card=${idCard} and logistic_company=${logisticCompany} and gmt_create>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        WHERE id_card=#{idCard} and logistic_company=#{logisticCompany} and gmt_create>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)
     </select>
-    <select id="selectByLogisticNo" >
+    <select id="selectByLogisticNo" resultMap="BaseResultMap" >
         SELECT
         <include refid="Base_Column_List" />
         FROM shipping_order
-        WHERE  logistic_no=${logisticNo}
+        WHERE  logistic_no=#{logisticNo}
     </select>
 
     <update id="updateStatusByShippingNo" parameterType="java.lang.String">

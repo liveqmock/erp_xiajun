@@ -1,2 +1,2 @@
 ALTER TABLE applet_config ADD authorizer_refresh_token VARCHAR(64) NULL COMMENT '第三方授权平台刷新token';
-ALTER TABLE applet_config ADD authorizer_access_token VARCHAR(64) NULL COMMENT '第三方授权平台token';
+ALTER TABLE applet_config ADD authorizer_access_token VARCHAR(512) NULL COMMENT '第三方授权平台token';

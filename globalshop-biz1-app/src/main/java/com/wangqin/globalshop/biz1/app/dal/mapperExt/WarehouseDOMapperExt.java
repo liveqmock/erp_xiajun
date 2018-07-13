@@ -16,4 +16,5 @@ public interface WarehouseDOMapperExt extends WarehouseDOMapper {
     List<WarehouseDO> selectByCompanyNo(String companyNo);
 
     List<WarehouseDO> list(WarehouseDO warehouseDO);
+    
 }

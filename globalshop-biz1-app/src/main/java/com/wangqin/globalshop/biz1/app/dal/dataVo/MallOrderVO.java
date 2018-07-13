@@ -17,9 +17,9 @@ public class MallOrderVO extends MallOrderDO {
     private String receiverState;
     
     private Integer payType;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endGmtCreate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startGmtCreate;
     private String outerOrderDetailList;
     //-----------做显示----------------

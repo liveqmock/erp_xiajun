@@ -122,14 +122,16 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         //再全加
         userVo.setId(authUser.getId());
         insertByUserVo(userVo);
+        //TODO 要判断公司是否为空，否则会误删其他公司的买手
+        // if(AppUtil.getLoginUserCompanyNo()!=null){
+        AuthRoleDO buyerRoleDO= authRoleDOMapper.selectByNameAndCompanyNo("买手",AppUtil.getLoginUserCompanyNo());
 
-        AuthRoleDO authRoleDO= authRoleDOMapper.selectByNameAndCompanyNo("买手",userVo.getCompanyNo());
-
-        boolean isBuyer= checkIfNeedAddBuyer(userVo.getRoleIds(), authRoleDO.getRoleId());
-        if(isBuyer && authUser.getWxUnionId()!=null){
+        boolean asBuyer= checkIfNeedAddBuyer(userVo.getRoleIds(), (buyerRoleDO==null)?null:buyerRoleDO.getId());
+        if(asBuyer && authUser.getWxUnionId()!=null){
             BuyerDO buyerQueryDO=new BuyerDO();
-            buyerQueryDO.setCompanyNo(userVo.getCompanyNo());
+            buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
             buyerQueryDO.setUnionId(authUser.getWxUnionId());
+            buyerQueryDO.setNickName(authUser.getName());
             BuyerDO buyerDO=buyerDOMapperExt.searchBuyer(buyerQueryDO);
             if(buyerDO!=null){
                 //no change
@@ -139,16 +141,18 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
             buyerQueryDO.init();
             buyerDOMapperExt.insertSelective(buyerQueryDO);
         }
-        else {
+        else if(!asBuyer){
             BuyerDO buyerQueryDO=new BuyerDO();
-            buyerQueryDO.setCompanyNo(userVo.getCompanyNo());
+            buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
             buyerQueryDO.setUnionId(authUser.getWxUnionId());
-            BuyerDO buyerDO=buyerDOMapperExt.searchBuyer(buyerQueryDO);
-            if(buyerDO!=null){
+            List<BuyerDO> buyerDOList=buyerDOMapperExt.searchBuyerList(buyerQueryDO);
+            if(buyerDOList!=null ){
                 //delete buyer
-                buyerDOMapperExt.deleteByPrimaryKey(buyerDO.getId());
-                return;
+                for(BuyerDO buyerDO:buyerDOList) {
+                    buyerDOMapperExt.deleteByPrimaryKey(buyerDO.getId());
+                }
             }
+            return;
         }
 
 

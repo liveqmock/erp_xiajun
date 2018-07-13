@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.JsonObject;
 import com.wangqin.globalshop.common.utils.*;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
@@ -31,12 +33,16 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -79,7 +85,8 @@ public class InventoryController {
     private MallSubOrderMapperExt mallSubOrderMapper;
     @Autowired
     private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
-
+    @Autowired
+    private ItemSkuMapperExt itemSkuMapperExt;
 
     @RequestMapping("/query")
     @ResponseBody
@@ -96,14 +103,12 @@ public class InventoryController {
     @ResponseBody
     public Object queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
         JsonResult<List<InventoryOnWarehouseVO>> result = new JsonResult<>();
-        System.out.println("queryInventoryAreas");
 //        try {
 //            if (StringUtil.isNotBlank(inventoryQueryVO.getBuySite())) {
 //                String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getBuySite());
 //                inventoryQueryVO.setBuySite(orderBy);
 //            }
             List<InventoryOnWarehouseVO> list = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
-            System.out.println("size:"+list.size());
             /**查规格**/
             for(InventoryOnWarehouseVO inv:list) {
             	List<ItemSkuScaleDO> scaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(inv.getSkuCode());
@@ -117,6 +122,7 @@ public class InventoryController {
             			}
             		});
             	}
+            	inv.setSkuPic(ImgUtil.initImg2Json(inv.getSkuPic()));
             }
             result.buildData(list);
             result.buildIsSuccess(true);
@@ -284,40 +290,23 @@ public class InventoryController {
     @RequestMapping("/queryInventoryInout")
     @ResponseBody
     public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-    	JsonResult<List<InventoryInoutDO>> result = new JsonResult<>();
-        try {
-//			Integer count =  inventoryInoutService.queryInventoryInoutCount(inventoryQueryVO);
-//			if(count!=null&&count!=0L){
-//				result.buildPage(count, inventoryQueryVO);
-//            ItemSkuDO item = itemSkuService.selectItemByItemCode(inventoryQueryVO.getItemName());            
-        	List<InventoryInoutDO> list = inventoryInoutService.queryInventoryInouts(inventoryQueryVO);
-        	List<InventoryInoutVO> listVO = new ArrayList<>();
-        	InventoryInoutVO invVO = new InventoryInoutVO();
-        	ItemSkuDO itemSkuDO = new ItemSkuDO();
-        	for(int i = 0; i < list.size(); i ++) {
-        		InventoryInoutDO inventoryInoutDO = list.get(i);
-        		itemSkuDO = inventoryInoutService.selectItemBySkuCode(inventoryInoutDO.getSkuCode());
-        		invVO.setSkuCode(inventoryInoutDO.getSkuCode());
-        		invVO.setItemName(itemSkuDO.getItemName());
-        		invVO.setUpc(itemSkuDO.getUpc());
-        		invVO.setSkuPic(itemSkuDO.getSkuPic());
-        		invVO.setCompanyNo(inventoryInoutDO.getCompanyNo());
-        		invVO.setCreator(inventoryInoutDO.getCreator());
-        		invVO.setGmtCreate(inventoryInoutDO.getGmtCreate());
-        		invVO.setShelfNo(inventoryInoutDO.getShelfNo());
-        		invVO.setOperatorType(inventoryInoutDO.getOperatorType());
-        		listVO.add(invVO);
-        	}
-            //            list.forEach(inout ->
-//                    inout.setWarehouseName(warehouseService.selectByWarehouseNo(inout.getWarehouseNo()))
-//            );
-            result.setData(list);
-//			}
-            result.buildIsSuccess(true);
-        } catch (Exception e) {
-            result.buildIsSuccess(false);
+    	JsonResult<List<InventoryQueryVO>> result = new JsonResult<>();
+    	List<InventoryQueryVO> inventoryList = inventoryInoutService.queryInventoryInoutsVo(inventoryQueryVO);
+    	for(InventoryQueryVO inv:inventoryList) {
+    		ItemSkuDO itemSku = inventoryInoutService.selectItemBySkuCode(inv.getSkuCode());
+    		InventoryOnWareHouseDO warehouseDO = inventoryAreaService.selectByInventoryOnWarehouseNo(inv.getInventoryOnWarehouseNo());
+    		if(IsEmptyUtil.isCollectionNotEmpty(inventoryList)) {
+    			inv.setItemName(itemSku.getItemName());
+    			inv.setUpc(itemSku.getUpc());
+    			inv.setSkuPic(itemSku.getSkuPic());
+    			inv.setWarehouseName(warehouseDO.getWarehouseName());
+    			inv.setCreator(itemSku.getCreator());
+    		}
         }
-        return result;
+    	result.buildData(inventoryList);
+    	return result.buildIsSuccess(true);
+
+
     }
 
     /**
@@ -561,6 +550,29 @@ public class InventoryController {
             result.buildIsSuccess(false);
         }
         return result;
+    }
+
+
+    /**
+     * 确认出库
+     *
+     * @param inventoryOutDetailListStr inventoryOnWarehouseNo + quantity
+     * @param desc
+     * @return
+     * @throws InventoryException
+     */
+//    @RequestMapping("/inventoryOutConfirm")
+    @ResponseBody
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public Object inventoryOutConfirm(JsonObject[] inventoryOutDetailListStr, String desc) throws InventoryException {
+        try {
+            inventoryService.inventoryOutConfirm(inventoryOutDetailListStr, desc);
+        } catch (ErpCommonException e) {
+            return JsonResult.buildFailed(e.getErrorMsg());
+        } catch (Exception ex) {
+            return JsonResult.buildFailed("未知异常");
+        }
+        return JsonResult.buildSuccess(null);
     }
 
     /**

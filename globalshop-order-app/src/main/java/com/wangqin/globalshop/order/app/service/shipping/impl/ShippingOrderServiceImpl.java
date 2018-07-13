@@ -86,6 +86,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //            if (mallSubOrder.getStockStatus() == null || (mallSubOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode() && mallSubOrder.getStockStatus() != StockUpStatus.PREPARE.getCode())) {
 //                throw new ErpCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
 //            }
+        	mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
             if (StringUtils.isBlank(mallSubOrder.getReceiver()) || StringUtils.isBlank(mallSubOrder.getTelephone()) || StringUtils.isBlank(mallSubOrder.getReceiverState()) || StringUtils.isBlank(mallSubOrder.getReceiverCity()) || StringUtils.isBlank(mallSubOrder.getReceiverDistrict())) {
                 throw new ErpCommonException("收货人地址不能为空：" + mallSubOrder.getId());
             }
@@ -97,7 +98,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 receiver = mallSubOrder.getReceiver();
                 telephone = mallSubOrder.getTelephone();
                 addressDetail = mallSubOrder.getReceiverAddress();
-
+                
                 multiDeliveryFormDTO.setReceiver(mallSubOrder.getReceiver());
                 multiDeliveryFormDTO.setReceiverState(mallSubOrder.getReceiverState());
                 multiDeliveryFormDTO.setReceiverCity(mallSubOrder.getReceiverCity());
@@ -429,7 +430,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public void update(ShippingOrderDO shippingOrder) {
-
+    	shippingOrderMapper.updateByPrimaryKeySelective(shippingOrder);
     }
 
     @Override
@@ -477,7 +478,8 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(ShippingOrderDO shippingOrder) throws ErpCommonException {
 
-        String shippingNo = CodeGenUtil.getShippingNO(sequenceUtilService.gainPKGSequence());
+
+    	String shippingNo = CodeGenUtil.getShippingNO(sequenceUtilService.gainPKGSequence());
         StringBuffer erpNos = new StringBuffer();
         String mallOrders = shippingOrder.getMallOrders();
         if (Util.isEmpty(mallOrders)){
@@ -514,7 +516,14 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         for (MallSubOrderDO erpOrder : list) {
             /**如果没有订单号  则认为是没有发货*/
             if (Util.isEmpty(erpOrder.getShippingNo())) {
-                /**物流出库*/
+                /**判断实际库存是否满足发货条件*/
+            	InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(erpOrder.getItemCode(), erpOrder.getSkuCode());
+            	if(inventory.getInv() <= 0) {
+            		throw new ErpCommonException("实际库存不足");
+            	}
+            	
+            	/**物流出库*/
+            	
                 erpOrder.setStatus(ORDER_SATUTS_SENT);
                 erpOrder.setShippingNo(shippingNo);
                 Map<InventoryOnWareHouseDO, Long> ship = inventoryService.ship(erpOrder);
