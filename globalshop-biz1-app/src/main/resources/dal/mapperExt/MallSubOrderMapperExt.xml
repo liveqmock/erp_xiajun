@@ -71,8 +71,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM `mall_sub_order` T1 WHERE
-        where
-        is_del != '1'
+        is_del is false
         <if test="status != null">
             AND status = #{status}
         </if>

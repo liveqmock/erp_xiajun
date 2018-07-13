@@ -3,6 +3,8 @@ package com.wangqin.globalshop.inventory.app.service;
 import com.google.gson.JsonObject;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.inventory.app.vo.InventoryOutDetailVO;
+import net.sf.json.JSONArray;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +53,8 @@ public interface InventoryService {
     void inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity);
 
     /**出库单确认出库*/
-    void inventoryOutConfirm(JsonObject[] inventoryOutDetailListStr, String desc);
+    void inventoryOutConfirm(JSONArray inventoryOutDetailArray, String warehouseNo,
+                             String warehouseName, String desc);
 
     /**修改货架号*/
     void updateSelfNo(String inventoryOnWarehouseNo, String selfNo);
