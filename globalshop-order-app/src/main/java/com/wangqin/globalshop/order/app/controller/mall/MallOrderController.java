@@ -11,6 +11,7 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.ImgUtil;
 import com.wangqin.globalshop.common.utils.ShiroUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -302,6 +303,9 @@ public class MallOrderController {
             if (orderNo != null) {
                 //查询未关闭子订单备货情况
                 List<MallSubOrderDO> erpOrders = mallSubOrderService.selectUnClosedByOrderNo(orderNo);
+                for(MallSubOrderDO mallSubOrder : erpOrders) {
+                	mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
+                }
                 result.setData(erpOrders);
             } else {
                 return JsonResult.buildFailed("没有传ID");

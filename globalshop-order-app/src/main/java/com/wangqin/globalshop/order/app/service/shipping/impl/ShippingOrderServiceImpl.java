@@ -86,6 +86,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //            if (mallSubOrder.getStockStatus() == null || (mallSubOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode() && mallSubOrder.getStockStatus() != StockUpStatus.PREPARE.getCode())) {
 //                throw new ErpCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
 //            }
+        	mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
             if (StringUtils.isBlank(mallSubOrder.getReceiver()) || StringUtils.isBlank(mallSubOrder.getTelephone()) || StringUtils.isBlank(mallSubOrder.getReceiverState()) || StringUtils.isBlank(mallSubOrder.getReceiverCity()) || StringUtils.isBlank(mallSubOrder.getReceiverDistrict())) {
                 throw new ErpCommonException("收货人地址不能为空：" + mallSubOrder.getId());
             }
@@ -97,7 +98,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
                 receiver = mallSubOrder.getReceiver();
                 telephone = mallSubOrder.getTelephone();
                 addressDetail = mallSubOrder.getReceiverAddress();
-
+                
                 multiDeliveryFormDTO.setReceiver(mallSubOrder.getReceiver());
                 multiDeliveryFormDTO.setReceiverState(mallSubOrder.getReceiverState());
                 multiDeliveryFormDTO.setReceiverCity(mallSubOrder.getReceiverCity());
