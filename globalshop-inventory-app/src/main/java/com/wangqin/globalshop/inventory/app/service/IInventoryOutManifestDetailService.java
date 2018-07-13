@@ -3,8 +3,7 @@ package com.wangqin.globalshop.inventory.app.service;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
-import com.wangqin.globalshop.common.utils.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
 
 import java.util.List;
 import java.util.Set;
@@ -14,6 +13,7 @@ import java.util.Set;
  * @data 2018/06/01
  */
 public interface IInventoryOutManifestDetailService {
+
     void addInventoryOut(InventoryOutManifestDO inventoryOut);
 
     InventoryOutManifestDO queryInventoryOut(Long id);
@@ -22,8 +22,6 @@ public interface IInventoryOutManifestDetailService {
 
     void updateInventoryOut(InventoryOutManifestDO inventoryOut);
 
-    JsonPageResult<List<InventoryOutManifestDO>> inventoryOutQueryList(InventoryOutVO inventoryOutVO);
-
     Set<String> addInventoryOutConfirm(InventoryOutManifestDO inventoryOut);
 
     Set<String> updateInventoryOutConfirm(InventoryOutManifestDO inventoryOut);
@@ -31,17 +29,26 @@ public interface IInventoryOutManifestDetailService {
     void deleteInventoryOutById(Long id);
 
     /**
+     * 查询出货单详情列表
+     *
+     * @param inventoryOutManifestVO inventoryOutManifestVO
+     * @return List<InventoryOutManifestDO>
+     */
+    List<InventoryOutManifestDetailDO> listInventoryOutManifestDetail(InventoryOutManifestVO inventoryOutManifestVO);
+
+    /**
      * 添加出货单详情
      *
-     * @param inventoryOutManifestDetailDO
+     * @param inventoryOutManifestDetailDO inventoryOutManifestDetailDO
      */
     void insertInventoryOutManifestDetail(InventoryOutManifestDetailDO inventoryOutManifestDetailDO);
 
     /**
      * 添加出货单详情
      *
-     * @param inventoryOnWareHouseDO
-     * @param inventoryOutManifestDO
+     * @param inventoryOnWareHouseDO 用于获取库存相关信息
+     * @param inventoryOutManifestDO 用于获取出货单相关信息
+     * @param quantity               出货数量
      */
     void insertInventoryOutManifestDetail(InventoryOnWareHouseDO inventoryOnWareHouseDO,
                                           InventoryOutManifestDO inventoryOutManifestDO, Long quantity);
