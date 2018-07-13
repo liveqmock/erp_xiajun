@@ -7,6 +7,9 @@ public class DateUtils {
 
     public static final String formateStr19 = "yyyy-MM-dd HH:mm:ss";
 
+    public static final String formateStr21 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
+
     /**
      * yyyy-MM-dd
      * @param dateStr
