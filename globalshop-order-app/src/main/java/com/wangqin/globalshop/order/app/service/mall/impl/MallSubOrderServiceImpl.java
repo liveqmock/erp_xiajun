@@ -1,4 +1,4 @@
-﻿package com.wangqin.globalshop.order.app.service.mall.impl;
+package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import java.util.Date;
 import java.util.List;
