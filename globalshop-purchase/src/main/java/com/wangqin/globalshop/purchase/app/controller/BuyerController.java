@@ -190,7 +190,7 @@ public class BuyerController {
         ByteArrayOutputStream out = excelHelper.writeToByteArrayOutputStream();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        String fileName = "采购单_" + itemSkuList.get(0).getItemName() + ".xlsx";
+        String fileName = "采购单_" + ((itemSkuList==null|| itemSkuList.size()==0)?"":itemSkuList.get(0).getItemName()) + ".xlsx";
         headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("utf-8"), "ISO8859-1"));
 
         filebyte = new ResponseEntity<byte[]>(out.toByteArray(), headers, HttpStatus.OK);

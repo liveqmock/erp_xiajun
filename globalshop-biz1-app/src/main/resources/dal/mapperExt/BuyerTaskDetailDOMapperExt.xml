@@ -63,8 +63,8 @@
         WHEN 'XXL' THEN 7
         end as scale_int
         FROM buyer_task_detail a
-        LEFT JOIN item_sku b ON a.sku_code=b.id
-        LEFT JOIN buyer_task c ON a.buyer_task_no=c.id
+        LEFT JOIN item_sku b ON a.sku_code=b.sku_code
+        LEFT JOIN buyer_task c ON a.buyer_task_no=c.buyer_task_no
         WHERE a.buyer_task_no=#{buyerTaskNo}
         ORDER BY trim(b.item_name),(b.scale+0),scale_int
     </select>
