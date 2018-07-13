@@ -195,7 +195,9 @@ public class MallSubOrderController {
 				i++;
 				MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
 				if(erpOrder!=null){
-					inventoryService.release(erpOrder);
+//					inventoryService.release(erpOrder);
+					//换成另一个方法试试
+					inventoryService.tryRelease(erpOrder);
 				}
 			}
 			String rmsg = "";
