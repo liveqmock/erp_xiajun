@@ -13,7 +13,7 @@ public class InventoryOutManifestDO extends BaseModel {
 
     private Integer status;
 
-    private String desc;
+    private String remark;
 
     private String modifier;
 
@@ -67,12 +67,12 @@ public class InventoryOutManifestDO extends BaseModel {
         this.status = status;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public String getModifier() {
