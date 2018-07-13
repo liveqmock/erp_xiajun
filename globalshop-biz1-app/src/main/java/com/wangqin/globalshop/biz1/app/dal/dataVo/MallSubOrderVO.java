@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -28,11 +29,13 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	/**
 	 * 订单开始时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date startGmtCreate;
 	
 	/**
 	 * 订单结束时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endGmtCreate;
 	
 	private String closeReason;

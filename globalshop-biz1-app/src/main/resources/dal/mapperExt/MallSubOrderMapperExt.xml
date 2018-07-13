@@ -65,6 +65,26 @@
     modifier, sub_order_no, channel_sub_order_no, share_user_id, share_token, share_time,
     share_close_flag, share_close_time, share_money
     </sql>
+
+    <select id="queryErpOrderForExcel"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `mall_sub_order` T1 WHERE
+        where
+        is_del != '1'
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test=" startGmtCreate!= null ">
+            and   <![CDATA[ order_time >= #{startGmtCreate} ]]>
+        </if>
+        <if test=" endGmtCreate != null ">
+            and    <![CDATA[ order_time <= #{endGmtCreate} ]]>
+        </if>
+
+    </select>
+
     <update id="updateOuterOrderDetailByItemSku">
         UPDATE mall_sub_order a
         LEFT JOIN item_sku b ON a.sku_code=b.sku_code
