@@ -385,6 +385,30 @@
             </if>
         </where>
     </select>
+    <select id="queryExpiredSubOrders" resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `mall_sub_order`
+        where
+
+        is_del is false
+        and status = #{status}
+        and <![CDATA[ gmt_create < date_sub(now(), interval '0:10:0' hour_second) ]]>
+
+    </select>
+
+    <update id="updateSubOrderStatus">
+        UPDATE mall_sub_order
+        SET
+        status=#{newStatus}
+         <where>
+            is_del is false
+             and status = #{oldStatus}
+             and <![CDATA[ gmt_create < date_sub(now(), interval '0:10:0' hour_second) ]]>
+        </where>
+    </update>
+
     <select id="queryErpOrders" resultMap="BaseResultMap"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
         SELECT
         <include refid="Base_Column_List"/>

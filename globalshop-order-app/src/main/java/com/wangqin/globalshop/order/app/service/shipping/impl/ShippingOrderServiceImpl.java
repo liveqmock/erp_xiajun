@@ -430,7 +430,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public void update(ShippingOrderDO shippingOrder) {
-
+    	shippingOrderMapper.updateByPrimaryKeySelective(shippingOrder);
     }
 
     @Override
@@ -478,7 +478,8 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(ShippingOrderDO shippingOrder) throws ErpCommonException {
 
-        String shippingNo = CodeGenUtil.getShippingNO(sequenceUtilService.gainPKGSequence());
+
+    	String shippingNo = CodeGenUtil.getShippingNO(sequenceUtilService.gainPKGSequence());
         StringBuffer erpNos = new StringBuffer();
         String mallOrders = shippingOrder.getMallOrders();
         if (Util.isEmpty(mallOrders)){
@@ -515,7 +516,14 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         for (MallSubOrderDO erpOrder : list) {
             /**如果没有订单号  则认为是没有发货*/
             if (Util.isEmpty(erpOrder.getShippingNo())) {
-                /**物流出库*/
+                /**判断实际库存是否满足发货条件*/
+            	InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(erpOrder.getItemCode(), erpOrder.getSkuCode());
+            	if(inventory.getInv() <= 0) {
+            		throw new ErpCommonException("实际库存不足");
+            	}
+            	
+            	/**物流出库*/
+            	
                 erpOrder.setStatus(ORDER_SATUTS_SENT);
                 erpOrder.setShippingNo(shippingNo);
                 Map<InventoryOnWareHouseDO, Long> ship = inventoryService.ship(erpOrder);

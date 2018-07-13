@@ -128,6 +128,7 @@ public class InventoryController {
             			}
             		});
             	}
+            	inv.setSkuPic(ImgUtil.initImg2Json(inv.getSkuPic()));
             }
             result.buildData(list);
             result.buildIsSuccess(true);
