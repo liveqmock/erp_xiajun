@@ -112,7 +112,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
      * @return
      */
     @Transactional(rollbackFor = ErpCommonException.class)
-    private List<BuyerStorageDetailVo> doSearchList(String openId, String upc, Integer status){
+    public List<BuyerStorageDetailVo> doSearchList(String openId, String upc, Integer status){
         List<BuyerStorageDetailVo> voList = new ArrayList<>();
 
         BuyerStorageDO buyerStorageSo = new BuyerStorageDO();
@@ -143,18 +143,19 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 ItemSkuDO skuSo = new ItemSkuDO();
                 skuSo.setSkuCode(detail.getSkuCode());
                 skuSo.initCompany();
-                skuSo.setUpc(detail.getUpc());
+                //skuSo.setUpc(detail.getUpc());
 
 
                 ItemSkuDO skuDO = skuDOMapperExt.queryItemSku(skuSo);
 
-                List<ItemSkuScaleDO> scaleList = skuScaleMapperExt.selectScaleNameValueBySkuCode(skuDO.getSkuCode());
-
-                System.out.println(skuDO);
                 if(skuDO == null){
-                    throw new ErpCommonException("未找到对应商品");
+                    throw new ErpCommonException("未找到对应商品,skuCode: "+detail.getSkuCode()+" upc: "+detail.getUpc());
                 }
 
+                List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+                if(skuDO != null && !EasyUtil.isStringEmpty(skuDO.getSkuCode())){
+                    scaleList = skuScaleMapperExt.selectScaleNameValueBySkuCode(skuDO.getSkuCode());
+                }
 
                 UserQueryVO user = null;
                 if(!EasyUtil.isStringEmpty(detail.getOpUserNo())){
@@ -171,17 +172,28 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
                 BuyerDO buyer = buyerDOMapperExt.searchBuyer(buyerSo);
 
-                vo.setBuyerName(buyer.getNickName());
-                vo.setBuyerOpenId(buyer.getOpenId());
+                if(buyer != null){
+                    vo.setBuyerName(buyer.getNickName());
+                    vo.setBuyerOpenId(buyer.getOpenId());
+                }
+
 
                 vo.setGmtCreate(detail.getGmtCreate());
                 vo.setGmtModify(detail.getGmtModify());
                 vo.setStorageNo(buyerStorage.getStorageNo());
                 vo.setItemCode(detail.getItemCode());
                 vo.setUpc(detail.getUpc());
-                vo.setSkuName(skuDO.getItemName());
+
+                if(skuDO != null){
+                    vo.setSkuCode(skuDO.getSkuCode());
+                    vo.setSkuName(skuDO.getItemName());
+                }else {
+                    vo.setSkuCode(detail.getSkuCode());
+                }
+
+
                 vo.setSpecifications(getScaleString(scaleList));
-                vo.setSkuCode(skuDO.getSkuCode());
+
                 vo.setQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途,实际需要入库的数量
                 vo.setTransQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途，预入库数量
 
