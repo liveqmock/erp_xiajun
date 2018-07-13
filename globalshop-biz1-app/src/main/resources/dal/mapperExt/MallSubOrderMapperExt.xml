@@ -477,7 +477,7 @@
         <include refid="Base_Column_List"/>
         FROM
         `mall_sub_order`
-        WHERE sku_code=#{skuCode}
+        WHERE sub_order_no=#{subOrderNo}
     </select>
     <select id="list" resultMap="BaseResultMap">
         SELECT

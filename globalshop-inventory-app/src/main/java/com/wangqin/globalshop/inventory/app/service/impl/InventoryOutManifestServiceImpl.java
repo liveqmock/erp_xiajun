@@ -38,7 +38,7 @@ public class InventoryOutManifestServiceImpl implements InventoryOutManifestServ
         inventoryOutManifestDO.setWarehouseNo(warehouseNo);
         inventoryOutManifestDO.setWarehouseName(warehouseName);
         inventoryOutManifestDO.setStatus(0);
-        inventoryOutManifestDO.setDesc(desc);
+        inventoryOutManifestDO.setRemark(desc);
         inventoryOutManifestDO.setModifier(AppUtil.getLoginUserId());
         inventoryOutManifestDO.setCreator(AppUtil.getLoginUserId());
         inventoryOutManifestDO.setIsDel(false);

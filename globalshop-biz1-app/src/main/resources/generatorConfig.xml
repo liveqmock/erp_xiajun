@@ -338,13 +338,13 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="inventory_out_manifest" domainObjectName="InventoryOutManifestDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
+        <table tableName="inventory_out_manifest" domainObjectName="InventoryOutManifestDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+        enableSelectByExample="false" selectByExampleQueryId="false" >
+        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
+            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
+            <ignoreColumn column="is_del" delimitedColumnName=""/>
+        </table>
 
         <!--<table tableName="inventory_out_manifest_detail" domainObjectName="InventoryOutManifestDetailDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -715,13 +715,13 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <table tableName="applet_config" domainObjectName="AppletConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
-            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
-            <ignoreColumn column="is_del" delimitedColumnName=""/>
-        </table>
+        <!--<table tableName="applet_config" domainObjectName="AppletConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
 
 
 

@@ -92,33 +92,38 @@ public class InventoryServiceImpl implements InventoryService {
 
     }
 
-//    /**
-//     * 退货
-//     *
-//     * @param orderDO
-//     */
-//    @Override
-//    @Transactional(rollbackFor = ErpCommonException.class)
-//    public void returns(MallSubOrderDO orderDO, Long inv) {
-//        /**修改库存*/
-//        InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(orderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
-//        if (inventory == null) {
-//            throw new ErpCommonException("找不到相关库存");
-//        }
-//        inventory.setInv(inventory.getInv() + inv);
-//        inventory.update();
-//        mapper.updateByPrimaryKeySelective(inventory);
-//        /**更新相关Inventory*/
-//        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNo(orderDO.getCompanyNo(), orderDO.getSkuCode(), orderDO.getWarehouseNo());
-//        if (wareHouseDO == null) {
-//            throw new ErpCommonException("找不到相关库存");
-//        }
-//        wareHouseDO.update();
-//        invOnWarehouseMapperExt.updateByPrimaryKeySelective(wareHouseDO);
-//        /**修改流水*/
-//        Integer opeatory = 102;
-//        saveInventoryInOut(inventory, wareHouseDO, opeatory, inv, "退货入库");
-//    }
+    /**
+     * 退货
+     *
+     * @param orderDO
+     */
+    @Override
+    public void returns(MallSubOrderDO orderDO) {
+        /**修改库存*/
+        InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(orderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
+        if (inventory == null) {
+            throw new ErpCommonException("找不到相关库存");
+        }
+        Integer inv = orderDO.getQuantity();
+        inventory.setInv(inventory.getInv() + inv);
+        if (inventory.getLockedInv() > inv) {
+            inventory.setLockedInv(inventory.getLockedInv() - inv);
+        } else {
+            inventory.setLockedInv(0L);
+        }
+        inventory.update();
+        mapper.updateByPrimaryKeySelective(inventory);
+        /**更新相关Inventory*/
+        InventoryOnWareHouseDO wareHouseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNo(orderDO.getCompanyNo(), orderDO.getSkuCode(), orderDO.getWarehouseNo());
+        if (wareHouseDO == null) {
+            throw new ErpCommonException("找不到相关库存");
+        }
+        wareHouseDO.update();
+        invOnWarehouseMapperExt.updateByPrimaryKeySelective(wareHouseDO);
+        /**修改流水*/
+        Integer opeatory = 102;
+        saveInventoryInOut(inventory, wareHouseDO, opeatory, Long.valueOf(inv), "退货入库");
+    }
 
 
     /**
@@ -159,7 +164,6 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallSubOrderDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
     public void order(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
@@ -197,7 +201,6 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallSubOrderDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
     public void release(MallSubOrderDO mallSubOrderDO) {
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
         if (inventoryDO == null) {
@@ -208,13 +211,13 @@ public class InventoryServiceImpl implements InventoryService {
         mapper.updateByPrimaryKeySelective(inventoryDO);
 
     }
+
     /**
      * 取消订单
      *
      * @param mallSubOrderDO
      */
     @Override
-    @Transactional
     public void tryRelease(MallSubOrderDO mallSubOrderDO) {
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
         if (inventoryDO == null) {
@@ -225,6 +228,7 @@ public class InventoryServiceImpl implements InventoryService {
         mapper.updateByPrimaryKeySelective(inventoryDO);
 
     }
+
     /**
      * 库存盘入
      *
