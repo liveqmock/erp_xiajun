@@ -1,11 +1,6 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
-import static org.junit.Assert.assertNotNull;
-
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -15,14 +10,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.record.SCLRecord;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +28,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
@@ -52,14 +44,13 @@ import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuScaleService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
-import com.youzan.open.sdk.gen.v3_0_0.model.YouzanSkusCustomGetResult.ItemSku;
+
 
 /**
  * @author liuhui
@@ -75,7 +66,7 @@ public class MallSubOrderController {
 	private static final String SENDER = "爱派客官方微店";//发货人
 	private static final String SENDER_ADDRESS = "香港新界元朗流浮山廈村屏廈路丈量約份第129約第3141號地段";//发货人地址
 	private static final String SENDER_PHONE = "21561899";//发货人电话
-	
+		
 	@Autowired
 	private IMallSubOrderService erpOrderService;
 	@Autowired
@@ -177,9 +168,9 @@ public class MallSubOrderController {
 				i++;
 				MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
 				if(erpOrder==null){
-					errorMsg.add("第"+i+"条订单数据有误,");
+					errorMsg.add("找不到对应的订单id:"+orderId);
 				}else{
- 					if(Objects.equals(ORDER_SATUTS_INIT, erpOrder.getStatus())){
+ 					if(Objects.equals(OrderStatus.INIT.getCode(), erpOrder.getStatus())){
 						try{
 							if(StringUtil.isNotBlank(closeReason)) {
 								erpOrder.setCloseReason(closeReason);
@@ -187,10 +178,10 @@ public class MallSubOrderController {
 							erpOrderService.closeErpOrder(erpOrder);
 							mainIds.add(erpOrder.getOrderNo());
 						}catch(Exception e){
-							errorMsg.add("第"+i+"条订单关闭失败,");
+							errorMsg.add("只允许修改待付款单的订单");
 						}
 					}else{
-						errorMsg.add("第"+i+"条订单状态有误,");
+						errorMsg.add("id"+orderId+"状态不为代付款状态,不允许关闭");
 					}
 				}
 				
@@ -238,7 +229,7 @@ public class MallSubOrderController {
 			if(erpOrder.getQuantity()==1){
 				return JsonResult.buildFailed("一个商品不能拆分");
 			}
-			if(Objects.equals(erpOrder.getStatus(), ORDER_SATUTS_INIT)){
+			if(Objects.equals(erpOrder.getStatus(), OrderStatus.INIT.getCode())){
 				try{
 					if(splitCount>=erpOrder.getQuantity()){
 						return JsonResult.buildFailed("拆单数量不能超过订单数量");
@@ -270,7 +261,7 @@ public class MallSubOrderController {
 			return JsonResult.buildFailed("未找到订单");
 		}else{
 			//订单状态校验
-			if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
+			if(OrderStatus.INIT.getCode()==erpOrder.getStatus()&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
 				inventoryService.release(erpOrder);
 			}else{
 				return JsonResult.buildFailed("订单状态错误");
@@ -328,7 +319,7 @@ public class MallSubOrderController {
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
 					erpOrders.add(erpOrder);
-					if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())){
+					if(OrderStatus.INIT.getCode()==erpOrder.getStatus()){
 						if(skuCode==null){
 							skuCode = erpOrder.getSkuCode();
 						}else{
@@ -521,6 +512,7 @@ public class MallSubOrderController {
         excelHelper.close();
         return filebyte;
     }
+    
     @RequestMapping("/listChoice")
 	private Object listChoice(Long id){
 		JsonResult<Map<String, String>> result = new JsonResult();

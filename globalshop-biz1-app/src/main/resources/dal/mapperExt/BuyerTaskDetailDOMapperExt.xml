@@ -51,4 +51,22 @@
     </update>
 
 
+    <select id="taskDailyExportByTaskNo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.String">
+        SELECT b.item_name as itemName,b.sku_pic as skuPic,b.sku_code as skuCode,b.upc,b.brand_name as brand,b.scale,a.count,c.title as taskTitle,c.gmt_create as gmtCreate,c.buyer_task_no as taskOrderNo,entry_count as inCount,
+        case b.scale
+        WHEN 'XXS' THEN 1
+        WHEN 'XS' THEN 2
+        WHEN 'S' THEN 3
+        WHEN 'M' THEN 4
+        WHEN 'L' THEN 5
+        WHEN 'XL' THEN 6
+        WHEN 'XXL' THEN 7
+        end as scale_int
+        FROM buyer_task_detail a
+        LEFT JOIN item_sku b ON a.sku_code=b.sku_code
+        LEFT JOIN buyer_task c ON a.buyer_task_no=c.buyer_task_no
+        WHERE a.buyer_task_no=#{buyerTaskNo}
+        ORDER BY trim(b.item_name),(b.scale+0),scale_int
+    </select>
+
 </mapper>

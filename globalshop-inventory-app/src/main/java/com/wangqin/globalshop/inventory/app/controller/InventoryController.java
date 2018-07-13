@@ -1,17 +1,22 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
-
-import com.google.gson.JsonObject;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.shiro.ShiroUser;
 import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.inventory.app.service.*;
+import net.sf.json.JSONArray;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,40 +26,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
-import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.shiro.ShiroUser;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
-import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
-import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailService;
-import com.wangqin.globalshop.inventory.app.service.IWarehouseService;
-import com.wangqin.globalshop.inventory.app.service.InventoryBookingRecordService;
-import com.wangqin.globalshop.inventory.app.service.InventoryIMallSubOrderService;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 库存处理器
@@ -63,7 +43,7 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
  */
 @Controller
 @RequestMapping("/inventory")
-@Authenticated
+//@Authenticated
 public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
@@ -122,6 +102,7 @@ public class InventoryController {
             			}
             		});
             	}
+            	inv.setSkuPic(ImgUtil.initImg2Json(inv.getSkuPic()));
             }
             result.buildData(list);
             result.buildIsSuccess(true);
@@ -397,6 +378,9 @@ public class InventoryController {
     /**
      * 修改货架号
      *
+     * @param inventoryOnWarehouseNo inventoryOnWarehouseNo
+     * @param shelfNo                货架号
+     * @return
      */
     @RequestMapping("/changePositionNo")
     @ResponseBody
@@ -555,62 +539,69 @@ public class InventoryController {
     /**
      * 确认出库
      *
-     * @param inventoryOutDetailListStr inventoryOnWarehouseNo + quantity
-     * @param desc
+     * @param inventoryOutDetailList inventoryOutDetailList
+     * @param warehouseNo            仓库编号
+     * @param warehouseName          仓库名
+     * @param desc                   描述/备注
      * @return
      * @throws InventoryException
      */
-//    @RequestMapping("/inventoryOutConfirm")
+    @RequestMapping("/inventoryOutConfirm")
     @ResponseBody
     @Transactional(rollbackFor = ErpCommonException.class)
-    public Object inventoryOutConfirm(JsonObject[] inventoryOutDetailListStr, String desc) throws InventoryException {
+    public Object inventoryOutConfirm(String inventoryOutDetailList,String warehouseNo,
+                                      String warehouseName, String desc) throws InventoryException {
+
+        JSONArray inventoryOutDetailArray = JSONArray.fromObject(inventoryOutDetailList);
+
         try {
-            inventoryService.inventoryOutConfirm(inventoryOutDetailListStr, desc);
+            inventoryService.inventoryOutConfirm(inventoryOutDetailArray, warehouseNo, warehouseName, desc);
         } catch (ErpCommonException e) {
             return JsonResult.buildFailed(e.getErrorMsg());
         } catch (Exception ex) {
             return JsonResult.buildFailed("未知异常");
         }
+
         return JsonResult.buildSuccess(null);
     }
 
-    /**
-     * 确认出库,区分新增出库和修改出库，逻辑不同
-     *
-     * @param
-     * @return
-     */
-    @RequestMapping("/inventoryOutConfirm")
-    @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
-    public Object inventoryOutConfirm(InventoryOutManifestDO inventoryOut) throws InventoryException {
-        JsonResult<String> result = new JsonResult<>();
-        Set<String> skuIdSet = null;
-        if (inventoryOut.getId() == null) {    //新增出库
-            initInventoryOut(inventoryOut);
-            inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
-            skuIdSet = inventoryOutService.addInventoryOutConfirm(inventoryOut);
-        } else {
-            if (inventoryOut.getId() == null) {
-                return result.buildIsSuccess(false).buildMsg("没有ID");
-            } else {
-                InventoryOutManifestDO io = inventoryOutService.selectById(inventoryOut.getId());
-                if (io == null || io.getStatus() != GeneralStatus.INIT.getCode()) {
-                    return result.buildIsSuccess(false).buildMsg("状态不对");
-                }
-            }
-            initInventoryOut(inventoryOut);
-            inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
-            skuIdSet = inventoryOutService.updateInventoryOutConfirm(inventoryOut);
-        }
-        //对子订单进行库存分配
-        if (skuIdSet != null && !skuIdSet.isEmpty()) {
-            for (String skuId : skuIdSet) {
-                erpOrderService.lockErpOrderBySkuId(skuId);
-            }
-        }
-        return result.buildIsSuccess(true);
-    }
+//    /**
+//     * 确认出库,区分新增出库和修改出库，逻辑不同
+//     *
+//     * @param
+//     * @return
+//     */
+//    @RequestMapping("/inventoryOutConfirm")
+//    @ResponseBody
+//    @Transactional(rollbackFor = ErpCommonException.class)
+//    public Object inventoryOutConfirm(InventoryOutManifestDO inventoryOut) throws InventoryException {
+//        JsonResult<String> result = new JsonResult<>();
+//        Set<String> skuIdSet = null;
+//        if (inventoryOut.getId() == null) {    //新增出库
+//            initInventoryOut(inventoryOut);
+//            inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
+//            skuIdSet = inventoryOutService.addInventoryOutConfirm(inventoryOut);
+//        } else {
+//            if (inventoryOut.getId() == null) {
+//                return result.buildIsSuccess(false).buildMsg("没有ID");
+//            } else {
+//                InventoryOutManifestDO io = inventoryOutService.selectById(inventoryOut.getId());
+//                if (io == null || io.getStatus() != GeneralStatus.INIT.getCode()) {
+//                    return result.buildIsSuccess(false).buildMsg("状态不对");
+//                }
+//            }
+//            initInventoryOut(inventoryOut);
+//            inventoryOut.setStatus(GeneralStatus.CONFIRM.getCode());
+//            skuIdSet = inventoryOutService.updateInventoryOutConfirm(inventoryOut);
+//        }
+//        //对子订单进行库存分配
+//        if (skuIdSet != null && !skuIdSet.isEmpty()) {
+//            for (String skuId : skuIdSet) {
+//                erpOrderService.lockErpOrderBySkuId(skuId);
+//            }
+//        }
+//        return result.buildIsSuccess(true);
+//    }
 
     /**
      * 删除出库单

@@ -28,6 +28,12 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	@Override
     MallSubOrderDO selectByPrimaryKey(Long id);
 
+	//查询超时订单，后面再调一下超时时间参数
+	List<MallSubOrderDO> queryExpiredSubOrders(@Param("status")Integer status);
+
+	//关闭超时订单，后面再调一下超时时间参数
+	void updateSubOrderStatus(@Param("oldStatus")Integer oldStatus,@Param("newStatus")Integer newStatus);
+
 
 	List<MallSubOrderDO> selectList(MallSubOrderDO order);
 

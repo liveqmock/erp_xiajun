@@ -12,3 +12,8 @@ ADD COLUMN `batch_num` int(4) COMMENT '批次号';
 ###批次号
 ALTER TABLE `haidb2new`.`buyer_storage_detail`
 ADD COLUMN `batch_num` int(4) COMMENT '批次号';
+
+###20180712
+ALTER TABLE `haidb2new`.`buyer`
+DROP INDEX `OPENID`,
+ADD UNIQUE INDEX `OPENID`(`open_id`, `union_id`) USING BTREE;

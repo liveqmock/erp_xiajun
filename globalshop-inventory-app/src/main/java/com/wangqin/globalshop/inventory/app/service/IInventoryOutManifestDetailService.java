@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.inventory.app.service;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 
@@ -27,4 +29,20 @@ public interface IInventoryOutManifestDetailService {
     Set<String> updateInventoryOutConfirm(InventoryOutManifestDO inventoryOut);
 
     void deleteInventoryOutById(Long id);
+
+    /**
+     * 添加出货单详情
+     *
+     * @param inventoryOutManifestDetailDO
+     */
+    void insertInventoryOutManifestDetail(InventoryOutManifestDetailDO inventoryOutManifestDetailDO);
+
+    /**
+     * 添加出货单详情
+     *
+     * @param inventoryOnWareHouseDO
+     * @param inventoryOutManifestDO
+     */
+    void insertInventoryOutManifestDetail(InventoryOnWareHouseDO inventoryOnWareHouseDO,
+                                          InventoryOutManifestDO inventoryOutManifestDO, Long quantity);
 }

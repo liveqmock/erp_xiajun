@@ -339,6 +339,10 @@ public class Wechat3rdPartyAuthorization {
 
     }
 
+//    public static void main(String[] args) {
+//        re_url = URLEncoder.encode("http://tests.buyer007.cn/account/authcallback", "UTF-8");
+//    }
+
 
     /***
      * 封装小程序配置类对象

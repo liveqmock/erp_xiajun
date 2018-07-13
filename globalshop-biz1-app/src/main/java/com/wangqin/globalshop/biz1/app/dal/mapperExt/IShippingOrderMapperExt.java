@@ -4,6 +4,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ShippingOrderDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,13 +18,13 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
 
     Integer queryShippingOrderCount(ShippingOrderVO shippingOrderVO);
 
-    List<ShippingOrderDO> selectBatchIds(List<Long> shippingOrderIdList);
+    List<ShippingOrderDO> selectBatchIds(@Param("shippingOrderIdList") List<Long> shippingOrderIdList);
 
     List<ShippingOrderDO> queryByShippingOrderPackageTime(ShippingOrderVO shippingOrderQueryVO);
 
     ShippingOrderDO selectByShippingNo(String shippingNO);
 
-    int selectCount(String idCard, String logisticCompany);
+    int selectCount(@Param("idCard") String idCard,@Param("logisticCompany") String logisticCompany);
 
     ShippingOrderDO selectByLogisticNo(ShippingOrderDO order);
 

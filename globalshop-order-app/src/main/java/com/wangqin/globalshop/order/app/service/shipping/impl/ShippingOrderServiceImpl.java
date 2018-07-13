@@ -430,7 +430,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public void update(ShippingOrderDO shippingOrder) {
-
+    	shippingOrderMapper.updateByPrimaryKeySelective(shippingOrder);
     }
 
     @Override
@@ -478,7 +478,8 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void ship(ShippingOrderDO shippingOrder) throws ErpCommonException {
 
-        String shippingNo = CodeGenUtil.getShippingNO(sequenceUtilService.gainPKGSequence());
+
+    	String shippingNo = CodeGenUtil.getShippingNO(sequenceUtilService.gainPKGSequence());
         StringBuffer erpNos = new StringBuffer();
         String mallOrders = shippingOrder.getMallOrders();
         if (Util.isEmpty(mallOrders)){
@@ -515,8 +516,15 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         for (MallSubOrderDO erpOrder : list) {
             /**如果没有订单号  则认为是没有发货*/
             if (Util.isEmpty(erpOrder.getShippingNo())) {
-                /**物流出库*/
-                erpOrder.setStatus(ORDER_SATUTS_SENT);
+                /**判断实际库存是否满足发货条件*/
+            	InventoryDO inventory = inventoryService.selectByItemCodeAndSkuCode(erpOrder.getItemCode(), erpOrder.getSkuCode());
+            	if(inventory.getInv() <= 0) {
+            		throw new ErpCommonException("实际库存不足");
+            	}
+            	
+            	/**物流出库*/
+            	
+                erpOrder.setStatus(OrderStatus.SENT.getCode());
                 erpOrder.setShippingNo(shippingNo);
                 Map<InventoryOnWareHouseDO, Long> ship = inventoryService.ship(erpOrder);
                 for (InventoryOnWareHouseDO inventoryOnWareHouseDO : ship.keySet()) {
@@ -582,12 +590,12 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     private void updateMallOrderStats(MallOrderDO orderDO) {
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
         for (MallSubOrderDO aDo : list) {
-            if (ORDER_SATUTS_SENT.equals(aDo.getStatus())) {
-                orderDO.setStatus(ORDER_SATUTS_PART_SENT);
+            if (OrderStatus.SENT.getCode() != aDo.getStatus()){
+                orderDO.setStatus(OrderStatus.PART_SENT.getCode());
                 return;
             }
         }
-        orderDO.setStatus(ORDER_SATUTS_SENT);
+        orderDO.setStatus(OrderStatus.SENT.getCode());
 
     }
 
