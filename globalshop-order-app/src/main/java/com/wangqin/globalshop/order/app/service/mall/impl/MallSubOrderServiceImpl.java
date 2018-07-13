@@ -26,8 +26,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_CLOSE;
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
 
 /**
  * @author biscuit
@@ -88,7 +86,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     public List<MallSubOrderDO> queryErpOrders(MallSubOrderVO erpOrderQueryVO) {
         erpOrderQueryVO.init();
-            return mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
+        return mallSubOrderDOMapper.queryErpOrders(erpOrderQueryVO);
     }
 
     @Override
@@ -99,15 +97,15 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void closeErpOrder(MallSubOrderDO erpOrder) throws InventoryException {
-        erpOrder.setStatus(ORDER_SATUTS_CLOSE);
+        erpOrder.setStatus(OrderStatus.CLOSE.getCode());
         erpOrder.setGmtModify(new Date());
         mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
-        //备货状态清空占用库存
-        Integer stockStatus = erpOrder.getStockStatus();
-        Integer initStatus = StockUpStatus.INIT.getCode();
-        if(!initStatus.equals(stockStatus) ){
-            inventoryService.release(erpOrder);
-        }
+//        //备货状态清空占用库存
+//        Integer stockStatus = erpOrder.getStockStatus();
+//        Integer initStatus = StockUpStatus.INIT.getCode();
+//        if(!initStatus.equals(stockStatus) ){
+        inventoryService.release(erpOrder);
+//        }
     }
 
     @Override
@@ -118,10 +116,10 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         BeanUtils.copyProperties(erpOrder, newErpOrder);
         newErpOrder.setId(null);
 //		newErpOrder.setErpNo(erpNo);
-        newErpOrder.setStatus(ORDER_SATUTS_INIT);
-        newErpOrder.setStockStatus( StockUpStatus.INIT.getCode());
+        newErpOrder.setStatus(OrderStatus.PAID.getCode());
+        newErpOrder.setStockStatus(StockUpStatus.INIT.getCode());
         newErpOrder.setGmtModify(new Date());
-        newErpOrder.setQuantity(erpOrder.getQuantity()-splitCount);
+        newErpOrder.setQuantity(erpOrder.getQuantity() - splitCount);
         newErpOrder.setWarehouseNo(null);
         //获取子订单数量便于产生单号
         List<MallSubOrderDO> erpOrders = mallSubOrderDOMapper.selectByOrderNo(erpOrder.getOrderNo());
@@ -132,58 +130,58 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         erpOrder.setGmtModify(new Date());
 //		this.baseMapper.updateById(erpOrder);
         //未备货状态
-        if(erpOrder.getStockStatus()==StockUpStatus.INIT.getCode()||erpOrder.getStockStatus()==StockUpStatus.RELEASED.getCode()){
+        if (erpOrder.getStockStatus() == StockUpStatus.INIT.getCode() || erpOrder.getStockStatus() == StockUpStatus.RELEASED.getCode()) {
             mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
-        }else {//部分备货或者全部备货状态
-            List<InventoryBookingRecordDO>  records = inventoryRecordService.queryByErpOrderId(erpOrder.getOrderNo());
+        } else {//部分备货或者全部备货状态
+            List<InventoryBookingRecordDO> records = inventoryRecordService.queryByErpOrderId(erpOrder.getOrderNo());
             Long realBooked = 0L;//现货备货数量
             Long transBooked = 0L;//在途备货数量
-            Map<Long,InventoryBookingRecordDO> realMaps = Maps.newHashMap();//现货备货记录
-            Map<Long,InventoryBookingRecordDO> transMaps = Maps.newHashMap();//在途备货记录
-            if(CollectionUtils.isNotEmpty(records)){
-                for(InventoryBookingRecordDO record:records){
-                    if(record.getInventoryType()== InventoryRecord.InventoryType.INVENTORY){
-                        realBooked+=record.getBookedQuantity();
+            Map<Long, InventoryBookingRecordDO> realMaps = Maps.newHashMap();//现货备货记录
+            Map<Long, InventoryBookingRecordDO> transMaps = Maps.newHashMap();//在途备货记录
+            if (CollectionUtils.isNotEmpty(records)) {
+                for (InventoryBookingRecordDO record : records) {
+                    if (record.getInventoryType() == InventoryRecord.InventoryType.INVENTORY) {
+                        realBooked += record.getBookedQuantity();
                         realMaps.put(record.getId(), record);
-                    }else{
-                        transBooked+=record.getBookedQuantity();
+                    } else {
+                        transBooked += record.getBookedQuantity();
                         transMaps.put(record.getId(), record);
                     }
                 }
-            }else{
+            } else {
                 throw new InventoryException("无备货记录，数据异常");
             }
             //要拆分的主订单比全部备货数量还大，原来的备货直接给予主订单，新增一条未备货的子订单即可
-            if(splitCount>=(realBooked+transBooked)){
+            if (splitCount >= (realBooked + transBooked)) {
                 //无剩余备货订单
-                for(InventoryBookingRecordDO record:records){
+                for (InventoryBookingRecordDO record : records) {
                     record.setQuantity(Long.valueOf(erpOrder.getQuantity()));
                     record.setGmtModify(new Date());
                 }
                 inventoryRecordService.updates(records);
                 //根据备货数量计算订单状态
-                ErpOrderUtil.calculateStockStatus(erpOrder,realBooked,transBooked);
+                ErpOrderUtil.calculateStockStatus(erpOrder, realBooked, transBooked);
                 //新订单改为未备货
                 mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
-            }else if(splitCount>realBooked){//比现货备货大，现货全部给予主订单。
+            } else if (splitCount > realBooked) {//比现货备货大，现货全部给予主订单。
                 Long mainReal = realBooked;  //主订单现货
                 Long subReal = 0L;   //子订单现货
 
-                Long mainTrans = splitCount-realBooked;  //主订单在途
-                Long subTrans = realBooked+transBooked-splitCount;  //子订单在途
+                Long mainTrans = splitCount - realBooked;  //主订单在途
+                Long subTrans = realBooked + transBooked - splitCount;  //子订单在途
 
 
                 //有剩余在途备货订单
                 Long x = splitCount - realBooked;
-                if(!transMaps.isEmpty()){
-                    for(Long id : transMaps.keySet()){
+                if (!transMaps.isEmpty()) {
+                    for (Long id : transMaps.keySet()) {
                         InventoryBookingRecordDO tran = transMaps.get(id);
-                        if(x>0){
-                            if(x<tran.getBookedQuantity()){
+                        if (x > 0) {
+                            if (x < tran.getBookedQuantity()) {
                                 //拆
-                                Long tx = tran.getBookedQuantity()-x;
+                                Long tx = tran.getBookedQuantity() - x;
                                 //x的数量给主订单，tx的数量给子订单
                                 //新record初始化
                                 InventoryBookingRecordDO newRecord = new InventoryBookingRecordDO();
@@ -201,15 +199,15 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                                 tran.setQuantity(Long.valueOf(erpOrder.getQuantity()));
                                 tran.setGmtModify(new Date());
 
-                                x=0L;
-                            }else{
+                                x = 0L;
+                            } else {
                                 //不拆，全部给主订单
-                                x-=tran.getBookedQuantity();
+                                x -= tran.getBookedQuantity();
                                 tran.setQuantity(Long.valueOf(erpOrder.getQuantity()));
                                 tran.setGmtModify(new Date());
                             }
 
-                        }else{
+                        } else {
                             //剩余在途全部给子订单
                             tran.setOrderNo(newErpOrder.getOrderNo());
                             tran.setQuantity(Long.valueOf(newErpOrder.getQuantity()));
@@ -218,8 +216,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                     }
                 }
                 //现货全部给主订单
-                if(!realMaps.isEmpty()){
-                    for(Long id : realMaps.keySet()){
+                if (!realMaps.isEmpty()) {
+                    for (Long id : realMaps.keySet()) {
                         InventoryBookingRecordDO real = realMaps.get(id);
                         real.setQuantity(Long.valueOf(erpOrder.getQuantity()));
                         real.setGmtModify(new Date());
@@ -227,26 +225,26 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                 }
                 //更新全部在途或者现货record
                 inventoryRecordService.updates(records);
-                ErpOrderUtil.calculateStockStatus(erpOrder,mainReal,mainTrans);
+                ErpOrderUtil.calculateStockStatus(erpOrder, mainReal, mainTrans);
                 mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
                 newErpOrder.setWarehouseNo(erpOrder.getWarehouseNo());
-                ErpOrderUtil.calculateStockStatus(newErpOrder,subReal,subTrans);
+                ErpOrderUtil.calculateStockStatus(newErpOrder, subReal, subTrans);
                 mallSubOrderDOMapper.updateByPrimaryKeySelective(newErpOrder);
-            }else{//从1 <= splitCount <= realBooked 个
+            } else {//从1 <= splitCount <= realBooked 个
 //				int mainReal = realBooked;
 //				int mainTrans = 0;
-                Long subReal = realBooked-splitCount; //子订单实际备货数量
+                Long subReal = realBooked - splitCount; //子订单实际备货数量
                 Long subTrans = transBooked;//子订单在途备货数量
 
                 //有剩余现货备货订单
                 Integer x = splitCount;
-                for(Long id : realMaps.keySet()){
+                for (Long id : realMaps.keySet()) {
                     InventoryBookingRecordDO real = realMaps.get(id);
-                    if(x>0){
-                        if(x<real.getBookedQuantity()){
+                    if (x > 0) {
+                        if (x < real.getBookedQuantity()) {
                             //拆
-                            long tx = real.getBookedQuantity()-x;
+                            long tx = real.getBookedQuantity() - x;
                             //x的数量给主订单，tx的数量给子订单
                             //新record初始化
                             InventoryBookingRecordDO newRecord = new InventoryBookingRecordDO();
@@ -264,34 +262,34 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
                             real.setQuantity(Long.valueOf(erpOrder.getQuantity()));
                             real.setGmtModify(new Date());
 
-                            x=0;
-                        }else{
+                            x = 0;
+                        } else {
                             //不拆，全部给主订单
                             x = x - Integer.valueOf(Math.toIntExact(real.getBookedQuantity()));
                             real.setQuantity(Long.valueOf(erpOrder.getQuantity()));
                             real.setGmtModify(new Date());
                         }
-                    }else{//剩下现货都给子订单
+                    } else {//剩下现货都给子订单
                         real.setOrderNo(newErpOrder.getOrderNo());
                         real.setQuantity(Long.valueOf(newErpOrder.getQuantity()));
                         real.setGmtModify(new Date());
                     }
                 }
                 //在途全部给子订单
-                if(!transMaps.isEmpty()){
-                    for(Long id : transMaps.keySet()){
+                if (!transMaps.isEmpty()) {
+                    for (Long id : transMaps.keySet()) {
                         InventoryBookingRecordDO tran = transMaps.get(id);
                         tran.setOrderNo(newErpOrder.getOrderNo());
                         tran.setQuantity(Long.valueOf(newErpOrder.getQuantity()));
                         tran.setGmtModify(new Date());
                     }
                 }
-                erpOrder.setStockStatus( StockUpStatus.STOCKUP.getCode());
+                erpOrder.setStockStatus(StockUpStatus.STOCKUP.getCode());
                 erpOrder.setGmtModify(new Date());
                 mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
                 newErpOrder.setWarehouseNo(erpOrder.getWarehouseNo());
-                ErpOrderUtil.calculateStockStatus(newErpOrder,subReal,subTrans);
+                ErpOrderUtil.calculateStockStatus(newErpOrder, subReal, subTrans);
                 mallSubOrderDOMapper.updateByPrimaryKeySelective(newErpOrder);
                 //更新全部在途或者现货record
                 inventoryRecordService.updates(records);
@@ -348,35 +346,35 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
     @Override
     public int selectCountWithStateAndOrderNo(String orderNo, Integer statuts) {
-        return mallSubOrderDOMapper.selectCountWithStateAndOrderNo(orderNo,statuts);
-    }
-
-	@Override
-	public void updateByIsDel(MallSubOrderVO mallSubOrderVO) {
-		// TODO Auto-generated method stub
-		
-		mallSubOrderDOMapper.updateByIsDel(mallSubOrderVO);
-	}
-
-	@Override
-	public List<MallSubOrderVO> selectByOrderNoVo(String ordderNo) {
-		// TODO Auto-generated method stub
-		return mallSubOrderDOMapper.selectByOrderNoVo(ordderNo);
-	}
-
-	@Override
-	public void deleteByHardSub(Long id) {
-		// TODO Auto-generated method stub
-		mallSubOrderDOMapper.deleteByPrimaryKey(id);
-	}
-
-    @Override
-    public List<MallSubOrderDO> queryExpiredSubOrders(Integer status){
-        return  mallSubOrderDOMapper.queryExpiredSubOrders(status);
+        return mallSubOrderDOMapper.selectCountWithStateAndOrderNo(orderNo, statuts);
     }
 
     @Override
-    public void updateSubOrderStatus(Integer oldStatus, Integer newStatus){
-        mallSubOrderDOMapper.updateSubOrderStatus( oldStatus, newStatus);
+    public void updateByIsDel(MallSubOrderVO mallSubOrderVO) {
+        // TODO Auto-generated method stub
+
+        mallSubOrderDOMapper.updateByIsDel(mallSubOrderVO);
+    }
+
+    @Override
+    public List<MallSubOrderVO> selectByOrderNoVo(String ordderNo) {
+        // TODO Auto-generated method stub
+        return mallSubOrderDOMapper.selectByOrderNoVo(ordderNo);
+    }
+
+    @Override
+    public void deleteByHardSub(Long id) {
+        // TODO Auto-generated method stub
+        mallSubOrderDOMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<MallSubOrderDO> queryExpiredSubOrders(Integer status) {
+        return mallSubOrderDOMapper.queryExpiredSubOrders(status);
+    }
+
+    @Override
+    public void updateSubOrderStatus(Integer oldStatus, Integer newStatus) {
+        mallSubOrderDOMapper.updateSubOrderStatus(oldStatus, newStatus);
     }
 }

@@ -36,7 +36,6 @@ import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.*;
 
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
 
 /**
  * @author liuhui
@@ -205,7 +204,7 @@ public class MallSubOrderController {
 			if(erpOrder.getQuantity()==1){
 				return JsonResult.buildFailed("一个商品不能拆分");
 			}
-			if(Objects.equals(erpOrder.getStatus(), ORDER_SATUTS_INIT)){
+			if(Objects.equals(erpOrder.getStatus(), OrderStatus.INIT.getCode())){
 				try{
 					if(splitCount>=erpOrder.getQuantity()){
 						return JsonResult.buildFailed("拆单数量不能超过订单数量");
@@ -237,7 +236,7 @@ public class MallSubOrderController {
 			return JsonResult.buildFailed("未找到订单");
 		}else{
 			//订单状态校验
-			if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
+			if(OrderStatus.INIT.getCode()==erpOrder.getStatus()&&erpOrder.getStockStatus()!= StockUpStatus.RELEASED.getCode()&&erpOrder.getStockStatus()!=StockUpStatus.INIT.getCode()){
 				inventoryService.release(erpOrder);
 			}else{
 				return JsonResult.buildFailed("订单状态错误");
@@ -295,7 +294,7 @@ public class MallSubOrderController {
 					errorMsg.add("第"+i+"条订单数据有误,");
 				}else{
 					erpOrders.add(erpOrder);
-					if(ORDER_SATUTS_INIT.equals(erpOrder.getStatus())){
+					if(OrderStatus.INIT.getCode()==erpOrder.getStatus()){
 						if(skuCode==null){
 							skuCode = erpOrder.getSkuCode();
 						}else{

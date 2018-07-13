@@ -524,7 +524,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             	
             	/**物流出库*/
             	
-                erpOrder.setStatus(ORDER_SATUTS_SENT);
+                erpOrder.setStatus(OrderStatus.SENT.getCode());
                 erpOrder.setShippingNo(shippingNo);
                 Map<InventoryOnWareHouseDO, Long> ship = inventoryService.ship(erpOrder);
                 for (InventoryOnWareHouseDO inventoryOnWareHouseDO : ship.keySet()) {
@@ -590,12 +590,12 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     private void updateMallOrderStats(MallOrderDO orderDO) {
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
         for (MallSubOrderDO aDo : list) {
-            if (ORDER_SATUTS_SENT.equals(aDo.getStatus())) {
-                orderDO.setStatus(ORDER_SATUTS_PART_SENT);
+            if (OrderStatus.SENT.getCode() != aDo.getStatus()){
+                orderDO.setStatus(OrderStatus.PART_SENT.getCode());
                 return;
             }
         }
-        orderDO.setStatus(ORDER_SATUTS_SENT);
+        orderDO.setStatus(OrderStatus.SENT.getCode());
 
     }
 
