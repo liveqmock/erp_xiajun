@@ -1,129 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailMapperExt">
-	<sql id="Base_Column_List">
-	   T1.id,T1.task_id AS taskId,T1.item_id AS itemId,T1.sku_id AS skuId,T1.upc AS upc,T1.sku_code AS skuCode,T1.task_price AS taskPrice,T1.task_max_price AS taskMaxPrice,T1.`count` AS count,T1.`status`,T1.task_start_time AS taskStartTime,T1.task_end_time AS taskEndTime,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.`mode`,T1.currency,T1.task_order_no AS taskOrderNo,T1.remark,T1.task_max_count AS taskMaxCount,
-	   T1.buyer_id as buyerId,T1.buyer_name as buyerName,T1.owner_id as ownerId,T1.owner_name as ownerName,T1.in_count as inCount
-	</sql>
-	
-	<select id="queryBuyerTaskList" resultType="com.wangqin.globalshop.biz1.app.dto.BuyerTaskDailyDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">
-        SELECT
-        	 <include refid="Base_Column_List"/>,T2.item_name as itemName ,T2.sku_code as skuCode, T2.color as color,T2.scale as scale,T2.buy_site as buySite,T2.sku_pic as skuPic,T1.`count` AS taskDailyCount,T1.id As taskDailyDetailId,
-        	 T2.cost_price as costPrice,T2.discount,T2.purchase_price as purchasePrice,
-        	 case T2.scale 
-			 WHEN 'XXS' THEN 1 
-			 WHEN 'XS' THEN 2 
-			 WHEN 'S' THEN 3 
-			 WHEN 'M' THEN 4 
-			 WHEN 'L' THEN 5 
-			 WHEN 'XL' THEN 6 
-			 WHEN 'XXL' THEN 7 
-			end as scale_int 
-        FROM
-            task_daily_detail T1 left join item_sku T2 on T1.sku_id=T2.id
-        where
-           1=1
-            <if test=" buyerId != null and buyerId != '' ">
-                and T1.buyer_id = #{buyerId}
-            </if>
-            <if test=" itemName != null and itemName != '' ">
-                and T2.item_name LIKE concat('%',#{itemName},'%')
-            </if>
-            <if test=" buySite != null and buySite != '' ">
-          		and T2.buy_site LIKE concat('%',#{buySite},'%') 
-            </if>
-              <![CDATA[   and T1.task_start_time<=NOW() 
-                and T1.task_end_time>= NOW()]]>
-			    and T1.status=0 
-                order by IFNULL(T2.buy_site, ''),trim(T2.item_name),T2.color,(T2.scale+0),scale_int
-    </select>
-    
-    <select id="taskDailyExportByTaskId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">
-    	SELECT b.item_name as itemName,b.sku_pic as skuPic,b.sku_code as skuCode,b.upc,b.brand,b.color,b.scale,b.buy_site as buySite,a.count,c.task_title as taskTitle,c.gmt_create as gmtCreate,c.task_order_no as taskOrderNo,in_count as inCount,
-	    	case b.scale 
-			 WHEN 'XXS' THEN 1 
-			 WHEN 'XS' THEN 2 
-			 WHEN 'S' THEN 3 
-			 WHEN 'M' THEN 4 
-			 WHEN 'L' THEN 5 
-			 WHEN 'XL' THEN 6 
-			 WHEN 'XXL' THEN 7 
-			end as scale_int 
-		FROM task_daily_detail a 
-		LEFT JOIN item_sku b ON a.sku_id=b.id 
-		LEFT JOIN task_daily c ON a.task_id=c.id 
-		WHERE a.task_id=#{taskId} 
-		ORDER BY IFNULL(b.buy_site, ''),trim(b.item_name),b.color,(b.scale+0),scale_int
-    </select>
-    
-    <select id="queryDailyDetailByTaskId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO" parameterType="java.lang.Long">
-    	SELECT <include refid="Base_Column_List"/>,T2.sku_pic as skuPic,T2.color as color, T2.scale as scaleInt
-		FROM task_daily_detail T1 
-		LEFT JOIN item_sku T2 ON T1.sku_id=T2.id 
-		WHERE T1.task_id=#{taskId} 
-		ORDER BY IFNULL(T2.buy_site, ''),trim(T2.item_name),T2.color,(T2.scale+0),scaleInt
-    </select>
-    
-    <!-- 查找一个task_deily对应的多个task_deilay_detail，XiaJun -->
-    <select id="queryTaskDailyDetailsByTaskDailyId" resultType="java.lang.Long" parameterType="java.lang.Long">
-    	SELECT T1.id
-		FROM task_daily_detail T1 
-		WHERE T1.task_id=#{id} 
-    </select>
-    
-    <!-- 判断该商品是否已经入库，count=in_incount表示已入库，XiaJun -->
-    <!--  
-    <select id="judgeItemIn" resultType="java.lang.Integer" parameterType="java.lang.Long">
-    	SELECT (count-in_count)
-		FROM task_daily_detail  
-		WHERE id=#{task_daily_detail_id} 
-    </select>
-    -->
-    <!--  
-    <update id="closeTaskDetailDaily" >
-	    UPDATE task_daily_detail 
-	    	SET status=-1 
-	    WHERE task_id IN 
-	    <foreach item="item" index="index" collection="taskDailyIdList" open="(" separator="," close=")">  
-			#{item}
-		</foreach> 
-	</update>
-	<update id="finishTaskDetailDaily" >
-	    UPDATE task_daily_detail 
-	    	SET status=2 
-	    WHERE task_id IN 
-	    <foreach item="item" index="index" collection="taskDailyIdList" open="(" separator="," close=")">  
-			#{item}
-		</foreach> 
-	</update>
-	-->
-	
-	<!-- 统一上面两个接口为更新采购状态 @Author:XiaJun -->
-	<update id="updateTaskDetailDailyStatus" >
-	    UPDATE task_daily_detail 
-	    	SET status=#{status}
-	    WHERE task_id IN 
-	    <foreach item="item" index="index" collection="taskDailyIdList" open="(" separator="," close=")">  
-			#{item}
-		</foreach> 
-	</update>
-	
-	<!-- 统计待采购商品数，task_daily_detail表status为待采购的记录，对count求和，XiaJun -->
-    <select id="countUnPurchasedItemNumber" resultType="java.lang.Integer" >
-    	SELECT IFNULL(sum(IFNULL(T1.count,0)),0)
-		FROM task_daily_detail T1 
-		WHERE T1.status = 0
-    </select>
-    
-    <!-- 采购异常订单数,XiaJun -->
-    <select id="countPurExcOrderNum" resultType="java.lang.Integer">
-    SELECT 	IFNULL(count(1),0)
-    FROM task_daily_detail T1
-    WHERE T1.status = 1 <!-- 状态标为采购结束 -->
-    AND T1.in_count != count <!-- 但是入库数量不满足所需数量 -->
-    </select>
-	
-	<update id="updateUpcForTaskDailyDetail" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
-		UPDATE task_daily_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};
-    </update>
+	<!--
+
+	本文件跟BuyerTaskDetailDOMapperExt.xml合并
+
+
+	 <sql id="Base_Column_List">-->
+	   <!--T1.id,T1.task_id AS taskId,T1.item_id AS itemId,T1.sku_id AS skuId,T1.upc AS upc,T1.sku_code AS skuCode,T1.task_price AS taskPrice,T1.task_max_price AS taskMaxPrice,T1.`count` AS count,T1.`status`,T1.task_start_time AS taskStartTime,T1.task_end_time AS taskEndTime,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.`mode`,T1.currency,T1.task_order_no AS taskOrderNo,T1.remark,T1.task_max_count AS taskMaxCount,-->
+	   <!--T1.buyer_id as buyerId,T1.buyer_name as buyerName,T1.owner_id as ownerId,T1.owner_name as ownerName,T1.in_count as inCount-->
+	<!--</sql>-->
+	<!---->
+	<!--<select id="queryBuyerTaskList" resultType="com.wangqin.globalshop.biz1.app.dto.BuyerTaskDailyDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">-->
+        <!--SELECT-->
+        	 <!--<include refid="Base_Column_List"/>,T2.item_name as itemName ,T2.sku_code as skuCode, T2.color as color,T2.scale as scale,T2.buy_site as buySite,T2.sku_pic as skuPic,T1.`count` AS taskDailyCount,T1.id As taskDailyDetailId,-->
+        	 <!--T2.cost_price as costPrice,T2.discount,T2.purchase_price as purchasePrice,-->
+        	 <!--case T2.scale -->
+			 <!--WHEN 'XXS' THEN 1 -->
+			 <!--WHEN 'XS' THEN 2 -->
+			 <!--WHEN 'S' THEN 3 -->
+			 <!--WHEN 'M' THEN 4 -->
+			 <!--WHEN 'L' THEN 5 -->
+			 <!--WHEN 'XL' THEN 6 -->
+			 <!--WHEN 'XXL' THEN 7 -->
+			<!--end as scale_int -->
+        <!--FROM-->
+            <!--task_daily_detail T1 left join item_sku T2 on T1.sku_id=T2.id-->
+        <!--where-->
+           <!--1=1-->
+            <!--<if test=" buyerId != null and buyerId != '' ">-->
+                <!--and T1.buyer_id = #{buyerId}-->
+            <!--</if>-->
+            <!--<if test=" itemName != null and itemName != '' ">-->
+                <!--and T2.item_name LIKE concat('%',#{itemName},'%')-->
+            <!--</if>-->
+            <!--<if test=" buySite != null and buySite != '' ">-->
+          		<!--and T2.buy_site LIKE concat('%',#{buySite},'%') -->
+            <!--</if>-->
+              <!--<![CDATA[   and T1.task_start_time<=NOW() -->
+                <!--and T1.task_end_time>= NOW()]]>-->
+			    <!--and T1.status=0 -->
+                <!--order by IFNULL(T2.buy_site, ''),trim(T2.item_name),T2.color,(T2.scale+0),scale_int-->
+    <!--</select>-->
+    <!---->
+    <!--<select id="taskDailyExportByTaskId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="java.lang.Long">-->
+    	<!--SELECT b.item_name as itemName,b.sku_pic as skuPic,b.sku_code as skuCode,b.upc,b.brand,b.color,b.scale,b.buy_site as buySite,a.count,c.task_title as taskTitle,c.gmt_create as gmtCreate,c.task_order_no as taskOrderNo,in_count as inCount,-->
+	    	<!--case b.scale -->
+			 <!--WHEN 'XXS' THEN 1 -->
+			 <!--WHEN 'XS' THEN 2 -->
+			 <!--WHEN 'S' THEN 3 -->
+			 <!--WHEN 'M' THEN 4 -->
+			 <!--WHEN 'L' THEN 5 -->
+			 <!--WHEN 'XL' THEN 6 -->
+			 <!--WHEN 'XXL' THEN 7 -->
+			<!--end as scale_int -->
+		<!--FROM task_daily_detail a -->
+		<!--LEFT JOIN item_sku b ON a.sku_id=b.id -->
+		<!--LEFT JOIN task_daily c ON a.task_id=c.id -->
+		<!--WHERE a.task_id=#{taskId} -->
+		<!--ORDER BY IFNULL(b.buy_site, ''),trim(b.item_name),b.color,(b.scale+0),scale_int-->
+    <!--</select>-->
+    <!---->
+    <!--<select id="queryDailyDetailByTaskId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO" parameterType="java.lang.Long">-->
+    	<!--SELECT <include refid="Base_Column_List"/>,T2.sku_pic as skuPic,T2.color as color, T2.scale as scaleInt-->
+		<!--FROM task_daily_detail T1 -->
+		<!--LEFT JOIN item_sku T2 ON T1.sku_id=T2.id -->
+		<!--WHERE T1.task_id=#{taskId} -->
+		<!--ORDER BY IFNULL(T2.buy_site, ''),trim(T2.item_name),T2.color,(T2.scale+0),scaleInt-->
+    <!--</select>-->
+    <!---->
+    <!--&lt;!&ndash; 查找一个task_deily对应的多个task_deilay_detail，XiaJun &ndash;&gt;-->
+    <!--<select id="queryTaskDailyDetailsByTaskDailyId" resultType="java.lang.Long" parameterType="java.lang.Long">-->
+    	<!--SELECT T1.id-->
+		<!--FROM task_daily_detail T1 -->
+		<!--WHERE T1.task_id=#{id} -->
+    <!--</select>-->
+    <!---->
+    <!--&lt;!&ndash; 判断该商品是否已经入库，count=in_incount表示已入库，XiaJun &ndash;&gt;-->
+    <!--&lt;!&ndash;  -->
+    <!--<select id="judgeItemIn" resultType="java.lang.Integer" parameterType="java.lang.Long">-->
+    	<!--SELECT (count-in_count)-->
+		<!--FROM task_daily_detail  -->
+		<!--WHERE id=#{task_daily_detail_id} -->
+    <!--</select>-->
+    <!--&ndash;&gt;-->
+    <!--&lt;!&ndash;  -->
+    <!--<update id="closeTaskDetailDaily" >-->
+	    <!--UPDATE task_daily_detail -->
+	    	<!--SET status=-1 -->
+	    <!--WHERE task_id IN -->
+	    <!--<foreach item="item" index="index" collection="taskDailyIdList" open="(" separator="," close=")">  -->
+			<!--#{item}-->
+		<!--</foreach> -->
+	<!--</update>-->
+	<!--<update id="finishTaskDetailDaily" >-->
+	    <!--UPDATE task_daily_detail -->
+	    	<!--SET status=2 -->
+	    <!--WHERE task_id IN -->
+	    <!--<foreach item="item" index="index" collection="taskDailyIdList" open="(" separator="," close=")">  -->
+			<!--#{item}-->
+		<!--</foreach> -->
+	<!--</update>-->
+	<!--&ndash;&gt;-->
+	<!---->
+	<!--&lt;!&ndash; 统一上面两个接口为更新采购状态 @Author:XiaJun &ndash;&gt;-->
+	<!--<update id="updateTaskDetailDailyStatus" >-->
+	    <!--UPDATE task_daily_detail -->
+	    	<!--SET status=#{status}-->
+	    <!--WHERE task_id IN -->
+	    <!--<foreach item="item" index="index" collection="taskDailyIdList" open="(" separator="," close=")">  -->
+			<!--#{item}-->
+		<!--</foreach> -->
+	<!--</update>-->
+	<!---->
+	<!--&lt;!&ndash; 统计待采购商品数，task_daily_detail表status为待采购的记录，对count求和，XiaJun &ndash;&gt;-->
+    <!--<select id="countUnPurchasedItemNumber" resultType="java.lang.Integer" >-->
+    	<!--SELECT IFNULL(sum(IFNULL(T1.count,0)),0)-->
+		<!--FROM task_daily_detail T1 -->
+		<!--WHERE T1.status = 0-->
+    <!--</select>-->
+    <!---->
+    <!--&lt;!&ndash; 采购异常订单数,XiaJun &ndash;&gt;-->
+    <!--<select id="countPurExcOrderNum" resultType="java.lang.Integer">-->
+    <!--SELECT 	IFNULL(count(1),0)-->
+    <!--FROM task_daily_detail T1-->
+    <!--WHERE T1.status = 1 &lt;!&ndash; 状态标为采购结束 &ndash;&gt;-->
+    <!--AND T1.in_count != count &lt;!&ndash; 但是入库数量不满足所需数量 &ndash;&gt;-->
+    <!--</select>-->
+	<!---->
+	<!--<update id="updateUpcForTaskDailyDetail" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">-->
+		<!--UPDATE task_daily_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};-->
+    <!--</update>-->
 </mapper>
