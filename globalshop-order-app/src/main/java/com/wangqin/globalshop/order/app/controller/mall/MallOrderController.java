@@ -117,7 +117,7 @@ public class MallOrderController {
             List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
             for (MallSubOrderDO mallSubOrderDO : erpOrders) {
             	//1,释放子订单库存       
-                inventoryService.release(mallSubOrderDO);            
+                inventoryService.tryRelease(mallSubOrderDO);
 			}
             mallOrderService.deleteByHard(selouterOrderVO);
             //订单详情

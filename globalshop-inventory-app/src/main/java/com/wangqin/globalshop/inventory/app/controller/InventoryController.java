@@ -172,7 +172,7 @@ public class InventoryController {
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object releaseOrder(Long orderId) throws InventoryException {
         MallSubOrderDO order = erpOrderService.selectById(orderId);
-        inventoryService.release(order);
+        inventoryService.tryRelease(order);
         return JsonResult.buildSuccess(true);
     }
 

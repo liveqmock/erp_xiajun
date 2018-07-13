@@ -199,8 +199,8 @@ public class MallSubOrderController {
                             }
                             erpOrderService.closeErpOrder(erpOrder);
                             mainIds.add(erpOrder.getOrderNo());
-                            //更新子订单相应的占用库存
-                            inventoryService.tryRelease(erpOrder);
+//                            //更新子订单相应的占用库存
+//                            inventoryService.tryRelease(erpOrder);
                         } catch (Exception e) {
                             errorMsg.add("只允许修改待付款单的订单");
                         }
@@ -290,7 +290,7 @@ public class MallSubOrderController {
         } else {
             //订单状态校验
             if (OrderStatus.INIT.getCode() == erpOrder.getStatus() && erpOrder.getStockStatus() != StockUpStatus.RELEASED.getCode() && erpOrder.getStockStatus() != StockUpStatus.INIT.getCode()) {
-                inventoryService.release(erpOrder);
+                inventoryService.tryRelease(erpOrder);
             } else {
                 return JsonResult.buildFailed("订单状态错误");
             }
@@ -382,7 +382,7 @@ public class MallSubOrderController {
                 //批量释放库存
                 erpOrders.forEach(order -> {
                     if (order.getStockStatus() != StockUpStatus.INIT.getCode() && order.getStockStatus() != StockUpStatus.RELEASED.getCode()) {
-                        inventoryService.release(order);
+                        inventoryService.tryRelease(order);
                     }
                 });
 //				//批量重新分配库存

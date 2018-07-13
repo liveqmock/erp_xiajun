@@ -34,8 +34,8 @@ public interface InventoryService {
     void updateVirtualInv(String skuCode,Long virInv,String companyNo);
 
     InventoryDO selectByItemCodeAndSkuCode(String itemCode, String skuCode);
-    /**取消订单库存*/
-    void release(MallSubOrderDO order);
+//    /**取消订单库存*/
+//    void release(MallSubOrderDO order);
     /**尝试取消订单库存，失败不报异常*/
     void tryRelease(MallSubOrderDO mallSubOrderDO);
 

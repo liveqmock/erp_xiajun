@@ -193,22 +193,22 @@ public class InventoryServiceImpl implements InventoryService {
 
     }
 
-    /**
-     * 取消订单
-     *
-     * @param mallSubOrderDO
-     */
-    @Override
-    public void release(MallSubOrderDO mallSubOrderDO) {
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
-        if (inventoryDO == null) {
-            throw new ErpCommonException("找不到对应的库存");
-        }
-        /**修改库存占用*/
-        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
-        mapper.updateByPrimaryKeySelective(inventoryDO);
-
-    }
+//    /**
+//     * 取消订单
+//     *
+//     * @param mallSubOrderDO
+//     */
+//    @Override
+//    public void release(MallSubOrderDO mallSubOrderDO) {
+//        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
+//        if (inventoryDO == null) {
+//            throw new ErpCommonException("找不到对应的库存");
+//        }
+//        /**修改库存占用*/
+//        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
+//        mapper.updateByPrimaryKeySelective(inventoryDO);
+//
+//    }
 
     /**
      * 取消订单

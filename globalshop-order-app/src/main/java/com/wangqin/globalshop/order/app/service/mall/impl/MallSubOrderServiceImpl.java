@@ -102,11 +102,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         erpOrder.setStatus(OrderStatus.CLOSE.getCode());
         erpOrder.setGmtModify(new Date());
         mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
-//        //备货状态清空占用库存
-//        Integer stockStatus = erpOrder.getStockStatus();
-//        Integer initStatus = StockUpStatus.INIT.getCode();
-//        if(!initStatus.equals(stockStatus) ){
-        inventoryService.release(erpOrder);
+
+        inventoryService.tryRelease(erpOrder);
 //        }
     }
 

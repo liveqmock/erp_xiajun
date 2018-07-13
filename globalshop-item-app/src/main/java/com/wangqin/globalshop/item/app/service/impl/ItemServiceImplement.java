@@ -192,7 +192,7 @@ public class ItemServiceImplement implements IItemService {
         }
 
         //系统自动生成item_code
-        String itemCode = "I"+categoryCode+"T"+RandomUtils.getTimeRandom();
+        String itemCode = CodeGenUtil.getItemCode(categoryCode);
         item.setItemCode(itemCode);
         
         // 解析skuList 数组对象
