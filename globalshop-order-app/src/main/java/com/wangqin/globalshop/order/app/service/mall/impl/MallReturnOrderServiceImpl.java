@@ -44,7 +44,7 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
 
         erpReturnOrder.init();
         //1新增一个退款单
-        mapper.insertSelective(erpReturnOrder);
+
         MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(erpReturnOrder.getErpOrderId());
         if (orderDO == null){
             throw new ErpCommonException("找不到对应订单,请联系网站管理员");
@@ -56,10 +56,11 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
         if (orderDO.getQuantity() < erpReturnOrder.getReturnQuantity()){
             throw new ErpCommonException("退货的数目大于订单数目,请确认后重新操作");
         }
-        //判断是否要入库
-        if (erpReturnOrder.getIsCheckin() == 1) {
-            //退货
-            inventoryService.returns(orderDO, Long.valueOf(erpReturnOrder.getReturnQuantity()));
-        }
+        mapper.insertSelective(erpReturnOrder);
+//        //判断是否要入库
+//        if (erpReturnOrder.getIsCheckin() == 1) {
+//            //退货
+//            inventoryService.returns(orderDO, Long.valueOf(erpReturnOrder.getReturnQuantity()));
+//        }
     }
 }
