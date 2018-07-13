@@ -283,7 +283,14 @@ public class InventoryServiceImpl implements InventoryService {
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**减少实际库存*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
-        insertInv(inventoryDO, inventoryDO.getInv() - quantity);
+        if (inventoryDO == null){
+            throw new ErpCommonException("找不到对应库存");
+        }
+        if (inventoryDO.getInv() - quantity < 0) {
+            throw new ErpCommonException("盘出库存不能大于实际库存");
+        }
+        inventoryDO.setInv(inventoryDO.getInv() - quantity);
+        mapper.updateByPrimaryKeySelective(inventoryDO);
 
         /**新增流水*/
         Integer opeatory = 202;

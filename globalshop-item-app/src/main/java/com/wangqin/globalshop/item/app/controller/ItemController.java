@@ -529,6 +529,7 @@ public class ItemController {
     /**
      * 商品查询管理主列表
      *
+     * @param itemQueryVO
      * @return
      */
     @RequestMapping("/queryItemList")
