@@ -7,16 +7,19 @@ package com.wangqin.globalshop.biz1.app.constants.enums;
  */
 public enum OrderStatus {
 
-	INIT(0, "待付款"), 
-	PAID(3, "已付款待发货"), 
-	PART_SENT(1, "部分发货"), 
-	SENT(2, "全部发货"), 
-	CLOSE(-1, "关闭"), 
-	MONEY_WITHDRAW(-2, "退款中"), 
-	RETURNING(-3, "退货中"),
-	RETURNDONE(-4, "退货完成"), 
-	SUCCESS(4, "订单完成");
-	
+    INIT(0, "待付款"),
+    PAID(3, "已付款待发货"),
+    PART_SENT(1, "部分发货"),
+    SENT(2, "全部发货"),
+    CLOSE(-1, "关闭"),
+    RETURNING(-3, "售后处理中"),
+    RETURNDONE(-4, "售后完成"),
+    SUCCESS(4, "订单完成"),
+    COMFIRM(5, "已签收");
+
+
+
+
     private int code;
     private String description;
     OrderStatus(int code,String description){

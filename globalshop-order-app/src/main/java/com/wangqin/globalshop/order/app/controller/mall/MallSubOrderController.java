@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
@@ -15,8 +16,6 @@ import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -145,9 +144,9 @@ public class MallSubOrderController {
 				i++;
 				MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
 				if(erpOrder==null){
-					errorMsg.add("第"+i+"条订单数据有误,");
+					errorMsg.add("找不到对应的订单id:"+orderId);
 				}else{
- 					if(Objects.equals(ORDER_SATUTS_INIT, erpOrder.getStatus())){
+ 					if(Objects.equals(OrderStatus.INIT.getCode(), erpOrder.getStatus())){
 						try{
 							if(StringUtil.isNotBlank(closeReason)) {
 								erpOrder.setCloseReason(closeReason);
@@ -155,10 +154,10 @@ public class MallSubOrderController {
 							erpOrderService.closeErpOrder(erpOrder);
 							mainIds.add(erpOrder.getOrderNo());
 						}catch(Exception e){
-							errorMsg.add("第"+i+"条订单关闭失败,");
+							errorMsg.add("只允许修改待付款单的订单");
 						}
 					}else{
-						errorMsg.add("第"+i+"条订单状态有误,");
+						errorMsg.add("id"+orderId+"状态不为代付款状态,不允许关闭");
 					}
 				}
 				
