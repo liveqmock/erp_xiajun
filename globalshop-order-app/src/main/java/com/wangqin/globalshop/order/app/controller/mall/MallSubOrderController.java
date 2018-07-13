@@ -394,13 +394,15 @@ public class MallSubOrderController {
     	        list.add(erpOrder.getSkuCode());	//商品条码
     	        list.add(erpOrder.getQuantity());	//销售数量
     	        list.add(erpOrder.getSalePrice());	//销售价格
-    	        list.add(erpOrder.getQuantity()*erpOrder.getSalePrice());               //销售总价
+    	        list.add(erpOrder.getQuantity()*(erpOrder.getSalePrice()==null ?0:erpOrder.getSalePrice()));               //销售总价
     	        list.add(erpOrder.getStatus());		//订单状态
-    	        list.add(StockUpStatus.of(erpOrder.getStockStatus()).getDescription());	//备货状态
+				//目前备货状态为空，暂时屏蔽，后续一起添上
+//    	        list.add(StockUpStatus.of(erpOrder.getStockStatus()).getDescription());	//备货状态
+    	        list.add("-");	//备货状态
     	        list.add(DateUtil.ymdFormat(erpOrder.getOrderTime()));					//创建时间
     	        list.add(erpOrder.getReceiver());	//收件人
     	        list.add(erpOrder.getTelephone());	//收件人电话
-    	        list.add(erpOrder.getReceiverState() + erpOrder.getReceiverCity() + erpOrder.getReceiverDistrict() + "\r\n" + erpOrder.getReceiverAddress());		//地址
+    	        list.add(""+erpOrder.getReceiverState() + erpOrder.getReceiverCity() + erpOrder.getReceiverDistrict() + "\r\n" + erpOrder.getReceiverAddress());		//地址
     	        list.add(erpOrder.getMemo());				//备注
     	        
     	        
