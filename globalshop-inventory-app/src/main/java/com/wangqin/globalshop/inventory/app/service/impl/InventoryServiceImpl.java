@@ -199,7 +199,23 @@ public class InventoryServiceImpl implements InventoryService {
         mapper.updateByPrimaryKeySelective(inventoryDO);
 
     }
+    /**
+     * 取消订单
+     *
+     * @param mallSubOrderDO
+     */
+    @Override
+    @Transactional
+    public void tryRelease(MallSubOrderDO mallSubOrderDO) {
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
+        if (inventoryDO == null) {
+            return;
+        }
+        /**修改库存占用*/
+        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
+        mapper.updateByPrimaryKeySelective(inventoryDO);
 
+    }
     /**
      * 库存盘入
      *

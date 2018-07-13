@@ -369,4 +369,14 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 		// TODO Auto-generated method stub
 		mallSubOrderDOMapper.deleteByPrimaryKey(id);
 	}
+
+    @Override
+    public List<MallSubOrderDO> queryExpiredSubOrders(Integer status){
+        return  mallSubOrderDOMapper.queryExpiredSubOrders(status);
+    }
+
+    @Override
+    public void updateSubOrderStatus(Integer oldStatus, Integer newStatus){
+        mallSubOrderDOMapper.updateSubOrderStatus( oldStatus, newStatus);
+    }
 }
