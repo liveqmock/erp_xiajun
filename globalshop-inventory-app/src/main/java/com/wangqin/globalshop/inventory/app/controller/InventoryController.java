@@ -1,23 +1,23 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.shiro.ShiroUser;
 import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.inventory.app.vo.InventoryOutDetailVO;
+import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.inventory.app.service.*;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.eclipse.jetty.util.StringUtil;
-import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,42 +25,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
-import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.shiro.ShiroUser;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;
-import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
-import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailService;
-import com.wangqin.globalshop.inventory.app.service.IWarehouseService;
-import com.wangqin.globalshop.inventory.app.service.InventoryBookingRecordService;
-import com.wangqin.globalshop.inventory.app.service.InventoryIMallSubOrderService;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 库存处理器
@@ -69,7 +43,7 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
  */
 @Controller
 @RequestMapping("/inventory")
-@Authenticated
+//@Authenticated
 public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
