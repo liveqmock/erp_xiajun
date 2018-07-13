@@ -1,11 +1,12 @@
 package com.wangqin.globalshop.order.app.service.mall;
 
+import java.util.List;
+
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.exception.InventoryException;
-
-import java.util.List;
 
 /**
  * @author biscuit
@@ -40,8 +41,10 @@ public interface IMallSubOrderService {
     void splitErpOrder(MallSubOrderDO erpOrder, Integer splitCount) throws InventoryException;
 
 //    JsonResult lockErpOrder(MallSubOrderDO erpOrder) throws InventoryException;
-
-    List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
+    //导出子订单1
+    List<MallSubOrderExcelVO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO);
+    //导出子订单2
+    List<MallSubOrderExcelVO> queryErpOrderForExcelByIdList(List<Long> idList);
 
 
     List<MallSubOrderDO> list();

@@ -10,6 +10,12 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.BuyerTaskDetailDOMapper;
  */
 public interface BuyerTaskDetailMapperExt extends BuyerTaskDetailDOMapper{
 
+
+	//本文件跟BuyerTaskDetailDOMapperExt.java合并
+
+
+
+
 	//List<BuyerTaskDailyDTO> queryBuyerTaskList(BuyerTaskVO buyerTaskVO);
 	
 	//List<ItemSku> taskDailyExportByTaskId(Long taskId);

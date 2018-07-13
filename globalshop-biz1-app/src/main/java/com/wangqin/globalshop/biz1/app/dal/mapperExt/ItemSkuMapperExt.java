@@ -19,6 +19,10 @@ import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
  */
 public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
+	//根据sku_code查询一条item_sku表里面的记录，不关联其他的表，不做分页，只查一条记录
+	ItemSkuDO queryItemSkuDOBySkuCodeAndCompanyNo(@Param("skuCode") String skuCode,
+			@Param("companyNo") String companyNo);
+	
 	//查询和本sku同属一个商品的所有sku的sale_price
 	List<Double> querySalePriceListBySkuCode(String skuCode);
 	

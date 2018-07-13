@@ -30,7 +30,7 @@ public class InventoryOutManifestServiceImpl implements InventoryOutManifestServ
      * 添加出货单
      */
     @Override
-    public InventoryOutManifestDO insertInventoryOutManifest(String warehouseNo, String warehouseName, String desc) {
+    public InventoryOutManifestDO insertInventoryOutManifest(String warehouseNo, String warehouseName, String remark) {
         InventoryOutManifestDO inventoryOutManifestDO = new InventoryOutManifestDO();
 
         inventoryOutManifestDO.setInventoryOutNo(CodeGenUtil.getInventoryOutNo());
@@ -38,7 +38,7 @@ public class InventoryOutManifestServiceImpl implements InventoryOutManifestServ
         inventoryOutManifestDO.setWarehouseNo(warehouseNo);
         inventoryOutManifestDO.setWarehouseName(warehouseName);
         inventoryOutManifestDO.setStatus(0);
-        inventoryOutManifestDO.setRemark(desc);
+        inventoryOutManifestDO.setRemark(remark);
         inventoryOutManifestDO.setModifier(AppUtil.getLoginUserId());
         inventoryOutManifestDO.setCreator(AppUtil.getLoginUserId());
         inventoryOutManifestDO.setIsDel(false);
