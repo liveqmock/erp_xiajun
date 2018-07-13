@@ -175,7 +175,7 @@ public class ShippingOrderController {
         try {
             shippingOrderService.ship(shippingOrder);
         } catch (ErpCommonException e) {
-            result.buildMsg(e.getMessage()).buildIsSuccess(false);
+            return result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
         }
 
         return result.buildMsg("发货成功").buildIsSuccess(true);
