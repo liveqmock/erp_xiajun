@@ -443,7 +443,12 @@ public class ItemServiceImplement implements IItemService {
         return item;
     }
 
-    //商品列表
+    /**
+     * 商品列表
+     *
+     * @param itemQueryVO
+     * @return
+     */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO) {
