@@ -216,8 +216,10 @@ public class MallSubOrderController {
             for (Long orderId : orderIdList) {
                 i++;
                 MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
-                if (erpOrder != null) {
-                    inventoryService.release(erpOrder);
+                if(erpOrder!=null){
+//					inventoryService.release(erpOrder);
+                    //换成另一个方法试试
+                    inventoryService.tryRelease(erpOrder);
                 }
             }
             String rmsg = "";
@@ -390,14 +392,15 @@ public class MallSubOrderController {
 //				});
 				return JsonResult.buildSuccess(null);
 			}
-			
+
 		}else{
 			return JsonResult.buildFailed("参数错误");
 		}
 	}
-	
+
 	/**
 	 * 导出excel
+     * @author:xiajun
 	 */
 	@RequestMapping("/erpOrderExport")
     public ResponseEntity<byte[]> erpOrderExport(MallSubOrderVO erpOrderQueryVO) throws Exception {
