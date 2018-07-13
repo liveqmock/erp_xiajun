@@ -430,7 +430,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public void update(ShippingOrderDO shippingOrder) {
-
+    	shippingOrderMapper.updateByPrimaryKeySelective(shippingOrder);
     }
 
     @Override
