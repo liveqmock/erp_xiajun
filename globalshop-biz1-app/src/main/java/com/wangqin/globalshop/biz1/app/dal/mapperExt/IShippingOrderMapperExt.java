@@ -18,7 +18,7 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
 
     Integer queryShippingOrderCount(ShippingOrderVO shippingOrderVO);
 
-    List<ShippingOrderDO> selectBatchIds(List<Long> shippingOrderIdList);
+    List<ShippingOrderDO> selectBatchIds(@Param("shippingOrderIdList") List<Long> shippingOrderIdList);
 
     List<ShippingOrderDO> queryByShippingOrderPackageTime(ShippingOrderVO shippingOrderQueryVO);
 
