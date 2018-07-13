@@ -15,9 +15,9 @@ public class InventoryOutManifestDO extends BaseModel {
 
     private String desc;
 
-    private String creator;
-
     private String modifier;
+
+    private String creator;
 
     public Long getId() {
         return id;
@@ -39,7 +39,6 @@ public class InventoryOutManifestDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -76,21 +75,19 @@ public class InventoryOutManifestDO extends BaseModel {
         this.desc = desc == null ? null : desc.trim();
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 }
