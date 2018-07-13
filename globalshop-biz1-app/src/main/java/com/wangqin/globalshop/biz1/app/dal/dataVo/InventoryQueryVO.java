@@ -23,6 +23,7 @@ public class InventoryQueryVO extends InventoryDO {
 	private String shelfNo;
 	private String creator;
 	private String operatorType;
+	private Long quantity; 
 	@Override
     public String getItemCode() {
 		return itemCode;
@@ -147,4 +148,12 @@ public class InventoryQueryVO extends InventoryDO {
 		this.operatorType = operatorType;
 	}
 
+	public Long getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Long quantity) {
+		this.quantity = quantity;
+	}
+	
 }
