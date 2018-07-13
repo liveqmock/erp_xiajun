@@ -31,6 +31,9 @@ import java.util.List;
  */
 @Service
 public class MallOrderServiceImpl implements IMallOrderService {
+
+    //in seconds
+    private static final long NEW_TASK_TIMEOUT = 600;
     @Autowired
     private MallOrderMapperExt mallOrderDOMapper;
     @Autowired
@@ -292,5 +295,12 @@ public class MallOrderServiceImpl implements IMallOrderService {
         mallOrderDOMapper.deleteByPrimaryKey(mallOrderVO.getId());
         
 	}
+
+
+    @Override
+    public void changeOrderStatus(Integer oldStatus, Integer newStatus){
+        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus,newStatus);
+
+    }
 
 }
