@@ -35,6 +35,7 @@
     <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR"/>
     <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
     <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
   </resultMap>
   <!-- 2.0 -->
   <sql id="Base_Column_List" >
