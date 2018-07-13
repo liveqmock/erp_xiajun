@@ -2,74 +2,77 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestMapperExt">
 
-<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="inventory_out_no" property="inventoryOutNo" jdbcType="VARCHAR" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
-    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="TINYINT" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-  </resultMap>
-  <!-- 2.0结果列 -->
-  <sql id="Base_Column_List" >
-    id, inventory_out_no, company_no, warehouse_no, warehouse_name, status, desc, gmt_create, 
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="inventory_out_no" property="inventoryOutNo" jdbcType="VARCHAR"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR"/>
+        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="desc" property="desc" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 2.0结果列 -->
+    <sql id="Base_Column_List">
+    id, inventory_out_no, company_no, warehouse_no, warehouse_name, status, remark, gmt_create,
     gmt_modify, is_del, creator, modifier
   </sql>
-  
-<!-- 通用查询结果列-->
+
+    <!-- 通用查询结果列-->
     <sql id="Base_Column_List_Old">
-    	T1.id AS id,T1.warehouse_id AS warehouseId ,T1.warehouse_name AS warehouseName,T1.inv_out_no AS invOutNo,T1.status AS status,T1.remark AS remark,T1.user_create AS userCreate,T1.user_modify AS userModify,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify
+    	T1.id AS id,T1.warehouse_no AS warehouseNo ,T1.warehouse_name AS warehouseName,T1.inventory_out_no AS inventoryOutNo,T1.status AS status,T1.remark AS remark,T1.creator AS creator,T1.modifier AS modifier,T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify, T1.is_del AS isDel
     </sql>
 
-	<select id="queryInventoryOutCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryOutVO">
-        SELECT 
-        	count(1) 
-        FROM 
-            inventory_out_manifest T1 
-        where 
-     		  1=1 
-     		<if test="warehouseId != null">
-        			and warehouse_id = #{warehouseId}	
-        	</if>
-            <if test=" invOutNo != null and invOutNo != '' ">
-                and T1.inv_out_no = #{invOutNo}
+    <select id="queryInventoryOutCount" resultType="java.lang.Integer"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO">
+        SELECT
+        count(1)
+        FROM
+        inventory_out_manifest T1
+        where
+        1=1
+        <if test="warehouseNo != null">
+            and warehouse_no = #{warehouseNo}
+        </if>
+        <if test=" invOutinventoryOutNoNo != null and inventoryOutNo != '' ">
+            and T1.inventory_out_no = #{inventoryOutNo}
+        </if>
+        <if test=" startGmt!= null ">
+            and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
+        </if>
+        <if test=" endGmt != null ">
+            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
+        </if>
+    </select>
+
+    <select id="listInventoryOutManifest"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_out_manifest T1
+        <where>
+            <if test="warehouseNo != null">
+                and warehouse_no = #{warehouseNo}
+            </if>
+            <if test=" inventoryOutNo != null and inventoryOutNo != '' ">
+                and T1.inventory_out_no = #{inventoryOutNo}
             </if>
             <if test=" startGmt!= null ">
-             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
+                and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
             </if>
             <if test=" endGmt != null ">
-            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
+                and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
             </if>
+        </where>
+        order by T1.id desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+
     </select>
-    
-    <select id="queryInventoryOutList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryOutVO">
-        SELECT 
-        	 <include refid="Base_Column_List" /> 
-        FROM 
-            inventory_out_manifest T1 
-        where 
-           1=1 
-           	<if test="warehouseId != null">
-        			and warehouse_id = #{warehouseId}	
-        	</if>
-             <if test=" invOutNo != null and invOutNo != '' ">
-                and T1.inv_out_no = #{invOutNo}
-            </if>
-            <if test=" startGmt!= null ">
-             and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
-            </if>
-            <if test=" endGmt != null ">
-            and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
-            </if>
-          order by T1.id desc
-          	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-            
-    </select>
-  
+
 </mapper>

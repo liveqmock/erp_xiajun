@@ -32,7 +32,7 @@ public class InventoryOutManifestDO extends BaseModel {
     }
 
     public void setInventoryOutNo(String inventoryOutNo) {
-        this.inventoryOutNo = inventoryOutNo == null ? null : inventoryOutNo.trim();
+        this.inventoryOutNo = inventoryOutNo;
     }
 
     public String getCompanyNo() {
@@ -40,7 +40,7 @@ public class InventoryOutManifestDO extends BaseModel {
     }
 
     public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo == null ? null : companyNo.trim();
+        this.companyNo = companyNo;
     }
 
     public String getWarehouseNo() {
@@ -48,7 +48,7 @@ public class InventoryOutManifestDO extends BaseModel {
     }
 
     public void setWarehouseNo(String warehouseNo) {
-        this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
+        this.warehouseNo = warehouseNo;
     }
 
     public String getWarehouseName() {
@@ -56,7 +56,7 @@ public class InventoryOutManifestDO extends BaseModel {
     }
 
     public void setWarehouseName(String warehouseName) {
-        this.warehouseName = warehouseName == null ? null : warehouseName.trim();
+        this.warehouseName = warehouseName;
     }
 
     public Integer getStatus() {
@@ -72,7 +72,7 @@ public class InventoryOutManifestDO extends BaseModel {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
     public String getModifier() {
@@ -80,7 +80,7 @@ public class InventoryOutManifestDO extends BaseModel {
     }
 
     public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+        this.modifier = modifier;
     }
 
     public String getCreator() {
@@ -88,6 +88,7 @@ public class InventoryOutManifestDO extends BaseModel {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
+
 }
