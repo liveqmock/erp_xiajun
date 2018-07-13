@@ -185,9 +185,9 @@ public class MallSubOrderController {
             List<Long> orderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
             });
             Set<String> mainIds = Sets.newHashSet();
-            int i = 0;
+//            int i = 0;
             for (Long orderId : orderIdList) {
-                i++;
+//                i++;
                 MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
                 if (erpOrder == null) {
                     errorMsg.add("找不到对应的订单id:" + orderId);
@@ -199,6 +199,8 @@ public class MallSubOrderController {
                             }
                             erpOrderService.closeErpOrder(erpOrder);
                             mainIds.add(erpOrder.getOrderNo());
+                            //更新子订单相应的占用库存
+                            inventoryService.tryRelease(erpOrder);
                         } catch (Exception e) {
                             errorMsg.add("只允许修改待付款单的订单");
                         }
@@ -213,15 +215,15 @@ public class MallSubOrderController {
                 shippingOrderService.updateOuterstatus(mainIds);
             }
             //更新子订单相应的占用库存
-            for (Long orderId : orderIdList) {
-                i++;
-                MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
-                if(erpOrder!=null){
-//					inventoryService.release(erpOrder);
-                    //换成另一个方法试试
-                    inventoryService.tryRelease(erpOrder);
-                }
-            }
+//            for (Long orderId : orderIdList) {
+////                i++;
+//                MallSubOrderDO erpOrder = erpOrderService.selectById(orderId);
+//                if(erpOrder!=null){
+////					inventoryService.release(erpOrder);
+//                    //换成另一个方法试试
+//                    inventoryService.tryRelease(erpOrder);
+//                }
+//            }
             String rmsg = "";
             if (CollectionUtils.isNotEmpty(errorMsg)) {
                 for (String a : errorMsg) {
