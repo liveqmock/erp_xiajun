@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelDO;
 import com.wangqin.globalshop.channel.service.channel.IChannelOfflineService;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,7 @@ public class ChannelController extends BaseController {
 		channel.setGmtModify(new Date());
 		channel.setCreator(AppUtil.getLoginUserId());
 		channel.setModifier(AppUtil.getLoginUserId());
+        channel.setChannelNo(CodeGenUtil.getChannelCode());
 
         int ret = channelOfflineService.insert(channel);
 

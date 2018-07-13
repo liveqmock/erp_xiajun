@@ -17,7 +17,11 @@ public class CodeGenUtil {
 	}
 
 
-    public static String getScaleCode() {
+	public static String getChannelCode() {
+		return "CH"+System.currentTimeMillis()+ RandomUtils.nextInt(10000);
+	}
+
+	public static String getScaleCode() {
 		return "s"+System.currentTimeMillis()+ RandomUtils.nextInt(10000);
     }
 
