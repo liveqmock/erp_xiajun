@@ -63,5 +63,7 @@ public interface IMallSubOrderService {
     List<MallSubOrderDO> queryExpiredSubOrders(Integer status);
 
     void updateSubOrderStatus(Integer orderSatutsInit, Integer orderSatutsClose);
+
+    MallSubOrderDO selectBySubOrderNo(String subOrderNo);
 }
 

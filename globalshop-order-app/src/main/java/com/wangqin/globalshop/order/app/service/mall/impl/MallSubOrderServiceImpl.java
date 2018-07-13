@@ -385,4 +385,9 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     public void updateSubOrderStatus(Integer oldStatus, Integer newStatus) {
         mallSubOrderDOMapper.updateSubOrderStatus(oldStatus, newStatus);
     }
+
+    @Override
+    public MallSubOrderDO selectBySubOrderNo(String subOrderNo) {
+        return mallSubOrderDOMapper.selectBySubOrderNo(subOrderNo);
+    }
 }

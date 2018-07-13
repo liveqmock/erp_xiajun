@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
@@ -108,13 +109,14 @@ public class MallOrderServiceImpl implements IMallOrderService {
             o.setReceiverState(outerOrder.getReceiverState());
             o.setReceiverAddress(outerOrder.getAddressDetail());
             o.setTelephone(outerOrder.getTelephone());
-            o.setStatus(0);
             o.setIdCard(outerOrder.getIdCard());
             o.setMemo(outerOrder.getMemo());
+            o.setStatus(OrderStatus.PAID.getCode());
+            o.setSubOrderNo(CodeGenUtil.getSubOrderNo());
             inventoryService.order(o);
             mallSubOrderDOMapper.insert(o);
         }
-
+        outerOrder.setStatus(OrderStatus.PAID.getCode());
 //        outerOrder.setDealerName(deal.getName());
         outerOrder.setShopCode(shopCode);
         outerOrder.setMemo(outerOrder.getRemark());

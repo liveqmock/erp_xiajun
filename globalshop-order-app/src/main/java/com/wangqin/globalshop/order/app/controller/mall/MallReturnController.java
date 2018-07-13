@@ -1,7 +1,9 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -9,6 +11,7 @@ import com.wangqin.globalshop.common.utils.DateUtils;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.order.app.service.mall.IMallReturnOrderService;
+import com.youzan.open.sdk.client.oauth.OAuthFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,6 +77,7 @@ public class MallReturnController {
 		if(erpReturnOrder.getErpOrderId()==null) {
 			return result.buildIsSuccess(false).buildMsg("参数异常");
 		}
+		//todo
 		erpReturnOrder.setReturnRefer(0);
 		try {
 			erpReturnOrderService.add(erpReturnOrder);
@@ -83,8 +87,13 @@ public class MallReturnController {
 		result.setSuccess(true);
 		return result;
 	}
-
-
+	private int getMallOrderStatus(List<MallSubOrderDO> list) {
+		//todo  算出应该的状态
+		if (list.size()==1){
+			return OrderStatus.CLOSE.getCode();
+		}
+		return OrderStatus.SENT.getCode();
+	}
 
 
 }
