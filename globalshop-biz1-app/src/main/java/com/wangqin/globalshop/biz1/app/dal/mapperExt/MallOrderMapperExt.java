@@ -66,4 +66,6 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
     List<MallOrderVO> list(MallOrderVO vo);
     
     void updateByIsDel(MallOrderVO mallOrderVO);
+
+	void updateExpiredTaskStatus(@Param("oldStatus")Integer oldStatus,@Param("newStatus")Integer newStatus);
 }

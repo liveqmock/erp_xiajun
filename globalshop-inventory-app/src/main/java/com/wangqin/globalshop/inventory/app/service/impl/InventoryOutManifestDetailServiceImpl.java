@@ -1,13 +1,14 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
 import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutVO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOutManifestDOMapper;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDetailDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -25,7 +26,7 @@ import java.util.Set;
 @Service
 public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManifestDetailService {
     @Autowired
-    private InventoryOutManifestDOMapperExt mapper;
+    private InventoryOutManifestMapperExt mapper;
     @Autowired
     private InventoryOutManifestDetailDOMapperExt detailMapper;
     @Autowired
@@ -106,5 +107,32 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
     @Override
     public void deleteInventoryOutById(Long id) {
         mapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void insertInventoryOutManifestDetail(InventoryOutManifestDetailDO inventoryOutManifestDetailDO) {
+        detailMapper.insert(inventoryOutManifestDetailDO);
+    }
+
+    @Override
+    public void insertInventoryOutManifestDetail(InventoryOnWareHouseDO inventoryOnWareHouseDO,
+                                                 InventoryOutManifestDO inventoryOutManifestDO, Long quantity) {
+        InventoryOutManifestDetailDO inventoryOutManifestDetailDO = new InventoryOutManifestDetailDO();
+
+        inventoryOutManifestDetailDO.setInventoryOutNo(inventoryOutManifestDO.getInventoryOutNo());
+        inventoryOutManifestDetailDO.setItemCode(inventoryOnWareHouseDO.getItemCode());
+        inventoryOutManifestDetailDO.setQuantity(quantity);
+        inventoryOutManifestDetailDO.setItemName(inventoryOnWareHouseDO.getItemName());
+        inventoryOutManifestDetailDO.setScale(inventoryOnWareHouseDO.getScale());
+        inventoryOutManifestDetailDO.setUpc(inventoryOnWareHouseDO.getUpc());
+        inventoryOutManifestDetailDO.setSkuCode(inventoryOnWareHouseDO.getSkuCode());
+        inventoryOutManifestDetailDO.setSkuPic(inventoryOnWareHouseDO.getSkuPic());
+        inventoryOutManifestDetailDO.setShelfNo(inventoryOnWareHouseDO.getShelfNo());
+        inventoryOutManifestDetailDO.setCompanyNo(inventoryOnWareHouseDO.getCompanyNo());
+        inventoryOutManifestDetailDO.setModifier(AppUtil.getLoginUserId());
+        inventoryOutManifestDetailDO.setCreator(AppUtil.getLoginUserId());
+        inventoryOutManifestDetailDO.setIsDel(false);
+
+        insertInventoryOutManifestDetail(inventoryOutManifestDetailDO);
     }
 }

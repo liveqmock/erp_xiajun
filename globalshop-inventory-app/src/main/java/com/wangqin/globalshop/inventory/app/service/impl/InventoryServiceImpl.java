@@ -7,7 +7,12 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
+import com.wangqin.globalshop.inventory.app.service.IInventoryOutManifestDetailService;
+import com.wangqin.globalshop.inventory.app.service.InventoryOutManifestService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.inventory.app.vo.InventoryOutDetailVO;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +42,10 @@ public class InventoryServiceImpl implements InventoryService {
     private InventoryOutManifestDetailDOMapperExt outManifestDetailDOMapper;
     @Autowired
     private InventoryOnWarehouseMapperExt invOnWarehouseMapperExt;
+    @Autowired
+    private InventoryOutManifestService inventoryOutManifestService;
+    @Autowired
+    private IInventoryOutManifestDetailService inventoryOutManifestDetailService;
 
 
     /**
@@ -199,7 +208,23 @@ public class InventoryServiceImpl implements InventoryService {
         mapper.updateByPrimaryKeySelective(inventoryDO);
 
     }
+    /**
+     * 取消订单
+     *
+     * @param mallSubOrderDO
+     */
+    @Override
+    @Transactional
+    public void tryRelease(MallSubOrderDO mallSubOrderDO) {
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
+        if (inventoryDO == null) {
+            return;
+        }
+        /**修改库存占用*/
+        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
+        mapper.updateByPrimaryKeySelective(inventoryDO);
 
+    }
     /**
      * 库存盘入
      *
@@ -283,7 +308,7 @@ public class InventoryServiceImpl implements InventoryService {
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**减少实际库存*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
-        if (inventoryDO == null){
+        if (inventoryDO == null) {
             throw new ErpCommonException("找不到对应库存");
         }
         if (inventoryDO.getInv() - quantity < 0) {
@@ -300,19 +325,61 @@ public class InventoryServiceImpl implements InventoryService {
     /**
      * 出库单确认出库
      *
-     * @param inventoryOutDetailListStr
-     * @param desc
+     * @param inventoryOutDetailArray inventoryOutDetailList
+     * @param warehouseNo             仓库编号
+     * @param warehouseName           仓库名
+     * @param desc                    备注/描述
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void inventoryOutConfirm(JsonObject[] inventoryOutDetailListStr, String desc) {
+    public void inventoryOutConfirm(JSONArray inventoryOutDetailArray, String warehouseNo,
+                                    String warehouseName, String desc) {
         // 增加校验
-        if (inventoryOutDetailListStr == null || inventoryOutDetailListStr.length == 0 || StringUtils.isBlank(desc)) {
+        if (inventoryOutDetailArray == null || StringUtils.isBlank(warehouseNo)
+                || StringUtils.isBlank(warehouseName)) {
             throw new ErpCommonException("有空数据");
         }
-        for (JsonObject inventoryOutDetail : inventoryOutDetailListStr) {
-            // TODO
+        try {
+            InventoryOutManifestDO inventoryOutManifestDO =
+                    inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, desc);
+            for (int i = 0; i < inventoryOutDetailArray.size(); i++) {
+                JSONObject inventoryOutDetail = inventoryOutDetailArray.getJSONObject(i);
+                String inventoryOnWarehouseNo = inventoryOutDetail.getString("inventoryOnWarehouseNo");
+                Long quantity = inventoryOutDetail.getLong("quantity");
+
+                if (quantity <= 0) {
+                    throw new ErpCommonException("出库数量要为正数");
+                }
+                InventoryOnWareHouseDO inventoryOnWareHouseDO = invOnWarehouseMapperExt
+                        .getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+
+                /**减少仓库库存*/
+                if (inventoryOnWareHouseDO.getInventory() - quantity < 0) {
+                    throw new ErpCommonException("出库数量不能大于实际库存");
+                }
+                inventoryOnWareHouseDO.setInventory(inventoryOnWareHouseDO.getInventory() - quantity);
+                invOnWarehouseMapperExt.updateByPrimaryKeySelective(inventoryOnWareHouseDO);
+                /**减少实际库存*/
+                InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(inventoryOnWareHouseDO.getSkuCode(),
+                        AppUtil.getLoginUserCompanyNo());
+                if (inventoryDO == null) {
+                    throw new ErpCommonException("找不到对应库存");
+                }
+                if (inventoryDO.getInv() - quantity < 0) {
+                    throw new ErpCommonException("出库数量不能大于实际库存");
+                }
+                inventoryDO.setInv(inventoryDO.getInv() - quantity);
+                mapper.updateByPrimaryKeySelective(inventoryDO);
+                inventoryOutManifestDetailService.insertInventoryOutManifestDetail(
+                        inventoryOnWareHouseDO, inventoryOutManifestDO, quantity);
+            }
+        } catch (ErpCommonException e) {
+            throw e;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new ErpCommonException("未知错误");
         }
+
     }
 
     /**
@@ -385,7 +452,6 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void outOfStorehouse(InventoryOutManifestDO outManifestDO) {
-//        outManifestMapper
         List<InventoryOutManifestDetailDO> list = outManifestDetailDOMapper.selectByOutNo(outManifestDO.getInventoryOutNo());
         outOfWarehouse(list);
     }
@@ -466,6 +532,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
 
     }
+
 
     /**
      * 生成并保存流水记录
