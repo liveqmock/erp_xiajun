@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+
+import org.apache.bcel.generic.StackInstruction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -12,6 +14,8 @@ import java.util.Date;
  *
  */
 public class MallSubOrderVO extends MallSubOrderDO {
+	private String checkedSubOrderIdString;
+	private String companyNo;
 	/**
 	 * 状态
 	 */
@@ -41,6 +45,24 @@ public class MallSubOrderVO extends MallSubOrderDO {
 	private String closeReason;
 	
 	private boolean isDel;
+	
+	
+	public String getCheckedSubOrderIdString() {
+		return checkedSubOrderIdString;
+	}
+
+	public void setCheckedSubOrderIdString(String checkedSubOrderIdString) {
+		this.checkedSubOrderIdString = checkedSubOrderIdString;
+	}
+
+	public String getCompanyNo() {
+		return companyNo;
+	}
+
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
+
 	@Override
 	public Integer getStatus() {
 		return status;

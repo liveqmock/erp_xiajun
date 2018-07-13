@@ -65,24 +65,47 @@
     modifier, sub_order_no, channel_sub_order_no, share_user_id, share_token, share_time,
     share_close_flag, share_close_time, share_money
     </sql>
+    
+    <!-- 子订单导出专用,@author:xiajun-->
+    <sql id="Base_Column_List_For_Excel" >
+   		order_no AS orderNo,weight,quantity,sale_price AS salePrice,upc,item_name AS itemName,
+   		receiver,receiver_state AS receiverState,receiver_city AS receiverCity,
+   		receiver_district AS receiverDistrict,receiver_address AS receiverAddress,
+   		telephone,id_card AS idCard,sku_code AS skuCode
+   	</sql>
 
-    <select id="queryErpOrderForExcel"
-            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+	<!-- 导出子订单,根据时间@author:xiajun- -->
+    <select id="queryErpOrderForExcel" resultType="com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO"
+    	parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM `mall_sub_order` T1 WHERE
-        where
-        is_del != '1'
+        <include refid="Base_Column_List_For_Excel"/>
+        FROM `mall_sub_order` T1 
+        WHERE
+        T1.is_del is false
         <if test="status != null">
-            AND status = #{status}
+            AND T1.status = #{status}
+        </if>
+        <if test="companyNo != null">
+            AND T1.company_no = #{companyNo}
         </if>
         <if test=" startGmtCreate!= null ">
-            and   <![CDATA[ order_time >= #{startGmtCreate} ]]>
+            and   <![CDATA[ T1.order_time >= #{startGmtCreate} ]]>
         </if>
         <if test=" endGmtCreate != null ">
-            and    <![CDATA[ order_time <= #{endGmtCreate} ]]>
+            and    <![CDATA[ T1.order_time <= #{endGmtCreate} ]]>
         </if>
-
+    </select>
+    
+    <!-- 导出子订单,根据用户勾选了哪些子订单@author:xiajun- -->
+    <select id="queryErpOrderForExcelByIdList" resultType="com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO">
+        SELECT
+        <include refid="Base_Column_List_For_Excel"/>
+        FROM `mall_sub_order` T1 
+        WHERE
+ 		id IN
+ 		<foreach item="idList" index="index" collection="list" open="(" separator="," close=")"> 
+        	#{idList}
+        </foreach>
     </select>
 
     <update id="updateOuterOrderDetailByItemSku">

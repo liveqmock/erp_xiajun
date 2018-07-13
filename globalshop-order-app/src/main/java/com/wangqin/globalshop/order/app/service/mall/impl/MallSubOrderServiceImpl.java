@@ -1,11 +1,24 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
+import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_CLOSE;
+import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.google.common.collect.Maps;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
@@ -16,18 +29,6 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.uitl.ErpOrderUtil;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_CLOSE;
-import static com.wangqin.globalshop.order.app.comm.Constant.ORDER_SATUTS_INIT;
 
 /**
  * @author biscuit
@@ -334,10 +335,16 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 //        }
 //        return JsonResult.buildSuccess(true);
 //    }
-
+    //导出
     @Override
-    public List<MallSubOrderDO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO) {
+    public List<MallSubOrderExcelVO> queryErpOrderForExcel(MallSubOrderVO erpOrderQueryVO) {
         return mallSubOrderDOMapper.queryErpOrderForExcel(erpOrderQueryVO);
+    }
+
+    //导出子订单2
+    @Override
+    public List<MallSubOrderExcelVO> queryErpOrderForExcelByIdList(List<Long> idList) {
+    	return mallSubOrderDOMapper.queryErpOrderForExcelByIdList(idList);
     }
 
     @Override
