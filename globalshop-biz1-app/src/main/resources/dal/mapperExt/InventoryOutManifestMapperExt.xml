@@ -9,7 +9,7 @@
         <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR"/>
         <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="desc" property="desc" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
         <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
         <result column="is_del" property="isDel" jdbcType="BIT"/>
@@ -50,7 +50,7 @@
     </select>
 
     <select id="listInventoryOutManifest"
-            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO"
+            resultMap="BaseResultMap"
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO">
         SELECT
         <include refid="Base_Column_List"/>

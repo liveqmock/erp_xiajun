@@ -1,6 +1,14 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-public class InventoryOutManifestDO extends BaseModel {
+import java.util.Date;
+
+/**
+ * 出库单数据传输类
+ *
+ * @author angus
+ * @date 2018/7/13
+ */
+public class InventoryOutManifestDO{
     private Long id;
 
     private String inventoryOutNo;
@@ -15,9 +23,15 @@ public class InventoryOutManifestDO extends BaseModel {
 
     private String remark;
 
+    private Date gmtModify;
+
+    private Date gmtCreate;
+
     private String modifier;
 
     private String creator;
+
+    protected Boolean isDel;
 
     public Long getId() {
         return id;
@@ -75,6 +89,22 @@ public class InventoryOutManifestDO extends BaseModel {
         this.remark = remark;
     }
 
+    public Date getGmtModify() {
+        return gmtModify;
+    }
+
+    public void setGmtModify(Date gmtModify) {
+        this.gmtModify = gmtModify;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
     public String getModifier() {
         return modifier;
     }
@@ -91,4 +121,11 @@ public class InventoryOutManifestDO extends BaseModel {
         this.creator = creator;
     }
 
+    public Boolean getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
+    }
 }
