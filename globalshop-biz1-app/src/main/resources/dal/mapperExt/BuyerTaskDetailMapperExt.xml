@@ -128,7 +128,7 @@
     <!--AND T1.in_count != count &lt;!&ndash; 但是入库数量不满足所需数量 &ndash;&gt;-->
     <!--</select>-->
 	<!---->
-	<!--<update id="updateUpcForTaskDailyDetail" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">-->
-		<!--UPDATE task_daily_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};-->
-    <!--</update>-->
+	<update id="updateUpcForTaskDailyDetail" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+		UPDATE task_daily_detail SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_id=#{skuId};
+    </update>
 </mapper>

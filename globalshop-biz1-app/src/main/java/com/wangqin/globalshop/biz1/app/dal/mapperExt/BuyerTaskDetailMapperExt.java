@@ -28,7 +28,7 @@ public interface BuyerTaskDetailMapperExt extends BuyerTaskDetailDOMapper{
 	
 	//void updateTaskDetailDailyStatus(@Param("status")Integer status,@Param("taskDailyIdList")List<Long> taskDailyIdList);
 	
-//	void updateUpcForTaskDailyDetail(MallOrderDO erpOrder);
+	void updateUpcForTaskDailyDetail(MallOrderDO erpOrder);
 	
 	/**s
 	 * 查找一个task_deily对应的多个task_deilay_detail，XiaJun
