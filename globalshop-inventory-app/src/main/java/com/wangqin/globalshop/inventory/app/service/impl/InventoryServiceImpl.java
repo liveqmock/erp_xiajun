@@ -247,8 +247,6 @@ public class InventoryServiceImpl implements InventoryService {
         /**增加实际库存*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(skuCode, AppUtil.getLoginUserCompanyNo());
         insertInv(inventoryDO, quantity);
-        // /**增加仓库库存*/
-        // InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.selectByCompanyNoAndSkuCodeAndWarehouseNo(AppUtil.getLoginUserCompanyNo(),skuCode,warehouseNo);
         /**增加仓库对应货架库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
         /**检查仓库及对应货架是否存在*/
@@ -294,7 +292,6 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity) {
-        // 增加校验
         if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(skuCode) || quantity == null) {
             throw new ErpCommonException("有空数据");
         }
@@ -303,9 +300,15 @@ public class InventoryServiceImpl implements InventoryService {
         }
         /**减少仓库库存*/
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+        // 身份校验
+        if (!houseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo())) {
+            throw new ErpCommonException("没有权限");
+        }
+
         if (houseDO.getInventory() - quantity < 0) {
             throw new ErpCommonException("盘出库存不能大于实际库存");
         }
+
         houseDO.setInventory(houseDO.getInventory() - quantity);
         invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
         /**减少实际库存*/
@@ -341,9 +344,11 @@ public class InventoryServiceImpl implements InventoryService {
                 || StringUtils.isBlank(warehouseName)) {
             throw new ErpCommonException("有空数据");
         }
+
         try {
             InventoryOutManifestDO inventoryOutManifestDO =
                     inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, remark);
+
             for (int i = 0; i < inventoryOutDetailArray.size(); i++) {
                 JSONObject inventoryOutDetail = inventoryOutDetailArray.getJSONObject(i);
                 String inventoryOnWarehouseNo = inventoryOutDetail.getString("inventoryOnWarehouseNo");
@@ -354,6 +359,11 @@ public class InventoryServiceImpl implements InventoryService {
                 }
                 InventoryOnWareHouseDO inventoryOnWareHouseDO = invOnWarehouseMapperExt
                         .getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+                // 身份校验
+                if (!inventoryOnWareHouseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo())
+                        || !inventoryOutManifestDO.getCompanyNo().equals(inventoryOnWareHouseDO.getCompanyNo())) {
+                    throw new ErpCommonException("没有权限");
+                }
 
                 /**减少仓库库存*/
                 if (inventoryOnWareHouseDO.getInventory() - quantity < 0) {
@@ -393,11 +403,16 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void updateSelfNo(String inventoryOnWarehouseNo, String shelfNo) {
-        // 增加校验
         if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(shelfNo)) {
             throw new ErpCommonException("有空数据");
         }
+
         InventoryOnWareHouseDO houseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+
+        if (!houseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo())) {
+            throw new ErpCommonException("没有权限");
+        }
+
         if (!houseDO.getShelfNo().trim().equals(shelfNo.trim())) {
             houseDO.setShelfNo(shelfNo);
             invOnWarehouseMapperExt.updateByPrimaryKeySelective(houseDO);
