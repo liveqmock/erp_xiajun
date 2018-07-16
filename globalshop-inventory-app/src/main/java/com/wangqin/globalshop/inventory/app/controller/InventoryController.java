@@ -385,7 +385,6 @@ public class InventoryController {
      */
     @RequestMapping("/changePositionNo")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
     public Object changePositionNo(String inventoryOnWarehouseNo, String shelfNo) {
         try {
             inventoryService.updateSelfNo(inventoryOnWarehouseNo, shelfNo);
@@ -554,7 +553,6 @@ public class InventoryController {
      */
     @RequestMapping("/inventoryOutConfirm")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
     public Object inventoryOutConfirm(String inventoryOutDetailList, String warehouseNo,
                                       String warehouseName, String desc) throws InventoryException {
 

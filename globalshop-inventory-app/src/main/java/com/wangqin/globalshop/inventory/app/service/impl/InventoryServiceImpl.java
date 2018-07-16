@@ -344,52 +344,44 @@ public class InventoryServiceImpl implements InventoryService {
                 || StringUtils.isBlank(warehouseName)) {
             throw new ErpCommonException("有空数据");
         }
+        InventoryOutManifestDO inventoryOutManifestDO =
+                inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, remark);
 
-        try {
-            InventoryOutManifestDO inventoryOutManifestDO =
-                    inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, remark);
+        for (int i = 0; i < inventoryOutDetailArray.size(); i++) {
+            JSONObject inventoryOutDetail = inventoryOutDetailArray.getJSONObject(i);
+            String inventoryOnWarehouseNo = inventoryOutDetail.getString("inventoryOnWarehouseNo");
+            Long quantity = inventoryOutDetail.getLong("quantity");
 
-            for (int i = 0; i < inventoryOutDetailArray.size(); i++) {
-                JSONObject inventoryOutDetail = inventoryOutDetailArray.getJSONObject(i);
-                String inventoryOnWarehouseNo = inventoryOutDetail.getString("inventoryOnWarehouseNo");
-                Long quantity = inventoryOutDetail.getLong("quantity");
-
-                if (quantity <= 0) {
-                    throw new ErpCommonException("出库数量要为正数");
-                }
-                InventoryOnWareHouseDO inventoryOnWareHouseDO = invOnWarehouseMapperExt
-                        .getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
-                // 身份校验
-                if (!inventoryOnWareHouseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo())
-                        || !inventoryOutManifestDO.getCompanyNo().equals(inventoryOnWareHouseDO.getCompanyNo())) {
-                    throw new ErpCommonException("没有权限");
-                }
-
-                /**减少仓库库存*/
-                if (inventoryOnWareHouseDO.getInventory() - quantity < 0) {
-                    throw new ErpCommonException("出库数量不能大于实际库存");
-                }
-                inventoryOnWareHouseDO.setInventory(inventoryOnWareHouseDO.getInventory() - quantity);
-                invOnWarehouseMapperExt.updateByPrimaryKeySelective(inventoryOnWareHouseDO);
-                /**减少实际库存*/
-                InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(inventoryOnWareHouseDO.getSkuCode(),
-                        AppUtil.getLoginUserCompanyNo());
-                if (inventoryDO == null) {
-                    throw new ErpCommonException("找不到对应库存");
-                }
-                if (inventoryDO.getInv() - quantity < 0) {
-                    throw new ErpCommonException("出库数量不能大于实际库存");
-                }
-                inventoryDO.setInv(inventoryDO.getInv() - quantity);
-                mapper.updateByPrimaryKeySelective(inventoryDO);
-                inventoryOutManifestDetailService.insertInventoryOutManifestDetail(
-                        inventoryOnWareHouseDO, inventoryOutManifestDO, quantity);
+            if (quantity <= 0) {
+                throw new ErpCommonException("出库数量要为正数");
             }
-        } catch (ErpCommonException e) {
-            throw e;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new ErpCommonException("未知错误");
+            InventoryOnWareHouseDO inventoryOnWareHouseDO = invOnWarehouseMapperExt
+                    .getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+            // 身份校验
+            if (!inventoryOnWareHouseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo())
+                    || !inventoryOutManifestDO.getCompanyNo().equals(inventoryOnWareHouseDO.getCompanyNo())) {
+                throw new ErpCommonException("没有权限");
+            }
+
+            /**减少仓库库存*/
+            if (inventoryOnWareHouseDO.getInventory() - quantity < 0) {
+                throw new ErpCommonException("出库数量不能大于实际库存");
+            }
+            inventoryOnWareHouseDO.setInventory(inventoryOnWareHouseDO.getInventory() - quantity);
+            invOnWarehouseMapperExt.updateByPrimaryKeySelective(inventoryOnWareHouseDO);
+            /**减少实际库存*/
+            InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(inventoryOnWareHouseDO.getSkuCode(),
+                    AppUtil.getLoginUserCompanyNo());
+            if (inventoryDO == null) {
+                throw new ErpCommonException("找不到对应库存");
+            }
+            if (inventoryDO.getInv() - quantity < 0) {
+                throw new ErpCommonException("出库数量不能大于实际库存");
+            }
+            inventoryDO.setInv(inventoryDO.getInv() - quantity);
+            mapper.updateByPrimaryKeySelective(inventoryDO);
+            inventoryOutManifestDetailService.insertInventoryOutManifestDetail(
+                    inventoryOnWareHouseDO, inventoryOutManifestDO, quantity);
         }
 
     }
