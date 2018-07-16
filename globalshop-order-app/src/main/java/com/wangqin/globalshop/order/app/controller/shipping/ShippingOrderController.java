@@ -42,6 +42,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -561,7 +562,7 @@ public class ShippingOrderController {
     // 包裹明细导出
     @RequestMapping("/shippingOrderExportExcel")
     @ResponseBody
-    public ResponseEntity<byte[]> shippingOrderExportExcel(ShippingOrderVO shippingOrderQueryVO) throws Exception {
+    public ResponseEntity<byte[]> shippingOrderExportExcel(ShippingOrderVO shippingOrderQueryVO, BindingResult bindingResult) throws Exception {
         if (shippingOrderQueryVO.getStartOrderTime() == null || shippingOrderQueryVO.getEndOrderTime() == null) {
             throw new ErpCommonException("必须选择发货时间段");
         }
@@ -651,7 +652,7 @@ public class ShippingOrderController {
 
     @RequestMapping("/shippingOrderPackageExportExcel")
     @ResponseBody
-    public ResponseEntity<byte[]> shippingOrderPackageExportExcel(ShippingOrderVO shippingOrderQueryVO) throws Exception {
+    public ResponseEntity<byte[]> shippingOrderPackageExportExcel(ShippingOrderVO shippingOrderQueryVO, BindingResult bindingResult) throws Exception {
         if (shippingOrderQueryVO.getStartOrderTime() == null || shippingOrderQueryVO.getEndOrderTime() == null) {
             throw new ErpCommonException("必须选择发货时间段");
         }
