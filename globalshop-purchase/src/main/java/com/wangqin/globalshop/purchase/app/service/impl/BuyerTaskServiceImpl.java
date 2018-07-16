@@ -15,9 +15,6 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
-import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 
 import com.wangqin.globalshop.common.utils.AppUtil;
@@ -25,7 +22,6 @@ import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -265,6 +261,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         detail.setMaxPrice(itemTask.getTaskMaxPrice() == null ? itemTask.getTaskPrice() : itemTask.getTaskMaxPrice());
         detail.setRemark(itemTask.getRemark());
         detail.setSkuPicUrl(itemTask.getImageUrl());
+        detail.setUpc(sku.getUpc());
         detail.setMode(itemTask.getMode());
     }
 
