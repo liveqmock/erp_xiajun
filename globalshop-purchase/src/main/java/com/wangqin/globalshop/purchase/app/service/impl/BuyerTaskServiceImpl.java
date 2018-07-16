@@ -56,6 +56,10 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         return mapper.list(buyerTask);
     }
 
+    public BuyerTaskVO selectVoById(Long id){
+        return mapper.selectVoById(id);
+    }
+
     /**
      * 新增采购任务
      */

@@ -18,6 +18,7 @@ public interface BuyerTaskDOMapperExt extends BuyerTaskDOMapper {
     List<BuyerTaskVO> list(BuyerTaskVO buyerTask);
 
     void insertBatch(List<BuyerTaskDO> taskList);
-    
-//    List<Map<String, String>> dealerList(DealerDO seller);
+
+    BuyerTaskVO selectVoById(Long id);
+
 }

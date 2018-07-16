@@ -18,4 +18,5 @@ public interface IBuyerTaskService {
 
     void updateTaskStatus(Integer status,List<Long> taskDailyIdList);
 
+	public BuyerTaskVO selectVoById(Long id);
 }

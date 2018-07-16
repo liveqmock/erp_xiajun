@@ -106,6 +106,24 @@ public class BuyerTaskController {
         return result.buildIsSuccess(true);
     }
 
+
+    /**
+     * 查询单个采购任务
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/query")
+    @ResponseBody
+    public Object query(Long id) {
+        JsonResult<BuyerTaskVO> result = new JsonResult<>();
+        if (id == null) {
+            return result.buildIsSuccess(false).buildMsg("id 不能为 null");
+        }
+        BuyerTaskVO td = buyerTaskService.selectVoById(id);
+        return result.buildIsSuccess(true).buildData(td);
+    }
+
     /**
      * 完成采购按钮：采购中->采购结束
      *
