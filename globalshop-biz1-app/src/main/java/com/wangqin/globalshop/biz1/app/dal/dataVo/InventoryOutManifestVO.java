@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class InventoryOutManifestVO extends PageQueryVO {
@@ -17,11 +19,13 @@ public class InventoryOutManifestVO extends PageQueryVO {
     /**
      * 创建开始日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startGmt;
 
     /**
      * 创建结束时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endGmt;
 
     public String getWarehouseNo() {
