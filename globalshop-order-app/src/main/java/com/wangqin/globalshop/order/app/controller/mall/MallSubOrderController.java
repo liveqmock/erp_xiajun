@@ -446,8 +446,8 @@ public class MallSubOrderController {
     			if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
     				ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
     				if(null != itemSkuDoWeight) {
+    					list.add(itemSkuDoWeight.getWeight()-GROSS_GAIN);
     					list.add(itemSkuDoWeight.getWeight());
-    					list.add(itemSkuDoWeight.getWeight()+GROSS_GAIN);
     				} else {
     					list.add(0.0);
         				list.add(0.0+GROSS_GAIN);
