@@ -1,31 +1,65 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-public class InventoryOutManifestDetailDO extends BaseModel {
+import java.util.Date;
+
+/**
+ * @author angus
+ * @date 2018/7/16
+ */
+public class InventoryOutManifestDetailDO {
     private Long id;
-
+    /**
+     * 父 ID
+     */
     private String inventoryOutNo;
-
+    /**
+     * item ID
+     */
     private String itemCode;
-
+    /**
+     * 数量
+     */
     private Long quantity;
-
+    /**
+     * 商品名称
+     */
     private String itemName;
-
+    /**
+     * 规格
+     */
     private String scale;
-
+    /**
+     * 商品条码
+     */
     private String upc;
-
+    /**
+     * SKU CODE
+     */
     private String skuCode;
-
+    /**
+     * SKU 图片
+     */
     private String skuPic;
-
+    /**
+     * 货架号
+     */
     private String shelfNo;
 
-    private String creator;
+    private String companyNo;
+    /**
+     * 操作时间
+     */
+    private Date gmtModify;
+    /**
+     * 创建时间
+     */
+    private Date gmtCreate;
 
     private String modifier;
 
-    private String companyNo;
+    private String creator;
+
+    private Boolean isDel;
 
     public Long getId() {
         return id;
@@ -40,7 +74,7 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setInventoryOutNo(String inventoryOutNo) {
-        this.inventoryOutNo = inventoryOutNo == null ? null : inventoryOutNo.trim();
+        this.inventoryOutNo = inventoryOutNo;
     }
 
     public String getItemCode() {
@@ -48,7 +82,7 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setItemCode(String itemCode) {
-        this.itemCode = itemCode == null ? null : itemCode.trim();
+        this.itemCode = itemCode;
     }
 
     public Long getQuantity() {
@@ -64,7 +98,7 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setItemName(String itemName) {
-        this.itemName = itemName == null ? null : itemName.trim();
+        this.itemName = itemName;
     }
 
     public String getScale() {
@@ -72,7 +106,7 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setScale(String scale) {
-        this.scale = scale == null ? null : scale.trim();
+        this.scale = scale;
     }
 
     public String getUpc() {
@@ -80,7 +114,7 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setUpc(String upc) {
-        this.upc = upc == null ? null : upc.trim();
+        this.upc = upc;
     }
 
     public String getSkuCode() {
@@ -88,7 +122,7 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setSkuCode(String skuCode) {
-        this.skuCode = skuCode == null ? null : skuCode.trim();
+        this.skuCode = skuCode;
     }
 
     public String getSkuPic() {
@@ -96,7 +130,7 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setSkuPic(String skuPic) {
-        this.skuPic = skuPic == null ? null : skuPic.trim();
+        this.skuPic = skuPic;
     }
 
     public String getShelfNo() {
@@ -104,33 +138,54 @@ public class InventoryOutManifestDetailDO extends BaseModel {
     }
 
     public void setShelfNo(String shelfNo) {
-        this.shelfNo = shelfNo == null ? null : shelfNo.trim();
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    @Override
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+        this.shelfNo = shelfNo;
     }
 
     public String getCompanyNo() {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo == null ? null : companyNo.trim();
+        this.companyNo = companyNo;
+    }
+
+    public Date getGmtModify() {
+        return gmtModify;
+    }
+
+    public void setGmtModify(Date gmtModify) {
+        this.gmtModify = gmtModify;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public Boolean getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Boolean del) {
+        isDel = del;
     }
 }

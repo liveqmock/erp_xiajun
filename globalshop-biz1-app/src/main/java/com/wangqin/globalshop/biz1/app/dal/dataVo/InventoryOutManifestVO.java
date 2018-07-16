@@ -17,6 +17,11 @@ public class InventoryOutManifestVO extends PageQueryVO {
     private String inventoryOutNo;
 
     /**
+     * 公司号
+     */
+    private String companyNo;
+
+    /**
      * 创建开始日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -44,6 +49,14 @@ public class InventoryOutManifestVO extends PageQueryVO {
         this.inventoryOutNo = inventoryOutNo;
     }
 
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo;
+    }
+
     public Date getStartGmt() {
         return startGmt;
     }
@@ -59,6 +72,4 @@ public class InventoryOutManifestVO extends PageQueryVO {
     public void setEndGmt(Date endGmt) {
         this.endGmt = endGmt;
     }
-
-
 }

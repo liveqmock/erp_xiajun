@@ -31,10 +31,18 @@ public interface IInventoryOutManifestDetailService {
     /**
      * 查询出货单详情列表
      *
+     * @param inventoryOutNo
+     * @return
+     */
+    List<InventoryOutManifestDetailDO> listByInventoryOutNo(String inventoryOutNo);
+
+    /**
+     * 查询出货单详情列表
+     *
      * @param inventoryOutManifestVO inventoryOutManifestVO
      * @return List<InventoryOutManifestDO>
      */
-    List<InventoryOutManifestDetailDO> listInventoryOutManifestDetail(InventoryOutManifestVO inventoryOutManifestVO);
+    List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestVO inventoryOutManifestVO);
 
     /**
      * 添加出货单详情

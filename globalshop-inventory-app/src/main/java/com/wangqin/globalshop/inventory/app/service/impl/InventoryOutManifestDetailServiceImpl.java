@@ -80,7 +80,8 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
     }
     public Set<String> inventoryCheckOutBatch(InventoryOutManifestDO inventoryOut) {
         Set<String> skuIdSet = Sets.newHashSet();
-        List<InventoryOutManifestDetailDO> inventoryOutDetailList = inventoryOutManifestDetailDOMapper.selectByOutNo(inventoryOut.getInventoryOutNo());
+        List<InventoryOutManifestDetailDO> inventoryOutDetailList =
+                inventoryOutManifestDetailDOMapper.listByInventoryOutNo(inventoryOut.getInventoryOutNo());
         Long warehouseId = inventoryOut.getId();
         inventoryOutDetailList.forEach(inventoryOutDetail -> {
             Long quantity = inventoryOutDetail.getQuantity();
@@ -103,9 +104,13 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
     }
 
     @Override
-    public List<InventoryOutManifestDetailDO> listInventoryOutManifestDetail(InventoryOutManifestVO inventoryOutManifestVO) {
-        // TODO
-        return null;
+    public List<InventoryOutManifestDetailDO> listByInventoryOutNo(String inventoryOutNo) {
+        return inventoryOutManifestDetailDOMapper.listByInventoryOutNo(inventoryOutNo);
+    }
+
+    @Override
+    public List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestVO inventoryOutManifestVO) {
+        return inventoryOutManifestDetailDOMapper.listByInventoryOutManifestVO(inventoryOutManifestVO);
     }
 
 
