@@ -1,145 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryInoutMapperExt">
- <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
-    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR" />
-    <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
-    <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
-    <result column="quantity" property="quantity" jdbcType="BIGINT" />
-    <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-  </resultMap>
-   <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
-    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
-    <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="upc" property="upc" jdbcType="VARCHAR"/>
-    <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
-    <result column="sku_pic" property="skuPic" jdbcType="VARCHAR"/>
-    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
-    <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR"/>
-    <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
-    <result column="operator_type" property="operatorType" jdbcType="TINYINT" />
-    <result column="quantity" property="quantity" jdbcType="BIGINT" />
-  </resultMap>
-  <!-- 2.0 -->
-  <sql id="Base_Column_List" >
-    id, company_no, item_code, sku_code, inventory_on_warehouse_no, warehouse_no, shelf_no, 
-    quantity, operator_type, gmt_create, gmt_modify, is_del, creator, modifier
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
+        <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR"/>
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR"/>
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
+        <result column="quantity" property="quantity" jdbcType="BIGINT"/>
+        <result column="operator_type" property="operatorType" jdbcType="TINYINT"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="upc" property="upc" jdbcType="VARCHAR"/>
+        <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR"/>
+        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
+        <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR"/>
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
+        <result column="operator_type" property="operatorType" jdbcType="TINYINT"/>
+        <result column="quantity" property="quantity" jdbcType="BIGINT"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 2.0 -->
+    <sql id="Base_Column_List">
+    id, company_no, item_code, sku_code, inventory_on_warehouse_no,
+    warehouse_no, shelf_no, remark, quantity, operator_type,
+    gmt_create, gmt_modify, creator, modifier, is_del
   </sql>
-  
-   <select id="queryInventoryInoutCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+
+    <select id="queryInventoryInoutCount" resultType="java.lang.Integer"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
         SELECT
-        		count(1)
+        count(1)
         FROM
-            inventory_inout T1,item_sku T2
-        WHERE  is_del=0 
-        		and T1.sku_code=T2.sku_code
-       		<if test="itemName!=null and itemName!=''">
-       			and T2.item_name LIKE concat('%',#{itemName},'%')
-       		</if>
-       		<if test="skuCode!=null and skuCode!=''">
-       			and T1.sku_code = #{skuCode} 
-       		</if>
-       		<if test="upc!=null and upc!=''">
-       			and T2.upc = #{upc} 
-       		</if>
-       		<if test="warehouseId != null">
-        			and T1.warehouse_no = #{warehouseNO}	
-        	</if>
-       		<if test="operatorType != null">
-        			and T1.operator_type = #{operatorType}	
-        	</if>
-        	<if test="shelfNo != null">
-        			and T1.shelf_no = #{shelfNo}
-        	</if>
+        inventory_inout T1,item_sku T2
+        WHERE is_del=0
+        and T1.sku_code=T2.sku_code
+        <if test="itemName!=null and itemName!=''">
+            and T2.item_name LIKE concat('%',#{itemName},'%')
+        </if>
+        <if test="skuCode!=null and skuCode!=''">
+            and T1.sku_code = #{skuCode}
+        </if>
+        <if test="upc!=null and upc!=''">
+            and T2.upc = #{upc}
+        </if>
+        <if test="warehouseId != null">
+            and T1.warehouse_no = #{warehouseNO}
+        </if>
+        <if test="operatorType != null">
+            and T1.operator_type = #{operatorType}
+        </if>
+        <if test="shelfNo != null">
+            and T1.shelf_no = #{shelfNo}
+        </if>
     </select>
-    
-    <select id="queryInventoryInouts" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
-		SELECT
-			<include refid="Base_Column_List"/>
+
+    <select id="queryInventoryInouts" resultMap="BaseResultMap"
+            parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM
-            inventory_inout
-		<where>
-			<if test="warehouseNo!=null and warehouseNo!=''">
-				and warehouse_no = #{warehouseNo}
-			</if>
-			<if test="companyNo!=null and companyNo!=''">
-				and company_no = #{companyNo}
-			</if>
-			<if test="skuCode!=null and skuCode!=''">
-				and sku_code = #{skuCode}
-			</if>
-			<if test="itemName!=null and itemName!=''">
-				and item_name = #{itemName}
-			</if>
-			<if test="shelfNo!=null and shelfNo!=''">
-				and shelf_no = #{shelfNo}
-			</if>
-		</where>
+        inventory_inout
+        <where>
+            <if test="warehouseNo!=null and warehouseNo!=''">
+                and warehouse_no = #{warehouseNo}
+            </if>
+            <if test="companyNo!=null and companyNo!=''">
+                and company_no = #{companyNo}
+            </if>
+            <if test="skuCode!=null and skuCode!=''">
+                and sku_code = #{skuCode}
+            </if>
+            <if test="itemName!=null and itemName!=''">
+                and item_name = #{itemName}
+            </if>
+            <if test="shelfNo!=null and shelfNo!=''">
+                and shelf_no = #{shelfNo}
+            </if>
+        </where>
 
     </select>
-    
+
     <!-- 查询出库商品详情 -->
-    <select id="queryInventoryInoutsVo"  resultMap="BaseResultMapVO">
-    	SELECT
-			<include refid="Base_Column_List"/>,inventory_on_warehouse_no
+    <select id="queryInventoryInoutsVo" resultMap="BaseResultMapVO">
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM
-            inventory_inout
-		<where>
-			<if test="warehouseNo!=null and warehouseNo!=''">
-				and warehouse_no = #{warehouseNo}
-			</if>
-			<if test="companyNo!=null and companyNo!=''">
-				and company_no = #{companyNo}
-			</if>
-			<if test="skuCode!=null and skuCode!=''">
-				and sku_code = #{skuCode}
-			</if>
-			<if test="itemName!=null and itemName!=''">
-				and item_name = #{itemName}
-			</if>
-			<if test="shelfNo!=null and shelfNo!=''">
-				and shelf_no = #{shelfNo}
-			</if>
-		</where>
+        inventory_inout
+        <where>
+            <if test="warehouseNo!=null and warehouseNo!=''">
+                and warehouse_no = #{warehouseNo}
+            </if>
+            <if test="companyNo!=null and companyNo!=''">
+                and company_no = #{companyNo}
+            </if>
+            <if test="skuCode!=null and skuCode!=''">
+                and sku_code = #{skuCode}
+            </if>
+            <if test="itemName!=null and itemName!=''">
+                and item_name = #{itemName}
+            </if>
+            <if test="shelfNo!=null and shelfNo!=''">
+                and shelf_no = #{shelfNo}
+            </if>
+        </where>
     </select>
-    
+
     <!-- 查询 入库商品数,XiaJun-->
     <select id="countTodayInInventoryItemNum" resultType="java.lang.Integer">
-    SELECT
-    	IFNULL(sum(IFNULL(T1.quantity,0)),0)
-    	FROM inventory_inout T1
-    	<where> 
-    	 1=1
-    	 AND T1.operator_type IN
-    	<foreach item="type" index="index" collection="typeList" open="(" separator="," close=")">  
-			#{type}
-		</foreach>
+        SELECT
+        IFNULL(sum(IFNULL(T1.quantity,0)),0)
+        FROM inventory_inout T1
+        <where>
+            1=1
+            AND T1.operator_type IN
+            <foreach item="type" index="index" collection="typeList" open="(" separator="," close=")">
+                #{type}
+            </foreach>
 
-			<if test="today != null">
-		AND
-			<![CDATA[ T1.gmt_create >= #{today} ]]>
-		</if>
-		</where>
+            <if test="today != null">
+                AND
+                <![CDATA[ T1.gmt_create >= #{today} ]]>
+            </if>
+        </where>
     </select>
     <!-- 通过skucode 查出商品的名称 upc sku图片 -->
-    <select id="selectItemBySkuCode" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
+    <select id="selectItemBySkuCode" parameterType="java.lang.String"
+            resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO">
     	SELECT
     		item_name itemName,
     		upc,
