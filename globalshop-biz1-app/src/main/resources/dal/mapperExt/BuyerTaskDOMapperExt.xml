@@ -41,6 +41,17 @@
         </if>
     </select>
 
+    <select id="selectVoById" resultMap="BaseResultMap">
+        SELECT
+            buyer_task.*, buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
+        FROM
+            buyer_task,buyer_task_detail
+        WHERE
+            buyer_task.buyer_task_no = buyer_task_detail.buyer_task_no
+        and
+            buyer_task.id = #{id}
+    </select>
+
 
     <insert id="insertBatch" parameterType="java.util.List">
         <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
