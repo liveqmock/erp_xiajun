@@ -1,4 +1,9 @@
 ALTER TABLE inventory_out_manifest CHANGE `desc` remark VARCHAR(256) COMMENT '备注';
+-- 一个appid只能绑定给一个公司
+CREATE UNIQUE INDEX applet_config_appid_uindex ON applet_config (appid);
+-- 每个公司只能绑定一个商城小程序和一个采购小程序
+ALTER TABLE applet_config
+  ADD UNIQUE KEY(company_no, applet_type);
 
 
 ALTER TABLE `item_find`

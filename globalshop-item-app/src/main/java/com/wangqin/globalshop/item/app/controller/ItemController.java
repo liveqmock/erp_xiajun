@@ -127,19 +127,7 @@ public class ItemController {
         }
 
         //商品名称处理
-        StringBuffer nameNew = new StringBuffer();
-        String[] brandArr = item.getBrand().split("->");
-        if (StringUtil.isNotBlank(brandArr[0])) {    //英文品牌
-        	nameNew.append(brandArr[0] + " ");
-        }
-        if (brandArr.length > 1 && StringUtil.isNotBlank(brandArr[1])) {    //中文品牌
-        	nameNew.append(brandArr[1] + " ");
-        }
-        if (StringUtil.isNotBlank(item.getSexStyle())) {        //男女款
-        	nameNew.append(item.getSexStyle() + " ");
-        }
-        nameNew.append(item.getName());   
-        item.setName(nameNew.toString());//重新设置商品名称
+        setItemNewName(item);
 
         String skuList = item.getSkuList();
         if (!StringUtils.isNotBlank(skuList)) {
@@ -147,6 +135,7 @@ public class ItemController {
         }
         
         List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+        List<Double> skuSalePriceList = new ArrayList<Double>();
         
         try {
         	String s = skuList.replace("&quot;", "\"");
@@ -158,8 +147,6 @@ public class ItemController {
         	//更新商品的价格区间,同时判断用户传来的upc是否相互之间有重复，同时判断upc和数据库里面已有的upc是否重复
         	String itemCode = iItemService.queryItemCodeById(item.getId());
         	List<String> upcList = new ArrayList<>();
-        	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
-        	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
         	for(ItemSkuQueryVO sku:skus) {
         		Integer duplcatedCountNumber = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(
         				AppUtil.getLoginUserCompanyNo(),sku.getUpc(), itemCode);
@@ -167,24 +154,15 @@ public class ItemController {
         			return result.buildIsSuccess(false).buildMsg("更新失败，添加的upc和已有的upc重复");
         		}
         		upcList.add(sku.getUpc());
-        		BigDecimal temp = new BigDecimal(sku.getSalePrice().toString());
-        		maxPrice = maxPrice.compareTo(temp) < 0 ? temp : maxPrice;
-        		minPrice = minPrice.compareTo(temp) > 0 ? temp : minPrice;
+        		skuSalePriceList.add(sku.getSalePrice());
         	}
         	HashSet<String> upcSet = new HashSet<String>(upcList);
             if(upcList.size() > upcSet.size()) {
             	result.buildIsSuccess(false);
             	result.buildMsg("输入的upc有重复，请再次输入");
             	return result;
-            }
-            if(0 == minPrice.compareTo(maxPrice)) {
-            	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString()));
-            } else {
-            	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString())+"-"+PriceUtil.formatPrice(maxPrice.toPlainString()));
-            }
-            
-            //检查更新的这些upc是否和数据库里面(除了正在更新的这个商品的sku)的重复
-        	
+            }           
+            //检查更新的这些upc是否和数据库里面(除了正在更新的这个商品的sku)的重复        	
         	int startIndex = 0;
         	//获取原来绑定该商品的所有sku的skuCode
         	ItemSkuQueryVO itemSkuQueryVO = new ItemSkuQueryVO();
@@ -315,10 +293,6 @@ public class ItemController {
 //        }
         //TEMP
         item.setIsSale(1);
-//        //编辑运费
-//        if (item.getFreight() == null) {
-//            item.setFreight(0.0d);
-//        }
 
         newItem.setDetail(item.getDetail());
         detailDecoder(newItem);
@@ -336,7 +310,7 @@ public class ItemController {
         newItem.setItemName(item.getName());
         newItem.setCurrency(item.getCurrency().byteValue());
         newItem.setIdCard(item.getIdCard().byteValue());
-        newItem.setPriceRange(item.getPriceRange());
+        newItem.setPriceRange(PriceUtil.calNewPriceRange(skuSalePriceList));
         newItem.setCountry(item.getCountry());
         newItem.setRemark(item.getRemark());
         newItem.setMainPic(item.getMainPic());
@@ -738,7 +712,22 @@ public class ItemController {
         return result.buildIsSuccess(true).buildMsg("上传成功");
     }
     
-    //给价格区间接口加上0
+    /**
+     * 工具类：处理商品的名字
+     * 商品名称公式：品牌英文名+品牌中文名+男女款+商品名
+     */
+    private static void setItemNewName(ItemQueryVO item) {
+    	StringBuffer nameNew = new StringBuffer();
+        String[] brandArr = item.getBrand().split("->");
+        for(String s:brandArr) { //品牌处理
+        	nameNew.append(s+" ");
+        }
+        if(IsEmptyUtil.isStringNotEmpty(item.getSexStyle())) { //男女款处理
+        	nameNew.append(item.getSexStyle() + " ");
+        }
+        nameNew.append(item.getName());   
+        item.setName(nameNew.toString());//重新设置商品名称
+    }
 
 }
 

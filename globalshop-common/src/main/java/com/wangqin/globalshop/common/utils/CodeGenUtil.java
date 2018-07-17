@@ -11,7 +11,7 @@ public class CodeGenUtil {
 
 	public static String genUserNo(){
 
-		String userNo = "9999"+DateUtil.formatDate(new Date(),"yyMMddHHmmss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+		String userNo = "U"+DateUtil.formatDate(new Date(),"yyMMddHHmmss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
 
 		return userNo;
 	}
@@ -25,16 +25,17 @@ public class CodeGenUtil {
 		return "s"+System.currentTimeMillis()+ RandomUtils.nextInt(10000);
     }
 
-	public static String getItemCode(String categoryCode ) {
-		return "I" + categoryCode + "Q" + RandomUtils.nextInt(10000);
+	//商品的编码,@author:xiajun
+	public static String generateItemCode(String categoryCode ) {
+		return "I" + categoryCode + "T" + com.wangqin.globalshop.common.utils.RandomUtils.getTimeRandom();
 	}
 
 	public static String getBuyerTaskNo() {
-		return "TaskNo" + System.currentTimeMillis();
+		return "TASK" + System.currentTimeMillis();
 	}
 
 	public static String getBuyerTaskDetailNo() {
-		return "TaskDetailNo" + System.currentTimeMillis();
+		return "TASKD" + System.currentTimeMillis();
 	}
 
     public static String getShopCode() {
@@ -49,8 +50,9 @@ public class CodeGenUtil {
 		return "SUB" + System.currentTimeMillis();
 	}
 
-	public static String getSkuCode(String categoryCode,String ItemCode,int i ) {
-		return "S" + categoryCode + "Q"+ItemCode+String.format("%0" + 4 + "d", ++i);
+	//sku的编码,@author:xiajun
+	public static String generateSkuCode(String ItemCode,int i) {
+		return "S" + ItemCode.substring(1) + String.format("%0" + 2 + "d", i);
 	}
 
     public static String getShippingNO(Long aLong) {
@@ -58,10 +60,10 @@ public class CodeGenUtil {
     }
 
 	public static String getInvOnWarehouseNo() {
-		return "INVONWARE" + System.currentTimeMillis();
+		return "IN" + System.currentTimeMillis();
 	}
 
 	public static String getInventoryOutNo() {
-		return "INVENTORYOUTNO" + System.currentTimeMillis();
+		return "INO" + System.currentTimeMillis();
 	}
 }
