@@ -21,9 +21,13 @@ public class BuyerStorageDetailVo {
 
 	private String specifications;//规格
 
-	private Integer quantity; //小程序端，这个是线下数量，现在它和globalshop前端，查询后置=BuyerStorageDetailDo.quantity+BuyerStorageDetailDo.transQuantity
+	private Integer quantity; //小程序端，这个是线下数量，
 
-	private Integer transQuantity; //在途，预入库数，小程序段，这里是在途数量，现在是前端置为BuyerStorageDetailDo.quantity+BuyerStorageDetailDo.transQuantity
+	private Integer transQuantity; //在途，预入库数，
+
+	private Integer entryQuantity; //实际入库数=客户手工填写入库数
+
+	private Integer preQuantity; //预入库数=在途+线下
 
 	private String buyerName; //买手名字
 
@@ -56,8 +60,19 @@ public class BuyerStorageDetailVo {
 	private Integer batchNum;
 
 	private String buyerTaskNo;
-
-
+	
+	public Integer getPreQuantity() {
+		return preQuantity;
+	}
+	public void setPreQuantity(Integer preQuantity) {
+		this.preQuantity = preQuantity;
+	}
+	public Integer getEntryQuantity() {
+		return entryQuantity;
+	}
+	public void setEntryQuantity(Integer entryQuantity) {
+		this.entryQuantity = entryQuantity;
+	}
 	public String getBuyerTaskNo() {
 		return buyerTaskNo;
 	}

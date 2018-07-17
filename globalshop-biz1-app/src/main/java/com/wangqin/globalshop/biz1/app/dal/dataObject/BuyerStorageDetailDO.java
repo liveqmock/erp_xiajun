@@ -27,6 +27,8 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     private Integer transQuantity;
 
+    private Integer entryQuantity;
+
     private String purchaseStorageNo;
 
     private String buyerTaskDetailNo;
@@ -143,6 +145,14 @@ public class BuyerStorageDetailDO extends BaseModel {
 
     public void setTransQuantity(Integer transQuantity) {
         this.transQuantity = transQuantity;
+    }
+
+    public Integer getEntryQuantity() {
+        return entryQuantity;
+    }
+
+    public void setEntryQuantity(Integer entryQuantity) {
+        this.entryQuantity = entryQuantity;
     }
 
     public String getPurchaseStorageNo() {

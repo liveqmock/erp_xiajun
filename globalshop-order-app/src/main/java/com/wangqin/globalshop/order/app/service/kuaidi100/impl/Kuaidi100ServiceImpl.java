@@ -32,7 +32,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 	
 	private static final String kuaidi100_post_url = "http://www.kuaidi100.com/poll";
 	private static final String kuaidi100_query_url = "http://poll.kuaidi100.com/poll/query.do";
-	private static final String kuaidi100_post_callback = "https://erp.buyer007.cn/kuaidi100/callback";
+	private static final String kuaidi100_post_callback = "https://test.buyer007.cn/kuaidi100/callback";
 //	private static final String kuaidi100_post_callback = "https://erp.buyer007.com/kuaidi100/callback";
 
 
