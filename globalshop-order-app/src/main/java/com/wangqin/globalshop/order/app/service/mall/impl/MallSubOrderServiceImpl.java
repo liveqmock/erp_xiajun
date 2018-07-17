@@ -437,6 +437,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         return mallSubOrderDOMapper.getByShippingNo(shippingNo);
     }
 
+    @Override
+    public void deleteByOrderNo(String orderNo) {
+        mallSubOrderDOMapper.deleteByOrderNo(orderNo);
+    }
+
     private int getMallOrderStatus(List<MallSubOrderDO> list) {
         return OrderStatus.RETURNING.getCode();
     }
