@@ -128,11 +128,11 @@
 
     <select id="getByShippingNo" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
-            <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         FROM
-            mall_sub_order
+        mall_sub_order
         WHERE
-            shipping_no = #{ShippingNo}
+        shipping_no = #{ShippingNo}
     </select>
 
     <update id="updateUpcForOuterOrderDetail"
@@ -735,10 +735,17 @@
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     	DELETE 
-    	FROM 
+    	FROM
     		mall_sub_order
     	WHERE
     		id = #{id,jdbcType=BIGINT}	
   	</delete>
+
+    <delete id="deleteByOrderNo" parameterType="java.lang.String">
+        DELETE FROM
+            mall_sub_order
+        WHERE
+            order_no = #{orderNo}
+    </delete>
 
 </mapper>

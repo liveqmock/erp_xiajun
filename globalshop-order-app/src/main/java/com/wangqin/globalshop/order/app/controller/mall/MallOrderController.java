@@ -185,6 +185,7 @@ public class MallOrderController {
                 return JsonResult.buildFailed("先关闭才能删除订单");
             }
             mallOrderService.deleteByIsDel(outerOrder);
+            mallSubOrderService.deleteByOrderNo(orderNo);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }

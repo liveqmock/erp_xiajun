@@ -75,5 +75,12 @@ public interface IMallSubOrderService {
      * @return
      */
     MallSubOrderDO getByShippingNo(String shippingNo);
+
+    /**
+     * 根据主订单号删除子订单
+     *
+     * @param orderNo 主订单号
+     */
+    void deleteByOrderNo(String orderNo);
 }
 
