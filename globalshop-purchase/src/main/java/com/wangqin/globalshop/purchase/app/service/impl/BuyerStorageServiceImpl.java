@@ -349,7 +349,11 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         String result = "";
         if(!EasyUtil.isListEmpty(scaleList)){
             for(ItemSkuScaleDO scale : scaleList){
-                result += scale.getScaleName()+"-"+scale.getScaleValue()+";";
+            	if(EasyUtil.isStringEmpty(result)){
+					result += scale.getScaleValue();
+				}else{
+					result += "-"+scale.getScaleValue();
+				}
             }
         }
         return result;
