@@ -355,7 +355,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
         if (itemSku == null) {
             return;
         }
-        o.setSalePrice(itemSku.getSalePrice());
         Long freight = itemSku.getFreight();
         o.setFreight((double) (freight == null ? 0L : freight));
         o.setItemCode(itemSku.getItemCode());

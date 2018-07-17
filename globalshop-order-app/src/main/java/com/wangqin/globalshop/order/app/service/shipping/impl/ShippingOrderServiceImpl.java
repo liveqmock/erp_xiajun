@@ -535,9 +535,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
                     erpOrder.setWarehouseNo(inventoryOnWareHouseDO.getWarehouseNo());
                 }
-                /**拼接erp*/
+                /**拼接mallOrders*/
                 mallSubOrderMapper.updateByPrimaryKey(erpOrder);
-                erpNos.append(erpOrder.getShopCode()).append(",");
+                erpNos.append(erpOrder.getSubOrderNo()).append(",");
             } else {
                 throw new ErpCommonException("不能重复发货");
             }
@@ -564,7 +564,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         erpStr = erpStr.substring(0, erpStr.length() - 1);
         shippingOrder.init();
         shippingOrder.setStatus(SHIP_INIT);
-        shippingOrder.setShippingNo(erpStr);
+        shippingOrder.setMallOrders(erpStr);
         shippingOrder.setShippingNo(shippingNo);
         shippingOrder.setTransferStatus(TransferStatus.UNPREDICT.getValue());
         shippingOrderMapper.insertSelective(shippingOrder);
