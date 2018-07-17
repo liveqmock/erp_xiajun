@@ -6,15 +6,45 @@ package com.wangqin.globalshop.biz1.app.constants.enums;
  *
  */
 public enum OrderStatus {
-
+    /**
+     * 待付款
+     */
     INIT(0, "待付款"),
+    /**
+     * 新建
+     */
+    NEW(6, "新建"),
+    /**
+     * 已付款待发货
+     */
     PAID(3, "已付款待发货"),
+    /**
+     * 部分发货
+     */
     PART_SENT(1, "部分发货"),
+    /**
+     * 全部发货
+     */
     SENT(2, "全部发货"),
+    /**
+     * 关闭
+     */
     CLOSE(-1, "关闭"),
+    /**
+     * 售后处理中
+     */
     RETURNING(-3, "售后处理中"),
+    /**
+     * 售后完成
+     */
     RETURNDONE(-4, "售后完成"),
+    /**
+     * 订单完成
+     */
     SUCCESS(4, "订单完成"),
+    /**
+     * 已签收
+     */
     COMFIRM(5, "已签收");
 
 

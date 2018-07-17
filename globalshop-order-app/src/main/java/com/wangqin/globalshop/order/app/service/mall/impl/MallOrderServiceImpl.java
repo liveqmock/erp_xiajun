@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
+import com.jd.open.api.sdk.internal.util.CodecUtil;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -75,6 +76,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void addOuterOrder(MallOrderVO outerOrder) {
+        outerOrder.setOrderNo(CodeGenUtil.getOrderNo());
         List<MallSubOrderDO> os = outerOrder.getOuterOrderDetails();
         Double totalPrice = 0.0;
         String shopCode = CodeGenUtil.getShopCode();
@@ -111,17 +113,17 @@ public class MallOrderServiceImpl implements IMallOrderService {
             o.setTelephone(outerOrder.getTelephone());
             o.setIdCard(outerOrder.getIdCard());
             o.setMemo(outerOrder.getMemo());
-            o.setStatus(OrderStatus.PAID.getCode());
+            o.setStatus(OrderStatus.NEW.getCode());
             o.setSubOrderNo(CodeGenUtil.getSubOrderNo());
             inventoryService.order(o);
             mallSubOrderDOMapper.insert(o);
         }
-        outerOrder.setStatus(OrderStatus.PAID.getCode());
+        outerOrder.setStatus(OrderStatus.NEW.getCode());
 //        outerOrder.setDealerName(deal.getName());
         outerOrder.setShopCode(shopCode);
         outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
-        outerOrder.setActualAmount(0.0);
+        outerOrder.setActualAmount(totalPrice);
         outerOrder.setIdCard(outerOrder.getIdCard());
         mallOrderDOMapper.insertSelective(outerOrder);
 

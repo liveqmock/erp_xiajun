@@ -11,7 +11,7 @@ public class CodeGenUtil {
 
 	public static String genUserNo(){
 
-		String userNo = "9999"+DateUtil.formatDate(new Date(),"yyMMddHHmmss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
+		String userNo = "U"+DateUtil.formatDate(new Date(),"yyMMddHHmmss")+String.format("%1$06d", RandomUtils.nextInt(1000000));
 
 		return userNo;
 	}
@@ -30,11 +30,11 @@ public class CodeGenUtil {
 	}
 
 	public static String getBuyerTaskNo() {
-		return "TaskNo" + System.currentTimeMillis();
+		return "TASK" + System.currentTimeMillis();
 	}
 
 	public static String getBuyerTaskDetailNo() {
-		return "TaskDetailNo" + System.currentTimeMillis();
+		return "TASKD" + System.currentTimeMillis();
 	}
 
     public static String getShopCode() {
@@ -58,10 +58,10 @@ public class CodeGenUtil {
     }
 
 	public static String getInvOnWarehouseNo() {
-		return "INVONWARE" + System.currentTimeMillis();
+		return "IN" + System.currentTimeMillis();
 	}
 
 	public static String getInventoryOutNo() {
-		return "INVENTORYOUTNO" + System.currentTimeMillis();
+		return "INO" + System.currentTimeMillis();
 	}
 }

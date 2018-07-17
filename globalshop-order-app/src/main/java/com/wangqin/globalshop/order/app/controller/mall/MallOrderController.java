@@ -71,8 +71,8 @@ public class MallOrderController {
     public Object add(MallOrderVO mallOrderVO) {
         JsonResult<List<MallOrderVO>> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
-            String setOrderNo = CodeGenUtil.getOrderNo();
-            mallOrderVO.setOrderNo(setOrderNo);
+//            String setOrderNo = CodeGenUtil.getOrderNo();
+//            mallOrderVO.setOrderNo(setOrderNo);
             String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
             String s = outerOrderDetailList.replace("&quot;", "\"");
             List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
@@ -117,7 +117,7 @@ public class MallOrderController {
             List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
             for (MallSubOrderDO mallSubOrderDO : erpOrders) {
             	//1,释放子订单库存       
-                inventoryService.tryRelease(mallSubOrderDO);
+                inventoryService.release(mallSubOrderDO);
 			}
             mallOrderService.deleteByHard(selouterOrderVO);
             //订单详情

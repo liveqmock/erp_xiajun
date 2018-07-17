@@ -1,12 +1,12 @@
 package com.wangqin.globalshop.order.app.service.mall;
 
-import java.util.List;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.exception.InventoryException;
+
+import java.util.List;
 
 /**
  * @author biscuit
@@ -65,5 +65,7 @@ public interface IMallSubOrderService {
     void updateSubOrderStatus(Integer orderSatutsInit, Integer orderSatutsClose);
 
     MallSubOrderDO selectBySubOrderNo(String subOrderNo);
+
+    void returns(String subOrderNo);
 }
 
