@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -66,8 +65,8 @@ import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.ItemEnCodeUtil;
 import com.wangqin.globalshop.common.utils.PriceUtil;
-import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -175,7 +174,7 @@ public class ItemServiceImplement implements IItemService {
         }
 
         //系统自动生成item_code
-        String itemCode = CodeGenUtil.generateItemCode(categoryCode);
+        String itemCode = ItemEnCodeUtil.generateItemCode(categoryCode);
         item.setItemCode(itemCode);
         
         // 解析skuList 数组对象
@@ -193,7 +192,7 @@ public class ItemServiceImplement implements IItemService {
                 for (ItemSkuAddVO itemSku : skus) {
                 	itemSkuPriceList.add(itemSku.getSalePrice());
                     i++;
-                    itemSku.setSkuCode(CodeGenUtil.generateSkuCode(itemCode, i));
+                    itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i));
                     //itemSku.setLogisticType(item.getLogisticType());TODO
                     
                     String skuMainPic = itemSku.getSkuPic();
