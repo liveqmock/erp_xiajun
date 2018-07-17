@@ -321,7 +321,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
         }
         MallOrderDO mallOrder = mallOrderDOMapper.selectByOrderNo(orderNo);
         mallOrder.setShopCode(vo.getShopCode());
-        mallOrder.setOrderTime(vo.getOrderTime());
         mallOrder.setPayType(vo.getPayType());
         mallOrder.setTotalAmount(totalPrice);
         mallOrder.setActualAmount(totalPrice);

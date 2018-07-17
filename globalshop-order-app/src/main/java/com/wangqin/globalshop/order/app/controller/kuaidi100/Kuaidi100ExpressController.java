@@ -14,13 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("kuaidi100")
+@RequestMapping("/kuaidi100")
 public class Kuaidi100ExpressController {
     protected Logger logger = LogManager.getLogger(getClass());
     @Autowired
     private IKuaidi100Service kuaidi100Service;
 
-    @RequestMapping(value = "callback", method = RequestMethod.POST)
+    @RequestMapping(value = "/callback", method = RequestMethod.POST)
     public void expressCallback(HttpServletRequest request, HttpServletResponse response) throws IOException {
         NoticeResponse ret = kuaidi100Service.handleCallback(request.getParameter("param"));
         logger.info(ret);
