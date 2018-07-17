@@ -47,6 +47,8 @@ public class MallReturnOrderDO extends BaseModel {
 
     private String mallReturnOrderNo;
 
+    private String companyNo;
+
     public Long getId() {
         return id;
     }
@@ -221,5 +223,13 @@ public class MallReturnOrderDO extends BaseModel {
 
     public void setMallReturnOrderNo(String mallReturnOrderNo) {
         this.mallReturnOrderNo = mallReturnOrderNo == null ? null : mallReturnOrderNo.trim();
+    }
+
+    public String getCompanyNo() {
+        return companyNo;
+    }
+
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 }

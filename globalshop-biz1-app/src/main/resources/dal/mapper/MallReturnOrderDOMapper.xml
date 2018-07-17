@@ -1,268 +1,283 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallReturnOrderDOMapper">
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
-        <result column="outer_order_no" jdbcType="BIGINT" property="outerOrderNo" />
-        <result column="mall_return_order_no" jdbcType="VARCHAR" property="mallReturnOrderNo" />
-        <result column="sub_order_no" jdbcType="VARCHAR" property="subOrderNo" />
-        <result column="status" jdbcType="TINYINT" property="status" />
-        <result column="return_reason" jdbcType="VARCHAR" property="returnReason" />
-        <result column="return_reason_detail" jdbcType="VARCHAR" property="returnReasonDetail" />
-        <result column="return_quantity" jdbcType="INTEGER" property="returnQuantity" />
-        <result column="return_price" jdbcType="DOUBLE" property="returnPrice" />
-        <result column="is_civil" jdbcType="TINYINT" property="isCivil" />
-        <result column="is_checkin" jdbcType="TINYINT" property="isCheckin" />
-        <result column="customer_open_id" jdbcType="VARCHAR" property="customerOpenId" />
-        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
-        <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
-        <result column="return_pay_time" jdbcType="TIMESTAMP" property="returnPayTime" />
-        <result column="remark" jdbcType="VARCHAR" property="remark" />
-        <result column="return_refer" jdbcType="INTEGER" property="returnRefer" />
-        <result column="proof_img" jdbcType="VARCHAR" property="proofImg" />
-        <result column="return_type" jdbcType="INTEGER" property="returnType" />
-        <result column="creator" jdbcType="VARCHAR" property="creator" />
-        <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    </resultMap>
-    <sql id="Base_Column_List">
-    id, order_no, outer_order_no, mall_return_order_no, sub_order_no, status, return_reason, return_reason_detail,
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallReturnOrderDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="outer_order_no" property="outerOrderNo" jdbcType="BIGINT" />
+    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="return_reason" property="returnReason" jdbcType="VARCHAR" />
+    <result column="return_reason_detail" property="returnReasonDetail" jdbcType="VARCHAR" />
+    <result column="return_quantity" property="returnQuantity" jdbcType="INTEGER" />
+    <result column="return_price" property="returnPrice" jdbcType="DOUBLE" />
+    <result column="is_civil" property="isCivil" jdbcType="TINYINT" />
+    <result column="is_checkin" property="isCheckin" jdbcType="TINYINT" />
+    <result column="customer_open_id" property="customerOpenId" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    <result column="return_pay_time" property="returnPayTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="return_refer" property="returnRefer" jdbcType="INTEGER" />
+    <result column="proof_img" property="proofImg" jdbcType="VARCHAR" />
+    <result column="return_type" property="returnType" jdbcType="INTEGER" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="mall_return_order_no" property="mallReturnOrderNo" jdbcType="VARCHAR" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_no, outer_order_no, sub_order_no, status, return_reason, return_reason_detail, 
     return_quantity, return_price, is_civil, is_checkin, customer_open_id, telephone, 
-    receive_time, return_pay_time, remark, return_refer, proof_img, return_type, creator, 
-    modifier
+    receive_time, return_pay_time, remark, return_refer, proof_img, return_type, modifier, 
+    creator, mall_return_order_no, company_no
   </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from mall_return_order
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mall_return_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from mall_return_order
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into mall_return_order (order_no, outer_order_no, mall_return_order_no, sub_order_no,
-        status, return_reason, return_reason_detail,
-        return_quantity, return_price, is_civil,
-        is_checkin, customer_open_id, telephone,
-        receive_time, return_pay_time, remark,
-        return_refer, proof_img, return_type,
-        creator, modifier)
-        values (#{orderNo,jdbcType=VARCHAR}, #{outerOrderNo,jdbcType=BIGINT}, #{mallReturnOrderNo,jdbcType=VARCHAR}, #{subOrderNo,jdbcType=VARCHAR},
-        #{status,jdbcType=TINYINT}, #{returnReason,jdbcType=VARCHAR}, #{returnReasonDetail,jdbcType=VARCHAR},
-        #{returnQuantity,jdbcType=INTEGER}, #{returnPrice,jdbcType=DOUBLE}, #{isCivil,jdbcType=TINYINT},
-        #{isCheckin,jdbcType=TINYINT}, #{customerOpenId,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
-        #{receiveTime,jdbcType=TIMESTAMP}, #{returnPayTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},
-        #{returnRefer,jdbcType=INTEGER}, #{proofImg,jdbcType=VARCHAR}, #{returnType,jdbcType=INTEGER},
-        #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into mall_return_order
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="orderNo != null">
-                order_no,
-            </if>
-            <if test="outerOrderNo != null">
-                outer_order_no,
-            </if>
-            <if test="mallReturnOrderNo != null">
-                mall_return_order_no,
-            </if>
-            <if test="subOrderNo != null">
-                sub_order_no,
-            </if>
-            <if test="status != null">
-                status,
-            </if>
-            <if test="returnReason != null">
-                return_reason,
-            </if>
-            <if test="returnReasonDetail != null">
-                return_reason_detail,
-            </if>
-            <if test="returnQuantity != null">
-                return_quantity,
-            </if>
-            <if test="returnPrice != null">
-                return_price,
-            </if>
-            <if test="isCivil != null">
-                is_civil,
-            </if>
-            <if test="isCheckin != null">
-                is_checkin,
-            </if>
-            <if test="customerOpenId != null">
-                customer_open_id,
-            </if>
-            <if test="telephone != null">
-                telephone,
-            </if>
-            <if test="receiveTime != null">
-                receive_time,
-            </if>
-            <if test="returnPayTime != null">
-                return_pay_time,
-            </if>
-            <if test="remark != null">
-                remark,
-            </if>
-            <if test="returnRefer != null">
-                return_refer,
-            </if>
-            <if test="proofImg != null">
-                proof_img,
-            </if>
-            <if test="returnType != null">
-                return_type,
-            </if>
-            <if test="creator != null">
-                creator,
-            </if>
-            <if test="modifier != null">
-                modifier,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="orderNo != null">
-                #{orderNo,jdbcType=VARCHAR},
-            </if>
-            <if test="outerOrderNo != null">
-                #{outerOrderNo,jdbcType=BIGINT},
-            </if>
-            <if test="mallReturnOrderNo != null">
-                #{mallReturnOrderNo,jdbcType=VARCHAR},
-            </if>
-            <if test="subOrderNo != null">
-                #{subOrderNo,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null">
-                #{status,jdbcType=TINYINT},
-            </if>
-            <if test="returnReason != null">
-                #{returnReason,jdbcType=VARCHAR},
-            </if>
-            <if test="returnReasonDetail != null">
-                #{returnReasonDetail,jdbcType=VARCHAR},
-            </if>
-            <if test="returnQuantity != null">
-                #{returnQuantity,jdbcType=INTEGER},
-            </if>
-            <if test="returnPrice != null">
-                #{returnPrice,jdbcType=DOUBLE},
-            </if>
-            <if test="isCivil != null">
-                #{isCivil,jdbcType=TINYINT},
-            </if>
-            <if test="isCheckin != null">
-                #{isCheckin,jdbcType=TINYINT},
-            </if>
-            <if test="customerOpenId != null">
-                #{customerOpenId,jdbcType=VARCHAR},
-            </if>
-            <if test="telephone != null">
-                #{telephone,jdbcType=VARCHAR},
-            </if>
-            <if test="receiveTime != null">
-                #{receiveTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="returnPayTime != null">
-                #{returnPayTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="remark != null">
-                #{remark,jdbcType=VARCHAR},
-            </if>
-            <if test="returnRefer != null">
-                #{returnRefer,jdbcType=INTEGER},
-            </if>
-            <if test="proofImg != null">
-                #{proofImg,jdbcType=VARCHAR},
-            </if>
-            <if test="returnType != null">
-                #{returnType,jdbcType=INTEGER},
-            </if>
-            <if test="creator != null">
-                #{creator,jdbcType=VARCHAR},
-            </if>
-            <if test="modifier != null">
-                #{modifier,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
-        update mall_return_order
-        <set>
-            <if test="orderNo != null">
-                order_no = #{orderNo,jdbcType=VARCHAR},
-            </if>
-            <if test="outerOrderNo != null">
-                outer_order_no = #{outerOrderNo,jdbcType=BIGINT},
-            </if>
-            <if test="subOrderNo != null">
-                sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=TINYINT},
-            </if>
-            <if test="returnReason != null">
-                return_reason = #{returnReason,jdbcType=VARCHAR},
-            </if>
-            <if test="returnReasonDetail != null">
-                return_reason_detail = #{returnReasonDetail,jdbcType=VARCHAR},
-            </if>
-            <if test="returnQuantity != null">
-                return_quantity = #{returnQuantity,jdbcType=INTEGER},
-            </if>
-            <if test="returnPrice != null">
-                return_price = #{returnPrice,jdbcType=DOUBLE},
-            </if>
-            <if test="isCivil != null">
-                is_civil = #{isCivil,jdbcType=TINYINT},
-            </if>
-            <if test="isCheckin != null">
-                is_checkin = #{isCheckin,jdbcType=TINYINT},
-            </if>
-            <if test="customerOpenId != null">
-                customer_open_id = #{customerOpenId,jdbcType=VARCHAR},
-            </if>
-            <if test="telephone != null">
-                telephone = #{telephone,jdbcType=VARCHAR},
-            </if>
-            <if test="receiveTime != null">
-                receive_time = #{receiveTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="returnPayTime != null">
-                return_pay_time = #{returnPayTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="remark != null">
-                remark = #{remark,jdbcType=VARCHAR},
-            </if>
-            <if test="returnRefer != null">
-                return_refer = #{returnRefer,jdbcType=INTEGER},
-            </if>
-            <if test="proofImg != null">
-                proof_img = #{proofImg,jdbcType=VARCHAR},
-            </if>
-            <if test="returnType != null">
-                return_type = #{returnType,jdbcType=INTEGER},
-            </if>
-            <if test="creator != null">
-                creator = #{creator,jdbcType=VARCHAR},
-            </if>
-            <if test="modifier != null">
-                modifier = #{modifier,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_return_order (order_no, outer_order_no, sub_order_no, 
+      status, return_reason, return_reason_detail, 
+      return_quantity, return_price, is_civil, 
+      is_checkin, customer_open_id, telephone, 
+      receive_time, return_pay_time, remark, 
+      return_refer, proof_img, return_type, 
+      modifier, creator, mall_return_order_no, 
+      company_no)
+    values (#{orderNo,jdbcType=VARCHAR}, #{outerOrderNo,jdbcType=BIGINT}, #{subOrderNo,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{returnReason,jdbcType=VARCHAR}, #{returnReasonDetail,jdbcType=VARCHAR}, 
+      #{returnQuantity,jdbcType=INTEGER}, #{returnPrice,jdbcType=DOUBLE}, #{isCivil,jdbcType=TINYINT}, 
+      #{isCheckin,jdbcType=TINYINT}, #{customerOpenId,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
+      #{receiveTime,jdbcType=TIMESTAMP}, #{returnPayTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{returnRefer,jdbcType=INTEGER}, #{proofImg,jdbcType=VARCHAR}, #{returnType,jdbcType=INTEGER}, 
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{mallReturnOrderNo,jdbcType=VARCHAR}, 
+      #{companyNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_return_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="outerOrderNo != null" >
+        outer_order_no,
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="returnReason != null" >
+        return_reason,
+      </if>
+      <if test="returnReasonDetail != null" >
+        return_reason_detail,
+      </if>
+      <if test="returnQuantity != null" >
+        return_quantity,
+      </if>
+      <if test="returnPrice != null" >
+        return_price,
+      </if>
+      <if test="isCivil != null" >
+        is_civil,
+      </if>
+      <if test="isCheckin != null" >
+        is_checkin,
+      </if>
+      <if test="customerOpenId != null" >
+        customer_open_id,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="receiveTime != null" >
+        receive_time,
+      </if>
+      <if test="returnPayTime != null" >
+        return_pay_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="returnRefer != null" >
+        return_refer,
+      </if>
+      <if test="proofImg != null" >
+        proof_img,
+      </if>
+      <if test="returnType != null" >
+        return_type,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="mallReturnOrderNo != null" >
+        mall_return_order_no,
+      </if>
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outerOrderNo != null" >
+        #{outerOrderNo,jdbcType=BIGINT},
+      </if>
+      <if test="subOrderNo != null" >
+        #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="returnReason != null" >
+        #{returnReason,jdbcType=VARCHAR},
+      </if>
+      <if test="returnReasonDetail != null" >
+        #{returnReasonDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="returnQuantity != null" >
+        #{returnQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="returnPrice != null" >
+        #{returnPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="isCivil != null" >
+        #{isCivil,jdbcType=TINYINT},
+      </if>
+      <if test="isCheckin != null" >
+        #{isCheckin,jdbcType=TINYINT},
+      </if>
+      <if test="customerOpenId != null" >
+        #{customerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnPayTime != null" >
+        #{returnPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="returnRefer != null" >
+        #{returnRefer,jdbcType=INTEGER},
+      </if>
+      <if test="proofImg != null" >
+        #{proofImg,jdbcType=VARCHAR},
+      </if>
+      <if test="returnType != null" >
+        #{returnType,jdbcType=INTEGER},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="mallReturnOrderNo != null" >
+        #{mallReturnOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO" >
+    update mall_return_order
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outerOrderNo != null" >
+        outer_order_no = #{outerOrderNo,jdbcType=BIGINT},
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="returnReason != null" >
+        return_reason = #{returnReason,jdbcType=VARCHAR},
+      </if>
+      <if test="returnReasonDetail != null" >
+        return_reason_detail = #{returnReasonDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="returnQuantity != null" >
+        return_quantity = #{returnQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="returnPrice != null" >
+        return_price = #{returnPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="isCivil != null" >
+        is_civil = #{isCivil,jdbcType=TINYINT},
+      </if>
+      <if test="isCheckin != null" >
+        is_checkin = #{isCheckin,jdbcType=TINYINT},
+      </if>
+      <if test="customerOpenId != null" >
+        customer_open_id = #{customerOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnPayTime != null" >
+        return_pay_time = #{returnPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="returnRefer != null" >
+        return_refer = #{returnRefer,jdbcType=INTEGER},
+      </if>
+      <if test="proofImg != null" >
+        proof_img = #{proofImg,jdbcType=VARCHAR},
+      </if>
+      <if test="returnType != null" >
+        return_type = #{returnType,jdbcType=INTEGER},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="mallReturnOrderNo != null" >
+        mall_return_order_no = #{mallReturnOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO" >
     update mall_return_order
     set order_no = #{orderNo,jdbcType=VARCHAR},
       outer_order_no = #{outerOrderNo,jdbcType=BIGINT},
@@ -282,8 +297,10 @@
       return_refer = #{returnRefer,jdbcType=INTEGER},
       proof_img = #{proofImg,jdbcType=VARCHAR},
       return_type = #{returnType,jdbcType=INTEGER},
+      modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      mall_return_order_no = #{mallReturnOrderNo,jdbcType=VARCHAR},
+      company_no = #{companyNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -9,6 +9,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -35,12 +36,6 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     @Autowired
     private InventoryService inventoryService;
 
-    @Override
-    public List<MallReturnOrderDO> list() {
-
-        return mapper.list();
-
-    }
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -91,7 +86,7 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public List<MallReturnOrderDO> selectByCondition(String orderNo, String startGmtCreate, String endGmtCreate) {
 
-        List<MallReturnOrderDO> list = mapper.selectByCondition(orderNo, startGmtCreate, endGmtCreate);
+        List<MallReturnOrderDO> list = mapper.selectByCondition(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
         return list;
     }
 }
