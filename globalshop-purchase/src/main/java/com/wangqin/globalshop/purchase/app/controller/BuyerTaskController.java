@@ -91,7 +91,7 @@ public class BuyerTaskController {
 
     /**
      * 查询该买手的采购任务
-     * @param buyerTaskDO
+     * @param
      * @return
      */
     @PostMapping("/queryBuyerTaskList")
