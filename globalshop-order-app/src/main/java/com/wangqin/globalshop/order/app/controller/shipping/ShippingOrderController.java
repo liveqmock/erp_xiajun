@@ -82,34 +82,8 @@ public class ShippingOrderController {
      */
     public Object query(ShippingOrderVO shippingOrderVO) {
         JsonResult<List<ShippingOrderDO>> result = new JsonResult<>();
-        if (shippingOrderVO.getStartOrderTime() != null) {
-            String startOrderTimeStr = DateUtil.ymdFormat(shippingOrderVO.getStartOrderTime());
-            Date startOrderTime = DateUtil.parseDate(startOrderTimeStr + " 00:00:00");
-            shippingOrderVO.setStartOrderTime(startOrderTime);
-        }
-        if (shippingOrderVO.getEndOrderTime() != null) {
-            String endOrderTimeStr = DateUtil.ymdFormat(shippingOrderVO.getEndOrderTime());
-            Date endOrderTime = DateUtil.parseDate(endOrderTimeStr + " 23:59:59");
-            shippingOrderVO.setEndOrderTime(endOrderTime);
-        }
-        // 如果是代理
-        // ShiroUser shiroUser = this.getShiroUser();
-        // Set<String> roles = shiroUser.getRoles();
-        // if(roles.contains("irhdaili")) {
-        // String[] logingNameArr = shiroUser.getLoginName().split("_");
-        // if(logingNameArr.length<2 || StringUtils.isBlank(logingNameArr[1])) {
-        // throw new ErpCommonException("用户权限异常");
-        // }
-        // shippingOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
-        // Seller seller = sellerService.selectById(shippingOrderQueryVO.getSalesId());
-        // if(seller.getOpenId()!=null) {
-        // shippingOrderQueryVO.setOpenId(seller.getOpenId());
-        // }
-        // }
+
         List<ShippingOrderDO> list = shippingOrderService.queryShippingOrders(shippingOrderVO);
-        // if(roles.contains("irhdaili")) {
-        // result.setAgentRoler(true);
-        // }
         result.buildData(list);
         result.setSuccess(true);
         return result;

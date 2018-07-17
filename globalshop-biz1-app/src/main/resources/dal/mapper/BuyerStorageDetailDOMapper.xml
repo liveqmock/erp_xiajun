@@ -14,6 +14,7 @@
     <result column="upc" property="upc" jdbcType="VARCHAR" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
     <result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
+    <result column="entry_quantity" property="entryQuantity" jdbcType="INTEGER" />
     <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
     <result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
     <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
@@ -28,7 +29,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price, 
-    currency, upc, quantity, trans_quantity, purchase_storage_no, buyer_task_detail_no, 
+    currency, upc, quantity, trans_quantity, entry_quantity, purchase_storage_no, buyer_task_detail_no, 
     item_code, sku_buysite, modifier, creator, status, mem, op_user_no, op_time, batch_num
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -48,19 +49,19 @@
     insert into buyer_storage_detail (storage_no, warehouse_no, warehouse_name, 
       shelf_no, sku_code, price, 
       total_price, currency, upc, 
-      quantity, trans_quantity, purchase_storage_no, 
-      buyer_task_detail_no, item_code, sku_buysite, 
-      modifier, creator, status, 
-      mem, op_user_no, op_time, 
-      batch_num)
+      quantity, trans_quantity, entry_quantity, 
+      purchase_storage_no, buyer_task_detail_no, item_code, 
+      sku_buysite, modifier, creator, 
+      status, mem, op_user_no, 
+      op_time, batch_num)
     values (#{storageNo,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
       #{shelfNo,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
       #{totalPrice,jdbcType=DOUBLE}, #{currency,jdbcType=TINYINT}, #{upc,jdbcType=VARCHAR}, 
-      #{quantity,jdbcType=INTEGER}, #{transQuantity,jdbcType=INTEGER}, #{purchaseStorageNo,jdbcType=VARCHAR}, 
-      #{buyerTaskDetailNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{skuBuysite,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{mem,jdbcType=VARCHAR}, #{opUserNo,jdbcType=VARCHAR}, #{opTime,jdbcType=TIMESTAMP}, 
-      #{batchNum,jdbcType=INTEGER})
+      #{quantity,jdbcType=INTEGER}, #{transQuantity,jdbcType=INTEGER}, #{entryQuantity,jdbcType=INTEGER}, 
+      #{purchaseStorageNo,jdbcType=VARCHAR}, #{buyerTaskDetailNo,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{skuBuysite,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{mem,jdbcType=VARCHAR}, #{opUserNo,jdbcType=VARCHAR}, 
+      #{opTime,jdbcType=TIMESTAMP}, #{batchNum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -100,6 +101,9 @@
       </if>
       <if test="transQuantity != null" >
         trans_quantity,
+      </if>
+      <if test="entryQuantity != null" >
+        entry_quantity,
       </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no,
@@ -168,6 +172,9 @@
       </if>
       <if test="transQuantity != null" >
         #{transQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="entryQuantity != null" >
+        #{entryQuantity,jdbcType=INTEGER},
       </if>
       <if test="purchaseStorageNo != null" >
         #{purchaseStorageNo,jdbcType=VARCHAR},
@@ -240,6 +247,9 @@
       <if test="transQuantity != null" >
         trans_quantity = #{transQuantity,jdbcType=INTEGER},
       </if>
+      <if test="entryQuantity != null" >
+        entry_quantity = #{entryQuantity,jdbcType=INTEGER},
+      </if>
       <if test="purchaseStorageNo != null" >
         purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       </if>
@@ -289,6 +299,7 @@
       upc = #{upc,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
       trans_quantity = #{transQuantity,jdbcType=INTEGER},
+      entry_quantity = #{entryQuantity,jdbcType=INTEGER},
       purchase_storage_no = #{purchaseStorageNo,jdbcType=VARCHAR},
       buyer_task_detail_no = #{buyerTaskDetailNo,jdbcType=VARCHAR},
       item_code = #{itemCode,jdbcType=VARCHAR},

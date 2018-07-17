@@ -46,6 +46,8 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(MallReturnOrderVO erpReturnOrder) {
 
+        // TODO: 前端没有传 subOrderNo 字段，导致添加时 sub_order_no 字段为空
+
         if (erpReturnOrder.getErpOrderId() == null) {
             new ErpCommonException("ErpCommonException");
         }

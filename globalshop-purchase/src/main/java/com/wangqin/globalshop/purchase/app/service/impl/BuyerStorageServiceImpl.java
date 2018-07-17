@@ -194,8 +194,20 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
 
                 vo.setSpecifications(getScaleString(scaleList));
 
-                vo.setQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途,实际需要入库的数量
-                vo.setTransQuantity(detail.getQuantity()+detail.getTransQuantity());//线下加在途，预入库数量
+                vo.setQuantity(detail.getQuantity());//线下
+                vo.setTransQuantity(detail.getTransQuantity());//在途，
+
+				//预入库数量
+				vo.setPreQuantity(detail.getQuantity()+detail.getTransQuantity());
+
+
+                //实际入库数，如果查询状态为预入库（新建），则直接相加
+                if(status != null && status.equals(GeneralStatus.INIT.getCode())){
+                    vo.setEntryQuantity(detail.getQuantity()+detail.getTransQuantity());
+                }else{
+                    vo.setEntryQuantity(detail.getEntryQuantity() == null ? 0 : detail.getEntryQuantity());
+                }
+
 
                 vo.setStatus(detail.getStatus());
                 vo.setStatusName(GeneralStatus.of(detail.getStatus()).getDescription());
@@ -243,10 +255,11 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         detail.setWarehouseNo(detailVo.getWarehouseNo());
 
         //检验库存
-        if(detailVo.getQuantity() == null || detailVo.getQuantity() < 0){
+        if(detailVo.getEntryQuantity() == null || detailVo.getEntryQuantity() < 0){
             throw new ErpCommonException("入库数必填");
         }
-        //detail.setQuantity(detailVo.getQuantity());
+        //填写实际入库数
+        detail.setEntryQuantity(detailVo.getEntryQuantity());
 
         //记录货架号
         if(EasyUtil.isStringEmpty(detailVo.getShelfNo())){
@@ -257,7 +270,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         // 记录流水inventory_inout
         InventoryDO inventory = new InventoryDO();
 
-        inventory.setInv(Long.valueOf(detailVo.getQuantity()));//客户实际改写后的数量
+        inventory.setInv(Long.valueOf(detailVo.getEntryQuantity()));//客户实际改写后的数量
         inventory.setItemCode(detail.getItemCode());
         inventory.setSkuCode(detail.getSkuCode());
         inventory.setCompanyNo(AppUtil.getLoginUserCompanyNo());
@@ -336,7 +349,11 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
         String result = "";
         if(!EasyUtil.isListEmpty(scaleList)){
             for(ItemSkuScaleDO scale : scaleList){
-                result += scale.getScaleName()+"-"+scale.getScaleValue()+";";
+            	if(EasyUtil.isStringEmpty(result)){
+					result += scale.getScaleValue();
+				}else{
+					result += "-"+scale.getScaleValue();
+				}
             }
         }
         return result;
