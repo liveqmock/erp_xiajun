@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.biz1.app.vo;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -24,7 +25,9 @@ public class ShippingOrderVO extends ShippingOrderDO {
     private Integer status;
     private Integer type;
     //发货时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startOrderTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endOrderTime;
     private String companyNo;
     /**

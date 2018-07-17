@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDetailDOMapperExt">
+
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="inventory_out_no" property="inventoryOutNo" jdbcType="VARCHAR"/>
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
+        <result column="quantity" property="quantity" jdbcType="BIGINT"/>
+        <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+        <result column="scale" property="scale" jdbcType="VARCHAR"/>
+        <result column="upc" property="upc" jdbcType="VARCHAR"/>
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR"/>
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, inventory_out_no, item_code, quantity, item_name,
+        scale, upc, sku_code, sku_pic, shelf_no, company_no,
+        gmt_modify,gmt_create, creator, modifier,is_del
+    </sql>
+
+    <select id="listByInventoryOutNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_out_manifest_detail
+        WHERE
+        inventoryOutNo = #{inventoryOutNo}
+    </select>
+
+    <select id="listByInventoryOutManifestVO" resultMap="BaseResultMap"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_out_manifest_detail
+        <where>
+            <if test="warehouseNo != null">
+                AND warehouse_no = #{warehouseNo}
+            </if>
+            <if test="inventoryOutNo != null">
+                AND inventory_out_no = #{inventoryOutNo}
+            </if>
+            <if test="companyNo != null">
+                AND company_no = #{companyNo}
+            </if>
+        </where>
+    </select>
+
+    <!--<select id="listByInventoryOutManifestVO" resultMap="BaseResultMap"-->
+            <!--parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO">-->
+        <!--SELECT-->
+        <!--<include refid="Base_Column_List"/>-->
+        <!--FROM-->
+        <!--inventory_out_manifest_detail-->
+        <!--<where>-->
+            <!--<if test="id != null">-->
+                <!--AND id = #{id},-->
+            <!--</if>-->
+            <!--<if test="inventoryOutNo != null">-->
+                <!--AND inventory_out_no = #{inventoryOutNo},-->
+            <!--</if>-->
+            <!--<if test="itemCode != null">-->
+                <!--AND item_code = #{itemCode},-->
+            <!--</if>-->
+            <!--<if test="quantity != null">-->
+                <!--AND quantity = #{quantity},-->
+            <!--</if>-->
+            <!--<if test="itemName != null">-->
+                <!--AND item_name = #{itemName},-->
+            <!--</if>-->
+            <!--<if test="scale != null">-->
+                <!--AND scale = #{scale},-->
+            <!--</if>-->
+            <!--<if test="upc != null">-->
+                <!--AND upc = #{upc},-->
+            <!--</if>-->
+            <!--<if test="skuCode != null">-->
+                <!--AND sku_code = #{skuCode},-->
+            <!--</if>-->
+            <!--<if test="skuPic != null">-->
+                <!--AND sku_pic = #{skuPic},-->
+            <!--</if>-->
+            <!--<if test="shelfNo != null">-->
+                <!--AND shelf_no = #{shelfNo},-->
+            <!--</if>-->
+            <!--<if test="companyNo != null">-->
+                <!--AND company_no = #{companyNo},-->
+            <!--</if>-->
+            <!--<if test="gmtCreate != null">-->
+                <!--AND gmt_create = #{gmtCreate},-->
+            <!--</if>-->
+            <!--<if test="gmtModify != null">-->
+                <!--AND gmt_modify = #{gmtModify},-->
+            <!--</if>-->
+            <!--<if test="creator != null">-->
+                <!--AND creator = #{creator},-->
+            <!--</if>-->
+            <!--<if test="modifier != null">-->
+                <!--AND modifier = #{modifier},-->
+            <!--</if>-->
+            <!--<if test="is_del != null">-->
+                <!--AND modifier = #{isDel},-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
+
+
+</mapper>

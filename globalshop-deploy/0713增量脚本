@@ -1,1 +1,6 @@
 ALTER TABLE inventory_out_manifest CHANGE `desc` remark VARCHAR(256) COMMENT '备注';
+
+
+ALTER TABLE `item_find`
+ADD COLUMN `brand_no` VARCHAR(16) NULL COMMENT '品牌编码' ,
+ADD COLUMN `brand_name` VARCHAR(64) NULL COMMENT '品牌名字';

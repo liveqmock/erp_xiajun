@@ -461,7 +461,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void outOfStorehouse(InventoryOutManifestDO outManifestDO) {
-        List<InventoryOutManifestDetailDO> list = outManifestDetailDOMapper.selectByOutNo(outManifestDO.getInventoryOutNo());
+        List<InventoryOutManifestDetailDO> list = outManifestDetailDOMapper.listByInventoryOutNo(outManifestDO.getInventoryOutNo());
         outOfWarehouse(list);
     }
 

@@ -435,21 +435,33 @@ public class InventoryController {
     }
 
     /**
-     * 查询单个出库单
+     * 查询单个出库单对应的出库详情单列表
+     *
+     * @param inventoryOutNo 出库单号
+     * @return
      */
-    @RequestMapping("/inventoryOutQuery")
+    @RequestMapping("/queryInventoryOutManifestDetail")
     @ResponseBody
-    public Object inventoryOutQuery(Long id) {
-        JsonResult<InventoryOutManifestDO> result = new JsonResult<>();
-        if (id != null) {
-            InventoryOutManifestDO inventoryOut = inventoryOutManifestDetailService.queryInventoryOut(id);
-            if (inventoryOut == null) {
-                result.buildIsSuccess(false).buildMsg("没有找到InventoryOut");
+    public Object queryInventoryOutManifestDetail(String inventoryOutNo) {
+        JsonResult<List<InventoryOutManifestDetailDO>> result = new JsonResult<>();
+
+        String companyNo = AppUtil.getLoginUserCompanyNo();
+
+        if (StringUtil.isNotBlank(inventoryOutNo) && StringUtil.isNotBlank(companyNo)) {
+            InventoryOutManifestVO inventoryOutManifestVO = new InventoryOutManifestVO();
+            inventoryOutManifestVO.setInventoryOutNo(inventoryOutNo);
+            inventoryOutManifestVO.setCompanyNo(companyNo);
+            List<InventoryOutManifestDetailDO> inventoryOutManifestDetailList =
+                    inventoryOutManifestDetailService.listByInventoryOutManifestVO(inventoryOutManifestVO);
+
+            if (inventoryOutManifestDetailList == null || inventoryOutManifestDetailList.size() <= 0) {
+                result.buildIsSuccess(false).buildMsg("没有对应的数据");
             }
-            result.setData(inventoryOut);
+
+            result.setData(inventoryOutManifestDetailList);
             return result.buildIsSuccess(true);
         } else {
-            return result.buildIsSuccess(false).buildMsg("没有Item id");
+            return result.buildIsSuccess(false).buildMsg("有空数据");
         }
     }
 
