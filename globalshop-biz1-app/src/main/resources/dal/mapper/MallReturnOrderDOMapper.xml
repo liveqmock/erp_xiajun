@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallReturnOrderDOMapper">
     <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
-        <result column="outer_order_no" property="outerOrderNo" jdbcType="BIGINT"/>
-        <result column="mall_return_order_no" property="mallReturnOrderNo" jdbcType="VARCHAR"/>
-        <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="return_reason" property="returnReason" jdbcType="VARCHAR"/>
-        <result column="return_reason_detail" property="returnReasonDetail" jdbcType="VARCHAR"/>
-        <result column="return_quantity" property="returnQuantity" jdbcType="INTEGER"/>
-        <result column="return_price" property="returnPrice" jdbcType="DOUBLE"/>
-        <result column="is_civil" property="isCivil" jdbcType="TINYINT"/>
-        <result column="is_checkin" property="isCheckin" jdbcType="TINYINT"/>
-        <result column="customer_open_id" property="customerOpenId" jdbcType="VARCHAR"/>
-        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
-        <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP"/>
-        <result column="return_pay_time" property="returnPayTime" jdbcType="TIMESTAMP"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="return_refer" property="returnRefer" jdbcType="INTEGER"/>
-        <result column="proof_img" property="proofImg" jdbcType="VARCHAR"/>
-        <result column="return_type" property="returnType" jdbcType="INTEGER"/>
-        <result column="creator" property="creator" jdbcType="VARCHAR"/>
-        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+        <result column="outer_order_no" jdbcType="BIGINT" property="outerOrderNo" />
+        <result column="mall_return_order_no" jdbcType="VARCHAR" property="mallReturnOrderNo" />
+        <result column="sub_order_no" jdbcType="VARCHAR" property="subOrderNo" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="return_reason" jdbcType="VARCHAR" property="returnReason" />
+        <result column="return_reason_detail" jdbcType="VARCHAR" property="returnReasonDetail" />
+        <result column="return_quantity" jdbcType="INTEGER" property="returnQuantity" />
+        <result column="return_price" jdbcType="DOUBLE" property="returnPrice" />
+        <result column="is_civil" jdbcType="TINYINT" property="isCivil" />
+        <result column="is_checkin" jdbcType="TINYINT" property="isCheckin" />
+        <result column="customer_open_id" jdbcType="VARCHAR" property="customerOpenId" />
+        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+        <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+        <result column="return_pay_time" jdbcType="TIMESTAMP" property="returnPayTime" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="return_refer" jdbcType="INTEGER" property="returnRefer" />
+        <result column="proof_img" jdbcType="VARCHAR" property="proofImg" />
+        <result column="return_type" jdbcType="INTEGER" property="returnType" />
+        <result column="creator" jdbcType="VARCHAR" property="creator" />
+        <result column="modifier" jdbcType="VARCHAR" property="modifier" />
     </resultMap>
     <sql id="Base_Column_List">
     id, order_no, outer_order_no, mall_return_order_no, sub_order_no, status, return_reason, return_reason_detail,
@@ -31,9 +31,9 @@
     receive_time, return_pay_time, remark, return_refer, proof_img, return_type, creator, 
     modifier
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         from mall_return_order
         where id = #{id,jdbcType=BIGINT}
     </select>
@@ -42,7 +42,7 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
     <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
-        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into mall_return_order (order_no, outer_order_no, mall_return_order_no, sub_order_no,
@@ -61,7 +61,7 @@
         #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
-        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into mall_return_order
@@ -196,8 +196,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
         update mall_return_order
         <set>
             <if test="orderNo != null">

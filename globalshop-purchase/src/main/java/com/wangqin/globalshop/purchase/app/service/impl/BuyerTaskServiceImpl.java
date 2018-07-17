@@ -57,7 +57,10 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     }
 
     public BuyerTaskVO selectVoById(Long id){
-        return mapper.selectVoById(id);
+        BuyerTaskVO resultVo = mapper.selectVoById(id);
+        List<BuyerTaskDetailDO> buyerTaskDetailDOList = detailMapper.taskDailyByTaskNo(resultVo.getBuyerTaskNo());
+        resultVo.setTaskDetailList(buyerTaskDetailDOList);
+        return resultVo;
     }
 
     /**

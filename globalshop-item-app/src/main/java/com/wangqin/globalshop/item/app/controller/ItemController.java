@@ -229,7 +229,7 @@ public class ItemController {
         			
         			addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         			addSku.setItemCode(itemDTO.getItemCode());		
-        			addSku.setSkuCode("S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandom() + "Q"+String.format("%0" + 2 + "d", (startIndex++)));
+        			addSku.setSkuCode("S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandomMillSeconds() + "Q"+String.format("%0" + 2 + "d", (startIndex++)));
         			addSku.setScale(newSku.getScale());
         			addSku.setSalePrice((double) newSku.getSalePrice());
         			addSku.setWeight(newSku.getWeight());

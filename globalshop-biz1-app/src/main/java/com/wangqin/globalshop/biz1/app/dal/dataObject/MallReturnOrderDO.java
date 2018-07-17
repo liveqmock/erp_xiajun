@@ -7,8 +7,6 @@ public class MallReturnOrderDO extends BaseModel {
 
     private String orderNo;
 
-    private String mallReturnOrderNo;
-
     private Long outerOrderNo;
 
     private String subOrderNo;
@@ -43,9 +41,11 @@ public class MallReturnOrderDO extends BaseModel {
 
     private Integer returnType;
 
+    private String modifier;
+
     private String creator;
 
-    private String modifier;
+    private String mallReturnOrderNo;
 
     public Long getId() {
         return id;
@@ -61,14 +61,6 @@ public class MallReturnOrderDO extends BaseModel {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
-    }
-
-    public String getMallReturnOrderNo() {
-        return mallReturnOrderNo;
-    }
-
-    public void setMallReturnOrderNo(String mallReturnOrderNo) {
-        this.mallReturnOrderNo = mallReturnOrderNo;
     }
 
     public Long getOuterOrderNo() {
@@ -207,21 +199,27 @@ public class MallReturnOrderDO extends BaseModel {
         this.returnType = returnType;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getMallReturnOrderNo() {
+        return mallReturnOrderNo;
+    }
+
+    public void setMallReturnOrderNo(String mallReturnOrderNo) {
+        this.mallReturnOrderNo = mallReturnOrderNo == null ? null : mallReturnOrderNo.trim();
     }
 }

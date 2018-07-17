@@ -1,10 +1,11 @@
 package com.wangqin.globalshop.biz1.app.vo;
 
-import java.util.Date;
-
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
+import java.util.Date;
+import java.util.List;
 
 public class BuyerTaskVO extends BuyerTaskDO{
 	/**买手ID*/
@@ -29,8 +30,16 @@ public class BuyerTaskVO extends BuyerTaskDO{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date taskEndTime;
     private String taskTitle;
-    
-    public Long getBuyerId() {
+
+    private List<BuyerTaskDetailDO> taskDetailList;
+
+	public List<BuyerTaskDetailDO> getTaskDetailList() {
+		return taskDetailList;
+	}
+	public void setTaskDetailList(List<BuyerTaskDetailDO> taskDetailList) {
+		this.taskDetailList = taskDetailList;
+	}
+	public Long getBuyerId() {
 		return buyerId;
 	}
 

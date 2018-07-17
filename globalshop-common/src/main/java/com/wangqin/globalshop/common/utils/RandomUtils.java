@@ -8,4 +8,8 @@ public class RandomUtils {
 		Long currentTime = System.currentTimeMillis();
 		return currentTime.toString().substring(3,13);
 }
+    public static String getTimeRandomMillSeconds() {
+        Long currentTime = System.currentTimeMillis();
+        return currentTime.toString();
+    }
 }

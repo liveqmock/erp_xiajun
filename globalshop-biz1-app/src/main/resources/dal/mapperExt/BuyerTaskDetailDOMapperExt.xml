@@ -2,6 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt">
 
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="buyer_task_no" property="buyerTaskNo" jdbcType="VARCHAR" />
+        <result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="DECIMAL" />
+        <result column="max_price" property="maxPrice" jdbcType="DECIMAL" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="owner_name" property="ownerName" jdbcType="VARCHAR" />
+        <result column="owner_no" property="ownerNo" jdbcType="VARCHAR" />
+        <result column="currency" property="currency" jdbcType="TINYINT" />
+        <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+        <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="mode" property="mode" jdbcType="TINYINT" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="max_count" property="maxCount" jdbcType="INTEGER" />
+        <result column="sku_pic_url" property="skuPicUrl" jdbcType="VARCHAR" />
+        <result column="entry_count" property="entryCount" jdbcType="INTEGER" />
+        <result column="upc_pass_reason" property="upcPassReason" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, buyer_task_no, buyer_task_detail_no, item_code, upc, price, max_price, count,
+    owner_name, owner_no, currency, buyer_name, buyer_open_id, status, start_time, end_time,
+    mode, sku_code, remark, max_count, sku_pic_url, entry_count, upc_pass_reason, creator,
+    modifier, company_no
+  </sql>
 
     <insert id="inserBatch" parameterType="java.util.List">
         <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
@@ -67,6 +101,15 @@
         LEFT JOIN buyer_task c ON a.buyer_task_no=c.buyer_task_no
         WHERE a.buyer_task_no=#{buyerTaskNo}
         ORDER BY trim(b.item_name),(b.scale+0),scale_int
+    </select>
+
+    <select id="taskDailyByTaskNo" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM
+            buyer_task_detail
+        WHERE
+            buyer_task_no = #{buyerTaskNo}
+            and is_del is false
     </select>
 
 </mapper>
