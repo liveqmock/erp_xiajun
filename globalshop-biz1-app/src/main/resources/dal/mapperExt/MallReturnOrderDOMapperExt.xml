@@ -37,7 +37,7 @@
         <include refid="Base_Column_List"/>
         from mall_return_order
         WHERE
-        company_no = #{compayNo}
+        company_no = #{companyNo}
             <if test="orderNo != null">
                 and order_no = #{orderNo}
             </if>
