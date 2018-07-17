@@ -13,7 +13,6 @@ import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,16 +77,40 @@ public class BuyerTaskController {
      * @return
      */
     @PostMapping("/add")
-    @Transactional(rollbackFor = Exception.class)
     public Object addTask(BuyerTaskVO buyerTaskDO) {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
         try {
             buyerTaskService.add(buyerTaskDO);
-        } catch (Exception e) {
+        } catch (ErpCommonException e) {
+			return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+		} catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.toString());
         }
         return result.buildIsSuccess(true);
     }
+
+
+	/**
+	 * 更新采购任务
+	 *
+	 * @param
+	 * @return
+	 */
+	@PostMapping("/update")
+	public Object update(BuyerTaskVO buyerTaskDO) {
+		JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
+		try {
+			buyerTaskService.update(buyerTaskDO);
+		} catch (ErpCommonException e) {
+			return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+		} catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg(e.toString());
+		}
+		return result.buildIsSuccess(true);
+	}
+
+
+
 
     /**
      * 查询该买手的采购任务
