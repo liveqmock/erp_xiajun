@@ -5,11 +5,8 @@ import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.DateUtils;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.order.app.service.mall.IMallReturnOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,7 +44,7 @@ public class MallReturnController {
             result.setMsg(e.getErrorMsg());
             result.setSuccess(false);
         } catch (Exception ex) {
-            result.setMsg("未知错误");
+            result.setMsg(ex.getMessage());
             result.setSuccess(false);
         }
 
@@ -69,13 +65,7 @@ public class MallReturnController {
         return result;
     }
 
-    private int getMallOrderStatus(List<MallSubOrderDO> list) {
-        //todo  算出应该的状态
-        if (list.size() == 1) {
-            return OrderStatus.CLOSE.getCode();
-        }
-        return OrderStatus.SENT.getCode();
-    }
+
 
 
 }

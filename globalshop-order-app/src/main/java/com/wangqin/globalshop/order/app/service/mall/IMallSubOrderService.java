@@ -67,5 +67,20 @@ public interface IMallSubOrderService {
     MallSubOrderDO selectBySubOrderNo(String subOrderNo);
 
     void returns(String subOrderNo);
+
+    /**
+     * 通过包裹号获取 MallSubOrder，主要是配合发货单管理获取子订单信息
+     *
+     * @param shippingNo
+     * @return
+     */
+    MallSubOrderDO getByShippingNo(String shippingNo);
+
+    /**
+     * 根据主订单号删除子订单
+     *
+     * @param orderNo 主订单号
+     */
+    void deleteByOrderNo(String orderNo);
 }
 

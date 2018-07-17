@@ -321,7 +321,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
         }
         MallOrderDO mallOrder = mallOrderDOMapper.selectByOrderNo(orderNo);
         mallOrder.setShopCode(vo.getShopCode());
-        mallOrder.setOrderTime(vo.getOrderTime());
         mallOrder.setPayType(vo.getPayType());
         mallOrder.setTotalAmount(totalPrice);
         mallOrder.setActualAmount(totalPrice);
@@ -356,7 +355,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
         if (itemSku == null) {
             return;
         }
-        o.setSalePrice(itemSku.getSalePrice());
         Long freight = itemSku.getFreight();
         o.setFreight((double) (freight == null ? 0L : freight));
         o.setItemCode(itemSku.getItemCode());

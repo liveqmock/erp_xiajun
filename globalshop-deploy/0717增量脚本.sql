@@ -17,3 +17,6 @@ ADD COLUMN `mall_return_order_no` VARCHAR(64) NOT NULL COMMENT '退单号';
 # 入库单新增实际入库数
 ALTER TABLE `haidb2new`.`buyer_storage_detail`
 ADD COLUMN `entry_quantity` int(11) DEFAULT 0 COMMENT '实际入库数' AFTER `trans_quantity`;
+
+ALTER TABLE `mall_return_order`
+ADD COLUMN `company_no` VARCHAR(64) NOT NULL COMMENT '公司编号';

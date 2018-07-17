@@ -5,6 +5,8 @@ public class ShippingOrderDO extends BaseModel {
 
     private String shippingNo;
 
+    private String subOrderNo;
+
     private String logisticNo;
 
     private String logisticCompany;
@@ -73,6 +75,14 @@ public class ShippingOrderDO extends BaseModel {
 
     public void setShippingNo(String shippingNo) {
         this.shippingNo = shippingNo == null ? null : shippingNo.trim();
+    }
+
+    public String getSubOrderNo() {
+        return subOrderNo;
+    }
+
+    public void setSubOrderNo(String subOrderNo) {
+        this.subOrderNo = subOrderNo;
     }
 
     public String getLogisticNo() {
