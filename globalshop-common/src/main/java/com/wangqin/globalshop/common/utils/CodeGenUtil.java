@@ -25,8 +25,9 @@ public class CodeGenUtil {
 		return "s"+System.currentTimeMillis()+ RandomUtils.nextInt(10000);
     }
 
-	public static String getItemCode(String categoryCode ) {
-		return "I" + categoryCode + "Q" + RandomUtils.nextInt(10000);
+	//商品的编码,@author:xiajun
+	public static String generateItemCode(String categoryCode ) {
+		return "I" + categoryCode + "T" + com.wangqin.globalshop.common.utils.RandomUtils.getTimeRandom();
 	}
 
 	public static String getBuyerTaskNo() {
@@ -49,8 +50,9 @@ public class CodeGenUtil {
 		return "SUB" + System.currentTimeMillis();
 	}
 
-	public static String getSkuCode(String categoryCode,String ItemCode,int i ) {
-		return "S" + categoryCode + "Q"+ItemCode+String.format("%0" + 4 + "d", ++i);
+	//sku的编码,@author:xiajun
+	public static String generateSkuCode(String ItemCode,int i) {
+		return "S" + ItemCode.substring(1) + String.format("%0" + 2 + "d", i);
 	}
 
     public static String getShippingNO(Long aLong) {
