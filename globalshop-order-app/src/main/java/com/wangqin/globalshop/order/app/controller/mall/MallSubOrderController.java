@@ -28,7 +28,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
@@ -94,40 +93,28 @@ public class MallSubOrderController {
         return result.buildIsSuccess(true);
     }
 
+    /**
+     * 退单
+     * @param orderNumber
+     * @return
+     */
     @PostMapping("/return")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
-    public Object returnOrder(String subOrderNo) {
+    public Object returnOrder(String orderNumber) {
         JsonResult<MallSubOrderDO> result = new JsonResult<>();
-        MallSubOrderDO mallSubOrder;
         try {
-            mallSubOrder = erpOrderService.selectBySubOrderNo(subOrderNo);
-            MallOrderDO mallOrder = orderService.selectByOrderNo(mallSubOrder.getOrderNo());
-            if (mallOrder == null){
-                throw new ErpCommonException("找不到对应的主订单");
-            }
-            mallSubOrder.setStatus(OrderStatus.CLOSE.getCode());
-            List<MallSubOrderDO> list = erpOrderService.selectByOrderNo(mallOrder.getOrderNo());
-            int mallOrderStatus = getMallOrderStatus(list);
-            mallOrder.setStatus(mallOrderStatus);
-            erpOrderService.update(mallSubOrder);
-            orderService.updateById(mallOrder);
-            inventoryService.returns(mallSubOrder);
+
+            erpOrderService.returns(orderNumber);
+
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
-        return result.buildIsSuccess(true).buildData(mallSubOrder);
+        return result.buildIsSuccess(true);
     }
 
-    private int getMallOrderStatus(List<MallSubOrderDO> list) {
-        //todo  算出应该的状态
-        if (list.size()==1){
-            return OrderStatus.CLOSE.getCode();
-        }
-        return OrderStatus.SENT.getCode();
-    }
+
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
@@ -159,10 +146,7 @@ public class MallSubOrderController {
     @ResponseBody
     public Object update(MallSubOrderDO orderDO) {
         JsonResult<MallSubOrderDO> result = new JsonResult<>();
-//		ShiroUser shiroUser = this.getShiroUser();
-//		erpOrder.setUserModify(shiroUser.getLoginName());
-        orderDO.setModifier("mallSubOrderController((((");
-        orderDO.setGmtModify(new Date());
+        orderDO.update();
         orderDO.setQuantity(null);//不能修改销售数量，需要在主订单哪里修改数量
         erpOrderService.update(orderDO);
         result.setSuccess(true);
@@ -290,7 +274,7 @@ public class MallSubOrderController {
         } else {
             //订单状态校验
             if (OrderStatus.INIT.getCode() == erpOrder.getStatus() && erpOrder.getStockStatus() != StockUpStatus.RELEASED.getCode() && erpOrder.getStockStatus() != StockUpStatus.INIT.getCode()) {
-                inventoryService.tryRelease(erpOrder);
+                inventoryService.release(erpOrder);
             } else {
                 return JsonResult.buildFailed("订单状态错误");
             }
@@ -382,7 +366,7 @@ public class MallSubOrderController {
                 //批量释放库存
                 erpOrders.forEach(order -> {
                     if (order.getStockStatus() != StockUpStatus.INIT.getCode() && order.getStockStatus() != StockUpStatus.RELEASED.getCode()) {
-                        inventoryService.tryRelease(order);
+                        inventoryService.release(order);
                     }
                 });
 //				//批量重新分配库存

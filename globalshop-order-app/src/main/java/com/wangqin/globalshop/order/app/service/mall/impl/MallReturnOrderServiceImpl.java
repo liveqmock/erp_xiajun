@@ -9,6 +9,8 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.comm.Constant;
 import com.wangqin.globalshop.order.app.service.mall.IMallReturnOrderService;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -43,7 +46,16 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(MallReturnOrderVO erpReturnOrder) {
 
+        if (erpReturnOrder.getErpOrderId() == null) {
+            new ErpCommonException("ErpCommonException");
+        }
+        //todo
+        erpReturnOrder.setReturnRefer(0);
+
         erpReturnOrder.init();
+
+        erpReturnOrder.setMallReturnOrderNo(CodeGenUtil.getMallReturnOrderNo());
+
         //1新增一个退款单
 
         MallSubOrderDO orderDO = mallSubOrderMapper.selectByPrimaryKey(erpReturnOrder.getErpOrderId());
@@ -71,5 +83,13 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
 //            //退货
 //            inventoryService.returns(orderDO, Long.valueOf(erpReturnOrder.getReturnQuantity()));
 //        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public List<MallReturnOrderDO> selectByCondition(String orderNo, String startGmtCreate, String endGmtCreate) {
+
+        List<MallReturnOrderDO> list = mapper.selectByCondition(orderNo, startGmtCreate, endGmtCreate);
+        return list;
     }
 }

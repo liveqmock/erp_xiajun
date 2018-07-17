@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
@@ -15,8 +15,8 @@ import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.ImgUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
@@ -75,6 +75,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void addOuterOrder(MallOrderVO outerOrder) {
+        outerOrder.setOrderNo(CodeGenUtil.getOrderNo());
         List<MallSubOrderDO> os = outerOrder.getOuterOrderDetails();
         Double totalPrice = 0.0;
         String shopCode = CodeGenUtil.getShopCode();
@@ -86,42 +87,21 @@ public class MallOrderServiceImpl implements IMallOrderService {
             o.setShopCode(shopCode);
             o.init();
             /**商品相关Star*/
-            ItemSkuDO itemSku = itemSkuService.selectBySkuCode(o.getSkuCode());
-            o.setSalePrice(itemSku.getSalePrice());
-            Long freight = itemSku.getFreight();
-            o.setFreight((double) (freight == null ? 0L : freight));
-            o.setItemCode(itemSku.getItemCode());
-            o.setItemName(itemSku.getItemName());
-            o.setSkuPic(ImgUtil.initImg2Json(itemSku.getSkuPic()));
-            o.setUpc(itemSku.getUpc());
-            o.setScale(itemSku.getScale());
-            if(itemSku.getLogisticType()!=null) {
-                o.setLogisticType(Integer.valueOf(itemSku.getLogisticType()));
-            }else {
-                o.setLogisticType(0);//default type value
-            }
-            o.setWeight(itemSku.getWeight());
+            initSkuInfo2SubOrder(o);
             /**商品相关End*/
-            o.setCompanyNo(outerOrder.getCompanyNo());
-            o.setReceiver(outerOrder.getReceiver());
-            o.setReceiverDistrict(outerOrder.getReceiverDistrict());
-            o.setReceiverCity(outerOrder.getReceiverCity());
-            o.setReceiverState(outerOrder.getReceiverState());
-            o.setReceiverAddress(outerOrder.getAddressDetail());
-            o.setTelephone(outerOrder.getTelephone());
-            o.setIdCard(outerOrder.getIdCard());
+            initAddressInfo2SubOrder(o,outerOrder);
             o.setMemo(outerOrder.getMemo());
-            o.setStatus(OrderStatus.PAID.getCode());
+            o.setStatus(OrderStatus.NEW.getCode());
             o.setSubOrderNo(CodeGenUtil.getSubOrderNo());
             inventoryService.order(o);
             mallSubOrderDOMapper.insert(o);
         }
-        outerOrder.setStatus(OrderStatus.PAID.getCode());
+        outerOrder.setStatus(OrderStatus.NEW.getCode());
 //        outerOrder.setDealerName(deal.getName());
         outerOrder.setShopCode(shopCode);
         outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
-        outerOrder.setActualAmount(0.0);
+        outerOrder.setActualAmount(totalPrice);
         outerOrder.setIdCard(outerOrder.getIdCard());
         mallOrderDOMapper.insertSelective(outerOrder);
 
@@ -242,7 +222,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     @Override
     public List<MallOrderVO> list(MallOrderVO vo) {
         vo.init();
-        if (Integer.valueOf("10").equals(vo.getStatus())){
+        if (Integer.valueOf("10").equals(vo.getStatus())) {
             vo.setStatus(null);
         }
         return mallOrderDOMapper.list(vo);
@@ -268,42 +248,127 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     }
 
-	@Override
-	public void deleteByIsDel(MallOrderVO mallOrderVO) {
-		// TODO Auto-generated method stub
-		List<MallSubOrderVO> mallSubOrderVOList = mallSubOrderDOMapper.selectByOrderNoVo(mallOrderVO.getOrderNo());
+    @Override
+    public void deleteByIsDel(MallOrderVO mallOrderVO) {
+        // TODO Auto-generated method stub
+        List<MallSubOrderVO> mallSubOrderVOList = mallSubOrderDOMapper.selectByOrderNoVo(mallOrderVO.getOrderNo());
         for (MallSubOrderVO mallSubOrderVO : mallSubOrderVOList) {
-        	mallSubOrderVO.setIsDel(true);
+            mallSubOrderVO.setIsDel(true);
             mallSubOrderDOMapper.updateByIsDel(mallSubOrderVO);
         }
         mallOrderVO.setIsDel(true);
         mallOrderVO.init();
         mallOrderDOMapper.updateByIsDel(mallOrderVO);
-	}
+    }
 
-	@Override
-	public MallOrderVO selectByOrderNoVO(String orderNo) {
-		// TODO Auto-generated method stub
-		return mallOrderDOMapper.selectByOrderNoVO(orderNo);
-	}
+    @Override
+    public MallOrderVO selectByOrderNoVO(String orderNo) {
+        // TODO Auto-generated method stub
+        return mallOrderDOMapper.selectByOrderNoVO(orderNo);
+    }
 
-	@Override
-	public void deleteByHard(MallOrderVO mallOrderVO) {
-		// TODO Auto-generated method stub
-		List<MallSubOrderVO> mallSubOrderVOList = mallSubOrderDOMapper.selectByOrderNoVo(mallOrderVO.getOrderNo());
+    @Override
+    public void deleteByHard(MallOrderVO mallOrderVO) {
+        // TODO Auto-generated method stub
+        List<MallSubOrderVO> mallSubOrderVOList = mallSubOrderDOMapper.selectByOrderNoVo(mallOrderVO.getOrderNo());
         for (MallSubOrderVO mallSubOrderVO : mallSubOrderVOList) {
             mallSubOrderDOMapper.deleteByPrimaryKey(mallSubOrderVO.getId());
         }
         mallOrderVO.init();
         mallOrderDOMapper.deleteByPrimaryKey(mallOrderVO.getId());
-        
-	}
+
+    }
 
 
     @Override
-    public void changeOrderStatus(Integer oldStatus, Integer newStatus){
-        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus,newStatus);
+    public void changeOrderStatus(Integer oldStatus, Integer newStatus) {
+        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus, newStatus);
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void update(MallOrderVO vo) {
+        List<MallSubOrderDO> list = JSON.parseArray(vo.getOuterOrderDetailList(), MallSubOrderDO.class);
+        String orderNo = vo.getOrderNo();
+        if (StringUtils.isBlank(orderNo)){
+            throw new ErpCommonException("数据丢失,请联系管理员");
+        }
+        /*释放原先的库存占用*/
+        List<MallSubOrderDO> oldList = mallSubOrderDOMapper.selectByOrderNo(orderNo);
+        for (MallSubOrderDO subOrder : oldList) {
+            inventoryService.release(subOrder);
+            mallSubOrderDOMapper.deleteByPrimaryKey(subOrder.getId());
+        }
+        Double totalPrice = 0.0;
+        /*进行新的占用*/
+        for (MallSubOrderDO subOrder : list) {
+            subOrder.init();
+            Double salePrice = subOrder.getSalePrice();
+            salePrice = salePrice == null ? 0 : salePrice;
+            Integer quantity = subOrder.getQuantity();
+            quantity = quantity == null ? 0 : quantity;
+            totalPrice += salePrice * quantity;
+            subOrder.setOrderNo(orderNo);
+            subOrder.setShopCode(vo.getShopCode());
+            initSkuInfo2SubOrder(subOrder);
+            initAddressInfo2SubOrder(subOrder, vo);
+            subOrder.setMemo(vo.getMemo());
+            subOrder.setStatus(OrderStatus.NEW.getCode());
+            subOrder.setSubOrderNo(CodeGenUtil.getSubOrderNo());
+            inventoryService.order(subOrder);
+            mallSubOrderDOMapper.insert(subOrder);
+        }
+        MallOrderDO mallOrder = mallOrderDOMapper.selectByOrderNo(orderNo);
+        mallOrder.setShopCode(vo.getShopCode());
+        mallOrder.setOrderTime(vo.getOrderTime());
+        mallOrder.setPayType(vo.getPayType());
+        mallOrder.setTotalAmount(totalPrice);
+        mallOrder.setActualAmount(totalPrice);
+        mallOrderDOMapper.updateByPrimaryKeySelective(mallOrder);
+
+    }
+
+    /***
+     * 根据vo对象完善mallSubOrderDO的地址信息
+     * @param o
+     */
+    private void initAddressInfo2SubOrder(MallSubOrderDO o, MallOrderVO vo) {
+        o.setReceiver(vo.getReceiver());
+        o.setReceiverDistrict(vo.getReceiverDistrict());
+        o.setReceiverCity(vo.getReceiverCity());
+        o.setReceiverState(vo.getReceiverState());
+        o.setReceiverAddress(vo.getAddressDetail());
+        o.setTelephone(vo.getTelephone());
+        o.setIdCard(vo.getIdCard());
+    }
+
+    /***
+     * 根据skucode完善mallSubOrderDO的信息
+     * @param o
+     */
+    private void initSkuInfo2SubOrder(MallSubOrderDO o) {
+        if (o == null || o.getSkuCode() == null) {
+            return;
+        }
+        ItemSkuDO itemSku = itemSkuService.selectBySkuCode(o.getSkuCode());
+        if (itemSku == null) {
+            return;
+        }
+        o.setSalePrice(itemSku.getSalePrice());
+        Long freight = itemSku.getFreight();
+        o.setFreight((double) (freight == null ? 0L : freight));
+        o.setItemCode(itemSku.getItemCode());
+        o.setItemName(itemSku.getItemName());
+        o.setSkuPic(ImgUtil.initImg2Json(itemSku.getSkuPic()));
+        o.setUpc(itemSku.getUpc());
+        o.setScale(itemSku.getScale());
+        if (itemSku.getLogisticType() != null) {
+            o.setLogisticType(Integer.valueOf(itemSku.getLogisticType()));
+        } else {
+            o.setLogisticType(0);
+        }
+        o.setWeight(itemSku.getWeight());
     }
 
 }

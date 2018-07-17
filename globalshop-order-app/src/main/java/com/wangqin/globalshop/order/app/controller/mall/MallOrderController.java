@@ -9,7 +9,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.ImgUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
@@ -71,8 +74,8 @@ public class MallOrderController {
     public Object add(MallOrderVO mallOrderVO) {
         JsonResult<List<MallOrderVO>> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
-            String setOrderNo = CodeGenUtil.getOrderNo();
-            mallOrderVO.setOrderNo(setOrderNo);
+//            String setOrderNo = CodeGenUtil.getOrderNo();
+//            mallOrderVO.setOrderNo(setOrderNo);
             String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
             String s = outerOrderDetailList.replace("&quot;", "\"");
             List<MallSubOrderDO> outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
@@ -100,58 +103,18 @@ public class MallOrderController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public Object update(MallOrderVO mallOrderVO) {
-
         JsonResult<String> result = new JsonResult<>();
-        if (mallOrderVO.getId() != null) {
-            MallOrderVO selouterOrderVO = mallOrderService.selectByOrderNoVO(mallOrderVO.getOrderNo());
-            if (selouterOrderVO == null || !Objects.equals(selouterOrderVO.getStatus(), OrderStatus.INIT.getCode())) {
-                return JsonResult.buildFailed("订单不存在或者状态错误");
-            }
-            //查询是否有发货的订单，有的话订单不能修改
-            int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(mallOrderVO.getOrderNo(),OrderStatus.SENT.getCode());
-            if (sendOrder > 0) {
-                return JsonResult.buildFailed("有子订单发货不能修改");
-            }
-
-            selouterOrderVO.setGmtModify(new Date());
-            List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
-            for (MallSubOrderDO mallSubOrderDO : erpOrders) {
-            	//1,释放子订单库存       
-                inventoryService.tryRelease(mallSubOrderDO);
-			}
-            mallOrderService.deleteByHard(selouterOrderVO);
-            //订单详情
-            List<MallSubOrderDO> outerOrderDetails = null;
-            String outerOrderDetailList = mallOrderVO.getOuterOrderDetailList();
-            if (StringUtils.isNotBlank(outerOrderDetailList)) {
-                String s = outerOrderDetailList.replace("&quot;", "\"");
-                outerOrderDetails = HaiJsonUtils.toBean(s, new TypeReference<List<MallSubOrderDO>>() {
-                });
-                selouterOrderVO.setOuterOrderDetails(outerOrderDetails);
-                if (CollectionUtils.isEmpty(outerOrderDetails)) {
-                    return JsonResult.buildFailed("没有商品信息");
-                }
-                    //创建外部订单
-                    selouterOrderVO.setOrderTime(mallOrderVO.getOrderTime());
-	                selouterOrderVO.setOrderTime(mallOrderVO.getOrderTime());
-	                selouterOrderVO.setReceiver(mallOrderVO.getReceiver());
-	                selouterOrderVO.setTelephone(mallOrderVO.getTelephone());
-	                selouterOrderVO.setPayType(mallOrderVO.getPayType());
-	                selouterOrderVO.setAddressDetail(mallOrderVO.getAddressDetail());
-	                selouterOrderVO.setReceiverState(mallOrderVO.getReceiverState());
-	                selouterOrderVO.setReceiverCity(mallOrderVO.getReceiverCity());
-	                selouterOrderVO.setReceiverDistrict(mallOrderVO.getReceiverDistrict());
-	                selouterOrderVO.setIdCard(mallOrderVO.getIdCard());
-	                selouterOrderVO.setMemo(mallOrderVO.getMemo());
-	                mallOrderService.addOuterOrder(selouterOrderVO);
-
-            }
-            result.buildIsSuccess(true);
-            } else {
-            	result.buildData("错误数据").buildIsSuccess(false);
-        	}
-        	return result;
+        try {
+            mallOrderService.update(mallOrderVO);
+        } catch (ErpCommonException e) {
+            return result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+        } catch (Exception e){
+            return result.buildMsg(e.getMessage()).buildIsSuccess(false);
         }
+
+        return result;
+    }
+
     /**
      * 查询单个订单
      */
@@ -249,7 +212,8 @@ public class MallOrderController {
                     errorMsg.add("第" + i + "条不存在或者状态错误,");
                 }
                 //查询是否有发货的订单，有的话订单不能修改
-                int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(outerOrder.getOrderNo(),OrderStatus.SENT.getCode());;
+                int sendOrder = mallSubOrderService.selectCountWithStateAndOrderNo(outerOrder.getOrderNo(), OrderStatus.SENT.getCode());
+                ;
                 if (sendOrder > 0) {
                     return result.buildMsg("第" + i + "条有子订单发货不能关闭").buildIsSuccess(false);
                 }
@@ -298,8 +262,8 @@ public class MallOrderController {
             if (orderNo != null) {
                 //查询未关闭子订单备货情况
                 List<MallSubOrderDO> erpOrders = mallSubOrderService.selectUnClosedByOrderNo(orderNo);
-                for(MallSubOrderDO mallSubOrder : erpOrders) {
-                	mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
+                for (MallSubOrderDO mallSubOrder : erpOrders) {
+                    mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
                 }
                 result.setData(erpOrders);
             } else {
@@ -357,8 +321,8 @@ public class MallOrderController {
         ExcelHelper excelHelper = new ExcelHelper();
 //        String[] columnTitles = new String[]{"主订单号", "销售员", "订单金额", "下单时间", "订单状态", "收件人", "手机", "省", "市", "区", "详细地址"};
 //        Integer[] columnWidth = new Integer[]{30, 15, 15, 20, 15, 15, 15, 15, 15, 15, 45};
-        String[] columnTitles = new String[]{"主订单号",  "订单金额", "下单时间", "订单状态", "收件人"};
-        Integer[] columnWidth = new Integer[]{30,  15, 20, 15, 15};
+        String[] columnTitles = new String[]{"主订单号", "订单金额", "下单时间", "订单状态", "收件人"};
+        Integer[] columnWidth = new Integer[]{30, 15, 20, 15, 15};
 
         excelHelper.setOuterOrderToSheet("Father Order", columnTitles, rowDatas, columnWidth);
         //excelHelper.writeToFile("/Users/liuyang/Work/test.xls");

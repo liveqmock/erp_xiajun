@@ -1,20 +1,12 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Maps;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
@@ -27,6 +19,15 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.uitl.ErpOrderUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -39,6 +40,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     private MallSubOrderMapperExt mallSubOrderDOMapper;
     @Autowired
     private InventoryService inventoryService;
+    @Autowired
+    private MallOrderMapperExt mallOrderMapper;
     @Autowired
     private OrderInventoryBookingRecordService inventoryRecordService;
 
@@ -103,7 +106,7 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         erpOrder.setGmtModify(new Date());
         mallSubOrderDOMapper.updateByPrimaryKeySelective(erpOrder);
 
-        inventoryService.tryRelease(erpOrder);
+        inventoryService.release(erpOrder);
 //        }
     }
 
@@ -386,5 +389,26 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     public MallSubOrderDO selectBySubOrderNo(String subOrderNo) {
         return mallSubOrderDOMapper.selectBySubOrderNo(subOrderNo);
+    }
+
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void returns(String subOrderNo) {
+        MallSubOrderDO mallSubOrder = mallSubOrderDOMapper.selectBySubOrderNo(subOrderNo);
+        MallOrderDO mallOrder = mallOrderMapper.selectByOrderNo(mallSubOrder.getOrderNo());
+        if (mallOrder == null){
+            throw new ErpCommonException("找不到对应的主订单");
+        }
+        mallSubOrder.setStatus(OrderStatus.RETURNING.getCode());
+        List<MallSubOrderDO> list = mallSubOrderDOMapper.selectByOrderNo(mallOrder.getOrderNo());
+        int mallOrderStatus = getMallOrderStatus(list);
+        mallOrder.setStatus(mallOrderStatus);
+        mallSubOrderDOMapper.updateByPrimaryKeySelective(mallSubOrder);
+        mallOrderMapper.updateByPrimaryKeySelective(mallOrder);
+        inventoryService.release(mallSubOrder);
+    }
+
+    private int getMallOrderStatus(List<MallSubOrderDO> list) {
+        return OrderStatus.RETURNING.getCode();
     }
 }
