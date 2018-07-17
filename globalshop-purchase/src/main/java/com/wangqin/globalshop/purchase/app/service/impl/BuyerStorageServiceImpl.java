@@ -195,7 +195,11 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                 vo.setSpecifications(getScaleString(scaleList));
 
                 vo.setQuantity(detail.getQuantity());//线下
-                vo.setTransQuantity(detail.getTransQuantity());//在途，预入库数量
+                vo.setTransQuantity(detail.getTransQuantity());//在途，
+
+				//预入库数量
+				vo.setPreQuantity(detail.getQuantity()+detail.getTransQuantity());
+
 
                 //实际入库数，如果查询状态为预入库（新建），则直接相加
                 if(status != null && status.equals(GeneralStatus.INIT.getCode())){

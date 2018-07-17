@@ -25,7 +25,9 @@ public class BuyerStorageDetailVo {
 
 	private Integer transQuantity; //在途，预入库数，
 
-	private Integer entryQuantity; //实际入库数=默认值=在途+线下=客户手工填写入库数
+	private Integer entryQuantity; //实际入库数=客户手工填写入库数
+
+	private Integer preQuantity; //预入库数=在途+线下
 
 	private String buyerName; //买手名字
 
@@ -58,7 +60,13 @@ public class BuyerStorageDetailVo {
 	private Integer batchNum;
 
 	private String buyerTaskNo;
-
+	
+	public Integer getPreQuantity() {
+		return preQuantity;
+	}
+	public void setPreQuantity(Integer preQuantity) {
+		this.preQuantity = preQuantity;
+	}
 	public Integer getEntryQuantity() {
 		return entryQuantity;
 	}
