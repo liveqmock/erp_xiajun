@@ -48,4 +48,6 @@ public interface IMallOrderService  {
     void deleteByHard(MallOrderVO mallOrderVO);
 
     void changeOrderStatus(Integer oldStatus,Integer newStatus);
+
+    void update(MallOrderVO mallOrderVO);
 }

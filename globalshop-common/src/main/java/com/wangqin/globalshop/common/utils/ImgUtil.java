@@ -37,7 +37,7 @@ public class ImgUtil {
             Integer mainPicNum = jsonObject.getInteger("mainPicNum");
             int i = mainPicNum == null ? 1 : mainPicNum;
 
-            if (picList.size() < i - 1) {
+            if (picList.size() < i) {
                 return imgUrl;
             }
             JSONObject o = (JSONObject) picList.get(i - 1);
