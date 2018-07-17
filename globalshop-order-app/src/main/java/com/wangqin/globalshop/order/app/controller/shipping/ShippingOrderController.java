@@ -21,10 +21,7 @@ import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ImgUtil;
-import com.wangqin.globalshop.common.utils.PicModel;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
@@ -573,6 +570,8 @@ public class ShippingOrderController {
         Date endOrderTime = DateUtil.parseDate(endOrderTimeStr + " 23:59:59");
         shippingOrderQueryVO.setEndOrderTime(endOrderTime);
 
+        //需加上商户号隔离
+        shippingOrderQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         List<List<Object>> rowDatas = new ArrayList<>();
         List<MallSubOrderDO> erpOrderlist = mallSubOrderService.queryByShippingOrder(shippingOrderQueryVO);
         if (erpOrderlist != null) {
@@ -618,7 +617,9 @@ public class ShippingOrderController {
                 list.add(erpOrder.getWarehouseNo()); // 仓库名称
                 list.add(erpOrder.getShippingNo()); // 包裹号
                 list.add(erpOrder.getCompanyNo()); // 物流公司
-                list.add(ShippingOrderType.of(erpOrder.getLogisticType()).getDescription());// 渠道方式
+                //TODO LogisticType这字段怎么会为空导致异常
+                list.add("");
+//                list.add(ShippingOrderType.of(erpOrder.getLogisticType()).getDescription());// 渠道方式
                 if (erpOrder.getLogisticType() == null || erpOrder.getLogisticType() == 0) {
                     list.add("直邮");
                 } else {
