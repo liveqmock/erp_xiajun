@@ -6,7 +6,6 @@ import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -83,7 +82,7 @@ public class AutoCreateTaskDailyOrderTask {
 	 * 订阅快递100
 	 */
 //	@Scheduled(cron = "0 12 0/1 * * ?")
-	@Scheduled(cron = "0 0/5 * * * ?")
+//	@Scheduled(cron = "0 0/5 * * * ?")
 	public void subscribeKuaidi100() {
         System.out.println("定时任务：订阅快递100===>Start");
         logger.info("定时任务：订阅快递100===>Start");
@@ -107,7 +106,7 @@ public class AutoCreateTaskDailyOrderTask {
 	 * 查询快递100物流
 	 */
 //	@Scheduled(cron = "0 20 9,13,18 * * ?")
-	@Scheduled(cron = "0 0/1 * * * ?")
+//	@Scheduled(cron = "0 0/1 * * * ?")
 	public void queryKuaidi100Track() {
         System.out.println("定时任务：查询快递100物流轨迹===>Start");
 		logger.info("定时任务：查询快递100物流轨迹===>Start");
