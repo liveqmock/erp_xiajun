@@ -108,4 +108,12 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	int selectCountWithStateAndOrderNo(@Param("orderNo")String orderNo,@Param("status") Integer status);
 	
 	void updateByIsDel(MallSubOrderVO mallSubOrderVO);
+
+	/**
+	 * 通过包裹号获取 MallSubOrder，主要是配合发货单管理获取子订单信息
+	 *
+	 * @param shippingNo
+	 * @return
+	 */
+	MallSubOrderDO getByShippingNo(String shippingNo);
 }

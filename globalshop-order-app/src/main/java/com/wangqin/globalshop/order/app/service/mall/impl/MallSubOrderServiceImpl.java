@@ -432,6 +432,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
     }
 
+    @Override
+    public MallSubOrderDO getByShippingNo(String shippingNo) {
+        return mallSubOrderDOMapper.getByShippingNo(shippingNo);
+    }
+
     private int getMallOrderStatus(List<MallSubOrderDO> list) {
         return OrderStatus.RETURNING.getCode();
     }

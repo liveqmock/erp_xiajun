@@ -62,8 +62,13 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO) {
-        List<ShippingOrderDO> shippingOrders = shippingOrderMapper.queryShippingOrders(shippingOrderVO);
-        return shippingOrders;
+        List<ShippingOrderDO> shippingOrderList = shippingOrderMapper.queryShippingOrders(shippingOrderVO);
+//        for (ShippingOrderDO shippingOrderDO: shippingOrderList) {
+//            String shippingNo = shippingOrderDO.getShippingNo();
+//            MallSubOrderDO mallSubOrderDO = mallSubOrderService.getByShippingNo(shippingNo);
+//            shippingOrderDO.setSubOrderNo(mallSubOrderDO.getSubOrderNo());
+//        }
+        return shippingOrderList;
     }
 
     @Override
