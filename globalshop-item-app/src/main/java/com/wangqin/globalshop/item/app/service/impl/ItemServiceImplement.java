@@ -65,6 +65,7 @@ import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
@@ -143,35 +144,17 @@ public class ItemServiceImplement implements IItemService {
     @Override
     public Object addItem(ItemQueryVO item) {
     	JsonResult<ItemDO> result = new JsonResult<>();       
-        if (null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserId()) {
-            return result.buildIsSuccess(false).buildMsg("请先登录");
-        }
-        
+    	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+         	return result.buildIsSuccess(false).buildMsg("请先登录");
+        }       
         if (null != item.getId()) {
             return result.buildMsg("新增的商品不能有ID").buildIsSuccess(false);
-        }
-        
+        }        
         List<ItemSkuScaleDO> scaleList = new ArrayList<>();
-        String priceRange = "0";
         
         //商品名称处理
-        StringBuffer nameNew = new StringBuffer();
-        String[] brandArr = item.getBrand().split("->");
-        if (StringUtil.isNotBlank(brandArr[0])) {    //英文品牌放在名字最前面
-            nameNew.append(brandArr[0] + " ");
-        }
-
-        if (brandArr.length > 1 && StringUtil.isNotBlank(brandArr[1])) { //中文品牌紧随其后
-            nameNew.append(brandArr[1] + " ");
-        }
-
-        if (StringUtil.isNotBlank(item.getSexStyle())) { //男女款排在第三
-            nameNew.append(item.getSexStyle() + " ");
-        }
         String itemNameShort = item.getName();
-        nameNew.append(item.getName());//最后出场的才是商品的名字
-        item.setName(nameNew.toString());//重新设置商品名称
-        
+        setItemNewName(item);       
 
         //类目处理
         String categoryCode = item.getCategoryCode();
@@ -184,7 +167,7 @@ public class ItemServiceImplement implements IItemService {
         String mainPic = item.getMainPic();
         //图片处理
         String imgJson = ImageUtil.getImageUrl(mainPic);
-        //商品必须有主图(donot delete!)
+        //商品必须有主图
         JSONObject jsonObject = JSONObject.fromObject(mainPic);
         JSONArray jsonArray = jsonObject.getJSONArray("picList");
         if(0 == jsonArray.size()) {
@@ -192,7 +175,7 @@ public class ItemServiceImplement implements IItemService {
         }
 
         //系统自动生成item_code
-        String itemCode = CodeGenUtil.getItemCode(categoryCode);
+        String itemCode = CodeGenUtil.generateItemCode(categoryCode);
         item.setItemCode(itemCode);
         
         // 解析skuList 数组对象
@@ -200,24 +183,23 @@ public class ItemServiceImplement implements IItemService {
         if(!StringUtils.isNotBlank(skuList)) {
         	return result.buildIsSuccess(false).buildMsg("最少需要提供一个sku");
         }
+        List<Double> itemSkuPriceList = new ArrayList<Double>();
         try {
             String s = skuList.replace("&quot;", "\"");
             List<ItemSkuAddVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>() {
             });
-            int i = 0;
-
+            int i = 0;            
             if (skus != null && !skus.isEmpty()) {
-            	BigDecimal maxPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
-            	BigDecimal minPrice = new BigDecimal(skus.get(0).getSalePrice().toString());
                 for (ItemSkuAddVO itemSku : skus) {
+                	itemSkuPriceList.add(itemSku.getSalePrice());
                     i++;
-                    itemSku.setSkuCode("S" + itemCode.substring(1) + "Q" + String.format("%0" + 2 + "d", ++i));
+                    itemSku.setSkuCode(CodeGenUtil.generateSkuCode(itemCode, i));
                     //itemSku.setLogisticType(item.getLogisticType());TODO
                     
                     String skuMainPic = itemSku.getSkuPic();
-                    String skuPic = ImageUtil.getImageUrl(skuMainPic);
+                    //String skuPic = ImageUtil.getImageUrl(skuMainPic);
                     
-                    //sku没有图片就用商品的图片(别删，谁删谁负责)
+                    //sku没有图片就用商品的图片
                     JSONObject skuPicJsonObject = JSONObject.fromObject(skuMainPic);
                     JSONArray skuPicJsonArray = skuPicJsonObject.getJSONArray("picList");
                     if(0 == skuPicJsonArray.size()) {//没图
@@ -228,20 +210,6 @@ public class ItemServiceImplement implements IItemService {
                     if (StringUtils.isNotBlank(itemSku.getPackageLevelId())) {
                         List<Long> a = HaiJsonUtils.toBean(itemSku.getPackageLevelId(), new TypeReference<List<Long>>() {
                         });
-                        //itemSku.setPackageId(a.get(a.size() - 1));
-                    }
-                    BigDecimal temp = new BigDecimal(itemSku.getSalePrice().toString());
-            		maxPrice = maxPrice.compareTo(temp) < 0 ? temp : maxPrice;
-            		minPrice = minPrice.compareTo(temp) > 0 ? temp : minPrice;
-//                    // 如果商品没有图片，默认使用sku上的图片
-//                    if (StringUtils.isBlank(imgJson) && StringUtils.isNotBlank(skuPic)) {
-//                        imgJson = skuPic;
-//                    }
-            		//价格区间处理
-                    if(0 == minPrice.compareTo(maxPrice)) {
-                    	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString()));
-                    } else {
-                    	item.setPriceRange(PriceUtil.formatPrice(minPrice.toPlainString())+"-"+PriceUtil.formatPrice(maxPrice.toPlainString()));
                     }
                 }
                 item.setItemSkus(skus);
@@ -263,24 +231,12 @@ public class ItemServiceImplement implements IItemService {
         } catch (Exception e) {
             //TODO
         }
-
-        //判断是否可售
-//        if (item.getStartDate() == null || item.getEndDate() == null) {
-//            item.setIsSale(0);
-//        } else if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), DateUtil.getDateByCalculate(newItem.getEndDate(), Calendar.DATE, 1))) {
-//            item.setIsSale(1);
-//        } else {
-//            item.setIsSale(0);
-//        }
-        //TEMP
-        
-        
-        
+        //TEMP                    
         item.setIsSale(1);
 
         newItem.setDetail(item.getDetail());
         detailDecoder(newItem);
-        newItem.setPriceRange(priceRange);
+        newItem.setPriceRange(PriceUtil.calNewPriceRange(itemSkuPriceList));
         newItem.setCategoryName(item.getCategoryName());
         newItem.setCategoryCode(categoryCode);
         newItem.setBrandName(item.getBrand());
@@ -299,17 +255,11 @@ public class ItemServiceImplement implements IItemService {
         }      
         newItem.setCountry(item.getCountry());
         newItem.setItemCode(item.getItemCode());
-        newItem.setWxisSale(item.getWxisSale().byteValue());
-        newItem.setRemark(item.getRemark());       
+        newItem.setWxisSale(item.getWxisSale().byteValue());     
         newItem.setMainPic(item.getMainPic());
-
         newItem.setRemark(item.getRemark());
- 
         newItem.setIsSale(item.getIsSale().byteValue());
-        newItem.setItemShort(itemNameShort);
-
-        newItem.setRemark(item.getRemark());     
-        newItem.setPriceRange(item.getPriceRange());
+        newItem.setItemShort(itemNameShort); 
         newItem.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setCreator(AppUtil.getLoginUserId());
@@ -883,7 +833,7 @@ public class ItemServiceImplement implements IItemService {
                 String category3 = obj.get(7).toString().trim();
                 List<ItemCategoryDO> categoryList = getByCategory(category1, category2, category3);
                 String categoryCode = "";
-                String itemCode = CodeGenUtil.getItemCode(categoryCode);
+                String itemCode = CodeGenUtil.generateItemCode(categoryCode);
                 if (categoryList == null || categoryList.size() == 0) {
                     errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
                 } else if (categoryList.size() > 1) {
@@ -951,7 +901,7 @@ public class ItemServiceImplement implements IItemService {
                     }
                 }
                 /**SKU编号*/
-                String skuCode = CodeGenUtil.getSkuCode(categoryCode, itemCode, i);
+                String skuCode = CodeGenUtil.generateSkuCode(itemCode, i);
                 itemSku.setSkuCode(skuCode);
 
                 /**图片链接*/
@@ -1105,5 +1055,22 @@ public class ItemServiceImplement implements IItemService {
     @Override
     public String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo) {
         return itemDOMapperExt.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
+    }
+    
+    /**
+     * 工具类：处理商品的名字
+     * 商品名称公式：品牌英文名+品牌中文名+男女款+商品名
+     */
+    private static void setItemNewName(ItemQueryVO item) {
+    	StringBuffer nameNew = new StringBuffer();
+        String[] brandArr = item.getBrand().split("->");
+        for(String s:brandArr) { //品牌处理
+        	nameNew.append(s+" ");
+        }
+        if(IsEmptyUtil.isStringNotEmpty(item.getSexStyle())) { //男女款处理
+        	nameNew.append(item.getSexStyle() + " ");
+        }
+        nameNew.append(item.getName());   
+        item.setName(nameNew.toString());//重新设置商品名称
     }
 }
