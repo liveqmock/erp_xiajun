@@ -50,6 +50,10 @@ public interface IShippingOrderService {
 
     void ship(ShippingOrderDO erpOrderId);
 
+    List<ShippingOrderDO> selectByLogisticNoIsNotNull();
+
+    List<ShippingOrderDO> selectInOneMonth();
+
 
 //	MultiDeliveryFormDTO queryByErpOrderId(String erpOrderId);
 //

@@ -587,6 +587,16 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     }
 
+    @Override
+    public List<ShippingOrderDO> selectByLogisticNoIsNotNull() {
+        return shippingOrderMapper.selectByLogisticNoIsNotNull();
+    }
+
+    @Override
+    public List<ShippingOrderDO> selectInOneMonth() {
+        return shippingOrderMapper.selectInOneMonth();
+    }
+
     private void updateMallOrderStats(MallOrderDO orderDO) {
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
         for (MallSubOrderDO aDo : list) {
