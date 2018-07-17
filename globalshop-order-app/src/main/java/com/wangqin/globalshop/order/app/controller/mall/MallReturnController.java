@@ -65,13 +65,7 @@ public class MallReturnController {
         return result;
     }
 
-    private int getMallOrderStatus(List<MallSubOrderDO> list) {
-        //todo  算出应该的状态
-        if (list.size() == 1) {
-            return OrderStatus.CLOSE.getCode();
-        }
-        return OrderStatus.SENT.getCode();
-    }
+
 
 
 }
