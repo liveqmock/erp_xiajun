@@ -11,7 +11,6 @@ import com.wangqin.globalshop.common.utils.DateUtils;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.order.app.service.mall.IMallReturnOrderService;
-import com.youzan.open.sdk.client.oauth.OAuthFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,76 +23,59 @@ import java.util.List;
 
 /**
  * @author liuyang
- *
  */
 @Controller
 @RequestMapping("/erpReturnOrder")
 @Authenticated
 public class MallReturnController {
-	@Autowired
-	private IMallReturnOrderService erpReturnOrderService;
+    @Autowired
+    private IMallReturnOrderService mallReturnOrderService;
 
-	@Autowired
-	private MallReturnOrderDOMapperExt mapper;
 
-	
-	@PostMapping("/index")
-	@ResponseBody
-	public Object index(@RequestParam(value = "orderNo",required = false) String orderNo,
-						@RequestParam(value = "startGmtCreate",required = false) String startGmtCreate,
-						@RequestParam(value = "endGmtCreate",required = false) String endGmtCreate
-						) {
-		if (StringUtils.isBlank(orderNo) || "null".equals(orderNo)){
-			orderNo = null;
-		}
-		if (StringUtils.isBlank(startGmtCreate) || "null".equals(startGmtCreate)){
-			startGmtCreate = null;
-		}
-		if (StringUtils.isBlank(endGmtCreate) || "null".equals(endGmtCreate)){
-			endGmtCreate = null;
-		}
+    @PostMapping("/index")
+    @ResponseBody
+    public Object index(
+            @RequestParam(value = "orderNo", required = false) String orderNo,
+            @RequestParam(value = "startGmtCreate", required = false) String startGmtCreate,
+            @RequestParam(value = "endGmtCreate", required = false) String endGmtCreate) {
+        JsonResult<List<MallReturnOrderDO>> result = new JsonResult<>();
 
-		JsonResult<List<MallReturnOrderDO>> result= new JsonResult<>();
+        try {
+            List<MallReturnOrderDO> list = mallReturnOrderService.selectByCondition(orderNo, startGmtCreate, endGmtCreate);
+            result.setData(list);
+            result.setSuccess(true);
+        } catch (ErpCommonException e) {
+            result.setMsg(e.getErrorMsg());
+            result.setSuccess(false);
+        } catch (Exception ex) {
+            result.setMsg("未知错误");
+            result.setSuccess(false);
+        }
 
-		Date startGmtCreateDate = null;
-		Date endGmtCreateDate = null;
-		if(StringUtils.isNotBlank(startGmtCreate)){
-			startGmtCreateDate = DateUtils.dateBeginning(startGmtCreate);
-		}
-		if (StringUtils.isNotBlank(endGmtCreate)){
-			endGmtCreateDate = DateUtils.dateEnd(endGmtCreate);
-		}
-		List<MallReturnOrderDO> list = mapper.selectByCondition(orderNo, startGmtCreateDate, endGmtCreateDate);
-		result.setData(list);
-		result.setSuccess(true);
-		return result;
-	}
-	
+        return result;
+    }
 
-	@PostMapping("/add")
-	@ResponseBody
-	public Object add(MallReturnOrderVO erpReturnOrder) {
-		JsonResult<MallReturnOrderVO> result = new JsonResult<>();
-		if(erpReturnOrder.getErpOrderId()==null) {
-			return result.buildIsSuccess(false).buildMsg("参数异常");
-		}
-		//todo
-		erpReturnOrder.setReturnRefer(0);
-		try {
-			erpReturnOrderService.add(erpReturnOrder);
-		}catch (ErpCommonException exception){
-			return result.buildIsSuccess(false).buildMsg(exception.getErrorMsg());
-		}
-		result.setSuccess(true);
-		return result;
-	}
-	private int getMallOrderStatus(List<MallSubOrderDO> list) {
-		//todo  算出应该的状态
-		if (list.size()==1){
-			return OrderStatus.CLOSE.getCode();
-		}
-		return OrderStatus.SENT.getCode();
-	}
+
+    @PostMapping("/add")
+    @ResponseBody
+    public Object add(MallReturnOrderVO erpReturnOrder) {
+        JsonResult<MallReturnOrderVO> result = new JsonResult<>();
+        try {
+            mallReturnOrderService.add(erpReturnOrder);
+        } catch (ErpCommonException exception) {
+            return result.buildIsSuccess(false).buildMsg(exception.getErrorMsg());
+        }
+        result.setSuccess(true);
+        return result;
+    }
+
+    private int getMallOrderStatus(List<MallSubOrderDO> list) {
+        //todo  算出应该的状态
+        if (list.size() == 1) {
+            return OrderStatus.CLOSE.getCode();
+        }
+        return OrderStatus.SENT.getCode();
+    }
 
 
 }

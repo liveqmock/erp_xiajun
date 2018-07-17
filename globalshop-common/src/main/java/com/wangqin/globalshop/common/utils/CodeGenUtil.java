@@ -46,6 +46,10 @@ public class CodeGenUtil {
 		return "OR" + System.currentTimeMillis();
 	}
 
+	public static String getMallReturnOrderNo() {
+		return "MRO" + System.currentTimeMillis();
+	}
+
 	public static String getSubOrderNo() {
 		return "SUB" + System.currentTimeMillis();
 	}
@@ -60,7 +64,7 @@ public class CodeGenUtil {
     }
 
 	public static String getInvOnWarehouseNo() {
-		return "IN" + System.currentTimeMillis();
+		return "INW" + System.currentTimeMillis();
 	}
 
 	public static String getInventoryOutNo() {

@@ -12,6 +12,7 @@ public class MallReturnOrderVO extends MallReturnOrderDO {
     private String orderNo;
     private Long outerOrderNo;
     private String subOrderNo;
+    private String mallReturnOrderNo;
     private Byte status;
     private String returnReason;
     private String returnReasonDetail;

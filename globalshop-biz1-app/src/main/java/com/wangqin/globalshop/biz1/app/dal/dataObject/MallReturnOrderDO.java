@@ -7,6 +7,8 @@ public class MallReturnOrderDO extends BaseModel {
 
     private String orderNo;
 
+    private String mallReturnOrderNo;
+
     private Long outerOrderNo;
 
     private String subOrderNo;
@@ -59,6 +61,14 @@ public class MallReturnOrderDO extends BaseModel {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public String getMallReturnOrderNo() {
+        return mallReturnOrderNo;
+    }
+
+    public void setMallReturnOrderNo(String mallReturnOrderNo) {
+        this.mallReturnOrderNo = mallReturnOrderNo;
     }
 
     public Long getOuterOrderNo() {
