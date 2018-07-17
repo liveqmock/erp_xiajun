@@ -146,10 +146,7 @@ public class MallSubOrderController {
     @ResponseBody
     public Object update(MallSubOrderDO orderDO) {
         JsonResult<MallSubOrderDO> result = new JsonResult<>();
-//		ShiroUser shiroUser = this.getShiroUser();
-//		erpOrder.setUserModify(shiroUser.getLoginName());
-        orderDO.setModifier("mallSubOrderController((((");
-        orderDO.setGmtModify(new Date());
+        orderDO.update();
         orderDO.setQuantity(null);//不能修改销售数量，需要在主订单哪里修改数量
         erpOrderService.update(orderDO);
         result.setSuccess(true);
