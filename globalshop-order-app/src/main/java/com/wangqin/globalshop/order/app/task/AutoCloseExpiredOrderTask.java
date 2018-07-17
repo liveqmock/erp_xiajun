@@ -35,12 +35,11 @@ public class AutoCloseExpiredOrderTask {
     private InventoryService inventoryService;
 
     //先5分钟检查一次，后续缩小间隔到1分钟
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     @Transactional(rollbackFor = ErpCommonException.class)
     public void autoCloseExpiredOrder() {
-        mallOrderService.changeOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
         List<MallSubOrderDO> mallSubOrderDOList = mallSubOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode());
-
+        mallOrderService.changeOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
         mallSubOrderService.updateSubOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
         for (MallSubOrderDO mallSubOrderDO : mallSubOrderDOList) {
             inventoryService.tryRelease(mallSubOrderDO);
