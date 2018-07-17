@@ -408,7 +408,7 @@
             </if>
         </where>
     </select>
-    <select id="queryExpiredSubOrders" resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+    <select id="queryExpiredSubOrders" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -417,7 +417,7 @@
 
         is_del is false
         and status = #{status}
-        and <![CDATA[ gmt_create < date_sub(now(), interval '0:10:0' hour_second) ]]>
+        and <![CDATA[ gmt_create < date_sub(now(), interval #{timeOut} MINUTE ) ]]>
 
     </select>
 
@@ -428,7 +428,7 @@
          <where>
             is_del is false
              and status = #{oldStatus}
-             and <![CDATA[ gmt_create < date_sub(now(), interval '0:10:0' hour_second) ]]>
+             and <![CDATA[ gmt_create < date_sub(now(), interval #{timeOut} MINUTE ) ]]>
         </where>
     </update>
 

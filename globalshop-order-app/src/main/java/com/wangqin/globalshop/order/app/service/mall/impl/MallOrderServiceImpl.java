@@ -281,8 +281,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
 
     @Override
-    public void changeOrderStatus(Integer oldStatus, Integer newStatus) {
-        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus, newStatus);
+    public void changeOrderStatus(Integer oldStatus, Integer newStatus, Long timeOut) {
+        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus, newStatus,timeOut);
 
     }
 
@@ -328,6 +328,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         mallOrderDOMapper.updateByPrimaryKeySelective(mallOrder);
 
     }
+
 
     /***
      * 根据vo对象完善mallSubOrderDO的地址信息
