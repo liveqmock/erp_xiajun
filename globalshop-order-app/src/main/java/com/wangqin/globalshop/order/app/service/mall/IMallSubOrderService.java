@@ -60,9 +60,9 @@ public interface IMallSubOrderService {
     
     void deleteByHardSub(Long id);
 
-    List<MallSubOrderDO> queryExpiredSubOrders(Integer status);
+    List<MallSubOrderDO> queryExpiredSubOrders(Integer status, Long timeOut);
 
-    void updateSubOrderStatus(Integer orderSatutsInit, Integer orderSatutsClose);
+    void updateSubOrderStatus(Integer orderSatutsInit, Integer orderSatutsClose, Long timeOut);
 
     MallSubOrderDO selectBySubOrderNo(String subOrderNo);
 

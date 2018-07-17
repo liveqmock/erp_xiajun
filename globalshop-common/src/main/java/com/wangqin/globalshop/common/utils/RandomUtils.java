@@ -6,6 +6,6 @@ public class RandomUtils {
 
 	public static String getTimeRandom() {
 		Long currentTime = System.currentTimeMillis();
-		return currentTime.toString().substring(0,10);
-	}
+		return currentTime.toString().substring(3,13);
+}
 }
