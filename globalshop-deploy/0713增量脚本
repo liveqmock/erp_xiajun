@@ -4,3 +4,7 @@ ALTER TABLE inventory_out_manifest CHANGE `desc` remark VARCHAR(256) COMMENT '�
 ALTER TABLE `item_find`
 ADD COLUMN `brand_no` VARCHAR(16) NULL COMMENT '品牌编码' ,
 ADD COLUMN `brand_name` VARCHAR(64) NULL COMMENT '品牌名字';
+
+# mall_return_order 表添加 mall_return_order_no
+ALTER TABLE `mall_return_order`
+ADD COLUMN `mall_return_order_no` VARCHAR(64) NULL COMMENT '退单号';
