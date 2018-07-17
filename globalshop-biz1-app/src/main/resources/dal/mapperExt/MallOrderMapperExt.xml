@@ -382,10 +382,9 @@
         <where>
             is_del is false
             and status = #{oldStatus}
-            and <![CDATA[ gmt_create < date_sub(now(), interval '0:10:0' hour_second) ]]>
+            and <![CDATA[ gmt_create < SUBDATE(now(),INTERVAL #{timeOut} MINUTE)]]>
         </where>
     </update>
-
     <update id="updateUpcForErpOrder" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
 		UPDATE mall_sub_order SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_code=#{skuCode}
     </update>

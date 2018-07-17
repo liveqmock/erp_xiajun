@@ -217,7 +217,7 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     public void tryRelease(MallSubOrderDO mallSubOrderDO) {
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(),mallSubOrderDO.getCompanyNo());
         if (inventoryDO == null) {
             return;
         }

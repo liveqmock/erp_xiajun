@@ -377,13 +377,13 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    public List<MallSubOrderDO> queryExpiredSubOrders(Integer status) {
-        return mallSubOrderDOMapper.queryExpiredSubOrders(status);
+    public List<MallSubOrderDO> queryExpiredSubOrders(Integer status, Long timeOut) {
+        return mallSubOrderDOMapper.queryExpiredSubOrders(status,timeOut);
     }
 
     @Override
-    public void updateSubOrderStatus(Integer oldStatus, Integer newStatus) {
-        mallSubOrderDOMapper.updateSubOrderStatus(oldStatus, newStatus);
+    public void updateSubOrderStatus(Integer oldStatus, Integer newStatus, Long timeOut) {
+        mallSubOrderDOMapper.updateSubOrderStatus(oldStatus, newStatus,timeOut);
     }
 
     @Override
