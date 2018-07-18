@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -126,13 +127,16 @@ public class WechatLoginController {
             user.setAvatarUrl(object.getString("headimgurl"));
 
             userService.addUserByqrcode(state, user);
-            response.setStatus(420);
-//            response.setCharacterEncoding("UTF-8");
-//            ServletOutputStream out = response.getOutputStream();
+            response.setStatus(200);
+            response.setCharacterEncoding("UTF-8");
+            ServletOutputStream out = response.getOutputStream();
+            out.print("chang");
 //            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("授权成功")));
 //            response.sendRedirect(sysurl+"/#/permission/user");
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return result.buildIsSuccess(true).buildMsg("授权成功");
     }
