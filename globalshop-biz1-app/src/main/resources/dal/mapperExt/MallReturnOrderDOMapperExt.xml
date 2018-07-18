@@ -91,9 +91,12 @@
     <select id="listMallReturnOrder" resultMap="NewBaseResultMap">
         SELECT
         <include refid="New_Base_Column_List"/>
-        FROM mall_return_order AS T1
-        JOIN mall_sub_order AS T2
-        ON T1.sub_order_no = T2.sub_order_no
+        FROM
+          mall_return_order AS T1
+        LEFT JOIN
+          mall_sub_order AS T2
+        ON
+          T1.sub_order_no = T2.sub_order_no
         WHERE
         T1.company_no = #{companyNo}
         <if test="orderNo != null">
