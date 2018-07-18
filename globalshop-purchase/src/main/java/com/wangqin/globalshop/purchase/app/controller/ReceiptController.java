@@ -49,6 +49,7 @@ public class ReceiptController {
             receipt.setCompanyNo(AppUtil.getLoginUserCompanyNo());
             list = detailService.getVoList(receipt);
         } catch (Exception e) {
+            e.printStackTrace();
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
         return result.buildIsSuccess(true).buildData(list);

@@ -1,11 +1,17 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class BuyerReceiptDetailDO extends BaseModel {
     private Long id;
 
     private String skuCode;
 
     private String itemCode;
+
+    private String itemName;
 
     private Double price;
 
@@ -31,6 +37,12 @@ public class BuyerReceiptDetailDO extends BaseModel {
 
     private Integer batchNum;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startGmtCreate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endGmtCreate;
+
     public Long getId() {
         return id;
     }
@@ -53,6 +65,14 @@ public class BuyerReceiptDetailDO extends BaseModel {
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode == null ? null : itemCode.trim();
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public Double getPrice() {
@@ -149,5 +169,21 @@ public class BuyerReceiptDetailDO extends BaseModel {
 
     public void setBatchNum(Integer batchNum) {
         this.batchNum = batchNum;
+    }
+
+    public Date getStartGmtCreate() {
+        return startGmtCreate;
+    }
+
+    public void setStartGmtCreate(Date startGmtCreate) {
+        this.startGmtCreate = startGmtCreate;
+    }
+
+    public Date getEndGmtCreate() {
+        return endGmtCreate;
+    }
+
+    public void setEndGmtCreate(Date endGmtCreate) {
+        this.endGmtCreate = endGmtCreate;
     }
 }
