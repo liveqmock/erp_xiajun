@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -127,15 +128,8 @@ public class WechatLoginController {
             user.setAvatarUrl(object.getString("headimgurl"));
 
             userService.addUserByqrcode(state, user);
-            response.setStatus(302);
-            response.setCharacterEncoding("UTF-8");
-            ServletOutputStream out = response.getOutputStream();
-//            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("授权成功")));
-//            response.sendRedirect(sysurl+"/#/permission/user");
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return result.buildIsSuccess(true).buildMsg("授权成功");
     }
@@ -241,9 +235,15 @@ public class WechatLoginController {
      * @return
      */
     @RequestMapping("/getHtml")
+    @Authenticated
     public void getImgHtml(HttpServletResponse response) {
-        String baseUrl = sysurl + "/wechatLogin/authorized";
+        String baseUrl = sysurl + "/#/permission/test";
         try {
+            String companyNo = AppUtil.getLoginUserCompanyNo();
+            if (StringUtils.isBlank(companyNo)){
+                response.setStatus(302);
+                return;
+            }
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
             String str = "<!DOCTYPE html>\n" +
@@ -263,7 +263,7 @@ public class WechatLoginController {
                     "          appid: \"" + appid + "\",\n" +
                     "          scope: \"snsapi_login\",//写死\n" +
                     "          redirect_uri: '" + baseUrl + "',\n" +
-                    "          state: \"" + AppUtil.getLoginUserCompanyNo() + "\",\n" +
+                    "          state: \"" + companyNo + "\",\n" +
                     "          style: \"black\",\n" +
                     "      });\n" +
                     "    </script>\n" +

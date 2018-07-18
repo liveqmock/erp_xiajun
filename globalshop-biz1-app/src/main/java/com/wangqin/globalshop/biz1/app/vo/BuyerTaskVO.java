@@ -8,9 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 public class BuyerTaskVO extends BuyerTaskDO{
-	/**买手ID*/
-	private Long buyerId;
-	
 	private String itemName;
 	
 	private String buySite;
@@ -29,7 +26,40 @@ public class BuyerTaskVO extends BuyerTaskDO{
     private Date taskStartTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date taskEndTime;
-    private String taskTitle;
+
+	/**
+	 * 任务单号
+	 */
+	private String taskOrderNo;
+	/**
+	 * 任务名称
+	 */
+	private String taskTitle;
+	/**
+	 * 买手 ID
+	 */
+	private Long buyerId;
+	/**
+	 * 买手名称
+	 */
+	private String buyerName;
+	/**
+	 * 开始时间范围
+	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date taskStart1;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date taskStart2;
+
+	/**
+	 * 结束时间范围
+	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date taskEnd1;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date taskEnd2;
 
     private List<BuyerTaskDetailDO> taskDetailList;
 
@@ -45,6 +75,16 @@ public class BuyerTaskVO extends BuyerTaskDO{
 
 	public void setBuyerId(Long buyerId) {
 		this.buyerId = buyerId;
+	}
+
+	@Override
+	public String getBuyerName() {
+		return buyerName;
+	}
+
+	@Override
+	public void setBuyerName(String buyerName) {
+		this.buyerName = buyerName;
 	}
 
 	public String getItemName() {
@@ -142,5 +182,44 @@ public class BuyerTaskVO extends BuyerTaskDO{
 	public void setSkuPicUrl(String skuPicUrl) {
 		this.skuPicUrl = skuPicUrl;
 	}
-	
+
+	public String getTaskOrderNo() {
+		return taskOrderNo;
+	}
+
+	public void setTaskOrderNo(String taskOrderNo) {
+		this.taskOrderNo = taskOrderNo;
+	}
+
+	public Date getTaskStart1() {
+		return taskStart1;
+	}
+
+	public void setTaskStart1(Date taskStart1) {
+		this.taskStart1 = taskStart1;
+	}
+
+	public Date getTaskStart2() {
+		return taskStart2;
+	}
+
+	public void setTaskStart2(Date taskStart2) {
+		this.taskStart2 = taskStart2;
+	}
+
+	public Date getTaskEnd1() {
+		return taskEnd1;
+	}
+
+	public void setTaskEnd1(Date taskEnd1) {
+		this.taskEnd1 = taskEnd1;
+	}
+
+	public Date getTaskEnd2() {
+		return taskEnd2;
+	}
+
+	public void setTaskEnd2(Date taskEnd2) {
+		this.taskEnd2 = taskEnd2;
+	}
 }

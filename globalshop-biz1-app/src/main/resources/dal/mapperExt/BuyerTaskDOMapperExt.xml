@@ -26,16 +26,38 @@
     <select id="list" resultMap="BaseResultMap"
             parameterType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">
         SELECT
-        buyer_task.*, buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
+            buyer_task.*, buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
         FROM 
-        buyer_task,buyer_task_detail
+            buyer_task
+        LEFT JOIN buyer_task_detail
+        ON  buyer_task.buyer_task_no = buyer_task_detail.buyer_task_no
         WHERE
-        buyer_task.company_no = #{companyNo}
-        AND
-        buyer_task.buyer_task_no = buyer_task_detail.buyer_task_no
+            buyer_task.company_no = #{companyNo}
         <if test="buyerOpenId != null">
             AND buyer_task.buyer_open_id = #{buyerOpenId}
         </if>
+        <if test="taskOrderNo != null">
+            AND buyer_task.buyer_task_no = #{taskOrderNo}
+        </if>
+        <if test="taskTitle != null">
+            AND buyer_task.title = #{taskTitle}
+        </if>
+        <if test="taskStart1 != null">
+            AND buyer_task_detail.start_time &gt;= #{taskStart1}
+        </if>
+        <if test="taskStart2 != null">
+            AND buyer_task_detail.start_time &lt;= #{taskStart2}
+        </if>
+        <if test="taskEnd1 != null">
+            AND buyer_task_detail.end_time &gt;= #{taskEnd1}
+        </if>
+        <if test="taskEnd2 != null">
+            AND buyer_task_detail.end_time &lt;= #{taskEnd2}
+        </if>
+        <if test="buyerName != null">
+            AND buyer_task_detail.buyer_name = #{buyerName}
+        </if>
+        ORDER BY buyer_task_detail.start_time DESC
     </select>
 
     <select id="selectVoById" resultMap="BaseResultMap">
