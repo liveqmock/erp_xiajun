@@ -93,7 +93,8 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public List<MallReturnOrderDO> selectByCondition(String orderNo, String startGmtCreate, String endGmtCreate) {
 
-        List<MallReturnOrderDO> list = mapper.selectByCondition(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
-        return list;
+//        List<MallReturnOrderDO> mallReturnOrderDOList = mapper.selectByCondition(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
+        List<MallReturnOrderDO> mallReturnOrderDOList = mapper.listMallReturnOrder(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
+        return mallReturnOrderDOList;
     }
 }

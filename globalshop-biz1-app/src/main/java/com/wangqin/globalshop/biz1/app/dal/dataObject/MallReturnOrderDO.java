@@ -49,6 +49,17 @@ public class MallReturnOrderDO extends BaseModel {
 
     private String companyNo;
 
+    /**
+     * 以下字段为售后订单展示准备
+     */
+    private String skuCode;
+
+    private String skuPic;
+
+    private String itemName;
+
+    private String upc;
+
     public Long getId() {
         return id;
     }
@@ -62,7 +73,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+        this.orderNo = orderNo;
     }
 
     public Long getOuterOrderNo() {
@@ -78,7 +89,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setSubOrderNo(String subOrderNo) {
-        this.subOrderNo = subOrderNo == null ? null : subOrderNo.trim();
+        this.subOrderNo = subOrderNo;
     }
 
     public Byte getStatus() {
@@ -94,7 +105,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setReturnReason(String returnReason) {
-        this.returnReason = returnReason == null ? null : returnReason.trim();
+        this.returnReason = returnReason;
     }
 
     public String getReturnReasonDetail() {
@@ -102,7 +113,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setReturnReasonDetail(String returnReasonDetail) {
-        this.returnReasonDetail = returnReasonDetail == null ? null : returnReasonDetail.trim();
+        this.returnReasonDetail = returnReasonDetail;
     }
 
     public Integer getReturnQuantity() {
@@ -142,7 +153,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setCustomerOpenId(String customerOpenId) {
-        this.customerOpenId = customerOpenId == null ? null : customerOpenId.trim();
+        this.customerOpenId = customerOpenId;
     }
 
     public String getTelephone() {
@@ -150,7 +161,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setTelephone(String telephone) {
-        this.telephone = telephone == null ? null : telephone.trim();
+        this.telephone = telephone;
     }
 
     public Date getReceiveTime() {
@@ -174,7 +185,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
     public Integer getReturnRefer() {
@@ -190,7 +201,7 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setProofImg(String proofImg) {
-        this.proofImg = proofImg == null ? null : proofImg.trim();
+        this.proofImg = proofImg;
     }
 
     public Integer getReturnType() {
@@ -205,16 +216,18 @@ public class MallReturnOrderDO extends BaseModel {
         return modifier;
     }
 
+    @Override
     public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+        this.modifier = modifier;
     }
 
     public String getCreator() {
         return creator;
     }
 
+    @Override
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
 
     public String getMallReturnOrderNo() {
@@ -222,14 +235,47 @@ public class MallReturnOrderDO extends BaseModel {
     }
 
     public void setMallReturnOrderNo(String mallReturnOrderNo) {
-        this.mallReturnOrderNo = mallReturnOrderNo == null ? null : mallReturnOrderNo.trim();
+        this.mallReturnOrderNo = mallReturnOrderNo;
     }
 
     public String getCompanyNo() {
         return companyNo;
     }
 
+    @Override
     public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo == null ? null : companyNo.trim();
+        this.companyNo = companyNo;
+    }
+
+    public String getSkuCode() {
+        return skuCode;
+    }
+
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
+
+    public String getSkuPic() {
+        return skuPic;
+    }
+
+    public void setSkuPic(String skuPic) {
+        this.skuPic = skuPic;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getUpc() {
+        return upc;
+    }
+
+    public void setUpc(String upc) {
+        this.upc = upc;
     }
 }
