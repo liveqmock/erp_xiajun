@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -128,15 +126,13 @@ public class WechatLoginController {
             user.setAvatarUrl(object.getString("headimgurl"));
 
             userService.addUserByqrcode(state, user);
-            response.setStatus(200);
-            response.setCharacterEncoding("UTF-8");
-            ServletOutputStream out = response.getOutputStream();
-            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("授权成功")));
-            response.sendRedirect(sysurl+"/#/permission/user");
+            response.setStatus(420);
+//            response.setCharacterEncoding("UTF-8");
+//            ServletOutputStream out = response.getOutputStream();
+//            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("授权成功")));
+//            response.sendRedirect(sysurl+"/#/permission/user");
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return result.buildIsSuccess(true).buildMsg("授权成功");
     }
