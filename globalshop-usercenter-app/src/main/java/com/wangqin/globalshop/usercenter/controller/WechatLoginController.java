@@ -244,7 +244,7 @@ public class WechatLoginController {
     @RequestMapping("/getHtml")
     @Authenticated
     public void getImgHtml(HttpServletResponse response) {
-        String baseUrl = sysurl + "/#/permission/user";
+        String baseUrl = sysurl + "/wechatLogin/authorized";
         try {
             String companyNo = AppUtil.getLoginUserCompanyNo();
             if (StringUtils.isBlank(companyNo)){
