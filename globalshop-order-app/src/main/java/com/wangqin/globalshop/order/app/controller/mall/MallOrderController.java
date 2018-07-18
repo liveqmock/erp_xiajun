@@ -261,8 +261,7 @@ public class MallOrderController {
         JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();
         try {
             if (orderNo != null) {
-                //查询未关闭子订单备货情况
-                List<MallSubOrderDO> erpOrders = mallSubOrderService.selectUnClosedByOrderNo(orderNo);
+                List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(orderNo);
                 for (MallSubOrderDO mallSubOrder : erpOrders) {
                     mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
                 }
