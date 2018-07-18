@@ -84,11 +84,6 @@ public class InventoryController {
     @ResponseBody
     public Object queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
         JsonResult<List<InventoryOnWarehouseVO>> result = new JsonResult<>();
-//        try {
-//            if (StringUtil.isNotBlank(inventoryQueryVO.getBuySite())) {
-//                String orderBy = Underline2Camel.camel2Underline(inventoryQueryVO.getBuySite());
-//                inventoryQueryVO.setBuySite(orderBy);
-//            }
         List<InventoryOnWarehouseVO> list = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
         /**查规格**/
         for (InventoryOnWarehouseVO inv : list) {
@@ -107,10 +102,6 @@ public class InventoryController {
         }
         result.buildData(list);
         result.buildIsSuccess(true);
-
-//        } catch (Exception e) {
-//            result.buildIsSuccess(false);
-//        }
         return result;
     }
 

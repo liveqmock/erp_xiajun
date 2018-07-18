@@ -352,6 +352,7 @@
                 and inv.upc = #{upc}
             </if>
         </where>
+        ORDER BY inv.gmt_create DESC
     </select>
     <select id="getINvOnWarehouseListOfShip"
             resultMap="BaseResultMap">

@@ -122,6 +122,7 @@
                 and shelf_no = #{shelfNo}
             </if>
         </where>
+        ORDER BY gmt_create DESC
     </select>
 
     <!-- 查询 入库商品数,XiaJun-->

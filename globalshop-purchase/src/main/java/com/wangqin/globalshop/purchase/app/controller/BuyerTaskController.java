@@ -62,13 +62,13 @@ public class BuyerTaskController {
     @PostMapping("/queryTaskDailyList")
     public Object queryTaskDailyList(BuyerTaskVO buyerTaskVO) {
         JsonResult<List<BuyerTaskVO>> result = new JsonResult<>();
-        List<BuyerTaskVO> list = null;
+        List<BuyerTaskVO> buyerTaskList = null;
         try {
-            list = buyerTaskService.list(buyerTaskVO);
+            buyerTaskList = buyerTaskService.list(buyerTaskVO);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
-        return result.buildData(list).buildIsSuccess(true);
+        return result.buildData(buyerTaskList).buildIsSuccess(true);
     }
 
     /**

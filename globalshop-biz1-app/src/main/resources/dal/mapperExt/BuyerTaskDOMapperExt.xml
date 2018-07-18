@@ -57,6 +57,7 @@
         <if test="buyerName != null">
             AND buyer_task_detail.buyer_name = #{buyerName}
         </if>
+        ORDER BY buyer_task_detail.start_time DESC
     </select>
 
     <select id="selectVoById" resultMap="BaseResultMap">
