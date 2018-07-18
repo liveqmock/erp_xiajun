@@ -29,7 +29,19 @@
     FROM buyer_receipt_detail
     WHERE
     company_no=#{companyNo}
-    and is_del = 0
+    <if test="receiptNo != null">
+      AND receipt_no = #{receiptNo}
+    </if>
+    <if test="upc != null">
+      AND upc = #{upc}
+    </if>
+    <if test="skuCode != null">
+      AND sku_code = #{skuCode}
+    </if>
+    <if test="skuBuysite != null">
+      AND sku_buysite = #{skuBuysite}
+    </if>
+    AND is_del = 0
     ORDER BY gmt_create desc
   </select>
 </mapper>
