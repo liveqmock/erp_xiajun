@@ -131,7 +131,7 @@ public class WechatLoginController {
             response.setStatus(200);
             response.setCharacterEncoding("UTF-8");
             ServletOutputStream out = response.getOutputStream();
-            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("添加成功")));
+            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("授权成功")));
             response.sendRedirect(sysurl+"/#/permission/user");
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
