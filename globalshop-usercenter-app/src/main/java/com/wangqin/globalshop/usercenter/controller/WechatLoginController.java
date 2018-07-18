@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -93,41 +94,48 @@ public class WechatLoginController {
     }
 
     @RequestMapping("/authorized")
-    public Object authorized(String code, String state) {
+    public Object authorized(String code, String state, HttpServletResponse response) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
-
-        /**获取openId和token*/
-        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
-                null, "2");
-        /**如果相应包含errcode  表示请求失败*/
-        if (o.containsKey("errcode")) {
-            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
-        }
-        String unionid = o.getString("unionid");
-        List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid, state);
-        if (hasAuthUser(list, state)) {
-            return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
-        }
-
-        String openid = o.getString("openid");
-        String accessToken = o.getString("access_token");
-        /**根据token获取用户的信息*/
-        JSONObject object = HttpClientUtil.post("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null,
-                null, "2");
-        WxUserDO user = new WxUserDO();
-        user.setCompanyNo(state);
-        user.setGender(Integer.valueOf(object.getString("sex")));
-        user.setNickName(object.getString("nickname"));
-        user.setProvince(object.getString("province"));
-        user.setCity(object.getString("city"));
-        user.setCountry(object.getString("country"));
-        user.setOpenId(openid);
-        user.setUnionId(unionid);
-        user.setAvatarUrl(object.getString("headimgurl"));
         try {
+            /**获取openId和token*/
+            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
+                    null, "2");
+            /**如果相应包含errcode  表示请求失败*/
+            if (o.containsKey("errcode")) {
+                return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+            }
+            String unionid = o.getString("unionid");
+            List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid, state);
+            if (hasAuthUser(list, state)) {
+                return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
+            }
+
+            String openid = o.getString("openid");
+            String accessToken = o.getString("access_token");
+            /**根据token获取用户的信息*/
+            JSONObject object = HttpClientUtil.post("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null,
+                    null, "2");
+            WxUserDO user = new WxUserDO();
+            user.setCompanyNo(state);
+            user.setGender(Integer.valueOf(object.getString("sex")));
+            user.setNickName(object.getString("nickname"));
+            user.setProvince(object.getString("province"));
+            user.setCity(object.getString("city"));
+            user.setCountry(object.getString("country"));
+            user.setOpenId(openid);
+            user.setUnionId(unionid);
+            user.setAvatarUrl(object.getString("headimgurl"));
+
             userService.addUserByqrcode(state, user);
-        } catch (ErpCommonException e){
+            response.setStatus(302);
+            response.setCharacterEncoding("UTF-8");
+            ServletOutputStream out = response.getOutputStream();
+//            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("授权成功")));
+//            response.sendRedirect(sysurl+"/#/permission/user");
+        } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return result.buildIsSuccess(true).buildMsg("授权成功");
     }

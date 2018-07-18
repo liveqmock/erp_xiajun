@@ -112,4 +112,13 @@
             and is_del is false
     </select>
 
+    <select id="deleteByTaskNo">
+        delete from
+             buyer_task_detail
+        WHERE
+             buyer_task_no = #{buyerTaskNo}
+         and company_no = #{companyNo}
+    </select>
+
+
 </mapper>
