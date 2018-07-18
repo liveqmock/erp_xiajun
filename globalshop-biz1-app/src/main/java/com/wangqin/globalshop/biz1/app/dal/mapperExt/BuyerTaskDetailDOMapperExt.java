@@ -16,7 +16,5 @@ public interface BuyerTaskDetailDOMapperExt extends BuyerTaskDetailDOMapper {
 
     List<BuyerTaskDetailDO> taskDailyByTaskNo(@Param("buyerTaskNo") String buyerTaskNo);
 
-
-
-
+	void deleteByTaskNo(@Param("buyerTaskNo") String buyerTaskNo, @Param("companyNo") String companyNo);
 }

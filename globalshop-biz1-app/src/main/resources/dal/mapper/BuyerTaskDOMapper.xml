@@ -11,17 +11,17 @@
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
     <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
     <result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT" />
     <result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_task_no, title, owner_no, company_no, remark, start_time, end_time, status, 
-    buyer_open_id, buyer_name, purchase_commission_mode, purchase_commission_str, creator, 
-    modifier
+    buyer_name, purchase_commission_mode, purchase_commission_str, buyer_open_id, modifier, 
+    creator
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -39,14 +39,16 @@
     </selectKey>
     insert into buyer_task (buyer_task_no, title, owner_no, 
       company_no, remark, start_time, 
-      end_time, status, buyer_open_id, 
-      buyer_name, purchase_commission_mode, purchase_commission_str, 
-      creator, modifier)
+      end_time, status, buyer_name, 
+      purchase_commission_mode, purchase_commission_str, 
+      buyer_open_id, modifier, creator
+      )
     values (#{buyerTaskNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{ownerNo,jdbcType=VARCHAR}, 
       #{companyNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{buyerOpenId,jdbcType=VARCHAR}, 
-      #{buyerName,jdbcType=VARCHAR}, #{purchaseCommissionMode,jdbcType=BIGINT}, #{purchaseCommissionStr,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+      #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{buyerName,jdbcType=VARCHAR}, 
+      #{purchaseCommissionMode,jdbcType=BIGINT}, #{purchaseCommissionStr,jdbcType=VARCHAR}, 
+      #{buyerOpenId,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -78,9 +80,6 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="buyerOpenId != null" >
-        buyer_open_id,
-      </if>
       <if test="buyerName != null" >
         buyer_name,
       </if>
@@ -90,11 +89,14 @@
       <if test="purchaseCommissionStr != null" >
         purchase_commission_str,
       </if>
-      <if test="creator != null" >
-        creator,
+      <if test="buyerOpenId != null" >
+        buyer_open_id,
       </if>
       <if test="modifier != null" >
         modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -122,9 +124,6 @@
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="buyerOpenId != null" >
-        #{buyerOpenId,jdbcType=VARCHAR},
-      </if>
       <if test="buyerName != null" >
         #{buyerName,jdbcType=VARCHAR},
       </if>
@@ -134,11 +133,14 @@
       <if test="purchaseCommissionStr != null" >
         #{purchaseCommissionStr,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null" >
-        #{creator,jdbcType=VARCHAR},
+      <if test="buyerOpenId != null" >
+        #{buyerOpenId,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -169,9 +171,6 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="buyerOpenId != null" >
-        buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
-      </if>
       <if test="buyerName != null" >
         buyer_name = #{buyerName,jdbcType=VARCHAR},
       </if>
@@ -181,11 +180,14 @@
       <if test="purchaseCommissionStr != null" >
         purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null" >
-        creator = #{creator,jdbcType=VARCHAR},
+      <if test="buyerOpenId != null" >
+        buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -200,12 +202,12 @@
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
-      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       buyer_name = #{buyerName,jdbcType=VARCHAR},
       purchase_commission_mode = #{purchaseCommissionMode,jdbcType=BIGINT},
       purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

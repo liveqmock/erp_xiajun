@@ -15,11 +15,11 @@ import java.util.Date;
 public class ItemTask {
     private String skucode;
     private Long buyerId;
-    private BigDecimal taskPrice;
-    private BigDecimal taskMaxPrice;
+    private BigDecimal price;
+    private BigDecimal maxPrice;
     private Byte mode;
     private Integer count;
-    private Integer taskMaxCount;
+    private Integer maxCount;
     private String color;
     private String scaleInt;
     private String remark;
