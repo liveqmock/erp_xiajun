@@ -663,6 +663,7 @@
                	 AND
                	 t1.sku_code = #{skuCode}
                </if>
+        ORDER BY t1.order_time DESC
     </select>
 
     <!-- -->
