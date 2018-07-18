@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -241,9 +242,15 @@ public class WechatLoginController {
      * @return
      */
     @RequestMapping("/getHtml")
+    @Authenticated
     public void getImgHtml(HttpServletResponse response) {
-        String baseUrl = sysurl + "/wechatLogin/authorized";
+        String baseUrl = sysurl + "/#/permission/user";
         try {
+            String companyNo = AppUtil.getLoginUserCompanyNo();
+            if (StringUtils.isBlank(companyNo)){
+                response.setStatus(302);
+                return;
+            }
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
             String str = "<!DOCTYPE html>\n" +
@@ -263,7 +270,7 @@ public class WechatLoginController {
                     "          appid: \"" + appid + "\",\n" +
                     "          scope: \"snsapi_login\",//写死\n" +
                     "          redirect_uri: '" + baseUrl + "',\n" +
-                    "          state: \"" + AppUtil.getLoginUserCompanyNo() + "\",\n" +
+                    "          state: \"" + companyNo + "\",\n" +
                     "          style: \"black\",\n" +
                     "      });\n" +
                     "    </script>\n" +
