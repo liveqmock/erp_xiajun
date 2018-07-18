@@ -52,8 +52,8 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
 
     @Override
-    public List<MallSubOrderDO> selectByOrderNo(String mainId) {
-        return mallSubOrderDOMapper.selectByOrderNo(mainId);
+    public List<MallSubOrderDO> selectByOrderNo(String orderNo) {
+        return mallSubOrderDOMapper.selectByOrderNo(orderNo);
     }
 
     @Override
