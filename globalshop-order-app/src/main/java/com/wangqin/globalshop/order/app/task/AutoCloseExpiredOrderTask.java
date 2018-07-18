@@ -22,6 +22,7 @@ import java.util.List;
 @Component
 public class AutoCloseExpiredOrderTask {
 
+    public static final long DEFAULT_TIME_OUT_IN_MINUTE = 10L;
     //	protected Logger logger = LogManager.getLogger(getClass());
     @Value("#{sys.CLOSE_TASK_TIME_OUT}")
     private Long timeOut;
@@ -41,7 +42,7 @@ public class AutoCloseExpiredOrderTask {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void autoCloseExpiredOrder() {
         /**十分钟*/
-        timeOut = timeOut == null ? 10L : timeOut;
+        timeOut = timeOut == null ? DEFAULT_TIME_OUT_IN_MINUTE : timeOut;
         List<MallSubOrderDO> mallSubOrderDOList = mallSubOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode(), timeOut);
         mallOrderService.changeOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode(), timeOut);
 
