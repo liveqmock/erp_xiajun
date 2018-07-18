@@ -11,5 +11,10 @@ public interface MallReturnOrderDOMapperExt extends MallReturnOrderDOMapper {
     List<MallReturnOrderDO> selectByCondition(@Param("orderNo") String orderNo,
                                               @Param("startGmtCreateDate") String startGmtCreateDate,
                                               @Param("endGmtCreateDate") String endGmtCreateDate,
-                                              @Param("companyNo")String loginUserCompanyNo);
+                                              @Param("companyNo") String loginUserCompanyNo);
+
+    List<MallReturnOrderDO> listMallReturnOrder(@Param("orderNo") String orderNo,
+                                                @Param("startGmtCreateDate") String startGmtCreateDate,
+                                                @Param("endGmtCreateDate") String endGmtCreateDate,
+                                                @Param("companyNo") String loginUserCompanyNo);
 }

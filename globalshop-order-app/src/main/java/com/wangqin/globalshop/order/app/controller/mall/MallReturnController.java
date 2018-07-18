@@ -30,10 +30,7 @@ public class MallReturnController {
 
     @PostMapping("/index")
     @ResponseBody
-    public Object index(
-            @RequestParam(value = "orderNo", required = false) String orderNo,
-            @RequestParam(value = "startGmtCreate", required = false) String startGmtCreate,
-            @RequestParam(value = "endGmtCreate", required = false) String endGmtCreate) {
+    public Object index(String orderNo, String startGmtCreate, String endGmtCreate) {
         JsonResult<List<MallReturnOrderDO>> result = new JsonResult<>();
 
         try {
@@ -64,8 +61,6 @@ public class MallReturnController {
         result.setSuccess(true);
         return result;
     }
-
-
 
 
 }
