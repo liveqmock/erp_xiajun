@@ -127,10 +127,9 @@ public class WechatLoginController {
             user.setAvatarUrl(object.getString("headimgurl"));
 
             userService.addUserByqrcode(state, user);
-            response.setStatus(200);
+            response.setStatus(302);
             response.setCharacterEncoding("UTF-8");
             ServletOutputStream out = response.getOutputStream();
-            out.print("chang");
 //            out.print(JSON.toJSONString(result.buildIsSuccess(true).buildMsg("授权成功")));
 //            response.sendRedirect(sysurl+"/#/permission/user");
         } catch (ErpCommonException e) {
