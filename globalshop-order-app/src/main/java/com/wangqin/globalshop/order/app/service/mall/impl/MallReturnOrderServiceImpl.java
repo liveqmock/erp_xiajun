@@ -9,19 +9,15 @@ import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.order.app.comm.Constant;
 import com.wangqin.globalshop.order.app.service.mall.IMallReturnOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -32,7 +28,7 @@ import java.util.List;
 @Service
 public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     @Autowired
-    private MallReturnOrderDOMapperExt mapper;
+    private MallReturnOrderDOMapperExt mallReturnOrderDOMapper;
     @Autowired
     private MallSubOrderMapperExt mallSubOrderMapper;
     @Autowired
@@ -44,8 +40,6 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(MallReturnOrderVO erpReturnOrder) {
-
-        // TODO: 前端没有传 subOrderNo 字段，导致添加时 sub_order_no 字段为空
 
         if (erpReturnOrder.getErpOrderId() == null) {
             new ErpCommonException("ErpCommonException");
@@ -81,7 +75,7 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
         if (orderDO.getQuantity() < erpReturnOrder.getReturnQuantity()) {
             throw new ErpCommonException("退货的数目大于订单数目,请确认后重新操作");
         }
-        mapper.insertSelective(erpReturnOrder);
+        mallReturnOrderDOMapper.insertSelective(erpReturnOrder);
 //        //判断是否要入库
 //        if (erpReturnOrder.getIsCheckin() == 1) {
 //            //退货
@@ -90,11 +84,25 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     }
 
     @Override
+    public void update(MallReturnOrderVO erpReturnOrder) {
+        mallReturnOrderDOMapper.updateByMallReturnOrderNo(erpReturnOrder);
+    }
+
+
+    @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public List<MallReturnOrderDO> selectByCondition(String orderNo, String startGmtCreate, String endGmtCreate) {
 
-//        List<MallReturnOrderDO> mallReturnOrderDOList = mapper.selectByCondition(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
-        List<MallReturnOrderDO> mallReturnOrderDOList = mapper.listMallReturnOrder(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
+//        List<MallReturnOrderDO> mallReturnOrderDOList =
+//                  mallReturnOrderDOMapper.selectByCondition(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
+        List<MallReturnOrderDO> mallReturnOrderDOList =
+                mallReturnOrderDOMapper.listMallReturnOrder(orderNo, startGmtCreate, endGmtCreate, AppUtil.getLoginUserCompanyNo());
         return mallReturnOrderDOList;
+    }
+
+    @Override
+    public MallReturnOrderDO getByMallReturnOrderNo(String mallReturnOrderNo) {
+
+        return mallReturnOrderDOMapper.getByMallReturnOrderNo(mallReturnOrderNo);
     }
 }
