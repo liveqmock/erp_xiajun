@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.DealerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.TaskPurchaseVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.BuyerTaskDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,6 @@ public interface BuyerTaskDOMapperExt extends BuyerTaskDOMapper {
 
     void insertBatch(List<BuyerTaskDO> taskList);
 
-    BuyerTaskVO selectVoById(Long id);
+    BuyerTaskDO selectVoById(Long id);
 
 }

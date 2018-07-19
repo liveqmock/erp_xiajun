@@ -201,9 +201,31 @@
         FROM shipping_order
         WHERE  logistic_no=#{logisticNo}
     </select>
+    <select id="selectByLogisticNoIsNotNull" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE  logistic_no IS NOT NULL
+    </select>
+    <select id="selectInOneMonth" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_order
+        WHERE  logistic_no IS NOT NULL AND gmt_create > DATE_SUB(now(),INTERVAL 30 DAY)
+    </select>
 
     <update id="updateStatusByShippingNo" parameterType="java.lang.String">
         UPDATE shipping_order SET status=2 WHERE logistic_no=#{logisticNo}
     </update>
+
+    <select id="listByLogisticCompany" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            shipping_order
+        WHERE
+            status = 2
+            AND logistic_company = #{logisticCompany}
+    </select>
 
 </mapper>

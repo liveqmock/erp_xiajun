@@ -95,16 +95,16 @@ public class MallSubOrderController {
 
     /**
      * 退单
-     * @param orderNumber
+     * @param subOrderNo
      * @return
      */
     @PostMapping("/return")
     @ResponseBody
-    public Object returnOrder(String orderNumber) {
+    public Object returnOrder(String subOrderNo) {
         JsonResult<MallSubOrderDO> result = new JsonResult<>();
         try {
 
-            erpOrderService.returns(orderNumber);
+            erpOrderService.returns(subOrderNo);
 
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
@@ -189,7 +189,7 @@ public class MallSubOrderController {
                             errorMsg.add("只允许修改待付款单的订单");
                         }
                     } else {
-                        errorMsg.add("id" + orderId + "状态不为代付款状态,不允许关闭");
+                        errorMsg.add("id" + orderId + "状态不为待付款状态,不允许关闭");
                     }
                 }
 

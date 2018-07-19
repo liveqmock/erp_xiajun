@@ -1,12 +1,15 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.google.common.collect.Maps;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderReturnStatus;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
@@ -44,11 +47,13 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     private MallOrderMapperExt mallOrderMapper;
     @Autowired
     private OrderInventoryBookingRecordService inventoryRecordService;
+    @Autowired
+    private MallReturnOrderDOMapperExt returnOrderDOMapper;
 
 
     @Override
-    public List<MallSubOrderDO> selectByOrderNo(String mainId) {
-        return mallSubOrderDOMapper.selectByOrderNo(mainId);
+    public List<MallSubOrderDO> selectByOrderNo(String orderNo) {
+        return mallSubOrderDOMapper.selectByOrderNo(orderNo);
     }
 
     @Override
@@ -377,13 +382,13 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     }
 
     @Override
-    public List<MallSubOrderDO> queryExpiredSubOrders(Integer status) {
-        return mallSubOrderDOMapper.queryExpiredSubOrders(status);
+    public List<MallSubOrderDO> queryExpiredSubOrders(Integer status, Long timeOut) {
+        return mallSubOrderDOMapper.queryExpiredSubOrders(status,timeOut);
     }
 
     @Override
-    public void updateSubOrderStatus(Integer oldStatus, Integer newStatus) {
-        mallSubOrderDOMapper.updateSubOrderStatus(oldStatus, newStatus);
+    public void updateSubOrderStatus(Integer oldStatus, Integer newStatus, Long timeOut) {
+        mallSubOrderDOMapper.updateSubOrderStatus(oldStatus, newStatus,timeOut);
     }
 
     @Override
@@ -406,6 +411,35 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
         mallSubOrderDOMapper.updateByPrimaryKeySelective(mallSubOrder);
         mallOrderMapper.updateByPrimaryKeySelective(mallOrder);
         inventoryService.release(mallSubOrder);
+        MallReturnOrderDO returnOrder = new MallReturnOrderDO();
+        returnOrder.init();
+        returnOrder.setOrderNo(mallOrder.getOrderNo());
+        returnOrder.setCustomerOpenId(mallOrder.getOpenId());
+        returnOrder.setIsCheckin((byte) 1);
+        returnOrder.setMallReturnOrderNo(CodeGenUtil.getMallReturnOrderNo());
+        returnOrder.setSubOrderNo(mallSubOrder.getSubOrderNo());
+        returnOrder.setStatus((byte) OrderReturnStatus.RECEIVE.getCode());
+        returnOrder.setReturnQuantity(mallSubOrder.getQuantity());
+        returnOrder.setReturnPrice(mallSubOrder.getSalePrice());
+        returnOrder.setTelephone(mallSubOrder.getTelephone());
+        returnOrder.setReturnReason("其他");
+        returnOrder.setReturnReasonDetail("未发货的订单直接取消订单");
+        String channelNo = mallOrder.getChannelNo();
+        returnOrder.setReturnRefer("102".equals(channelNo)?1:0);
+//        （0直接退款;1既退货又退款
+        returnOrder.setReturnType(1);
+        returnOrderDOMapper.insertSelective(returnOrder);
+
+    }
+
+    @Override
+    public MallSubOrderDO getByShippingNo(String shippingNo) {
+        return mallSubOrderDOMapper.getByShippingNo(shippingNo);
+    }
+
+    @Override
+    public void deleteByOrderNo(String orderNo) {
+        mallSubOrderDOMapper.deleteByOrderNo(orderNo);
     }
 
     private int getMallOrderStatus(List<MallSubOrderDO> list) {

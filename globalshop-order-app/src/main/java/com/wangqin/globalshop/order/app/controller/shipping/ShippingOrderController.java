@@ -77,86 +77,28 @@ public class ShippingOrderController {
 
     @RequestMapping("/query")
     @ResponseBody
-    /**
-     * @param shippingOrderDo 前台界面传输过来的
-     */
     public Object query(ShippingOrderVO shippingOrderVO) {
         JsonResult<List<ShippingOrderDO>> result = new JsonResult<>();
-        if (shippingOrderVO.getStartOrderTime() != null) {
-            String startOrderTimeStr = DateUtil.ymdFormat(shippingOrderVO.getStartOrderTime());
-            Date startOrderTime = DateUtil.parseDate(startOrderTimeStr + " 00:00:00");
-            shippingOrderVO.setStartOrderTime(startOrderTime);
+        try {
+            List<ShippingOrderDO> list = shippingOrderService.queryShippingOrders(shippingOrderVO);
+            result.buildData(list);
+            result.setSuccess(true);
+        } catch (ErpCommonException e) {
+            result.buildMsg(e.getErrorMsg());
+            result.buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("未知异常");
+            result.buildIsSuccess(false);
         }
-        if (shippingOrderVO.getEndOrderTime() != null) {
-            String endOrderTimeStr = DateUtil.ymdFormat(shippingOrderVO.getEndOrderTime());
-            Date endOrderTime = DateUtil.parseDate(endOrderTimeStr + " 23:59:59");
-            shippingOrderVO.setEndOrderTime(endOrderTime);
-        }
-        // 如果是代理
-        // ShiroUser shiroUser = this.getShiroUser();
-        // Set<String> roles = shiroUser.getRoles();
-        // if(roles.contains("irhdaili")) {
-        // String[] logingNameArr = shiroUser.getLoginName().split("_");
-        // if(logingNameArr.length<2 || StringUtils.isBlank(logingNameArr[1])) {
-        // throw new ErpCommonException("用户权限异常");
-        // }
-        // shippingOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
-        // Seller seller = sellerService.selectById(shippingOrderQueryVO.getSalesId());
-        // if(seller.getOpenId()!=null) {
-        // shippingOrderQueryVO.setOpenId(seller.getOpenId());
-        // }
-        // }
-        List<ShippingOrderDO> list = shippingOrderService.queryShippingOrders(shippingOrderVO);
-        // if(roles.contains("irhdaili")) {
-        // result.setAgentRoler(true);
-        // }
-        result.buildData(list);
-        result.setSuccess(true);
         return result;
     }
-
-//    @RequestMapping(value = "/query", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Object query1(ShippingOrderVO orderVO) {
-//        JsonResult<List<ShippingOrderDO>> result;
-//        if (orderVO.getStartOrderTime() != null) {
-//            String startOrderTimeStr = DateUtil.ymdFormat(orderVO.getStartOrderTime());
-//            Date startOrderTime = DateUtil.parseDate(startOrderTimeStr + " 00:00:00");
-//            orderVO.setStartOrderTime(startOrderTime);
-//        }
-//        if (orderVO.getEndOrderTime() != null) {
-//            String endOrderTimeStr = DateUtil.ymdFormat(orderVO.getEndOrderTime());
-//            Date endOrderTime = DateUtil.parseDate(endOrderTimeStr + " 23:59:59");
-//            orderVO.setEndOrderTime(endOrderTime);
-//        }
-//        // 如果是代理
-//        // ShiroUser shiroUser = this.getShiroUser();
-//        // Set<String> roles = shiroUser.getRoles();
-//        // if(roles.contains("irhdaili")) {
-//        // String[] logingNameArr = shiroUser.getLoginName().split("_");
-//        // if(logingNameArr.length<2 || StringUtils.isBlank(logingNameArr[1])) {
-//        // throw new ErpCommonException("用户权限异常");
-//        // }
-//        // shippingOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
-//        // Seller seller = sellerService.selectById(shippingOrderQueryVO.getSalesId());
-//        // if(seller.getOpenId()!=null) {
-//        // shippingOrderQueryVO.setOpenId(seller.getOpenId());
-//        // }
-//        // }
-//        result = shippingOrderService.queryShippingOrders(orderVO);
-//        // if(roles.contains("irhdaili")) {
-//        // result.setAgentRoler(true);
-//        // }
-//        result.setSuccess(true);
-//        return result;
-//    }
 
     // 合单发货表单
     @RequestMapping("/multiDeliveryForm")
     @ResponseBody
     public Object multiDeliveryForm(String erpOrderId) {
         JsonResult<MultiDeliveryFormDTO> result = new JsonResult();
-//        shippingOrderService.ship(erpOrderId);
         MultiDeliveryFormDTO dto = null;
         try {
             dto = shippingOrderService.queryByOrderId(erpOrderId);
@@ -755,6 +697,7 @@ public class ShippingOrderController {
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         } catch (Exception ex) {
+            ex.printStackTrace();
             return result.buildIsSuccess(false).buildMsg("未知异常");
         }
     }

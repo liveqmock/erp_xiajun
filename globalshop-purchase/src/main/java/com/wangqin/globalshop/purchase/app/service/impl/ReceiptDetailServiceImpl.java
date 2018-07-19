@@ -33,11 +33,11 @@ public class ReceiptDetailServiceImpl implements IReceiptDetailService {
     }
 
     @Override
-    public List<BuyerReceiptDetailVo> getVoList(BuyerReceiptDetailDO receipt){
+    public List<BuyerReceiptDetailVo> getVoList(BuyerReceiptDetailDO receipt) {
         List<BuyerReceiptDetailDO> doList = mapper.list(receipt);
         List<BuyerReceiptDetailVo> voList = new ArrayList<>();
-        if(!EasyUtil.isListEmpty(doList)){
-            for(BuyerReceiptDetailDO detail : doList){
+        if (!EasyUtil.isListEmpty(doList)) {
+            for (BuyerReceiptDetailDO detail : doList) {
                 BuyerReceiptDetailVo vo = new BuyerReceiptDetailVo();
                 BeanUtils.copies(detail, vo);
 
@@ -47,14 +47,14 @@ public class ReceiptDetailServiceImpl implements IReceiptDetailService {
                 skuSo.setUpc(detail.getUpc());
 
                 ItemSkuDO skuDO = skuDOMapperExt.queryItemSku(skuSo);
-                if(skuDO != null){
+                if (skuDO != null) {
                     vo.setCostPrice(skuDO.getCostPrice());
                     vo.setItemName(skuDO.getItemName());
 
-                    if(skuDO.getCostPrice() == null || skuDO.getCostPrice() <= 0 || vo.getPrice() == null || vo.getPrice() <= 0){
+                    if (skuDO.getCostPrice() == null || skuDO.getCostPrice() <= 0 || vo.getPrice() == null || vo.getPrice() <= 0) {
                         vo.setDisCount(skuDO.getDiscount());
-                    }else {
-                        vo.setDisCount(skuDO.getCostPrice()/vo.getPrice());
+                    } else {
+                        vo.setDisCount(skuDO.getCostPrice() / vo.getPrice());
                     }
                     vo.setSkuPic(ImageUtil.getImageUrl(skuDO.getSkuPic()));
                 }

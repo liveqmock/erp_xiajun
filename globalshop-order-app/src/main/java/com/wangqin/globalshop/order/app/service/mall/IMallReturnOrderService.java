@@ -2,9 +2,7 @@ package com.wangqin.globalshop.order.app.service.mall;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,9 +11,11 @@ import java.util.List;
  */
 public interface IMallReturnOrderService {
 
-    List<MallReturnOrderDO> list();
-
     void add(MallReturnOrderVO erpReturnOrder);
 
+    void update(MallReturnOrderVO erpReturnOrder);
+
     List<MallReturnOrderDO> selectByCondition(String orderNo, String startGmtCreate, String endGmtCreate);
+
+    MallReturnOrderDO getByMallReturnOrderNo(String mallReturnOrderNo);
 }

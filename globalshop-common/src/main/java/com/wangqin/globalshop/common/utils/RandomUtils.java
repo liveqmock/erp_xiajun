@@ -6,11 +6,10 @@ public class RandomUtils {
 
 	public static String getTimeRandom() {
 		Long currentTime = System.currentTimeMillis();
-		return currentTime.toString().substring(0,10);
-	}
-	
-	public static String getTimeRandomMillSeconds() {
-		Long currentTime = System.currentTimeMillis();
-		return currentTime.toString();
-	}
+		return currentTime.toString().substring(3,13);
+}
+    public static String getTimeRandomMillSeconds() {
+        Long currentTime = System.currentTimeMillis();
+        return currentTime.toString();
+    }
 }

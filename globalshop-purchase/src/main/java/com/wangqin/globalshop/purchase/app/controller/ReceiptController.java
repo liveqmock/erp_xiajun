@@ -22,8 +22,7 @@ import java.util.List;
 @Controller
 @Authenticated
 @ResponseBody
-@RequestMapping(value = {
-        "/receipt"})
+@RequestMapping(value = {"/receipt"})
 public class ReceiptController {
     @Autowired
     private IReceiptService service;
@@ -41,14 +40,16 @@ public class ReceiptController {
         }
         return result.buildIsSuccess(true).buildData(list);
     }
+
     @RequestMapping("/queryTaskReceipt")
     public Object queryReceiptDetail(BuyerReceiptDetailDO receipt){
         JsonResult<List<BuyerReceiptDetailVo>> result = new JsonResult<>();
-        List<BuyerReceiptDetailVo> list = null;
+        List<BuyerReceiptDetailVo> list;
         try {
             receipt.setCompanyNo(AppUtil.getLoginUserCompanyNo());
             list = detailService.getVoList(receipt);
         } catch (Exception e) {
+            e.printStackTrace();
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
         return result.buildIsSuccess(true).buildData(list);

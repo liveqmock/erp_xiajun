@@ -2,7 +2,6 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.BuyerTaskDetailDOMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,4 +14,7 @@ public interface BuyerTaskDetailDOMapperExt extends BuyerTaskDetailDOMapper {
 
     List<ItemSkuDO> taskDailyExportByTaskNo(@Param("buyerTaskNo") String buyerTaskNo);
 
+    List<BuyerTaskDetailDO> taskDailyByTaskNo(@Param("buyerTaskNo") String buyerTaskNo);
+
+	void deleteByTaskNo(@Param("buyerTaskNo") String buyerTaskNo, @Param("companyNo") String companyNo);
 }

@@ -80,17 +80,6 @@ public class PurchaseStorageController {
         return result.buildIsSuccess(true);
     }
 
-    @PostMapping("/comfirmBody")
-    @ResponseBody
-    public Object comfirmBody(BuyerStorageDetailVo detailVo){
-        JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
-        try {
-            service.comfirm(detailVo);
-        } catch (Exception e) {
-            return result.buildIsSuccess(false).buildMsg(e.getMessage());
-        }
-        return result.buildIsSuccess(true);
-    }
 
     @PostMapping("/comfirm")
     public Object comfirm(String  detailVo){

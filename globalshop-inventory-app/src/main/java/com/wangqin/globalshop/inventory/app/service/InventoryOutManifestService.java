@@ -2,7 +2,6 @@ package com.wangqin.globalshop.inventory.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

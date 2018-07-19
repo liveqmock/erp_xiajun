@@ -99,7 +99,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         outerOrder.setStatus(OrderStatus.NEW.getCode());
 //        outerOrder.setDealerName(deal.getName());
         outerOrder.setShopCode(shopCode);
-        outerOrder.setMemo(outerOrder.getRemark());
+//        outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
         outerOrder.setActualAmount(totalPrice);
         outerOrder.setIdCard(outerOrder.getIdCard());
@@ -281,8 +281,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
 
     @Override
-    public void changeOrderStatus(Integer oldStatus, Integer newStatus) {
-        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus, newStatus);
+    public void changeOrderStatus(Integer oldStatus, Integer newStatus, Long timeOut) {
+        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus, newStatus,timeOut);
 
     }
 
@@ -321,13 +321,13 @@ public class MallOrderServiceImpl implements IMallOrderService {
         }
         MallOrderDO mallOrder = mallOrderDOMapper.selectByOrderNo(orderNo);
         mallOrder.setShopCode(vo.getShopCode());
-        mallOrder.setOrderTime(vo.getOrderTime());
         mallOrder.setPayType(vo.getPayType());
         mallOrder.setTotalAmount(totalPrice);
         mallOrder.setActualAmount(totalPrice);
         mallOrderDOMapper.updateByPrimaryKeySelective(mallOrder);
 
     }
+
 
     /***
      * 根据vo对象完善mallSubOrderDO的地址信息
@@ -355,7 +355,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
         if (itemSku == null) {
             return;
         }
-        o.setSalePrice(itemSku.getSalePrice());
         Long freight = itemSku.getFreight();
         o.setFreight((double) (freight == null ? 0L : freight));
         o.setItemCode(itemSku.getItemCode());

@@ -62,9 +62,13 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO) {
-        shippingOrderVO.init();
-        List<ShippingOrderDO> shippingOrders = shippingOrderMapper.queryShippingOrders(shippingOrderVO);
-        return shippingOrders;
+        List<ShippingOrderDO> shippingOrderList = shippingOrderMapper.queryShippingOrders(shippingOrderVO);
+//        for (ShippingOrderDO shippingOrderDO: shippingOrderList) {
+//            String shippingNo = shippingOrderDO.getShippingNo();
+//            MallSubOrderDO mallSubOrderDO = mallSubOrderService.getByShippingNo(shippingNo);
+//            shippingOrderDO.setSubOrderNo(mallSubOrderDO.getSubOrderNo());
+//        }
+        return shippingOrderList;
     }
 
     @Override
@@ -531,9 +535,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
                     erpOrder.setWarehouseNo(inventoryOnWareHouseDO.getWarehouseNo());
                 }
-                /**拼接erp*/
+                /**拼接mallOrders*/
                 mallSubOrderMapper.updateByPrimaryKey(erpOrder);
-                erpNos.append(erpOrder.getShopCode()).append(",");
+                erpNos.append(erpOrder.getSubOrderNo()).append(",");
             } else {
                 throw new ErpCommonException("不能重复发货");
             }
@@ -560,7 +564,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         erpStr = erpStr.substring(0, erpStr.length() - 1);
         shippingOrder.init();
         shippingOrder.setStatus(SHIP_INIT);
-        shippingOrder.setShippingNo(erpStr);
+        shippingOrder.setMallOrders(erpStr);
         shippingOrder.setShippingNo(shippingNo);
         shippingOrder.setTransferStatus(TransferStatus.UNPREDICT.getValue());
         shippingOrderMapper.insertSelective(shippingOrder);
@@ -587,6 +591,16 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     }
 
+    @Override
+    public List<ShippingOrderDO> selectByLogisticNoIsNotNull() {
+        return shippingOrderMapper.selectByLogisticNoIsNotNull();
+    }
+
+    @Override
+    public List<ShippingOrderDO> selectInOneMonth() {
+        return shippingOrderMapper.selectInOneMonth();
+    }
+
     private void updateMallOrderStats(MallOrderDO orderDO) {
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(orderDO.getOrderNo());
         for (MallSubOrderDO aDo : list) {
@@ -597,6 +611,16 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         }
         orderDO.setStatus(OrderStatus.SENT.getCode());
 
+    }
+
+    @Override
+    public List<ShippingOrderDO> queryAllInHaihu() {
+        // TODO:改成Mapper
+//        EntityWrapper<ShippingOrderDO> selEntityWrapper = new EntityWrapper<>();
+//        selEntityWrapper.where("logistic_company={0} and status<> 2", "海狐");
+//        List<ShippingOrderDO> haihuOrders = this.selectList(selEntityWrapper);
+        List<ShippingOrderDO> haihuOrders = shippingOrderMapper.listByLogisticCompany("海狐");
+        return haihuOrders;
     }
 
 

@@ -21,17 +21,17 @@ public class BuyerTaskDO extends BaseModel {
 
     private Integer status;
 
-    private String buyerOpenId;
-
     private String buyerName;
 
     private Long purchaseCommissionMode;
 
     private String purchaseCommissionStr;
 
-    private String creator;
+    private String buyerOpenId;
 
     private String modifier;
+
+    private String creator;
 
     public Long getId() {
         return id;
@@ -69,7 +69,6 @@ public class BuyerTaskDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -106,14 +105,6 @@ public class BuyerTaskDO extends BaseModel {
         this.status = status;
     }
 
-    public String getBuyerOpenId() {
-        return buyerOpenId;
-    }
-
-    public void setBuyerOpenId(String buyerOpenId) {
-        this.buyerOpenId = buyerOpenId == null ? null : buyerOpenId.trim();
-    }
-
     public String getBuyerName() {
         return buyerName;
     }
@@ -138,21 +129,27 @@ public class BuyerTaskDO extends BaseModel {
         this.purchaseCommissionStr = purchaseCommissionStr == null ? null : purchaseCommissionStr.trim();
     }
 
-    public String getCreator() {
-        return creator;
+    public String getBuyerOpenId() {
+        return buyerOpenId;
     }
 
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setBuyerOpenId(String buyerOpenId) {
+        this.buyerOpenId = buyerOpenId == null ? null : buyerOpenId.trim();
     }
 
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 }

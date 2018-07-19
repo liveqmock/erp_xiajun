@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
@@ -93,40 +94,40 @@ public class WechatLoginController {
     }
 
     @RequestMapping("/authorized")
-    public Object authorized(String code, String state) {
+    public Object authorized(String code, String state, HttpServletResponse response) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
-
-        /**获取openId和token*/
-        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
-                null, "2");
-        /**如果相应包含errcode  表示请求失败*/
-        if (o.containsKey("errcode")) {
-            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
-        }
-        String unionid = o.getString("unionid");
-        List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid, state);
-        if (hasAuthUser(list, state)) {
-            return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
-        }
-
-        String openid = o.getString("openid");
-        String accessToken = o.getString("access_token");
-        /**根据token获取用户的信息*/
-        JSONObject object = HttpClientUtil.post("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null,
-                null, "2");
-        WxUserDO user = new WxUserDO();
-        user.setCompanyNo(state);
-        user.setGender(Integer.valueOf(object.getString("sex")));
-        user.setNickName(object.getString("nickname"));
-        user.setProvince(object.getString("province"));
-        user.setCity(object.getString("city"));
-        user.setCountry(object.getString("country"));
-        user.setOpenId(openid);
-        user.setUnionId(unionid);
-        user.setAvatarUrl(object.getString("headimgurl"));
         try {
+            /**获取openId和token*/
+            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
+                    null, "2");
+            /**如果相应包含errcode  表示请求失败*/
+            if (o.containsKey("errcode")) {
+                return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+            }
+            String unionid = o.getString("unionid");
+            List<AuthUserDO> list = userService.selectByUnionidAndCompanyNo(unionid, state);
+            if (hasAuthUser(list, state)) {
+                return result.buildIsSuccess(false).buildMsg("您已存在当前公司的账户，不允许重复绑定");
+            }
+
+            String openid = o.getString("openid");
+            String accessToken = o.getString("access_token");
+            /**根据token获取用户的信息*/
+            JSONObject object = HttpClientUtil.post("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null,
+                    null, "2");
+            WxUserDO user = new WxUserDO();
+            user.setCompanyNo(state);
+            user.setGender(Integer.valueOf(object.getString("sex")));
+            user.setNickName(object.getString("nickname"));
+            user.setProvince(object.getString("province"));
+            user.setCity(object.getString("city"));
+            user.setCountry(object.getString("country"));
+            user.setOpenId(openid);
+            user.setUnionId(unionid);
+            user.setAvatarUrl(object.getString("headimgurl"));
+
             userService.addUserByqrcode(state, user);
-        } catch (ErpCommonException e){
+        } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         }
         return result.buildIsSuccess(true).buildMsg("授权成功");
@@ -233,9 +234,15 @@ public class WechatLoginController {
      * @return
      */
     @RequestMapping("/getHtml")
+    @Authenticated
     public void getImgHtml(HttpServletResponse response) {
-        String baseUrl = sysurl + "/wechatLogin/authorized";
+        String baseUrl = sysurl + "/#/permission/test";
         try {
+            String companyNo = AppUtil.getLoginUserCompanyNo();
+            if (StringUtils.isBlank(companyNo)){
+                response.setStatus(302);
+                return;
+            }
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
             String str = "<!DOCTYPE html>\n" +
@@ -255,7 +262,7 @@ public class WechatLoginController {
                     "          appid: \"" + appid + "\",\n" +
                     "          scope: \"snsapi_login\",//写死\n" +
                     "          redirect_uri: '" + baseUrl + "',\n" +
-                    "          state: \"" + AppUtil.getLoginUserCompanyNo() + "\",\n" +
+                    "          state: \"" + companyNo + "\",\n" +
                     "          style: \"black\",\n" +
                     "      });\n" +
                     "    </script>\n" +

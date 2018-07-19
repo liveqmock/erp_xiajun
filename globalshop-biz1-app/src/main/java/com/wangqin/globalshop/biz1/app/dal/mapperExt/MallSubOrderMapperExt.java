@@ -1,9 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
@@ -11,6 +7,9 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper;
 import com.wangqin.globalshop.biz1.app.dto.MyOrderDTO;
 import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -28,11 +27,10 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	@Override
     MallSubOrderDO selectByPrimaryKey(Long id);
 
-	//查询超时订单，后面再调一下超时时间参数
-	List<MallSubOrderDO> queryExpiredSubOrders(@Param("status")Integer status);
+	List<MallSubOrderDO> queryExpiredSubOrders(@Param("status") Integer status,@Param("timeOut") Long timeOut);
 
 	//关闭超时订单，后面再调一下超时时间参数
-	void updateSubOrderStatus(@Param("oldStatus")Integer oldStatus,@Param("newStatus")Integer newStatus);
+	void updateSubOrderStatus(@Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus, @Param("timeOut")Long timeOut);
 
 
 	List<MallSubOrderDO> selectList(MallSubOrderDO order);
@@ -110,4 +108,19 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	int selectCountWithStateAndOrderNo(@Param("orderNo")String orderNo,@Param("status") Integer status);
 	
 	void updateByIsDel(MallSubOrderVO mallSubOrderVO);
+
+	/**
+	 * 通过包裹号获取 MallSubOrder，主要是配合发货单管理获取子订单信息
+	 *
+	 * @param shippingNo
+	 * @return
+	 */
+	MallSubOrderDO getByShippingNo(String shippingNo);
+
+	/**
+	 * 根据主订单号删除子订单
+	 *
+	 * @param orderNo 主订单号
+	 */
+	void deleteByOrderNo(String orderNo);
 }

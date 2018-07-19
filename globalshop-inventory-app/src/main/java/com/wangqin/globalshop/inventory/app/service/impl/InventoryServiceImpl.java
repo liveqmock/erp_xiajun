@@ -217,7 +217,7 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     public void tryRelease(MallSubOrderDO mallSubOrderDO) {
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(),mallSubOrderDO.getCompanyNo());
         if (inventoryDO == null) {
             return;
         }
@@ -357,6 +357,11 @@ public class InventoryServiceImpl implements InventoryService {
             }
             InventoryOnWareHouseDO inventoryOnWareHouseDO = invOnWarehouseMapperExt
                     .getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+
+            if (!inventoryOutManifestDO.getWarehouseNo().equals(inventoryOnWareHouseDO.getWarehouseNo())){
+                throw new ErpCommonException("仓库号有误");
+            }
+
             // 身份校验
             if (!inventoryOnWareHouseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo())
                     || !inventoryOutManifestDO.getCompanyNo().equals(inventoryOnWareHouseDO.getCompanyNo())) {

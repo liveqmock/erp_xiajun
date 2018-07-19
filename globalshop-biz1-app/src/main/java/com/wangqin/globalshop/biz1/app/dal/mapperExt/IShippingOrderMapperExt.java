@@ -29,4 +29,10 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
     ShippingOrderDO selectByLogisticNo(ShippingOrderDO order);
 
     void updateStatusByShippingNo(String logisticNo);
+
+    List<ShippingOrderDO> selectByLogisticNoIsNotNull();
+
+    List<ShippingOrderDO> selectInOneMonth();
+
+    List<ShippingOrderDO> listByLogisticCompany(String logistCompany);
 }
