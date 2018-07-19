@@ -99,7 +99,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         outerOrder.setStatus(OrderStatus.NEW.getCode());
 //        outerOrder.setDealerName(deal.getName());
         outerOrder.setShopCode(shopCode);
-        outerOrder.setMemo(outerOrder.getRemark());
+//        outerOrder.setMemo(outerOrder.getRemark());
         outerOrder.setTotalAmount(totalPrice);
         outerOrder.setActualAmount(totalPrice);
         outerOrder.setIdCard(outerOrder.getIdCard());
