@@ -457,12 +457,9 @@ public class Wechat3rdPartyAuthorization {
     public String getInfo() {
         String componentAccessToken = (String) loginCache.get("component_access_token");
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
-        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType("sv9Kq1fXA2", "2");
-        String accessToken = applet.getAuthorizerAccessToken();
         Map<String, String> map = new HashMap<>();
         map.put("componentAccessToken", componentAccessToken);
         map.put("componentVerifyTicket", componentVerifyTicket);
-        map.put("accessToken", accessToken);
         return JSON.toJSONString(map);
 
     }
