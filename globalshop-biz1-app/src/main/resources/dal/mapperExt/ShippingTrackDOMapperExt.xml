@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackDOMapperExt" >
-    <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="shipping_order_no" property="shippingOrderNo" jdbcType="VARCHAR" />
         <result column="waybill_no" property="waybillNo" jdbcType="VARCHAR" />
@@ -26,27 +26,36 @@
         <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     </resultMap>
-    <sql id="Base_Column_List2" >
+    <sql id="Base_Column_List" >
         id, shipping_order_no, waybill_no, logistic_no, logistics_status, weight, volume,
         totalfee, receive_time, oversea_in_time, oversea_out_time, oversea_on_transfer_time,
         inland_in_time, inland_out_time, inland_express_company_code, inland_express_num,
         buyer_sign_time, air_take_off, airlines, flight, track_info, creator, modifier
     </sql>
 
-    <select id="selectShippingTrackListByLogisticNo" resultMap="BaseResultMap2" parameterType="java.lang.String" >
+    <select id="selectShippingTrackListByLogisticNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
-        <include refid="Base_Column_List2" />
+        <include refid="Base_Column_List" />
         from shipping_track
         where logistic_no = #{logisticNo}
         order by gmt_create desc;
     </select>
 
-    <select id="queryShippingTrack" resultMap="BaseResultMap2" parameterType="java.lang.String" >
+    <select id="queryShippingTrack" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
-        <include refid="Base_Column_List2" />
+        <include refid="Base_Column_List" />
         from shipping_track
         where logistic_no = #{logisticNo}
         order by gmt_create desc;
+    </select>
+
+    <select id="getByLogisticNoAndLogisticsStatus" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM shipping_track
+        WHERE
+            logistic_no = #{logisticNo}
+            AND logistics_status = #{logisticsStatus}
     </select>
 
 </mapper>

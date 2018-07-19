@@ -71,7 +71,7 @@ public interface IShippingOrderService {
 //
 //	void updateStatusByShippingNo(String shippingNo);
 //
-//	List<ShippingOrder> queryAllInHaihu();
+	List<ShippingOrderDO> queryAllInHaihu();
 //
 //	List<ShippingOrder> queryAllFourPx();
 //
