@@ -402,7 +402,7 @@ public class Wechat3rdPartyAuthorization {
         applet.setStatus(PAY_STATUS_PLATFORM);
         applet.setAuthorizerAccessToken(accessToken);
         applet.setAuthorizerRefreshToken(refreshToken);
-        applet.init();
+        applet.init4NoLogin();
         return applet;
     }
 
