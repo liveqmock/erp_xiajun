@@ -12,6 +12,7 @@
         <result column="shop_code" property="shopCode" jdbcType="VARCHAR"/>
         <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR"/>
         <result column="order_time" property="orderTime" jdbcType="TIMESTAMP"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
         <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
         <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
         <result column="sku_code" property="skuCode" jdbcType="VARCHAR"/>
@@ -63,7 +64,7 @@
     receiver, receiver_country, receiver_state, receiver_city, receiver_district, receiver_address,
     telephone, postcode, id_card, idcard_pic_front, idcard_pic_reverse, memo, creator,
     modifier, sub_order_no, channel_sub_order_no, share_user_id, share_token, share_time,
-    share_close_flag, share_close_time, share_money
+    share_close_flag, share_close_time, share_money, gmt_create
     </sql>
 
     <!-- 子订单导出专用,@author:xiajun-->
@@ -502,6 +503,7 @@
                 and company_no = #{companyNo}
             </if>
         </where>
+        ORDER BY order_time DESC
     </select>
     <select id="selectBySkuCode" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
