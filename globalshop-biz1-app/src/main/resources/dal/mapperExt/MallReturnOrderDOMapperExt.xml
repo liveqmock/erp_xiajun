@@ -49,6 +49,32 @@
         </if>
     </select>
 
+    <select id="getByMallReturnOrderNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_return_order
+        WHERE
+        mall_return_order_no = #{mallReturnOrderNo}
+    </select>
+
+    <update id="updateByMallReturnOrderNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO">
+        UPDATE mall_return_order
+        SET
+            return_type = #{returnType},
+            status = #{status},
+            return_quantity = #{returnQuantity},
+            return_price = #{returnPrice},
+            is_civil = #{isCivil},
+            receive_time = #{receiveTime},
+            is_checkin = #{isCheckin},
+            return_pay_time = #{returnPayTime},
+            return_reason = #{returnReason},
+            return_reason_detail = #{returnReasonDetail},
+            remark = #{remark}
+        WHERE
+            mall_return_order_no = #{mallReturnOrderNo}
+    </update>
+
     <!-- 以下为与 mall_sub_order 表关联所用 -->
     <resultMap id="NewBaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO">
         <id column="id" property="id" jdbcType="BIGINT"/>
@@ -92,11 +118,11 @@
         SELECT
         <include refid="New_Base_Column_List"/>
         FROM
-          mall_return_order AS T1
+        mall_return_order AS T1
         LEFT JOIN
-          mall_sub_order AS T2
+        mall_sub_order AS T2
         ON
-          T1.sub_order_no = T2.sub_order_no
+        T1.sub_order_no = T2.sub_order_no
         WHERE
         T1.company_no = #{companyNo}
         <if test="orderNo != null">

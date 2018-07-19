@@ -13,5 +13,9 @@ public interface IMallReturnOrderService {
 
     void add(MallReturnOrderVO erpReturnOrder);
 
+    void update(MallReturnOrderVO erpReturnOrder);
+
     List<MallReturnOrderDO> selectByCondition(String orderNo, String startGmtCreate, String endGmtCreate);
+
+    MallReturnOrderDO getByMallReturnOrderNo(String mallReturnOrderNo);
 }
