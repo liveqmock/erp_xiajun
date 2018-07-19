@@ -182,8 +182,9 @@ public class Wechat3rdPartyAuthorization {
      * @return
      */
     @RequestMapping(value = "/authcallback/{companyNo}",method = RequestMethod.GET)
-    public String queryAuth(@PathVariable("companyNo") String companyNo ,@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn) {
-        log.info("===================companyNo============================"+companyNo);
+    public String queryAuth(@PathVariable("companyNo") String companyNo ,@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn,HttpServletRequest request) {
+
+        log.info("===================companyNo============================"+companyNo+"----------------------"+request.getRequestURL().toString());
         try {
             log.info("===================进入授权回调============================");
             log.info("auth_code===============" + authCode);
