@@ -11,6 +11,7 @@ import com.wangqin.globalshop.common.utils.WxPay.PayUtil;
 import com.wangqin.globalshop.usercenter.service.IAppletConfigService;
 import com.wangqin.globalshop.usercenter.wechat_sdk.AesException;
 import com.wangqin.globalshop.usercenter.wechat_sdk.WXBizMsgCrypt;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,7 +143,7 @@ public class Wechat3rdPartyAuthorization {
 
 
     @RequestMapping("/getAuthUrl")
-    @Authenticated
+//    @Authenticated
     public Object getAuthUrl() {
         JsonResult<Object> result = new JsonResult<>();
         String re_url;
@@ -158,7 +160,7 @@ public class Wechat3rdPartyAuthorization {
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
             //todo 配置的是http://test.buyer007.cn/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-            re_url = URLEncoder.encode("http://tests.buyer007.cn/account/authcallback", "UTF-8");
+            re_url = URLEncoder.encode("http://tests.buyer007.cn/account/authcallback"+AppUtil.getLoginUserCompanyNo(), "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             log.info("re_url:" + reUrl);
             return result.buildIsSuccess(true).buildData(reUrl);
@@ -179,8 +181,9 @@ public class Wechat3rdPartyAuthorization {
      * @param expiresIn 存活时间
      * @return
      */
-    @RequestMapping(value = "/authcallback")
-    public String queryAuth(@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn) {
+    @RequestMapping(value = "/authcallback/{companyNo}",method = RequestMethod.GET)
+    public String queryAuth(@PathVariable("companyNo") String companyNo ,@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn) {
+        log.info("===================companyNo============================"+companyNo);
         try {
             log.info("===================进入授权回调============================");
             log.info("auth_code===============" + authCode);
@@ -194,7 +197,7 @@ public class Wechat3rdPartyAuthorization {
             JSONObject o = JSON.parseObject(s);
             log.info("===================查询用户授权信息END============================");
             JSONObject info = o.getJSONObject("authorization_info");
-            AppletConfigDO applet = getAppletDO(info, APPLET_TYPE);
+            AppletConfigDO applet = getAppletDO(info, APPLET_TYPE,companyNo);
             log.info("最终小程序信息=======" + applet);
             appletConfigServiceImplement.insert(applet);
             return "success";
@@ -384,16 +387,17 @@ public class Wechat3rdPartyAuthorization {
      * 封装小程序配置类对象
      * @param info 回调解析的对象
      * @param appletType 小程序的类型
+     * @param companyNo
      * @return
      */
-    private AppletConfigDO getAppletDO(JSONObject info, String appletType) {
+    private AppletConfigDO getAppletDO(JSONObject info, String appletType, String companyNo) {
         String accessToken = info.getString("authorizer_access_token");
         String refreshToken = info.getString("authorizer_refresh_token");
         String appid = info.getString("authorizer_appid");
         AppletConfigDO applet = new AppletConfigDO();
         applet.setAppid(appid);
         applet.setAppletType(appletType);
-        applet.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+        applet.setCompanyNo(companyNo);
         applet.setStatus(PAY_STATUS_PLATFORM);
         applet.setAuthorizerAccessToken(accessToken);
         applet.setAuthorizerRefreshToken(refreshToken);
@@ -447,18 +451,50 @@ public class Wechat3rdPartyAuthorization {
         loginCache.putEx("component_access_token", componentAccessToken, 7100L);
 
     }
+
     @RequestMapping("getInfo")
-    public String getInfo(){
+    public String getInfo() {
         String componentAccessToken = (String) loginCache.get("component_access_token");
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
         AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType("sv9Kq1fXA2", "2");
         String accessToken = applet.getAuthorizerAccessToken();
         Map<String, String> map = new HashMap<>();
-        map.put("componentAccessToken",componentAccessToken);
-        map.put("componentVerifyTicket",componentVerifyTicket);
-        map.put("accessToken",accessToken);
+        map.put("componentAccessToken", componentAccessToken);
+        map.put("componentVerifyTicket", componentVerifyTicket);
+        map.put("accessToken", accessToken);
         return JSON.toJSONString(map);
 
+    }
+
+    @RequestMapping("publicApplet")
+    public String publicApplet() {
+        List<String> msg = new ArrayList<>();
+        List<AppletConfigDO> list = appletConfigServiceImplement.list();
+        for (AppletConfigDO applet : list) {
+            String token = applet.getAuthorizerAccessToken();
+            if (StringUtils.isBlank(token)) {
+                continue;
+            }
+            String url = "https://api.weixin.qq.com/wxa/commit?access_token=" + token;
+            String param = "{\"template_id\": 2,\n" +
+                    "  \"user_version\": \"2018-01-17 09:39:57\",\n" +
+                    "  \"user_desc\": \"修复bug\",\n" +
+                    "  \"ext_json\": \"{\\\"extEnable\\\":true,\\\"extAppid\\\":\\\"" + applet.getAppid() + "\\\",\\\"ext\\\":{\\\"userAppId\\\":\\\"" + applet.getAppid() + "\\\"}}\"\n" +
+                    "}";
+            System.out.println(param);
+            String post = PayUtil.httpRequest(url, "POST", param);
+            if (post.contains("errcode")) {
+                msg.add("上传失败: appid" + applet.getAppid());
+
+            } else {
+                String url1 = "https://api.weixin.qq.com/wxa/get_qrcode?access_token=" + token;
+                String s = HttpClientUtil.get(url1);
+                msg.add("上传成功: appid" + applet.getAppid()+"url:"+s);
+            }
+
+        }
+
+        return msg.toString();
     }
 
 
