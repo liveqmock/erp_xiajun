@@ -180,21 +180,26 @@ public class Wechat3rdPartyAuthorization {
      */
     @RequestMapping(value = "/authcallback")
     public String queryAuth(@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn) {
-        System.out.println("进入授权回调");
-        System.out.println("auth_code=" + authCode);
-        System.out.println("expires_in=" + expiresIn);
-        String url = "https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=" + getToken();
-        String param = "{\"component_appid\":\"" + componentAppid + "\",\"authorization_code\":\"" + authCode + "\"}";
-        String s = PayUtil.httpRequest(url, "POST", param);
-        System.out.println("----------------授权回调接口-------------");
-        JSONObject o = JSON.parseObject(s);
-        System.out.println(s);
-        JSONObject info = o.getJSONObject("authorization_info");
-        AppletConfigDO applet = getAppletDO(info, APPLET_TYPE);
-
-        appletConfigServiceImplement.insert(applet);
-        System.out.println("----------------授权回调接口-------------");
-        return "success";
+        try {
+            log.info("===================进入授权回调============================");
+            log.info("auth_code===============" + authCode);
+            log.info("expires_in=============" + expiresIn);
+            String url = "https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=" + getToken();
+            String param = "{\"component_appid\":\"" + componentAppid + "\",\"authorization_code\":\"" + authCode + "\"}";
+            String s = PayUtil.httpRequest(url, "POST", param);
+            log.info("===================查询用户授权信息BEGIN============================");
+            log.info("请求参数=======" + param);
+            log.info("响应=======" + s);
+            JSONObject o = JSON.parseObject(s);
+            log.info("===================查询用户授权信息END============================");
+            JSONObject info = o.getJSONObject("authorization_info");
+            AppletConfigDO applet = getAppletDO(info, APPLET_TYPE);
+            log.info("最终小程序信息=======" + applet);
+            appletConfigServiceImplement.insert(applet);
+            return "success";
+        } catch (Exception e) {
+            return "fail";
+        }
     }
 
     //todo 设置小程序初始信息的
