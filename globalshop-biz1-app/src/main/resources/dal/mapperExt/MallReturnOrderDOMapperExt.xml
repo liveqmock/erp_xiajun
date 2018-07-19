@@ -49,14 +49,6 @@
         </if>
     </select>
 
-    <select id="getByMallReturnOrderNo" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from mall_return_order
-        WHERE
-        mall_return_order_no = #{mallReturnOrderNo}
-    </select>
-
     <update id="updateByMallReturnOrderNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO">
         UPDATE mall_return_order
         SET
@@ -114,17 +106,30 @@
     T1.modifier, T1.creator, T1.mall_return_order_no, T1.company_no, T2.sku_code, T2.item_name, T2.upc, T2.sku_pic
     </sql>
 
+    <select id="getByMallReturnOrderNo" resultMap="NewBaseResultMap">
+        SELECT
+            <include refid="New_Base_Column_List"/>
+        FROM
+            mall_return_order AS T1
+        LEFT JOIN
+            mall_sub_order AS T2
+        ON
+            T1.sub_order_no = T2.sub_order_no
+        WHERE
+            T1.mall_return_order_no = #{mallReturnOrderNo}
+    </select>
+
     <select id="listMallReturnOrder" resultMap="NewBaseResultMap">
         SELECT
-        <include refid="New_Base_Column_List"/>
+            <include refid="New_Base_Column_List"/>
         FROM
-        mall_return_order AS T1
+            mall_return_order AS T1
         LEFT JOIN
-        mall_sub_order AS T2
+            mall_sub_order AS T2
         ON
-        T1.sub_order_no = T2.sub_order_no
+            T1.sub_order_no = T2.sub_order_no
         WHERE
-        T1.company_no = #{companyNo}
+            T1.company_no = #{companyNo}
         <if test="orderNo != null">
             and T1.order_no = #{orderNo}
         </if>
