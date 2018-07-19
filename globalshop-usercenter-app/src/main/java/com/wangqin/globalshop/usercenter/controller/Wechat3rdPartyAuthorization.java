@@ -198,6 +198,7 @@ public class Wechat3rdPartyAuthorization {
             appletConfigServiceImplement.insert(applet);
             return "success";
         } catch (Exception e) {
+            e.printStackTrace();
             return "fail";
         }
     }
