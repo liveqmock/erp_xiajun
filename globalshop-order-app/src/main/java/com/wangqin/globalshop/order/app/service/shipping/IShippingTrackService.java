@@ -24,4 +24,8 @@ public interface IShippingTrackService {
     int selectCount(ShippingTrackDO selShippingTrack);
 
     List<ShippingTrackDO> selectShippingTrackListByLogisticNo(String logisticNo);
+
+    ShippingTrackDO getByLogisticNoAndLogisticsStatus(String logisticNo, Integer logisticsStatus);
+
+
 }

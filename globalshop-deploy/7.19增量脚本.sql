@@ -1,0 +1,1 @@
+ALTER TABLE applet_config MODIFY secret VARCHAR(64) COMMENT '小程序secret';

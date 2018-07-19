@@ -613,5 +613,15 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     }
 
+    @Override
+    public List<ShippingOrderDO> queryAllInHaihu() {
+        // TODO:改成Mapper
+//        EntityWrapper<ShippingOrderDO> selEntityWrapper = new EntityWrapper<>();
+//        selEntityWrapper.where("logistic_company={0} and status<> 2", "海狐");
+//        List<ShippingOrderDO> haihuOrders = this.selectList(selEntityWrapper);
+        List<ShippingOrderDO> haihuOrders = shippingOrderMapper.listByLogisticCompany("海狐");
+        return haihuOrders;
+    }
+
 
 }
