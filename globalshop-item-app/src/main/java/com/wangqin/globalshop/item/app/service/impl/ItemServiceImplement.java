@@ -403,12 +403,14 @@ public class ItemServiceImplement implements IItemService {
     public JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO) {
         JsonPageResult<List<ItemDTO>> itemResult = new JsonPageResult<>();
         // 1、查询总的记录数量
+        // totalCount 与 items 的数量有出入
         Integer totalCount = itemDOMapperExt.queryItemsCount(itemQueryVO);
 
         // 2、查询分页记录
         if (totalCount != null && totalCount != 0) {
-            itemResult.buildPage(totalCount, itemQueryVO);
             List<ItemDTO> items = itemDOMapperExt.queryItems(itemQueryVO);
+            totalCount = items.size();
+            itemResult.buildPage(totalCount, itemQueryVO);
             itemResult.setData(items);
         } else {
             List<ItemDTO> items = new ArrayList<>();
