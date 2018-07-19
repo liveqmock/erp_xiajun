@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -447,18 +448,50 @@ public class Wechat3rdPartyAuthorization {
         loginCache.putEx("component_access_token", componentAccessToken, 7100L);
 
     }
+
     @RequestMapping("getInfo")
-    public String getInfo(){
+    public String getInfo() {
         String componentAccessToken = (String) loginCache.get("component_access_token");
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
         AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType("sv9Kq1fXA2", "2");
         String accessToken = applet.getAuthorizerAccessToken();
         Map<String, String> map = new HashMap<>();
-        map.put("componentAccessToken",componentAccessToken);
-        map.put("componentVerifyTicket",componentVerifyTicket);
-        map.put("accessToken",accessToken);
+        map.put("componentAccessToken", componentAccessToken);
+        map.put("componentVerifyTicket", componentVerifyTicket);
+        map.put("accessToken", accessToken);
         return JSON.toJSONString(map);
 
+    }
+
+    @RequestMapping("publicApplet")
+    public String publicApplet() {
+        List<String> msg = new ArrayList<>();
+        List<AppletConfigDO> list = appletConfigServiceImplement.list();
+        for (AppletConfigDO applet : list) {
+            String token = applet.getAuthorizerAccessToken();
+            if (StringUtils.isBlank(token)) {
+                continue;
+            }
+            String url = "https://api.weixin.qq.com/wxa/commit?access_token=" + token;
+            String param = "{\"template_id\": 2,\n" +
+                    "  \"user_version\": \"2018-01-17 09:39:57\",\n" +
+                    "  \"user_desc\": \"修复bug\",\n" +
+                    "  \"ext_json\": \"{\\\"extEnable\\\":true,\\\"extAppid\\\":\\\"" + applet.getAppid() + "\\\",\\\"ext\\\":{\\\"userAppId\\\":\\\"" + applet.getAppid() + "\\\"}}\"\n" +
+                    "}";
+            System.out.println(param);
+            String post = PayUtil.httpRequest(url, "POST", param);
+            if (post.contains("errcode")) {
+                msg.add("上传失败: appid" + applet.getAppid());
+
+            } else {
+                String url1 = "https://api.weixin.qq.com/wxa/get_qrcode?access_token=" + token;
+                String s = HttpClientUtil.get(url1);
+                msg.add("上传成功: appid" + applet.getAppid()+"url:"+s);
+            }
+
+        }
+
+        return msg.toString();
     }
 
 
