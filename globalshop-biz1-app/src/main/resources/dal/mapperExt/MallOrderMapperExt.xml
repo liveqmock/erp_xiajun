@@ -492,6 +492,9 @@
         <if test="status != null">
             AND status = #{status}
         </if>
+        <if test="companyNo != null and companyNo!=''">
+            and company_no = #{companyNo}
+        </if>
         <if test="orderNo!=null and orderNo!=''">
             and order_no LIKE concat('%',#{orderNo},'%')
         </if>
