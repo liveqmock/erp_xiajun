@@ -218,4 +218,14 @@
         UPDATE shipping_order SET status=2 WHERE logistic_no=#{logisticNo}
     </update>
 
+    <select id="listByLogisticCompany" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            shipping_order
+        WHERE
+            status = 2
+            AND logistic_company = #{logisticCompany}
+    </select>
+
 </mapper>

@@ -189,7 +189,7 @@ public class MallSubOrderController {
                             errorMsg.add("只允许修改待付款单的订单");
                         }
                     } else {
-                        errorMsg.add("id" + orderId + "状态不为代付款状态,不允许关闭");
+                        errorMsg.add("id" + orderId + "状态不为待付款状态,不允许关闭");
                     }
                 }
 
