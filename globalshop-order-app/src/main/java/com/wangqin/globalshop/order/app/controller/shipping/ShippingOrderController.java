@@ -697,6 +697,7 @@ public class ShippingOrderController {
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         } catch (Exception ex) {
+            ex.printStackTrace();
             return result.buildIsSuccess(false).buildMsg("未知异常");
         }
     }

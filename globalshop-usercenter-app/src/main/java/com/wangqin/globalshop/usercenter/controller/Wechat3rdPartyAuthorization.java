@@ -160,7 +160,7 @@ public class Wechat3rdPartyAuthorization {
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
             //todo 配置的是http://test.buyer007.cn/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-            re_url = URLEncoder.encode("http://tests.buyer007.cn/account/authcallback"+AppUtil.getLoginUserCompanyNo(), "UTF-8");
+            re_url = URLEncoder.encode("http://test.buyer007.cn/account/authcallback/"+AppUtil.getLoginUserCompanyNo(), "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             log.info("re_url:" + reUrl);
             return result.buildIsSuccess(true).buildData(reUrl);
@@ -182,8 +182,9 @@ public class Wechat3rdPartyAuthorization {
      * @return
      */
     @RequestMapping(value = "/authcallback/{companyNo}",method = RequestMethod.GET)
-    public String queryAuth(@PathVariable("companyNo") String companyNo ,@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn) {
-        log.info("===================companyNo============================"+companyNo);
+    public String queryAuth(@PathVariable("companyNo") String companyNo ,@RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn,HttpServletRequest request) {
+
+        log.info("===================companyNo============================"+companyNo+"----------------------"+request.getRequestURL().toString());
         try {
             log.info("===================进入授权回调============================");
             log.info("auth_code===============" + authCode);
@@ -401,7 +402,7 @@ public class Wechat3rdPartyAuthorization {
         applet.setStatus(PAY_STATUS_PLATFORM);
         applet.setAuthorizerAccessToken(accessToken);
         applet.setAuthorizerRefreshToken(refreshToken);
-        applet.init();
+        applet.init4NoLogin();
         return applet;
     }
 
@@ -456,12 +457,9 @@ public class Wechat3rdPartyAuthorization {
     public String getInfo() {
         String componentAccessToken = (String) loginCache.get("component_access_token");
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
-        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType("sv9Kq1fXA2", "2");
-        String accessToken = applet.getAuthorizerAccessToken();
         Map<String, String> map = new HashMap<>();
         map.put("componentAccessToken", componentAccessToken);
         map.put("componentVerifyTicket", componentVerifyTicket);
-        map.put("accessToken", accessToken);
         return JSON.toJSONString(map);
 
     }
