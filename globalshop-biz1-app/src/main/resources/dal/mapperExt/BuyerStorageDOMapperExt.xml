@@ -97,7 +97,7 @@
     FROM <include refid="tableSection"/> T
     WHERE
     <include refid="commonSelectSection"/>
-    ORDER BY T.gmt_create desc
+    ORDER BY T.gmt_modify desc
   </select>
 
 </mapper>
