@@ -11,12 +11,17 @@
     <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
     <result column="contact_url" property="contactUrl" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="sale_level" property="saleLevel" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="discount1" property="discount1" jdbcType="DOUBLE" />
+    <result column="discount2" property="discount2" jdbcType="DOUBLE" />
+    <result column="discount3" property="discount3" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, channel_no, name, type, contact_mobile, contact_name, contact_email, contact_url, 
-    remark, creator, modifier
+    remark, modifier, creator, sale_level, discount, discount1, discount2, discount3
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -34,12 +39,16 @@
     </selectKey>
     insert into channel (channel_no, name, type, 
       contact_mobile, contact_name, contact_email, 
-      contact_url, remark, creator, 
-      modifier)
+      contact_url, remark, modifier, 
+      creator, sale_level, discount, 
+      discount1, discount2, discount3
+      )
     values (#{channelNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
       #{contactMobile,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
-      #{contactUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+      #{contactUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{saleLevel,jdbcType=VARCHAR}, #{discount,jdbcType=DOUBLE}, 
+      #{discount1,jdbcType=DOUBLE}, #{discount2,jdbcType=DOUBLE}, #{discount3,jdbcType=DOUBLE}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -71,11 +80,26 @@
       <if test="remark != null" >
         remark,
       </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
       <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null" >
-        modifier,
+      <if test="saleLevel != null" >
+        sale_level,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="discount1 != null" >
+        discount1,
+      </if>
+      <if test="discount2 != null" >
+        discount2,
+      </if>
+      <if test="discount3 != null" >
+        discount3,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -103,11 +127,26 @@
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
+      <if test="saleLevel != null" >
+        #{saleLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="discount1 != null" >
+        #{discount1,jdbcType=DOUBLE},
+      </if>
+      <if test="discount2 != null" >
+        #{discount2,jdbcType=DOUBLE},
+      </if>
+      <if test="discount3 != null" >
+        #{discount3,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -138,11 +177,26 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        modifier = #{modifier,jdbcType=VARCHAR},
+      <if test="saleLevel != null" >
+        sale_level = #{saleLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="discount1 != null" >
+        discount1 = #{discount1,jdbcType=DOUBLE},
+      </if>
+      <if test="discount2 != null" >
+        discount2 = #{discount2,jdbcType=DOUBLE},
+      </if>
+      <if test="discount3 != null" >
+        discount3 = #{discount3,jdbcType=DOUBLE},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -157,8 +211,13 @@
       contact_email = #{contactEmail,jdbcType=VARCHAR},
       contact_url = #{contactUrl,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      sale_level = #{saleLevel,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DOUBLE},
+      discount1 = #{discount1,jdbcType=DOUBLE},
+      discount2 = #{discount2,jdbcType=DOUBLE},
+      discount3 = #{discount3,jdbcType=DOUBLE}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

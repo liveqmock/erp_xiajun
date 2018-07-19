@@ -19,9 +19,19 @@ public class ChannelDO extends BaseModel {
 
     private String remark;
 
+    private String modifier;
+
     private String creator;
 
-    private String modifier;
+    private String saleLevel;
+
+    private Double discount;
+
+    private Double discount1;
+
+    private Double discount2;
+
+    private Double discount3;
 
     public Long getId() {
         return id;
@@ -95,21 +105,59 @@ public class ChannelDO extends BaseModel {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getSaleLevel() {
+        return saleLevel;
+    }
+
+    public void setSaleLevel(String saleLevel) {
+        this.saleLevel = saleLevel == null ? null : saleLevel.trim();
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    public Double getDiscount1() {
+        return discount1;
+    }
+
+    public void setDiscount1(Double discount1) {
+        this.discount1 = discount1;
+    }
+
+    public Double getDiscount2() {
+        return discount2;
+    }
+
+    public void setDiscount2(Double discount2) {
+        this.discount2 = discount2;
+    }
+
+    public Double getDiscount3() {
+        return discount3;
+    }
+
+    public void setDiscount3(Double discount3) {
+        this.discount3 = discount3;
     }
 }
