@@ -218,6 +218,10 @@ public class ItemController {
         				scaleService.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", updateSku.getScale());
         			}
         			//最后更新其他的sks项目
+        			updateSku.setBrand(item.getBrand());
+        			updateSku.setItemName(item.getName());
+        			updateSku.setCategoryCode(item.getCategoryCode());
+        			updateSku.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
         			itemSkuService.updateById(updateSku);
         		}
         	}
