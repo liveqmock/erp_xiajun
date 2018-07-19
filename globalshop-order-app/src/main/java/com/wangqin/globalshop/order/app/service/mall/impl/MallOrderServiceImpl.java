@@ -310,7 +310,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
             quantity = quantity == null ? 0 : quantity;
             totalPrice += salePrice * quantity;
             subOrder.setOrderNo(orderNo);
-            subOrder.setShopCode(vo.getShopCode());
+            //shopcode不填的
+//            subOrder.setShopCode(vo.getShopCode());
             initSkuInfo2SubOrder(subOrder);
             initAddressInfo2SubOrder(subOrder, vo);
             subOrder.setMemo(vo.getMemo());
