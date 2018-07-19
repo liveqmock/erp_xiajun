@@ -5,8 +5,8 @@
     <!-- 通用查询结果列-->
     <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR" />
-        <result column="dealer_name" property="dealerName" jdbcType="VARCHAR" />
+        <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR"/>
+        <result column="dealer_name" property="dealerName" jdbcType="VARCHAR"/>
         <result column="open_id" property="openId" jdbcType="VARCHAR"/>
         <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
         <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
@@ -36,11 +36,11 @@
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
     </resultMap>
-    
+
     <resultMap id="BaseResultVOMap" type="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR" />
-        <result column="dealer_name" property="dealerName" jdbcType="VARCHAR" />
+        <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR"/>
+        <result column="dealer_name" property="dealerName" jdbcType="VARCHAR"/>
         <result column="open_id" property="openId" jdbcType="VARCHAR"/>
         <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
         <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
@@ -70,7 +70,7 @@
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
     </resultMap>
-    
+
     <sql id="Base_Column_List">
         id, dealer_code, dealer_name, union_id,open_id, order_no, company_no, channel_no, channel_name, channel_order_no,
         channel_customer_no, channel_type, shop_code, wx_pay_trade_no, total_amount, actual_amount,
@@ -526,12 +526,12 @@
     </select>
 
     <select id="selectByOrderNoVO" resultMap="BaseResultVOMap" parameterType="java.lang.String">
-    	SELECT
-    	<include refid="Base_Column_List"/>
-    	FROM
-    		mall_order
-    	WHERE
-    		order_no = #{orderNo}
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        mall_order
+        WHERE
+        order_no = #{orderNo}
     </select>
     <!-- 今日发货订单表(我也不知道这句话什么意思),XiaJun -->
     <select id="todaySendOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
@@ -605,8 +605,7 @@
     </select>
 
     <!--查询总条数 -->
-    <select id="queryPoCount" resultType="java.lang.Integer"
-    >
+    <select id="queryPoCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM
         <include refid="tableSection"/>
@@ -614,58 +613,66 @@
         WHERE
         <include refid="commonSelectSection"/>
     </select>
-    <select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO"
-    >
-           SELECT
-                DISTINCT
-                t1.order_no orderNo,
-                t1.id id,
-                t1.channel_order_no channelOrderNo,
-                 t1.dealer_name dealerName,
-                 t1.shop_code shopCode,
-                 t1.creator ,
-                 t1.order_time orderTime,
-                 t2.receiver receiver,
-                 t2.receiver_address addressDetail,
-                 t2.receiver_city receiverCity,
-                 t2.receiver_state receiverState,
-                 t2.receiver_district receiverDistrict,
-                 t1.status ,
-                 t2.receiver_address addressDetail,
-                 t2.telephone,
-                 t1.memo remark,
-                 t2.sku_code skuCode,
-                 t1.pay_type payType
-               FROM mall_order t1, mall_sub_order t2
-               WHERE t1.order_no = t2.order_no AND t1.is_del = 0
-               		AND t2.is_del = 0
-                    AND t1.company_no = #{companyNo}
-               <if test="orderNo != null">
-               	   AND t2.order_no = #{orderNo}
-               </if>
-               <if test="channelOrderNo != null">
-               	   AND
-               	   t1.channel_order_no = #{channelOrderNo}
-               </if>
-               <if test="status != null">
-                   and t1.status = #{status}
-               </if>
-               <if test="receiver != null">
-               	   AND
-               	   t2.receiver = #{receiver}
-               </if>
-               <if test="telephone != null">
-               	   AND
-               	   t2.telephone = #{telephone}
-               </if>
-               <if test="dealerName != null">
-               	  AND
-               	  t1.dealerName = #{dealerName}
-               </if>
-               <if test="skuCode != null ">
-               	 AND
-               	 t1.sku_code = #{skuCode}
-               </if>
+    <select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+        SELECT
+        DISTINCT
+        t1.order_no orderNo,
+        t1.id id,
+        t1.channel_order_no channelOrderNo,
+        t1.dealer_name dealerName,
+        t1.shop_code shopCode,
+        t1.creator ,
+        t1.order_time orderTime,
+        t2.receiver receiver,
+        t2.receiver_address addressDetail,
+        t2.receiver_city receiverCity,
+        t2.receiver_state receiverState,
+        t2.receiver_district receiverDistrict,
+        t1.status ,
+        t2.receiver_address addressDetail,
+        t2.telephone,
+        t1.memo remark,
+        t2.sku_code skuCode,
+        t1.pay_type payType
+        FROM mall_order t1, mall_sub_order t2
+        WHERE t1.order_no = t2.order_no AND t1.is_del = 0
+        AND t2.is_del = 0
+        AND t1.company_no = #{companyNo}
+        <if test="orderNo != null">
+            AND t2.order_no = #{orderNo}
+        </if>
+        <if test="channelOrderNo != null">
+            AND
+            t1.channel_order_no = #{channelOrderNo}
+        </if>
+        <if test="status != null">
+            and t1.status = #{status}
+        </if>
+        <if test="receiver != null">
+            AND
+            t2.receiver = #{receiver}
+        </if>
+        <if test="telephone != null">
+            AND
+            t2.telephone = #{telephone}
+        </if>
+        <if test="dealerName != null">
+            AND
+            t1.dealerName = #{dealerName}
+        </if>
+        <if test="skuCode != null ">
+            AND
+            t1.sku_code = #{skuCode}
+        </if>
+        <if test="startGmtCreate != null ">
+            AND
+            t1.gmt_create &gt;= #{startGmtCreate}
+        </if>
+        <if test="endGmtCreate != null ">
+            AND
+            t1.gmt_create &lt;= #{endGmtCreate}
+        </if>
         ORDER BY t1.order_time DESC
     </select>
 

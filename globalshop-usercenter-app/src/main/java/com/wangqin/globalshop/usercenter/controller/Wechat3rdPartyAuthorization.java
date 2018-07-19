@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.wangqin.globalshop.usercenter.constant.SysConstants.APPLET_TYPE;
 import static com.wangqin.globalshop.usercenter.constant.SysConstants.PAY_STATUS_PLATFORM;
@@ -444,6 +445,19 @@ public class Wechat3rdPartyAuthorization {
         /**在返回结果中获取token*/
         /**保存token，并设置有效时间*/
         loginCache.putEx("component_access_token", componentAccessToken, 7100L);
+
+    }
+    @RequestMapping("getInfo")
+    public String getInfo(){
+        String componentAccessToken = (String) loginCache.get("component_access_token");
+        String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
+        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType("sv9Kq1fXA2", "2");
+        String accessToken = applet.getAuthorizerAccessToken();
+        Map<String, String> map = new HashMap<>();
+        map.put("componentAccessToken",componentAccessToken);
+        map.put("componentVerifyTicket",componentVerifyTicket);
+        map.put("accessToken",accessToken);
+        return JSON.toJSONString(map);
 
     }
 
