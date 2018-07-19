@@ -41,6 +41,12 @@
     where company_no = #{companyNo,jdbcType=VARCHAR}
     AND applet_type =#{type,jdbcType=VARCHAR}
   </select>
+  <select id="selectByAppid" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from applet_config
+    where appid = #{appid,jdbcType=VARCHAR}
+  </select>
   <select id="list" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
