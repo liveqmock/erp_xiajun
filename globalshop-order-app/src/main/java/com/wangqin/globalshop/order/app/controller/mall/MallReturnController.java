@@ -62,5 +62,30 @@ public class MallReturnController {
         return result;
     }
 
+    @PostMapping("/update")
+    @ResponseBody
+    public Object update(MallReturnOrderVO erpReturnOrder) {
+        JsonResult<MallReturnOrderVO> result = new JsonResult<>();
+        try {
+            mallReturnOrderService.update(erpReturnOrder);
+        } catch (ErpCommonException exception) {
+            return result.buildIsSuccess(false).buildMsg(exception.getErrorMsg());
+        }
+        result.setSuccess(true);
+        return result;
+    }
 
+    @PostMapping("queryById")
+    @ResponseBody
+    public Object queryById(String mallReturnOrderNo){
+        JsonResult<MallReturnOrderDO> result = new JsonResult<>();
+        try {
+            MallReturnOrderDO mallReturnOrderDO = mallReturnOrderService.getByMallReturnOrderNo(mallReturnOrderNo);
+            result.setData(mallReturnOrderDO);
+            result.setSuccess(true);
+        } catch (ErpCommonException exception) {
+            return result.buildIsSuccess(false).buildMsg(exception.getErrorMsg());
+        }
+        return result;
+    }
 }
