@@ -123,7 +123,7 @@ public class Wechat3rdPartyAuthorization {
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
             //todo 配置的是http://test.buyer007.cn/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-            re_url = URLEncoder.encode("http://tests.buyer007.cn/account/authcallback", "UTF-8");
+            re_url = URLEncoder.encode("http://test.buyer007.cn/account/authcallback", "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             //todo 有待优化
             String html = "<html><head><title>Title</title></head><body><a href=\"" + reUrl + "\">授权小程序</a></body></html>";
@@ -386,6 +386,7 @@ public class Wechat3rdPartyAuthorization {
         AppletConfigDO applet = new AppletConfigDO();
         applet.setAppid(appid);
         applet.setAppletType(appletType);
+        applet.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         applet.setStatus(PAY_STATUS_PLATFORM);
         applet.setAuthorizerAccessToken(accessToken);
         applet.setAuthorizerRefreshToken(refreshToken);
