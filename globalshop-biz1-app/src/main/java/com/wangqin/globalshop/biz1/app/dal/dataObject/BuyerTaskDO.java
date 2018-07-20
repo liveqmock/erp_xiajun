@@ -33,6 +33,10 @@ public class BuyerTaskDO extends BaseModel {
 
     private String creator;
 
+    private String taskDesc;
+
+    private String imageUrl;
+
     public Long getId() {
         return id;
     }
@@ -151,5 +155,21 @@ public class BuyerTaskDO extends BaseModel {
 
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getTaskDesc() {
+        return taskDesc;
+    }
+
+    public void setTaskDesc(String taskDesc) {
+        this.taskDesc = taskDesc == null ? null : taskDesc.trim();
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl == null ? null : imageUrl.trim();
     }
 }

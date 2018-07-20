@@ -48,4 +48,12 @@ public class BuyerServiceImpl implements IBuyerService {
     public int updateByPrimaryKey(BuyerDO record){
         return mapper.updateByPrimaryKey(record);
     }
+
+	@Override
+	public int deleteSoft(Long id){
+		BuyerDO buyerUpdate = new BuyerDO();
+		buyerUpdate.setId(id);
+		buyerUpdate.setIsDel(true);
+		return mapper.update(buyerUpdate);
+	}
 }

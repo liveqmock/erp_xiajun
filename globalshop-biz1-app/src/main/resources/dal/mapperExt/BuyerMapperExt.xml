@@ -111,4 +111,62 @@
 		ORDER BY T.id desc
 	</select>
 
+    <update id="update" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO" >
+        update buyer
+        <set >
+            <if test="companyNo != null" >
+                company_no = #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null" >
+                open_id = #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="unionId != null" >
+                union_id = #{unionId,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null" >
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="headProtraitUrl != null" >
+                head_protrait_url = #{headProtraitUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                gender = #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="city != null" >
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null" >
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null" >
+                country = #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="referer != null" >
+                referer = #{referer,jdbcType=BIGINT},
+            </if>
+            <if test="purchaseCommissionMode != null" >
+                purchase_commission_mode = #{purchaseCommissionMode,jdbcType=BIGINT},
+            </if>
+            <if test="purchaseCommissionStr != null" >
+                purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLoginTime != null" >
+                first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginTime != null" >
+                last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null" >
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="modifier != null" >
+                modifier = #{modifier,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null" >
+                is_del = #{isDel,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
 </mapper>

@@ -2,25 +2,15 @@ package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
-
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,20 +71,29 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(BuyerTaskVO vo) {
+		List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
+
+		Long buyerId = vo.getBuyerId();
         /**获取相关买手信息*/
-        BuyerDO buyer = buyerMapper.selectByPrimaryKey(vo.getBuyerId());
+        if(vo.getBuyerId() == null || vo.getBuyerId() < 0){
+			 buyerId = list.get(0).getBuyerId();
+		}
+        BuyerDO buyer = buyerMapper.selectByPrimaryKey(buyerId);
         BuyerTaskDO task = new BuyerTaskDO();
         /**封装出一个buyerTaskDO对象*/
-        String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
+
+		Long nestTask = mapper.gainTASKSequence();
+
+        String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(buyerId,nestTask);
         task.setBuyerTaskNo(buyerTaskNo);
 
         task.setTitle(vo.getTitle());
         task.setRemark(vo.getRemark());
-        //task.set
-
+        task.setTaskDesc(vo.getTaskDesc());
+		task.setImageUrl(vo.getImageUrl());
         getBuyerTaskDO(task, buyer, vo);
         mapper.insertSelective(task);
-        List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
+
         for (ItemTask itemTask : list) {
             /**获取相关买手信息*/
             BuyerDO by = buyerMapper.selectByPrimaryKey(itemTask.getBuyerId());
@@ -205,7 +204,8 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
                 }
                 task.setStatus(Constant.TO_BE_PURCHASED);
-                String buyerTaskNo = CodeGenUtil.getBuyerTaskNo();
+				Long nestTask = mapper.gainTASKSequence();
+                String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(0000L,nestTask);
                 task.setBuyerTaskNo(buyerTaskNo);
                 task.init();
                 taskList.add(task);
@@ -332,7 +332,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         detail.setPrice(itemTask.getPrice());
         detail.setMaxPrice(itemTask.getMaxPrice() == null ? itemTask.getPrice() : itemTask.getMaxPrice());
         detail.setRemark(itemTask.getRemark());
-        detail.setSkuPicUrl(itemTask.getImageUrl());
+        detail.setSkuPicUrl(sku.getSkuPic());
         detail.setUpc(sku.getUpc());
         detail.setMode(itemTask.getMode());
     }

@@ -17,11 +17,13 @@
     <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="task_desc" property="taskDesc" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_task_no, title, owner_no, company_no, remark, start_time, end_time, status, 
     buyer_name, purchase_commission_mode, purchase_commission_str, buyer_open_id, modifier, 
-    creator
+    creator, task_desc, image_url
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -41,14 +43,14 @@
       company_no, remark, start_time, 
       end_time, status, buyer_name, 
       purchase_commission_mode, purchase_commission_str, 
-      buyer_open_id, modifier, creator
-      )
+      buyer_open_id, modifier, creator, 
+      task_desc, image_url)
     values (#{buyerTaskNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{ownerNo,jdbcType=VARCHAR}, 
       #{companyNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{buyerName,jdbcType=VARCHAR}, 
       #{purchaseCommissionMode,jdbcType=BIGINT}, #{purchaseCommissionStr,jdbcType=VARCHAR}, 
-      #{buyerOpenId,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
-      )
+      #{buyerOpenId,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{taskDesc,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -98,6 +100,12 @@
       <if test="creator != null" >
         creator,
       </if>
+      <if test="taskDesc != null" >
+        task_desc,
+      </if>
+      <if test="imageUrl != null" >
+        image_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="buyerTaskNo != null" >
@@ -141,6 +149,12 @@
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDesc != null" >
+        #{taskDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -189,6 +203,12 @@
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
+      <if test="taskDesc != null" >
+        task_desc = #{taskDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -207,7 +227,9 @@
       purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},
       buyer_open_id = #{buyerOpenId,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR}
+      creator = #{creator,jdbcType=VARCHAR},
+      task_desc = #{taskDesc,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
