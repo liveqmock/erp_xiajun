@@ -1,20 +1,13 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
-import com.wangqin.globalshop.common.base.BaseController;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.usercenter.service.IUserRoleService;
-import com.wangqin.globalshop.usercenter.service.IUserService;
-import com.wangqin.globalshop.usercenter.service.QrCodeService;
-import com.wangqin.globalshop.usercenter.vo.UserVo;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import lombok.val;
+import javax.validation.Valid;
 
+import org.apache.logging.log4j.core.appender.rolling.RolloverDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +21,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
+import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.common.base.BaseController;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.DigestUtils;
+import com.wangqin.globalshop.common.utils.EasyUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.LogWorker;
+import com.wangqin.globalshop.common.utils.PageInfo;
+import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.usercenter.service.IOrganizationService;
+import com.wangqin.globalshop.usercenter.service.IRoleService;
+import com.wangqin.globalshop.usercenter.service.IUserRoleService;
+import com.wangqin.globalshop.usercenter.service.IUserService;
+import com.wangqin.globalshop.usercenter.service.QrCodeService;
+import com.wangqin.globalshop.usercenter.vo.UserVo;
 
 /**
  * @description：用户管理
@@ -48,6 +60,10 @@ public class UserController extends BaseController {
     private IUserService userService;
     @Autowired
     private IUserRoleService userRoleService;
+    @Autowired	
+    private IRoleService roleService;
+    @Autowired
+    private IOrganizationService organizationService;
 
     @Autowired
     private QrCodeService qrCodeService;
@@ -316,9 +332,41 @@ public class UserController extends BaseController {
         return result.buildData(userService.queryVoById(id)).buildIsSuccess(true);
     }
 
+//    @RequestMapping("/queryList")
+//    @ResponseBody
+//    public Object queryList(@Valid AuthUserDO userDo, BindingResult bindResult) {
+//    	LogWorker.logStart(log, "配置", "userVo:{}", userDo);
+//    	
+//    	if(bindResult.hasErrors()) {
+//        	StringBuffer sb = new StringBuffer();
+//        	for(ObjectError error : bindResult.getAllErrors()) {
+//        		sb.append(error.getDefaultMessage()).append(",");
+//        	}
+//        	return BaseResp.createFailure(sb.toString());
+//        }
+//        BaseResp resp = BaseResp.createSuccess("");
+//        
+//    	String companyNo = AppUtil.getLoginUserCompanyNo();
+//        
+//    	JsonResult<List<AuthUserDO>> result = new JsonResult<>();
+//    	
+//    	List<AuthUserDO> userList = userService.queryUserByCompanyNo(companyNo);
+//    	
+//    	result.setData(userList);
+//    	LogWorker.logEnd(log, "配置", "userVo:{}", userDo);
+//        return result.buildIsSuccess(true);
+//    }
+    
+    /**
+     * 用户管理-->用户列表
+     * @author xiajun
+     * @param userDo
+     * @param bindResult
+     * @return
+     */
     @RequestMapping("/queryList")
     @ResponseBody
-    public Object queryList(@Valid AuthUserDO userDo, BindingResult bindResult) {
+    public Object queryUserList(@Valid AuthUserDO userDo, BindingResult bindResult) {
     	LogWorker.logStart(log, "配置", "userVo:{}", userDo);
     	
     	if(bindResult.hasErrors()) {
@@ -332,9 +380,32 @@ public class UserController extends BaseController {
         
     	String companyNo = AppUtil.getLoginUserCompanyNo();
         
-    	JsonResult<List<AuthUserDO>> result = new JsonResult<>();
+    	JsonResult<List<AuthUserVO>> result = new JsonResult<>();
     	
-    	List<AuthUserDO> userList = userService.queryUserByCompanyNo(companyNo);
+    	List<AuthUserVO> userList = userService.queryUserListByCompanyNo(companyNo);
+    	for(AuthUserVO user:userList) {
+    		//查组织的名字
+    		Long organizationId = user.getOrganizationId().longValue();
+    		if(null != organizationId) {
+    			AuthOrganizationDO organizationDO = organizationService.selectByPrimaryKey(organizationId);
+    			if(null != organizationDO) {
+    				user.setOrganizationName(organizationDO.getName());
+    			}
+    		}
+    		//查角色的名字
+    		Long userId = user.getId();
+    		List<Long> roleIdList = userRoleService.queryRoleIdListByUserId(userId,companyNo);
+    		if(IsEmptyUtil.isCollectionNotEmpty(roleIdList)) {
+    			List<AuthRoleDO> roleList = new ArrayList<AuthRoleDO>();
+    			for(Long id:roleIdList) {
+    				String roleName = roleService.queryRoleNameByIdOrRoleId(id, companyNo);
+    				AuthRoleDO authRoleDO = new AuthRoleDO();
+    				authRoleDO.setName(roleName);
+    				roleList.add(authRoleDO);
+    			}
+    			user.setRolesList(roleList);
+    		}
+    	}
     	
     	result.setData(userList);
     	LogWorker.logEnd(log, "配置", "userVo:{}", userDo);

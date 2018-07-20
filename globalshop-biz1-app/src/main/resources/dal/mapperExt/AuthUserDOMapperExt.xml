@@ -27,6 +27,15 @@
     id, company_no, user_no, login_name, name, password, sex, age, phone, user_type,
     status, organization_id, create_time, wx_union_id, email, creator, modifier,gmt_create
   </sql>
+  <sql id="Base_Column_List3" >
+    id,gmt_create AS gmtCreate,login_name AS loginName, creator, modifier,
+    company_no AS companyNo, user_no AS userNo,
+    name,  sex, age, phone, 
+    user_type AS userType,status, organization_id AS organizationId,
+    wx_union_id AS wxUnionId
+  </sql>
+  
+  
 
   <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
     <id column="id" property="id" jdbcType="BIGINT"/>
@@ -416,6 +425,19 @@
   		company_no = #{companyNo}
   	</where>
   </select>	
+  
+  <select id="queryUserListByCompanyNo" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO">
+  	select
+  	<include refid="Base_Column_List3"/>
+  	from 
+  		auth_user
+  	<where>
+  		company_no = #{companyNo}
+  		AND
+  		is_del=0
+  	</where>
+  </select>	
+  
   <select id="selectByUnionidAndCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List2" />

@@ -1,13 +1,14 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper;
+import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 
 public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     //    int deleteByPrimaryKey(Long id);
@@ -40,6 +41,8 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     List<UserQueryVO> queryUserQueryVOList(UserQueryVO userQueryVO);
     
     List<AuthUserDO> queryUserByCompanyNo(String companyNo);
+    
+    List<AuthUserVO> queryUserListByCompanyNo(String companyNo);
 
 //    List<AuthUserDO> selectUserVoPage();
 

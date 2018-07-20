@@ -58,11 +58,11 @@
         </where>
     </update>
     
-     <!-- 根据skuCode和规格的名字删除规格 -->
+     <!-- 根据skuCode和规格的名字删除规格，硬删除 -->
     <update id="deleteItemSkuScaleBySkuCodeAndScaleName" parameterType="java.lang.String">
-        UPDATE 
+        delete
+        from 
         item_sku_scale 
-        set is_del=1
         <where>
         sku_code = #{skuCode}
         AND
