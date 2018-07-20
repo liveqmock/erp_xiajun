@@ -282,11 +282,18 @@
       <if test="skuPic != null" >
         sku_pic = #{skuPic},
       </if>
-      <if test="creator != null" >
-        creator = #{creator},
-      </if>
       <if test="modifier != null" >
         modifier = #{modifier},
+      </if>
+      <!-- 更新商品的时候会影响到的item_sku的字段，因为编辑商品的时候会同时更新sku -->
+      <if test="itemName != null" >
+        item_name = #{itemName},
+      </if>
+      <if test="categoryCode != null" >
+        category_code = #{categoryCode},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName},
       </if>
     </set>
     where id = #{id}
