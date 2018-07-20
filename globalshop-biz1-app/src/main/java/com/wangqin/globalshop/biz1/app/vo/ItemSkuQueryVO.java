@@ -58,6 +58,8 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	
 	private String categoryCode;
 	
+	private String categoryName;
+	
 	/**
 	 * 品牌
 	 */
@@ -309,6 +311,15 @@ public class ItemSkuQueryVO extends PageQueryVO{
 
 	public void setCompanyNo(String companyNo) {
 		this.companyNo = companyNo;
+	}
+
+	
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public String getCategoryCode() {
