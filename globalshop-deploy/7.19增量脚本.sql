@@ -15,3 +15,12 @@ ADD COLUMN `main_pic` varchar(2048) ;
 # 增加字段长度
 ALTER TABLE `haidb2new`.`db_migrate_send_record`
 MODIFY COLUMN `db_script` varchar(6144) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL ;
+
+
+# buyer_task新增任务描述
+ALTER TABLE `haidb2new`.`buyer_task`
+MODIFY COLUMN `remark` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '任务备注',
+ADD COLUMN `task_desc` varchar(255) COMMENT '任务描述',
+ADD COLUMN `image_url` varchar(1024) COMMENT '任务主图，item_find主图';
+
+

@@ -17,11 +17,13 @@
         <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
         <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="task_desc" property="taskDesc" jdbcType="VARCHAR" />
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
     id, buyer_task_no, title, owner_no, company_no, remark, start_time, end_time, status,
     buyer_name, purchase_commission_mode, purchase_commission_str, buyer_open_id, modifier,
-    creator
+    creator, task_desc, image_url
   </sql>
     <select id="list" resultMap="BaseResultMap"
             parameterType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">
@@ -71,7 +73,9 @@
             buyer_task.id = #{id}
     </select>
 
-
+    <select id="gainTASKSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('TASK');
+    </select>
 
     <insert id="insertBatch" parameterType="java.util.List">
         <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
