@@ -60,7 +60,15 @@ public class BuyerStorageDetailVo {
 	private Integer batchNum;
 
 	private String buyerTaskNo;
-	
+
+	private String mem;
+
+	public String getMem() {
+		return mem;
+	}
+	public void setMem(String mem) {
+		this.mem = mem;
+	}
 	public Integer getPreQuantity() {
 		return preQuantity;
 	}

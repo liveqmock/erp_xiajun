@@ -177,7 +177,7 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
                     vo.setBuyerOpenId(buyer.getOpenId());
                 }
 
-
+				vo.setMem(detail.getMem());
                 vo.setGmtCreate(detail.getGmtCreate());
                 vo.setGmtModify(detail.getGmtModify());
                 vo.setStorageNo(buyerStorage.getStorageNo());
@@ -337,11 +337,12 @@ public class BuyerStorageServiceImpl implements IBuyerStorageService {
             }
         }
     }
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional
     public void updateMem(Long id, String mem){
-        BuyerStorageDetailDO detail = detaiMapper.selectByPrimaryKey(id);
-        detail.setMem(EasyUtil.truncateLEFitSize(mem,1000));
-        detaiMapper.updateByPrimaryKey(detail);
+		BuyerStorageDetailDO updateDetail = new BuyerStorageDetailDO();
+		updateDetail.setMem(EasyUtil.truncateLEFitSize(mem,1000));
+		updateDetail.setId(id);
+        detaiMapper.updateByPrimaryKeySelective(updateDetail);
     }
 
 

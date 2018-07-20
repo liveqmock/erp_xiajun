@@ -135,7 +135,7 @@ public class PurchaseStorageController {
         return result.buildIsSuccess(true);
     }
 
-    @RequestMapping("/updateMem")
+    @PostMapping("/updateMem")
     public Object updateMem(Long id, String mem){
         JsonResult<List<BuyerStorageDetailVo>> result = new JsonResult<>();
         try {
@@ -145,6 +145,8 @@ public class PurchaseStorageController {
         }
         return result.buildIsSuccess(true);
     }
+
+
 
 
 
