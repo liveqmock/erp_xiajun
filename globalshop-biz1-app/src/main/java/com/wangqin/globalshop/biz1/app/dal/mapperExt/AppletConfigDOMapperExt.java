@@ -15,4 +15,6 @@ public interface AppletConfigDOMapperExt extends AppletConfigDOMapper {
 	AppletConfigDO selectByCompanyNoAndType(@Param("companyNo") String companyNo, @Param("type") String type);
 
 	List<AppletConfigDO> list();
+
+	AppletConfigDO selectByAppid(String appid);
 }

@@ -19,4 +19,6 @@ public interface IAppletConfigService {
     List<AppletConfigDO> list();
 
 	void update(AppletConfigDO applet);
+
+	AppletConfigDO selectByAppid(String appid);
 }

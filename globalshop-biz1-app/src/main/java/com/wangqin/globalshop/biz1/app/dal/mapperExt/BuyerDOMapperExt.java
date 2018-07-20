@@ -16,4 +16,6 @@ public interface BuyerDOMapperExt extends BuyerDOMapper{
     Long searchBuyerCount(BuyerDO record);
 
     List<BuyerDO> searchBuyerList(BuyerDO record);
+
+    int update(BuyerDO buyerDO);
 }

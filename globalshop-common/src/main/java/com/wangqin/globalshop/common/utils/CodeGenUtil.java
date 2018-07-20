@@ -30,8 +30,11 @@ public class CodeGenUtil {
 		return "I" + categoryCode + "T" + com.wangqin.globalshop.common.utils.RandomUtils.getTimeRandom()+RandomUtils.nextInt(10000);
 	}
 
-	public static String getBuyerTaskNo() {
-		return "TASK" + System.currentTimeMillis();
+	public static String getBuyerTaskNo(Long buyerId,Long nextTaskNum) {
+
+		String taskOrderNo = "T" + TimeUtil.getDate(TimeUtil.DEFAULT_DATE_NO_SEPRATORS_FORMAT, new Date())
+				+ "U" + String.format("%0" + 4 + "d", buyerId) + nextTaskNum;
+		return taskOrderNo;
 	}
 
 	public static String getBuyerTaskDetailNo() {

@@ -40,4 +40,9 @@ public class AppletConfigServiceImplement implements IAppletConfigService {
 		mapper.updateByPrimaryKeySelective(applet);
 
 	}
+
+	@Override
+	public AppletConfigDO selectByAppid(String appid) {
+		return mapper.selectByAppid(appid);
+	}
 }

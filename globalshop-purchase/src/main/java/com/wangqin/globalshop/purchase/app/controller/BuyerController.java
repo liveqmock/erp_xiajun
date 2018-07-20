@@ -122,9 +122,10 @@ public class BuyerController {
     @PostMapping("/delete")
     public Object delete(Long id) {
         try {
-            service.deleteByPrimaryKey(id);
+            service.deleteSoft(id);
         } catch (Exception e) {
             e.printStackTrace();
+			return JsonResult.buildFailed("");
         }
         return JsonResult.buildSuccess(true);
     }
