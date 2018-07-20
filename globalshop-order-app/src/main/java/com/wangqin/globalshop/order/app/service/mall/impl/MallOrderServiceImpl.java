@@ -99,7 +99,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         outerOrder.setStatus(OrderStatus.NEW.getCode());
 //        outerOrder.setDealerName(deal.getName());
         outerOrder.setShopCode(shopCode);
-//        outerOrder.setMemo(outerOrder.getRemark());
+        outerOrder.setMemo(outerOrder.getMemo());
         outerOrder.setTotalAmount(totalPrice);
         outerOrder.setActualAmount(totalPrice);
         outerOrder.setIdCard(outerOrder.getIdCard());
@@ -321,6 +321,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
             mallSubOrderDOMapper.insert(subOrder);
         }
         mallOrder.setShopCode(vo.getShopCode());
+        mallOrder.setMemo(vo.getMemo());
+        mallOrder.setChannelOrderNo(vo.getChannelOrderNo());
         mallOrder.setPayType(vo.getPayType());
         mallOrder.setTotalAmount(totalPrice);
         mallOrder.setActualAmount(totalPrice);
