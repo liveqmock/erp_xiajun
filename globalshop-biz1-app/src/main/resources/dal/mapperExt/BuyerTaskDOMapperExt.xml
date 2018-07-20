@@ -24,11 +24,33 @@
     id, buyer_task_no, title, owner_no, company_no, remark, start_time, end_time, status,
     buyer_name, purchase_commission_mode, purchase_commission_str, buyer_open_id, modifier,
     creator, task_desc, image_url
-  </sql>
-    <select id="list" resultMap="BaseResultMap"
+    </sql>
+
+
+    <select id="list" resultType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO"
             parameterType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">
         SELECT
-            buyer_task.*, buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
+        buyer_task.id as id ,
+        buyer_task.buyer_task_no as buyerTaskNo,
+        buyer_task.title,
+        buyer_task.owner_no as ownerNo,
+        buyer_task.company_no as companyNo,
+        buyer_task.remark,
+        buyer_task.start_time as startTime,
+        buyer_task.end_time as endTime,
+        buyer_task.status,
+        buyer_task.buyer_name as buyerName,
+        buyer_task.purchase_commission_mode as purchaseCommissionMode,
+        buyer_task.purchase_commission_str as purchaseCommissionStr,
+        buyer_task.buyer_open_id as buyerOpenId,
+        buyer_task.modifier,
+        buyer_task.creator,
+        buyer_task.task_desc as taskDesc,
+        buyer_task.image_url as imageUrl,
+
+        buyer_task_detail.item_code as itemCode,
+        buyer_task_detail.upc as upc,
+        buyer_task_detail.sku_pic_url as skuPicUrl
         FROM 
             buyer_task
         LEFT JOIN buyer_task_detail
@@ -62,9 +84,9 @@
         ORDER BY buyer_task.start_time DESC
     </select>
 
-    <select id="selectVoById" resultMap="BaseResultMap">
+    <select id="selectVoById" resultType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">
         SELECT
-            buyer_task.*, buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
+            buyer_task.*, buyer_task_detail.item_code as itemCode, buyer_task_detail.upc as upc, buyer_task_detail.sku_pic_url as skuPicUrl
         FROM
             buyer_task,buyer_task_detail
         WHERE

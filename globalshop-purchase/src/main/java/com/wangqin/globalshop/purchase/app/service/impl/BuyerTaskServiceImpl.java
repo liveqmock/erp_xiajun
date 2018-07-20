@@ -332,7 +332,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         detail.setPrice(itemTask.getPrice());
         detail.setMaxPrice(itemTask.getMaxPrice() == null ? itemTask.getPrice() : itemTask.getMaxPrice());
         detail.setRemark(itemTask.getRemark());
-        detail.setSkuPicUrl(itemTask.getImageUrl());
+        detail.setSkuPicUrl(sku.getSkuPic());
         detail.setUpc(sku.getUpc());
         detail.setMode(itemTask.getMode());
     }
