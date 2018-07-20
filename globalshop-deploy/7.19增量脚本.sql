@@ -16,6 +16,9 @@ ADD COLUMN `main_pic` varchar(2048) ;
 ALTER TABLE `haidb2new`.`db_migrate_send_record`
 MODIFY COLUMN `db_script` varchar(6144) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL ;
 
+ALTER TABLE `haidb2new`.`buyer_task_detail`
+CHANGE COLUMN `mode` `mode` TINYINT(2) NULL DEFAULT '1' COMMENT '采购方式 0 线上 1线下' ;
+
 
 # buyer_task新增任务描述
 ALTER TABLE `haidb2new`.`buyer_task`
