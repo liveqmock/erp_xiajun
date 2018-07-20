@@ -23,4 +23,6 @@ public interface IBuyerService {
     public int updateByPrimaryKeySelective(BuyerDO record);
 
     public int updateByPrimaryKey(BuyerDO record);
+
+	public int deleteSoft(Long id);
 }
