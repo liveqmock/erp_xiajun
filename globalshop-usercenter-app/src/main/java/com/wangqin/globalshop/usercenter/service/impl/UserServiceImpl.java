@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -330,6 +331,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
 		// TODO Auto-generated method stub
 		return userMapper.queryUserByCompanyNo(companyNo);
 	}
+	
+	@Override
+	public List<AuthUserVO> queryUserListByCompanyNo(String companyNo) {
+		return userMapper.queryUserListByCompanyNo(companyNo);
+	}
+	
     @Override
     public List<AuthUserDO> selectByUnionidAndCompanyNo(String unionid, String companyNo) {
         return userMapper.selectByUnionidAndCompanyNo(unionid,companyNo);

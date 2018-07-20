@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -26,8 +25,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
@@ -57,19 +59,21 @@ import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
 import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.enums.AppletType;
+import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ImageUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.ItemEnCodeUtil;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
@@ -114,6 +118,12 @@ public class ItemServiceImplement implements IItemService {
     private ShippingPackingPatternDOMapperExt shippingPackingPatternDOMapper;
     @Autowired
     private Cache shareCache;
+    @Autowired
+    private IAppletConfigService appletConfigService;
+    
+    public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
+    public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
+    public static final String ACCESS_TOKEN_MI = "&secret=";
 
     @Override
     public ItemDO queryItemDOByItemCode(String itemCode) {
@@ -145,28 +155,19 @@ public class ItemServiceImplement implements IItemService {
     	JsonResult<ItemDO> result = new JsonResult<>();       
     	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
          	return result.buildIsSuccess(false).buildMsg("请先登录");
-        }       
-        if (null != item.getId()) {
-            return result.buildMsg("新增的商品不能有ID").buildIsSuccess(false);
-        }        
+        }             
         List<ItemSkuScaleDO> scaleList = new ArrayList<>();
-        
+      
         //商品名称处理
         String itemNameShort = item.getName();
         setItemNewName(item);       
 
         //类目处理
         String categoryCode = item.getCategoryCode();
-        if (null != categoryCode) {
-            item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
-        } else {
-            return result.buildMsg("没有找到类目").buildIsSuccess(false);
-        }
+        item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
 
-        String mainPic = item.getMainPic();
-        //图片处理
-        String imgJson = ImageUtil.getImageUrl(mainPic);
         //商品必须有主图
+        String mainPic = item.getMainPic();     
         JSONObject jsonObject = JSONObject.fromObject(mainPic);
         JSONArray jsonArray = jsonObject.getJSONArray("picList");
         if(0 == jsonArray.size()) {
@@ -192,11 +193,8 @@ public class ItemServiceImplement implements IItemService {
                 for (ItemSkuAddVO itemSku : skus) {
                 	itemSkuPriceList.add(itemSku.getSalePrice());
                     i++;
-                    itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i));
-                    //itemSku.setLogisticType(item.getLogisticType());TODO
-                    
+                    itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i));                                   
                     String skuMainPic = itemSku.getSkuPic();
-                    //String skuPic = ImageUtil.getImageUrl(skuMainPic);
                     
                     //sku没有图片就用商品的图片
                     JSONObject skuPicJsonObject = JSONObject.fromObject(skuMainPic);
@@ -214,24 +212,22 @@ public class ItemServiceImplement implements IItemService {
                 item.setItemSkus(skus);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return result.buildMsg("解析SKU错误").buildIsSuccess(false);
         }           
         
         //对前端传来的时间进行处理
         ItemDO newItem = new ItemDO();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            newItem.setStartDate(format.parse(item.getStartDate()));
-            newItem.setEndDate(format.parse(item.getEndDate()));
-            if (null != item.getBookingDate()) {//非必填项，空指针检查
-                newItem.setBookingDate(format.parse(item.getBookingDate()));
+            newItem.setStartDate(DateUtil.transferStringToDate(item.getStartDate()));
+            newItem.setEndDate(DateUtil.transferStringToDate(item.getEndDate()));
+            if (IsEmptyUtil.isStringNotEmpty(item.getBookingDate())) {//非必填项，空指针检查
+                newItem.setBookingDate(DateUtil.transferStringToDate(item.getBookingDate()));
             }
         } catch (Exception e) {
-            //TODO
+            return result.buildIsSuccess(false).buildMsg("时间填写的有错误");
         }
         //TEMP                    
-        item.setIsSale(1);
+        item.setIsSale(ItemIsSale.SALABLE.getCode());
 
         newItem.setDetail(item.getDetail());
         detailDecoder(newItem);
@@ -239,19 +235,18 @@ public class ItemServiceImplement implements IItemService {
         newItem.setCategoryName(item.getCategoryName());
         newItem.setCategoryCode(categoryCode);
         newItem.setBrandName(item.getBrand());
-        String itemBrandFullName = item.getBrand();
-        if(itemBrandFullName.contains("->")) {
-        	newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
-        } else {
-        	newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand()));
-        }      
+        newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));   
         newItem.setEnName(item.getEnName());
         newItem.setItemName(item.getName());
         newItem.setCurrency(item.getCurrency().byteValue());
         newItem.setIdCard(item.getIdCard().byteValue());
         if(null != item.getLogisticType()) {
         	newItem.setLogisticType(item.getLogisticType().byteValue());
-        }      
+        }  
+        String qrCodeUrl = generateQrCode(item.getItemCode());
+        if(IsEmptyUtil.isStringNotEmpty(qrCodeUrl)) {
+        	newItem.setQrCodeUrl(qrCodeUrl);
+        }
         newItem.setCountry(item.getCountry());
         newItem.setItemCode(item.getItemCode());
         newItem.setWxisSale(item.getWxisSale().byteValue());     
@@ -266,9 +261,6 @@ public class ItemServiceImplement implements IItemService {
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
         List<String> upcList = new ArrayList<>();
-        if(EasyUtil.isListEmpty(itemSkuList)) {
-        	return result.buildIsSuccess(false).buildMsg("最少需要提供一个sku");
-        }
         for(ItemSkuAddVO itemSku:itemSkuList) {
             //检测upc是否和数据库里面已有的upc重复,按公司划分
         	Integer duplcatedCountNumber = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(
@@ -287,7 +279,6 @@ public class ItemServiceImplement implements IItemService {
         	scaleList.add(scaleObject);
         	itemSku.setItemName(newItem.getItemName());
         	itemSku.setItemId(newItem.getId());
-        	itemSku.setBrand(newItem.getBrandName());
         	itemSku.setCategoryName(item.getCategoryName());
         	itemSku.setCategoryCode(item.getCategoryCode());
         	itemSku.setBrand(newItem.getBrandName());
@@ -1074,4 +1065,27 @@ public class ItemServiceImplement implements IItemService {
         nameNew.append(item.getName());   
         item.setName(nameNew.toString());//重新设置商品名称
     }
+    
+    /**
+     * 生成商品的二维码
+     * @param itemCode
+     * @return
+     */
+    private String generateQrCode(String itemCode) {
+        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
+        if(null == appletConfig) {
+        	return null;
+        }
+        String appId = appletConfig.getAppid();
+        String secret = appletConfig.getSecret();
+        if(IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
+        	return null;
+        }
+        String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
+        JSONObject myJson = JSONObject.fromObject(reponse);
+        String token = (String) myJson.get("access_token");
+        String picUrl = insertIntoItemDimension(itemCode, "pages/item/detail", token);     
+        return picUrl;
+    }
+    
 }

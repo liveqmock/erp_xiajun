@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
 import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
 
 import java.util.List;
 import java.util.Map;
@@ -52,4 +53,7 @@ public interface AuthRoleDOMapperExt extends AuthRoleDOMapper {
     int insertByRoleVo(RoleQueryVO roleVo);
     
     int updateByRoleVo(RoleQueryVO roleVo);
+    
+    //根据id查询角色的名字，@author:xiajun
+    String queryRoleNameByIdOrRoleId(@Param("roleId") Long roleId,@Param("companyNo") String companyNo);
 }

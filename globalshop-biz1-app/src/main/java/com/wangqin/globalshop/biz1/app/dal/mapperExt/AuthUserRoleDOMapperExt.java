@@ -24,6 +24,9 @@ public interface AuthUserRoleDOMapperExt extends AuthUserRoleDOMapper {
 
     List<Long> selectRoleIdListByUserId(String loginName);
     
+    //查询某个用户的所有角色的角色Id，@author:xiajun
+    List<Long> queryRoleIdListByUserId(@Param("userId")Long userId,@Param("companyNo")String companyNo);
+    
     List<AuthUserRoleDO> selectByUserId(Long userId);
     
     void insertByNoId(AuthUserRoleDO record);

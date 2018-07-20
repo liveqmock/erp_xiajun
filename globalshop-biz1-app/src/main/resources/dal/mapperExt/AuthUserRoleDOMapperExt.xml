@@ -72,6 +72,17 @@
     where user_id = #{userId}
   </select>
   
+  <!-- 查询某个用户的所有角色的角色Id，@author:xiajun -->
+  <select id="queryRoleIdListByUserId" resultType="java.lang.Long">
+    SELECT
+    role_id 
+    FROM
+    auth_user_role
+    WHERE
+    user_id = #{userId}
+    AND company_no = #{companyNo}
+  </select>
+  
   <select id="selectRoleIdByUserId" resultMap="BaseResultMap2" parameterType="java.lang.Long">
     select
     role_id AS roleId

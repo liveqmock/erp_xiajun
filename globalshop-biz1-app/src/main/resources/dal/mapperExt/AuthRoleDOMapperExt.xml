@@ -246,4 +246,19 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <!-- 根据id查询角色的名字，@author:xiajun-->
+  <select id="queryRoleNameByIdOrRoleId"  resultType="java.lang.String">
+  	SELECT
+  	name
+  	FROM
+  	auth_role
+  	WHERE
+  	company_no=#{companyNo}
+  	AND (
+  	role_id=#{roleId}
+  	OR
+  	id=#{roleId}
+  	)
+  </select>
+  
 </mapper>
