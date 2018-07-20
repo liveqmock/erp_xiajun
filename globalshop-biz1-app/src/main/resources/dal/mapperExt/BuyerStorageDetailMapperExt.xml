@@ -34,6 +34,40 @@
     item_code, sku_buysite, modifier, creator, status, mem, op_user_no, op_time, batch_num
   </sql>
 
+    <resultMap id="BaseResultMapWithTime" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="storage_no" property="storageNo" jdbcType="VARCHAR" />
+        <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+        <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="DOUBLE" />
+        <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
+        <result column="currency" property="currency" jdbcType="TINYINT" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="quantity" property="quantity" jdbcType="INTEGER" />
+        <result column="trans_quantity" property="transQuantity" jdbcType="INTEGER" />
+        <result column="entry_quantity" property="entryQuantity" jdbcType="INTEGER" />
+        <result column="purchase_storage_no" property="purchaseStorageNo" jdbcType="VARCHAR" />
+        <result column="buyer_task_detail_no" property="buyerTaskDetailNo" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="sku_buysite" property="skuBuysite" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="mem" property="mem" jdbcType="VARCHAR" />
+        <result column="op_user_no" property="opUserNo" jdbcType="VARCHAR" />
+        <result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
+        <result column="batch_num" property="batchNum" jdbcType="INTEGER" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List_Time" >
+    id, storage_no, warehouse_no, warehouse_name, shelf_no, sku_code, price, total_price,
+    currency, upc, quantity, trans_quantity, entry_quantity, purchase_storage_no, buyer_task_detail_no,
+    item_code, sku_buysite, modifier, creator, status, mem, op_user_no, op_time, batch_num, gmt_create, gmt_modify
+  </sql>
+
 
 
     <select id="queryPurStoDetails" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDetailDO" >
@@ -100,9 +134,9 @@
 
 
     <!--查询总条数 -->
-    <select id="search" resultMap="BaseResultMap"
+    <select id="search" resultMap="BaseResultMapWithTime"
     >
-        SELECT <include refid="Base_Column_List" />
+        SELECT <include refid="Base_Column_List_Time" />
         FROM <include refid="tableSection"/> T
         WHERE
         <include refid="commonSelectSection"/>
@@ -118,8 +152,8 @@
     </select>
 
     <!-- -->
-    <select id="searchList" resultMap="BaseResultMap">
-        SELECT  <include refid="Base_Column_List" />
+    <select id="searchList" resultMap="BaseResultMapWithTime">
+        SELECT  <include refid="Base_Column_List_Time" />
         FROM <include refid="tableSection"/> T
         WHERE
         <include refid="commonSelectSection"/>
