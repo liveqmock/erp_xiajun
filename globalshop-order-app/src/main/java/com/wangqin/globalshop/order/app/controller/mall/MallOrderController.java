@@ -307,7 +307,7 @@ public class MallOrderController {
 //                list.add(outerOrder.getS());        //销售员
                 list.add(outerOrder.getTotalAmount());    //订单金额
                 list.add(outerOrder.getGmtCreate());        //下单时间
-                list.add(outerOrder.getStatus());  //订单状态
+                list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
                 list.add(outerOrder.getIdCard());            //收件人
 //                list.add(outerOrder.getTelephone());        //手机
 //                list.add(outerOrder.getSt());    //省
