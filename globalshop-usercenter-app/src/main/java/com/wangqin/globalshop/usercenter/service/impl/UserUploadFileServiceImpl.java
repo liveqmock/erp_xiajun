@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 
-@Service("mallUploadFileService")
+@Service
 public class UserUploadFileServiceImpl implements UserUploadFileService {
 
     // endpoint以杭州为例，其它region请按实际情况填写
