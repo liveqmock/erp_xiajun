@@ -34,6 +34,8 @@ public class MallSubOrderDO extends BaseModel {
 
     private String scale;
 
+    private String color;
+
     private String skuPic;
 
     private Integer logisticType;
@@ -106,6 +108,8 @@ public class MallSubOrderDO extends BaseModel {
 
     private BigDecimal shareMoney;
 
+    private String brand;
+
     public Long getId() {
         return id;
     }
@@ -119,7 +123,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+        this.orderNo = orderNo;
     }
 
     public String getMallReturnOrderNo() {
@@ -127,7 +131,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setMallReturnOrderNo(String mallReturnOrderNo) {
-        this.mallReturnOrderNo = mallReturnOrderNo == null ? null : mallReturnOrderNo.trim();
+        this.mallReturnOrderNo = mallReturnOrderNo;
     }
 
     public String getCustomerNo() {
@@ -135,7 +139,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setCustomerNo(String customerNo) {
-        this.customerNo = customerNo == null ? null : customerNo.trim();
+        this.customerNo = customerNo;
     }
 
     public String getOpenId() {
@@ -143,7 +147,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setOpenId(String openId) {
-        this.openId = openId == null ? null : openId.trim();
+        this.openId = openId;
     }
 
     public String getCompanyNo() {
@@ -152,7 +156,7 @@ public class MallSubOrderDO extends BaseModel {
 
     @Override
     public void setCompanyNo(String companyNo) {
-        this.companyNo = companyNo == null ? null : companyNo.trim();
+        this.companyNo = companyNo;
     }
 
     public String getShopCode() {
@@ -160,7 +164,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShopCode(String shopCode) {
-        this.shopCode = shopCode == null ? null : shopCode.trim();
+        this.shopCode = shopCode;
     }
 
     public String getChannelOrderNo() {
@@ -168,7 +172,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setChannelOrderNo(String channelOrderNo) {
-        this.channelOrderNo = channelOrderNo == null ? null : channelOrderNo.trim();
+        this.channelOrderNo = channelOrderNo;
     }
 
     public Date getOrderTime() {
@@ -184,7 +188,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setItemCode(String itemCode) {
-        this.itemCode = itemCode == null ? null : itemCode.trim();
+        this.itemCode = itemCode;
     }
 
     public String getItemName() {
@@ -192,7 +196,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setItemName(String itemName) {
-        this.itemName = itemName == null ? null : itemName.trim();
+        this.itemName = itemName;
     }
 
     public String getSkuCode() {
@@ -200,7 +204,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setSkuCode(String skuCode) {
-        this.skuCode = skuCode == null ? null : skuCode.trim();
+        this.skuCode = skuCode;
     }
 
     public String getChannelSkuCode() {
@@ -208,7 +212,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setChannelSkuCode(String channelSkuCode) {
-        this.channelSkuCode = channelSkuCode == null ? null : channelSkuCode.trim();
+        this.channelSkuCode = channelSkuCode;
     }
 
     public String getUpc() {
@@ -216,7 +220,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setUpc(String upc) {
-        this.upc = upc == null ? null : upc.trim();
+        this.upc = upc;
     }
 
     public String getScale() {
@@ -224,7 +228,15 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setScale(String scale) {
-        this.scale = scale == null ? null : scale.trim();
+        this.scale = scale;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getSkuPic() {
@@ -232,7 +244,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setSkuPic(String skuPic) {
-        this.skuPic = skuPic == null ? null : skuPic.trim();
+        this.skuPic = skuPic;
     }
 
     public Integer getLogisticType() {
@@ -304,7 +316,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setCloseReason(String closeReason) {
-        this.closeReason = closeReason == null ? null : closeReason.trim();
+        this.closeReason = closeReason;
     }
 
     public String getWarehouseNo() {
@@ -312,7 +324,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setWarehouseNo(String warehouseNo) {
-        this.warehouseNo = warehouseNo == null ? null : warehouseNo.trim();
+        this.warehouseNo = warehouseNo;
     }
 
     public Integer getStockStatus() {
@@ -328,7 +340,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShippingOrderNo(String shippingOrderNo) {
-        this.shippingOrderNo = shippingOrderNo == null ? null : shippingOrderNo.trim();
+        this.shippingOrderNo = shippingOrderNo;
     }
 
     public String getShippingNo() {
@@ -336,7 +348,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShippingNo(String shippingNo) {
-        this.shippingNo = shippingNo == null ? null : shippingNo.trim();
+        this.shippingNo = shippingNo;
     }
 
     public String getReceiver() {
@@ -344,7 +356,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setReceiver(String receiver) {
-        this.receiver = receiver == null ? null : receiver.trim();
+        this.receiver = receiver;
     }
 
     public String getReceiverCountry() {
@@ -352,7 +364,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setReceiverCountry(String receiverCountry) {
-        this.receiverCountry = receiverCountry == null ? null : receiverCountry.trim();
+        this.receiverCountry = receiverCountry;
     }
 
     public String getReceiverState() {
@@ -360,7 +372,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setReceiverState(String receiverState) {
-        this.receiverState = receiverState == null ? null : receiverState.trim();
+        this.receiverState = receiverState;
     }
 
     public String getReceiverCity() {
@@ -368,7 +380,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setReceiverCity(String receiverCity) {
-        this.receiverCity = receiverCity == null ? null : receiverCity.trim();
+        this.receiverCity = receiverCity;
     }
 
     public String getReceiverDistrict() {
@@ -376,7 +388,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setReceiverDistrict(String receiverDistrict) {
-        this.receiverDistrict = receiverDistrict == null ? null : receiverDistrict.trim();
+        this.receiverDistrict = receiverDistrict;
     }
 
     public String getReceiverAddress() {
@@ -384,7 +396,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setReceiverAddress(String receiverAddress) {
-        this.receiverAddress = receiverAddress == null ? null : receiverAddress.trim();
+        this.receiverAddress = receiverAddress;
     }
 
     public String getTelephone() {
@@ -392,7 +404,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setTelephone(String telephone) {
-        this.telephone = telephone == null ? null : telephone.trim();
+        this.telephone = telephone;
     }
 
     public String getPostcode() {
@@ -400,7 +412,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setPostcode(String postcode) {
-        this.postcode = postcode == null ? null : postcode.trim();
+        this.postcode = postcode;
     }
 
     public String getIdCard() {
@@ -408,7 +420,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setIdCard(String idCard) {
-        this.idCard = idCard == null ? null : idCard.trim();
+        this.idCard = idCard;
     }
 
     public String getIdcardPicFront() {
@@ -416,7 +428,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setIdcardPicFront(String idcardPicFront) {
-        this.idcardPicFront = idcardPicFront == null ? null : idcardPicFront.trim();
+        this.idcardPicFront = idcardPicFront;
     }
 
     public String getIdcardPicReverse() {
@@ -424,7 +436,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setIdcardPicReverse(String idcardPicReverse) {
-        this.idcardPicReverse = idcardPicReverse == null ? null : idcardPicReverse.trim();
+        this.idcardPicReverse = idcardPicReverse;
     }
 
     public String getMemo() {
@@ -432,7 +444,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setMemo(String memo) {
-        this.memo = memo == null ? null : memo.trim();
+        this.memo = memo;
     }
 
     public String getCreator() {
@@ -441,7 +453,7 @@ public class MallSubOrderDO extends BaseModel {
 
     @Override
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
 
     public String getModifier() {
@@ -450,7 +462,7 @@ public class MallSubOrderDO extends BaseModel {
 
     @Override
     public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+        this.modifier = modifier;
     }
 
     public String getSubOrderNo() {
@@ -458,7 +470,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setSubOrderNo(String subOrderNo) {
-        this.subOrderNo = subOrderNo == null ? null : subOrderNo.trim();
+        this.subOrderNo = subOrderNo;
     }
 
     public String getChannelSubOrderNo() {
@@ -466,7 +478,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setChannelSubOrderNo(String channelSubOrderNo) {
-        this.channelSubOrderNo = channelSubOrderNo == null ? null : channelSubOrderNo.trim();
+        this.channelSubOrderNo = channelSubOrderNo;
     }
 
     public String getShareUserId() {
@@ -474,7 +486,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShareUserId(String shareUserId) {
-        this.shareUserId = shareUserId == null ? null : shareUserId.trim();
+        this.shareUserId = shareUserId;
     }
 
     public String getShareToken() {
@@ -482,7 +494,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShareToken(String shareToken) {
-        this.shareToken = shareToken == null ? null : shareToken.trim();
+        this.shareToken = shareToken;
     }
 
     public String getShareTime() {
@@ -490,7 +502,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShareTime(String shareTime) {
-        this.shareTime = shareTime == null ? null : shareTime.trim();
+        this.shareTime = shareTime;
     }
 
     public String getShareCloseFlag() {
@@ -498,7 +510,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShareCloseFlag(String shareCloseFlag) {
-        this.shareCloseFlag = shareCloseFlag == null ? null : shareCloseFlag.trim();
+        this.shareCloseFlag = shareCloseFlag;
     }
 
     public String getShareCloseTime() {
@@ -506,7 +518,7 @@ public class MallSubOrderDO extends BaseModel {
     }
 
     public void setShareCloseTime(String shareCloseTime) {
-        this.shareCloseTime = shareCloseTime == null ? null : shareCloseTime.trim();
+        this.shareCloseTime = shareCloseTime;
     }
 
     public BigDecimal getShareMoney() {
@@ -515,5 +527,13 @@ public class MallSubOrderDO extends BaseModel {
 
     public void setShareMoney(BigDecimal shareMoney) {
         this.shareMoney = shareMoney;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

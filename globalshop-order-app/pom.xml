@@ -54,7 +54,11 @@
             <artifactId>globalshop-channel</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.wangqin.globalshop</groupId>
+            <artifactId>globalshop-item-app</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>globalshop-order-app</finalName>

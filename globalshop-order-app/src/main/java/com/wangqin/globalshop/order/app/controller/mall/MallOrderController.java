@@ -4,17 +4,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.channel.service.item.IItemService;
+import com.wangqin.globalshop.channel.service.item.IItemSkuService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.ImgUtil;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.util_service.OrderISequenceUtilService;
@@ -46,14 +48,18 @@ public class MallOrderController {
 
     @Autowired
     private IMallOrderService mallOrderService;
-
     @Autowired
     private OrderISequenceUtilService sequenceUtilService;
-
     @Autowired
     private IMallSubOrderService mallSubOrderService;
     @Autowired
     private InventoryService inventoryService;
+    @Autowired
+    private IItemService itemService;
+    @Autowired
+    private IItemSkuService itemSkuService;
+    @Autowired
+    private IItemSkuScaleService itemSkuScaleService;
 
     /**
      * 主页
@@ -263,8 +269,25 @@ public class MallOrderController {
             if (orderNo != null) {
                 List<MallSubOrderDO> erpOrders = mallSubOrderService.selectByOrderNo(orderNo);
                 for (MallSubOrderDO mallSubOrder : erpOrders) {
+
                     mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
+
+                    List<ItemSkuScaleDO> skuScaleList = itemSkuScaleService.selectScaleNameValueBySkuCode(mallSubOrder.getSkuCode());
+                    if(!EasyUtil.isListEmpty(skuScaleList)) {
+                        for(ItemSkuScaleDO scale:skuScaleList) {
+                            if("颜色".equals(scale.getScaleName())) {
+                                mallSubOrder.setColor(scale.getScaleValue());
+                            }
+                            if("尺寸".equals(scale.getScaleName())) {
+                                mallSubOrder.setScale(scale.getScaleValue());
+                            }
+                        }
+                    }
+
+                    ItemDO itemDO = itemService.getByItemCode(mallSubOrder.getItemCode());
+                    mallSubOrder.setBrand(itemDO.getBrandName());
                 }
+
                 result.setData(erpOrders);
             } else {
                 return JsonResult.buildFailed("没有传ID");
