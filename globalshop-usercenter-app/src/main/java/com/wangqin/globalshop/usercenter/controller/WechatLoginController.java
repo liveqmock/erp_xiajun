@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
@@ -11,6 +12,8 @@ import com.wangqin.globalshop.common.utils.CookieUtil;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
+import lombok.Getter;
+import lombok.Setter;
 import net.sf.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,7 +31,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author biscuit
@@ -328,5 +334,49 @@ public class WechatLoginController {
         }
 
     }
+        @RequestMapping("/loginByUserNo")
+    public Object loginByUserNo(String userNo){
+        JsonResult<Object> result = new JsonResult<>();
+        return result.buildIsSuccess(true).buildMsg("登陆成功");
+    }
+    @RequestMapping("/getUserInfo")
+    public Object getLoginHtml(String status){
+        JsonResult<Object> result = new JsonResult<>();
+        Map<String,String> map = new HashMap<>();
+        if ("0".equals(status)){
+            map.put("status","0");
+            result.buildIsSuccess(false).buildMsg("找不到对应用户").buildData(map);
+        }else if ("1".equals(status)){
+            map.put("status","1");
+            result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
+        } else if ("2".equals(status)) {
+            map.put("status","2");
+            User user1 = new User();
+            user1.setCompanyName("网擒天下");
+            user1.setName("张三");
+            user1.setUserNo("7456");
+            User user2 = new User();
+            user2.setCompanyName("海狐海淘");
+            user2.setName("李四");
+            user2.setUserNo("2333");
+            List<User> list = new ArrayList();
+            list.add(user1);
+            list.add(user2);
+            map.put("status","2");
+            map.put("userInfo", JSON.toJSONString(list));
+            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
+        } else {
+            result.buildIsSuccess(false).buildMsg("异常数据:status"+status);
+        }
 
+        return result;
+
+    }
+    @Getter@Setter
+    class User{
+        private String companyName;
+        private String name;
+        private String userNo;
+
+    }
 }
