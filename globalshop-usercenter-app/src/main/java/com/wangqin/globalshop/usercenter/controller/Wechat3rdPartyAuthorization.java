@@ -455,7 +455,7 @@ public class Wechat3rdPartyAuthorization {
 
     @RequestMapping("getInfo")
     public String getInfo() {
-        String componentAccessToken = (String) loginCache.get("component_access_token");
+        String componentAccessToken = getToken();
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
         Map<String, String> map = new HashMap<>();
         map.put("componentAccessToken", componentAccessToken);
