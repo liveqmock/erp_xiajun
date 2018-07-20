@@ -294,6 +294,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         if (StringUtils.isBlank(orderNo)){
             throw new ErpCommonException("数据丢失,请联系管理员");
         }
+        MallOrderDO mallOrder = mallOrderDOMapper.selectByOrderNo(orderNo);
         /*释放原先的库存占用*/
         List<MallSubOrderDO> oldList = mallSubOrderDOMapper.selectByOrderNo(orderNo);
         for (MallSubOrderDO subOrder : oldList) {
@@ -310,8 +311,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
             quantity = quantity == null ? 0 : quantity;
             totalPrice += salePrice * quantity;
             subOrder.setOrderNo(orderNo);
-            //shopcode现在在add时随机生成，不让改了
-//            subOrder.setShopCode(vo.getShopCode());
+            subOrder.setShopCode(mallOrder.getShopCode());
             initSkuInfo2SubOrder(subOrder);
             initAddressInfo2SubOrder(subOrder, vo);
             subOrder.setMemo(vo.getMemo());
@@ -320,7 +320,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
             inventoryService.order(subOrder);
             mallSubOrderDOMapper.insert(subOrder);
         }
-        MallOrderDO mallOrder = mallOrderDOMapper.selectByOrderNo(orderNo);
         mallOrder.setShopCode(vo.getShopCode());
         mallOrder.setPayType(vo.getPayType());
         mallOrder.setTotalAmount(totalPrice);
