@@ -330,12 +330,14 @@ public class Wechat3rdPartyAuthorizationController {
             throw new ErpCommonException("获取用户小程序分类失败");
         }
         String category_list = o1.getString("category_list");
-        Category category = JSON.parseObject(category_list, Category.class);
+        JSONArray objects = JSON.parseArray(category_list);
+        Object o = objects.get(0);
+        JSONObject object1 = JSON.parseObject(o.toString());
 //        {"errcode":0,"errmsg":"ok","category_list":[{"first_class":"工具","second_class":"办公","first_id":287,"second_id":298}]}
-        String firstClass = category.getFirst_class();
-        String secondClass = category.getSecond_class();
-        String firstId = category.getFirst_id();
-        String secondId = category.getSecond_id();
+        String firstClass = object1.getString("first_class");
+        String secondClass = object1.getString("second_class");
+        String firstId = object1.getString("first_id");
+        String secondId = object1.getString("second_id");
         log.info("firstClass" + firstClass);
         log.info("secondClass" + secondClass);
         log.info("firstId" + firstId);
@@ -539,5 +541,26 @@ public class Wechat3rdPartyAuthorizationController {
 
     }
 
+    public static void main(String[] args) {
+        String a = "{\"errcode\":0,\"errmsg\":\"ok\",\"category_list\":[{\"first_class\":\"工具\",\"second_class\":\"办公\",\"first_id\":287,\"second_id\":298}]}";
+        JSONObject object = JSON.parseObject(a);
+        String category_list = object.getString("category_list");
+        System.out.println(category_list);
+//        Category category = JSON.parseObject("{"+category_list+"}", Category.class);
+////        {"errcode":0,"errmsg":"ok","category_list":[{"first_class":"工具","second_class":"办公","first_id":287,"second_id":298}]}
+//        String firstClass = category.getFirst_class();
+//        String secondClass = category.getSecond_class();
+//        String firstId = category.getFirst_id();
+//        String secondId = category.getSecond_id();
+//        log.info("firstClass" + firstClass);
+//        log.info("secondClass" + secondClass);
+//        log.info("firstId" + firstId);
+//        log.info("secondId" + secondId);
+        //language=JSON
+        String n = "[{\"second_class\":\"办公\",\"second_id\":298,\"first_id\":287,\"first_class\":\"工具\"}]";
+
+//        System.out.println(object1);
+
+    }
 
 }
