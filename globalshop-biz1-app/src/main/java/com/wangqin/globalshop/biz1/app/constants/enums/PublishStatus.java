@@ -5,7 +5,7 @@ package com.wangqin.globalshop.biz1.app.constants.enums;
  * @author 朱路
  *
  */
-public enum PubilshStatus {
+public enum PublishStatus {
     /**
      *已授权
      */
@@ -29,7 +29,7 @@ public enum PubilshStatus {
 
     private int code;
     private String description;
-    PubilshStatus(int code, String description){
+    PublishStatus(int code, String description){
     	this.code = code;
     	this.description = description;
     }
@@ -41,8 +41,8 @@ public enum PubilshStatus {
         return description;
     }
     
-    public static PubilshStatus of(int code) {
-        for (PubilshStatus status : PubilshStatus.values()) {
+    public static PublishStatus of(int code) {
+        for (PublishStatus status : PublishStatus.values()) {
             if (status.code == code) {
                 return status;
             }

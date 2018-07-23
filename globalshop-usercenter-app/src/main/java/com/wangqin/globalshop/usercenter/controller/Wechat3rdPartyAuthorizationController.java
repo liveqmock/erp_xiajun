@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.PubilshStatus;
+import com.wangqin.globalshop.biz1.app.constants.enums.PublishStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.*;
@@ -14,8 +14,6 @@ import com.wangqin.globalshop.usercenter.service.IAppletConfigService;
 import com.wangqin.globalshop.usercenter.service.UserUploadFileService;
 import com.wangqin.globalshop.usercenter.wechat_sdk.AesException;
 import com.wangqin.globalshop.usercenter.wechat_sdk.WXBizMsgCrypt;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -26,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
-import sun.rmi.runtime.Log;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
@@ -34,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -215,8 +211,8 @@ public class Wechat3rdPartyAuthorizationController {
             AppletConfigDO applet = getAppletDO(info, APPLET_TYPE, companyNo);
             /*提交体验版*/
             updateApplet(templetId, applet);
-            /*提交审核*/
-            auditApplet(applet);
+//            /*提交审核*/
+//            auditApplet(applet);
             log.info("最终小程序信息=======" + applet);
             appletConfigServiceImplement.insert(applet);
             return "success";
@@ -294,12 +290,20 @@ public class Wechat3rdPartyAuthorizationController {
         }
         applet.setImgUrl(img);
         applet.setTempletId(templateId);
-        applet.setPublishStatus(PubilshStatus.SUBMITTED.getCode());
+        applet.setPublishStatus(PublishStatus.SUBMITTED.getCode());
         applet.setExtJson(trueJson);
         log.info("发布体验版后的小程序" + applet);
 
     }
 
+    @PostMapping("auditAll")
+    public void auditAll() {
+        List<AppletConfigDO> list = appletConfigServiceImplement.selectByPublishStatus(PublishStatus.SUBMITTED.getCode());
+        for (AppletConfigDO applet : list) {
+            auditApplet(applet);
+            appletConfigServiceImplement.update(applet);
+        }
+    }
 
 //    @PostMapping("/updateApletAll")
 ////    @Authenticated
@@ -368,7 +372,7 @@ public class Wechat3rdPartyAuthorizationController {
         String auditid = obj3.getString("auditid");
         log.info("auditid" + auditid);
         applet.setAuditId(auditid);
-        applet.setPublishStatus(PubilshStatus.PENDING_REVIEW.getCode());
+        applet.setPublishStatus(PublishStatus.PENDING_REVIEW.getCode());
         log.info("提交审核之后的" + applet);
     }
 
@@ -436,7 +440,7 @@ public class Wechat3rdPartyAuthorizationController {
     @Scheduled(cron = "0 0/30 * * * ?")
     private void publicapplet() {
         log.info("发布小程序定时任务启动");
-        List<AppletConfigDO> list = appletConfigServiceImplement.selectByPublishStatus(PubilshStatus.PENDING_REVIEW.getCode());
+        List<AppletConfigDO> list = appletConfigServiceImplement.selectByPublishStatus(PublishStatus.PENDING_REVIEW.getCode());
         for (AppletConfigDO applet : list) {
             String accessToken = applet.getAuthorizerAccessToken();
             String url = "https://api.weixin.qq.com/wxa/get_auditstatus?access_token=" + accessToken;
@@ -480,7 +484,7 @@ public class Wechat3rdPartyAuthorizationController {
         applet.setAppletType(appletType);
         applet.setCompanyNo(companyNo);
         applet.setStatus(PAY_STATUS_PLATFORM);
-        applet.setPublishStatus(PubilshStatus.AUTHORIZED.getCode());
+        applet.setPublishStatus(PublishStatus.AUTHORIZED.getCode());
         applet.setAuthorizerAccessToken(accessToken);
         applet.setAuthorizerRefreshToken(refreshToken);
         applet.init4NoLogin();
