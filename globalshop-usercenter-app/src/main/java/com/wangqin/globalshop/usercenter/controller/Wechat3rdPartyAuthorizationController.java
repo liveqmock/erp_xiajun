@@ -152,7 +152,7 @@ public class Wechat3rdPartyAuthorizationController {
 
 
     @RequestMapping("/getAuthUrl")
-    @Authenticated
+//    @Authenticated
     public Object getAuthUrl() {
         JsonResult<Object> result = new JsonResult<>();
         String re_url;
