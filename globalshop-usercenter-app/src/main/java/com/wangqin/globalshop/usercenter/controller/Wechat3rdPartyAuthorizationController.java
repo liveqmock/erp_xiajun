@@ -14,6 +14,8 @@ import com.wangqin.globalshop.usercenter.service.IAppletConfigService;
 import com.wangqin.globalshop.usercenter.service.UserUploadFileService;
 import com.wangqin.globalshop.usercenter.wechat_sdk.AesException;
 import com.wangqin.globalshop.usercenter.wechat_sdk.WXBizMsgCrypt;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -328,19 +330,18 @@ public class Wechat3rdPartyAuthorizationController {
             throw new ErpCommonException("获取用户小程序分类失败");
         }
         String category_list = o1.getString("category_list");
-        JSONObject o3 = JSON.parseObject(category_list);
-        String firstClass = o3.getString("first_class");
-        String secondClass = o3.getString("second_class");
-        String firstId = o3.getString("first_id");
-        String secondId = o3.getString("second_id");
+        Category category = JSON.parseObject(category_list, Category.class);
+//        {"errcode":0,"errmsg":"ok","category_list":[{"first_class":"工具","second_class":"办公","first_id":287,"second_id":298}]}
+        String firstClass = category.getFirst_class();
+        String secondClass = category.getSecond_class();
+        String firstId = category.getFirst_id();
+        String secondId = category.getSecond_id();
         log.info("firstClass" + firstClass);
         log.info("secondClass" + secondClass);
         log.info("firstId" + firstId);
         log.info("secondId" + secondId);
 
-
 //        {"errcode":0,"errmsg":"ok","category_list":[{"first_class":"商家自营","second_class":"海淘","first_id":304,"second_id":784}]}
-
         String url2 = "https://api.weixin.qq.com/wxa/get_page?access_token=" + authorizerAccessToken;
         String s2 = HttpClientUtil.get(url2);
         log.info("获取页面结果" + s2);
@@ -369,7 +370,13 @@ public class Wechat3rdPartyAuthorizationController {
         applet.setPublishStatus(PubilshStatus.PENDING_REVIEW.getCode());
         log.info("提交审核之后的" + applet);
     }
-
+    @Getter@Setter
+    class Category{
+        private String first_class;
+        private String second_class;
+        private String first_id;
+        private String second_id;
+    }
 
     /***
      * 设置小程序的业务域名
