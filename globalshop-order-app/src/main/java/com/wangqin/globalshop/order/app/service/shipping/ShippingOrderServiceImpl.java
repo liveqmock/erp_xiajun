@@ -157,7 +157,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         multiDeliveryFormDTO.setTotalSalePrice(totalSalePrice);
         multiDeliveryFormDTO.setMallSubOrderList(mallSubOrderList);
         return multiDeliveryFormDTO;
-    }
+    } 
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)

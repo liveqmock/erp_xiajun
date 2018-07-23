@@ -1,8 +1,9 @@
-package com.wangqin.globalshop.order.app.service.sifang.impl;
+package com.wangqin.globalshop.order.app.service.shipping.sifang.impl;
 
 import com.google.gson.Gson;
 import com.wangqin.globalshop.biz1.app.constants.enums.TransferStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.MapUtil;
 import com.wangqin.globalshop.common.utils.MathUtil;
@@ -11,9 +12,8 @@ import com.wangqin.globalshop.order.app.service.category.OrderICategoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
-import com.wangqin.globalshop.order.app.service.sifang.ISiFangService;
-import com.wangqin.globalshop.order.app.service.sifang.OrderShippingTrackPolling4pxService;
-import com.wangqin.globalshop.order.app.service.warehouse.OrderIWarehouseService;
+import com.wangqin.globalshop.order.app.service.shipping.sifang.ISiFangService;
+import com.wangqin.globalshop.order.app.service.shipping.sifang.OrderShippingTrackPolling4pxService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -51,7 +51,7 @@ public class SiFangServiceImpl implements ISiFangService {
 	@Autowired
 	private OrderICategoryService categoryService;
 	@Autowired
-	private OrderIWarehouseService warehouseService;
+	private WarehouseDOMapperExt warehouseDOMapper;
 
 	// public static final String Token = "CPRX01A-4528-1106-17PM-1808DEEB48A4";
 
@@ -121,7 +121,7 @@ public class SiFangServiceImpl implements ISiFangService {
 		
 		// 查仓库
 		String warehouseNo = erpOrderList.get(0).getWarehouseNo();
-		WarehouseDO wareHouse =  warehouseService.selectByWarehouseNo(warehouseNo);
+		WarehouseDO wareHouse =  warehouseDOMapper.selectByWarehouseNo(warehouseNo);
 		if (wareHouse == null) {
 			throw new ErpCommonException("仓库查不到 wareHouseId：" + warehouseNo);
 		}

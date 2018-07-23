@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.haihu;
+package com.wangqin.globalshop.order.app.service.shipping.haihu;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 

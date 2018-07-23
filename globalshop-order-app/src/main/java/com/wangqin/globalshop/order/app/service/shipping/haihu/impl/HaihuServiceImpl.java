@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.haihu.impl;
+package com.wangqin.globalshop.order.app.service.shipping.haihu.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
@@ -9,9 +9,9 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.MapUtil;
 import com.wangqin.globalshop.common.utils.Md5Util;
+import com.wangqin.globalshop.order.app.service.shipping.haihu.IHaihuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
-import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
