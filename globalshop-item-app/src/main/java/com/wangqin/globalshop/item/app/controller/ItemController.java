@@ -322,6 +322,7 @@ public class ItemController {
         if(null != item.getLogisticType()) {
         	newItem.setLogisticType(item.getLogisticType().byteValue());
         }    
+        newItem.setId(item.getId());
         iItemService.updateByIdSelective(newItem);	
         return result.buildIsSuccess(true);
     }
