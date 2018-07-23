@@ -1,37 +1,62 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
-import com.wangqin.globalshop.common.enums.StockUpStatus;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.order.app.service.item.OrderItemSkuScaleService;
-import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
-import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
-import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.ByteArrayOutputStream;
-import java.util.*;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
+import com.wangqin.globalshop.common.enums.StockUpStatus;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.exception.InventoryException;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.order.app.config.OrderConfig;
+import com.wangqin.globalshop.order.app.service.item.OrderItemSkuScaleService;
+import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
+import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
+import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
+import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
+import com.wangqin.globalshop.order.app.service.warehouse.OrderIWarehouseService;
 
 
 /**
@@ -41,13 +66,8 @@ import java.util.*;
 @Controller
 @RequestMapping("/erpOrder")
 @Authenticated
+@PropertySource("classpath:orderConfig.properties")
 public class MallSubOrderController {
-
-	//APEX使用,@author:xiajun
-	private static final Double GROSS_GAIN = 0.80;//净重=毛重*0.8
-	private static final String SENDER = "爱派客官方微店";//发货人
-	private static final String SENDER_ADDRESS = "DD129 LOT 3304RP, Ping Ha Road, Ha Tsuen, Yuen Long, New Territories, Hong Kong(香港新界元朗流浮山屏厦路DD129, 3304地段)";//发货人地址
-	private static final String SENDER_PHONE = "21561899";//发货人电话
 
 	@Autowired
 	private IMallSubOrderService erpOrderService;
@@ -59,6 +79,10 @@ public class MallSubOrderController {
 	private OrderItemSkuService orderItemSkuService;
 	@Autowired
 	private OrderItemSkuScaleService orderItemSkuScaleService;
+	@Autowired
+	private OrderIWarehouseService warehouseService;
+	@Autowired
+	private OrderConfig orderConfig;
 	@Autowired
     private IMallOrderService orderService;
 
@@ -388,13 +412,25 @@ public class MallSubOrderController {
 	 * 导出excel
      * @author:xiajun
 	 */
-	@RequestMapping("/erpOrderExport")
+	@RequestMapping("/erpOrderExport")	
     public ResponseEntity<byte[]> erpOrderExport(MallSubOrderVO erpOrderQueryVO) throws Exception {
     	String companyNo = AppUtil.getLoginUserCompanyNo();
     	if(IsEmptyUtil.isStringEmpty(companyNo)) {
     		throw new ErpCommonException("请先登录");
     	}
     	erpOrderQueryVO.setCompanyNo(companyNo);
+    	
+    	//查询仓库信息
+    	List<WarehouseDO> warehouseList = warehouseService.selectByCompanyNo(companyNo);
+    	String warehouseAddress = "";
+    	String warehouseContactPerson = "";
+    	String warehouseTel = "";
+    	if(IsEmptyUtil.isCollectionNotEmpty(warehouseList)) {
+    		WarehouseDO warehouse = warehouseList.get(0);
+    		warehouseAddress = warehouse.getAddress();
+    		warehouseContactPerson = warehouse.getContactPerson();
+    		warehouseTel = warehouse.getTel();
+    	}
 
     	List<MallSubOrderExcelVO> erpOrderList = new ArrayList<MallSubOrderExcelVO>();
     	List<List<Object>> rowDatas = new ArrayList<>();
@@ -419,6 +455,7 @@ public class MallSubOrderController {
         	erpOrderList = erpOrderService.queryErpOrderForExcel(erpOrderQueryVO);
     	}
 
+
     	if(erpOrderList != null) {
     		for (MallSubOrderExcelVO erpOrder : erpOrderList) {
     			List<Object> list = new ArrayList<>();
@@ -430,8 +467,9 @@ public class MallSubOrderController {
     			if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
     				ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
     				if(null != itemSkuDoWeight) {
-    					list.add(itemSkuDoWeight.getWeight()*GROSS_GAIN);
-    					list.add(itemSkuDoWeight.getWeight());
+    					Double grossWeight = itemSkuDoWeight.getWeight();
+    					list.add(calPureWeight(grossWeight));
+    					list.add(grossWeight);
     				} else {
     					list.add(0.0);
         				list.add(0.0);
@@ -479,9 +517,9 @@ public class MallSubOrderController {
     	        list.add(erpOrder.getReceiverAddress());
     	        list.add(erpOrder.getTelephone());
     	        list.add(erpOrder.getIdCard());
-    	        list.add(SENDER);
-    	        list.add(SENDER_ADDRESS);
-    	        list.add(SENDER_PHONE);
+    	        list.add(warehouseContactPerson);
+    	        list.add(warehouseAddress);
+    	        list.add(warehouseTel);
     	        list.add(null);
     	        list.add(null);
     	        list.add(null);
@@ -545,6 +583,27 @@ public class MallSubOrderController {
         result.setSuccess(true);
         return result.buildIsSuccess(true);
 
+    }
+    
+    /**
+     * 净重的计算
+     * 
+     */
+    private Double calPureWeight(Double grossWeight) {
+    	String operator = orderConfig.getOperator();
+    	Double para = Double.parseDouble(orderConfig.getConstant());
+    	switch (operator) {
+		case "+":
+			return grossWeight+para;
+		case "-":
+			return grossWeight-para;
+		case "*":
+			return grossWeight*para;
+		case "/":
+			return grossWeight/para;
+		default:
+			return grossWeight;
+		}
     }
 
 }

@@ -6,13 +6,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.xpath.operations.Bool;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -153,10 +157,9 @@ public class ItemServiceImplement implements IItemService {
     @Override
     public Object addItem(ItemQueryVO item) {
     	JsonResult<ItemDO> result = new JsonResult<>();       
-    	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+    	if(!loginCheck()) {
          	return result.buildIsSuccess(false).buildMsg("请先登录");
-        }             
-        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+        }                    
       
         //商品名称处理
         String itemNameShort = item.getName();
@@ -167,22 +170,15 @@ public class ItemServiceImplement implements IItemService {
         item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
 
         //商品必须有主图
-        String mainPic = item.getMainPic();     
-        JSONObject jsonObject = JSONObject.fromObject(mainPic);
-        JSONArray jsonArray = jsonObject.getJSONArray("picList");
-        if(0 == jsonArray.size()) {
+        if(!picCheck(item.getMainPic())) {
         	return result.buildIsSuccess(false).buildMsg("商品必须有主图");
         }
 
         //系统自动生成item_code
         String itemCode = ItemEnCodeUtil.generateItemCode(categoryCode);
-        item.setItemCode(itemCode);
         
         // 解析skuList 数组对象
         String skuList = item.getSkuList();
-        if(!StringUtils.isNotBlank(skuList)) {
-        	return result.buildIsSuccess(false).buildMsg("最少需要提供一个sku");
-        }
         List<Double> itemSkuPriceList = new ArrayList<Double>();
         try {
             String s = skuList.replace("&quot;", "\"");
@@ -192,42 +188,32 @@ public class ItemServiceImplement implements IItemService {
             if (skus != null && !skus.isEmpty()) {
                 for (ItemSkuAddVO itemSku : skus) {
                 	itemSkuPriceList.add(itemSku.getSalePrice());
-                    i++;
-                    itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i));                                   
+                    itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i++));                                   
                     String skuMainPic = itemSku.getSkuPic();
                     
                     //sku没有图片就用商品的图片
-                    JSONObject skuPicJsonObject = JSONObject.fromObject(skuMainPic);
-                    JSONArray skuPicJsonArray = skuPicJsonObject.getJSONArray("picList");
-                    if(0 == skuPicJsonArray.size()) {//没图
-                    	itemSku.setSkuPic(mainPic);
+                    if(!picCheck(skuMainPic)) {//没图
+                    	itemSku.setSkuPic(item.getMainPic());
                     } else {
                     	itemSku.setSkuPic(skuMainPic);
-                    }
-                    if (StringUtils.isNotBlank(itemSku.getPackageLevelId())) {
-                        List<Long> a = HaiJsonUtils.toBean(itemSku.getPackageLevelId(), new TypeReference<List<Long>>() {
-                        });
                     }
                 }
                 item.setItemSkus(skus);
             }
         } catch (Exception e) {
             return result.buildMsg("解析SKU错误").buildIsSuccess(false);
-        }           
+        }                 
+        
+        ItemDO newItem = new ItemDO();
         
         //对前端传来的时间进行处理
-        ItemDO newItem = new ItemDO();
         try {
-            newItem.setStartDate(DateUtil.transferStringToDate(item.getStartDate()));
-            newItem.setEndDate(DateUtil.transferStringToDate(item.getEndDate()));
-            if (IsEmptyUtil.isStringNotEmpty(item.getBookingDate())) {//非必填项，空指针检查
-                newItem.setBookingDate(DateUtil.transferStringToDate(item.getBookingDate()));
-            }
+            setItemDate(item, newItem);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg("时间填写的有错误");
         }
-        //TEMP                    
-        item.setIsSale(ItemIsSale.SALABLE.getCode());
+        //是否可售                  
+        setIsSale(newItem);
 
         newItem.setDetail(item.getDetail());
         detailDecoder(newItem);
@@ -248,11 +234,10 @@ public class ItemServiceImplement implements IItemService {
         	newItem.setQrCodeUrl(qrCodeUrl);
         }
         newItem.setCountry(item.getCountry());
-        newItem.setItemCode(item.getItemCode());
+        newItem.setItemCode(itemCode);
         newItem.setWxisSale(item.getWxisSale().byteValue());     
         newItem.setMainPic(item.getMainPic());
         newItem.setRemark(item.getRemark());
-        newItem.setIsSale(item.getIsSale().byteValue());
         newItem.setItemShort(itemNameShort); 
         newItem.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         newItem.setModifier(AppUtil.getLoginUserId());
@@ -260,6 +245,7 @@ public class ItemServiceImplement implements IItemService {
         
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
+        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
         List<String> upcList = new ArrayList<>();
         for(ItemSkuAddVO itemSku:itemSkuList) {
             //检测upc是否和数据库里面已有的upc重复,按公司划分
@@ -300,11 +286,6 @@ public class ItemServiceImplement implements IItemService {
         scaleService.insertBatch(scaleList);
         
         invService.outbound(inventoryList);
-
-        //同步生成小程序的二维码
-//        if (item.getId() != null) {
-//            voidDimensionCodeUtil(item.getId());
-//        }
         
     	//处理第三方销售平台，TEMP
     	List<Integer> channelList = item.getSaleOnChannels();
@@ -1053,7 +1034,7 @@ public class ItemServiceImplement implements IItemService {
      * 工具类：处理商品的名字
      * 商品名称公式：品牌英文名+品牌中文名+男女款+商品名
      */
-    private static void setItemNewName(ItemQueryVO item) {
+    public static void setItemNewName(ItemQueryVO item) {
     	StringBuffer nameNew = new StringBuffer();
         String[] brandArr = item.getBrand().split("->");
         for(String s:brandArr) { //品牌处理
@@ -1067,8 +1048,60 @@ public class ItemServiceImplement implements IItemService {
     }
     
     /**
-     * 生成商品的二维码
+     * 工具类
+     * 设置商品是否可售
+     */
+    public static void setIsSale(ItemDO newItem) {
+        if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), DateUtil.getDateByCalculate(newItem.getEndDate(), Calendar.DATE, 1))) {
+        	newItem.setIsSale(ItemIsSale.SALABLE.getCode().byteValue());
+        } else {
+        	newItem.setIsSale(ItemIsSale.UNSALABLE.getCode().byteValue());
+        }
+    }
+    
+    /**
+     * 工具类
+     * 处理商品时间相关的字段
+     */
+    public static void setItemDate(ItemQueryVO item,ItemDO newItem) throws ParseException{    	
+    	newItem.setStartDate(DateUtil.transferStringToDate(item.getStartDate()));
+    	newItem.setEndDate(DateUtil.transferStringToDate(item.getEndDate()));
+    	if(IsEmptyUtil.isStringNotEmpty(item.getBookingDate())) {
+    		newItem.setBookingDate(DateUtil.transferStringToDate(item.getBookingDate()));
+    	}
+    }
+    
+    /**
+     * 工具类
+     * 用户登录判断
      * @param itemCode
+     * @return
+     */
+    public Boolean loginCheck() {
+    	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+         	return false;
+        }  
+    	return true;
+    }
+    
+    /**
+     * 工具类
+     * 判断用户是否提供了主图
+     * @param itemCode
+     * @return
+     */
+    public Boolean picCheck(String pic) {   
+        JSONObject jsonObject = JSONObject.fromObject(pic);
+        JSONArray jsonArray = jsonObject.getJSONArray("picList");
+        if(0 == jsonArray.size()) {
+         	return false;
+        }
+        return true;
+    }
+    
+    /**
+     * 工具类
+     * 二维码生成
      * @return
      */
     private String generateQrCode(String itemCode) {

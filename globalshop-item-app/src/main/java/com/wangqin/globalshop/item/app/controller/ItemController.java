@@ -1,30 +1,19 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.vo.*;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.common.enums.AppletType;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.common.utils.excel.ReadExcel;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.*;
-
-
-
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,18 +22,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.common.enums.AppletType;
+import com.wangqin.globalshop.common.enums.ItemIsSale;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
+import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.ImageUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.PriceUtil;
+import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.common.utils.excel.ReadExcel;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.IAppletConfigService;
+import com.wangqin.globalshop.item.app.service.IItemBrandService;
+import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.item.app.service.impl.ItemServiceImplement;
 
-
-import java.io.*;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * 商品处理器
@@ -127,7 +143,7 @@ public class ItemController {
         }
 
         //商品名称处理
-        setItemNewName(item);
+        ItemServiceImplement.setItemNewName(item);
 
         String skuList = item.getSkuList();
         if (!StringUtils.isNotBlank(skuList)) {
@@ -274,42 +290,25 @@ public class ItemController {
         
         String imgJson = ImageUtil.getImageUrl(item.getMainPic());
         item.setMainPic(imgJson);
-
-        //对前端传来的时间进行处理
+       
         ItemDO newItem = new ItemDO();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        //对前端传来的时间进行处理
         try {
-            newItem.setStartDate(format.parse(item.getStartDate()));
-            newItem.setEndDate(format.parse(item.getEndDate()));
-            if(null != item.getBookingDate()) {
-                newItem.setBookingDate(format.parse(item.getBookingDate()));
-            }
-        } catch (Exception e) {
-            //
+        	ItemServiceImplement.setItemDate(item,newItem);
+        } catch (ParseException e) {
+        	return result.buildIsSuccess(false).buildMsg("时间填写的有错误");
         }
-        //判断是否可售
-//        if (item.getStartDate() == null || item.getEndDate() == null) {
-//            item.setIsSale(0);
-//        } else if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), DateUtil.getDateByCalculate(newItem.getEndDate(), Calendar.DATE, 1))) {
-//            item.setIsSale(1);
-//        } else {
-//            item.setIsSale(0);
-//        }
-        //TEMP
-        item.setIsSale(1);
+      
+        //是否可售
+        ItemServiceImplement.setIsSale(newItem);
 
         newItem.setDetail(item.getDetail());
         detailDecoder(newItem);
         newItem.setCategoryCode(item.getCategoryCode());
         newItem.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
         newItem.setBrandName(item.getBrand());
-        String itemBrandFullName = item.getBrand();
-        if(itemBrandFullName.contains("->")) {
-        	newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
-        } else {
-        	
-        	newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand()));
-        } 
+        newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));   
         newItem.setEnName(item.getEnName());
         newItem.setItemName(item.getName());
         newItem.setCurrency(item.getCurrency().byteValue());
@@ -318,11 +317,8 @@ public class ItemController {
         newItem.setCountry(item.getCountry());
         newItem.setRemark(item.getRemark());
         newItem.setMainPic(item.getMainPic());
-        newItem.setId(item.getId());
         newItem.setWxisSale(item.getWxisSale().byteValue());
-        newItem.setMainPic(item.getMainPic());
         newItem.setModifier(AppUtil.getLoginUserId());
-        newItem.setIsSale(item.getIsSale().byteValue());
         if(null != item.getLogisticType()) {
         	newItem.setLogisticType(item.getLogisticType().byteValue());
         }    
@@ -714,24 +710,7 @@ public class ItemController {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
-    }
-    
-    /**
-     * 工具类：处理商品的名字
-     * 商品名称公式：品牌英文名+品牌中文名+男女款+商品名
-     */
-    private static void setItemNewName(ItemQueryVO item) {
-    	StringBuffer nameNew = new StringBuffer();
-        String[] brandArr = item.getBrand().split("->");
-        for(String s:brandArr) { //品牌处理
-        	nameNew.append(s+" ");
-        }
-        if(IsEmptyUtil.isStringNotEmpty(item.getSexStyle())) { //男女款处理
-        	nameNew.append(item.getSexStyle() + " ");
-        }
-        nameNew.append(item.getName());   
-        item.setName(nameNew.toString());//重新设置商品名称
-    }
+    }         
 
 }
 
