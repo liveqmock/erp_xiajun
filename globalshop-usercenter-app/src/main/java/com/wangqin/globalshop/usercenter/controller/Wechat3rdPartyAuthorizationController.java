@@ -327,10 +327,12 @@ public class Wechat3rdPartyAuthorizationController {
         if (!"ok".equals(o1.getString("errmsg"))) {
             throw new ErpCommonException("获取用户小程序分类失败");
         }
-        String firstClass = o1.getString("first_class");
-        String secondClass = o1.getString("second_class");
-        String firstId = o1.getString("first_id");
-        String secondId = o1.getString("second_id");
+        String category_list = o1.getString("category_list");
+        JSONObject o3 = JSON.parseObject(category_list);
+        String firstClass = o3.getString("first_class");
+        String secondClass = o3.getString("second_class");
+        String firstId = o3.getString("first_id");
+        String secondId = o3.getString("second_id");
         log.info("firstClass" + firstClass);
         log.info("secondClass" + secondClass);
         log.info("firstId" + firstId);
