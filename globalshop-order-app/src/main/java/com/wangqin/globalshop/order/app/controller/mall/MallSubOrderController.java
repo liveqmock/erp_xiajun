@@ -44,9 +44,9 @@ import java.util.*;
 public class MallSubOrderController {
 
 	//APEX使用,@author:xiajun
-	private static final Double GROSS_GAIN = 300.0;//毛重比净重大300克
+	private static final Double GROSS_GAIN = 0.80;//净重=毛重*0.8
 	private static final String SENDER = "爱派客官方微店";//发货人
-	private static final String SENDER_ADDRESS = "香港新界元朗流浮山廈村屏廈路丈量約份第129約第3141號地段";//发货人地址
+	private static final String SENDER_ADDRESS = "DD129 LOT 3304RP, Ping Ha Road, Ha Tsuen, Yuen Long, New Territories, Hong Kong(香港新界元朗流浮山屏厦路DD129, 3304地段)";//发货人地址
 	private static final String SENDER_PHONE = "21561899";//发货人电话
 
 	@Autowired
@@ -430,15 +430,15 @@ public class MallSubOrderController {
     			if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
     				ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
     				if(null != itemSkuDoWeight) {
-    					list.add(itemSkuDoWeight.getWeight()-GROSS_GAIN);
+    					list.add(itemSkuDoWeight.getWeight()*GROSS_GAIN);
     					list.add(itemSkuDoWeight.getWeight());
     				} else {
     					list.add(0.0);
-        				list.add(0.0+GROSS_GAIN);
+        				list.add(0.0);
     				}
     			} else {
     				list.add(0.0);
-    				list.add(0.0+GROSS_GAIN);
+    				list.add(0.0);
     			}
     	        list.add(erpOrder.getQuantity());
     	        list.add(erpOrder.getSalePrice());
@@ -458,7 +458,13 @@ public class MallSubOrderController {
     	        if(IsEmptyUtil.isStringNotEmpty(skuCode)) {
     	        	ItemSkuDO itemSkuDO = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
     	        	if(null != itemSkuDO) {
-    	        		list.add(itemSkuDO.getBrandName());
+    	        		String brandName = itemSkuDO.getBrandName();
+    	        		if(IsEmptyUtil.isStringNotEmpty(brandName)) {
+    	        			String[] brands = brandName.split("->");
+    	        			list.add(brands[brands.length-1]);
+    	        		} else {
+    	        			list.add("");//没有品牌的商品暂时以""代替
+    	        		}
     	        	}
     	        	else {
     	        		list.add("");//没有品牌的商品暂时以""代替
@@ -511,7 +517,7 @@ public class MallSubOrderController {
     			"备注商品名称","商品品牌", "收件人姓名","省", "市", "区", "地址", "收件人电话", "收件人证件","发货人名称",
     			"发货人地址", "发货人电话", "商品货号","商品原产国","计量单位","商品备案号","规格型号","国检备案号","购买时间"};
     	Integer[] columnWidth = new Integer[]{10, 15, 10, 10, 10, 10, 10, 15, 20, 10, 12, 10, 10, 10,
-    			10, 10, 12, 20,20 ,15, 10, 10, 10, 10, 25, 10, 10};
+    			10, 10, 12, 20,40 ,15, 10, 10, 10, 10, 25, 10, 10};
     	excelHelper.setErpOrderToSheetForAPEX("Erp Order", columnTitles, rowDatas, columnWidth);
     	//excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
 

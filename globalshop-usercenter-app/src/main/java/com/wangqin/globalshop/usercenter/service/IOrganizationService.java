@@ -15,6 +15,8 @@ import java.util.List;
  */
 public interface IOrganizationService {//extends ISuperService<AuthOrganizationDO>
 
+	AuthOrganizationDO selectByPrimaryKey(Long id);
+	
     List<Tree> selectTree();
 
     List<AuthOrganizationDO> selectTreeGrid();

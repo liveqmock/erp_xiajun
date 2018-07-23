@@ -51,5 +51,11 @@ public class UserRoleServiceImpl implements IUserRoleService {
 		// TODO Auto-generated method stub
 		return userRoleMapper.selectRoleIdByUserId(userId);
 	}
+	
+	//查询某个用户的所有角色的角色Id，@author:xiajun
+	@Override
+	public List<Long> queryRoleIdListByUserId(Long userId,String companyNo) {
+		return userRoleMapper.queryRoleIdListByUserId(userId,companyNo);
+	}
 
 }

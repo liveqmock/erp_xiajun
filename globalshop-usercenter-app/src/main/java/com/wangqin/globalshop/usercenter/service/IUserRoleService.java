@@ -17,4 +17,6 @@ public interface IUserRoleService {
 	
 	AuthUserRoleDO selectRoleIdByUserId(Long userId);
 	
+	//查询某个用户的所有角色的角色Id，@author:xiajun
+    List<Long> queryRoleIdListByUserId(Long userId,String companyNo);
 }

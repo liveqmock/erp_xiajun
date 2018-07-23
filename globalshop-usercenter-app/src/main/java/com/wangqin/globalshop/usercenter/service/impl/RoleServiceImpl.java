@@ -173,4 +173,10 @@ public class RoleServiceImpl implements IRoleService {
 		roleVo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		return roleMapper.updateByRoleVo(roleVo);
 	}
+	
+	//根据id查询角色的名字，@author:xiajun
+	@Override
+	public String queryRoleNameByIdOrRoleId(Long roleId,String companyNo) {
+    	return roleMapper.queryRoleNameByIdOrRoleId(roleId,companyNo);
+    }
 }

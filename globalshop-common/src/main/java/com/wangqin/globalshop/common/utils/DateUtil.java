@@ -20,8 +20,17 @@ public class DateUtil {
 	public static final String DATE_PARTEN_YYMMDDHHMMSS = "yyMMddHHmmss";
 	public static final String formateStr19 = "yyyy-MM-dd HH:mm:ss";
 
+	/**
+	 * 时间字符串转Date类对象，结果类似2017-09-09 11:11:11
+	 * @param date
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date transferStringToDate(String date) throws ParseException{
+		DateFormat format = new SimpleDateFormat(formateStr19);
+		return format.parse(date);		
+	}
 	
-
 	public static boolean isToday(Date date) {
 		if (date != null) {
 			Calendar calendar = Calendar.getInstance();

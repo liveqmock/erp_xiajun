@@ -28,7 +28,12 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
 	@Autowired
 	private AuthOrganizationDOMapperExt organizationMapper;
-
+	
+	@Override
+	public AuthOrganizationDO selectByPrimaryKey(Long id) {
+		return organizationMapper.selectByPrimaryKey(id);
+	}
+	
 	@Override
 	@Transactional(rollbackFor = ErpCommonException.class)
     public List<Tree> selectTree() {

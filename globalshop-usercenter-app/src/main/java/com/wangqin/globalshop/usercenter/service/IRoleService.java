@@ -38,4 +38,7 @@ public interface IRoleService {//extends ISuperService<AuthRoleDO>
     int insertByRoleVo(RoleQueryVO roleVo);
     
     int updateByRoleVo(RoleQueryVO roleVo);
+    
+    //根据id查询角色的名字，@author:xiajun
+    String queryRoleNameByIdOrRoleId(Long roleId,String companyNo);
 }
