@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.sifang;
+package com.wangqin.globalshop.order.app.service.shipping.sifang;
 
 import java.text.ParseException;
 

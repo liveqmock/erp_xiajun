@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.kuaidi100;
+package com.wangqin.globalshop.order.app.service.shipping.kuaidi100;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.order.app.kuaidi_bean.NoticeResponse;

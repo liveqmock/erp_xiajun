@@ -14,10 +14,16 @@
     <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
     <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
     <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR" />
+    <result column="publish_status" property="publishStatus" jdbcType="INTEGER" />
+    <result column="templet_id" property="templetId" jdbcType="INTEGER" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="audit_id" property="auditId" jdbcType="VARCHAR" />
+    <result column="ext_json" property="extJson" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, secret, appid, applet_type, creator, modifier, mch_id, status, pay_key, 
-    authorizer_access_token, authorizer_refresh_token
+    authorizer_access_token, authorizer_refresh_token, publish_status, templet_id, img_url, 
+    audit_id, ext_json
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -36,13 +42,15 @@
     insert into applet_config (company_no, secret, appid, 
       applet_type, creator, modifier, 
       mch_id, status, pay_key, 
-      authorizer_access_token, authorizer_refresh_token
-      )
+      authorizer_access_token, authorizer_refresh_token, 
+      publish_status, templet_id, img_url, 
+      audit_id, ext_json)
     values (#{companyNo,jdbcType=VARCHAR}, #{secret,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR}, 
       #{appletType,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{mchId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{payKey,jdbcType=VARCHAR}, 
-      #{authorizerAccessToken,jdbcType=VARCHAR}, #{authorizerRefreshToken,jdbcType=VARCHAR}
-      )
+      #{authorizerAccessToken,jdbcType=VARCHAR}, #{authorizerRefreshToken,jdbcType=VARCHAR}, 
+      #{publishStatus,jdbcType=INTEGER}, #{templetId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{auditId,jdbcType=VARCHAR}, #{extJson,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -83,6 +91,21 @@
       <if test="authorizerRefreshToken != null" >
         authorizer_refresh_token,
       </if>
+      <if test="publishStatus != null" >
+        publish_status,
+      </if>
+      <if test="templetId != null" >
+        templet_id,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="auditId != null" >
+        audit_id,
+      </if>
+      <if test="extJson != null" >
+        ext_json,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="companyNo != null" >
@@ -117,6 +140,21 @@
       </if>
       <if test="authorizerRefreshToken != null" >
         #{authorizerRefreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="publishStatus != null" >
+        #{publishStatus,jdbcType=INTEGER},
+      </if>
+      <if test="templetId != null" >
+        #{templetId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="auditId != null" >
+        #{auditId,jdbcType=VARCHAR},
+      </if>
+      <if test="extJson != null" >
+        #{extJson,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +194,21 @@
       <if test="authorizerRefreshToken != null" >
         authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR},
       </if>
+      <if test="publishStatus != null" >
+        publish_status = #{publishStatus,jdbcType=INTEGER},
+      </if>
+      <if test="templetId != null" >
+        templet_id = #{templetId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="auditId != null" >
+        audit_id = #{auditId,jdbcType=VARCHAR},
+      </if>
+      <if test="extJson != null" >
+        ext_json = #{extJson,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -171,7 +224,12 @@
       status = #{status,jdbcType=VARCHAR},
       pay_key = #{payKey,jdbcType=VARCHAR},
       authorizer_access_token = #{authorizerAccessToken,jdbcType=VARCHAR},
-      authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR}
+      authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR},
+      publish_status = #{publishStatus,jdbcType=INTEGER},
+      templet_id = #{templetId,jdbcType=INTEGER},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      audit_id = #{auditId,jdbcType=VARCHAR},
+      ext_json = #{extJson,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

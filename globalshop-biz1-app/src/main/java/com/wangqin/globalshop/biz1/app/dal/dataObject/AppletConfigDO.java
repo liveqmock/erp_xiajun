@@ -28,6 +28,16 @@ public class AppletConfigDO extends BaseModel {
 
     private String authorizerRefreshToken;
 
+    private Integer publishStatus;
+
+    private Integer templetId;
+
+    private String imgUrl;
+
+    private String auditId;
+
+    private String extJson;
+
     public Long getId() {
         return id;
     }
@@ -122,5 +132,45 @@ public class AppletConfigDO extends BaseModel {
 
     public void setAuthorizerRefreshToken(String authorizerRefreshToken) {
         this.authorizerRefreshToken = authorizerRefreshToken == null ? null : authorizerRefreshToken.trim();
+    }
+
+    public Integer getPublishStatus() {
+        return publishStatus;
+    }
+
+    public void setPublishStatus(Integer publishStatus) {
+        this.publishStatus = publishStatus;
+    }
+
+    public Integer getTempletId() {
+        return templetId;
+    }
+
+    public void setTempletId(Integer templetId) {
+        this.templetId = templetId;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
+    }
+
+    public String getAuditId() {
+        return auditId;
+    }
+
+    public void setAuditId(String auditId) {
+        this.auditId = auditId == null ? null : auditId.trim();
+    }
+
+    public String getExtJson() {
+        return extJson;
+    }
+
+    public void setExtJson(String extJson) {
+        this.extJson = extJson == null ? null : extJson.trim();
     }
 }

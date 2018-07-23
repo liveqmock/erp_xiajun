@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 
-public interface OrderIWarehouseService  {
+public interface IOrderWarehouseService  {
 
 	WarehouseDO selectByWarehouseNo(String warehouseNo);
 	

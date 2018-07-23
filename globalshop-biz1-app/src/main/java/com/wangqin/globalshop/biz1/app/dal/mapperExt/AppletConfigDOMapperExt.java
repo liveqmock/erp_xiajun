@@ -17,4 +17,6 @@ public interface AppletConfigDOMapperExt extends AppletConfigDOMapper {
 	List<AppletConfigDO> list();
 
 	AppletConfigDO selectByAppid(String appid);
+
+    List<AppletConfigDO> selectByPublishStatus(int publishStatus);
 }

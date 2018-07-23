@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -56,7 +55,7 @@ import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
-import com.wangqin.globalshop.order.app.service.warehouse.OrderIWarehouseService;
+import com.wangqin.globalshop.order.app.service.warehouse.IOrderWarehouseService;
 
 
 /**
@@ -80,7 +79,7 @@ public class MallSubOrderController {
 	@Autowired
 	private OrderItemSkuScaleService orderItemSkuScaleService;
 	@Autowired
-	private OrderIWarehouseService warehouseService;
+	private IOrderWarehouseService warehouseService;
 	@Autowired
 	private OrderConfig orderConfig;
 	@Autowired

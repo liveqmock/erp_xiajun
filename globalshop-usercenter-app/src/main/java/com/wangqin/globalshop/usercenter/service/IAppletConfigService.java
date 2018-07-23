@@ -21,4 +21,6 @@ public interface IAppletConfigService {
 	void update(AppletConfigDO applet);
 
 	AppletConfigDO selectByAppid(String appid);
+
+    List<AppletConfigDO> selectByPublishStatus(int code);
 }

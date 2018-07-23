@@ -67,8 +67,7 @@ public class WechatLoginController {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
         try {
             /**获取openId和token*/
-            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
-                    null, "2");
+            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null, null, "2");
             /**如果相应包含errcode  表示请求失败*/
             if (o.containsKey("errcode")) {
                 return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
@@ -104,8 +103,7 @@ public class WechatLoginController {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
         try {
             /**获取openId和token*/
-            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null,
-                    null, "2");
+            JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null, null, "2");
             /**如果相应包含errcode  表示请求失败*/
             if (o.containsKey("errcode")) {
                 return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
@@ -119,8 +117,7 @@ public class WechatLoginController {
             String openid = o.getString("openid");
             String accessToken = o.getString("access_token");
             /**根据token获取用户的信息*/
-            JSONObject object = HttpClientUtil.post("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null,
-                    null, "2");
+            JSONObject object = HttpClientUtil.post("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openid, null, null, "2");
             WxUserDO user = new WxUserDO();
             user.setCompanyNo(state);
             user.setGender(Integer.valueOf(object.getString("sex")));
@@ -245,35 +242,13 @@ public class WechatLoginController {
         String baseUrl = sysurl + "/#/permission/test";
         try {
             String companyNo = AppUtil.getLoginUserCompanyNo();
-            if (StringUtils.isBlank(companyNo)){
+            if (StringUtils.isBlank(companyNo)) {
                 response.setStatus(302);
                 return;
             }
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
-            String str = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "  <meta charset=\"UTF-8\">\n" +
-                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
-                    "  <title></title>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
-                    "    <div id=\"login_container\"></div>\n" +
-                    "    <script>\n" +
-                    "      var obj = new WxLogin\n" +
-                    "      ({\n" +
-                    "          id:\"login_container\",//div的id\n" +
-                    "          appid: \"" + appid + "\",\n" +
-                    "          scope: \"snsapi_login\",//写死\n" +
-                    "          redirect_uri: '" + baseUrl + "',\n" +
-                    "          state: \"" + companyNo + "\",\n" +
-                    "          style: \"black\",\n" +
-                    "      });\n" +
-                    "    </script>\n" +
-                    "</body>\n" +
-                    "</html>\n";
+            String str = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "  <meta charset=\"UTF-8\">\n" + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" + "  <title></title>\n" + "</head>\n" + "<body>\n" + "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" + "    <div id=\"login_container\"></div>\n" + "    <script>\n" + "      var obj = new WxLogin\n" + "      ({\n" + "          id:\"login_container\",//div的id\n" + "          appid: \"" + appid + "\",\n" + "          scope: \"snsapi_login\",//写死\n" + "          redirect_uri: '" + baseUrl + "',\n" + "          state: \"" + companyNo + "\",\n" + "          style: \"black\",\n" + "      });\n" + "    </script>\n" + "</body>\n" + "</html>\n";
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             PrintWriter writer = response.getWriter();
@@ -298,30 +273,7 @@ public class WechatLoginController {
         try {
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
-            String str = "<!DOCTYPE html>\n" +
-                    "<html lang=\"en\">\n" +
-                    "<head>\n" +
-                    "  <meta charset=\"UTF-8\">\n" +
-                    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
-                    "  <title></title>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" +
-                    "    <div id=\"login_container\"></div>\n" +
-                    "    <script>\n" +
-                    "      var obj = new WxLogin\n" +
-                    "      ({\n" +
-                    "          id:\"login_container\",//div的id\n" +
-                    "          appid: \"" + appid + "\",\n" +
-                    "          scope: \"snsapi_login\",//写死\n" +
-                    "          redirect_uri: '" + baseUrl + "',\n" +
-                    "          state: \"" + AppUtil.getLoginUserCompanyNo() + "\",\n" +
-                    "          style: \"black\",\n" +
-                    "          href: \"data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZXsKICB3aWR0aDogMTgwcHghaW1wb3J0YW50Owp9Ci5pbXBvd2VyQm94IC5pbmZvIHsKICB3aWR0aDogMjgwcHg7CiAgbWFyZ2luOiAwIGF1dG87CiAgbWFyZ2luLWxlZnQ6IC0zMHB4IWltcG9ydGFudDsKICBwYWRkaW5nLWxlZnQ6IDEwcHg7Cn0KLndycF9jb2RlIHsKICBtYXJnaW4tbGVmdDogLTYwcHg7Cn0KLmltcG93ZXJCb3ggLnRpdGxlewogIG1hcmdpbi1sZWZ0OiAtNjBweDsKfQ==\",\n" +
-                    "      });\n" +
-                    "    </script>\n" +
-                    "</body>\n" +
-                    "</html>\n";
+            String str = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "  <meta charset=\"UTF-8\">\n" + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" + "  <title></title>\n" + "</head>\n" + "<body>\n" + "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" + "    <div id=\"login_container\"></div>\n" + "    <script>\n" + "      var obj = new WxLogin\n" + "      ({\n" + "          id:\"login_container\",//div的id\n" + "          appid: \"" + appid + "\",\n" + "          scope: \"snsapi_login\",//写死\n" + "          redirect_uri: '" + baseUrl + "',\n" + "          state: \"" + AppUtil.getLoginUserCompanyNo() + "\",\n" + "          style: \"black\",\n" + "          href: \"data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZXsKICB3aWR0aDogMTgwcHghaW1wb3J0YW50Owp9Ci5pbXBvd2VyQm94IC5pbmZvIHsKICB3aWR0aDogMjgwcHg7CiAgbWFyZ2luOiAwIGF1dG87CiAgbWFyZ2luLWxlZnQ6IC0zMHB4IWltcG9ydGFudDsKICBwYWRkaW5nLWxlZnQ6IDEwcHg7Cn0KLndycF9jb2RlIHsKICBtYXJnaW4tbGVmdDogLTYwcHg7Cn0KLmltcG93ZXJCb3ggLnRpdGxlewogIG1hcmdpbi1sZWZ0OiAtNjBweDsKfQ==\",\n" + "      });\n" + "    </script>\n" + "</body>\n" + "</html>\n";
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             PrintWriter writer = response.getWriter();
@@ -334,23 +286,26 @@ public class WechatLoginController {
         }
 
     }
-        @RequestMapping("/loginByUserNo")
-    public Object loginByUserNo(String userNo){
+
+    @RequestMapping("/loginByUserNo")
+    public Object loginByUserNo(String userNo) {
         JsonResult<Object> result = new JsonResult<>();
         return result.buildIsSuccess(true).buildMsg("登陆成功");
     }
+
     @RequestMapping("/getUserInfo")
-    public Object getLoginHtml(String status){
+    public Object getLoginHtml(String status) {
         JsonResult<Object> result = new JsonResult<>();
-        Map<String,String> map = new HashMap<>();
-        if ("0".equals(status)){
-            map.put("status","0");
+        Map<String, String> map = new HashMap<>();
+        if ("0".equals(status)) {
+            map.put("status", "0");
             result.buildIsSuccess(false).buildMsg("找不到对应用户").buildData(map);
-        }else if ("1".equals(status)){
-            map.put("status","1");
+        } else if ("1".equals(status)) {
+            map.put("status", "1");
+//            loginByUserNo();
             result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
         } else if ("2".equals(status)) {
-            map.put("status","2");
+            map.put("status", "2");
             User user1 = new User();
             user1.setCompanyName("网擒天下");
             user1.setName("张三");
@@ -362,18 +317,20 @@ public class WechatLoginController {
             List<User> list = new ArrayList();
             list.add(user1);
             list.add(user2);
-            map.put("status","2");
+            map.put("status", "2");
             map.put("userInfo", JSON.toJSONString(list));
             result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
         } else {
-            result.buildIsSuccess(false).buildMsg("异常数据:status"+status);
+            result.buildIsSuccess(false).buildMsg("异常数据:status" + status);
         }
 
         return result;
 
     }
-    @Getter@Setter
-    class User{
+
+    @Getter
+    @Setter
+    class User {
         private String companyName;
         private String name;
         private String userNo;

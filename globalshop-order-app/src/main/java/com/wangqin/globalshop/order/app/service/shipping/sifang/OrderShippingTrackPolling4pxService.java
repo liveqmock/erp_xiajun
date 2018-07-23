@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.sifang;
+package com.wangqin.globalshop.order.app.service.shipping.sifang;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackPolling4pxDO;
 
