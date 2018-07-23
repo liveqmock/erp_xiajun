@@ -22,6 +22,7 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +56,12 @@ public class Wechat3rdPartyAuthorizationController {
     //todo
     private String componentAppid = "wxe25c15397f0ec710";
     private String componentAppsecret = "8eb667a448cb3226d57878acfaca84a0";
-    private Integer templetId = 5;
+
+
+    @Value("#{sys.TEMPLET_ID}")
+    private Integer templetId;
+    @Value("#{sys.WXBASEURL}")
+    private String wxBaseUrl;
 
     /**
      * 回调拿Ticket
@@ -128,8 +134,8 @@ public class Wechat3rdPartyAuthorizationController {
 //            /**预授权码*/
 //            String preAuthCode = object.getString("pre_auth_code");
 //            log.info("预授权码:" + preAuthCode);
-//            //todo 配置的是http://test.buyer007.cn/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-//            re_url = URLEncoder.encode("http://test.buyer007.cn/account/authcallback", "UTF-8");
+//            //todo 配置的是http://"+wxBaseUrl+"/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
+//            re_url = URLEncoder.encode("http://"+wxBaseUrl+"/account/authcallback", "UTF-8");
 //            String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
 //            //todo 有待优化
 //            String html = "<html><head><title>Title</title></head><body><a href=\"" + reUrl + "\">授权小程序</a></body></html>";
@@ -162,8 +168,8 @@ public class Wechat3rdPartyAuthorizationController {
             /**预授权码*/
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
-            //todo 配置的是http://test.buyer007.cn/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-            re_url = URLEncoder.encode("http://test.buyer007.cn/account/authcallback/" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
+            //todo 配置的是http://"+wxBaseUrl+"/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
+            re_url = URLEncoder.encode("http://"+wxBaseUrl+"/account/authcallback/" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             log.info("re_url:" + reUrl);
             return result.buildIsSuccess(true).buildData(reUrl);
@@ -283,12 +289,12 @@ public class Wechat3rdPartyAuthorizationController {
         String trueJson = extJson.replace("${appid}", applet.getAppid());
         PayUtil.httpRequest(url.replace("${token}", applet.getAuthorizerAccessToken()), "POST", param.replace("${extJson}", trueJson));
 
-        String s = HttpClientUtil.get(imgUrl.replace("${token}", applet.getAuthorizerAccessToken()));
-        String img;
-        try (ByteArrayInputStream tInputStringStream = new ByteArrayInputStream(s.getBytes())) {
-            img = uploadFileService.uploadImg(tInputStringStream, applet.getAppid() + str);
-        }
-        applet.setImgUrl(img);
+//        String s = HttpClientUtil.get(imgUrl.replace("${token}", applet.getAuthorizerAccessToken()));
+//        String img;
+//        try (ByteArrayInputStream tInputStringStream = new ByteArrayInputStream(s.getBytes())) {
+//            img = uploadFileService.uploadImg(tInputStringStream, applet.getAppid() + str);
+//        }
+//        applet.setImgUrl(img);
         applet.setTempletId(templateId);
         applet.setPublishStatus(PublishStatus.SUBMITTED.getCode());
         applet.setExtJson(trueJson);
@@ -309,6 +315,14 @@ public class Wechat3rdPartyAuthorizationController {
             appletConfigServiceImplement.update(applet);
         }
         return "结束";
+    }
+
+    @PostMapping("getImgUrl")
+    @Authenticated
+    @ResponseBody
+    public String getImgUrl() {
+        AppletConfigDO appletConfigDO = appletConfigServiceImplement.selectByCompanyNoAndType(AppUtil.getLoginUserCompanyNo(), APPLET_TYPE);
+        return "https://api.weixin.qq.com/wxa/get_qrcode?access_token="+appletConfigDO.getAuthorizerAccessToken();
     }
 
     @PostMapping("publishAll")
@@ -374,7 +388,7 @@ public class Wechat3rdPartyAuthorizationController {
         log.info("获取页面结果" + s2);
         JSONObject o2 = JSON.parseObject(s2);
         if (!"ok".equals(o2.getString("errmsg"))) {
-            throw new ErpCommonException("获取小程序主页失败");
+
         }
         JSONArray pageList = o2.getJSONArray("page_list");
         log.info("pageList" + pageList);
@@ -559,6 +573,9 @@ public class Wechat3rdPartyAuthorizationController {
         loginCache.putEx("component_access_token", componentAccessToken, 7100L);
 
     }
-
+    @PostMapping("getaaa")
+    public String getasd(){
+        return templetId+wxBaseUrl;
+    }
 
 }
