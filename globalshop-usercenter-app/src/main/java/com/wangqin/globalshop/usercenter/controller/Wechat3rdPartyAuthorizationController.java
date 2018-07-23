@@ -229,51 +229,50 @@ public class Wechat3rdPartyAuthorizationController {
     }
 
 
-    /**
-     * 设置小程序业务域名和服务器域名
-     *
-     * @return
-     */
-//    @PostMapping("/setAppletRequestUrl")
-    public String initApplet() {
-        //设置所有状态为新建的小程序的业务域名和服务器域名
-        // TODO: 2018/7/20
-        setAppletRequestUrl("", "add");
-        return "";
-    }
+//    /**
+//     * 设置小程序业务域名和服务器域名
+//     *
+//     * @return
+//     */
+////    @PostMapping("/setAppletRequestUrl")
+//    public String initApplet() {
+//        //设置所有状态为新建的小程序的业务域名和服务器域名
+//        // TODO: 2018/7/20
+//        setAppletRequestUrl("", "add");
+//        return "";
+//    }
 
-    //todo 设置小程序的其他信息
-    @PostMapping("/B")
-    @Authenticated
-    public String setAppletInfo() {
-        //todo 接口未调通  参考相关文档
-        //todo  设置小程序基本信息
+//    //todo 设置小程序的其他信息
+//    @PostMapping("/B")
+//    @Authenticated
+//    public String setAppletInfo() {
+//        //todo 接口未调通  参考相关文档
+//        //todo  设置小程序基本信息
+//
+//        //todo 设置姓名的时候需要调用api查询是否可用
+//        //设置小程序名  信息、log
+//        return "";
+//    }
 
-        //todo 设置姓名的时候需要调用api查询是否可用
-        //设置小程序名  信息、log
-        return "";
-    }
-
-    /**
-     * 提交小程序体验版
-     *
-     * @param templateId
-     * @return
-     */
-    @PostMapping("/updateAplet")
-    @Authenticated
-    public Object update(Integer templateId) {
-        JsonResult<Object> result = new JsonResult<>();
-        try {
-            AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(AppUtil.getLoginUserCompanyNo(), APPLET_TYPE);
-            updateApplet(templateId, applet);
-            appletConfigServiceImplement.update(applet);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return result.buildMsg("发布失败");
-        }
-        return result.buildIsSuccess(true).buildMsg("发布成功");
-    }
+//    /**
+//     * 提交小程序体验版
+//     *
+//     * @return
+//     */
+//    @PostMapping("/updateApplet")
+//    @Authenticated
+//    public Object update() {
+//        JsonResult<Object> result = new JsonResult<>();
+//        try {
+//            AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(AppUtil.getLoginUserCompanyNo(), APPLET_TYPE);
+//            updateApplet(templetId, applet);
+//            appletConfigServiceImplement.update(applet);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return result.buildMsg("发布失败");
+//        }
+//        return result.buildIsSuccess(true).buildMsg("发布成功");
+//    }
 
     private void updateApplet(Integer templateId, AppletConfigDO applet) throws IOException {
         String url = "https://api.weixin.qq.com/wxa/commit?access_token=${token}";
@@ -302,23 +301,23 @@ public class Wechat3rdPartyAuthorizationController {
     }
 
 
-    @PostMapping("/updateApletAll")
-//    @Authenticated
-    public Object updateAplet(Integer templateId) {
-        JsonResult<Object> result = new JsonResult<>();
-        try {
-            //todo list
-            List<AppletConfigDO> list = new ArrayList<>();
-            for (AppletConfigDO applet : list) {
-                updateApplet(templateId, applet);
-                appletConfigServiceImplement.update(applet);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    @PostMapping("/updateApletAll")
+////    @Authenticated
+//    public Object updateAplet(Integer templateId) {
+//        JsonResult<Object> result = new JsonResult<>();
+//        try {
+//            //todo list
+//            List<AppletConfigDO> list = new ArrayList<>();
+//            for (AppletConfigDO applet : list) {
+//                updateApplet(templateId, applet);
+//                appletConfigServiceImplement.update(applet);
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public void auditApplet(AppletConfigDO applet) throws ErpCommonException {
         String authorizerAccessToken = applet.getAuthorizerAccessToken();
@@ -371,13 +370,6 @@ public class Wechat3rdPartyAuthorizationController {
         applet.setAuditId(auditid);
         applet.setPublishStatus(PubilshStatus.PENDING_REVIEW.getCode());
         log.info("提交审核之后的" + applet);
-    }
-    @Getter@Setter
-    class Category{
-        private String first_class;
-        private String second_class;
-        private String first_id;
-        private String second_id;
     }
 
     /***
@@ -446,12 +438,12 @@ public class Wechat3rdPartyAuthorizationController {
         log.info("发布小程序定时任务启动");
         List<AppletConfigDO> list = appletConfigServiceImplement.selectByPublishStatus(PubilshStatus.PENDING_REVIEW.getCode());
         for (AppletConfigDO applet : list) {
-
             String accessToken = applet.getAuthorizerAccessToken();
             String url = "https://api.weixin.qq.com/wxa/get_auditstatus?access_token=" + accessToken;
             //language=JSON
             String param = "{\"auditid\":\"" + applet.getAuditId() + "\"}";
             String post = PayUtil.httpRequest(url, "POST", param);
+            log.info("回调" + post);
             JSONObject obj = JSON.parseObject(post);
             String status = obj.getString("status");
             log.info("查询状态" + status);
@@ -488,6 +480,7 @@ public class Wechat3rdPartyAuthorizationController {
         applet.setAppletType(appletType);
         applet.setCompanyNo(companyNo);
         applet.setStatus(PAY_STATUS_PLATFORM);
+        applet.setPublishStatus(PubilshStatus.AUTHORIZED.getCode());
         applet.setAuthorizerAccessToken(accessToken);
         applet.setAuthorizerRefreshToken(refreshToken);
         applet.init4NoLogin();
@@ -541,26 +534,5 @@ public class Wechat3rdPartyAuthorizationController {
 
     }
 
-    public static void main(String[] args) {
-        String a = "{\"errcode\":0,\"errmsg\":\"ok\",\"category_list\":[{\"first_class\":\"工具\",\"second_class\":\"办公\",\"first_id\":287,\"second_id\":298}]}";
-        JSONObject object = JSON.parseObject(a);
-        String category_list = object.getString("category_list");
-        System.out.println(category_list);
-//        Category category = JSON.parseObject("{"+category_list+"}", Category.class);
-////        {"errcode":0,"errmsg":"ok","category_list":[{"first_class":"工具","second_class":"办公","first_id":287,"second_id":298}]}
-//        String firstClass = category.getFirst_class();
-//        String secondClass = category.getSecond_class();
-//        String firstId = category.getFirst_id();
-//        String secondId = category.getSecond_id();
-//        log.info("firstClass" + firstClass);
-//        log.info("secondClass" + secondClass);
-//        log.info("firstId" + firstId);
-//        log.info("secondId" + secondId);
-        //language=JSON
-        String n = "[{\"second_class\":\"办公\",\"second_id\":298,\"first_id\":287,\"first_class\":\"工具\"}]";
-
-//        System.out.println(object1);
-
-    }
 
 }
