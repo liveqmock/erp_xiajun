@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.shipping.impl;
+package com.wangqin.globalshop.order.app.service.shipping;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Sets;
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.wangqin.globalshop.order.app.comm.Constant.*;
+import static com.wangqin.globalshop.order.app.common.Constant.*;
 
 /**
  * @author biscuit
