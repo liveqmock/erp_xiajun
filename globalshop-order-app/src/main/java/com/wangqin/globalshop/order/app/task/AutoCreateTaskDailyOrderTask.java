@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.order.app.task;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.order.app.service.kuaidi100.IKuaidi100Service;
+import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

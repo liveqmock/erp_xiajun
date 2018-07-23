@@ -4,7 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.order.app.service.haihu.IHaihuService;
+import com.wangqin.globalshop.order.app.service.shipping.haihu.IHaihuService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import net.sf.ezmorph.bean.MorphDynaBean;

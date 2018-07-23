@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.shipping.impl;
+package com.wangqin.globalshop.order.app.service.shipping;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingTrackDOMapperExt;

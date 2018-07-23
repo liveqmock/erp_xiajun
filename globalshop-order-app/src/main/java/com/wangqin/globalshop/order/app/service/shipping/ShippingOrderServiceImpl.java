@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.service.shipping.impl;
+package com.wangqin.globalshop.order.app.service.shipping;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Sets;
@@ -33,8 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.wangqin.globalshop.order.app.common.Constant.SHIP_INIT;
-
+import static com.wangqin.globalshop.order.app.common.Constant.*;
 
 /**
  * @author biscuit
@@ -158,7 +157,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         multiDeliveryFormDTO.setTotalSalePrice(totalSalePrice);
         multiDeliveryFormDTO.setMallSubOrderList(mallSubOrderList);
         return multiDeliveryFormDTO;
-    }
+    } 
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
