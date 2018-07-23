@@ -209,8 +209,8 @@ public class Wechat3rdPartyAuthorizationController {
             String token = info.getString("authorizer_access_token");
             setAppletRequestUrl(token, "set");
             AppletConfigDO applet = getAppletDO(info, APPLET_TYPE, companyNo);
-            /*提交体验版*/
-            updateApplet(templetId, applet);
+//            /*提交体验版*/
+//            updateApplet(templetId, applet);
 //            /*提交审核*/
 //            auditApplet(applet);
             log.info("最终小程序信息=======" + applet);
@@ -304,8 +304,24 @@ public class Wechat3rdPartyAuthorizationController {
         List<AppletConfigDO> list = appletConfigServiceImplement.selectByPublishStatus(PublishStatus.SUBMITTED.getCode());
         for (AppletConfigDO applet : list) {
             i++;
-            log.info("提交第一个"+i);
+            log.info("提交第一个" + i);
             auditApplet(applet);
+            appletConfigServiceImplement.update(applet);
+        }
+        return "结束";
+    }
+
+    @PostMapping("publishAll")
+    @ResponseBody
+    public String publishAll() throws IOException {
+        log.info("开始提交");
+        int i = 0;
+        List<AppletConfigDO> list = appletConfigServiceImplement.selectByPublishStatus(PublishStatus.AUTHORIZED.getCode());
+        for (AppletConfigDO applet : list) {
+            i++;
+            log.info("提交第一个" + i);
+            updateApplet(templetId, applet);
+
             appletConfigServiceImplement.update(applet);
         }
         return "结束";
