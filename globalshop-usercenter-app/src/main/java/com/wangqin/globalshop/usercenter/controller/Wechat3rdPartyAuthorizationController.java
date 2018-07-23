@@ -352,6 +352,7 @@ public class Wechat3rdPartyAuthorizationController {
         String post3 = PayUtil.httpRequest(url3, "POST", param3);
 //        {"errcode":0,"errmsg":"ok","auditid":430371682}
         JSONObject obj3 = JSON.parseObject(post3);
+        log.info("提交审核的回调"+obj3.toJSONString());
         String auditid = obj3.getString("auditid");
         applet.setAuditId(auditid);
         applet.setPublishStatus(PubilshStatus.PENDING_REVIEW.getCode());
