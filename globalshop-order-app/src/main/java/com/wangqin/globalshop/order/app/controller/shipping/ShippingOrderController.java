@@ -687,8 +687,12 @@ public class ShippingOrderController {
         JsonPageResult<List<MallSubOrderDO>> result = new JsonPageResult<>();
         try {
             ShippingOrderDO shippingOrder = shippingOrderService.selectById(shippingOrderId);
-            String erpOrderIds = shippingOrder.getMallOrders();
-            List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(erpOrderIds);
+            String mallSubOrderNos = shippingOrder.getMallOrders();
+            String[] nos = mallSubOrderNos.split(",");
+            List<String> noList = new ArrayList();
+            noList.toArray(nos);
+            List<MallSubOrderDO> ErpOrderList = mallSubOrderService.queryByMallSubOrderNos(noList);
+//            List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(erpOrderIds);
             for(MallSubOrderDO mallSubOrder : ErpOrderList) {
             	mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
             }

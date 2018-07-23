@@ -750,4 +750,16 @@
             order_no = #{orderNo}
     </delete>
 
+    <select id="queryByMallSubOrderNos" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mall_sub_order
+        WHERE
+        sub_order_no IN
+        <foreach collection="list" item="subOrderNo" open="(" separator="," close=")" >
+           #{subOrderNo}
+        </foreach>
+    </select>
+
+
 </mapper>

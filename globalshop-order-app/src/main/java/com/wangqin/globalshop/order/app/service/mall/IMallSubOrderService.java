@@ -82,5 +82,7 @@ public interface IMallSubOrderService {
      * @param orderNo 主订单号
      */
     void deleteByOrderNo(String orderNo);
+
+    List<MallSubOrderDO> queryByMallSubOrderNos(List<String> noList);
 }
 
