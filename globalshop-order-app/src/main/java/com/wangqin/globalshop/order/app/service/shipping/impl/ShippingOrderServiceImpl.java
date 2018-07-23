@@ -33,7 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.wangqin.globalshop.order.app.comm.Constant.*;
+import static com.wangqin.globalshop.order.app.common.Constant.SHIP_INIT;
+
 
 /**
  * @author biscuit

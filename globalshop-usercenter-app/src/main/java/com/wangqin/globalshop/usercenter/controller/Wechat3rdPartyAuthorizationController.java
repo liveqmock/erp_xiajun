@@ -354,6 +354,7 @@ public class Wechat3rdPartyAuthorizationController {
         JSONObject obj3 = JSON.parseObject(post3);
         log.info("提交审核的回调"+obj3.toJSONString());
         String auditid = obj3.getString("auditid");
+        log.info("auditid"+auditid);
         applet.setAuditId(auditid);
         applet.setPublishStatus(PubilshStatus.PENDING_REVIEW.getCode());
         log.info("提交审核之后的"+applet);
