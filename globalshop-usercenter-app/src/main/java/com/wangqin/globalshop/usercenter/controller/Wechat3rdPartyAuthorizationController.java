@@ -573,9 +573,6 @@ public class Wechat3rdPartyAuthorizationController {
         loginCache.putEx("component_access_token", componentAccessToken, 7100L);
 
     }
-    @PostMapping("getaaa")
-    public String getasd(){
-        return templetId+wxBaseUrl;
-    }
+
 
 }
