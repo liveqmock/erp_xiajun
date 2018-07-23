@@ -288,9 +288,9 @@ public class WechatLoginController {
     }
 
     @RequestMapping("/loginByUserNo")
-    public Object loginByUserNo(String userNo,String companyNo,String code,String loginToken) {
+    public Object loginByUserNo(String userNo, String companyNo, String code, String loginToken) {
         JsonResult<Object> result = new JsonResult<>();
-        if ("0".equals(code.trim())){
+        if ("0".equals(loginToken.trim())) {
             return result.buildIsSuccess(false).buildMsg("登陆失败");
         }
         return result.buildIsSuccess(true).buildMsg("登陆成功");
@@ -322,8 +322,26 @@ public class WechatLoginController {
             list.add(user2);
             map.put("status", "2");
             map.put("userInfo", JSON.toJSONString(list));
-            map.put("code","1213");
-            map.put("loginToken","1213");
+//            map.put("code","1213");存缓存
+            map.put("loginToken", "0");
+            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
+        } else if ("2".equals(code)) {
+            map.put("status", "2");
+            User user1 = new User();
+            user1.setCompanyName("网擒天下");
+            user1.setCompanyNo("787878");
+            user1.setUserNo("7456");
+            User user2 = new User();
+            user2.setCompanyName("海狐海淘");
+            user2.setCompanyNo("121546");
+            user2.setUserNo("2333");
+            List<User> list = new ArrayList();
+            list.add(user1);
+            list.add(user2);
+            map.put("status", "2");
+            map.put("userInfo", JSON.toJSONString(list));
+//            map.put("code","1213");存缓存
+            map.put("loginToken", "1");
             result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
         } else {
             result.buildIsSuccess(false).buildMsg("异常数据:status" + code);
