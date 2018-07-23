@@ -45,4 +45,9 @@ public class AppletConfigServiceImplement implements IAppletConfigService {
 	public AppletConfigDO selectByAppid(String appid) {
 		return mapper.selectByAppid(appid);
 	}
+
+	@Override
+	public List<AppletConfigDO> selectByPublishStatus(int publishStatus) {
+		return mapper.selectByPublishStatus(publishStatus);
+	}
 }
