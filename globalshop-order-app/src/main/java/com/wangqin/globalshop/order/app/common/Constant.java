@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.comm;
+package com.wangqin.globalshop.order.app.common;
 
 /**
  * @author biscuit
