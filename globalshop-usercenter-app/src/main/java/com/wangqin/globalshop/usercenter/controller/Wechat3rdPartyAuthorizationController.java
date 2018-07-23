@@ -297,12 +297,18 @@ public class Wechat3rdPartyAuthorizationController {
     }
 
     @PostMapping("auditAll")
-    public void auditAll() {
+    @ResponseBody
+    public String auditAll() {
+        log.info("开始提交");
+        int i = 0;
         List<AppletConfigDO> list = appletConfigServiceImplement.selectByPublishStatus(PublishStatus.SUBMITTED.getCode());
         for (AppletConfigDO applet : list) {
+            i++;
+            log.info("提交第一个"+i);
             auditApplet(applet);
             appletConfigServiceImplement.update(applet);
         }
+        return "结束";
     }
 
 //    @PostMapping("/updateApletAll")
