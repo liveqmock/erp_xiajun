@@ -288,40 +288,45 @@ public class WechatLoginController {
     }
 
     @RequestMapping("/loginByUserNo")
-    public Object loginByUserNo(String userNo) {
+    public Object loginByUserNo(String userNo,String companyNo,String code,String loginToken) {
         JsonResult<Object> result = new JsonResult<>();
+        if ("0".equals(code.trim())){
+            return result.buildIsSuccess(false).buildMsg("登陆失败");
+        }
         return result.buildIsSuccess(true).buildMsg("登陆成功");
     }
 
     @RequestMapping("/getUserInfo")
-    public Object getLoginHtml(String status) {
+    public Object getLoginHtml(String code) {
         JsonResult<Object> result = new JsonResult<>();
         Map<String, String> map = new HashMap<>();
-        if ("0".equals(status)) {
+        if ("0".equals(code)) {
             map.put("status", "0");
             result.buildIsSuccess(false).buildMsg("找不到对应用户").buildData(map);
-        } else if ("1".equals(status)) {
+        } else if ("1".equals(code)) {
             map.put("status", "1");
 //            loginByUserNo();
             result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
-        } else if ("2".equals(status)) {
+        } else if ("2".equals(code)) {
             map.put("status", "2");
             User user1 = new User();
             user1.setCompanyName("网擒天下");
-            user1.setName("张三");
+            user1.setCompanyNo("787878");
             user1.setUserNo("7456");
             User user2 = new User();
             user2.setCompanyName("海狐海淘");
-            user2.setName("李四");
+            user2.setCompanyNo("121546");
             user2.setUserNo("2333");
             List<User> list = new ArrayList();
             list.add(user1);
             list.add(user2);
             map.put("status", "2");
             map.put("userInfo", JSON.toJSONString(list));
+            map.put("code","1213");
+            map.put("loginToken","1213");
             result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
         } else {
-            result.buildIsSuccess(false).buildMsg("异常数据:status" + status);
+            result.buildIsSuccess(false).buildMsg("异常数据:status" + code);
         }
 
         return result;
@@ -332,7 +337,7 @@ public class WechatLoginController {
     @Setter
     class User {
         private String companyName;
-        private String name;
+        private String companyNo;
         private String userNo;
 
     }
