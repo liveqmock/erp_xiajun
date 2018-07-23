@@ -287,11 +287,9 @@ public class Wechat3rdPartyAuthorizationController {
         PayUtil.httpRequest(url.replace("${token}", applet.getAuthorizerAccessToken()), "POST", param.replace("${extJson}", trueJson));
 
         String s = HttpClientUtil.get(imgUrl.replace("${token}", applet.getAuthorizerAccessToken()));
-        log.info("体验版二维码(旧)" + s);
         String img;
         try (ByteArrayInputStream tInputStringStream = new ByteArrayInputStream(s.getBytes())) {
             img = uploadFileService.uploadImg(tInputStringStream, applet.getAppid() + str);
-            log.info("体验版二维码(新)" + s);
         }
         applet.setImgUrl(img);
         applet.setTempletId(templateId);
