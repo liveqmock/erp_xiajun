@@ -23,8 +23,12 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List2" >
+  <sql id="Base_Column_List_SECURE_PASSWORD" >
     id, company_no, user_no, login_name, name, password, sex, age, phone, user_type,
+    status, organization_id, create_time, wx_union_id, email, creator, modifier,gmt_create
+  </sql>
+  <sql id="Base_Column_List2" >
+    id, company_no, user_no, login_name, name, '********' as password, sex, age, phone, user_type,
     status, organization_id, create_time, wx_union_id, email, creator, modifier,gmt_create
   </sql>
   <sql id="Base_Column_List3" >
@@ -189,15 +193,30 @@
       </if>
     </trim>
   </insert>
-	
-  <select id="selectByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+
+  <!-- 普通查询勿用此sql，用下面那个selectByLoginName-->
+  <select id="selectSecureByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
+    <include refid="Base_Column_List_SECURE_PASSWORD" />
+    from auth_user
+    where login_name = #{userNo,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
     <include refid="Base_Column_List2" />
     from auth_user
     where login_name = #{userNo,jdbcType=VARCHAR}
   </select>
 
-  <update id="updateByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+  <update id="updatePasswordByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    update auth_user
+     set
+       password = #{password,jdbcType=VARCHAR}
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateUserInfoByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
   update auth_user
   <set >
   <if test="userNo != null" >
@@ -209,9 +228,10 @@
   <if test="name != null" >
   name = #{name,jdbcType=VARCHAR},
   </if>
-  <if test="password != null" >
-  password = #{password,jdbcType=VARCHAR},
-  </if>
+
+  <!--<if test="password != null" >-->
+  <!--password = #{password,jdbcType=VARCHAR},-->
+  <!--</if>-->
   <if test="sex != null" >
   sex = #{sex,jdbcType=TINYINT},
   </if>
@@ -271,7 +291,7 @@
     t.id,
     login_name,
     t.`name`,
-    `password`,
+    '********' as `password`,
     sex,
     age,
     user_type,
@@ -320,7 +340,7 @@
     t.id,
     login_name,
     t.`name`,
-    `password`,
+    '********' as `password`,
     sex,
     age,
     user_type,
@@ -346,7 +366,7 @@
     t.id,
     login_name,
     t.`name`,
-    `password`,
+    '********' as `password`,
     sex,
     age,
     user_type,
