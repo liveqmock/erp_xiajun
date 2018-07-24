@@ -12,6 +12,7 @@ import com.wangqin.globalshop.common.utils.CookieUtil;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IUserService;
+import com.wangqin.globalshop.usercenter.service.UserUploadFileService;
 import lombok.Getter;
 import lombok.Setter;
 import net.sf.json.JSONObject;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +56,8 @@ public class WechatLoginController {
     private String appid;
     @Value("#{sys.sysurl}")
     private String sysurl;
+    @Autowired
+    private UserUploadFileService uploadFileService;
     private static long TIMEOUT = 30 * 60 * 1000;
 
     @Autowired
@@ -127,11 +131,15 @@ public class WechatLoginController {
             user.setCountry(object.getString("country"));
             user.setOpenId(openid);
             user.setUnionId(unionid);
-            user.setAvatarUrl(object.getString("headimgurl"));
+            String headImgUrl = uploadFileService.uploadImg(new URL(object.getString("headimgurl")).openStream(), unionid);
+            user.setAvatarUrl(headImgUrl);
 
             userService.addUserByqrcode(state, user);
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (IOException e) {
+
+            return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
         return result.buildIsSuccess(true).buildMsg("授权成功");
     }

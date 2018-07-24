@@ -340,7 +340,39 @@ public class Wechat3rdPartyAuthorizationController {
         }
         return "结束";
     }
+    @PostMapping("/getAuditStatusWithAuditId")
+    @ResponseBody
+    public String getAuditStatusWithAuditId(String companyNo){
+        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
+        String accessToken = applet.getAuthorizerAccessToken();
+        String url = "https://api.weixin.qq.com/wxa/get_auditstatus?access_token=" + accessToken;
+        //language=JSON
+        String param = "{\"auditid\":\"" + applet.getAuditId() + "\"}";
+        String post = PayUtil.httpRequest(url, "POST", param);
+        return post;
 
+    }
+    @PostMapping("/getAuditStatus")
+    @ResponseBody
+    public String getAuditStatus(String companyNo){
+        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
+        String accessToken = applet.getAuthorizerAccessToken();
+        String url = "https://api.weixin.qq.com/wxa/get_latest_auditstatus?access_token=" + accessToken;
+        String s = HttpClientUtil.get(url);
+        return s;
+
+    }
+    @PostMapping("/release")
+    @ResponseBody
+    public String release(String companyNo){
+        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
+        String accessToken = applet.getAuthorizerAccessToken();
+        String url1 = "https://api.weixin.qq.com/wxa/release?access_token=" + accessToken;
+        String param1 = "{}";
+        String post1 = PayUtil.httpRequest(url1, "POST", param1);
+        log.info("发布成功" + post1);
+        return post1;
+    }
 //    @PostMapping("/updateApletAll")
 ////    @Authenticated
 //    public Object updateAplet(Integer templateId) {
@@ -396,6 +428,7 @@ public class Wechat3rdPartyAuthorizationController {
             throw new ErpCommonException("小程序主页为空");
         }
         String index = pageList.getString(0);
+        log.info("审核页面信息"+index);
         //{"errcode":0,"errmsg":"ok","page_list":["pages\/index\/index","pages\/index\/webView","pages\/index\/special","pages\/order\/detail","pages\/order\/list","pages\/item\/list","pages\/user\/main","pages\/user\/about","pages\/user\/service","pages\/user\/address","pages\/user\/addAddress","pages\/user\/editAddress","pages\/cart\/list","pages\/cart\/lists","pages\/order\/allExpress","pages\/order\/preview","pages\/item\/detail"]}
 
         String url3 = "https://api.weixin.qq.com/wxa/submit_audit?access_token=" + authorizerAccessToken;
@@ -484,6 +517,7 @@ public class Wechat3rdPartyAuthorizationController {
             String param = "{\"auditid\":\"" + applet.getAuditId() + "\"}";
             String post = PayUtil.httpRequest(url, "POST", param);
             log.info("回调" + post);
+//            {"errcode":0,"errmsg":"ok","status":1,"reason":"1:小程序内容不符合规则:<br>(1):页面无正式运营内容，请上架完整内容再提交审核。（测试环境wifi\/4G，ios11.3.1，微信6.6.7，iPhone6）<br>"}
             JSONObject obj = JSON.parseObject(post);
             String status = obj.getString("status");
             log.info("查询状态" + status);
