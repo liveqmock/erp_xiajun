@@ -63,7 +63,7 @@ public class HaiLoginController extends BaseController {
         }
         UserVo userVo = new UserVo();
         userVo.setLoginName(username);
-        AuthUserDO userDOList = userService.selectByLoginName(username);
+        AuthUserDO userDOList = userService.selectSecureByLoginName(username);
         if (userDOList == null) {
             return renderError("该用户不存在");
         } else if (!userDOList.getStatus().equals(SysConstants.USER_DEACTIVED)) {

@@ -4,4 +4,4 @@ ALTER TABLE applet_config ADD img_url  VARCHAR(64) NULL COMMENT '体验版二维
 ALTER TABLE applet_config ADD audit_id   VARCHAR(64) NULL COMMENT ' 微信审核的id   用于查询审核状态等api';
 ALTER TABLE applet_config ADD ext_json   VARCHAR(1024) NULL COMMENT '小程序的ext.json文件';
 
-ALTER TABLE `warehouse` CHANGE COLUMN `address` `address` VARCHAR(128) NULL DEFAULT NULL;
+ALTER TABLE `warehouse` CHANGE COLUMN `address` `address` VARCHAR(256) NULL DEFAULT NULL;

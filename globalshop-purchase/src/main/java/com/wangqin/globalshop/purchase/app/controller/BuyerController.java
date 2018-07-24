@@ -172,7 +172,7 @@ public class BuyerController {
                 list.add(item.getItemName()); // 商品名称
                 list.add(item.getSkuCode()); // SKU代码
                 list.add(item.getUpc()); // UPC
-                // list.add(item.getBrand()); //品牌
+                // list.add(item.getBrandName()); //品牌
 //                list.add(item.getColor()); // 颜色
                 list.add(item.getScale()); // 尺码
 //                list.add(item.getBuySite()); // 采购站点
