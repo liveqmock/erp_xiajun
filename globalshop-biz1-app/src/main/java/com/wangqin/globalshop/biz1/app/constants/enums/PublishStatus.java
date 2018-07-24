@@ -15,9 +15,9 @@ public enum PublishStatus {
      */
     SUBMITTED(2,"已提交体验版"),
     /**
-     *待审核
+     *审核中
      */
-    PENDING_REVIEW(3,"待审核"),
+    PENDING_REVIEW(3,"审核中"),
     /**
      *审核通过待发布
      */
@@ -25,7 +25,11 @@ public enum PublishStatus {
     /**
      *已发布
      */
-    PUBLISHED(5,"已发布");
+    PUBLISHED(5,"已发布"),
+    /**
+     *审核不通过
+     */
+    AUDIT_FAILURE(6,"审核不通过");
 
     private int code;
     private String description;
