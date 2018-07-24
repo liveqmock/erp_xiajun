@@ -5,3 +5,12 @@ ALTER TABLE applet_config ADD audit_id   VARCHAR(64) NULL COMMENT ' 微信审核
 ALTER TABLE applet_config ADD ext_json   VARCHAR(1024) NULL COMMENT '小程序的ext.json文件';
 
 ALTER TABLE `warehouse` CHANGE COLUMN `address` `address` VARCHAR(256) NULL DEFAULT NULL;
+
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('申通','001',NULL,'shentong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('中通','002',NULL,'zhongtong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('圆通','003',NULL,'yuantong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('顺丰','004',NULL,'shunfeng','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('韵达','005',NULL,'yunda','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('天天','006',NULL,'tiantian','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('4PX','007',NULL,'zhuanyunsifang','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('百世快递','008',NULL,'baishiwuliu','SYSTEM','SYSTEM');

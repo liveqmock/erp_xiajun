@@ -938,3 +938,12 @@ INSERT INTO `item_category`(`id`,`category_code`,`name`,`p_code`,`root_code`,`se
 INSERT INTO `item_category`(`id`,`category_code`,`name`,`p_code`,`root_code`,`seq`,`level`,`status`,`all_path`,`gmt_create`,`gmt_modify`,`creator`,`modifier`,`is_del`) VALUES (309,'1005005','键盘/鼠标','1005000','1000000',0,3,0,'数码家电/办公用品/键盘/鼠标','2018-06-15 17:34:55','2018-06-15 17:37:16','SYSTEM', 'SYSTEM', 0);
 INSERT INTO `item_category`(`id`,`category_code`,`name`,`p_code`,`root_code`,`seq`,`level`,`status`,`all_path`,`gmt_create`,`gmt_modify`,`creator`,`modifier`,`is_del`) VALUES (310,'1005006','其他','1005000','1000000',0,3,0,'数码家电/办公用品/其他','2018-06-15 17:34:55','2018-06-15 17:37:16','SYSTEM', 'SYSTEM', 0);
 
+-- 物流公司
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('申通','001',NULL,'shentong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('中通','002',NULL,'zhongtong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('圆通','003',NULL,'yuantong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('顺丰','004',NULL,'shunfeng','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('韵达','005',NULL,'yunda','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('天天','006',NULL,'tiantian','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('4PX','007',NULL,'zhuanyunsifang','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('百世快递','008',NULL,'baishiwuliu','SYSTEM','SYSTEM');
