@@ -23,6 +23,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -295,7 +296,7 @@ public class WechatLoginController {
 
     }
 
-    @RequestMapping("/loginByUserNo")
+    @PostMapping("/loginByUserNo")
     public Object loginByUserNo(String userNo, String companyNo, String code, String loginToken) {
         JsonResult<Object> result = new JsonResult<>();
         if ("0".equals(loginToken.trim())) {
@@ -304,7 +305,7 @@ public class WechatLoginController {
         return result.buildIsSuccess(true).buildMsg("登陆成功");
     }
 
-    @RequestMapping("/getUserInfo")
+    @PostMapping("/getUserInfo")
     public Object getLoginHtml(String code) {
         JsonResult<Object> result = new JsonResult<>();
         Map<String, String> map = new HashMap<>();

@@ -775,18 +775,17 @@ public class ItemServiceImplement implements IItemService {
                 i++;
                 ItemDO item = new ItemDO();
                 ItemSkuDO itemSku = new ItemSkuDO();
-                /**SKU编号*/
-//            String skuCode = obj.get(0).toString().trim();
+                /**UPC*/
+                itemSku.setUpc(obj.get(0).toString().trim());
                 /**商品名称*/
                 String itemName = obj.get(1).toString().trim();
                 item.setItemName(itemName);
                 itemSku.setItemName(itemName);
-                /**UPC*/
-                itemSku.setUpc(obj.get(2).toString().trim());
+
                 /**品牌(英文)*/
-                String brandEnName = obj.get(3).toString();
+                String brandEnName = obj.get(2).toString();
                 /**品牌(中文)*/
-                String brandCnName = obj.get(4).toString().trim();
+                String brandCnName = obj.get(3).toString().trim();
                 item.setBrandName(brandEnName + " " + brandCnName);
                 itemSku.setBrandName(brandEnName + " " + brandCnName);
                 List<ItemBrandDO> brand = iBrandService.queryByEnNameAndCnName(brandEnName, brandCnName);
@@ -798,12 +797,12 @@ public class ItemServiceImplement implements IItemService {
                     item.setBrandNo(brand.get(0).getBrandNo());
                 }
                 /**类目1*/
-                String category1 = obj.get(5).toString().trim();
+                String category1 = obj.get(4).toString().trim();
                 /**类目2*/
-                String category2 = obj.get(6).toString().trim();
+                String category2 = obj.get(5).toString().trim();
                 /**类目3*/
 
-                String category3 = obj.get(7).toString().trim();
+                String category3 = obj.get(6).toString().trim();
                 List<ItemCategoryDO> categoryList = getByCategory(category1, category2, category3);
                 String categoryCode = "";
                 String itemCode = CodeGenUtil.generateItemCode(categoryCode);
@@ -820,14 +819,14 @@ public class ItemServiceImplement implements IItemService {
                     itemSku.setCategoryCode(category.getName());
                 }
                 /**规格(颜色)*/
-                String scala1 = obj.get(8).toString().trim();
+                String scala1 = obj.get(7).toString().trim();
                 /**规格(尺寸)*/
-                String scala2 = obj.get(9).toString().trim();
+                String scala2 = obj.get(8).toString().trim();
                 /**采购地*/
-                String purchaseFrom = obj.get(10).toString().trim();
+                String purchaseFrom = obj.get(9).toString().trim();
                 item.setCountry(purchaseFrom);
                 /**币种*/
-                String currency = obj.get(11).toString();
+                String currency = obj.get(10).toString();
                 currency = StringUtil.isBlank(currency) ? "0" : currency;
                 if (isParseToInteger(currency)) {
                     item.setCurrency(Byte.valueOf(currency));
@@ -835,23 +834,23 @@ public class ItemServiceImplement implements IItemService {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + currency);
                 }
                 /**销售价*/
-                String salePrice = obj.get(12).toString();
+                String salePrice = obj.get(11).toString();
                 salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
                 if (isParseToDouble(salePrice)) {
                     itemSku.setSalePrice(Double.valueOf(salePrice));
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
                 }
-                /**原价*/
-                String price = obj.get(13).toString();
-                price = StringUtil.isBlank(price) ? "0" : price;
-                if (isParseToDouble(price)) {
-                    itemSku.setCostPrice(Double.valueOf(price));
-                } else {
-                    errMsg.add("存在未知格式的数据:第" + i + "行 第14列的  " + price);
-                }
+//                /**原价*/
+//                String price = obj.get(12).toString();
+//                price = StringUtil.isBlank(price) ? "0" : price;
+//                if (isParseToDouble(price)) {
+//                    itemSku.setCostPrice(Double.valueOf(price));
+//                } else {
+//                    errMsg.add("存在未知格式的数据:第" + i + "行 第14列的  " + price);
+//                }
                 /**重量*/
-                String weight = obj.get(14).toString();
+                String weight = obj.get(13).toString();
                 weight = StringUtil.isBlank(weight) ? "0" : weight;
                 if (isParseToDouble(weight)) {
                     item.setWeight(Double.valueOf(weight));
@@ -860,7 +859,7 @@ public class ItemServiceImplement implements IItemService {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第15列的  " + weight);
                 }
                 /**包装*/
-                String packName = obj.get(15).toString();
+                String packName = obj.get(14).toString();
                 if (StringUtil.isNotBlank(packName)) {
                     ShippingPackingPatternDO pack = shippingPackingPatternDOMapper.selectByName(packName);
                     if (pack == null) {
@@ -877,10 +876,10 @@ public class ItemServiceImplement implements IItemService {
                 String skuCode = CodeGenUtil.generateSkuCode(itemCode, i);
                 itemSku.setSkuCode(skuCode);
 
-                /**图片链接*/
-                String imgUrl = obj.get(16).toString();
-                item.setMainPic(imgUrl);
-                itemSku.setSkuPic(imgUrl);
+//                /**图片链接*/
+//                String imgUrl = obj.get(15).toString();
+//                item.setMainPic(imgUrl);
+//                itemSku.setSkuPic(imgUrl);
 
                 item.setItemCode(itemCode);
                 itemSku.setItemCode(itemCode);
