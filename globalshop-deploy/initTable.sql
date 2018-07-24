@@ -1549,7 +1549,7 @@ CREATE TABLE `warehouse` (
   `name` varchar(64) DEFAULT NULL COMMENT '仓库名称',
   `company_no` varchar(64) NOT NULL COMMENT '公司编号',
   `delivery_priority` int(4) DEFAULT '0' COMMENT '发货优先级,值越大越优先',
-  `address` varchar(64) DEFAULT NULL,
+  `address` varchar(256) DEFAULT NULL,
   `tel` varchar(32) DEFAULT NULL,
   `contact_person` varchar(32) NOT NULL,
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
