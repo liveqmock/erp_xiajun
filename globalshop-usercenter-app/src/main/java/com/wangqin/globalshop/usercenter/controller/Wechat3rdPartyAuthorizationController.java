@@ -538,6 +538,7 @@ public class Wechat3rdPartyAuthorizationController {
 
     }
 
+
     /***
      * 封装小程序配置类对象
      * @param info 回调解析的对象
