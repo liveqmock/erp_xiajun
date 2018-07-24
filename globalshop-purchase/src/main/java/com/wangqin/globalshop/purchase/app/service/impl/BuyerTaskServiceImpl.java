@@ -159,6 +159,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             List<BuyerTaskDO> taskList = new ArrayList<>();
             List<BuyerTaskDetailDO> detailList = new ArrayList<>();
             int i = 0;
+            Long nestTask = mapper.gainTASKSequence();
             for (List<Object> obj : list) {
                 i++;
                 BuyerTaskDO task = new BuyerTaskDO();
@@ -204,8 +205,8 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
                 }
                 task.setStatus(Constant.TO_BE_PURCHASED);
-				Long nestTask = mapper.gainTASKSequence();
-                String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(0000L,nestTask);
+
+                String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(0000L,nestTask+i);
                 task.setBuyerTaskNo(buyerTaskNo);
                 task.init();
                 taskList.add(task);

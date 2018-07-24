@@ -538,11 +538,6 @@ public class Wechat3rdPartyAuthorizationController {
 
     }
 
-    @RequestMapping("get")
-    public String get() {
-        return wxBaseUrl;
-
-    }
 
     /***
      * 封装小程序配置类对象

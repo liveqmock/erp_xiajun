@@ -16,6 +16,8 @@ public interface InventoryService {
     void outbound(InventoryDO inventory,String warehouseNo,String positionNo);
     /**超售入库*/
     void outbound(List<InventoryDO> list);
+    /**超售入库*/
+    void outbound(InventoryDO list);
     /**发货*/
     Map<InventoryOnWareHouseDO, Long> ship(MallSubOrderDO mallSubOrderDO) throws ErpCommonException;
     /**下单*/
