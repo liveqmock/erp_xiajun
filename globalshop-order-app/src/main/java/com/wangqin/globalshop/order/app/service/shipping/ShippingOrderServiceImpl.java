@@ -23,7 +23,6 @@ import com.wangqin.globalshop.common.utils.czh.Util;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.util_service.OrderISequenceUtilService;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.util.StringUtil;
@@ -33,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.wangqin.globalshop.order.app.common.Constant.*;
+import static com.wangqin.globalshop.order.app.common.Constant.SHIP_INIT;
 
 /**
  * @author biscuit
@@ -454,8 +453,8 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     }
 
     @Override
-    public ShippingOrderDO selectByShippingNO(String str) {
-        return shippingOrderMapper.selectByShippingNo(str);
+    public ShippingOrderDO selectByShippingNo(String shippingNo) {
+        return shippingOrderMapper.selectByShippingNo(shippingNo);
     }
 
     @Override
@@ -469,8 +468,8 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     }
 
     @Override
-    public ShippingOrderDO selectOne(ShippingOrderDO order) {
-        return shippingOrderMapper.selectByLogisticNo(order);
+    public ShippingOrderDO selectByLogisticNo(String  logisticNo) {
+        return shippingOrderMapper.selectByLogisticNo(logisticNo);
     }
 
     @Override

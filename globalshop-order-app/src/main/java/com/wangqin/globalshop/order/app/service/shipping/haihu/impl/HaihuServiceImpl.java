@@ -126,6 +126,7 @@ public class HaihuServiceImpl implements IHaihuService {
 		param.put("Sign",sign);
 		param.put("Data", paramData);
 		JSONObject json = JSONObject.fromObject(param);
+		// FIXME: 下面这句有问题
 		JSONObject jsonObject = HttpClientUtil.post("http://expressjob.haihu.com/haitao/queryTrack", null, param, "1");
 		JSONObject jsonData = jsonObject.getJSONObject("Data");
 		String shippingNo = jsonData.getString("ShipperOrderNo");
@@ -179,7 +180,7 @@ public class HaihuServiceImpl implements IHaihuService {
 				shippingTrack.setBuyerSignTime(date.parse(jsonArrayDetail.getString("OccurDatetime")));
 				shippingTrack.setTrackInfo("用户已签收");
 			}
-			//ShippingTrack selectOne = shippingTrackService.selectOne(selShippingTrack);
+			//ShippingTrack selectByLogisticNo = shippingTrackService.selectByLogisticNo(selShippingTrack);
 			int count = shippingTrackService.selectCount(selShippingTrack);
 			if (count>0) {
 				continue;
@@ -192,7 +193,8 @@ public class HaihuServiceImpl implements IHaihuService {
 
 	public static void main(String[] args) throws ParseException{
 		HaihuServiceImpl one = new HaihuServiceImpl();
-		one.shippingTrack("1708061624477508435176460");
+		one.shippingTrack("1807200732200511359998762");
+//		one.shippingTrack("1708061624477508435176460");
 	}
 
 	@Override

@@ -187,7 +187,7 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM shipping_order
-        WHERE shipping_no = #{shippingNO}
+        WHERE shipping_no = #{shippingNo}
     </select>
     <select id="selectCount" resultType="java.lang.Integer" >
         SELECT

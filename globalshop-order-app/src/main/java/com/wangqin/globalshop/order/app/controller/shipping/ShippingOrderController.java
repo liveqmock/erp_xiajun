@@ -725,7 +725,7 @@ public class ShippingOrderController {
 //        // youkeService.inboundStatus("PKG17062502002910007");
 //        // youkeService.orderStatus("1739255020");
 //        // EntityWrapper<ShippingOrderDO> entityWrapper = new EntityWrapper<>();
-//        ShippingOrderDO Order = shippingOrderService.selectByShippingNO("PKG17062710132810022");
+//        ShippingOrderDO Order = shippingOrderService.selectByShippingNo("PKG17062710132810022");
 //        // haihuService.returnPackageNo(Order);
 //    }
 

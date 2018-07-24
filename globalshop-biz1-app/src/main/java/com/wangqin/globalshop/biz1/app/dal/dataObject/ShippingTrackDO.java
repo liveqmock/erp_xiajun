@@ -42,7 +42,9 @@ public class ShippingTrackDO extends BaseModel {
     private String airlines;
 
     private String flight;
-
+    /**
+     * 物流轨迹说明
+     */
     private String trackInfo;
 
     private String creator;
