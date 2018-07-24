@@ -65,6 +65,8 @@ public class WechatLoginController {
     private IUserService userService;
     @Autowired
     private Cache loginCache;
+    @Autowired
+    private HttpServletRequest request;
 
 
     @RequestMapping("/login")
@@ -302,6 +304,16 @@ public class WechatLoginController {
         if ("0".equals(loginToken.trim())) {
             return result.buildIsSuccess(false).buildMsg("登陆失败");
         }
+
+        String sessionId = (String) request.getAttribute(SESSION_ID);
+        if (StringUtils.isBlank(sessionId)) {
+            sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+        }
+
+        loginCache.putEx(sessionId, "abc", TIMEOUT);
+        loginCache.putEx(COMPANY_NO + sessionId, "123", TIMEOUT);
+        AppUtil.setLoginUser("abc", "abc");
+
         return result.buildIsSuccess(true).buildMsg("登陆成功");
     }
 
@@ -314,6 +326,14 @@ public class WechatLoginController {
             result.buildIsSuccess(true).buildMsg("找不到对应用户").buildData(map);
         } else if ("1".equals(code)) {
             map.put("status", "1");
+            String sessionId = (String) request.getAttribute(SESSION_ID);
+            if (StringUtils.isBlank(sessionId)) {
+                sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+            }
+
+            loginCache.putEx(sessionId, "abc", TIMEOUT);
+            loginCache.putEx(COMPANY_NO + sessionId, "123", TIMEOUT);
+            AppUtil.setLoginUser("abc", "abc");
 //            loginByUserNo();
             result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
         } else if ("2".equals(code)) {
@@ -334,7 +354,7 @@ public class WechatLoginController {
 //            map.put("code","1213");存缓存
             map.put("loginToken", "0");
             result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
-        } else if ("2".equals(code)) {
+        } else if ("3".equals(code)) {
             map.put("status", "2");
             User user1 = new User();
             user1.setCompanyName("网擒天下");
