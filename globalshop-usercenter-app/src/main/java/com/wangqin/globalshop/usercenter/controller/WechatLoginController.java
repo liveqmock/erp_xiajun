@@ -311,7 +311,7 @@ public class WechatLoginController {
         Map<String, String> map = new HashMap<>();
         if ("0".equals(code)) {
             map.put("status", "0");
-            result.buildIsSuccess(false).buildMsg("找不到对应用户").buildData(map);
+            result.buildIsSuccess(true).buildMsg("找不到对应用户").buildData(map);
         } else if ("1".equals(code)) {
             map.put("status", "1");
 //            loginByUserNo();

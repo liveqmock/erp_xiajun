@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.web;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * @author biscuit
@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @Profile("dev")
-@ImportResource("classpath:props/${BIZ_SYSTEM}-config-dev.properties")
+@PropertySource("classpath:props/${BIZ_SYSTEM}-config-dev.properties")
 public class DevConfig {
 }
