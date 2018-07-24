@@ -100,7 +100,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
     @Override
     public Result query(String shippingNo) {
         if(shippingNo == null) {
-            throw new ErpCommonException("shippingNo 为空");
+            throw new ErpCommonException("物流单号为空");
         }
         // 根据shippingNo查询ShippingOrder
         ShippingOrderDO shippingOrder = shippingOrderService.selectByShippingNo(shippingNo);
@@ -111,6 +111,9 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
         // 根据物流公司名获取其对应的快递100 Code
         String com = codeInKuaidi100(logisticCompany);
         String num = shippingOrder.getLogisticNo();
+        if(com == null || num == null) {
+            throw new ErpCommonException("物流单信息缺失");
+        }
         return this.query(shippingNo, com, num);
     }
 
