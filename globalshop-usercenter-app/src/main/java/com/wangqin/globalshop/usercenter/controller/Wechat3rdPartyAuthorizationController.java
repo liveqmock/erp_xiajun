@@ -537,6 +537,11 @@ public class Wechat3rdPartyAuthorizationController {
         return componentAccessToken;
 
     }
+    @RequestMapping("get")
+    public String get() {
+       return wxBaseUrl;
+
+    }
 
 
     /***
