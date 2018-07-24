@@ -35,4 +35,6 @@ public interface ICountryService {
 	CountryDO queryCountrySelective(CountryDO countryDO);
 	
 	String queryCodeById(Integer id);
+
+	void undeleteCountry(CountryDO countryDO);
 }

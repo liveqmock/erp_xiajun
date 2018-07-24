@@ -69,4 +69,8 @@ public class CountryServiceImpl   implements ICountryService {
 		return countryMapper.queryCodeById(id);
 	}
 
+	@Override
+	public void undeleteCountry(CountryDO countryDO){
+		countryMapper.updateByPrimaryKeySelective(countryDO);
+	}
 }
