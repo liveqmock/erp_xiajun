@@ -100,7 +100,12 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
 
     @Override
     public void deleteInventoryOutById(Long id) {
-        inventoryOutManifestMapper.deleteByPrimaryKey(id);
+        //改成软删除
+//        inventoryOutManifestMapper.deleteByPrimaryKey(id);
+        InventoryOutManifestDO inventoryOutManifestDO=new InventoryOutManifestDO();
+        inventoryOutManifestDO.setId(id);
+        inventoryOutManifestDO.setIsDel(true);
+        inventoryOutManifestMapper.updateByPrimaryKeySelective(inventoryOutManifestDO);
     }
 
     @Override
