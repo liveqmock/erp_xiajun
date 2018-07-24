@@ -18,4 +18,6 @@ public interface InventoryOutManifestMapperExt extends InventoryOutManifestDOMap
      * @return List<InventoryOutManifestDO>
      */
     List<InventoryOutManifestDO> listInventoryOutManifest(InventoryOutManifestVO inventoryOutManifestVO);
+
+    void updateIsdelById(InventoryOutManifestDO inventoryOutManifestDO);
 }

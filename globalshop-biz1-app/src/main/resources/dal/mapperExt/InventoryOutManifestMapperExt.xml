@@ -75,4 +75,14 @@
 
     </select>
 
+    <update id="updateIsdelById" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO" >
+        update inventory_out_manifest
+        <set >
+            <if test="isDel != null" >
+                is_del = #{isDel,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
 </mapper>

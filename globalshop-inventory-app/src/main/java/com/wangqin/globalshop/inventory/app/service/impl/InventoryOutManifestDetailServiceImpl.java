@@ -105,7 +105,7 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
         InventoryOutManifestDO inventoryOutManifestDO=new InventoryOutManifestDO();
         inventoryOutManifestDO.setId(id);
         inventoryOutManifestDO.setIsDel(true);
-        inventoryOutManifestMapper.updateByPrimaryKeySelective(inventoryOutManifestDO);
+        inventoryOutManifestMapper.updateIsdelById(inventoryOutManifestDO);
     }
 
     @Override
