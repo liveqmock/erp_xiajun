@@ -694,7 +694,7 @@ public class ItemController {
      */
     @RequestMapping("/improtItem")
     @ResponseBody
-    public Object importTask(MultipartFile file) {
+    public Object improtItem(MultipartFile file) {
         JsonResult<Object> result = new JsonResult<>();
         try {
             if (!file.isEmpty()) {
