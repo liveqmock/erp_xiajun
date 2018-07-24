@@ -202,6 +202,7 @@
         <module>globalshop-usercenter-app</module>
         <module>globalshop-inventory-app</module>
         <module>globalshop-channel-api</module>
+        <module>globalshop-schedule-app</module>
     </modules>
 
 
