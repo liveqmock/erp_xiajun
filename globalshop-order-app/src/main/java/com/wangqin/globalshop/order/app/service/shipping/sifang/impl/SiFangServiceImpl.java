@@ -98,7 +98,7 @@ public class SiFangServiceImpl implements ISiFangService {
 	@Override
 	@Transactional(rollbackFor = ErpCommonException.class)
 	public String createOrder(String shippingOrderNo) {
-		ShippingOrderDO shippingOrder = shippingOrderService.selectByShippingNO(shippingOrderNo);
+		ShippingOrderDO shippingOrder = shippingOrderService.selectByShippingNo(shippingOrderNo);
 		if (shippingOrder == null) {
 			throw new ErpCommonException("发货单号异常");
 		}

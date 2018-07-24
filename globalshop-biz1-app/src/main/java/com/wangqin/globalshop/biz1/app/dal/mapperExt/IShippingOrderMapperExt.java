@@ -22,11 +22,11 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
 
     List<ShippingOrderDO> queryByShippingOrderPackageTime(ShippingOrderVO shippingOrderQueryVO);
 
-    ShippingOrderDO selectByShippingNo(String shippingNO);
+    ShippingOrderDO selectByShippingNo(String shippingNo);
 
     int selectCount(@Param("idCard") String idCard,@Param("logisticCompany") String logisticCompany);
 
-    ShippingOrderDO selectByLogisticNo(ShippingOrderDO order);
+    ShippingOrderDO selectByLogisticNo(String logisticNo);
 
     void updateStatusByShippingNo(String logisticNo);
 
