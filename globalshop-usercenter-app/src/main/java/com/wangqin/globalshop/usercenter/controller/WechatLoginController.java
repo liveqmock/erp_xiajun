@@ -310,9 +310,9 @@ public class WechatLoginController {
             sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
         }
 
-        loginCache.putEx(sessionId, "abc", TIMEOUT);
-        loginCache.putEx(COMPANY_NO + sessionId, "123", TIMEOUT);
-        AppUtil.setLoginUser("abc", "abc");
+        loginCache.putEx(sessionId, "fjz", TIMEOUT);
+        loginCache.putEx(COMPANY_NO + sessionId, "ZeYbipA0xN", TIMEOUT);
+        AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
 
         return result.buildIsSuccess(true).buildMsg("登陆成功");
     }
@@ -331,9 +331,9 @@ public class WechatLoginController {
                 sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
             }
 
-            loginCache.putEx(sessionId, "abc", TIMEOUT);
-            loginCache.putEx(COMPANY_NO + sessionId, "123", TIMEOUT);
-            AppUtil.setLoginUser("abc", "abc");
+            loginCache.putEx(sessionId, "fjz", TIMEOUT);
+            loginCache.putEx(COMPANY_NO + sessionId, "ZeYbipA0xN", TIMEOUT);
+            AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
 //            loginByUserNo();
             result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
         } else if ("2".equals(code)) {
