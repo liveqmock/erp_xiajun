@@ -313,8 +313,10 @@ public class WechatLoginController {
         loginCache.putEx(sessionId, "fjz", TIMEOUT);
         loginCache.putEx(COMPANY_NO + sessionId, "ZeYbipA0xN", TIMEOUT);
         AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
+        Map<String, String> map = new HashMap<>();
+        map.put("userName","fjz");
 
-        return result.buildIsSuccess(true).buildMsg("登陆成功");
+        return result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
     }
 
     @PostMapping("/getUserInfo")
@@ -326,6 +328,7 @@ public class WechatLoginController {
             result.buildIsSuccess(true).buildMsg("找不到对应用户").buildData(map);
         } else if ("1".equals(code)) {
             map.put("status", "1");
+            map.put("userName","fjz");
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isBlank(sessionId)) {
                 sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
