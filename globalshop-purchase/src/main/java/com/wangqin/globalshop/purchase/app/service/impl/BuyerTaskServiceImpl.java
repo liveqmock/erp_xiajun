@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.biz1.app.vo.BuyerTaskDetailVO;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.*;
@@ -57,7 +58,22 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
         List<BuyerTaskDetailDO> buyerTaskDetailDOList = detailMapper.taskDailyByTaskNo(resultVo.getBuyerTaskNo());
 		if(!EasyUtil.isListEmpty(buyerTaskDetailDOList)){
-			resultVo.setTaskDetailList(buyerTaskDetailDOList);
+
+			List<BuyerTaskDetailVO> detailVOList = new ArrayList<>();
+			for (BuyerTaskDetailDO detailDO : buyerTaskDetailDOList){
+				BuyerDO buyerSo = new BuyerDO();
+				buyerSo.setIsDel(false);
+				buyerSo.setOpenId(detailDO.getBuyerOpenId());
+				BuyerDO buyer = buyerMapper.searchBuyer(buyerSo);
+
+				BuyerTaskDetailVO detailVO = new BuyerTaskDetailVO();
+				BeanUtils.copies(detailDO,detailVO);
+				if(buyer != null){
+					detailVO.setBuyerId(buyer.getId());
+				}
+				detailVOList.add(detailVO);
+			}
+			resultVo.setTaskDetailList(detailVOList);
 
 			BuyerTaskDetailDO detailDO = buyerTaskDetailDOList.get(0);
 
