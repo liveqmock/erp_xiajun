@@ -69,4 +69,7 @@ public interface MallOrderMapperExt extends MallOrderDOMapper{
 
 	void updateExpiredTaskStatus(@Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus,@Param("timeOut") Long timeOut);
 
+    List<MallOrderDO> queryExpiredSubOrders(@Param("status") int status, @Param("timeOut") Long timeOut);
+
+    Integer changeStatus(@Param("id") Long id, @Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus);
 }

@@ -51,4 +51,7 @@ public interface IMallOrderService  {
 
     void update(MallOrderVO mallOrderVO);
 
+    List<MallOrderDO> queryExpiredSubOrders(int code, Long timeOut);
+
+    Integer changeStatus(Long id,Integer oldStatus, Integer newStatus);
 }

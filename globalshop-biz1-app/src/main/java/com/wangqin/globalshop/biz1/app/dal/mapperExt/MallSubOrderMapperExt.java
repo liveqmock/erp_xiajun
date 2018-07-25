@@ -125,4 +125,6 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper{
 	void deleteByOrderNo(String orderNo);
 
     List<MallSubOrderDO> queryByMallSubOrderNos(List<String> noList);
+
+    Integer changeStatus(@Param("id")Long id, @Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus);
 }
