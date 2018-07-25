@@ -180,7 +180,7 @@ public class HaihuServiceImpl implements IHaihuService {
 				shippingTrack.setBuyerSignTime(date.parse(jsonArrayDetail.getString("OccurDatetime")));
 				shippingTrack.setTrackInfo("用户已签收");
 			}
-			//ShippingTrack selectByLogisticNo = shippingTrackService.selectByLogisticNo(selShippingTrack);
+			//CommonShippingTrack selectByLogisticNo = shippingTrackService.selectByLogisticNo(selShippingTrack);
 			int count = shippingTrackService.selectCount(selShippingTrack);
 			if (count>0) {
 				continue;

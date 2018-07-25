@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.order.app.kuaidi_bean;
 
+import com.wangqin.globalshop.order.app.util.JacksonHelper;
+
 import java.util.HashMap;
 
 public class PostRequest

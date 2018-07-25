@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.kuaidi_bean;
+package com.wangqin.globalshop.order.app.util;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParser;

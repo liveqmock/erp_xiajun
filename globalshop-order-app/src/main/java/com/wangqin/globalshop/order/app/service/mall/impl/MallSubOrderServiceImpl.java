@@ -21,7 +21,7 @@ import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.inventory.OrderInventoryBookingRecordService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
-import com.wangqin.globalshop.order.app.uitl.ErpOrderUtil;
+import com.wangqin.globalshop.order.app.util.ErpOrderUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;

@@ -169,7 +169,7 @@ public class Wechat3rdPartyAuthorizationController {
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
             //todo 配置的是http://"+wxBaseUrl+"/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-            re_url = URLEncoder.encode("http://"+wxBaseUrl+"/account/authcallback/" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
+            re_url = URLEncoder.encode("http://" + wxBaseUrl + "/account/authcallback/" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             log.info("re_url:" + reUrl);
             return result.buildIsSuccess(true).buildData(reUrl);
@@ -322,7 +322,7 @@ public class Wechat3rdPartyAuthorizationController {
     @ResponseBody
     public String getImgUrl() {
         AppletConfigDO appletConfigDO = appletConfigServiceImplement.selectByCompanyNoAndType(AppUtil.getLoginUserCompanyNo(), APPLET_TYPE);
-        return "https://api.weixin.qq.com/wxa/get_qrcode?access_token="+appletConfigDO.getAuthorizerAccessToken();
+        return "https://api.weixin.qq.com/wxa/get_qrcode?access_token=" + appletConfigDO.getAuthorizerAccessToken();
     }
 
     @PostMapping("publishAll")
@@ -340,9 +340,10 @@ public class Wechat3rdPartyAuthorizationController {
         }
         return "结束";
     }
+
     @PostMapping("/getAuditStatusWithAuditId")
     @ResponseBody
-    public String getAuditStatusWithAuditId(String companyNo){
+    public String getAuditStatusWithAuditId(String companyNo) {
         AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
         String accessToken = applet.getAuthorizerAccessToken();
         String url = "https://api.weixin.qq.com/wxa/get_auditstatus?access_token=" + accessToken;
@@ -352,9 +353,10 @@ public class Wechat3rdPartyAuthorizationController {
         return post;
 
     }
+
     @PostMapping("/getAuditStatus")
     @ResponseBody
-    public String getAuditStatus(String companyNo){
+    public String getAuditStatus(String companyNo) {
         AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
         String accessToken = applet.getAuthorizerAccessToken();
         String url = "https://api.weixin.qq.com/wxa/get_latest_auditstatus?access_token=" + accessToken;
@@ -362,9 +364,10 @@ public class Wechat3rdPartyAuthorizationController {
         return s;
 
     }
+
     @PostMapping("/release")
     @ResponseBody
-    public String release(String companyNo){
+    public String release(String companyNo) {
         AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
         String accessToken = applet.getAuthorizerAccessToken();
         String url1 = "https://api.weixin.qq.com/wxa/release?access_token=" + accessToken;
@@ -428,7 +431,7 @@ public class Wechat3rdPartyAuthorizationController {
             throw new ErpCommonException("小程序主页为空");
         }
         String index = pageList.getString(0);
-        log.info("审核页面信息"+index);
+        log.info("审核页面信息" + index);
         //{"errcode":0,"errmsg":"ok","page_list":["pages\/index\/index","pages\/index\/webView","pages\/index\/special","pages\/order\/detail","pages\/order\/list","pages\/item\/list","pages\/user\/main","pages\/user\/about","pages\/user\/service","pages\/user\/address","pages\/user\/addAddress","pages\/user\/editAddress","pages\/cart\/list","pages\/cart\/lists","pages\/order\/allExpress","pages\/order\/preview","pages\/item\/detail"]}
 
         String url3 = "https://api.weixin.qq.com/wxa/submit_audit?access_token=" + authorizerAccessToken;
@@ -535,11 +538,27 @@ public class Wechat3rdPartyAuthorizationController {
         String componentAccessToken = getToken();
         log.info("小程序获取token====" + componentAccessToken);
         return componentAccessToken;
-
     }
+
     @RequestMapping("get")
     public String get() {
-       return wxBaseUrl;
+        return wxBaseUrl;
+
+    }
+
+    @RequestMapping("binding")
+    public String binding(String companyNo) {
+        AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + applet.getAppid() + "&secret=" + applet.getSecret();
+        String s = HttpClientUtil.get(url);
+        JSONObject obj = JSON.parseObject(s);
+        String token = obj.getString("access_token");
+        String s1 = "https://api.weixin.qq.com/cgi-bin/open/bind?access_token=" + token;
+        //language=JSON
+        String param = "{\"appid\":" + applet.getAppid() + ",\"open_appid\":" + componentAppid +"}";
+        String post = PayUtil.httpRequest(s1, "POST", param);
+
+        return post;
 
     }
 
