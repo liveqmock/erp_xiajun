@@ -83,7 +83,7 @@ public class ShippingOrderController {
     @Autowired
     private IKuaidi100Service kuaidi100Service;
 
-    @RequestMapping("/queryShippingTrack")
+    @RequestMapping("/query")
     @ResponseBody
     public Object query(ShippingOrderVO shippingOrderVO) {
         JsonResult<List<ShippingOrderDO>> result = new JsonResult<>();
