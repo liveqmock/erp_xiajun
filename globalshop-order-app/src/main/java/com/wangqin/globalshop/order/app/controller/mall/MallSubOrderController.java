@@ -139,7 +139,7 @@ public class MallSubOrderController {
 
 
 
-    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/queryShippingTrack", method = RequestMethod.POST)
     @ResponseBody
     public Object query(MallSubOrderVO mallSubOrderVO) {
         JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();

@@ -10,6 +10,8 @@ import com.wangqin.globalshop.order.app.kuaidi_bean._4px.LogisticsStatus;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
+import com.wangqin.globalshop.order.app.util.HttpClient;
+import com.wangqin.globalshop.order.app.util.JacksonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +61,11 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 
     public static void main(String[] args) {
         Kuaidi100ServiceImpl impl = new Kuaidi100ServiceImpl();
-        impl.query("yunda", "3101738504868");
+        impl.queryShippingTrack("yunda", "3101738504868");
     }
 
     @Override
-    public Result query(String shippingNo, String com, String num) {
+    public Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo, String com, String num) {
         try {
             String paramStr = "{\"com\":\"" + com + "\",\"num\":\"" + num + "\"}";
             String key = KUAIDI_100_KEY;
@@ -84,7 +86,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
                 return null;
             }
             logger.debug("kuaidi100主动查询结果 shippingNo:{}, num:{}, response:{} ", shippingNo, num, resultStr);
-            Result result = JacksonHelper.fromJSON(resultStr, Result.class);
+            Kuaidi100ShippingTrackResult result = JacksonHelper.fromJSON(resultStr, Kuaidi100ShippingTrackResult.class);
             return result;
         } catch (Exception e) {
             logger.error("kuaidi100主动查询，出现异常 shippingNo:{}, num:{}", shippingNo, num, e);
@@ -93,12 +95,12 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
     }
 
     @Override
-    public Result query(String com, String num) {
-        return this.query(null, com, num);
+    public Kuaidi100ShippingTrackResult queryShippingTrack(String com, String num) {
+        return this.queryShippingTrack(null, com, num);
     }
 
     @Override
-    public Result query(String shippingNo) {
+    public Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo) {
         if(shippingNo == null) {
             throw new ErpCommonException("物流单号为空");
         }
@@ -114,7 +116,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
         if(com == null || num == null) {
             throw new ErpCommonException("物流单信息缺失");
         }
-        return this.query(shippingNo, com, num);
+        return this.queryShippingTrack(shippingNo, com, num);
     }
 
     /**
@@ -217,7 +219,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             return;
         }
 
-        Result result = this.query(shippingNo, comCode, logisticsNo);
+        Kuaidi100ShippingTrackResult result = this.queryShippingTrack(shippingNo, comCode, logisticsNo);
         try {
             this.handleTrackList(result);
         } catch (Exception e) {
@@ -233,7 +235,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void handleTrackList(Result result) {
+    public void handleTrackList(Kuaidi100ShippingTrackResult result) {
         // 获取物流单号
         String logisticNo = result.getNu();
         if (StringUtils.isEmpty(logisticNo)) {
@@ -241,7 +243,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             return;
         }
         // 获取物流轨迹信息
-        List<ResultItem> data = result.getData();
+        List<Kuaidi100ShippingTrackResultNode> data = result.getData();
         // 反转物流轨迹信息，时间升序排列
         if (data != null && data.size() > 0) {
             Collections.reverse(data);
@@ -266,7 +268,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<ShippingTrackDO> newTrackList = new ArrayList<>();
         boolean isFinished = false;
-        for (ResultItem item : data) {
+        for (Kuaidi100ShippingTrackResultNode item : data) {
             String content = item.getContext().replaceAll("\n|\t|\r", " ");
             if (trackInfoList.contains(content)) {
                 continue;
@@ -417,7 +419,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             NoticeRequest request = JacksonHelper.fromJSON(json, NoticeRequest.class);
             try {
                 // 保存到数据库
-                Result result = request.getLastResult();
+                Kuaidi100ShippingTrackResult result = request.getLastResult();
 
                 String status = request.getStatus();
                 if ("abort".equals(status)) {

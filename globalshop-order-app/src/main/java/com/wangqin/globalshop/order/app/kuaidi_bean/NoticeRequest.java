@@ -6,7 +6,7 @@ public class NoticeRequest
 	private String status = "";
 	private String billstatus = "";
 	private String message = "";
-	private Result lastResult = new Result();
+	private Kuaidi100ShippingTrackResult lastResult = new Kuaidi100ShippingTrackResult();
 	
 	public String getStatus()
 	{
@@ -38,12 +38,12 @@ public class NoticeRequest
 		this.message = message;
 	}
 	
-	public Result getLastResult()
+	public Kuaidi100ShippingTrackResult getLastResult()
 	{
 		return lastResult;
 	}
 	
-	public void setLastResult(Result lastResult)
+	public void setLastResult(Kuaidi100ShippingTrackResult lastResult)
 	{
 		this.lastResult = lastResult;
 	}
