@@ -73,7 +73,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             String signedStr = paramStr + key + customer;
             String sign = Md5Util.string2MD5(signedStr).toUpperCase();
 
-            logger.debug("kuaidi100主动查询参数 shippingNo:{}, num:{}, paramStr:{}", shippingNo, num, paramStr);
+            logger.debug("主动查询参数 shippingNo:{}, paramStr:{}", shippingNo, paramStr);
             Map<String, String> params = new HashMap<>();
             params.put("customer", customer);
             params.put("sign", sign);
@@ -82,14 +82,13 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 
             String resultStr = response.getStringResult("utf-8");
             if (StringUtils.isEmpty(resultStr)) {
-                logger.debug("kuaidi100主动查询失败 shippingNo:{}, num:{}", shippingNo, num);
+                logger.debug("主动查询失败 shippingNo:{}, num:{}", shippingNo, num);
                 return null;
             }
-            logger.debug("kuaidi100主动查询结果 shippingNo:{}, num:{}, response:{} ", shippingNo, num, resultStr);
-            Kuaidi100ShippingTrackResult result = JacksonHelper.fromJSON(resultStr, Kuaidi100ShippingTrackResult.class);
-            return result;
+            logger.debug("主动查询结果 shippingNo:{}, num:{}, response:{} ", shippingNo, num, resultStr);
+            return JacksonHelper.fromJSON(resultStr, Kuaidi100ShippingTrackResult.class);
         } catch (Exception e) {
-            logger.error("kuaidi100主动查询，出现异常 shippingNo:{}, num:{}", shippingNo, num, e);
+            logger.error("查询出现异常 shippingNo:{}, num:{}", shippingNo, num, e);
             return null;
         }
     }
@@ -101,20 +100,23 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 
     @Override
     public Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo) {
-        if(shippingNo == null) {
-            throw new ErpCommonException("物流单号为空");
+        if (shippingNo == null) {
+            throw new ErpCommonException("发货单号为空");
         }
         // 根据shippingNo查询ShippingOrder
         ShippingOrderDO shippingOrder = shippingOrderService.selectByShippingNo(shippingNo);
-        if(shippingOrder == null) {
-            throw new ErpCommonException("没有该物流单");
+        if (shippingOrder == null) {
+            throw new ErpCommonException("没有该发货单");
         }
         String logisticCompany = shippingOrder.getLogisticCompany();
         // 根据物流公司名获取其对应的快递100 Code
         String com = codeInKuaidi100(logisticCompany);
+        if(com == null) {
+            throw new ErpCommonException("不支持该物流公司");
+        }
         String num = shippingOrder.getLogisticNo();
-        if(com == null || num == null) {
-            throw new ErpCommonException("物流单信息缺失");
+        if (num == null) {
+            throw new ErpCommonException("物流单号信息缺失");
         }
         return this.queryShippingTrack(shippingNo, com, num);
     }
