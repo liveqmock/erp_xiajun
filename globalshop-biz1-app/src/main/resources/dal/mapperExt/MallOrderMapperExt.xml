@@ -375,6 +375,24 @@
         order by T1.id desc
     </select>
 
+    <select id="queryExpiredSubOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        mall_order
+        where
+        is_del is false
+        and status = #{status}
+        and <![CDATA[ gmt_create < date_sub(now(), interval #{timeOut} MINUTE ) ]]>
+    </select>
+    <update id="changeStatus"  >
+        UPDATE mall_order
+        SET
+        status=#{newStatus}
+        WHERE id=#{id} AND status = #{oldStatus}
+    </update>
+
+
     <update id="updateExpiredTaskStatus">
         UPDATE mall_order
         SET

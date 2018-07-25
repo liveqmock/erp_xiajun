@@ -84,5 +84,7 @@ public interface IMallSubOrderService {
     void deleteByOrderNo(String orderNo);
 
     List<MallSubOrderDO> queryByMallSubOrderNos(List<String> noList);
+
+    Integer changeStatus(Long id,  Integer oldStatus, Integer newStatus);
 }
 
