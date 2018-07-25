@@ -221,7 +221,7 @@ public class ItemServiceImplement implements IItemService {
         if (null != item.getLogisticType()) {
             newItem.setLogisticType(item.getLogisticType().byteValue());
         }
-        String qrCodeUrl = generateQrCode(item.getItemCode());
+        String qrCodeUrl = generateQrCode(itemCode);
         if (IsEmptyUtil.isStringNotEmpty(qrCodeUrl)) {
             newItem.setQrCodeUrl(qrCodeUrl);
         }

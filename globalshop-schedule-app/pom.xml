@@ -9,30 +9,20 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.wangqin.globalshop</groupId>
-  <artifactId>globalshop-schedule-app</artifactId>
-  <version>1.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.wangqin.globalshop</groupId>
+    <artifactId>globalshop-schedule-app</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-  <name>globalshop-schedule-app</name>
+    <name>globalshop-schedule-app</name>
 
-  <packaging>jar</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-            <exclusions>
-			  <exclusion>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-starter-logging</artifactId>
-			  </exclusion>
-			</exclusions>
-        </dependency>
         <dependency>
             <groupId>com.wangqin.globalshop</groupId>
             <artifactId>globalshop-biz1-api</artifactId>
@@ -48,6 +38,7 @@
             <artifactId>globalshop-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
 
     </dependencies>
     <build>
