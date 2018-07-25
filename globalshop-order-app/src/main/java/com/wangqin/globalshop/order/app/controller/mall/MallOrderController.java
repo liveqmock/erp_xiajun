@@ -331,7 +331,7 @@ public class MallOrderController {
                 list.add(outerOrder.getTotalAmount());    //订单金额
                 list.add(outerOrder.getGmtCreate().toString());        //下单时间
                 list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
-                List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
+                List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
                 if(subOrderDOList.size()>0) {
                     list.add(subOrderDOList.get(0).getReceiver());            //收件人
 //                    list.add(subOrderDOList.get(0).getTelephone());        //手机
@@ -358,7 +358,7 @@ public class MallOrderController {
         String[] columnTitles = new String[]{"主订单号", "订单金额", "下单时间", "订单状态", "收件人"};
         Integer[] columnWidth = new Integer[]{30, 15, 20, 15, 15};
 
-        excelHelper.setOuterOrderToSheet("Father Order", columnTitles, rowDatas, columnWidth);
+        excelHelper.setOuterOrderToSheet("主订单", columnTitles, rowDatas, columnWidth);
         //excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
 
         ResponseEntity<byte[]> filebyte = null;

@@ -2,7 +2,8 @@ package com.wangqin.globalshop.order.app.controller.kuaidi100;
 
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.order.app.kuaidi_bean.Result;
+import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrack;
+import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;
 import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +20,11 @@ public class Kuaidi100Controller {
     @Autowired
     private IKuaidi100Service kuaidi100Service;
 
-    @PostMapping("/query")
-    private JsonResult query(String shippingNo, String com, String num) {
+
+    @PostMapping("/queryShippingTrack")
+    private JsonResult queryShippingTrack(String shippingNo, String com, String num) {
         JsonResult result = new JsonResult();
-        Result queryResult = kuaidi100Service.query(com, num);
+        Kuaidi100ShippingTrackResult queryResult = kuaidi100Service.queryShippingTrack(com, num);
         kuaidi100Service.handleTrackList(queryResult);
         result.setData(queryResult);
         return result;
@@ -36,10 +38,10 @@ public class Kuaidi100Controller {
      */
     @PostMapping("/queryByshippingNo")
     private JsonResult queryByshippingNo(String shippingNo) {
-        JsonResult result = new JsonResult();
+        JsonResult<CommonShippingTrack> result = new JsonResult<>();
         try {
-            Result queryResult = kuaidi100Service.query(shippingNo);
-            result.buildIsSuccess(true).buildData(queryResult);
+            Kuaidi100ShippingTrackResult kuaidi100Result = kuaidi100Service.queryShippingTrack(shippingNo);
+            result.buildIsSuccess(true).buildData(kuaidi100Result.toCommonShippingTrack());
         } catch (ErpCommonException e) {
             result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         }

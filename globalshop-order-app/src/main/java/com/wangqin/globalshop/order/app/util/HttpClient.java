@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.kuaidi_bean;
+package com.wangqin.globalshop.order.app.util;
 
 import com.wangqin.globalshop.common.utils.StringUtil;
 import org.apache.log4j.Logger;

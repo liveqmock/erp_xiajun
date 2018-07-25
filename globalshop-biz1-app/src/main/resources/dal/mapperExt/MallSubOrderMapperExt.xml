@@ -749,15 +749,20 @@
         WHERE
             order_no = #{orderNo}
     </delete>
-
+    <update id="changeStatus">
+        UPDATE mall_sub_order
+        SET
+        status=#{newStatus}
+        WHERE id=#{id} AND status = #{oldStatus}
+    </update>
     <select id="queryByMallSubOrderNos" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM mall_sub_order
         WHERE
         sub_order_no IN
-        <foreach collection="list" item="subOrderNo" open="(" separator="," close=")" >
-           #{subOrderNo}
+        <foreach collection="list" item="subOrderNo" open="(" separator="," close=")">
+            #{subOrderNo}
         </foreach>
     </select>
 

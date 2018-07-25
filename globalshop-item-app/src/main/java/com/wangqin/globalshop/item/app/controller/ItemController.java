@@ -712,7 +712,14 @@ public class ItemController {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
-    }         
+    }
+
+//    @RequestMapping("/getTemplateUrl")
+//    public Object getTemplateUrl(){
+//
+//
+//    }
+
 
 }
 

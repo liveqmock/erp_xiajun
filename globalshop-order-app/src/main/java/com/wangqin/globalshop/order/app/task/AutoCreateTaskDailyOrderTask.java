@@ -186,7 +186,7 @@ public class AutoCreateTaskDailyOrderTask {
 //    //@Scheduled(cron = "0 15 18 * * ?")
 //	public void runUpdateShippingTrack() {
 //		logger.info("定时任务：更新写入国内物流运输轨迹===>Start");
-//		List<ShippingTrack> shippingTrackList = shippingTrackMapper.queryStatus();
+//		List<CommonShippingTrack> shippingTrackList = shippingTrackMapper.queryStatus();
 //		Map<String, String> categorymap = MapUtil.getCategoryKuaiDi();
 //		String inlandExpressId = "";
 //		for (int i = 0; i < shippingTrackList.size(); i++) {

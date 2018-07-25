@@ -2,7 +2,7 @@ package com.wangqin.globalshop.order.app.service.shipping.kuaidi100;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.order.app.kuaidi_bean.NoticeResponse;
-import com.wangqin.globalshop.order.app.kuaidi_bean.Result;
+import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;
 
 public interface IKuaidi100Service {
     /**
@@ -13,7 +13,7 @@ public interface IKuaidi100Service {
      * @param num        物流单号
      * @return
      */
-    Result query(String shippingNo, String com, String num);
+    Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo, String com, String num);
 
     /**
      * 查物流轨迹
@@ -22,14 +22,14 @@ public interface IKuaidi100Service {
      * @param num 物流单号
      * @return
      */
-    Result query(String com, String num);
+    Kuaidi100ShippingTrackResult queryShippingTrack(String com, String num);
 
     /**
      * 查物流轨迹
      *
      * @param shippingNo 发货单号
      */
-    Result query(String shippingNo);
+    Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo);
 
     /**
      * 订阅物流100
@@ -78,5 +78,5 @@ public interface IKuaidi100Service {
      *
      * @param result
      */
-    void handleTrackList(Result result);
+    void handleTrackList(Kuaidi100ShippingTrackResult result);
 }

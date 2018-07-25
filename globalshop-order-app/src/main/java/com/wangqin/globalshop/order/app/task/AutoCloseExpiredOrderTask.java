@@ -2,11 +2,14 @@ package com.wangqin.globalshop.order.app.task;
 
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +24,7 @@ import java.util.List;
 
 @Component
 public class AutoCloseExpiredOrderTask {
-
+    private static Logger log = LoggerFactory.getLogger("AutoCloseExpiredOrderTask");
     public static final long DEFAULT_TIME_OUT_IN_MINUTE = 10L;
     //	protected Logger logger = LogManager.getLogger(getClass());
     @Value("#{sys.CLOSE_TASK_TIME_OUT}")
@@ -41,15 +44,42 @@ public class AutoCloseExpiredOrderTask {
     @Scheduled(cron = "0 0/1 * * * ?")
     @Transactional(rollbackFor = ErpCommonException.class)
     public void autoCloseExpiredOrder() {
+        log.info("轮询关闭订单开始");
+//        List<String> errMsg = new ArrayList();
+
         /**十分钟*/
         timeOut = timeOut == null ? DEFAULT_TIME_OUT_IN_MINUTE : timeOut;
         List<MallSubOrderDO> mallSubOrderDOList = mallSubOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode(), timeOut);
-        mallOrderService.changeOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode(), timeOut);
+        List<MallOrderDO> mallOrderlist = mallOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode(), timeOut);
 
-        mallSubOrderService.updateSubOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode(), timeOut);
-        for (MallSubOrderDO mallSubOrderDO : mallSubOrderDOList) {
-            inventoryService.tryRelease(mallSubOrderDO);
+        for (MallOrderDO mallOrder : mallOrderlist) {
+            Integer lien = mallOrderService.changeStatus(mallOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+            log.info("影响行数" + lien);
+//           if (lien != 1){
+//               errMsg.add("更新失败:orderNo"+mallOrder.getOrderNo());
+//           }
         }
+        for (MallSubOrderDO mallSubOrder : mallSubOrderDOList) {
+            Integer lien = mallSubOrderService.changeStatus(mallSubOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+            log.info("影响行数" + lien);
+//            if (lien == 1){
+            inventoryService.tryRelease(mallSubOrder);
+//            }else {
+//                errMsg.add("更新失败:subOrderNo"+mallSubOrder.getSubOrderNo());
+//            }
+        }
+//        if (errMsg.size() != 0){
+//            log.error(errMsg.toString());
+//            throw new ErpCommonException(errMsg.toString());
+//        }
+        log.info("轮询关闭订单成功");
+
+//        mallOrderService.changeOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode(), timeOut);
+//
+//        mallSubOrderService.updateSubOrderStatus(OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode(), timeOut);
+//        for (MallSubOrderDO mallSubOrderDO : mallSubOrderDOList) {
+//            inventoryService.tryRelease(mallSubOrderDO);
+//        }
     }
 
 }

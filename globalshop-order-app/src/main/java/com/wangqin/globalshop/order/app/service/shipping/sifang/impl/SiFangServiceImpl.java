@@ -290,7 +290,7 @@ public class SiFangServiceImpl implements ISiFangService {
 		LogisticsStatus lastStatus = null;
 
 		// 查出所有的节点，避免重复
-//		EntityWrapper<ShippingTrackDO> selEntityWrapper = new EntityWrapper<ShippingTrack>();
+//		EntityWrapper<ShippingTrackDO> selEntityWrapper = new EntityWrapper<CommonShippingTrack>();
 		List<ShippingTrackDO> shippingReadyTracks = shippingTrackService.selectByShippingOrderNoList(shipperOrderNo);
 		ArrayList<String> contentList = null;
 		if (shippingReadyTracks != null && shippingReadyTracks.size() > 0) {

@@ -21,6 +21,7 @@ import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -328,6 +329,16 @@ public class MallOrderServiceImpl implements IMallOrderService {
         mallOrder.setActualAmount(totalPrice);
         mallOrderDOMapper.updateByPrimaryKeySelective(mallOrder);
 
+    }
+
+    @Override
+    public List<MallOrderDO> queryExpiredSubOrders(int status, Long timeOut) {
+        return mallOrderDOMapper.queryExpiredSubOrders(status,timeOut);
+    }
+
+    @Override
+    public Integer changeStatus(Long id,Integer oldStatus, Integer newStatus) {
+        return mallOrderDOMapper.changeStatus(id,oldStatus,newStatus);
     }
 
 
