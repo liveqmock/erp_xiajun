@@ -61,12 +61,11 @@ public class BuyerTaskVO extends BuyerTaskDO{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date taskEnd2;
 
-    private List<BuyerTaskDetailDO> taskDetailList;
-
-	public List<BuyerTaskDetailDO> getTaskDetailList() {
+    private List<BuyerTaskDetailVO> taskDetailList;
+	public List<BuyerTaskDetailVO> getTaskDetailList() {
 		return taskDetailList;
 	}
-	public void setTaskDetailList(List<BuyerTaskDetailDO> taskDetailList) {
+	public void setTaskDetailList(List<BuyerTaskDetailVO> taskDetailList) {
 		this.taskDetailList = taskDetailList;
 	}
 	public Long getBuyerId() {
