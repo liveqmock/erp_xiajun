@@ -315,6 +315,7 @@ public class WechatLoginController {
         AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
         Map<String, String> map = new HashMap<>();
         map.put("userName","fjz");
+        map.put("userName","fjz");
 
         return result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
     }
