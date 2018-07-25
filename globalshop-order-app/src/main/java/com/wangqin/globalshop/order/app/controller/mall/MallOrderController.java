@@ -118,7 +118,7 @@ public class MallOrderController {
             return result.buildMsg(e.getMessage()).buildIsSuccess(false);
         }
 
-        return result;
+        return result.buildIsSuccess(true).buildMsg("更新成功");
     }
 
     /**
