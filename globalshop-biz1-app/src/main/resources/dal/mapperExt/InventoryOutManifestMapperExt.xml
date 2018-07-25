@@ -69,9 +69,7 @@
             <if test=" endGmt != null ">
                 and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
             </if>
-            <if test="isDel != null">
-                and T1.is_del = #{isDel}
-            </if>
+                and T1.is_del = 0
         </where>
         order by T1.id desc
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
