@@ -22,4 +22,6 @@ public interface IBuyerTaskService {
 
 
 	void update(BuyerTaskVO buyerTaskDO);
+
+	void delete(Long id);
 }

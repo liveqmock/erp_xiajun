@@ -47,6 +47,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         return mapper.list(buyerTask);
     }
 
+    @Override
     public BuyerTaskVO selectVoById(Long id){
 
 		//buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
@@ -63,9 +64,24 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 			resultVo.setItemCode(detailDO.getItemCode());
 			resultVo.setUpc(detailDO.getUpc());
 			resultVo.setSkuPicUrl(detailDO.getSkuPicUrl());
+		}else{
+			throw new ErpCommonException("task_detail_error","未找到对应商品");
 		}
         return resultVo;
     }
+
+    @Override
+	@Transactional
+	public void delete(Long id){
+		BuyerTaskDO taskDO = mapper.selectByPrimaryKey(id);
+		if(taskDO == null || EasyUtil.isStringEmpty(taskDO.getBuyerTaskNo())){
+            return;
+		}
+
+		detailMapper.deleteByTaskNo(taskDO.getBuyerTaskNo(),taskDO.getCompanyNo());
+
+		mapper.deleteByPrimaryKey(id);
+	}
 
     /**
      * 新增采购任务

@@ -118,7 +118,7 @@ public class MallOrderController {
             return result.buildMsg(e.getMessage()).buildIsSuccess(false);
         }
 
-        return result;
+        return result.buildIsSuccess(true).buildMsg("更新成功");
     }
 
     /**
@@ -331,7 +331,7 @@ public class MallOrderController {
                 list.add(outerOrder.getTotalAmount());    //订单金额
                 list.add(outerOrder.getGmtCreate().toString());        //下单时间
                 list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
-                List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
+                List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
                 if(subOrderDOList.size()>0) {
                     list.add(subOrderDOList.get(0).getReceiver());            //收件人
 //                    list.add(subOrderDOList.get(0).getTelephone());        //手机
