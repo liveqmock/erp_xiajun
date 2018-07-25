@@ -329,14 +329,25 @@ public class MallOrderController {
                 list.add(outerOrder.getOrderNo());            //主订单号
 //                list.add(outerOrder.getS());        //销售员
                 list.add(outerOrder.getTotalAmount());    //订单金额
-                list.add(outerOrder.getGmtCreate());        //下单时间
+                list.add(outerOrder.getGmtCreate().toString());        //下单时间
                 list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
-                list.add(outerOrder.getIdCard());            //收件人
+                List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(mallOrderVO.getOrderNo());
+                if(subOrderDOList.size()>0) {
+                    list.add(subOrderDOList.get(0).getReceiver());            //收件人
+//                    list.add(subOrderDOList.get(0).getTelephone());        //手机
+//                    list.add(subOrderDOList.get(0).getReceiverState());    //省
+//                    list.add(subOrderDOList.get(0).getReceiverCity());        //市
+//                    list.add(subOrderDOList.get(0).getReceiverDistrict());    //区
+//                    list.add(subOrderDOList.get(0).getReceiverAddress());    //详细地址
+                }else
+                {
+                    list.add(outerOrder.getIdCard());            //收件人
 //                list.add(outerOrder.getTelephone());        //手机
 //                list.add(outerOrder.getSt());    //省
 //                list.add(outerOrder.getReceiverCity());        //市
 //                list.add(outerOrder.getReceiverDistrict());    //区
 //                list.add(outerOrder.getAddressDetail());    //详细地址
+                }
 
                 rowDatas.add(list);
             }
