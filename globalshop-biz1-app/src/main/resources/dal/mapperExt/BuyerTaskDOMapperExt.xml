@@ -57,6 +57,8 @@
         ON  buyer_task.buyer_task_no = buyer_task_detail.buyer_task_no
         WHERE
             buyer_task.company_no = #{companyNo}
+            and buyer_task.is_del is false
+            and buyer_task_detail.is_del is false
         <if test="buyerOpenId != null and buyerOpenId != ''">
             AND buyer_task.buyer_open_id = #{buyerOpenId}
         </if>
