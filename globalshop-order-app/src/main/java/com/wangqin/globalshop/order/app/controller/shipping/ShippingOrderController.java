@@ -828,6 +828,9 @@ public class ShippingOrderController {
             result.buildIsSuccess(true).buildData(shippingTrackVOList);
         } catch (ErpCommonException e) {
             result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildIsSuccess(false).buildMsg("物流信息查询失败");
         }
         return result;
     }
