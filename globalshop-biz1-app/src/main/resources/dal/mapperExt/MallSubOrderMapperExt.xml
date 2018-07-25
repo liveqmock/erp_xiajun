@@ -331,7 +331,8 @@
         warehouse_no,
         order_time,
         sku_pic,
-        logistic_type
+        logistic_type,
+        status
         FROM
         mall_sub_order
         WHERE

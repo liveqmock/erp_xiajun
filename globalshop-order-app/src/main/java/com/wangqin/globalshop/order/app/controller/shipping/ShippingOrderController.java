@@ -107,13 +107,14 @@ public class ShippingOrderController {
     @ResponseBody
     public Object multiDeliveryForm(String erpOrderId) {
         JsonResult<MultiDeliveryFormDTO> result = new JsonResult();
-        MultiDeliveryFormDTO dto = null;
+        MultiDeliveryFormDTO dto;
         try {
             dto = shippingOrderService.queryByOrderId(erpOrderId);
+            result.buildData(dto).buildIsSuccess(true);
         } catch (ErpCommonException e) {
             result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
         }
-        return result.buildData(dto).buildIsSuccess(true);
+        return result;
     }
 
     // 合单发货(将多个子订单合并成一个包裹)
