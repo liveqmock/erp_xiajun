@@ -55,13 +55,15 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 		BeanUtils.copies(taskDO,resultVo);
 
         List<BuyerTaskDetailDO> buyerTaskDetailDOList = detailMapper.taskDailyByTaskNo(resultVo.getBuyerTaskNo());
-        resultVo.setTaskDetailList(buyerTaskDetailDOList);
+		if(!EasyUtil.isListEmpty(buyerTaskDetailDOList)){
+			resultVo.setTaskDetailList(buyerTaskDetailDOList);
 
-		BuyerTaskDetailDO detailDO = buyerTaskDetailDOList.get(0);
+			BuyerTaskDetailDO detailDO = buyerTaskDetailDOList.get(0);
 
-		resultVo.setItemCode(detailDO.getItemCode());
-		resultVo.setUpc(detailDO.getUpc());
-		resultVo.setSkuPicUrl(detailDO.getSkuPicUrl());
+			resultVo.setItemCode(detailDO.getItemCode());
+			resultVo.setUpc(detailDO.getUpc());
+			resultVo.setSkuPicUrl(detailDO.getSkuPicUrl());
+		}
         return resultVo;
     }
 
