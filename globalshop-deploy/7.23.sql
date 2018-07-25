@@ -14,3 +14,7 @@ insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_ku
 insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('天天','006',NULL,'tiantian','SYSTEM','SYSTEM');
 insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('4PX','007',NULL,'zhuanyunsifang','SYSTEM','SYSTEM');
 insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('百世快递','008',NULL,'baishiwuliu','SYSTEM','SYSTEM');
+
+###增加任务主图的字段长度
+ALTER TABLE `haidb2new`.`buyer_task`
+MODIFY COLUMN `image_url` varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '任务主图，item_find主图';
