@@ -793,21 +793,26 @@ public class ItemServiceImplement implements IItemService {
                 /**类目2*/
                 String category2 = obj.get(5).toString().trim();
                 /**类目3*/
-
                 String category3 = obj.get(6).toString().trim();
+                List<ItemCategoryDO> categoryList = null;
+                if (EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1)) {
+                    errMsg.add("第" + i + "行:类目为空");
+                } else {
+                    List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
+                    List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
+                    categoryList = categoryService.selectByParentAndName(categoryList2, category3);
 
-                List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
-                List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
-                List<ItemCategoryDO> categoryList = categoryService.selectByParentAndName(categoryList2, category3);
+                }
+
 
                 String categoryCode = "";
-                if (categoryList.size() == 0) {
-                    errMsg.add("第" + i + "行:找不到" + category1+"/"+ category2+"/"+ category3+ "对应的类目");
+                if (categoryList == null || categoryList.size() == 0) {
+                    errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
                 } else if (categoryList.size() > 1) {
-                    errMsg.add("第" + i + "行:" + category1+"/"+ category2+"/"+ category3+ "对应的类目不唯一");
+                    errMsg.add("第" + i + "行:" + category1 + "/" + category2 + "/" + category3 + "对应的类目不唯一");
                 } else {
                     ItemCategoryDO category = categoryList.get(0);
-                    categoryCode=category.getCategoryCode();
+                    categoryCode = category.getCategoryCode();
 
                 }
 

@@ -714,11 +714,6 @@ public class ItemController {
         return result.buildIsSuccess(true).buildMsg("上传成功");
     }
 
-//    @RequestMapping("/getTemplateUrl")
-//    public Object getTemplateUrl(){
-//
-//
-//    }
 
 
 }
