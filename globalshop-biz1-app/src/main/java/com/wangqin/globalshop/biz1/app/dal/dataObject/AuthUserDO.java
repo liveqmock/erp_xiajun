@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import lombok.ToString;
+
 import java.util.Date;
-
-import javax.validation.constraints.Size;
-
+@ToString
 public class AuthUserDO extends BaseModel {
     private Long id;
 

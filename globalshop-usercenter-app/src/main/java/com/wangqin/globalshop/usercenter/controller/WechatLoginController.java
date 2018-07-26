@@ -341,8 +341,10 @@ public class WechatLoginController {
             log.info("有多个账户"+list);
             for (AuthUserDO authUser : list) {
                 AuthUserVO authUserVO = new AuthUserVO();
-                ParseObj2Obj.parseObj2Obj(authUserVO, authUser);
-                CompanyDO companyDO = companyService.selectByCompanyNo(authUser.getCompanyNo());
+                ParseObj2Obj.parseObj2Obj( authUser,authUserVO);
+                String companyNo = authUser.getCompanyNo();
+                log.info(companyNo);
+                CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
                 if (companyDO == null){
                    return result.buildIsSuccess(false).buildMsg("找不到对应的公司");
                 }
