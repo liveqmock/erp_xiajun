@@ -107,28 +107,28 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     public void add(BuyerTaskVO vo) {
         List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
 
-        Long buyerId = vo.getBuyerId();
-        /**获取相关买手信息*/
-        if (vo.getBuyerId() == null || vo.getBuyerId() < 0) {
-            buyerId = list.get(0).getBuyerId();
-        }
-        BuyerDO buyer = buyerMapper.selectByPrimaryKey(buyerId);
-        BuyerTaskDO task = new BuyerTaskDO();
-        /**封装出一个buyerTaskDO对象*/
-
-        Long nestTask = mapper.gainTASKSequence();
-
-        String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(buyerId, nestTask);
-        task.setBuyerTaskNo(buyerTaskNo);
-
-        task.setTitle(vo.getTitle());
-        task.setRemark(vo.getRemark());
-        task.setTaskDesc(vo.getTaskDesc());
-        task.setImageUrl(vo.getImageUrl());
-        getBuyerTaskDO(task, buyer, vo);
-        mapper.insertSelective(task);
-
         for (ItemTask itemTask : list) {
+            Long buyerId = vo.getBuyerId();
+            /**获取相关买手信息*/
+            if (vo.getBuyerId() == null || vo.getBuyerId() < 0) {
+                buyerId = itemTask.getBuyerId();
+            }
+            BuyerDO buyer = buyerMapper.selectByPrimaryKey(buyerId);
+            BuyerTaskDO task = new BuyerTaskDO();
+            /**封装出一个buyerTaskDO对象*/
+
+            Long nestTask = mapper.gainTASKSequence();
+
+            String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(buyerId, nestTask);
+            task.setBuyerTaskNo(buyerTaskNo);
+
+            task.setTitle(vo.getTitle());
+            task.setRemark(vo.getRemark());
+            task.setTaskDesc(vo.getTaskDesc());
+            task.setImageUrl(vo.getImageUrl());
+            getBuyerTaskDO(task, buyer, vo);
+            mapper.insertSelective(task);
+
             /**获取相关买手信息*/
             BuyerDO by = buyerMapper.selectByPrimaryKey(itemTask.getBuyerId());
             BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
@@ -142,8 +142,6 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             getBuyerTaskDetailDO(detail, itemTask, by);
             detailMapper.insertSelective(detail);
         }
-
-
     }
 
 

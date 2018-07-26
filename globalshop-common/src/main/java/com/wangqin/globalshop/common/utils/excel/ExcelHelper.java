@@ -704,7 +704,7 @@ public class ExcelHelper {
         			if(rowData.get(j) == null) {
         				cell.setCellValue("");
         			} else if(rowData.get(j) instanceof Date) {	//日期
-        				//cell.setCellValue(com.wangqin.util.DateUtil.formatDate((Date)rowData.get(j)));
+        				cell.setCellValue(com.wangqin.globalshop.common.utils.DateUtil.formatDate((Date)rowData.get(j)));
         			} else if(rowData.get(j) instanceof byte[]) {	//图片
         				int pictureIdx = wbWrite.addPicture((byte[])rowData.get(j), Workbook.PICTURE_TYPE_PNG);
         				ClientAnchor anchor = helper.createClientAnchor();
