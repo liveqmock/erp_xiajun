@@ -98,10 +98,10 @@
         </where>
 	</select>
 	<!--id查code -->
-	<select id="queryCodeByName" resultType="java.lang.String" parameterType= "java.lang.String">
+	<select id="queryCodeByName" resultType="java.lang.Long" parameterType= "java.lang.String">
 
 		select
-    	country_code
+    	id
      	FROM country
      	<where>
         is_del=0

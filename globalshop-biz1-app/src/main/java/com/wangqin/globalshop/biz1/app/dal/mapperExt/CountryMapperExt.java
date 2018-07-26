@@ -35,5 +35,5 @@ public interface CountryMapperExt extends CountryDOMapper{
 	
 	String queryCodeById(Integer id);
 
-    String queryCodeByName(String name);
+	Long queryCodeByName(String name);
 }

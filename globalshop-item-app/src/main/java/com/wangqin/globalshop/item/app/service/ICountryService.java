@@ -38,5 +38,5 @@ public interface ICountryService {
 
 	void undeleteCountry(CountryDO countryDO);
 
-    String queryCodeByName(String purchaseFrom);
+	Long queryCodeByName(String purchaseFrom);
 }

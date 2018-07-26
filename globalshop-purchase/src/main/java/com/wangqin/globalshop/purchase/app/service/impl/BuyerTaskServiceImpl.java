@@ -246,7 +246,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                     task.setEndTime(rightNow.getTime());
                     detail.setEndTime(rightNow.getTime());
                 } else {
-                    errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第6列的  " + limitTime);
                 }
                 task.setStatus(Constant.TO_BE_PURCHASED);
 

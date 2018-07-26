@@ -77,7 +77,7 @@ public class CountryServiceImpl   implements ICountryService {
 	}
 
 	@Override
-	public String queryCodeByName(String name) {
+	public Long queryCodeByName(String name) {
 		return countryMapper.queryCodeByName(name);
 	}
 }
