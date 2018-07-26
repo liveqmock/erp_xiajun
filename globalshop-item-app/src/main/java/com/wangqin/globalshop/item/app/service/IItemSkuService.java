@@ -112,4 +112,6 @@ public interface IItemSkuService  {
   	
     //询要更新的upc是否在别的商品名下已经存在,存在则表明出现了upc重复的问题
   	Integer queryRecordCountByUpcCompanyNotInSameItem(String companyNo,String upc,String itemCode);
+
+    Integer queryCountByUpcAndCompanyNo(String companyNo, String upc);
 }

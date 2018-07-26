@@ -691,9 +691,17 @@
 	</select>
 	
 	<!-- 查询要更新的upc是否在别的商品名下已经存在,存在则表明出现了upc重复的问题-->
-    <select id="queryRecordCountByUpcCompanyNotInSameItem"  resultType="java.lang.Integer">
-		SELECT count(1) 
+    <select id="queryCountByUpcAndCompanyNo"  resultType="java.lang.Integer">
+		SELECT count(*)
 		FROM item_sku 
+		WHERE upc=#{upc}
+			AND company_no=#{companyNo}
+			AND is_del=0
+	</select>
+	<!-- 查询要更新的upc是否在别的商品名下已经存在,存在则表明出现了upc重复的问题-->
+    <select id="queryRecordCountByUpcCompanyNotInSameItem"  resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM item_sku
 		<where>
 			<![CDATA[ item_code <> #{itemCode} ]]>
 			AND upc=#{upc}

@@ -760,6 +760,8 @@ public class ItemServiceImplement implements IItemService {
             List<ItemDO> itemList = new ArrayList<>();
             List<ItemSkuDO> skuList = new ArrayList<>();
             List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+            List<String> upcs = new ArrayList();
+
             int i = 0;
             for (List<Object> obj : list) {
                 i++;
@@ -768,25 +770,48 @@ public class ItemServiceImplement implements IItemService {
 
                 /**UPC*/
                 String upc = obj.get(0).toString().trim();
-                itemSku.setUpc(upc);
+                if (StringUtils.isBlank(upc)) {
+                    errMsg.add("第" + i + "行:upc不能为空");
+                } else {
+                    //检测upc是否和数据库里面已有的upc重复,按公司划分
+                    Integer duplcatedCountNumber = itemSkuService.queryCountByUpcAndCompanyNo(AppUtil.getLoginUserCompanyNo(), upc);
+                    if (0 < duplcatedCountNumber) {
+                        errMsg.add("第" + i + "行:商品库中已存在对应的upc" + upc);
+                    }
+                    if (upcs.contains(upc)) {
+                        errMsg.add("第" + i + "行:本次导入中存在重复的upc" + upc);
+                    }
+                    upcs.add(upc);
+                    itemSku.setUpc(upc);
+                }
+
                 /**商品名称*/
                 String itemName = obj.get(1).toString().trim();
-                item.setItemName(itemName);
-                itemSku.setItemName(itemName);
-
-                /**品牌(英文)*/
-                String brandEnName = obj.get(2).toString();
-                /**品牌(中文)*/
-                String brandCnName = obj.get(3).toString().trim();
-                item.setBrandName(brandEnName + " " + brandCnName);
-                itemSku.setBrandName(brandEnName + " " + brandCnName);
-                List<ItemBrandDO> brand = iBrandService.queryByEnNameAndCnName(brandEnName, brandCnName);
-                if (brand.size() == 0) {
-                    errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
-                } else if (brand.size() > 1) {
-                    errMsg.add("第" + i + "行:" + brandEnName + " " + brandCnName + "对应的品牌不唯一");
+                if (StringUtils.isBlank(itemName)) {
+                    errMsg.add("第" + i + "行:商品名不能为空");
                 } else {
-                    item.setBrandNo(brand.get(0).getBrandNo());
+                    item.setItemName(itemName);
+                    itemSku.setItemName(itemName);
+                }
+
+
+                String brandEnName = obj.get(2).toString();
+                /**品牌(英文)*/
+                if (StringUtils.isBlank(brandEnName)) {
+                    errMsg.add("第" + i + "行:品牌(英文)不能为空");
+                } else {
+                    /**品牌(中文)*/
+                    String brandCnName = obj.get(3).toString().trim();
+                    item.setBrandName(brandEnName + " " + brandCnName);
+                    itemSku.setBrandName(brandEnName + " " + brandCnName);
+                    List<ItemBrandDO> brand = iBrandService.queryByEnNameAndCnName(brandEnName, brandCnName);
+                    if (brand.size() == 0) {
+                        errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
+                    } else if (brand.size() > 1) {
+                        errMsg.add("第" + i + "行:" + brandEnName + " " + brandCnName + "对应的品牌不唯一");
+                    } else {
+                        item.setBrandNo(brand.get(0).getBrandNo());
+                    }
                 }
                 /**类目1*/
                 String category1 = obj.get(4).toString().trim();

@@ -286,16 +286,24 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
      * 如果不为空  返回的是错误信息
      */
     private String setDetailInfo(BuyerTaskDetailDO detail, String upc) {
-        ItemSkuDO itemSku = itemSkuMapper.queryBySkuCodeOrUpcAndCompanyNo(upc, AppUtil.getLoginUserCompanyNo());
-        if (itemSku == null) {
-            return "不存在对应的商品:" + upc;
+        if (StringUtils.isBlank(upc)) {
+            return "UPC为空";
         }
-        detail.setUpc(upc);
-        detail.setItemCode(itemSku.getItemCode());
-        detail.setSkuCode(itemSku.getSkuCode());
-        detail.setRemark(itemSku.getRemark());
-        detail.setSkuPicUrl(itemSku.getSkuPic());
-        return null;
+        try {
+            ItemSkuDO itemSku = itemSkuMapper.queryBySkuCodeOrUpcAndCompanyNo(upc, AppUtil.getLoginUserCompanyNo());
+
+            if (itemSku == null) {
+                return "不存在对应的商品:" + upc;
+            }
+            detail.setUpc(upc);
+            detail.setItemCode(itemSku.getItemCode());
+            detail.setSkuCode(itemSku.getSkuCode());
+            detail.setRemark(itemSku.getRemark());
+            detail.setSkuPicUrl(itemSku.getSkuPic());
+            return null;
+        } catch (Exception e) {
+            return "异常的upc" + upc;
+        }
     }
 
 
