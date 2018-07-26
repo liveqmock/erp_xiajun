@@ -61,6 +61,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 
     @Override
     public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO) {
+        shippingOrderVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
         List<ShippingOrderDO> shippingOrderList = shippingOrderMapper.queryShippingOrders(shippingOrderVO);
 //        for (ShippingOrderDO shippingOrderDO: shippingOrderList) {
 //            String shippingNo = shippingOrderDO.getShippingNo();
