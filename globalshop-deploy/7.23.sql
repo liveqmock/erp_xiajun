@@ -3,6 +3,8 @@ ALTER TABLE applet_config ADD templet_id   INT(11) NULL COMMENT '小程序模板
 ALTER TABLE applet_config ADD img_url  VARCHAR(64) NULL COMMENT '体验版二维码';
 ALTER TABLE applet_config ADD audit_id   VARCHAR(64) NULL COMMENT ' 微信审核的id   用于查询审核状态等api';
 ALTER TABLE applet_config ADD ext_json   VARCHAR(1024) NULL COMMENT '小程序的ext.json文件';
+ALTER TABLE applet_config MODIFY authorizer_access_token VARCHAR(512) COMMENT '第三方授权平台token';
+
 
 ALTER TABLE `warehouse` CHANGE COLUMN `address` `address` VARCHAR(256) NULL DEFAULT NULL;
 
