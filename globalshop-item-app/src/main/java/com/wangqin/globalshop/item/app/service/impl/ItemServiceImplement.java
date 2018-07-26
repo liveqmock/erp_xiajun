@@ -799,12 +799,15 @@ public class ItemServiceImplement implements IItemService {
                     errMsg.add("第" + i + "行:类目为空");
                 } else {
                     List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
-                    List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
-                    categoryList = categoryService.selectByParentAndName(categoryList2, category3);
+                    if (categoryList1.size() != 0) {
+                        List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
+                        if (categoryList2.size() != 0) {
+                            categoryList = categoryService.selectByParentAndName(categoryList2, category3);
+                        }
+
+                    }
 
                 }
-
-
                 String categoryCode = "";
                 if (categoryList == null || categoryList.size() == 0) {
                     errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
