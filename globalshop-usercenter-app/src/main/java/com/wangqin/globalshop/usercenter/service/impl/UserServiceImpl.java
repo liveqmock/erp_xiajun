@@ -344,6 +344,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         return userMapper.selectByUnionidAndCompanyNo(unionid,companyNo);
     }
 
+    @Override
+    public AuthUserDO selectByUserNoAndCompanyNo(String userNo, String companyNo) {
+
+        return userMapper.selectByUserNoAndCompanyNo(userNo,companyNo);
+    }
+
 
 }
 

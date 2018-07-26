@@ -3,7 +3,9 @@ package com.wangqin.globalshop.usercenter.controller;
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.redis.Cache;
@@ -11,6 +13,8 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CookieUtil;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.common.utils.czh.ParseObj2Obj;
+import com.wangqin.globalshop.usercenter.service.IUserCompanyService;
 import com.wangqin.globalshop.usercenter.service.IUserService;
 import com.wangqin.globalshop.usercenter.service.UserUploadFileService;
 import lombok.Getter;
@@ -49,6 +53,10 @@ import java.util.Map;
 public class WechatLoginController {
     @Value("#{sys.SESSION_ID}")
     private String SESSION_ID;
+    @Value("#{sys.LOGIN_REDIRECT}")
+    private String login_redirect;
+    @Value("#{sys.AUTH_REDIRECT}")
+    private String auth_redirect;
     @Value("#{sys.COMPANY_NO}")
     private String COMPANY_NO;
     @Value("#{sys.APPSECRET}")
@@ -67,6 +75,8 @@ public class WechatLoginController {
     private Cache loginCache;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private IUserCompanyService companyService;
 
 
     @RequestMapping("/login")
@@ -165,7 +175,7 @@ public class WechatLoginController {
     public Object getUrl() {
         JsonResult<Object> result = new JsonResult<>();
         try {
-            String baseUrl = sysurl + "/wechatLogin/login";
+            String baseUrl = sysurl + login_redirect;
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
             String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
             return result.buildData(url).buildIsSuccess(true);
@@ -176,15 +186,6 @@ public class WechatLoginController {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        String baseUrl = "https://test.buyer007.cn" + "/wechatLogin/authorized";
-        baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
-        String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-        url = url + "&state=" + "ZeYbipA0xN";
-        System.out.println(url);
-
-
-    }
 
     /**
      * 获取微信授权二维码的图片链接
@@ -219,28 +220,28 @@ public class WechatLoginController {
         return result.buildIsSuccess(false).buildMsg("获取失败");
 
     }
-
-    /**
-     * 获取微信授权二维码的链接
-     *
-     * @return
-     */
-    @RequestMapping("/getAuthorizedUrl")
-    public Object getAuthorizedUrl() {
-        JsonResult<Object> result = new JsonResult<>();
-        try {
-            String baseUrl = sysurl + "/wechatLogin/authorized";
-            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
-            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-            String state = AppUtil.getLoginUserCompanyNo();
-            url = url + "&state=" + state;
-            return result.buildData(url).buildIsSuccess(true).buildMsg("获取成功");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return result.buildIsSuccess(false).buildMsg("获取失败");
-        }
-
-    }
+//
+//    /**
+//     * 获取微信授权二维码的链接
+//     *
+//     * @return
+//     */
+//    @RequestMapping("/getAuthorizedUrl")
+//    public Object getAuthorizedUrl() {
+//        JsonResult<Object> result = new JsonResult<>();
+//        try {
+//            String baseUrl = sysurl + "/wechatLogin/authorized";
+//            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+//            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+//            String state = AppUtil.getLoginUserCompanyNo();
+//            url = url + "&state=" + state;
+//            return result.buildData(url).buildIsSuccess(true).buildMsg("获取成功");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//            return result.buildIsSuccess(false).buildMsg("获取失败");
+//        }
+//
+//    }
 
     /**
      * 获取微信授权二维码的网页
@@ -250,7 +251,7 @@ public class WechatLoginController {
     @RequestMapping("/getHtml")
     @Authenticated
     public void getImgHtml(HttpServletResponse response) {
-        String baseUrl = sysurl + "/#/permission/test";
+        String baseUrl = sysurl + auth_redirect;
         try {
             String companyNo = AppUtil.getLoginUserCompanyNo();
             if (StringUtils.isBlank(companyNo)) {
@@ -301,22 +302,19 @@ public class WechatLoginController {
     @PostMapping("/loginByUserNo")
     public Object loginByUserNo(String userNo, String companyNo, String code, String loginToken) {
         JsonResult<Object> result = new JsonResult<>();
-        if ("0".equals(loginToken.trim())) {
+        AuthUserDO user = userService.selectByUserNoAndCompanyNo(userNo,companyNo);
+        if (user == null){
             return result.buildIsSuccess(false).buildMsg("登陆失败");
         }
-
         String sessionId = (String) request.getAttribute(SESSION_ID);
         if (StringUtils.isBlank(sessionId)) {
             sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
         }
-
-        loginCache.putEx(sessionId, "fjz", TIMEOUT);
-        loginCache.putEx(COMPANY_NO + sessionId, "ZeYbipA0xN", TIMEOUT);
-        AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
+        loginCache.putEx(sessionId, user.getName(), TIMEOUT);
+        loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
+        AppUtil.setLoginUser(user.getName(),  user.getCompanyNo());
         Map<String, String> map = new HashMap<>();
-        map.put("userName","fjz");
-        map.put("userName","fjz");
-
+        map.put("userName", user.getName());
         return result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
     }
 
@@ -324,63 +322,107 @@ public class WechatLoginController {
     public Object getLoginHtml(String code) {
         JsonResult<Object> result = new JsonResult<>();
         Map<String, String> map = new HashMap<>();
-        if ("0".equals(code)) {
-            map.put("status", "0");
-            result.buildIsSuccess(true).buildMsg("找不到对应用户").buildData(map);
-        } else if ("1".equals(code)) {
-            map.put("status", "1");
-            map.put("userName","fjz");
+        /**获取openId和token*/
+        JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null, null, "2");
+        /**如果相应包含errcode  表示请求失败*/
+        if (o.containsKey("errcode")) {
+            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+        }
+        String unionid = o.getString("unionid");
+        List<AuthUserDO> list = userService.selectByUnionid(unionid);
+        List<AuthUserVO> vos = new ArrayList();
+
+        if (list.size() > 1) {
+            for (AuthUserDO authUser : list) {
+                AuthUserVO authUserVO = new AuthUserVO();
+                ParseObj2Obj.parseObj2Obj(authUserVO, authUser);
+                CompanyDO companyDO = companyService.selectByCompanyNo(authUser.getCompanyNo());
+                authUserVO.setCompanyName(companyDO.getCompanyName());
+                vos.add(authUserVO);
+            }
+            map.put("status", "2");
+            map.put("userInfo", JSON.toJSONString(vos));
+            map.put("code",code);
+            map.put("loginToken", "123");
+
+            return result.buildIsSuccess(true).buildData(vos);
+        }
+        if (list.size() == 1) {
+            AuthUserDO user = list.get(0);
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isBlank(sessionId)) {
                 sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
             }
 
-            loginCache.putEx(sessionId, "fjz", TIMEOUT);
-            loginCache.putEx(COMPANY_NO + sessionId, "ZeYbipA0xN", TIMEOUT);
-            AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
-//            loginByUserNo();
-            result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
-        } else if ("2".equals(code)) {
-            map.put("status", "2");
-            User user1 = new User();
-            user1.setCompanyName("网擒天下");
-            user1.setCompanyNo("787878");
-            user1.setUserNo("7456");
-            User user2 = new User();
-            user2.setCompanyName("海狐海淘");
-            user2.setCompanyNo("121546");
-            user2.setUserNo("2333");
-            List<User> list = new ArrayList();
-            list.add(user1);
-            list.add(user2);
-            map.put("status", "2");
-            map.put("userInfo", JSON.toJSONString(list));
-//            map.put("code","1213");存缓存
-            map.put("loginToken", "0");
-            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
-        } else if ("3".equals(code)) {
-            map.put("status", "2");
-            User user1 = new User();
-            user1.setCompanyName("网擒天下");
-            user1.setCompanyNo("787878");
-            user1.setUserNo("7456");
-            User user2 = new User();
-            user2.setCompanyName("海狐海淘");
-            user2.setCompanyNo("121546");
-            user2.setUserNo("2333");
-            List<User> list = new ArrayList();
-            list.add(user1);
-            list.add(user2);
-            map.put("status", "2");
-            map.put("userInfo", JSON.toJSONString(list));
-//            map.put("code","1213");存缓存
-            map.put("loginToken", "1");
-            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
-        } else {
-            result.buildIsSuccess(false).buildMsg("异常数据:status" + code);
+            loginCache.putEx(sessionId, user.getName(), TIMEOUT);
+            loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
+            AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
+            map.put("status", "1");
+            map.put("userName",user.getName());
+            return result.buildIsSuccess(true).buildMsg("登陆成功");
         }
+        map.put("status", "0");
+        return result.buildIsSuccess(true).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆").buildData(map);
 
-        return result;
+
+//
+//
+//        if ("0".equals(code)) {
+//            map.put("status", "0");
+//            result.buildIsSuccess(true).buildMsg("找不到对应用户").buildData(map);
+//        } else if ("1".equals(code)) {
+//            map.put("status", "1");
+//            map.put("userName","fjz");
+//            String sessionId = (String) request.getAttribute(SESSION_ID);
+//            if (StringUtils.isBlank(sessionId)) {
+//                sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
+//            }
+//
+//            loginCache.putEx(sessionId, "fjz", TIMEOUT);
+//            loginCache.putEx(COMPANY_NO + sessionId, "ZeYbipA0xN", TIMEOUT);
+//            AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
+////            loginByUserNo();
+//            result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
+//        } else if ("2".equals(code)) {
+//            map.put("status", "2");
+//            User user1 = new User();
+//            user1.setCompanyName("网擒天下");
+//            user1.setCompanyNo("787878");
+//            user1.setUserNo("7456");
+//            User user2 = new User();
+//            user2.setCompanyName("海狐海淘");
+//            user2.setCompanyNo("121546");
+//            user2.setUserNo("2333");
+//            List<User> list = new ArrayList();
+//            list.add(user1);
+//            list.add(user2);
+//            map.put("status", "2");
+//            map.put("userInfo", JSON.toJSONString(list));
+////            map.put("code","1213");存缓存
+//            map.put("loginToken", "0");
+//            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
+//        } else if ("3".equals(code)) {
+//            map.put("status", "2");
+//            User user1 = new User();
+//            user1.setCompanyName("网擒天下");
+//            user1.setCompanyNo("787878");
+//            user1.setUserNo("7456");
+//            User user2 = new User();
+//            user2.setCompanyName("海狐海淘");
+//            user2.setCompanyNo("121546");
+//            user2.setUserNo("2333");
+//            List<User> list = new ArrayList();
+//            list.add(user1);
+//            list.add(user2);
+//            map.put("status", "2");
+//            map.put("userInfo", JSON.toJSONString(list));
+////            map.put("code","1213");存缓存
+//            map.put("loginToken", "1");
+//            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
+//        } else {
+//            result.buildIsSuccess(false).buildMsg("异常数据:status" + code);
+//        }
+
 
     }
 
