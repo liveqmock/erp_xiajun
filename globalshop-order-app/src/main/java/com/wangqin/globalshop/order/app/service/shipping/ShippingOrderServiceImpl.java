@@ -90,8 +90,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //                throw new ErpCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
 //            }
             // 只有“已付款待发货”状态的订单可以发货
-            if (mallSubOrder.getStatus() != OrderStatus.PAID.getCode()) {
-                throw new ErpCommonException("“已付款待发货”状态下的订单才能发货");
+            if (mallSubOrder.getStatus() != OrderStatus.PAID.getCode()
+                    && mallSubOrder.getStatus() != OrderStatus.NEW.getCode()) {
+                throw new ErpCommonException("当前状态下的订单不能发货");
             }
 
             mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
