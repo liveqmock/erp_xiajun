@@ -367,8 +367,9 @@ public class WechatLoginController {
             AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
             map.put("status", "1");
             map.put("userName",user.getName());
-            log.info("响应====="+map);
-            return result.buildIsSuccess(true).buildMsg("登陆成功");
+            result.buildIsSuccess(true).buildMsg("登陆成功");
+            log.info("响应++++"+result);
+            return result;
         }
         map.put("status", "0");
         log.info("响应====="+map);
