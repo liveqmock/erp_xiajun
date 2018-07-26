@@ -152,14 +152,16 @@ public class BuyerController {
                 if (StringUtil.isNotBlank(skuPic)) {
                     PicModel pm = HaiJsonUtils.toBean(skuPic, PicModel.class);
                     String imgSrc = pm.getPicList().get(0).getUrl();
-                    String imgType = imgSrc.substring(imgSrc.lastIndexOf(".") + 1).toUpperCase();
+                    // System.out.println(imgSrc);
+                    URL url = new URL(imgSrc);
+                    //取图片类型
+                    String imgType = url.getPath().substring(url.getPath().lastIndexOf(".") + 1).toUpperCase();
                     if (imgSrc.contains("aliyuncs.com")) {
                         imgSrc += "?x-oss-process=image/resize,m_lfit,h_100,w_100";
                     } else {
                         imgSrc = imgSrc.replaceAll("Resource", "Thumbnail");
                     }
-                    // System.out.println(imgSrc);
-                    URL url = new URL(imgSrc);
+                    //取图
                     BufferedImage image = ImageIO.read(url);
                     ByteArrayOutputStream output = new ByteArrayOutputStream();
                     ImageIO.write(image, imgType, output);
