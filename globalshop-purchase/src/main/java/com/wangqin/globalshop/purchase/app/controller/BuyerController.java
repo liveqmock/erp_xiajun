@@ -178,9 +178,9 @@ public class BuyerController {
                 // list.add(item.getBrandName()); //品牌
                 list.add(item.getColor()); // 颜色
                 list.add(item.getScale()); // 尺码
-//                list.add(item.getBuySite()); // 采购站点
+                list.add(""); //item.getBuySite()// 采购站点
                 list.add(item.getCount()); // 采购数量
-                list.add(item.getEntryCount()); // 入库数量
+                list.add(item.getEntryCount()==null?0:item.getEntryCount()); // 入库数量
                 rowDatas.add(list);
             }
         }
