@@ -81,7 +81,7 @@
             AND buyer_task_detail.end_time &lt;= #{taskEnd2}
         </if>
         <if test="buyerName != null and buyerName != ''">
-            AND buyer_task_detail.buyer_name = #{buyerName}
+            AND buyer_task.buyer_name = #{buyerName}
         </if>
         ORDER BY buyer_task.start_time DESC
     </select>
