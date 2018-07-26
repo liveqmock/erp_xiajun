@@ -281,7 +281,7 @@ public class WechatLoginController {
      */
     @RequestMapping("/getLoginHtml")
     public void getLoginHtml(HttpServletResponse response) {
-        String baseUrl = sysurl + "/wechatLogin/login";
+        String baseUrl = sysurl + login_redirect;
         try {
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
