@@ -352,7 +352,9 @@ public class WechatLoginController {
             map.put("code",code);
             map.put("loginToken", "123");
             log.info("响应====="+map);
-            return result.buildIsSuccess(true).buildData(vos);
+            result.buildIsSuccess(true).buildData(map);
+            log.info("响应====="+result);
+            return result;
         }
         if (list.size() == 1) {
             log.info("有一个账户"+list);
