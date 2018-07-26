@@ -18,3 +18,7 @@ insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_ku
 ###增加任务主图的字段长度
 ALTER TABLE `haidb2new`.`buyer_task`
 MODIFY COLUMN `image_url` varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '任务主图，item_find主图';
+
+###item_sku_scale增加索引
+ALTER TABLE `haidb2new`.`item_sku_scale`
+ADD INDEX `skucode_index`(`sku_code`) USING BTREE COMMENT 'skucode查询比较频繁';
