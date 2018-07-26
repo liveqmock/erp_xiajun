@@ -797,7 +797,7 @@ public class ItemServiceImplement implements IItemService {
                     String brandCnName = obj.get(3).toString().trim();
                     item.setBrandName(brandEnName + " " + brandCnName);
                     itemSku.setBrandName(brandEnName + " " + brandCnName);
-                    List<ItemBrandDO> brand = iBrandService.queryByEnNameAndCnName(brandEnName, brandCnName);
+                    List<ItemBrandDO> brand = iBrandService.queryByEnName(brandEnName);
                     if (brand.size() == 0) {
                         errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
                     } else if (brand.size() > 1) {

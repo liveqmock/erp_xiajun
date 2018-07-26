@@ -50,4 +50,6 @@ public interface IItemBrandService {
 	
 	//修改之前查询是不是已经有该英文名的品牌
     List<Long> queryIdListByBrandName(String name);
+
+    List<ItemBrandDO> queryByEnName(String brandEnName);
 }
