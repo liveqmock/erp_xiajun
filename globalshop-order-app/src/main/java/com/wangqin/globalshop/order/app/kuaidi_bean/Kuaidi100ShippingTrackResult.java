@@ -33,10 +33,21 @@ import java.util.stream.Collectors;
  *  ]
  * }
  * </pre>
+ *
+ * @author angus
+ * @date 2018/7/25
  */
 public class Kuaidi100ShippingTrackResult {
     /**
-     * 无意义字段
+     * 查询失败时返回false，查询成功无此字段
+     */
+    private Boolean result;
+    /**
+     * 查询失败时返回的状态码，查询成功无此字段
+     */
+    private String returnCode;
+    /**
+     * 查询结果
      */
     private String message;
     /**
@@ -81,6 +92,22 @@ public class Kuaidi100ShippingTrackResult {
      * 物流轨迹信息
      */
     private ArrayList<Kuaidi100ShippingTrackResultNode> data;
+
+    public Boolean getResult() {
+        return result;
+    }
+
+    public void setResult(Boolean result) {
+        this.result = result;
+    }
+
+    public String getReturnCode() {
+        return returnCode;
+    }
+
+    public void setReturnCode(String returnCode) {
+        this.returnCode = returnCode;
+    }
 
     public String getMessage() {
         return message;

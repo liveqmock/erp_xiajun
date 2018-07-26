@@ -169,7 +169,7 @@ public class Wechat3rdPartyAuthorizationController {
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
             //todo 配置的是http://"+wxBaseUrl+"/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-            re_url = URLEncoder.encode("http://" + wxBaseUrl + "/account/authcallback?companyNo=" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
+            re_url = URLEncoder.encode("http://" + wxBaseUrl + "/#/myApp/appsetTest?companyNo=" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             log.info("re_url:" + reUrl);
             return result.buildIsSuccess(true).buildData(reUrl);
@@ -191,8 +191,8 @@ public class Wechat3rdPartyAuthorizationController {
      * @return
      */
     @RequestMapping(value = "/authcallback", method = RequestMethod.GET)
-    public String queryAuth(@RequestParam("companyNo") String companyNo, @RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn, HttpServletRequest request) {
-
+    public Object queryAuth(@RequestParam("companyNo") String companyNo, @RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn, HttpServletRequest request) {
+        JsonResult<Object> result = new JsonResult<>();
         log.info("===================companyNo============================" + companyNo + "----------------------" + request.getRequestURL().toString());
         try {
             log.info("===================进入授权回调============================");
@@ -209,24 +209,39 @@ public class Wechat3rdPartyAuthorizationController {
             JSONObject info = o.getJSONObject("authorization_info");
             /*授权成功之后可以获取到 authorizer_access_token 和 authorizer_refresh_token  如果没有获取 则返回失败*/
             if (!info.containsKey("authorizer_access_token")) {
-                return "fail";
+                return result.buildMsg("授权失败").buildIsSuccess(false);
             }
             /*设置小程序相关的 服务器域名、业务域名*/
+            AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
+            if (applet != null) {
+                String accessToken = info.getString("authorizer_access_token");
+                String refreshToken = info.getString("authorizer_refresh_token");
+                String appid = info.getString("authorizer_appid");
+                if (StringUtils.isBlank(appid) || !appid.equals(applet.getAppid())) {
+                    return result.buildMsg("授权失败:当前公司已经绑定了其它小程序,请在微信公众平台解除授权").buildIsSuccess(false);
+                }
+                applet.setAuthorizerAccessToken(accessToken);
+                applet.setAuthorizerRefreshToken(refreshToken);
+                applet.setPublishStatus(PublishStatus.AUTHORIZED.getCode());
+                applet.update();
+                appletConfigServiceImplement.update(applet);
+
+            }
             String token = info.getString("authorizer_access_token");
             setAppletRequestUrl(token, "set");
-            AppletConfigDO applet = getAppletDO(info, APPLET_TYPE, companyNo);
+            applet = getAppletDO(info, APPLET_TYPE, companyNo);
 //            /*提交体验版*/
 //            updateApplet(templetId, applet);
 //            /*提交审核*/
 //            auditApplet(applet);
             log.info("最终小程序信息=======" + applet);
             appletConfigServiceImplement.insert(applet);
-            return "success";
+            return result.buildMsg("授权成功").buildIsSuccess(false);
         } catch (ErpCommonException e) {
-            return e.getErrorMsg();
+            return result.buildMsg("授权失败" + e.getErrorMsg()).buildIsSuccess(false);
         } catch (Exception e) {
             e.printStackTrace();
-            return "fail";
+            return result.buildMsg("授权失败").buildIsSuccess(false);
         }
     }
 
@@ -289,7 +304,7 @@ public class Wechat3rdPartyAuthorizationController {
         String trueJson = extJson.replace("${appid}", applet.getAppid());
         String trueUrl = url.replace("${token}", applet.getAuthorizerAccessToken());
         String trueParam = param.replace("${extJson}", trueJson);
-        PayUtil.httpRequest(trueUrl, "POST", trueParam );
+        PayUtil.httpRequest(trueUrl, "POST", trueParam);
 
 //        String s = HttpClientUtil.get(imgUrl.replace("${token}", applet.getAuthorizerAccessToken()));
 //        String img;
@@ -557,7 +572,7 @@ public class Wechat3rdPartyAuthorizationController {
         String token = obj.getString("access_token");
         String s1 = "https://api.weixin.qq.com/cgi-bin/open/bind?access_token=" + token;
         //language=JSON
-        String param = "{\"appid\":" + applet.getAppid() + ",\"open_appid\":" + componentAppid +"}";
+        String param = "{\"appid\":" + applet.getAppid() + ",\"open_appid\":" + componentAppid + "}";
         String post = PayUtil.httpRequest(s1, "POST", param);
 
         return post;
