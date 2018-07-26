@@ -24,6 +24,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -68,6 +70,7 @@ public class WechatLoginController {
     @Autowired
     private UserUploadFileService uploadFileService;
     private static long TIMEOUT = 30 * 60 * 1000;
+    private static Logger log = LoggerFactory.getLogger("WechatLoginController");
 
     @Autowired
     private IUserService userService;
@@ -320,10 +323,12 @@ public class WechatLoginController {
 
     @PostMapping("/getUserInfo")
     public Object getLoginHtml(String code) {
+        log.info("开始登陆"+code);
         JsonResult<Object> result = new JsonResult<>();
         Map<String, String> map = new HashMap<>();
         /**获取openId和token*/
         JSONObject o = HttpClientUtil.post("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code", null, null, "2");
+        log.info("获取openId和token的结果"+o.toString());
         /**如果相应包含errcode  表示请求失败*/
         if (o.containsKey("errcode")) {
             return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
@@ -333,21 +338,24 @@ public class WechatLoginController {
         List<AuthUserVO> vos = new ArrayList();
 
         if (list.size() > 1) {
+            log.info("有多个账户"+list);
             for (AuthUserDO authUser : list) {
                 AuthUserVO authUserVO = new AuthUserVO();
                 ParseObj2Obj.parseObj2Obj(authUserVO, authUser);
                 CompanyDO companyDO = companyService.selectByCompanyNo(authUser.getCompanyNo());
                 authUserVO.setCompanyName(companyDO.getCompanyName());
                 vos.add(authUserVO);
+                log.info("用户信息====="+authUserVO);
             }
             map.put("status", "2");
             map.put("userInfo", JSON.toJSONString(vos));
             map.put("code",code);
             map.put("loginToken", "123");
-
+            log.info("响应====="+map);
             return result.buildIsSuccess(true).buildData(vos);
         }
         if (list.size() == 1) {
+            log.info("有一个账户"+list);
             AuthUserDO user = list.get(0);
             String sessionId = (String) request.getAttribute(SESSION_ID);
             if (StringUtils.isBlank(sessionId)) {
@@ -359,69 +367,13 @@ public class WechatLoginController {
             AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
             map.put("status", "1");
             map.put("userName",user.getName());
+            log.info("响应====="+map);
             return result.buildIsSuccess(true).buildMsg("登陆成功");
         }
         map.put("status", "0");
+        log.info("响应====="+map);
         return result.buildIsSuccess(true).buildMsg("您还不是本平台的用户,请联系公司管理员进行授权后登陆").buildData(map);
 
-
-//
-//
-//        if ("0".equals(code)) {
-//            map.put("status", "0");
-//            result.buildIsSuccess(true).buildMsg("找不到对应用户").buildData(map);
-//        } else if ("1".equals(code)) {
-//            map.put("status", "1");
-//            map.put("userName","fjz");
-//            String sessionId = (String) request.getAttribute(SESSION_ID);
-//            if (StringUtils.isBlank(sessionId)) {
-//                sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
-//            }
-//
-//            loginCache.putEx(sessionId, "fjz", TIMEOUT);
-//            loginCache.putEx(COMPANY_NO + sessionId, "ZeYbipA0xN", TIMEOUT);
-//            AppUtil.setLoginUser("fjz", "ZeYbipA0xN");
-////            loginByUserNo();
-//            result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
-//        } else if ("2".equals(code)) {
-//            map.put("status", "2");
-//            User user1 = new User();
-//            user1.setCompanyName("网擒天下");
-//            user1.setCompanyNo("787878");
-//            user1.setUserNo("7456");
-//            User user2 = new User();
-//            user2.setCompanyName("海狐海淘");
-//            user2.setCompanyNo("121546");
-//            user2.setUserNo("2333");
-//            List<User> list = new ArrayList();
-//            list.add(user1);
-//            list.add(user2);
-//            map.put("status", "2");
-//            map.put("userInfo", JSON.toJSONString(list));
-////            map.put("code","1213");存缓存
-//            map.put("loginToken", "0");
-//            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
-//        } else if ("3".equals(code)) {
-//            map.put("status", "2");
-//            User user1 = new User();
-//            user1.setCompanyName("网擒天下");
-//            user1.setCompanyNo("787878");
-//            user1.setUserNo("7456");
-//            User user2 = new User();
-//            user2.setCompanyName("海狐海淘");
-//            user2.setCompanyNo("121546");
-//            user2.setUserNo("2333");
-//            List<User> list = new ArrayList();
-//            list.add(user1);
-//            list.add(user2);
-//            map.put("status", "2");
-//            map.put("userInfo", JSON.toJSONString(list));
-////            map.put("code","1213");存缓存
-//            map.put("loginToken", "1");
-//            result.buildIsSuccess(true).buildMsg("请选择一个账户登陆").buildData(map);
-//        } else {
-//            result.buildIsSuccess(false).buildMsg("异常数据:status" + code);
-//        }
 
 
     }
