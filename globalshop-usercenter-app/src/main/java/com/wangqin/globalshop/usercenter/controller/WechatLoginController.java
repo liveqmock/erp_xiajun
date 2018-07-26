@@ -55,6 +55,8 @@ public class WechatLoginController {
     private String SESSION_ID;
     @Value("#{sys.LOGIN_REDIRECT}")
     private String login_redirect;
+    @Value("#{sys.AUTH_REDIRECT}")
+    private String auth_redirect;
     @Value("#{sys.COMPANY_NO}")
     private String COMPANY_NO;
     @Value("#{sys.APPSECRET}")
@@ -218,28 +220,28 @@ public class WechatLoginController {
         return result.buildIsSuccess(false).buildMsg("获取失败");
 
     }
-
-    /**
-     * 获取微信授权二维码的链接
-     *
-     * @return
-     */
-    @RequestMapping("/getAuthorizedUrl")
-    public Object getAuthorizedUrl() {
-        JsonResult<Object> result = new JsonResult<>();
-        try {
-            String baseUrl = sysurl + "/wechatLogin/authorized";
-            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
-            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-            String state = AppUtil.getLoginUserCompanyNo();
-            url = url + "&state=" + state;
-            return result.buildData(url).buildIsSuccess(true).buildMsg("获取成功");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return result.buildIsSuccess(false).buildMsg("获取失败");
-        }
-
-    }
+//
+//    /**
+//     * 获取微信授权二维码的链接
+//     *
+//     * @return
+//     */
+//    @RequestMapping("/getAuthorizedUrl")
+//    public Object getAuthorizedUrl() {
+//        JsonResult<Object> result = new JsonResult<>();
+//        try {
+//            String baseUrl = sysurl + "/wechatLogin/authorized";
+//            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
+//            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
+//            String state = AppUtil.getLoginUserCompanyNo();
+//            url = url + "&state=" + state;
+//            return result.buildData(url).buildIsSuccess(true).buildMsg("获取成功");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//            return result.buildIsSuccess(false).buildMsg("获取失败");
+//        }
+//
+//    }
 
     /**
      * 获取微信授权二维码的网页
@@ -249,7 +251,7 @@ public class WechatLoginController {
     @RequestMapping("/getHtml")
     @Authenticated
     public void getImgHtml(HttpServletResponse response) {
-        String baseUrl = sysurl + "/#/permission/test";
+        String baseUrl = sysurl + auth_redirect;
         try {
             String companyNo = AppUtil.getLoginUserCompanyNo();
             if (StringUtils.isBlank(companyNo)) {
