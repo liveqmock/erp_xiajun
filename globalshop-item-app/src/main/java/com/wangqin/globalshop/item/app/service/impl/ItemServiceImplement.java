@@ -795,6 +795,7 @@ public class ItemServiceImplement implements IItemService {
                 } else {
                     /**品牌(中文)*/
                     String brandCnName = obj.get(3).toString().trim();
+                    brandCnName = brandCnName == null ? "" : brandCnName;
                     item.setBrandName(brandEnName + " " + brandCnName);
                     itemSku.setBrandName(brandEnName + " " + brandCnName);
                     List<ItemBrandDO> brand = iBrandService.queryByEnName(brandEnName);
