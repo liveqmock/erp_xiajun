@@ -852,7 +852,9 @@ public class ItemServiceImplement implements IItemService {
                 /**采购地*/
                 String purchaseFrom = obj.get(9).toString().trim();
                 Long s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
-                item.setCountry(s1.toString());
+                if (s1 != null){
+                    item.setCountry(s1.toString());
+                }
                 /**币种*/
                 String currency = obj.get(10).toString();
                 currency = StringUtil.isBlank(currency) ? "0" : currency;
