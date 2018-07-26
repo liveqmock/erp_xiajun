@@ -169,7 +169,7 @@ public class Wechat3rdPartyAuthorizationController {
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
             //todo 配置的是http://"+wxBaseUrl+"/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
-            re_url = URLEncoder.encode("http://" + wxBaseUrl + "/account/authcallback/" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
+            re_url = URLEncoder.encode("http://" + wxBaseUrl + "/account/authcallback?companyNo=" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             log.info("re_url:" + reUrl);
             return result.buildIsSuccess(true).buildData(reUrl);
@@ -190,8 +190,8 @@ public class Wechat3rdPartyAuthorizationController {
      * @param expiresIn 存活时间
      * @return
      */
-    @RequestMapping(value = "/authcallback/{companyNo}", method = RequestMethod.GET)
-    public String queryAuth(@PathVariable("companyNo") String companyNo, @RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn, HttpServletRequest request) {
+    @RequestMapping(value = "/authcallback", method = RequestMethod.GET)
+    public String queryAuth(@RequestParam("companyNo") String companyNo, @RequestParam("auth_code") String authCode, @RequestParam("expires_in") String expiresIn, HttpServletRequest request) {
 
         log.info("===================companyNo============================" + companyNo + "----------------------" + request.getRequestURL().toString());
         try {
@@ -287,7 +287,9 @@ public class Wechat3rdPartyAuthorizationController {
         String param = "{\"template_id\": " + templateId + ",\"user_version\": \"" + TimeUtil.getCurrentDateDefaultString() + "\",\"user_desc\": \"发布新版本\",\"ext_json\": \"+${extJson}+\"}";
              /*发布所有的满足条件的小程序的体验版  并返回二维码图片  保存到数据库中*/
         String trueJson = extJson.replace("${appid}", applet.getAppid());
-        PayUtil.httpRequest(url.replace("${token}", applet.getAuthorizerAccessToken()), "POST", param.replace("${extJson}", trueJson));
+        String trueUrl = url.replace("${token}", applet.getAuthorizerAccessToken());
+        String trueParam = param.replace("${extJson}", trueJson);
+        PayUtil.httpRequest(trueUrl, "POST", trueParam );
 
 //        String s = HttpClientUtil.get(imgUrl.replace("${token}", applet.getAuthorizerAccessToken()));
 //        String img;
