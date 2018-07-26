@@ -85,10 +85,18 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
                 logger.debug("主动查询失败 shippingNo:{}, num:{}", shippingNo, num);
                 return null;
             }
+
             logger.debug("主动查询结果 shippingNo:{}, num:{}, response:{} ", shippingNo, num, resultStr);
-            return JacksonHelper.fromJSON(resultStr, Kuaidi100ShippingTrackResult.class);
-        } catch (Exception e) {
-            logger.error("查询出现异常 shippingNo:{}, num:{}", shippingNo, num, e);
+            Kuaidi100ShippingTrackResult result = JacksonHelper.fromJSON(resultStr, Kuaidi100ShippingTrackResult.class);
+            if (result.getResult() != null && !result.getResult()) {
+                // 查询失败，返回快递100给出的失败信息
+                throw new ErpCommonException(result.getMessage());
+            }
+            return result;
+        } catch (ErpCommonException e) {
+            throw e;
+        } catch (Exception ex) {
+            logger.error("查询出现异常 shippingNo:{}, num:{}", shippingNo, num, ex);
             return null;
         }
     }
@@ -111,7 +119,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
         String logisticCompany = shippingOrder.getLogisticCompany();
         // 根据物流公司名获取其对应的快递100 Code
         String com = codeInKuaidi100(logisticCompany);
-        if(com == null) {
+        if (com == null) {
             throw new ErpCommonException("不支持该物流公司");
         }
         String num = shippingOrder.getLogisticNo();
