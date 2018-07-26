@@ -750,8 +750,11 @@ public class ItemServiceImplement implements IItemService {
             List<String> upcs = new ArrayList();
 
             int i = 0;
-            if (list.size()>200){
+            if (list.size() > 200) {
                 throw new ErpCommonException("最多只能导入两百条");
+            }
+            if (list.size() == 0) {
+                throw new ErpCommonException("当前导入为空");
             }
             for (List<Object> obj : list) {
                 i++;
@@ -855,7 +858,7 @@ public class ItemServiceImplement implements IItemService {
                 /**采购地*/
                 String purchaseFrom = obj.get(9).toString().trim();
                 Long s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
-                if (s1 != null){
+                if (s1 != null) {
                     item.setCountry(s1.toString());
                 }
                 /**币种*/
@@ -937,7 +940,9 @@ public class ItemServiceImplement implements IItemService {
             if (size == 0) {
                 itemDOMapperExt.insertBatch(itemList);
                 itemSkuMapperExt.inserBatch(skuList);
-                itemSkuScaleDOMapper.insertBatch(scaleList);
+                if (scaleList.size() != 0) {
+                    itemSkuScaleDOMapper.insertBatch(scaleList);
+                }
             } else if (size < 10) {
                 throw new ErpCommonException(errMsg.toString());
             } else {
