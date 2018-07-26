@@ -261,7 +261,7 @@ public class ExcelHelper {
      * @param columnWidth	单元宽度
      * @return
      */
-    public boolean setTaskDailyToSheet(String sheetName, String[] columnTitles, List<List<Object>> rowDatas, Integer[] columnWidth) {
+    public boolean setTaskDailyToSheet(String sheetName, String[] columnTitles, List<List<Object>> rowDatas, Integer[] columnWidth, int imgFormat) {
     	boolean bIsSuccess = true;
     	if (null == wbWrite) {
     		wbWrite = new XSSFWorkbook();
@@ -309,7 +309,8 @@ public class ExcelHelper {
         			} else if(rowData.get(j) instanceof Date) {	//日期
         				//cell.setCellValue(DateUtil.formatDate((Date)rowData.get(j)));
         			} else if(rowData.get(j) instanceof byte[]) {	//图片
-        				int pictureIdx = wbWrite.addPicture((byte[])rowData.get(j), Workbook.PICTURE_TYPE_PNG);
+						int format=(imgFormat<=7&&imgFormat>=2)?imgFormat:Workbook.PICTURE_TYPE_PNG;
+        				int pictureIdx = wbWrite.addPicture((byte[])rowData.get(j), format);
         				ClientAnchor anchor = helper.createClientAnchor();
         				anchor.setCol1(j);
         				anchor.setRow1(i);
