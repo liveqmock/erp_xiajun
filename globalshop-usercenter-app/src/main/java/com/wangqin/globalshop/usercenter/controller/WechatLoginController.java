@@ -343,6 +343,9 @@ public class WechatLoginController {
                 AuthUserVO authUserVO = new AuthUserVO();
                 ParseObj2Obj.parseObj2Obj(authUserVO, authUser);
                 CompanyDO companyDO = companyService.selectByCompanyNo(authUser.getCompanyNo());
+                if (companyDO == null){
+                   return result.buildIsSuccess(false).buildMsg("找不到对应的公司");
+                }
                 authUserVO.setCompanyName(companyDO.getCompanyName());
                 vos.add(authUserVO);
                 log.info("用户信息====="+authUserVO);

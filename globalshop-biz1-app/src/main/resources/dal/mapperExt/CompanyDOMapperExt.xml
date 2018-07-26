@@ -65,11 +65,9 @@
         <include refid="commonSelectSection"/>
         ORDER BY T.id desc
     </select>
-    <select id="selectByCompanyNo" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    <select id="selectByCompanyNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         <include refid="Base_Column_List" />
-        ,
-        <include refid="Blob_Column_List" />
         from company
         where company_no = #{companyNo}
     </select>
