@@ -191,6 +191,9 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             List<BuyerTaskDO> taskList = new ArrayList<>();
             List<BuyerTaskDetailDO> detailList = new ArrayList<>();
             int i = 0;
+            if (list.size()>200){
+                throw new ErpCommonException("最多只能导入两百条");
+            }
             Long nestTask = mapper.gainTASKSequence();
             for (List<Object> obj : list) {
                 i++;

@@ -750,6 +750,9 @@ public class ItemServiceImplement implements IItemService {
             List<String> upcs = new ArrayList();
 
             int i = 0;
+            if (list.size()>200){
+                throw new ErpCommonException("最多只能导入两百条");
+            }
             for (List<Object> obj : list) {
                 i++;
                 ItemDO item = new ItemDO();
