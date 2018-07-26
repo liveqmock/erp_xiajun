@@ -83,7 +83,7 @@
         <if test="buyerName != null and buyerName != ''">
             AND buyer_task.buyer_name = #{buyerName}
         </if>
-        ORDER BY buyer_task.start_time DESC
+        ORDER BY buyer_task.gmt_create DESC
     </select>
 
     <select id="selectVoById" resultType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">

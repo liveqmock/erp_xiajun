@@ -33,10 +33,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author zhulu
@@ -329,16 +327,17 @@ public class MallOrderController {
                 list.add(outerOrder.getOrderNo());            //主订单号
 //                list.add(outerOrder.getS());        //销售员
                 list.add(outerOrder.getTotalAmount());    //订单金额
-                list.add(outerOrder.getGmtCreate().toString());        //下单时间
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+                list.add(sdf.format(outerOrder.getGmtCreate()));        //下单时间
                 list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
                 List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
                 if(subOrderDOList.size()>0) {
                     list.add(subOrderDOList.get(0).getReceiver());            //收件人
-//                    list.add(subOrderDOList.get(0).getTelephone());        //手机
-//                    list.add(subOrderDOList.get(0).getReceiverState());    //省
-//                    list.add(subOrderDOList.get(0).getReceiverCity());        //市
-//                    list.add(subOrderDOList.get(0).getReceiverDistrict());    //区
-//                    list.add(subOrderDOList.get(0).getReceiverAddress());    //详细地址
+                    list.add(subOrderDOList.get(0).getTelephone());        //手机
+                    list.add(subOrderDOList.get(0).getReceiverState());    //省
+                    list.add(subOrderDOList.get(0).getReceiverCity());        //市
+                    list.add(subOrderDOList.get(0).getReceiverDistrict());    //区
+                    list.add(subOrderDOList.get(0).getReceiverAddress());    //详细地址
                 }else
                 {
                     list.add(outerOrder.getIdCard());            //收件人
@@ -355,8 +354,8 @@ public class MallOrderController {
         ExcelHelper excelHelper = new ExcelHelper();
 //        String[] columnTitles = new String[]{"主订单号", "销售员", "订单金额", "下单时间", "订单状态", "收件人", "手机", "省", "市", "区", "详细地址"};
 //        Integer[] columnWidth = new Integer[]{30, 15, 15, 20, 15, 15, 15, 15, 15, 15, 45};
-        String[] columnTitles = new String[]{"主订单号", "订单金额", "下单时间", "订单状态", "收件人"};
-        Integer[] columnWidth = new Integer[]{30, 15, 20, 15, 15};
+        String[] columnTitles = new String[]{"主订单号", "订单金额", "下单时间", "订单状态", "收件人", "手机", "省", "市", "区", "详细地址"};
+        Integer[] columnWidth = new Integer[]{30, 15, 20, 15, 15, 15, 15, 15, 15, 45};
 
         excelHelper.setOuterOrderToSheet("主订单", columnTitles, rowDatas, columnWidth);
         //excelHelper.writeToFile("/Users/liuyang/Work/test.xls");

@@ -808,24 +808,10 @@ public class ShippingOrderController {
      */
     @RequestMapping("/getShippingTrackDetail")
     @ResponseBody
-    public Object getShippingTrackDetail(String shippingNo) {
+    public JsonResult getShippingTrackDetail(String shippingNo) {
         JsonResult<List<ShippingTrackVO>> result = new JsonResult<>();
         try {
-            Kuaidi100ShippingTrackResult kuaidi100Result = kuaidi100Service.queryShippingTrack(shippingNo);
-            CommonShippingTrack shippingTrack = kuaidi100Result.toCommonShippingTrack();
-
-            List<CommonShippingTrackNode> shippingTrackInfos = shippingTrack.getShippingTrackInfo();
-            List<ShippingTrackVO> shippingTrackVOList = new ArrayList<>();
-
-            if (shippingTrackInfos != null) {
-                shippingTrackInfos.forEach(shippingTrackInfo -> {
-                    ShippingTrackVO shippingOne = new ShippingTrackVO();
-                    shippingOne.setInfo(shippingTrackInfo.getInfo());
-                    shippingOne.setGmtCreate(DateUtil.parseDate(shippingTrackInfo.getDate()));
-                    shippingTrackVOList.add(shippingOne);
-                });
-            }
-
+            List<ShippingTrackVO> shippingTrackVOList = getShippingTrackList(shippingNo);
             result.buildIsSuccess(true).buildData(shippingTrackVOList);
         } catch (ErpCommonException e) {
             result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
@@ -835,6 +821,52 @@ public class ShippingOrderController {
         }
         return result;
     }
+
+    /**
+     * 批量完整物流轨迹详情展示
+     *
+     * @param shippingNos
+     * @return
+     */
+    @RequestMapping("/getShippingTrackDetails")
+    @ResponseBody
+    public JsonResult getShippingTrackDetails(Set<String> shippingNos) {
+        JsonResult<Map<String,List<ShippingTrackVO>>> result = new JsonResult<>();
+        try {
+            Map<String,List<ShippingTrackVO>> resultMap = new HashMap<>();
+            for (String shippingNo : shippingNos) {
+                List<ShippingTrackVO> shippingTrackVOList = getShippingTrackList(shippingNo);
+                resultMap.put(shippingNo, shippingTrackVOList);
+            }
+            result.buildIsSuccess(true).buildData(resultMap);
+
+        } catch (ErpCommonException e) {
+            result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildIsSuccess(false).buildMsg("物流信息查询失败");
+        }
+        return result;
+    }
+
+    private List<ShippingTrackVO> getShippingTrackList(String shippingNo){
+        Kuaidi100ShippingTrackResult kuaidi100Result = kuaidi100Service.queryShippingTrack(shippingNo);
+        CommonShippingTrack shippingTrack = kuaidi100Result.toCommonShippingTrack();
+
+        List<CommonShippingTrackNode> shippingTrackInfos = shippingTrack.getShippingTrackInfo();
+        List<ShippingTrackVO> shippingTrackVOList = new ArrayList<>();
+
+        if (shippingTrackInfos != null) {
+            shippingTrackInfos.forEach(shippingTrackInfo -> {
+                ShippingTrackVO shippingOne = new ShippingTrackVO();
+                shippingOne.setInfo(shippingTrackInfo.getInfo());
+                shippingOne.setGmtCreate(DateUtil.parseDate(shippingTrackInfo.getDate()));
+                shippingTrackVOList.add(shippingOne);
+            });
+        }
+        return shippingTrackVOList;
+    }
+
     /*
         if (StringUtils.isNotBlank(shippingNo)) {
             List<ShippingTrackDO> shippingTracks = shippingTrackService.queryShippingTrack(shippingNo);
