@@ -90,14 +90,25 @@
 	<select id="queryCodeById" resultType="java.lang.String" parameterType= "java.lang.Integer">
 	
 		select
-    	country_code
+        <include refid="Base_Column_List" />
      	FROM country
      	<where>
         is_del=0
         AND id=#{id}
         </where>
 	</select>
-	
+	<!--id查code -->
+	<select id="queryCodeByName" resultType="java.lang.String" parameterType= "java.lang.String">
+
+		select
+    	country_code
+     	FROM country
+     	<where>
+        is_del=0
+        AND name=#{name}
+        </where>
+	</select>
+
 	<!-- 查找国家 -->
 	<select id="queryCountrySelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO" >
    		select

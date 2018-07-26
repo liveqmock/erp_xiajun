@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.item.app.service.*;
 import org.apache.xpath.operations.Bool;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +35,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemSkuDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
@@ -67,13 +59,6 @@ import com.wangqin.globalshop.common.enums.AppletType;
 import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.IAppletConfigService;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
-import com.wangqin.globalshop.item.app.service.IItemCategoryService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.IUploadFileService;
 import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 
 import net.sf.json.JSONArray;
@@ -116,6 +101,8 @@ public class ItemServiceImplement implements IItemService {
     private Cache shareCache;
     @Autowired
     private IAppletConfigService appletConfigService;
+    @Autowired
+    private ICountryService countryServiceImpl;
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
@@ -864,7 +851,8 @@ public class ItemServiceImplement implements IItemService {
                 String scala2 = obj.get(8).toString().trim();
                 /**采购地*/
                 String purchaseFrom = obj.get(9).toString().trim();
-                item.setCountry(purchaseFrom);
+                String s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
+                item.setCountry(s1);
                 /**币种*/
                 String currency = obj.get(10).toString();
                 currency = StringUtil.isBlank(currency) ? "0" : currency;
@@ -877,7 +865,9 @@ public class ItemServiceImplement implements IItemService {
                 String salePrice = obj.get(11).toString();
                 salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
                 if (isParseToDouble(salePrice)) {
-                    itemSku.setSalePrice(Double.valueOf(salePrice));
+                    Double salePrice1 = Double.valueOf(salePrice);
+                    itemSku.setSalePrice(salePrice1);
+                    item.setPriceRange(salePrice1.toString());
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
                 }

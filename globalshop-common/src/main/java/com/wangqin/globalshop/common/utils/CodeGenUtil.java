@@ -33,7 +33,7 @@ public class CodeGenUtil {
 	public static String getBuyerTaskNo(Long buyerId,Long nextTaskNum) {
 
 		String taskOrderNo = "T" + TimeUtil.getDate(TimeUtil.DEFAULT_DATE_NO_SEPRATORS_FORMAT, new Date())
-				+ "U" + String.format("%0" + 4 + "d", buyerId) + nextTaskNum;
+				+ "U" +  com.wangqin.globalshop.common.utils.RandomUtils.getTimeRandom()+RandomUtils.nextInt(10000) + nextTaskNum;
 		return taskOrderNo;
 	}
 

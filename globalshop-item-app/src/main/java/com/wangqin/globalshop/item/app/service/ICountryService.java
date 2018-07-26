@@ -37,4 +37,6 @@ public interface ICountryService {
 	String queryCodeById(Integer id);
 
 	void undeleteCountry(CountryDO countryDO);
+
+    String queryCodeByName(String purchaseFrom);
 }

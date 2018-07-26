@@ -2,10 +2,7 @@ package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskDetailVO;
@@ -41,6 +38,8 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     @Autowired
     private AuthUserDOMapperExt authUserMapper;
+    @Autowired
+    private ItemSkuScaleMapperExt itemSkuScaleMapper;
 
     @Override
     public List<BuyerTaskVO> list(BuyerTaskVO buyerTask) {
@@ -63,6 +62,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             for (BuyerTaskDetailDO detailDO : buyerTaskDetailDOList) {
                 BuyerDO buyerSo = new BuyerDO();
                 buyerSo.setIsDel(false);
+                buyerSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
                 buyerSo.setOpenId(detailDO.getBuyerOpenId());
                 BuyerDO buyer = buyerMapper.searchBuyer(buyerSo);
 
@@ -215,7 +215,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 task.setImageUrl(detail.getSkuPicUrl());
                 /**采购限价*/
                 String maxPrice = obj.get(3).toString().trim();
-                maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
+                maxPrice = StringUtil.isBlank(maxPrice) ? "" : maxPrice;
                 if (isParseToDouble(maxPrice)) {
                     BigDecimal decimal = new BigDecimal(maxPrice);
                     detail.setMaxPrice(decimal);
@@ -225,7 +225,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 }
                 /**采购数目*/
                 String maxCount = obj.get(4).toString().trim();
-                maxCount = StringUtil.isBlank(maxCount) ? "0" : maxCount;
+                maxCount = StringUtil.isBlank(maxCount) ? "" : maxCount;
                 if (isParseToInteger(maxCount)) {
                     Integer count = Integer.valueOf(maxCount);
                     detail.setMaxCount(count);
@@ -235,7 +235,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 }
                 /**任务的有效天数*/
                 String limitTime = obj.get(5).toString().trim();
-                limitTime = StringUtil.isBlank(limitTime) ? "0" : limitTime;
+                limitTime = StringUtil.isBlank(limitTime) ? "" : limitTime;
                 if (isParseToInteger(limitTime)) {
                     Date date = new Date();
                     task.setStartTime(date);
