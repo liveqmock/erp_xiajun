@@ -214,6 +214,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 if (status != null) {
                     errMsg.add(status + "位于第" + i + "行 第2列");
                 }
+                task.setImageUrl(detail.getSkuPicUrl());
                 /**采购限价*/
                 String maxPrice = obj.get(3).toString().trim();
                 maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
@@ -239,10 +240,12 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 limitTime = StringUtil.isBlank(limitTime) ? "0" : limitTime;
                 if (isParseToInteger(limitTime)) {
                     Date date = new Date();
+                    task.setStartTime(date);
                     detail.setStartTime(date);
                     Calendar rightNow = Calendar.getInstance();
                     rightNow.setTime(date);
                     rightNow.add(Calendar.DAY_OF_YEAR, Integer.valueOf(limitTime));
+                    task.setEndTime(rightNow.getTime());
                     detail.setEndTime(rightNow.getTime());
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
@@ -295,6 +298,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             if (itemSku == null) {
                 return "不存在对应的商品:" + upc;
             }
+            detail.setSkuPicUrl(ImgUtil.initImg2Json(itemSku.getSkuPic()));
             detail.setUpc(upc);
             detail.setItemCode(itemSku.getItemCode());
             detail.setSkuCode(itemSku.getSkuCode());
