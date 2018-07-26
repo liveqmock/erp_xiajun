@@ -64,6 +64,8 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
 
     List<AuthUserDO> selectByUnionidAndCompanyNo(String unionid, String state);
 
+    AuthUserDO selectByUserNoAndCompanyNo(String userNo, String companyNo);
+
 
     /**
      * 查询买手

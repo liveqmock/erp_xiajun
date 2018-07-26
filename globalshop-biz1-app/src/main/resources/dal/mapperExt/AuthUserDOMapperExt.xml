@@ -465,6 +465,13 @@
     where wx_union_id = #{unionid,jdbcType=VARCHAR}
     AND company_no = #{companyNo,jdbcType=VARCHAR}
   </select>
+  <select id="selectByUserNoAndCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" >
+    select
+    <include refid="Base_Column_List2" />
+    from auth_user
+    where user_no = #{userNo,jdbcType=VARCHAR}
+    AND company_no = #{companyNo,jdbcType=VARCHAR}
+  </select>
   <sql id="tableSection">auth_user</sql>
 
   <sql id="commonSelectSection">

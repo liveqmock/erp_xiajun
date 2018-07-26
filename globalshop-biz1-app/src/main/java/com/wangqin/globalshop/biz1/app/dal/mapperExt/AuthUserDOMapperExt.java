@@ -1,14 +1,13 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     //    int deleteByPrimaryKey(Long id);
@@ -72,4 +71,5 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
 
     List<AuthUserDO> selectByUnionidAndCompanyNo(@Param("unionid")String unionid, @Param("companyNo")String companyNo);
 
+    AuthUserDO selectByUserNoAndCompanyNo(@Param("userNo")String userNo,@Param("companyNo") String companyNo);
 }
