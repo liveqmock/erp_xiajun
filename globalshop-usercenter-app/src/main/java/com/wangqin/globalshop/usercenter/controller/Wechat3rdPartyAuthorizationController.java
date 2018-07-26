@@ -546,6 +546,8 @@ public class Wechat3rdPartyAuthorizationController {
                 String param1 = "{}";
                 String post1 = PayUtil.httpRequest(url1, "POST", param1);
                 log.info("发布成功" + post1);
+                applet.setPublishStatus(PublishStatus.PUBLISHED.getCode());
+                appletConfigServiceImplement.update(applet);
             }
         }
     }

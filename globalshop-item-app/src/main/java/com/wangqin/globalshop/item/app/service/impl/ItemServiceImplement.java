@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.item.app.service.*;
 import org.apache.xpath.operations.Bool;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +35,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemSkuDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
@@ -67,13 +59,6 @@ import com.wangqin.globalshop.common.enums.AppletType;
 import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.IAppletConfigService;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
-import com.wangqin.globalshop.item.app.service.IItemCategoryService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.IUploadFileService;
 import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 
 import net.sf.json.JSONArray;
@@ -116,6 +101,8 @@ public class ItemServiceImplement implements IItemService {
     private Cache shareCache;
     @Autowired
     private IAppletConfigService appletConfigService;
+    @Autowired
+    private ICountryService countryServiceImpl;
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
@@ -763,6 +750,12 @@ public class ItemServiceImplement implements IItemService {
             List<String> upcs = new ArrayList();
 
             int i = 0;
+            if (list.size() > 200) {
+                throw new ErpCommonException("最多只能导入两百条");
+            }
+            if (list.size() == 0) {
+                throw new ErpCommonException("当前导入为空");
+            }
             for (List<Object> obj : list) {
                 i++;
                 ItemDO item = new ItemDO();
@@ -802,9 +795,10 @@ public class ItemServiceImplement implements IItemService {
                 } else {
                     /**品牌(中文)*/
                     String brandCnName = obj.get(3).toString().trim();
+                    brandCnName = brandCnName == null ? "" : brandCnName;
                     item.setBrandName(brandEnName + " " + brandCnName);
                     itemSku.setBrandName(brandEnName + " " + brandCnName);
-                    List<ItemBrandDO> brand = iBrandService.queryByEnNameAndCnName(brandEnName, brandCnName);
+                    List<ItemBrandDO> brand = iBrandService.queryByEnName(brandEnName);
                     if (brand.size() == 0) {
                         errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
                     } else if (brand.size() > 1) {
@@ -864,7 +858,10 @@ public class ItemServiceImplement implements IItemService {
                 String scala2 = obj.get(8).toString().trim();
                 /**采购地*/
                 String purchaseFrom = obj.get(9).toString().trim();
-                item.setCountry(purchaseFrom);
+                Long s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
+                if (s1 != null) {
+                    item.setCountry(s1.toString());
+                }
                 /**币种*/
                 String currency = obj.get(10).toString();
                 currency = StringUtil.isBlank(currency) ? "0" : currency;
@@ -877,7 +874,9 @@ public class ItemServiceImplement implements IItemService {
                 String salePrice = obj.get(11).toString();
                 salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
                 if (isParseToDouble(salePrice)) {
-                    itemSku.setSalePrice(Double.valueOf(salePrice));
+                    Double salePrice1 = Double.valueOf(salePrice);
+                    itemSku.setSalePrice(salePrice1);
+                    item.setPriceRange(salePrice1.toString());
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
                 }
@@ -942,7 +941,9 @@ public class ItemServiceImplement implements IItemService {
             if (size == 0) {
                 itemDOMapperExt.insertBatch(itemList);
                 itemSkuMapperExt.inserBatch(skuList);
-                itemSkuScaleDOMapper.insertBatch(scaleList);
+                if (scaleList.size() != 0) {
+                    itemSkuScaleDOMapper.insertBatch(scaleList);
+                }
             } else if (size < 10) {
                 throw new ErpCommonException(errMsg.toString());
             } else {

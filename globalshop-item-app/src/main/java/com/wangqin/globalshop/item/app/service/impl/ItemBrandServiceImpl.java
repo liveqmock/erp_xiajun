@@ -115,4 +115,9 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 	public List<Long> queryIdListByBrandName(String name) {
     	return itemBrandDOMapperExt.queryIdListByBrandName(name);
     }
+
+	@Override
+	public List<ItemBrandDO> queryByEnName(String brandEnName) {
+		return itemBrandDOMapperExt.queryByEnName(brandEnName);
+	}
 }
