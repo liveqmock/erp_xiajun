@@ -327,8 +327,9 @@ public class MallOrderController {
                 list.add(outerOrder.getOrderNo());            //主订单号
 //                list.add(outerOrder.getS());        //销售员
                 list.add(outerOrder.getTotalAmount());    //订单金额
-                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-                list.add(sdf.format(outerOrder.getGmtCreate()));        //下单时间
+//                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//                list.add(sdf.format(outerOrder.getGmtCreate()));        //下单时间
+                list.add(outerOrder.getGmtCreate());        //下单时间
                 list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
                 List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
                 if(subOrderDOList.size()>0) {
