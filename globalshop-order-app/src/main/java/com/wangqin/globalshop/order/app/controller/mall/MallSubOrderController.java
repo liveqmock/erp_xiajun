@@ -127,9 +127,6 @@ public class MallSubOrderController {
             Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");
             mallSubOrderVO.setEndGmtCreate(endGmtCreate);
         }
-
-//		mallSubOrderVO.setCompanyNo("MallSUbOrderController?JLJLJJLJ");
-
         result.buildData(erpOrderService.queryErpOrders(mallSubOrderVO));
         result.setSuccess(true);
         return result.buildIsSuccess(true);

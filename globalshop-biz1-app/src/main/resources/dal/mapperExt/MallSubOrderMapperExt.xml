@@ -504,7 +504,7 @@
                 and company_no = #{companyNo}
             </if>
         </where>
-        ORDER BY order_time DESC
+        ORDER BY gmt_create DESC
     </select>
     <select id="selectBySkuCode" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
