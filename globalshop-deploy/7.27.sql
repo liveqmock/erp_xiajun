@@ -1,0 +1,1 @@
+ALTER TABLE mall_shopping_cart MODIFY item_name VARCHAR(128) COMMENT '商品名称';
