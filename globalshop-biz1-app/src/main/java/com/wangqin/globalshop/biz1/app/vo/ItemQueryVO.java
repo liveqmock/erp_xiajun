@@ -144,7 +144,7 @@ public class ItemQueryVO extends PageQueryVO{
 	private List<BuyerDO> wxList;
 	
 
-	private List<Integer> saleOnChannels;
+	private String saleOnChannels;
 	
 
 	private String owners;
@@ -565,10 +565,10 @@ public class ItemQueryVO extends PageQueryVO{
 	public void setSaleOnYouzan(Integer saleOnYouzan) {
 		this.saleOnYouzan = saleOnYouzan;
 	}
-	public List<Integer> getSaleOnChannels() {
+	public String getSaleOnChannels() {
 		return saleOnChannels;
 	}
-	public void setSaleOnChannels(List<Integer> saleOnChannels) {
+	public void setSaleOnChannels(String saleOnChannels) {
 		this.saleOnChannels = saleOnChannels;
 	}
 	
