@@ -2,7 +2,7 @@ package com.wangqin.globalshop.channel.controller.youzan;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanMsgPushEntity;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;

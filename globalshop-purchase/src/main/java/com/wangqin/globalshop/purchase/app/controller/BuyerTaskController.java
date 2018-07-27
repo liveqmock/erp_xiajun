@@ -143,9 +143,44 @@ public class BuyerTaskController {
         if (id == null) {
             return result.buildIsSuccess(false).buildMsg("id 不能为 null");
         }
-        BuyerTaskVO td = buyerTaskService.selectVoById(id);
-        return result.buildIsSuccess(true).buildData(td);
+		try {
+			BuyerTaskVO td = buyerTaskService.selectVoById(id);
+			return result.buildIsSuccess(true).buildData(td);
+		} catch (ErpCommonException ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg(ex.getErrorMsg());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg("未知异常");
+		}
+
     }
+
+	/**
+	 * 查询单个采购任务
+	 *
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public Object delete(Long id) {
+		JsonResult<BuyerTaskVO> result = new JsonResult<>();
+		if (id == null) {
+			return result.buildIsSuccess(false).buildMsg("id 不能为 null");
+		}
+		try {
+			buyerTaskService.delete(id);
+			return result.buildIsSuccess(true).buildMsg("删除成功");
+		} catch (ErpCommonException ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg(ex.getErrorMsg());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg("未知异常");
+		}
+
+	}
 
     /**
      * 完成采购按钮：采购中->采购结束

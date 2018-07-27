@@ -1,61 +1,39 @@
 package com.wangqin.globalshop.order.app.controller.mall;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jetty.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
-import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.order.app.config.OrderConfig;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuScaleService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.warehouse.IOrderWarehouseService;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jetty.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayOutputStream;
+import java.util.*;
 
 
 /**
@@ -65,7 +43,6 @@ import com.wangqin.globalshop.order.app.service.warehouse.IOrderWarehouseService
 @Controller
 @RequestMapping("/erpOrder")
 @Authenticated
-@PropertySource("classpath:orderConfig.properties")
 public class MallSubOrderController {
 
 	@Autowired
@@ -81,9 +58,11 @@ public class MallSubOrderController {
 	@Autowired
 	private IOrderWarehouseService warehouseService;
 	@Autowired
-	private OrderConfig orderConfig;
-	@Autowired
     private IMallOrderService orderService;
+	@Value("#{sys.CONSTANT}")
+    private Double constant;
+	@Value("#{sys.OPERATOR}")
+    private String operator;
 
 
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
@@ -148,9 +127,6 @@ public class MallSubOrderController {
             Date endGmtCreate = DateUtil.parseDate(endGmtCreateStr + " 23:59:59");
             mallSubOrderVO.setEndGmtCreate(endGmtCreate);
         }
-
-//		mallSubOrderVO.setCompanyNo("MallSUbOrderController?JLJLJJLJ");
-
         result.buildData(erpOrderService.queryErpOrders(mallSubOrderVO));
         result.setSuccess(true);
         return result.buildIsSuccess(true);
@@ -589,17 +565,16 @@ public class MallSubOrderController {
      * 
      */
     private Double calPureWeight(Double grossWeight) {
-    	String operator = orderConfig.getOperator();
-    	Double para = Double.parseDouble(orderConfig.getConstant());
+
     	switch (operator) {
 		case "+":
-			return grossWeight+para;
+			return grossWeight+constant;
 		case "-":
-			return grossWeight-para;
+			return grossWeight-constant;
 		case "*":
-			return grossWeight*para;
+			return grossWeight*constant;
 		case "/":
-			return grossWeight/para;
+			return grossWeight/constant;
 		default:
 			return grossWeight;
 		}

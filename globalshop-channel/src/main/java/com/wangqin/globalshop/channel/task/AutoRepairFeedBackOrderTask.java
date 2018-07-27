@@ -6,7 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;

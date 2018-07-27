@@ -69,10 +69,21 @@
             <if test=" endGmt != null ">
                 and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
             </if>
+                and T1.is_del = 0
         </where>
         order by T1.id desc
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
 
     </select>
+
+    <update id="updateIsdelById" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO" >
+        update inventory_out_manifest
+        <set >
+            <if test="isDel != null" >
+                is_del = #{isDel,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 
 </mapper>

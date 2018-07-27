@@ -23,15 +23,20 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrack;
+import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrackNode;
+import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;
 import com.wangqin.globalshop.order.app.service.shipping.haihu.IHaihuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.mall.OrderMallCustomerService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
+import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
 import com.wangqin.globalshop.order.app.service.shipping.sifang.ISiFangService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +53,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -74,6 +80,8 @@ public class ShippingOrderController {
     private IHaihuService haihuService;
     @Autowired
     private IShippingTrackService shippingTrackService;
+    @Autowired
+    private IKuaidi100Service kuaidi100Service;
 
     @RequestMapping("/query")
     @ResponseBody
@@ -99,13 +107,14 @@ public class ShippingOrderController {
     @ResponseBody
     public Object multiDeliveryForm(String erpOrderId) {
         JsonResult<MultiDeliveryFormDTO> result = new JsonResult();
-        MultiDeliveryFormDTO dto = null;
+        MultiDeliveryFormDTO dto;
         try {
             dto = shippingOrderService.queryByOrderId(erpOrderId);
+            result.buildData(dto).buildIsSuccess(true);
         } catch (ErpCommonException e) {
             result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
         }
-        return result.buildData(dto).buildIsSuccess(true);
+        return result;
     }
 
     // 合单发货(将多个子订单合并成一个包裹)
@@ -262,7 +271,7 @@ public class ShippingOrderController {
                 // //直接选择顺丰或者韵达快递补全status = 4特殊国内物流轨迹
                 // if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("顺丰")||
                 // shippingOrder.getLogisticCompany().equals("韵达"))) {
-                // ShippingTrack shippingTrack = new ShippingTrack();
+                // CommonShippingTrack shippingTrack = new CommonShippingTrack();
                 // shippingTrack.setGmtCreate(new Date());
                 // shippingTrack.setGmtModify(new Date());
                 // shippingTrack.setStatus(4);
@@ -328,7 +337,7 @@ public class ShippingOrderController {
             }
             // else if(shippingOrder.getLogisticCompany()!=null && (shippingOrder.getLogisticCompany().equals("顺丰")||
             // shippingOrder.getLogisticCompany().equals("韵达"))){
-            // ShippingTrack shippingTrack = new ShippingTrack();
+            // CommonShippingTrack shippingTrack = new CommonShippingTrack();
             // shippingTrack.setGmtCreate(new Date());
             // shippingTrack.setGmtModify(new Date());
             // shippingTrack.setStatus(4);
@@ -687,10 +696,13 @@ public class ShippingOrderController {
         JsonPageResult<List<MallSubOrderDO>> result = new JsonPageResult<>();
         try {
             ShippingOrderDO shippingOrder = shippingOrderService.selectById(shippingOrderId);
-            String erpOrderIds = shippingOrder.getMallOrders();
-            List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(erpOrderIds);
-            for(MallSubOrderDO mallSubOrder : ErpOrderList) {
-            	mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
+            String mallSubOrderNos = shippingOrder.getMallOrders();
+            String[] nos = mallSubOrderNos.split(",");
+            List<String> noList = Arrays.asList(nos);
+            List<MallSubOrderDO> ErpOrderList = mallSubOrderService.queryByMallSubOrderNos(noList);
+//            List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(erpOrderIds);
+            for (MallSubOrderDO mallSubOrder : ErpOrderList) {
+                mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
             }
             result.setData(ErpOrderList);
             return result.buildIsSuccess(true);
@@ -722,7 +734,7 @@ public class ShippingOrderController {
 //        // youkeService.inboundStatus("PKG17062502002910007");
 //        // youkeService.orderStatus("1739255020");
 //        // EntityWrapper<ShippingOrderDO> entityWrapper = new EntityWrapper<>();
-//        ShippingOrderDO Order = shippingOrderService.selectByShippingNO("PKG17062710132810022");
+//        ShippingOrderDO Order = shippingOrderService.selectByShippingNo("PKG17062710132810022");
 //        // haihuService.returnPackageNo(Order);
 //    }
 
@@ -796,8 +808,66 @@ public class ShippingOrderController {
      */
     @RequestMapping("/getShippingTrackDetail")
     @ResponseBody
-    public Object getShippingTrackDetail(String shippingNo) {
-        JsonResult<Object> result = new JsonResult<Object>();
+    public JsonResult getShippingTrackDetail(String shippingNo) {
+        JsonResult<List<ShippingTrackVO>> result = new JsonResult<>();
+        try {
+            List<ShippingTrackVO> shippingTrackVOList = getShippingTrackList(shippingNo);
+            result.buildIsSuccess(true).buildData(shippingTrackVOList);
+        } catch (ErpCommonException e) {
+            result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildIsSuccess(false).buildMsg("物流信息查询失败");
+        }
+        return result;
+    }
+
+    /**
+     * 批量完整物流轨迹详情展示
+     *
+     * @param shippingNos
+     * @return
+     */
+    @RequestMapping("/getShippingTrackDetails")
+    @ResponseBody
+    public JsonResult getShippingTrackDetails(Set<String> shippingNos) {
+        JsonResult<Map<String,List<ShippingTrackVO>>> result = new JsonResult<>();
+        try {
+            Map<String,List<ShippingTrackVO>> resultMap = new HashMap<>();
+            for (String shippingNo : shippingNos) {
+                List<ShippingTrackVO> shippingTrackVOList = getShippingTrackList(shippingNo);
+                resultMap.put(shippingNo, shippingTrackVOList);
+            }
+            result.buildIsSuccess(true).buildData(resultMap);
+
+        } catch (ErpCommonException e) {
+            result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildIsSuccess(false).buildMsg("物流信息查询失败");
+        }
+        return result;
+    }
+
+    private List<ShippingTrackVO> getShippingTrackList(String shippingNo){
+        Kuaidi100ShippingTrackResult kuaidi100Result = kuaidi100Service.queryShippingTrack(shippingNo);
+        CommonShippingTrack shippingTrack = kuaidi100Result.toCommonShippingTrack();
+
+        List<CommonShippingTrackNode> shippingTrackInfos = shippingTrack.getShippingTrackInfo();
+        List<ShippingTrackVO> shippingTrackVOList = new ArrayList<>();
+
+        if (shippingTrackInfos != null) {
+            shippingTrackInfos.forEach(shippingTrackInfo -> {
+                ShippingTrackVO shippingOne = new ShippingTrackVO();
+                shippingOne.setInfo(shippingTrackInfo.getInfo());
+                shippingOne.setGmtCreate(DateUtil.parseDate(shippingTrackInfo.getDate()));
+                shippingTrackVOList.add(shippingOne);
+            });
+        }
+        return shippingTrackVOList;
+    }
+
+    /*
         if (StringUtils.isNotBlank(shippingNo)) {
             List<ShippingTrackDO> shippingTracks = shippingTrackService.queryShippingTrack(shippingNo);
             List<ShippingTrackVO> shippingTrackVOList = Lists.newArrayList();
@@ -811,45 +881,45 @@ public class ShippingOrderController {
                     shippingTrackVOList.add(shippingOne);
                 });
             }
-            /*
-             * if (shippingTracks.size() > 0) { shippingTracks.forEach(shippingTrack -> { ShippingTrackVO shippingOne =
-             * new ShippingTrackVO(); switch (shippingTrack.getStatus()) { case 0:
-             * shippingOne.setGmtCreate(shippingTrack.getGmtModify()); shippingOne.setInfo("未出库");
-             * shippingTrackVOList.add(shippingOne); break; case 1:
-             * shippingOne.setGmtCreate(shippingTrack.getOverseaOutTime()); shippingOne.setInfo("已出库");
-             * shippingTrackVOList.add(shippingOne); break; case 2:
-             * shippingOne.setGmtCreate(shippingTrack.getOverseaOutTime()); shippingOne.setInfo("递交航空公司");
-             * shippingTrackVOList.add(shippingOne); break; case 3:
-             * shippingOne.setGmtCreate(shippingTrack.getInlandInTime()); shippingOne.setInfo("清关");
-             * shippingTrackVOList.add(shippingOne); break; case 4: if(shippingTrack.getInlandOutTime()!=null) {
-             * shippingOne.setGmtCreate(shippingTrack.getInlandOutTime()); } else {
-             * shippingOne.setGmtCreate(shippingTrack.getGmtCreate()); } shippingOne.setInfo("国内派送");
-             * shippingTrackVOList.add(shippingOne); String infodetail = ""; JSONArray jsonArrayss = null; for (int i =
-             * 0; i < shippingTracks.size(); i++) { if (shippingTracks.get(i).getStatus() == 4) { infodetail =
-             * shippingTracks.get(i).getInfo(); if (StringUtils.isNotBlank(infodetail) && !infodetail.equals("已转国内快递")
-             * && infodetail.contains("{")) { JSONObject object = JSONObject.fromObject(infodetail); if
-             * (shippingTrack.getInlandExpressId().equals("tiantian") ||
-             * shippingTrack.getInlandExpressId().equals("百世汇通")) { jsonArrayss = object.getJSONArray("data"); for (int
-             * j = jsonArrayss.size() - 1; j > 0; j--) { ShippingTrackVO shippingTrackArray = new ShippingTrackVO();
-             * JSONObject object2 = jsonArrayss.getJSONObject(j); Date time =
-             * DateUtil.parseDate(object2.getString("time")); shippingTrackArray.setGmtCreate(time);
-             * shippingTrackArray.setInfo(String.valueOf(object2.get("context")));
-             * shippingTrackVOList.add(shippingTrackArray); } } else { jsonArrayss = object.getJSONArray("Traces"); for
-             * (int j = jsonArrayss.size() - 1; j > 0; j--) { ShippingTrackVO shippingTrackArray = new
-             * ShippingTrackVO(); JSONObject object2 = jsonArrayss.getJSONObject(j); Date time =
-             * DateUtil.parseDate(object2.getString("AcceptTime")); shippingTrackArray.setGmtCreate(time);
-             * shippingTrackArray.setInfo(String.valueOf(object2.get("AcceptStation")));
-             * shippingTrackVOList.add(shippingTrackArray); } } } } } break; case 5:
-             * shippingOne.setGmtCreate(shippingTrack.getGmtCreate()); shippingOne.setInfo("签收");
-             * shippingTrackVOList.add(shippingOne); break; } }); }
-             */
+
+     * if (shippingTracks.size() > 0) { shippingTracks.forEach(shippingTrack -> { ShippingTrackVO shippingOne =
+     * new ShippingTrackVO(); switch (shippingTrack.getStatus()) { case 0:
+     * shippingOne.setGmtCreate(shippingTrack.getGmtModify()); shippingOne.setInfo("未出库");
+     * shippingTrackVOList.add(shippingOne); break; case 1:
+     * shippingOne.setGmtCreate(shippingTrack.getOverseaOutTime()); shippingOne.setInfo("已出库");
+     * shippingTrackVOList.add(shippingOne); break; case 2:
+     * shippingOne.setGmtCreate(shippingTrack.getOverseaOutTime()); shippingOne.setInfo("递交航空公司");
+     * shippingTrackVOList.add(shippingOne); break; case 3:
+     * shippingOne.setGmtCreate(shippingTrack.getInlandInTime()); shippingOne.setInfo("清关");
+     * shippingTrackVOList.add(shippingOne); break; case 4: if(shippingTrack.getInlandOutTime()!=null) {
+     * shippingOne.setGmtCreate(shippingTrack.getInlandOutTime()); } else {
+     * shippingOne.setGmtCreate(shippingTrack.getGmtCreate()); } shippingOne.setInfo("国内派送");
+     * shippingTrackVOList.add(shippingOne); String infodetail = ""; JSONArray jsonArrayss = null; for (int i =
+     * 0; i < shippingTracks.size(); i++) { if (shippingTracks.get(i).getStatus() == 4) { infodetail =
+     * shippingTracks.get(i).getInfo(); if (StringUtils.isNotBlank(infodetail) && !infodetail.equals("已转国内快递")
+     * && infodetail.contains("{")) { JSONObject object = JSONObject.fromObject(infodetail); if
+     * (shippingTrack.getInlandExpressId().equals("tiantian") ||
+     * shippingTrack.getInlandExpressId().equals("百世汇通")) { jsonArrayss = object.getJSONArray("data"); for (int
+     * j = jsonArrayss.size() - 1; j > 0; j--) { ShippingTrackVO shippingTrackArray = new ShippingTrackVO();
+     * JSONObject object2 = jsonArrayss.getJSONObject(j); Date time =
+     * DateUtil.parseDate(object2.getString("time")); shippingTrackArray.setGmtCreate(time);
+     * shippingTrackArray.setInfo(String.valueOf(object2.get("context")));
+     * shippingTrackVOList.add(shippingTrackArray); } } else { jsonArrayss = object.getJSONArray("Traces"); for
+     * (int j = jsonArrayss.size() - 1; j > 0; j--) { ShippingTrackVO shippingTrackArray = new
+     * ShippingTrackVO(); JSONObject object2 = jsonArrayss.getJSONObject(j); Date time =
+     * DateUtil.parseDate(object2.getString("AcceptTime")); shippingTrackArray.setGmtCreate(time);
+     * shippingTrackArray.setInfo(String.valueOf(object2.get("AcceptStation")));
+     * shippingTrackVOList.add(shippingTrackArray); } } } } } break; case 5:
+     * shippingOne.setGmtCreate(shippingTrack.getGmtCreate()); shippingOne.setInfo("签收");
+     * shippingTrackVOList.add(shippingOne); break; } }); }
+
             ListSort(shippingTrackVOList);
             result.buildData(shippingTrackVOList).buildIsSuccess(true);
         } else {
             result.buildIsSuccess(false).buildMsg("包裹信息异常！");
         }
-        return result;
     }
+    */
 
     private static void ListSort(List<ShippingTrackVO> list) {
         Collections.sort(list, new Comparator<ShippingTrackVO>() {

@@ -1,14 +1,13 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     //    int deleteByPrimaryKey(Long id);
@@ -25,10 +24,15 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
 
 //    List<AuthUserDO> selectUserVoPage(page, pageInfo.getCondition());
 
-    //Here are
+    //根据登录名查用户信息，密码已脱敏，通常请用这个。
     AuthUserDO selectByLoginName(String userName);
 
-    void updateByLoginName(AuthUserDO user);
+    //根据登录名查用户信息，专用于修改密码和密码校验
+    AuthUserDO selectSecureByLoginName(String userName);
+
+    void updateUserInfoByLoginName(AuthUserDO user);
+
+    void updatePasswordByLoginName(AuthUserDO user);
 
     int deleteByLoginName(String userName);
 
@@ -57,7 +61,6 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     //一键分享手机号登录
     AuthUserDO selectUserByPhone(String phone);
 
-
     AuthUserDO searchAuthUser(AuthUserDO record);
 
     Long searchAuthUserCount(AuthUserDO record);
@@ -67,4 +70,6 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     List<AuthUserDO> selectByUnionid(@Param("unionid") String unionid);
 
     List<AuthUserDO> selectByUnionidAndCompanyNo(@Param("unionid")String unionid, @Param("companyNo")String companyNo);
+
+    AuthUserDO selectByUserNoAndCompanyNo(@Param("userNo")String userNo,@Param("companyNo") String companyNo);
 }

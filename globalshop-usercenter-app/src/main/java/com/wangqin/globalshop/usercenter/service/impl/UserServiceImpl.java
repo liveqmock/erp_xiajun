@@ -43,16 +43,20 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     @Autowired
     private BuyerDOMapperExt buyerDOMapperExt;
 
+    /*
+     * 查询用户信息推荐用这个，密码已脱敏。
+     */
     @Override
     public AuthUserDO selectByLoginName(String userNo) {
-//        AuthUserDO user = new AuthUserDO();
-////        user.setLoginName(userNo);
         return userMapper.selectByLoginName(userNo);
-//        EntityWrapper<AuthUserDO> wrapper = new EntityWrapper<AuthUserDO>(user);
-//        if (null != userNo.getId()) {
-//            wrapper.where("id != {0}", userNo.getId());
-//        }
-//        return this.selectList(wrapper);
+    }
+
+    /*
+    * 查询包括了密码密文的用户信息，慎用
+    */
+    @Override
+    public AuthUserDO selectSecureByLoginName(String userNo) {
+        return userMapper.selectSecureByLoginName(userNo);
     }
 
     @Override
@@ -102,7 +106,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         
 //        authUser.setLoginName(userVo.getLoginName());
         authUser.setName(userVo.getName());
-        if (StringUtils.isNotBlank(userVo.getPassword())) {
+        if (StringUtils.isNotBlank(userVo.getPassword())&&"********".equals(userVo.getPassword())) {
             authUser.setPassword(userVo.getPassword().trim());
         }
 
@@ -116,8 +120,8 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         authUser.setIsDel(false);
 
 
-
-        userMapper.updateByPrimaryKey(authUser);
+        userMapper.updateUserInfoByLoginName(authUser);
+//        userMapper.updateByPrimaryKey(authUser);
         //先全删
         userRoleMapper.deleteRoleByUserId(authUser.getId());
         //再全加
@@ -182,18 +186,16 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         return false;
     }
 
-//    @Override
-//    public void updateSelectiveById(AuthUserDO user) {
-//			
-//    }
-
     @Override
-    public void changePasswordByLoginName(String loginName, String md5Hex) {
+    public void changePasswordByLoginName(String loginName, String newPasswordInMd5Hex) {
+        if(StringUtil.isEmpty(newPasswordInMd5Hex)) {
+            return;
+        }
         AuthUserDO user = new AuthUserDO();
 //        user.setId(userId);
         user.setLoginName(loginName);
-        user.setPassword(md5Hex);
-        userMapper.updateByLoginName(user);
+        user.setPassword(newPasswordInMd5Hex);
+        userMapper.updatePasswordByLoginName(user);
     }
 
     @Override
@@ -340,6 +342,12 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
     @Override
     public List<AuthUserDO> selectByUnionidAndCompanyNo(String unionid, String companyNo) {
         return userMapper.selectByUnionidAndCompanyNo(unionid,companyNo);
+    }
+
+    @Override
+    public AuthUserDO selectByUserNoAndCompanyNo(String userNo, String companyNo) {
+
+        return userMapper.selectByUserNoAndCompanyNo(userNo,companyNo);
     }
 
 

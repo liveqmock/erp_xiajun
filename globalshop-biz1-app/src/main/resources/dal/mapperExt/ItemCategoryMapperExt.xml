@@ -117,11 +117,10 @@
 	SELECT
 	<include refid="Base_Column_List" />
 	from item_category T1
-        WHERE p_code IN (
-        <foreach collection="list" item="category" separator=",">
-            #{category.id}
+        WHERE p_code IN
+        <foreach collection="list" item="category" open="(" separator="," close=")">
+            #{category.categoryCode}
         </foreach>
-        )
         AND name = #{name}
 	</select>
 

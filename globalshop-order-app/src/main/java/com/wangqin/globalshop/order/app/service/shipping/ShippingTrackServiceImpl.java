@@ -30,7 +30,7 @@ public class ShippingTrackServiceImpl implements IShippingTrackService {
 
     @Override
     public void insertOrUpdateInfo() {
-		/*List<ShippingTrack> shippingTrackList = shippingTrackMapper.queryStatus();
+		/*List<CommonShippingTrack> shippingTrackList = shippingTrackMapper.queryStatus();
 
 		shippingTrackList.forEach(shippingTrack -> {
 			if (StringUtil.isNotBlank(shippingTrack.getInlandExpressId())

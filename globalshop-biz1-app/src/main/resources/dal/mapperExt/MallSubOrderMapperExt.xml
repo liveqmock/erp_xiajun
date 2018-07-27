@@ -331,7 +331,8 @@
         warehouse_no,
         order_time,
         sku_pic,
-        logistic_type
+        logistic_type,
+        status
         FROM
         mall_sub_order
         WHERE
@@ -503,7 +504,7 @@
                 and company_no = #{companyNo}
             </if>
         </where>
-        ORDER BY order_time DESC
+        ORDER BY gmt_create DESC
     </select>
     <select id="selectBySkuCode" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
@@ -749,5 +750,22 @@
         WHERE
             order_no = #{orderNo}
     </delete>
+    <update id="changeStatus">
+        UPDATE mall_sub_order
+        SET
+        status=#{newStatus}
+        WHERE id=#{id} AND status = #{oldStatus}
+    </update>
+    <select id="queryByMallSubOrderNos" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mall_sub_order
+        WHERE
+        sub_order_no IN
+        <foreach collection="list" item="subOrderNo" open="(" separator="," close=")">
+            #{subOrderNo}
+        </foreach>
+    </select>
+
 
 </mapper>

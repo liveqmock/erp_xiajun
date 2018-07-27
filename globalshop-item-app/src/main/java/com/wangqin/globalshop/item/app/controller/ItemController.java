@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -737,7 +738,7 @@ public class ItemController {
      */
     @RequestMapping("/improtItem")
     @ResponseBody
-    public Object importTask(MultipartFile file) {
+    public Object improtItem(MultipartFile file) {
         JsonResult<Object> result = new JsonResult<>();
         try {
             if (!file.isEmpty()) {

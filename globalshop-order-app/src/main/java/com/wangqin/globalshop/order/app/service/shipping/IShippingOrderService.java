@@ -37,13 +37,13 @@ public interface IShippingOrderService {
 
     List<ShippingOrderDO> queryByShippingOrderPackageTime(ShippingOrderVO shippingOrderQueryVO);
 
-    ShippingOrderDO selectByShippingNO(String str);
+    ShippingOrderDO selectByShippingNo(String shippingNo);
 
     int selectCount(String idCard, String logisticCompany);
 
     ShippingOrderDO selectById(Long shippingOrderId);
 
-    ShippingOrderDO selectOne(ShippingOrderDO order);
+    ShippingOrderDO selectByLogisticNo(String  logisticNo);
 
     void updateStatusByShippingNo(String logisticNo);
 //    -------------------------------------------------

@@ -274,5 +274,10 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		return itemSkuMapperExt.queryRecordCountByUpcCompanyNotInSameItem(companyNo, upc, itemCode);
 	}
 
+	@Override
+	public Integer queryCountByUpcAndCompanyNo(String companyNo, String upc) {
+		return itemSkuMapperExt.queryCountByUpcAndCompanyNo(companyNo,upc);
+	}
+
 }
 

@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.uitl;
+package com.wangqin.globalshop.order.app.util;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.common.enums.StockUpStatus;

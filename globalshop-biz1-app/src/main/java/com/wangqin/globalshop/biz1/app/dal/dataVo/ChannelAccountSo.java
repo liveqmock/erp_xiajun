@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.biz1.app.dal.dataSo;
+package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
 import java.util.Date;
 

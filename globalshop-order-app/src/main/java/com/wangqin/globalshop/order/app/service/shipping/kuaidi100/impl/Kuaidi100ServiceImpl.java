@@ -7,11 +7,13 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.Md5Util;
 import com.wangqin.globalshop.order.app.kuaidi_bean.*;
 import com.wangqin.globalshop.order.app.kuaidi_bean._4px.LogisticsStatus;
-import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
+import com.wangqin.globalshop.order.app.util.HttpClient;
+import com.wangqin.globalshop.order.app.util.JacksonHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,288 +29,112 @@ import java.util.regex.Pattern;
 @Service
 public class Kuaidi100ServiceImpl implements IKuaidi100Service {
 
-    // logger
-    protected Logger logger = LogManager.getLogger(getClass());
+    private static Logger logger = LoggerFactory.getLogger(Kuaidi100ServiceImpl.class);
 
-    private static final String kuaidi100_post_url = "http://www.kuaidi100.com/poll";
-    private static final String kuaidi100_query_url = "http://poll.kuaidi100.com/poll/query.do";
-    private static final String kuaidi100_post_callback = "https://test.buyer007.cn/kuaidi100/callback";
-//	private static final String kuaidi100_post_callback = "https://erp.buyer007.com/kuaidi100/callback";
-
-
-    private static final String kuaidi100_query_constomer = "788C8EBE2B8E2E6C9D699D9C459C9AD2";
-    private static final String kuaidi100_key = "zUNguBRY2899";
-
-    public static final String comQueryUrl = "http://www.kuaidi100.com/autonumber/autoComNum?text=";
-    public static final Pattern comPattern = Pattern.compile("\"comCode\":\"([a-z].+?)\"");
-
+    private static final String KUAIDI_100_POST_URL = "http://www.kuaidi100.com/poll";
+    /**
+     * 快递轨迹查询URL
+     */
+    private static final String KUAIDI_100_QUERY_URL = "http://poll.kuaidi100.com/poll/query.do";
+    private static final String KUAIDI_100_POST_CALLBACK = "https://test.buyer007.cn/kuaidi100/callback";
+    /**
+     * KEY
+     */
+    private static final String KUAIDI_100_QUERY_CUSTOMER = "788C8EBE2B8E2E6C9D699D9C459C9AD2";
+    private static final String KUAIDI_100_KEY = "zUNguBRY2899";
+    /**
+     * 根据运单号查询快递公司代码URL
+     */
+    private static final String COM_QUERY_URL = "http://www.kuaidi100.com/autonumber/autoComNum?text=";
+    private static final Pattern COM_PATTERN = Pattern.compile("\"comCode\":\"([a-z].+?)\"");
     @Autowired
-    IShippingOrderService shippingOrderService;
+    private IShippingOrderService shippingOrderService;
 
     @Autowired
     private IShippingTrackService shippingTrackService;
 
-    // 物流公司Code映射 key:公司名称  value:对应的快递100code
-    private Map<String, String> companyCodeMap = new ConcurrentHashMap<String, String>();
-
-
-    static String emptyValue = "";
-
-    @Override
-    public void subscribe(String shippingNo) {
-        if (StringUtils.isEmpty(shippingNo)) {
-            return;
-        }
-        ShippingOrderDO order = new ShippingOrderDO();
-        order.setShippingNo(shippingNo);
-        // 查出shippingNo
-        order = shippingOrderService.selectOne(order);
-        this.subscribe(order);
-
-    }
-
-
-    @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
-    public void subscribe(ShippingOrderDO order) {
-        String shippingNo = order.getShippingNo();
-        if (order == null) {
-            logger.error("订阅快递100 ShippingOrder为null，shippingNo: " + shippingNo);
-            return;
-        }
-
-//		Kuaidi100Status status = Kuaidi100Status.statusOfValue(order.getSubscribeKuaidi100());
-//		if (status != Kuaidi100Status.Need_Subscribe) {
-//			logger.error("订阅快递100 subscribe_kuaidi100状态为不是Need_Subscribe，shippingNo: " + shippingNo);
-//			return;
-//		}
-
-        // 物流公司code
-        String comCode = this.codeInKuaidi100(order.getLogisticCompany());
-        if (StringUtils.isEmpty(comCode)) {
-            logger.error("订阅快递100 comCode为null，shippingNo: " + shippingNo);
-            return;
-        }
-        // 物流单号
-        String logisticsNo = order.getLogisticNo();
-
-        if (StringUtils.isEmpty(logisticsNo)) {
-            logger.error("订阅快递100 ShippingOrder为null，shippingNo: " + shippingNo);
-            return;
-        }
-
-        //已经有物流公司名称的可以指定物流公司名称
-        if (!StringUtils.isEmpty(comCode)) {
-            //已经有物流公司名称的可以指定物流公司名称
-            PostRequest request = new PostRequest(comCode, logisticsNo);
-            PostResponse postResponse = this.postLogistics(request);
-            logger.error("订阅快递100 已经有物流公司名称,开始订阅\t[" + comCode + "]\t[" + logisticsNo + "]");
-            if ((postResponse.getResult() && "200".equals(postResponse.getReturnCode())) ||
-                    (postResponse.getMessage() != null && postResponse.getMessage().contains("重复订阅"))) {
-                // 修改数据库subscribe
-                ShippingOrderDO updateOrder = new ShippingOrderDO();
-                updateOrder.setId(order.getId());
-//				updateOrder.setSubscribeKuaidi100(Kuaidi100Status.Subscribed.getValue());
-                shippingOrderService.update(updateOrder);
-
-                logger.error("订阅快递100 已经有物流公司名称,结束订阅\t[" + comCode + "]\t[" + logisticsNo + "],订阅结果:\t" + postResponse);
-            }
-        } else {
-            List<String> coms = queryCompany(logisticsNo);
-            if (coms.size() > 0) {
-                for (String com : coms) {
-                    PostRequest request = new PostRequest(com, logisticsNo);
-                    PostResponse postResponse = this.postLogistics(request);
-                    logger.error("订阅快递100 开始订阅\t[" + com + "]\t[" + logisticsNo + "]");
-                    if (postResponse.getResult() && "200".equals(postResponse.getReturnCode())) {
-                        // 修改数据库subscribe
-                        ShippingOrderDO updateOrder = new ShippingOrderDO();
-                        updateOrder.setId(order.getId());
-//						updateOrder.setSubscribeKuaidi100(Kuaidi100Status.Subscribed.getValue());
-                        shippingOrderService.update(updateOrder);
-
-                        logger.error("订阅快递100 结束订阅\t[" + com + "]\t[" + logisticsNo + "],订阅结果:\t" + postResponse);
-                        break;
-                    }
-                }
-            } else {
-                logger.error("单号(" + logisticsNo + ")没有查到对应的物流公司");
-            }
-        }
-    }
-
-    @Override
-    public void fetchTrack(String logisticsNo) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void fetchTrackByShippingNo(String shippingNo) {
-        if (StringUtils.isEmpty(shippingNo)) {
-            return;
-        }
-        ShippingOrderDO order = new ShippingOrderDO();
-        order.setShippingNo(shippingNo);
-        // 查出shippingNo
-        order = shippingOrderService.selectOne(order);
-
-        this.fetchTrackByShippingOrder(order);
-    }
-
-
-    @Override
-    public void fetchTrackByShippingOrder(ShippingOrderDO order) {
-        String shippingNo = order.getShippingNo();
-        if (order == null) {
-            logger.error("查询快递100 ShippingOrder为null，shippingNo: " + shippingNo);
-            return;
-        }
-//		Kuaidi100Status status = Kuaidi100Status.statusOfValue(order.getSubscribeKuaidi100());
-//		if (status != Kuaidi100Status.Subscribed) {
-//			logger.error("查询快递100 subscribe_kuaidi100状态不为Subscribed，shippingNo: " + shippingNo);
-//			return;
-//		}
-
-        // 物流公司code
-        String comCode = this.codeInKuaidi100(order.getLogisticCompany());
-        if (StringUtils.isEmpty(comCode)) {
-            logger.error("查询快递100 comCode为null，shippingNo: " + shippingNo);
-            return;
-        }
-
-        // 物流单号
-        String logisticsNo = order.getLogisticNo();
-
-        if (StringUtils.isEmpty(logisticsNo)) {
-            logger.error("查询快递100 ShippingOrder为null，shippingNo: " + shippingNo);
-            return;
-        }
-
-        Result result = this.query(shippingNo, comCode, logisticsNo);
-        try {
-            this.handleTrackList(result);
-        } catch (Exception e) {
-            logger.error("查询快递100 异常！shippingNo: " + shippingNo, e);
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public NoticeResponse handleCallback(String json) {
-        /**
-         * 快递100的API
-         * 示例：http://api.kuaidi100.com/api?id=[]&com=[]&nu=[]&show=[0|1|2|3]&muti=[0|1]&order=[desc|asc]
-         * id 	身份授权key，请快递查询接口进行申请（大小写敏感）
-         * com 	要查询的快递公司代码，不支持中文，对应的公司代码见,《API URL 所支持的快递公司及参数说明》和《支持的国际类快递及参数说明》。
-         * show	返回类型：
-         * 				0：返回json字符串，
-         *				1：返回xml对象，
-         *				2：返回html对象，
-         *				3：返回text文本。
-         *				如果不填，默认返回json字符串。
-         * muti	返回信息数量：
-         *				1:返回多行完整的信息，
-         *				0:只返回一行信息。
-         *				不填默认返回多行。
-         * order 排序：
-         * 				desc：按时间由新到旧排列，
-         * 				asc：按时间由旧到新排列。
-         * 				不填默认返回倒序（大小写不敏感）
-         */
-        logger.error("---> 快递100 推送物流过来  :" + json);
-        NoticeResponse response = new NoticeResponse();
-        if (StringUtils.hasLength(json)) {
-            NoticeRequest request = JacksonHelper.fromJSON(json, NoticeRequest.class);
-            try {
-                // 保存到数据库
-                Result result = request.getLastResult();
-
-                String status = request.getStatus();
-                if ("abort".equals(status)) {
-//					this.handleAbort(result, response);
-                } else {
-                    this.handleTrackList(result);
-                }
-
-            } catch (Exception e) {
-                response.setMessage("保存到数据库出错");
-                response.setResult(false);
-                response.setReturnCode("500");
-                logger.error("", e);
-            }
-        } else {
-            response.setMessage("回传参数为空");
-            response.setResult(false);
-            response.setReturnCode("500");
-        }
-        return response;
-    }
-
-
-    // 订阅
-    public PostResponse postLogistics(PostRequest request) {
-        request.addCallbackParam(kuaidi100_post_callback);
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("schema", "json");
-        params.put("param", JacksonHelper.toJSON(request));
-        HttpClient.HttpResponse response = HttpClient.httpPost(kuaidi100_post_url, params);
-        return JacksonHelper.fromJSON(response.getStringResult("utf-8"), PostResponse.class);
-    }
-
-    // 查公司code
-    public static List<String> queryCompany(String nu) {
-        List<String> data = new ArrayList<String>();
-        String result = HttpClient.httpGet(comQueryUrl + nu).getStringResult();
-        Matcher m = comPattern.matcher(result);
-        while (m.find()) {
-            data.add(m.group(1));
-        }
-        return data;
-    }
+    /**
+     * 物流公司Code映射
+     * key-公司名称 value-对应的快递100 code
+     */
+    private Map<String, String> companyCodeMap = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
         Kuaidi100ServiceImpl impl = new Kuaidi100ServiceImpl();
-        impl.query("a", "yunda", "3101738504868");
+        impl.queryShippingTrack("yunda", "3101738504868");
     }
 
-    // 查物流轨迹
-    public Result query(String orderNo, String trackName, String trackNo) {
+    @Override
+    public Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo, String com, String num) {
         try {
-            logger.error("kuaidi100主动查询 orderNo:" + orderNo + ", trackNo:" + trackNo);
-            // 已经有物流公司名称的可以指定物流公司名称
-            String com = trackName;
-
-            String paramStr = "{\"com\":\"" + com + "\",\"num\":\"" + trackNo + "\"}";
-            String key = kuaidi100_key;
-            String customer = kuaidi100_query_constomer;
+            String paramStr = "{\"com\":\"" + com + "\",\"num\":\"" + num + "\"}";
+            String key = KUAIDI_100_KEY;
+            String customer = KUAIDI_100_QUERY_CUSTOMER;
             String signedStr = paramStr + key + customer;
             String sign = Md5Util.string2MD5(signedStr).toUpperCase();
 
-            logger.error("kuaidi100主动查询参数 orderNo:" + orderNo + ", trackNo:" + trackNo + " paramStr:" + paramStr);
-
-            Map<String, String> params = new HashMap<String, String>();
+            logger.debug("主动查询参数 shippingNo:{}, paramStr:{}", shippingNo, paramStr);
+            Map<String, String> params = new HashMap<>();
             params.put("customer", customer);
             params.put("sign", sign);
             params.put("param", paramStr);
-            HttpClient.HttpResponse response = HttpClient.httpPost(kuaidi100_query_url, params);
+            HttpClient.HttpResponse response = HttpClient.httpPost(KUAIDI_100_QUERY_URL, params);
 
             String resultStr = response.getStringResult("utf-8");
             if (StringUtils.isEmpty(resultStr)) {
-                logger.error("kuaidi100主动查询失败 orderNo:" + orderNo + ", trackNo:" + trackNo);
+                logger.debug("主动查询失败 shippingNo:{}, num:{}", shippingNo, num);
                 return null;
             }
-            logger.error("kuaidi100主动查询结果 orderNo:" + orderNo + ", trackNo:" + trackNo + ", response: " + resultStr);
-            Result result = (Result) JacksonHelper.fromJSON(resultStr, Result.class);
 
+            logger.debug("主动查询结果 shippingNo:{}, num:{}, response:{} ", shippingNo, num, resultStr);
+            Kuaidi100ShippingTrackResult result = JacksonHelper.fromJSON(resultStr, Kuaidi100ShippingTrackResult.class);
+            if (result.getResult() != null && !result.getResult()) {
+                // 查询失败，返回快递100给出的失败信息
+                throw new ErpCommonException(result.getMessage());
+            }
             return result;
-        } catch (Exception e) {
-            logger.error("kuaidi100主动查询，出现异常 orderNo:" + orderNo + ", trackNo:" + trackNo, e);
+        } catch (ErpCommonException e) {
+            throw e;
+        } catch (Exception ex) {
+            logger.error("查询出现异常 shippingNo:{}, num:{}", shippingNo, num, ex);
             return null;
         }
     }
 
-    // 获取物流公司code
+    @Override
+    public Kuaidi100ShippingTrackResult queryShippingTrack(String com, String num) {
+        return this.queryShippingTrack(null, com, num);
+    }
+
+    @Override
+    public Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo) {
+        if (shippingNo == null) {
+            throw new ErpCommonException("发货单号为空");
+        }
+        // 根据shippingNo查询ShippingOrder
+        ShippingOrderDO shippingOrder = shippingOrderService.selectByShippingNo(shippingNo);
+        if (shippingOrder == null) {
+            throw new ErpCommonException("没有该发货单");
+        }
+        String logisticCompany = shippingOrder.getLogisticCompany();
+        // 根据物流公司名获取其对应的快递100 Code
+        String com = codeInKuaidi100(logisticCompany);
+        if (com == null) {
+            throw new ErpCommonException("不支持该物流公司");
+        }
+        String num = shippingOrder.getLogisticNo();
+        if (num == null) {
+            throw new ErpCommonException("物流单号信息缺失");
+        }
+        return this.queryShippingTrack(shippingNo, com, num);
+    }
+
+    /**
+     * 根据快递公司名获取公司code
+     *
+     * @param companyName
+     * @return
+     */
     private String codeInKuaidi100(String companyName) {
         if (StringUtils.isEmpty(companyName)) {
             return null;
@@ -331,60 +157,130 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
                 }
                 // 为空，也要缓存，避免缓存穿透
                 if (StringUtils.isEmpty(value)) {
-                    this.companyCodeMap.put(name, emptyValue);
+                    this.companyCodeMap.put(name, "");
                 } else {
                     this.companyCodeMap.put(name, value);
                 }
             }
             code = this.companyCodeMap.get(companyName);
         }
-
         return code;
     }
 
-    @Transactional(rollbackFor = ErpCommonException.class)
-    private void handleTrackList(Result result) {
-        String logisticsNo = result.getNu();
+    /**
+     * 根据要查询的快递单号nu，查询快递公司代码com
+     *
+     * @param nu 快递单号
+     * @return 快递公司代码集合（自动查询结果不唯一）
+     */
+    private List<String> queryComByNu(String nu) {
+        List<String> data = new ArrayList<>();
+        String result = HttpClient.httpGet(COM_QUERY_URL + nu).getStringResult();
+        logger.debug(result);
+        Matcher m = COM_PATTERN.matcher(result);
+        while (m.find()) {
+            data.add(m.group(1));
+            logger.debug(m.group(1));
+        }
+        return data;
+    }
+
+    /**
+     * 根据发货单号获取指定发货单的轨迹信息
+     *
+     * @param shippingNo
+     */
+    @Override
+    public void fetchTrackByShippingNo(String shippingNo) {
+        if (StringUtils.isEmpty(shippingNo)) {
+            return;
+        }
+        // 根据shippingNo查询ShippingOrder
+        ShippingOrderDO order = shippingOrderService.selectByShippingNo(shippingNo);
+
+        this.fetchTrackByShippingOrder(order);
+    }
+
+
+    /**
+     * 根据发货单获取指定发货单的轨迹信息
+     *
+     * @param order
+     */
+    @Override
+    public void fetchTrackByShippingOrder(ShippingOrderDO order) {
+        if (order == null) {
+            logger.error("查询快递100 ShippingOrder为null");
+            return;
+        }
+        String shippingNo = order.getShippingNo();
+        // 物流公司code
+        String comCode = this.codeInKuaidi100(order.getLogisticCompany());
+        if (StringUtils.isEmpty(comCode)) {
+            logger.error("查询快递100 comCode为null，shippingNo: " + shippingNo);
+            return;
+        }
+
+        // 物流单号
+        String logisticsNo = order.getLogisticNo();
+
         if (StringUtils.isEmpty(logisticsNo)) {
+            logger.error("查询快递100 logisticsNo为null，shippingNo: " + shippingNo);
+            return;
+        }
+
+        Kuaidi100ShippingTrackResult result = this.queryShippingTrack(shippingNo, comCode, logisticsNo);
+        try {
+            this.handleTrackList(result);
+        } catch (Exception e) {
+            logger.error("查询快递100 异常！shippingNo: " + shippingNo, e);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 处理物流查询结果信息并更新数据库
+     *
+     * @param result
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void handleTrackList(Kuaidi100ShippingTrackResult result) {
+        // 获取物流单号
+        String logisticNo = result.getNu();
+        if (StringUtils.isEmpty(logisticNo)) {
             logger.error("kuaidi100[handleTrackingNodeForOrderDetail] logisticsNo为null");
             return;
         }
-
-        List<ResultItem> data = result.getData();
-
+        // 获取物流轨迹信息
+        List<Kuaidi100ShippingTrackResultNode> data = result.getData();
+        // 反转物流轨迹信息，时间升序排列
         if (data != null && data.size() > 0) {
             Collections.reverse(data);
         }
-        // 查出shippingOrder
-        ShippingOrderDO order = new ShippingOrderDO();
-        order.setLogisticNo(logisticsNo);
-        order = shippingOrderService.selectOne(order);
+        // 根据 logisticNo 查出 shippingOrder
+        ShippingOrderDO order = shippingOrderService.selectByLogisticNo(logisticNo);
 
         if (order == null) {
-            logger.error("kuaidi100[handleTrackingNodeForOrderDetail] ShippingOrder为null logistics:" + logisticsNo);
+            logger.error("kuaidi100[handleTrackingNodeForOrderDetail] ShippingOrder为null logistics:" + logisticNo);
             return;
         }
-
-        String logisticNo = order.getLogisticNo();
-        // 查出物流表中，该订单的物流节点
-        // 查出所有的节点，避免重复
+        // 根据 logisticNo 查出物流表中，该订单的所有物流节点
         List<ShippingTrackDO> shippingReadyTracks = shippingTrackService.queryShippingTrack(logisticNo);
-        ArrayList<String> contentList = null;
-        if (shippingReadyTracks != null && shippingReadyTracks.size() > 0) {
-            contentList = new ArrayList<>(shippingReadyTracks.size());
-            for (ShippingTrackDO item : shippingReadyTracks) {
-                contentList.add(item.getTrackInfo());
+        ArrayList<String> trackInfoList = new ArrayList<>();
+        if (shippingReadyTracks != null) {
+            for (ShippingTrackDO shippingTrackDO : shippingReadyTracks) {
+                trackInfoList.add(shippingTrackDO.getTrackInfo());
             }
         }
-        if (contentList == null) {
-            contentList = new ArrayList<String>();
-        }
+
+
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<ShippingTrackDO> newTrackList = new ArrayList<>();
         boolean isFinished = false;
-        for (ResultItem item : data) {
+        for (Kuaidi100ShippingTrackResultNode item : data) {
             String content = item.getContext().replaceAll("\n|\t|\r", " ");
-            if (contentList.contains(content)) {
+            if (trackInfoList.contains(content)) {
                 continue;
             }
             LogisticsStatus status = LogisticsStatus.CHINA_DISPATCHED;
@@ -403,7 +299,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             }
             ShippingTrackDO newTrack = new ShippingTrackDO();
             newTrack.setLogisticNo(logisticNo);
-            newTrack.setLogisticNo(logisticsNo);
+            newTrack.setLogisticNo(logisticNo);
             newTrack.setLogisticsStatus(status.getValue());
             newTrack.setOverseaInTime(timeDate);
             newTrack.setTrackInfo(content);
@@ -427,7 +323,22 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
     }
 
     /**
-     * 是否包含“签收”关键字
+     * 订阅
+     *
+     * @param request
+     * @return
+     */
+    private PostResponse postLogistics(PostRequest request) {
+        request.addCallbackParam(KUAIDI_100_POST_CALLBACK);
+        Map<String, String> params = new HashMap<>();
+        params.put("schema", "json");
+        params.put("param", JacksonHelper.toJSON(request));
+        HttpClient.HttpResponse response = HttpClient.httpPost(KUAIDI_100_POST_URL, params);
+        return JacksonHelper.fromJSON(response.getStringResult("utf-8"), PostResponse.class);
+    }
+
+    /**
+     * 判断是否包含“签收”关键字
      *
      * @param content
      * @return
@@ -440,5 +351,110 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void subscribe(String shippingNo) {
+        if (StringUtils.isEmpty(shippingNo)) {
+            return;
+        }
+        // 查出shippingNo
+        ShippingOrderDO order = shippingOrderService.selectByShippingNo(shippingNo);
+        this.subscribe(order);
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void subscribe(ShippingOrderDO order) {
+        if (order == null) {
+            logger.debug("订阅快递100 ShippingOrder为null");
+            return;
+        }
+        String shippingNo = order.getShippingNo();
+        // 物流公司code
+        String comCode = this.codeInKuaidi100(order.getLogisticCompany());
+        if (StringUtils.isEmpty(comCode)) {
+            logger.debug("订阅快递100 comCode为null，shippingNo: " + shippingNo);
+            return;
+        }
+        // 物流单号
+        String logisticsNo = order.getLogisticNo();
+
+        if (StringUtils.isEmpty(logisticsNo)) {
+            logger.debug("订阅快递100 ShippingOrder为null，shippingNo: " + shippingNo);
+            return;
+        }
+        //已经有物流公司名称的可以指定物流公司名称
+        if (!StringUtils.isEmpty(comCode)) {
+            //已经有物流公司名称的可以指定物流公司名称
+            PostRequest request = new PostRequest(comCode, logisticsNo);
+            PostResponse postResponse = this.postLogistics(request);
+            logger.error("订阅快递100 已经有物流公司名称,开始订阅\t[" + comCode + "]\t[" + logisticsNo + "]");
+            if ((postResponse.getResult() && "200".equals(postResponse.getReturnCode())) ||
+                    (postResponse.getMessage() != null && postResponse.getMessage().contains("重复订阅"))) {
+                // 修改数据库subscribe
+                ShippingOrderDO updateOrder = new ShippingOrderDO();
+                updateOrder.setId(order.getId());
+                shippingOrderService.update(updateOrder);
+                logger.error("订阅快递100 已经有物流公司名称,结束订阅\t[" + comCode + "]\t[" + logisticsNo + "],订阅结果:\t" + postResponse);
+            }
+        } else {
+            List<String> coms = queryComByNu(logisticsNo);
+            if (coms.size() > 0) {
+                for (String com : coms) {
+                    PostRequest request = new PostRequest(com, logisticsNo);
+                    PostResponse postResponse = this.postLogistics(request);
+                    logger.error("订阅快递100 开始订阅\t[" + com + "]\t[" + logisticsNo + "]");
+                    if (postResponse.getResult() && "200".equals(postResponse.getReturnCode())) {
+                        // 修改数据库subscribe
+                        ShippingOrderDO updateOrder = new ShippingOrderDO();
+                        updateOrder.setId(order.getId());
+                        shippingOrderService.update(updateOrder);
+                        logger.error("订阅快递100 结束订阅\t[" + com + "]\t[" + logisticsNo + "],订阅结果:\t" + postResponse);
+                        break;
+                    }
+                }
+            } else {
+                logger.error("单号(" + logisticsNo + ")没有查到对应的物流公司");
+            }
+        }
+    }
+
+    @Override
+    public NoticeResponse handleCallback(String json) {
+        logger.error("---> 快递100 推送物流过来  :" + json);
+        NoticeResponse response = new NoticeResponse();
+        if (StringUtils.hasLength(json)) {
+            NoticeRequest request = JacksonHelper.fromJSON(json, NoticeRequest.class);
+            try {
+                // 保存到数据库
+                Kuaidi100ShippingTrackResult result = request.getLastResult();
+
+                String status = request.getStatus();
+                if ("abort".equals(status)) {
+//					this.handleAbort(result, response);
+                } else {
+                    this.handleTrackList(result);
+                }
+
+            } catch (Exception e) {
+                response.setMessage("保存到数据库出错");
+                response.setResult(false);
+                response.setReturnCode("500");
+                logger.error("", e);
+            }
+        } else {
+            response.setMessage("回传参数为空");
+            response.setResult(false);
+            response.setReturnCode("500");
+        }
+        return response;
+    }
+
+    @Override
+    public void fetchTrack(String logisticsNo) {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -2,7 +2,6 @@ package com.wangqin.globalshop.purchase.app.controller;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerTaskDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.vo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -11,8 +10,10 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
+import com.wangqin.globalshop.biz1.app.vo.BuyerTaskExportDTO;
 import com.wangqin.globalshop.purchase.app.service.IBuyerService;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -139,10 +140,10 @@ public class BuyerController {
     @RequestMapping("/taskDailyExport")
     public ResponseEntity<byte[]> taskDailyExport(String buyerTaskNo) throws Exception {
         List<List<Object>> rowDatas = new ArrayList<>();
-        List<ItemSkuDO> itemSkuList = buyerTaskDetailDOMapperExt.taskDailyExportByTaskNo(buyerTaskNo);
+        List<BuyerTaskExportDTO> itemSkuList = buyerTaskDetailDOMapperExt.taskDailyExportByTaskNo(buyerTaskNo);
         if (itemSkuList != null) {
             int i = 0;
-            for (ItemSkuDO item : itemSkuList) {
+            for (BuyerTaskExportDTO item : itemSkuList) {
                 List<Object> list = new ArrayList<>();
                 // 序号
                 // list.add(++i);
@@ -151,14 +152,16 @@ public class BuyerController {
                 if (StringUtil.isNotBlank(skuPic)) {
                     PicModel pm = HaiJsonUtils.toBean(skuPic, PicModel.class);
                     String imgSrc = pm.getPicList().get(0).getUrl();
-                    String imgType = imgSrc.substring(imgSrc.lastIndexOf(".") + 1).toUpperCase();
+                    // System.out.println(imgSrc);
+                    URL url = new URL(imgSrc);
+                    //取图片类型
+                    String imgType = url.getPath().substring(url.getPath().lastIndexOf(".") + 1).toUpperCase();
                     if (imgSrc.contains("aliyuncs.com")) {
                         imgSrc += "?x-oss-process=image/resize,m_lfit,h_100,w_100";
                     } else {
                         imgSrc = imgSrc.replaceAll("Resource", "Thumbnail");
                     }
-                    // System.out.println(imgSrc);
-                    URL url = new URL(imgSrc);
+                    //取图
                     BufferedImage image = ImageIO.read(url);
                     ByteArrayOutputStream output = new ByteArrayOutputStream();
                     ImageIO.write(image, imgType, output);
@@ -172,19 +175,20 @@ public class BuyerController {
                 list.add(item.getItemName()); // 商品名称
                 list.add(item.getSkuCode()); // SKU代码
                 list.add(item.getUpc()); // UPC
-                // list.add(item.getBrand()); //品牌
-//                list.add(item.getColor()); // 颜色
+                // list.add(item.getBrandName()); //品牌
+                list.add(item.getColor()); // 颜色
                 list.add(item.getScale()); // 尺码
-//                list.add(item.getBuySite()); // 采购站点
-//                list.add(item.getCount()); // 采购数量
-//                list.add(item.getInCount()); // 入库数量
+                list.add(""); //item.getBuySite()// 采购站点
+                list.add(item.getCount()); // 采购数量
+                list.add(item.getEntryCount()==null?0:item.getEntryCount()); // 入库数量
                 rowDatas.add(list);
             }
         }
         ExcelHelper excelHelper = new ExcelHelper();
         String[] columnTitles = new String[] { "商品图片", "商品名称", "SKU代码", "UPC", "颜色", "尺码", "采购站点", "采购数量", "入库数量" };
         Integer[] columnWidth = new Integer[] { 15, 30, 25, 25, 15, 15, 15, 15, 15, 15 };
-        excelHelper.setTaskDailyToSheet("Erp Order", columnTitles, rowDatas, columnWidth);
+        //TODO 根据imgUrl 获取 图片格式
+        excelHelper.setTaskDailyToSheet("采购任务", columnTitles, rowDatas, columnWidth, Workbook.PICTURE_TYPE_JPEG);
         // excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
 
         ResponseEntity<byte[]> filebyte = null;

@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.order.app.kuaidi_bean;
+package com.wangqin.globalshop.order.app.util;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParser;
@@ -15,14 +15,14 @@ import java.util.List;
 public class JacksonHelper
 {
 	private static ObjectMapper mapper = new ObjectMapper();
-	
+
 	static
 	{
 		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 		mapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
 	}
-	
+
 	public static String toJSON(Object src)
 	{
 		try
@@ -43,7 +43,7 @@ public class JacksonHelper
 		}
 		return null;
 	}
-	
+
 	public static <T> T fromJSON(String json, Class<T> valueType)
 	{
 		try
@@ -56,14 +56,14 @@ public class JacksonHelper
 		}
 		return null;
 	}
-	
+
 	public static <T> List<T> fromJSONList(String json, Class<T> valueType)
 	{
 		try
 		{
 			CollectionType listType = CollectionType.construct(List.class, SimpleType.construct(valueType));
 			return mapper.readValue(json, listType);
-			// return mapper.readValue(json, new TypeReference<List<T>>() {}); 
+			// return mapper.readValue(json, new TypeReference<List<T>>() {});
 		}
 		catch (IOException e)
 		{

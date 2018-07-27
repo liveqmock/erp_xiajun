@@ -70,7 +70,7 @@ public class ThirdPartyLogisticsController {
             }
 
             if (shippingNo != null) {
-                ShippingOrderDO selShippingOrder = shippingOrderService.selectByShippingNO(shippingNo);
+                ShippingOrderDO selShippingOrder = shippingOrderService.selectByShippingNo(shippingNo);
                 if (selShippingOrder != null) {
                     selShippingOrder.setTplPkgStatus(tplPkgStatus);
                     selShippingOrder.setGmtModify(new Date());
@@ -254,7 +254,7 @@ public class ThirdPartyLogisticsController {
 //            ShippingTrackYuntong shippingTrackMiddle = new ShippingTrackYuntong();
 //            shippingTrackMiddle.setYundanCode(yundanCode);
 //            shippingTrackMiddle.setStatusName(statusName);
-//            ShippingTrackYuntong selShippingTrackMiddle = shippingTrackYuntongMapper.selectOne(shippingTrackMiddle);
+//            ShippingTrackYuntong selShippingTrackMiddle = shippingTrackYuntongMapper.selectByLogisticNo(shippingTrackMiddle);
 //            if (param.has("Key")) {
 //                shippingTrackMiddle.setKey(param.getString("Key"));
 //            }

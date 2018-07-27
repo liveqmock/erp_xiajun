@@ -826,6 +826,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into item(
+        country,
         item_code,
         company_no,
         category_code,
@@ -849,6 +850,7 @@
         VALUES
         <foreach collection="list" item="item" separator=",">
             (
+            #{item.country},
             #{item.itemCode},
             #{item.companyNo},
             #{item.categoryCode},

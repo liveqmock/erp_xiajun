@@ -135,8 +135,27 @@ public class InventoryServiceImpl implements InventoryService {
         for (InventoryDO aDo : list) {
             /**1增加库存库存*/
             aDo.init();
+            /*这里只允许修改虚拟库存*/
+            aDo.setLockedInv(0L);
+            aDo.setInv(0L);
             mapper.insertSelective(aDo);
         }
+
+    }
+
+    /**
+     * 超售入库
+     *
+     * @param inventoryDO
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void outbound(InventoryDO inventoryDO) {
+        inventoryDO.init();
+         /*这里只允许修改虚拟库存*/
+        inventoryDO.setLockedInv(0L);
+        inventoryDO.setInv(0L);
+        mapper.insertSelective(inventoryDO);
 
     }
 
@@ -217,7 +236,7 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     public void tryRelease(MallSubOrderDO mallSubOrderDO) {
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(),mallSubOrderDO.getCompanyNo());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getCompanyNo());
         if (inventoryDO == null) {
             return;
         }
@@ -337,15 +356,12 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
-    public void inventoryOutConfirm(JSONArray inventoryOutDetailArray, String warehouseNo,
-                                    String warehouseName, String remark) {
+    public void inventoryOutConfirm(JSONArray inventoryOutDetailArray, String warehouseNo, String warehouseName, String remark) {
         // 增加校验
-        if (inventoryOutDetailArray == null || StringUtils.isBlank(warehouseNo)
-                || StringUtils.isBlank(warehouseName)) {
+        if (inventoryOutDetailArray == null || StringUtils.isBlank(warehouseNo) || StringUtils.isBlank(warehouseName)) {
             throw new ErpCommonException("有空数据");
         }
-        InventoryOutManifestDO inventoryOutManifestDO =
-                inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, remark);
+        InventoryOutManifestDO inventoryOutManifestDO = inventoryOutManifestService.insertInventoryOutManifest(warehouseNo, warehouseName, remark);
 
         for (int i = 0; i < inventoryOutDetailArray.size(); i++) {
             JSONObject inventoryOutDetail = inventoryOutDetailArray.getJSONObject(i);
@@ -355,16 +371,14 @@ public class InventoryServiceImpl implements InventoryService {
             if (quantity <= 0) {
                 throw new ErpCommonException("出库数量要为正数");
             }
-            InventoryOnWareHouseDO inventoryOnWareHouseDO = invOnWarehouseMapperExt
-                    .getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
+            InventoryOnWareHouseDO inventoryOnWareHouseDO = invOnWarehouseMapperExt.getByInventoryOnWarehouseNo(inventoryOnWarehouseNo);
 
-            if (!inventoryOutManifestDO.getWarehouseNo().equals(inventoryOnWareHouseDO.getWarehouseNo())){
+            if (!inventoryOutManifestDO.getWarehouseNo().equals(inventoryOnWareHouseDO.getWarehouseNo())) {
                 throw new ErpCommonException("仓库号有误");
             }
 
             // 身份校验
-            if (!inventoryOnWareHouseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo())
-                    || !inventoryOutManifestDO.getCompanyNo().equals(inventoryOnWareHouseDO.getCompanyNo())) {
+            if (!inventoryOnWareHouseDO.getCompanyNo().equals(AppUtil.getLoginUserCompanyNo()) || !inventoryOutManifestDO.getCompanyNo().equals(inventoryOnWareHouseDO.getCompanyNo())) {
                 throw new ErpCommonException("没有权限");
             }
 
@@ -375,8 +389,7 @@ public class InventoryServiceImpl implements InventoryService {
             inventoryOnWareHouseDO.setInventory(inventoryOnWareHouseDO.getInventory() - quantity);
             invOnWarehouseMapperExt.updateByPrimaryKeySelective(inventoryOnWareHouseDO);
             /**减少实际库存*/
-            InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(inventoryOnWareHouseDO.getSkuCode(),
-                    AppUtil.getLoginUserCompanyNo());
+            InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(inventoryOnWareHouseDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
             if (inventoryDO == null) {
                 throw new ErpCommonException("找不到对应库存");
             }
@@ -385,8 +398,7 @@ public class InventoryServiceImpl implements InventoryService {
             }
             inventoryDO.setInv(inventoryDO.getInv() - quantity);
             mapper.updateByPrimaryKeySelective(inventoryDO);
-            inventoryOutManifestDetailService.insertInventoryOutManifestDetail(
-                    inventoryOnWareHouseDO, inventoryOutManifestDO, quantity);
+            inventoryOutManifestDetailService.insertInventoryOutManifestDetail(inventoryOnWareHouseDO, inventoryOutManifestDO, quantity);
         }
 
     }

@@ -5,7 +5,7 @@ package com.wangqin.globalshop.biz1.app.constants.enums;
  * @author 朱路
  *
  */
-public enum PubilshStatus {
+public enum PublishStatus {
     /**
      *已授权
      */
@@ -15,9 +15,9 @@ public enum PubilshStatus {
      */
     SUBMITTED(2,"已提交体验版"),
     /**
-     *待审核
+     *审核中
      */
-    PENDING_REVIEW(3,"待审核"),
+    PENDING_REVIEW(3,"审核中"),
     /**
      *审核通过待发布
      */
@@ -25,11 +25,15 @@ public enum PubilshStatus {
     /**
      *已发布
      */
-    PUBLISHED(5,"已发布");
+    PUBLISHED(5,"已发布"),
+    /**
+     *审核不通过
+     */
+    AUDIT_FAILURE(6,"审核不通过");
 
     private int code;
     private String description;
-    PubilshStatus(int code, String description){
+    PublishStatus(int code, String description){
     	this.code = code;
     	this.description = description;
     }
@@ -41,8 +45,8 @@ public enum PubilshStatus {
         return description;
     }
     
-    public static PubilshStatus of(int code) {
-        for (PubilshStatus status : PubilshStatus.values()) {
+    public static PublishStatus of(int code) {
+        for (PublishStatus status : PublishStatus.values()) {
             if (status.code == code) {
                 return status;
             }

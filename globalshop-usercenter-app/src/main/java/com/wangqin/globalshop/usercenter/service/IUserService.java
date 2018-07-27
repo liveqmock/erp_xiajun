@@ -19,6 +19,10 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
 
 //    List<AuthUserDO> selectByLoginName(UserVo userVo);
 
+    //查询包括了密码密文的用户信息，慎用
+    AuthUserDO selectSecureByLoginName(String userNo);
+
+    //查询用户信息推荐用这个，密码已脱敏。
     AuthUserDO selectByLoginName(String userNo);
     
     List<AuthUserDO> queryUserByCompanyNo(String companyNo);
@@ -59,6 +63,8 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
     List<AuthUserDO> selectByUnionid(String unionid);
 
     List<AuthUserDO> selectByUnionidAndCompanyNo(String unionid, String state);
+
+    AuthUserDO selectByUserNoAndCompanyNo(String userNo, String companyNo);
 
 
     /**

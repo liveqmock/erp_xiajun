@@ -14,6 +14,7 @@ CREATE PROCEDURE createUser(
     DECLARE roleid BIGINT DEFAULT 0;
     DECLARE roleid_default BIGINT DEFAULT 0;
     DECLARE roleid_buyer BIGINT DEFAULT 0;
+    DECLARE roleid_buyermgr BIGINT DEFAULT 0;
     DECLARE userId BIGINT DEFAULT 0;
     DECLARE i INT DEFAULT 0;
     /** 标记是否出错 */
@@ -64,7 +65,12 @@ CREATE PROCEDURE createUser(
     FROM auth_role;
     INSERT INTO auth_role (role_id, company_no, name, creator, modifier)
     VALUES (roleid_default, companyno, '新成员', 'SYSTEM', 'SYSTEM');
-
+#     创建买手角色
+    SELECT max(role_id) + 1
+    INTO roleid_buyermgr
+    FROM auth_role;
+    INSERT INTO auth_role (role_id, company_no, name, creator, modifier)
+    VALUES (roleid_buyermgr, companyno, '买手主管', 'SYSTEM', 'SYSTEM');
 
     #     创建用户
     INSERT INTO auth_user (company_no, user_no, login_name, name, password, creator, modifier)

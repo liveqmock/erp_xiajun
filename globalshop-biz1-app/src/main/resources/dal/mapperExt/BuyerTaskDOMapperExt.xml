@@ -57,13 +57,15 @@
         ON  buyer_task.buyer_task_no = buyer_task_detail.buyer_task_no
         WHERE
             buyer_task.company_no = #{companyNo}
-        <if test="buyerOpenId != null">
+            and buyer_task.is_del is false
+            and buyer_task_detail.is_del is false
+        <if test="buyerOpenId != null and buyerOpenId != ''">
             AND buyer_task.buyer_open_id = #{buyerOpenId}
         </if>
-        <if test="taskOrderNo != null">
+        <if test="taskOrderNo != null and taskOrderNo != ''">
             AND buyer_task.buyer_task_no = #{taskOrderNo}
         </if>
-        <if test="taskTitle != null">
+        <if test="taskTitle != null and taskTitle != ''">
             AND buyer_task.title = #{taskTitle}
         </if>
         <if test="taskStart1 != null">
@@ -78,10 +80,10 @@
         <if test="taskEnd2 != null">
             AND buyer_task_detail.end_time &lt;= #{taskEnd2}
         </if>
-        <if test="buyerName != null">
-            AND buyer_task_detail.buyer_name = #{buyerName}
+        <if test="buyerName != null and buyerName != ''">
+            AND buyer_task.buyer_name = #{buyerName}
         </if>
-        ORDER BY buyer_task.start_time DESC
+        ORDER BY buyer_task.gmt_create DESC
     </select>
 
     <select id="selectVoById" resultType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">

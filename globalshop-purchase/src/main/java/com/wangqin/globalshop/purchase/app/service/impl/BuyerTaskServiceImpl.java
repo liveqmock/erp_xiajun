@@ -2,12 +2,10 @@ package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.biz1.app.vo.BuyerTaskDetailVO;
 import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
 import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.*;
@@ -40,6 +38,8 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
     @Autowired
     private AuthUserDOMapperExt authUserMapper;
+    @Autowired
+    private ItemSkuScaleMapperExt itemSkuScaleMapper;
 
     @Override
     public List<BuyerTaskVO> list(BuyerTaskVO buyerTask) {
@@ -47,22 +47,56 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         return mapper.list(buyerTask);
     }
 
-    public BuyerTaskVO selectVoById(Long id){
+    @Override
+    public BuyerTaskVO selectVoById(Long id) {
 
-		//buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
-    	BuyerTaskDO taskDO = mapper.selectByPrimaryKey(id);
-		BuyerTaskVO resultVo = new BuyerTaskVO();
-		BeanUtils.copies(taskDO,resultVo);
+        //buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url
+        BuyerTaskDO taskDO = mapper.selectByPrimaryKey(id);
+        BuyerTaskVO resultVo = new BuyerTaskVO();
+        BeanUtils.copies(taskDO, resultVo);
 
         List<BuyerTaskDetailDO> buyerTaskDetailDOList = detailMapper.taskDailyByTaskNo(resultVo.getBuyerTaskNo());
-        resultVo.setTaskDetailList(buyerTaskDetailDOList);
+        if (!EasyUtil.isListEmpty(buyerTaskDetailDOList)) {
 
-		BuyerTaskDetailDO detailDO = buyerTaskDetailDOList.get(0);
+            List<BuyerTaskDetailVO> detailVOList = new ArrayList<>();
+            for (BuyerTaskDetailDO detailDO : buyerTaskDetailDOList) {
+                BuyerDO buyerSo = new BuyerDO();
+                buyerSo.setIsDel(false);
+                buyerSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+                buyerSo.setOpenId(detailDO.getBuyerOpenId());
+                BuyerDO buyer = buyerMapper.searchBuyer(buyerSo);
 
-		resultVo.setItemCode(detailDO.getItemCode());
-		resultVo.setUpc(detailDO.getUpc());
-		resultVo.setSkuPicUrl(detailDO.getSkuPicUrl());
+                BuyerTaskDetailVO detailVO = new BuyerTaskDetailVO();
+                BeanUtils.copies(detailDO, detailVO);
+                if (buyer != null) {
+                    detailVO.setBuyerId(buyer.getId());
+                }
+                detailVOList.add(detailVO);
+            }
+            resultVo.setTaskDetailList(detailVOList);
+
+            BuyerTaskDetailDO detailDO = buyerTaskDetailDOList.get(0);
+
+            resultVo.setItemCode(detailDO.getItemCode());
+            resultVo.setUpc(detailDO.getUpc());
+            resultVo.setSkuPicUrl(detailDO.getSkuPicUrl());
+        } else {
+            throw new ErpCommonException("task_detail_error", "未找到对应商品");
+        }
         return resultVo;
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        BuyerTaskDO taskDO = mapper.selectByPrimaryKey(id);
+        if (taskDO == null || EasyUtil.isStringEmpty(taskDO.getBuyerTaskNo())) {
+            return;
+        }
+
+        detailMapper.deleteByTaskNo(taskDO.getBuyerTaskNo(), taskDO.getCompanyNo());
+
+        mapper.deleteByPrimaryKey(id);
     }
 
     /**
@@ -71,30 +105,30 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void add(BuyerTaskVO vo) {
-		List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
-
-		Long buyerId = vo.getBuyerId();
-        /**获取相关买手信息*/
-        if(vo.getBuyerId() == null || vo.getBuyerId() < 0){
-			 buyerId = list.get(0).getBuyerId();
-		}
-        BuyerDO buyer = buyerMapper.selectByPrimaryKey(buyerId);
-        BuyerTaskDO task = new BuyerTaskDO();
-        /**封装出一个buyerTaskDO对象*/
-
-		Long nestTask = mapper.gainTASKSequence();
-
-        String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(buyerId,nestTask);
-        task.setBuyerTaskNo(buyerTaskNo);
-
-        task.setTitle(vo.getTitle());
-        task.setRemark(vo.getRemark());
-        task.setTaskDesc(vo.getTaskDesc());
-		task.setImageUrl(vo.getImageUrl());
-        getBuyerTaskDO(task, buyer, vo);
-        mapper.insertSelective(task);
+        List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
 
         for (ItemTask itemTask : list) {
+            Long buyerId = vo.getBuyerId();
+            /**获取相关买手信息*/
+            if (vo.getBuyerId() == null || vo.getBuyerId() < 0) {
+                buyerId = itemTask.getBuyerId();
+            }
+            BuyerDO buyer = buyerMapper.selectByPrimaryKey(buyerId);
+            BuyerTaskDO task = new BuyerTaskDO();
+            /**封装出一个buyerTaskDO对象*/
+
+            Long nestTask = mapper.gainTASKSequence();
+
+            String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(buyerId, nestTask);
+            task.setBuyerTaskNo(buyerTaskNo);
+
+            task.setTitle(vo.getTitle());
+            task.setRemark(vo.getRemark());
+            task.setTaskDesc(vo.getTaskDesc());
+            task.setImageUrl(vo.getImageUrl());
+            getBuyerTaskDO(task, buyer, vo);
+            mapper.insertSelective(task);
+
             /**获取相关买手信息*/
             BuyerDO by = buyerMapper.selectByPrimaryKey(itemTask.getBuyerId());
             BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
@@ -102,54 +136,52 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             detail.setBuyerTaskNo(buyerTaskNo);
             detail.setBuyerTaskDetailNo(CodeGenUtil.getBuyerTaskDetailNo());
 
-			detail.setStartTime(vo.getTaskStartTime());
-			detail.setEndTime(vo.getTaskEndTime());
+            detail.setStartTime(vo.getTaskStartTime());
+            detail.setEndTime(vo.getTaskEndTime());
+
+            getBuyerTaskDetailDO(detail, itemTask, by);
+            detailMapper.insertSelective(detail);
+        }
+    }
+
+
+    @Override
+    public void update(BuyerTaskVO buyerTaskVO) {
+
+        BuyerTaskDO buyerTaskDo = new BuyerTaskDO();
+
+        BeanUtils.copies(buyerTaskVO, buyerTaskDo);
+
+        BuyerDO buyer = buyerMapper.selectByPrimaryKey(buyerTaskVO.getBuyerId());
+        if (buyer != null) {
+            buyerTaskDo.setBuyerName(buyer.getNickName());
+            buyerTaskDo.setBuyerOpenId(buyer.getOpenId());
+        }
+
+        mapper.updateByPrimaryKeySelective(buyerTaskDo);
+
+
+        //先删除明细，再新增
+        detailMapper.deleteByTaskNo(buyerTaskDo.getBuyerTaskNo(), AppUtil.getLoginUserCompanyNo());
+
+
+        List<ItemTask> list = JSON.parseArray(buyerTaskVO.getDetailList(), ItemTask.class);
+        for (ItemTask itemTask : list) {
+            /**获取相关买手信息*/
+            BuyerDO by = buyerMapper.selectByPrimaryKey(itemTask.getBuyerId());
+            BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
+            /**封装出一个buyerDetailTaskDO对象*/
+            detail.setBuyerTaskNo(buyerTaskDo.getBuyerTaskNo());
+            detail.setBuyerTaskDetailNo(CodeGenUtil.getBuyerTaskDetailNo());
+
+            //detail.setStartTime(vo.getTaskStartTime());
+            //detail.setEndTime(vo.getTaskEndTime());
 
             getBuyerTaskDetailDO(detail, itemTask, by);
             detailMapper.insertSelective(detail);
         }
 
-
     }
-
-
-    @Override
-	public void update(BuyerTaskVO buyerTaskVO){
-
-		BuyerTaskDO buyerTaskDo = new BuyerTaskDO();
-
-		BeanUtils.copies(buyerTaskVO,buyerTaskDo);
-
-		BuyerDO buyer = buyerMapper.selectByPrimaryKey(buyerTaskVO.getBuyerId());
-		if(buyer != null){
-			buyerTaskDo.setBuyerName(buyer.getNickName());
-			buyerTaskDo.setBuyerOpenId(buyer.getOpenId());
-		}
-
-		mapper.updateByPrimaryKeySelective(buyerTaskDo);
-
-
-		//先删除明细，再新增
-		detailMapper.deleteByTaskNo(buyerTaskDo.getBuyerTaskNo(),AppUtil.getLoginUserCompanyNo());
-
-
-		List<ItemTask> list = JSON.parseArray(buyerTaskVO.getDetailList(), ItemTask.class);
-		for (ItemTask itemTask : list) {
-			/**获取相关买手信息*/
-			BuyerDO by = buyerMapper.selectByPrimaryKey(itemTask.getBuyerId());
-			BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
-			/**封装出一个buyerDetailTaskDO对象*/
-			detail.setBuyerTaskNo(buyerTaskDo.getBuyerTaskNo());
-			detail.setBuyerTaskDetailNo(CodeGenUtil.getBuyerTaskDetailNo());
-
-			//detail.setStartTime(vo.getTaskStartTime());
-			//detail.setEndTime(vo.getTaskEndTime());
-
-			getBuyerTaskDetailDO(detail, itemTask, by);
-			detailMapper.insertSelective(detail);
-		}
-
-	}
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -159,12 +191,25 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             List<BuyerTaskDO> taskList = new ArrayList<>();
             List<BuyerTaskDetailDO> detailList = new ArrayList<>();
             int i = 0;
+            if (list.size() > 200) {
+                throw new ErpCommonException("最多只能导入两百条");
+            }
+            if (list.size() == 0) {
+                throw new ErpCommonException("当前导入为空");
+            }
+            Long nestTask = mapper.gainTASKSequence();
             for (List<Object> obj : list) {
                 i++;
                 BuyerTaskDO task = new BuyerTaskDO();
                 BuyerTaskDetailDO detail = new BuyerTaskDetailDO();
+                String buyerTaskDetailNo = CodeGenUtil.getBuyerTaskDetailNo();
+                detail.setBuyerTaskDetailNo(buyerTaskDetailNo);
                 /**采购任务名称*/
-                task.setTitle(obj.get(0).toString());
+                String title = obj.get(0).toString();
+                if (EasyUtil.isStringEmpty(title)) {
+                    errMsg.add("采购任务名称为空!位于第" + i + "行 第2列");
+                }
+                task.setTitle(title);
                 /**upc*/
                 String upc = obj.get(1).toString();
                 /**根据upc*/
@@ -173,39 +218,45 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 if (status != null) {
                     errMsg.add(status + "位于第" + i + "行 第2列");
                 }
+                task.setImageUrl(detail.getSkuPicUrl());
                 /**采购限价*/
                 String maxPrice = obj.get(3).toString().trim();
-                maxPrice = StringUtil.isBlank(maxPrice) ? "0" : maxPrice;
+                maxPrice = StringUtil.isBlank(maxPrice) ? "" : maxPrice;
                 if (isParseToDouble(maxPrice)) {
                     BigDecimal decimal = new BigDecimal(maxPrice);
                     detail.setMaxPrice(decimal);
+                    detail.setPrice(decimal);
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第4列的  " + maxPrice);
                 }
                 /**采购数目*/
                 String maxCount = obj.get(4).toString().trim();
-                maxCount = StringUtil.isBlank(maxCount) ? "0" : maxCount;
+                maxCount = StringUtil.isBlank(maxCount) ? "" : maxCount;
                 if (isParseToInteger(maxCount)) {
-                    detail.setMaxCount(Integer.valueOf(maxCount));
-                }  else {
+                    Integer count = Integer.valueOf(maxCount);
+                    detail.setMaxCount(count);
+                    detail.setCount(count);
+                } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + maxCount);
                 }
                 /**任务的有效天数*/
                 String limitTime = obj.get(5).toString().trim();
-                limitTime = StringUtil.isBlank(limitTime) ? "0" : limitTime;
+                limitTime = StringUtil.isBlank(limitTime) ? "" : limitTime;
                 if (isParseToInteger(limitTime)) {
                     Date date = new Date();
+                    task.setStartTime(date);
                     detail.setStartTime(date);
                     Calendar rightNow = Calendar.getInstance();
                     rightNow.setTime(date);
                     rightNow.add(Calendar.DAY_OF_YEAR, Integer.valueOf(limitTime));
+                    task.setEndTime(rightNow.getTime());
                     detail.setEndTime(rightNow.getTime());
                 } else {
-                    errMsg.add("存在未知格式的数据:第" + i + "行 第5列的  " + limitTime);
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第6列的  " + limitTime);
                 }
                 task.setStatus(Constant.TO_BE_PURCHASED);
-				Long nestTask = mapper.gainTASKSequence();
-                String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(0000L,nestTask);
+
+                String buyerTaskNo = CodeGenUtil.getBuyerTaskNo(0000L, nestTask + i);
                 task.setBuyerTaskNo(buyerTaskNo);
                 task.init();
                 taskList.add(task);
@@ -225,9 +276,9 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             } else {
                 throw new ErpCommonException("上传文件错误过多,请验证后再次上传");
             }
-        } catch (ErpCommonException e){
+        } catch (ErpCommonException e) {
             throw new ErpCommonException(e.getErrorMsg());
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
 
@@ -242,16 +293,25 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
      * 如果不为空  返回的是错误信息
      */
     private String setDetailInfo(BuyerTaskDetailDO detail, String upc) {
-        ItemSkuDO itemSku = itemSkuMapper.queryBySkuCodeOrUpcAndCompanyNo(upc, AppUtil.getLoginUserCompanyNo());
-        if (itemSku == null) {
-            return "不存在对应的商品:" + upc;
+        if (StringUtils.isBlank(upc)) {
+            return "UPC为空";
         }
-        detail.setUpc(upc);
-        detail.setItemCode(itemSku.getItemCode());
-        detail.setSkuCode(itemSku.getSkuCode());
-        detail.setRemark(itemSku.getRemark());
-        detail.setSkuPicUrl(itemSku.getSkuPic());
-        return null;
+        try {
+            ItemSkuDO itemSku = itemSkuMapper.queryBySkuCodeOrUpcAndCompanyNo(upc, AppUtil.getLoginUserCompanyNo());
+
+            if (itemSku == null) {
+                return "不存在对应的商品:" + upc;
+            }
+            detail.setSkuPicUrl(ImgUtil.initImg2Json(itemSku.getSkuPic()));
+            detail.setUpc(upc);
+            detail.setItemCode(itemSku.getItemCode());
+            detail.setSkuCode(itemSku.getSkuCode());
+            detail.setRemark(itemSku.getRemark());
+            detail.setSkuPicUrl(itemSku.getSkuPic());
+            return null;
+        } catch (Exception e) {
+            return "异常的upc" + upc;
+        }
     }
 
 
@@ -268,6 +328,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         }
         return true;
     }
+
     /**
      * 判断是否能够转换成Double类型
      *
@@ -290,7 +351,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         /**设置采购中*/
         task.setStatus(Constant.TO_BE_PURCHASED);
         task.init();
-        if(buyer != null){
+        if (buyer != null) {
             //默认分配的买手
             task.setBuyerName(buyer.getNickName());
             task.setBuyerOpenId(buyer.getOpenId());
@@ -304,26 +365,26 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
 
         detail.setOwnerNo(AppUtil.getLoginUserId());
         UserQueryVO user = authUserMapper.selectUserVoByUserNo(AppUtil.getLoginUserId());
-        if(user != null){
+        if (user != null) {
             detail.setOwnerName(user.getName());
         }
 
         ItemSkuDO sku = itemSkuMapper.queryItemBySkuCode(itemTask.getSkucode());
 
-        if(itemTask.getCount() == null || itemTask.getCount() <= 0){
+        if (itemTask.getCount() == null || itemTask.getCount() <= 0) {
             throw new ErpCommonException("采购数量要大于0");
         }
-        if(itemTask.getPrice() == null || itemTask.getPrice().doubleValue() <= 0){
+        if (itemTask.getPrice() == null || itemTask.getPrice().doubleValue() <= 0) {
             throw new ErpCommonException("采购价要大于0");
         }
 
         detail.init();
-        if(by != null){
-			detail.setBuyerName(by.getNickName());
-			detail.setBuyerOpenId(by.getOpenId());
-		}else {
-        	throw new ErpCommonException("明细买手必填");
-		}
+        if (by != null) {
+            detail.setBuyerName(by.getNickName());
+            detail.setBuyerOpenId(by.getOpenId());
+        } else {
+            throw new ErpCommonException("明细买手必填");
+        }
 
         detail.setCount(itemTask.getCount());
         detail.setItemCode(sku.getItemCode());
@@ -342,9 +403,9 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Override
     @Transactional
     public void updateTaskStatus(Integer status, List<Long> taskDailyIdList) {
-        for(Long id : taskDailyIdList){
+        for (Long id : taskDailyIdList) {
             BuyerTaskDO buyerTask = mapper.selectByPrimaryKey(id);
-            if(buyerTask != null){
+            if (buyerTask != null) {
                 buyerTask.setStatus(status);
                 this.mapper.updateByPrimaryKeySelective(buyerTask);
                 detailMapper.updateTaskDetailDailyStatus(status, buyerTask.getBuyerTaskNo());

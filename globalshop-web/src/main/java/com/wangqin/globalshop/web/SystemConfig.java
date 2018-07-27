@@ -4,6 +4,7 @@ package com.wangqin.globalshop.web;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 /**
@@ -14,9 +15,26 @@ import org.springframework.core.io.ClassPathResource;
 public class SystemConfig {
 
     @Bean("sys")
-    public PropertiesFactoryBean propertiesFactoryBean(){
+    @Profile("test")
+    public PropertiesFactoryBean testPtFactoryBean(){
         PropertiesFactoryBean config = new PropertiesFactoryBean();
-        config.setLocations(new ClassPathResource("/systemConfig.properties"));
+        config.setLocations(new ClassPathResource("/systemConfig-test.properties"));
+        return config;
+
+    }
+    @Bean("sys")
+    @Profile("dev")
+    public PropertiesFactoryBean devPtFactoryBean(){
+        PropertiesFactoryBean config = new PropertiesFactoryBean();
+        config.setLocations(new ClassPathResource("/systemConfig-dev.properties"));
+        return config;
+
+    }
+    @Bean("sys")
+    @Profile("prd")
+    public PropertiesFactoryBean proPtFactoryBean(){
+        PropertiesFactoryBean config = new PropertiesFactoryBean();
+        config.setLocations(new ClassPathResource("/systemConfig-prd.properties"));
         return config;
 
     }

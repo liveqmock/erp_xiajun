@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.item.app.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +39,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemSkuDOMapperExt;
@@ -84,11 +86,12 @@ import com.wangqin.globalshop.item.app.service.IItemSkuService;
 import com.wangqin.globalshop.item.app.service.IUploadFileService;
 import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 import com.wangqin.globalshop.item.app.util.ItemUtil;
-
 import net.sf.json.JSONObject;
 
 @Service
 public class ItemServiceImplement implements IItemService {
+    @Value("#{sys.IMGURL}")
+    private String imgUrl;
 
     @Autowired
     private ItemDOMapperExt itemDOMapperExt;
@@ -125,8 +128,9 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private IChannelSalePriceService channelSalePriceService;
     @Autowired
-    private ChannelAccountDOMapperExt channelAccountDOMapperExt;
-    
+    private ChannelAccountDOMapperExt channelAccountDOMapperExt;   
+    @Autowired
+    private ICountryService countryServiceImpl;
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
     public static final String ACCESS_TOKEN_MI = "&secret=";
@@ -158,7 +162,7 @@ public class ItemServiceImplement implements IItemService {
     @Transactional(rollbackFor = ErpCommonException.class)
     @Override
     public Object addItem(ItemQueryVO item) {
-    	JsonResult<ItemDO> result = new JsonResult<>();       
+      	JsonResult<ItemDO> result = new JsonResult<>();       
     	if(!loginCheck()) {
          	return result.buildIsSuccess(false).buildMsg("请先登录");
         }                    
@@ -558,8 +562,7 @@ public class ItemServiceImplement implements IItemService {
             inputStream = new ByteArrayInputStream(result);
 
             StringBuilder sb = new StringBuilder();
-            sb.append((int) (Math.random()
-                    * 100)).append("_").append(System.currentTimeMillis()).append(".").append("jpg");
+            sb.append((int) (Math.random() * 100)).append("_").append(System.currentTimeMillis()).append(".").append("jpg");
             String picKey = sb.toString();
             picUrl = uploadFileService.uploadImg(inputStream, picKey);
             if (picUrl.isEmpty()) {
@@ -665,7 +668,7 @@ public class ItemServiceImplement implements IItemService {
                 BeanUtils.copies(sku, itemSkuVo);
             }
             //库存
-            InventoryDO inventoryDO = inventoryDOMapperExt.queryBySkuCodeAndCompanyNo(sku.getSkuCode(),itemDo.getCompanyNo());
+            InventoryDO inventoryDO = inventoryDOMapperExt.queryBySkuCodeAndCompanyNo(sku.getSkuCode(), itemDo.getCompanyNo());
             itemSkuVo.setInventoryDO(inventoryDO);
 
             //规格尺寸
@@ -813,42 +816,98 @@ public class ItemServiceImplement implements IItemService {
             List<ItemDO> itemList = new ArrayList<>();
             List<ItemSkuDO> skuList = new ArrayList<>();
             List<ItemSkuScaleDO> scaleList = new ArrayList<>();
+            List<String> upcs = new ArrayList();
+
             int i = 0;
+            if (list.size() > 200) {
+                throw new ErpCommonException("最多只能导入两百条");
+            }
+            if (list.size() == 0) {
+                throw new ErpCommonException("当前导入为空");
+            }
             for (List<Object> obj : list) {
                 i++;
                 ItemDO item = new ItemDO();
                 ItemSkuDO itemSku = new ItemSkuDO();
-                /**SKU编号*/
-//            String skuCode = obj.get(0).toString().trim();
+
+                /**UPC*/
+                String upc = obj.get(0).toString().trim();
+                if (StringUtils.isBlank(upc)) {
+                    errMsg.add("第" + i + "行:upc不能为空");
+                } else {
+                    //检测upc是否和数据库里面已有的upc重复,按公司划分
+                    Integer duplcatedCountNumber = itemSkuService.queryCountByUpcAndCompanyNo(AppUtil.getLoginUserCompanyNo(), upc);
+                    if (0 < duplcatedCountNumber) {
+                        errMsg.add("第" + i + "行:商品库中已存在对应的upc" + upc);
+                    }
+                    if (upcs.contains(upc)) {
+                        errMsg.add("第" + i + "行:本次导入中存在重复的upc" + upc);
+                    }
+                    upcs.add(upc);
+                    itemSku.setUpc(upc);
+                }
+
                 /**商品名称*/
                 String itemName = obj.get(1).toString().trim();
-                item.setItemName(itemName);
-                itemSku.setItemName(itemName);
-                /**UPC*/
-                itemSku.setUpc(obj.get(2).toString().trim());
-                /**品牌(英文)*/
-                String brandEnName = obj.get(3).toString();
-                /**品牌(中文)*/
-                String brandCnName = obj.get(4).toString().trim();
-                item.setBrandName(brandEnName + " " + brandCnName);
-                itemSku.setBrandName(brandEnName + " " + brandCnName);
-                List<ItemBrandDO> brand = iBrandService.queryByEnNameAndCnName(brandEnName, brandCnName);
-                if (brand.size() == 0) {
-                    errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
-                } else if (brand.size() > 1) {
-                    errMsg.add("第" + i + "行:" + brandEnName + " " + brandCnName + "对应的品牌不唯一");
+                if (StringUtils.isBlank(itemName)) {
+                    errMsg.add("第" + i + "行:商品名不能为空");
                 } else {
-                    item.setBrandNo(brand.get(0).getBrandNo());
+                    item.setItemName(itemName);
+                    itemSku.setItemName(itemName);
+                }
+
+
+                String brandEnName = obj.get(2).toString();
+                /**品牌(英文)*/
+                if (StringUtils.isBlank(brandEnName)) {
+                    errMsg.add("第" + i + "行:品牌(英文)不能为空");
+                } else {
+                    /**品牌(中文)*/
+                    String brandCnName = obj.get(3).toString().trim();
+                    brandCnName = brandCnName == null ? "" : brandCnName;
+                    item.setBrandName(brandEnName + " " + brandCnName);
+                    itemSku.setBrandName(brandEnName + " " + brandCnName);
+                    List<ItemBrandDO> brand = iBrandService.queryByEnName(brandEnName);
+                    if (brand.size() == 0) {
+                        errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
+                    } else if (brand.size() > 1) {
+                        errMsg.add("第" + i + "行:" + brandEnName + " " + brandCnName + "对应的品牌不唯一");
+                    } else {
+                        item.setBrandNo(brand.get(0).getBrandNo());
+                    }
                 }
                 /**类目1*/
-                String category1 = obj.get(5).toString().trim();
+                String category1 = obj.get(4).toString().trim();
                 /**类目2*/
-                String category2 = obj.get(6).toString().trim();
+                String category2 = obj.get(5).toString().trim();
                 /**类目3*/
+                String category3 = obj.get(6).toString().trim();
+                List<ItemCategoryDO> categoryList = null;
+                if (EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1)) {
+                    errMsg.add("第" + i + "行:类目为空");
+                } else {
+                    List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
+                    if (categoryList1.size() != 0) {
+                        List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
+                        if (categoryList2.size() != 0) {
+                            categoryList = categoryService.selectByParentAndName(categoryList2, category3);
+                        }
 
-                String category3 = obj.get(7).toString().trim();
-                List<ItemCategoryDO> categoryList = getByCategory(category1, category2, category3);
+                    }
+
+                }
                 String categoryCode = "";
+                if (categoryList == null || categoryList.size() == 0) {
+                    errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
+                } else if (categoryList.size() > 1) {
+                    errMsg.add("第" + i + "行:" + category1 + "/" + category2 + "/" + category3 + "对应的类目不唯一");
+                } else {
+                    ItemCategoryDO category = categoryList.get(0);
+                    categoryCode = category.getCategoryCode();
+
+                }
+
+
                 String itemCode = CodeGenUtil.generateItemCode(categoryCode);
                 if (categoryList == null || categoryList.size() == 0) {
                     errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
@@ -863,14 +922,17 @@ public class ItemServiceImplement implements IItemService {
                     itemSku.setCategoryCode(category.getName());
                 }
                 /**规格(颜色)*/
-                String scala1 = obj.get(8).toString().trim();
+                String scala1 = obj.get(7).toString().trim();
                 /**规格(尺寸)*/
-                String scala2 = obj.get(9).toString().trim();
+                String scala2 = obj.get(8).toString().trim();
                 /**采购地*/
-                String purchaseFrom = obj.get(10).toString().trim();
-                item.setCountry(purchaseFrom);
+                String purchaseFrom = obj.get(9).toString().trim();
+                Long s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
+                if (s1 != null) {
+                    item.setCountry(s1.toString());
+                }
                 /**币种*/
-                String currency = obj.get(11).toString();
+                String currency = obj.get(10).toString();
                 currency = StringUtil.isBlank(currency) ? "0" : currency;
                 if (isParseToInteger(currency)) {
                     item.setCurrency(Byte.valueOf(currency));
@@ -878,23 +940,35 @@ public class ItemServiceImplement implements IItemService {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + currency);
                 }
                 /**销售价*/
-                String salePrice = obj.get(12).toString();
+                String salePrice = obj.get(11).toString();
                 salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
                 if (isParseToDouble(salePrice)) {
-                    itemSku.setSalePrice(Double.valueOf(salePrice));
+                    Double salePrice1 = Double.valueOf(salePrice);
+                    itemSku.setSalePrice(salePrice1);
+                    item.setPriceRange(salePrice1.toString());
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
                 }
-                /**原价*/
-                String price = obj.get(13).toString();
-                price = StringUtil.isBlank(price) ? "0" : price;
-                if (isParseToDouble(price)) {
-                    itemSku.setCostPrice(Double.valueOf(price));
+                /**SKU编号*/
+                String skuCode = CodeGenUtil.generateSkuCode(itemCode, i);
+                itemSku.setSkuCode(skuCode);
+                /**虚拟库存*/
+                String virInv = obj.get(12).toString();
+                virInv = StringUtil.isBlank(virInv) ? "0" : virInv;
+                if (isParseToLong(virInv)) {
+                    itemSku.setVirtualInv(Integer.valueOf(virInv));
+                    InventoryDO inventory = new InventoryDO();
+                    inventory.setItemName(itemName);
+                    inventory.setItemCode(itemCode);
+                    inventory.setSkuCode(skuCode);
+                    inventory.setUpc(upc);
+                    inventory.setVirtualInv(Long.valueOf(virInv));
+                    invService.outbound(inventory);
                 } else {
-                    errMsg.add("存在未知格式的数据:第" + i + "行 第14列的  " + price);
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第14列的  " + virInv);
                 }
                 /**重量*/
-                String weight = obj.get(14).toString();
+                String weight = obj.get(13).toString();
                 weight = StringUtil.isBlank(weight) ? "0" : weight;
                 if (isParseToDouble(weight)) {
                     item.setWeight(Double.valueOf(weight));
@@ -902,28 +976,26 @@ public class ItemServiceImplement implements IItemService {
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第15列的  " + weight);
                 }
-                /**包装*/
-                String packName = obj.get(15).toString();
-                if (StringUtil.isNotBlank(packName)) {
-                    ShippingPackingPatternDO pack = shippingPackingPatternDOMapper.selectByName(packName);
-                    if (pack == null) {
-                        errMsg.add("找不到对应的包装" + packName + ":第" + i + "行 第15列的  ");
-                    } else {
-                        itemSku.setPackageCode(pack.getPatternNo());
-                        itemSku.setPackageLevelId(String.valueOf(pack.getPackageLevel()));
-                        itemSku.setPackageName(pack.getName());
-                        itemSku.setPackageEn(pack.getNameEn());
-                        itemSku.setPackageWeight(pack.getWeight());
-                    }
-                }
-                /**SKU编号*/
-                String skuCode = CodeGenUtil.generateSkuCode(itemCode, i);
-                itemSku.setSkuCode(skuCode);
+//                /**包装*/
+//                String packName = obj.get(14).toString();
+//                if (StringUtil.isNotBlank(packName)) {
+//                    ShippingPackingPatternDO pack = shippingPackingPatternDOMapper.selectByName(packName);
+//                    if (pack == null) {
+//                        errMsg.add("找不到对应的包装" + packName + ":第" + i + "行 第15列的  ");
+//                    } else {
+//                        itemSku.setPackageCode(pack.getPatternNo());
+//                        itemSku.setPackageLevelId(String.valueOf(pack.getPackageLevel()));
+//                        itemSku.setPackageName(pack.getName());
+//                        itemSku.setPackageEn(pack.getNameEn());
+//                        itemSku.setPackageWeight(pack.getWeight());
+//                    }
+//                }
+
 
                 /**图片链接*/
-                String imgUrl = obj.get(16).toString();
-                item.setMainPic(imgUrl);
-                itemSku.setSkuPic(imgUrl);
+                String s = ImgUtil.initImg2Json(imgUrl);
+                item.setMainPic(s);
+                itemSku.setSkuPic(s);
 
                 item.setItemCode(itemCode);
                 itemSku.setItemCode(itemCode);
@@ -938,7 +1010,9 @@ public class ItemServiceImplement implements IItemService {
             if (size == 0) {
                 itemDOMapperExt.insertBatch(itemList);
                 itemSkuMapperExt.inserBatch(skuList);
-                itemSkuScaleDOMapper.insertBatch(scaleList);
+                if (scaleList.size() != 0) {
+                    itemSkuScaleDOMapper.insertBatch(scaleList);
+                }
             } else if (size < 10) {
                 throw new ErpCommonException(errMsg.toString());
             } else {
@@ -951,21 +1025,15 @@ public class ItemServiceImplement implements IItemService {
 
     }
 
-    private List<ItemCategoryDO> getByCategory(String category1, String category2, String category3) {
-        List<ItemCategoryDO> categoryList3 = categoryService.selectByName(category3);
-        if (categoryList3.size() != 0) {
-            return categoryList3;
+    private boolean isParseToLong(String virInv) {
+        try {
+            Long.valueOf(virInv);
+        } catch (NumberFormatException e) {
+            return false;
         }
-        List<ItemCategoryDO> categoryList2 = categoryService.selectByName(category2);
-        if (categoryList2.size() != 0) {
-            return categoryList2;
-        }
-        List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
-        if (categoryList1.size() != 0) {
-            return categoryList1;
-        }
-        return null;
+        return true;
     }
+
 
     /**
      * 判断是否能够转换成Double类型
@@ -991,23 +1059,26 @@ public class ItemServiceImplement implements IItemService {
      * @param skuCode
      */
     private void addInfo2ScaleList(String scala1, String scala2, List<ItemSkuScaleDO> scaleList, String itemCode, String skuCode) {
-        ItemSkuScaleDO itemScale1 = new ItemSkuScaleDO();
-        ItemSkuScaleDO itemScale2 = new ItemSkuScaleDO();
-        itemScale1.init();
-        itemScale1.setScaleCode(CodeGenUtil.getScaleCode());
-        itemScale1.setScaleName("颜色");
-        itemScale1.setScaleValue(scala1);
-        itemScale1.setItemCode(itemCode);
-        itemScale1.setSkuCode(skuCode);
-        itemScale2.init();
-        itemScale2.setScaleCode(CodeGenUtil.getScaleCode());
-        itemScale2.setScaleName("尺寸");
-        itemScale2.setScaleValue(scala2);
-        itemScale2.setItemCode(itemCode);
-        itemScale2.setSkuCode(skuCode);
-        scaleList.add(itemScale1);
-        scaleList.add(itemScale2);
-
+        if (StringUtils.isNotBlank(scala1)) {
+            ItemSkuScaleDO itemScale1 = new ItemSkuScaleDO();
+            itemScale1.init();
+            itemScale1.setScaleCode(CodeGenUtil.getScaleCode());
+            itemScale1.setScaleName("颜色");
+            itemScale1.setScaleValue(scala1);
+            itemScale1.setItemCode(itemCode);
+            itemScale1.setSkuCode(skuCode);
+            scaleList.add(itemScale1);
+        }
+        if (StringUtils.isNotBlank(scala2)) {
+            ItemSkuScaleDO itemScale2 = new ItemSkuScaleDO();
+            itemScale2.init();
+            itemScale2.setScaleCode(CodeGenUtil.getScaleCode());
+            itemScale2.setScaleName("尺寸");
+            itemScale2.setScaleValue(scala2);
+            itemScale2.setItemCode(itemCode);
+            itemScale2.setSkuCode(skuCode);
+            scaleList.add(itemScale2);
+        }
     }
 
     /**
@@ -1073,40 +1144,41 @@ public class ItemServiceImplement implements IItemService {
     public String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo) {
         return itemDOMapperExt.queryItemPicByItemCodeAndCompanyNo(itemCode, companyNo);
     }
-         
+
     /**
      * 工具类
      * 用户登录判断
-     * @param itemCode
      * @return
      */
     public Boolean loginCheck() {
-    	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
-         	return false;
-        }  
-    	return true;
+        if (IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+            return false;
+        }
+        return true;
     }
-    
+
+
     /**
      * 工具类
      * 二维码生成
+     *
      * @return
      */
     private String generateQrCode(String itemCode) {
         AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
-        if(null == appletConfig) {
-        	return null;
+        if (null == appletConfig) {
+            return null;
         }
         String appId = appletConfig.getAppid();
         String secret = appletConfig.getSecret();
-        if(IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
-        	return null;
+        if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
+            return null;
         }
-        String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
+        String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART + appId + ACCESS_TOKEN_MI + secret);
         JSONObject myJson = JSONObject.fromObject(reponse);
         String token = (String) myJson.get("access_token");
-        String picUrl = insertIntoItemDimension(itemCode, "pages/item/detail", token);     
+        String picUrl = insertIntoItemDimension(itemCode, "pages/item/detail", token);
         return picUrl;
     }
-    
+
 }

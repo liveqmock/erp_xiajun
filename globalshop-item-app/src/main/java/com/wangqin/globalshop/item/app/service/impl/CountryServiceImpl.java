@@ -15,6 +15,8 @@ import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 
+import javax.naming.Name;
+
 /**
  * Country Service层实现
  * @author XiaJun
@@ -69,4 +71,13 @@ public class CountryServiceImpl   implements ICountryService {
 		return countryMapper.queryCodeById(id);
 	}
 
+	@Override
+	public void undeleteCountry(CountryDO countryDO){
+		countryMapper.updateByPrimaryKeySelective(countryDO);
+	}
+
+	@Override
+	public Long queryCodeByName(String name) {
+		return countryMapper.queryCodeByName(name);
+	}
 }
