@@ -225,7 +225,7 @@ public class Wechat3rdPartyAuthorizationController {
                 applet.setPublishStatus(PublishStatus.AUTHORIZED.getCode());
                 applet.update();
                 appletConfigServiceImplement.update(applet);
-
+                return result.buildMsg("授权成功").buildIsSuccess(false);
             }
             String token = info.getString("authorizer_access_token");
             setAppletRequestUrl(token, "set");
