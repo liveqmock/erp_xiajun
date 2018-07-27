@@ -148,7 +148,7 @@ public class ItemDTO implements Serializable{
 	private List<BuyerDO> wxList;
 	
 
-	private List<Integer> saleOnChannels;
+	private List<String> saleOnChannels;
 	
 
 	private String owners;
@@ -562,10 +562,10 @@ public class ItemDTO implements Serializable{
 	public void setSaleOnYouzan(Integer saleOnYouzan) {
 		this.saleOnYouzan = saleOnYouzan;
 	}
-	public List<Integer> getSaleOnChannels() {
+	public List<String> getSaleOnChannels() {
 		return saleOnChannels;
 	}
-	public void setSaleOnChannels(List<Integer> saleOnChannels) {
+	public void setSaleOnChannels(List<String> saleOnChannels) {
 		this.saleOnChannels = saleOnChannels;
 	}
 	

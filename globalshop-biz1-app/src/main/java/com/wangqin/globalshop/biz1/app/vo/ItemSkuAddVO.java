@@ -1,8 +1,11 @@
 package com.wangqin.globalshop.biz1.app.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
 import com.wangqin.globalshop.common.utils.Money;
 
 
@@ -13,6 +16,10 @@ import com.wangqin.globalshop.common.utils.Money;
  *
  */
 public class ItemSkuAddVO implements Serializable {
+	
+	private Integer saleMode;
+
+	private List<ChannelSalePriceVO> priceList = new ArrayList<ChannelSalePriceVO>();
 	
 	private String companyNo;
 	private String creator;
@@ -198,6 +205,20 @@ public class ItemSkuAddVO implements Serializable {
 	
 	private Integer itemSkuQuantity;
 	
+	
+	public Integer getSaleMode() {
+		return saleMode;
+	}
+	public void setSaleMode(Integer saleMode) {
+		this.saleMode = saleMode;
+	}
+	
+	public List<ChannelSalePriceVO> getPriceList() {
+		return priceList;
+	}
+	public void setPriceList(List<ChannelSalePriceVO> priceList) {
+		this.priceList = priceList;
+	}
 	public Double getCostPrice() {
 		return costPrice;
 	}
