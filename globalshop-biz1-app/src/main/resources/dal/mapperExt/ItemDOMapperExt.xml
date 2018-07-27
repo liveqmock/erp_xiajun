@@ -21,7 +21,8 @@
         unit,source,promotion,T1.id_card AS idCard,T1.detail,T1.start_date AS startDate,
         T1.end_date AS endDate,T1.is_sale AS isSale,T1.logistic_type as logisticType,
         T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.creator AS userCreate,
-        T1.modifier AS userModify 
+        T1.modifier AS userModify,
+        T1.sale_on_youzan AS saleOnYouzan,T1.third_sale AS thirdSale
     </sql>
 
     <!--通过item_code查询item-->
@@ -139,6 +140,12 @@
             <if test="isSale != null">
                 is_sale,
             </if>
+            <if test="saleOnYouzan != null" >
+        		sale_on_youzan,
+      		</if>
+      		<if test="thirdSale != null" >
+        		third_sale,
+      		</if>
             <if test="wxisSale != null">
                 wxis_sale,
             </if>
@@ -255,6 +262,12 @@
             <if test="isSale != null">
                 #{isSale,jdbcType=TINYINT},
             </if>
+            <if test="saleOnYouzan != null" >
+        		#{saleOnYouzan,jdbcType=INTEGER},
+      		</if>
+      		<if test="thirdSale != null" >
+        		#{thirdSale,jdbcType=INTEGER},
+      		</if>
             <if test="wxisSale != null">
                 #{wxisSale,jdbcType=TINYINT},
             </if>

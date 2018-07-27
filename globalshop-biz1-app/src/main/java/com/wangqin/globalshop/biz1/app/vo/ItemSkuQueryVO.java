@@ -1,8 +1,12 @@
 package com.wangqin.globalshop.biz1.app.vo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
 
 /**
  * 商品对象查询
@@ -10,7 +14,13 @@ import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
  *
  */
 public class ItemSkuQueryVO extends PageQueryVO{
+	
+	private Integer saleMode;
 
+	private List<ChannelSalePriceVO> priceList = new ArrayList<ChannelSalePriceVO>();
+
+	private List<ChannelSalePriceVO> channelSalePriceList = new ArrayList<ChannelSalePriceVO>();
+	
 	private String thirdSkuCode;
 	
 	private String companyNo;
@@ -106,6 +116,32 @@ public class ItemSkuQueryVO extends PageQueryVO{
 	private String skuPic;
 	private String creator;
 	private String modifier;
+
+	public Integer getSaleMode() {
+		return saleMode;
+	}
+
+	public void setSaleMode(Integer saleMode) {
+		this.saleMode = saleMode;
+	}
+
+	public List<ChannelSalePriceVO> getChannelSalePriceList() {
+		return channelSalePriceList;
+	}
+
+	public void setChannelSalePriceList(List<ChannelSalePriceVO> channelSalePriceList) {
+		this.channelSalePriceList = channelSalePriceList;
+	}
+	
+	
+
+	public List<ChannelSalePriceVO> getPriceList() {
+		return priceList;
+	}
+
+	public void setPriceList(List<ChannelSalePriceVO> priceList) {
+		this.priceList = priceList;
+	}
 
 	public String getItemCode() {
 		return itemCode;

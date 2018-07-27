@@ -2,7 +2,7 @@ package com.wangqin.globalshop.channel.service.channelAccountConfig;
 
 import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountConfigSo;
+import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountConfigSo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountConfigDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountConfigDOMapperExt;
 import com.wangqin.globalshop.common.utils.DateUtil;
