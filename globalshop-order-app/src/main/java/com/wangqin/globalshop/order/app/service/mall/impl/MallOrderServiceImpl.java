@@ -1,13 +1,13 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
@@ -23,7 +23,6 @@ import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,7 +136,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
 //                        try {
 //                            erpOrderIds.add(wc.getOrderNo());
 //                            inventoryService.lockedInventroy(wc);
-//                        } catch (Exception e) {
+//                        } catch (exception e) {
 //                            e.printStackTrace();
 //                        }
 //                    }
@@ -147,14 +146,14 @@ public class MallOrderServiceImpl implements IMallOrderService {
 //                    if (!erpOrderIds.contains(erpOrder.getId())) {
 //                        try {
 //                            mallSubOrderService.lockErpOrder(erpOrder);
-//                        } catch (Exception e) {
+//                        } catch (exception e) {
 //                            e.printStackTrace();
 //                        }
 //                    }
 //                });
 //            } catch (InventoryException e) {
 //                e.printStackTrace();
-//            } catch (Exception e) {
+//            } catch (exception e) {
 //                e.printStackTrace();
 //            }
 //        }

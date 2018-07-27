@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderExcelVO;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -372,7 +372,7 @@ public class MallSubOrderController {
 //				erpOrders.forEach(order->{
 //					try {
 //						erpOrderService.lockErpOrder(order);
-//					} catch (Exception e) {
+//					} catch (exception e) {
 //					}
 //				});
 				return JsonResult.buildSuccess(null);

@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.order.app.service.mall;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
 import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
 

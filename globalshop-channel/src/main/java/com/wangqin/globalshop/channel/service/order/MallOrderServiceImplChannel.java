@@ -121,7 +121,7 @@ public class MallOrderServiceImplChannel implements ChannelIMallOrderService {
 //                        } catch (InventoryException e) {
 //                            logger.info(e.getMessage() + e);
 //                            e.printStackTrace();
-//                        } catch (Exception e) {
+//                        } catch (exception e) {
 //                            logger.info(e.getMessage() + e);
 //                            e.printStackTrace();
 //                        }
@@ -135,13 +135,13 @@ public class MallOrderServiceImplChannel implements ChannelIMallOrderService {
 //                        } catch (InventoryException e) {
 //                            logger.info(e.getMessage() + e);
 //                            e.printStackTrace();
-//                        } catch (Exception e) {
+//                        } catch (exception e) {
 //                            logger.info(e.getMessage() + e);
 //                            e.printStackTrace();
 //                        }
 //                    }
 //                }
-//            } catch (Exception e) {
+//            } catch (exception e) {
 //                logger.info(e.getMessage() + e);
 //            }
 //        }

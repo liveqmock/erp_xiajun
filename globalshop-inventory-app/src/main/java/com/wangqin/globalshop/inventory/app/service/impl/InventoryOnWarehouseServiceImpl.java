@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
+import com.wangqin.globalshop.biz1.app.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;

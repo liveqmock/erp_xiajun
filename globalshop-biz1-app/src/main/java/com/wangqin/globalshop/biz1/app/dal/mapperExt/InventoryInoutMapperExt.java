@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryInoutDOMapper;
 import org.apache.ibatis.annotations.Param;
 

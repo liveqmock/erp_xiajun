@@ -125,7 +125,7 @@
 	</select>
 
 	<!-- 查询所有类目,返回DTO -->
-	<select id="selectAllDTO" resultType="com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO"> 
+	<select id="selectAllDTO" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemCategoryDTO">
 	SELECT 
 	<include refid="Base_Column_List" />
 	from item_category T1

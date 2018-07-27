@@ -11,7 +11,7 @@
 	   <!--T1.buyer_id as buyerId,T1.buyer_name as buyerName,T1.owner_id as ownerId,T1.owner_name as ownerName,T1.in_count as inCount-->
 	<!--</sql>-->
 	<!---->
-	<!--<select id="queryBuyerTaskList" resultType="com.wangqin.globalshop.biz1.app.dto.BuyerTaskDailyDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">-->
+	<!--<select id="queryBuyerTaskList" resultType="com.wangqin.globalshop.biz1.app.bean.dto.BuyerTaskDailyDTO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO">-->
         <!--SELECT-->
         	 <!--<include refid="Base_Column_List"/>,T2.item_name as itemName ,T2.sku_code as skuCode, T2.color as color,T2.scale as scale,T2.buy_site as buySite,T2.sku_pic as skuPic,T1.`count` AS taskDailyCount,T1.id As taskDailyDetailId,-->
         	 <!--T2.cost_price as costPrice,T2.discount,T2.purchase_price as purchasePrice,-->

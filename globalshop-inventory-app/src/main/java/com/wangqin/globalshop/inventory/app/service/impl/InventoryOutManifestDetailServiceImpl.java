@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;

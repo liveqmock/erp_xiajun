@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOutManifestDetailDOMapper;
 
 import java.util.List;

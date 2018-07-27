@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.mall.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
@@ -50,8 +50,8 @@ public class MallItemServiceImpl implements MallItemService {
 
 		itemQueryVO.setCompanyNo(companyNo);
 
-		itemQueryVO.setEndGmt(DateUtil.convertDate2Str(endTime,DateUtil.formateStr19));
-		itemQueryVO.setStartGmt(DateUtil.convertDate2Str(startTime,DateUtil.formateStr19));
+		itemQueryVO.setEndGmt(endTime);
+		itemQueryVO.setStartGmt(startTime);
 
 		List<ItemDTO> itemDTOList = itemDOMapperExt.queryMallItems(itemQueryVO);
 

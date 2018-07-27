@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
+import com.wangqin.globalshop.biz1.app.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
@@ -231,7 +231,7 @@ public class InventoryController {
 //            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
 //            result.setData(inventoryRecordList);
 //            result.buildIsSuccess(true);
-//        } catch (Exception e) {
+//        } catch (exception e) {
 //            result.buildIsSuccess(false);
 //        }
 //        return result;
@@ -248,7 +248,7 @@ public class InventoryController {
 //            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
 //            result.setData(inventoryRecordList);
 //            result.buildIsSuccess(true);
-//        } catch (Exception e) {
+//        } catch (exception e) {
 //            result.buildIsSuccess(false);
 //        }
 //        return result;
@@ -396,7 +396,7 @@ public class InventoryController {
 //     */
 //    @RequestMapping("/changePositionNo")
 //    @ResponseBody
-//    @Transactional(rollbackFor = ErpCommonException.class)
+//    @Transactional(rollbackFor = BizCommonException.class)
 //    public Object changePositionNo(Long inventoryAreaId, String positionNo) {
 //        if (StringUtil.isBlank(positionNo)) {
 //            return JsonResult.buildFailed("货架号不能为空！");
@@ -503,7 +503,7 @@ public class InventoryController {
 //			details.forEach(
 //					detail -> {
 //							if(detail.getNo()==null || detail.getQuantity()==null || detail.getQuantity()<=0) {
-//								throw new ErpCommonException("参数异常");
+//								throw new BizCommonException("参数异常");
 //							}
 //							InventoryOnWareHouseDO inventoryArea= inventoryAreaService.selectById(detail.getInventoryAreaId());
 ////							detail.setItemId(inventoryArea.getItemId());
@@ -580,7 +580,7 @@ public class InventoryController {
 //     */
 //    @RequestMapping("/inventoryOutConfirm")
 //    @ResponseBody
-//    @Transactional(rollbackFor = ErpCommonException.class)
+//    @Transactional(rollbackFor = BizCommonException.class)
 //    public Object inventoryOutConfirm(InventoryOutManifestDO inventoryOut) throws InventoryException {
 //        JsonResult<String> result = new JsonResult<>();
 //        Set<String> skuIdSet = null;
@@ -649,7 +649,7 @@ public class InventoryController {
 //			}
 //			try {
 //				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
-//			} catch (Exception ex) {
+//			} catch (exception ex) {
 //				return JsonResult.buildFailed("未知异常");
 //			}
 //
@@ -705,9 +705,9 @@ public class InventoryController {
 //			}
 //			try {
 //				inventoryAreaService.inventoryCheckIn(skuId, warehouseId, positionNo, quantity);
-//			} catch (ErpCommonException e) {
+//			} catch (BizCommonException e) {
 //				return JsonResult.buildFailed(e.getErrorMsg());
-//			} catch (Exception ex) {
+//			} catch (exception ex) {
 //				return JsonResult.buildFailed("未知异常");
 //			}
 //			try {

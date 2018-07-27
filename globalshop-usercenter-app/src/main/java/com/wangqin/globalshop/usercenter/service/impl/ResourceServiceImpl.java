@@ -2,18 +2,15 @@ package com.wangqin.globalshop.usercenter.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthResourceDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleResourceDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

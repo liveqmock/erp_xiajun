@@ -2,11 +2,11 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderDOMapper;
-import com.wangqin.globalshop.biz1.app.dto.MyOrderDTO;
-import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.MyOrderDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderExcelVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerReceiptDetailVo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerReceiptDetailVo;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerReceiptDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.common.utils.BeanUtils;

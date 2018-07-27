@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO;
 
 
 /**

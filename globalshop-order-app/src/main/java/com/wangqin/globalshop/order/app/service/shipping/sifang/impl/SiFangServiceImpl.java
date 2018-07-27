@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.order.app.service.shipping.sifang.impl;
 
 import com.google.gson.Gson;
-import com.wangqin.globalshop.biz1.app.constants.enums.TransferStatus;
+import com.wangqin.globalshop.biz1.app.enums.TransferStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -126,7 +126,7 @@ public class SiFangServiceImpl implements ISiFangService {
 			throw new ErpCommonException("仓库查不到 wareHouseId：" + warehouseNo);
 		}
 //		if (StringUtil.isBlank(wareHouse.getCode4px())) {
-//			throw new ErpCommonException("仓库code 为空 wareHouseId：" + warehouseNo);
+//			throw new BizCommonException("仓库code 为空 wareHouseId：" + warehouseNo);
 //		}
 //
 //		// TODO: 转运仓code

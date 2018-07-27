@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.channel.service.order;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
-import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
 

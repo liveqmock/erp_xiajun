@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.channel.task.jdtask;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;

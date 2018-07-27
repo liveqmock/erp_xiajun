@@ -10,13 +10,11 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
@@ -34,18 +31,16 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.vo.ChannelSalePriceVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelSalePriceVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.enums.AppletType;
 import com.wangqin.globalshop.common.enums.ChannelSaleType;
-import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
@@ -64,10 +59,8 @@ import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.impl.ItemServiceImplement;
 import com.wangqin.globalshop.item.app.util.ItemUtil;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -112,7 +105,7 @@ public class ItemController {
      */
     @RequestMapping("/add")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public Object add(ItemQueryVO item) {
     	//log.info("---->start to add item---->");
         return iItemService.addItem(item);
@@ -126,7 +119,7 @@ public class ItemController {
      */
     @RequestMapping("/update")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public Object update(ItemQueryVO item) {   	
         JsonResult<ItemDO> result = new JsonResult<>();       
         if(!loginCheck()) {
@@ -214,7 +207,7 @@ public class ItemController {
         			if(null != updateSku.getVirtualInv()) {
         				try {
             				inventoryService.updateVirtualInv(skuCode, updateSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());
-            			} catch (ErpCommonException e) {
+            			} catch (BizCommonException e) {
     						return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
     					}
         			}        			
@@ -412,7 +405,7 @@ public class ItemController {
      */
     @RequestMapping("/query")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public Object query(Long id) {
         JsonResult<ItemDTO> result = new JsonResult<>();
 
@@ -574,7 +567,7 @@ public class ItemController {
      */
     @RequestMapping("/updateVirtualInvByItemId")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public Object updateVirtualInvByItemId(Long id) {
         //logger.info("updateVirtualInvByItemId start");
         JsonResult<ItemDO> result = new JsonResult<>();
@@ -600,7 +593,7 @@ public class ItemController {
      */
     @RequestMapping("/getDimensionCodeUtil")
     @ResponseBody
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public Object getDimensionCodeUtil(Long itemId) {
         //logger.info("getDimensionCodeUtil start");
         JsonResult<Object> result = new JsonResult<>();
@@ -643,7 +636,7 @@ public class ItemController {
      *
      * @param itemId
      */
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public void voidDimensionCodeUtil(Long itemId) {
 //		/logger.info("voidDimensionCodeUtil start");
     	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
@@ -748,7 +741,7 @@ public class ItemController {
             }
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
-        } catch (ErpCommonException e) {
+        } catch (BizCommonException e) {
             String str = e.getErrorMsg().replace(",", "</br>");
             return result.buildIsSuccess(false).buildMsg(str);
         } catch (Exception e) {

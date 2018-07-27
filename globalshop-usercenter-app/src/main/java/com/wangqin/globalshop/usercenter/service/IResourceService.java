@@ -3,7 +3,7 @@ package com.wangqin.globalshop.usercenter.service;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
-import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO;
 
 import com.wangqin.globalshop.common.result.Tree;
 

@@ -36,7 +36,7 @@
     </sql>
 
 	-->
-    <!--<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerVO">-->
+    <!--<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="BuyerVO">-->
     <!--SELECT COUNT(*) FROM buyer T1 WHERE T1.power_code !=0-->
     <!--</select>-->
 

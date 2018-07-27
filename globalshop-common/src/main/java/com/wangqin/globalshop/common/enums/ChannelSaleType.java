@@ -11,7 +11,7 @@ public enum ChannelSaleType {
 
 
 	
-	private int value;
+	private Integer value;
 	private String name;
 	
 	private ChannelSaleType(int value, String name) {

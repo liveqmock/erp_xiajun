@@ -22,7 +22,7 @@
 			is_del = 0
 	</select>
 	
-	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO">
+	<select id="queryPackageLevelsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.PackageLevelQueryVO">
         SELECT
         	count(1)
         FROM
@@ -46,7 +46,7 @@
             
     </select>
     
-    <select id="queryPackageLevels" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO">
+    <select id="queryPackageLevels" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackagePatternDTO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.PackageLevelQueryVO">
         SELECT
         	 <include refid="Base_Column_List_Old" />
         FROM
@@ -75,7 +75,7 @@
     </select>
     
     
-    <select id="queryPatternsByScaleNo" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO"  >
+    <select id="queryPatternsByScaleNo" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackagePatternDTO"  >
         SELECT
         	 <include refid="Base_Column_List" />
         FROM
@@ -153,7 +153,7 @@
  
  
  <!-- 按条件修改pattern(fin) -->
-    <update id="updateLevelSelectiveById" parameterType="com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO">
+    <update id="updateLevelSelectiveById" parameterType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackagePatternDTO">
        UPDATE `shipping_packing_pattern` T1
        SET
        <trim suffixOverrides="," >

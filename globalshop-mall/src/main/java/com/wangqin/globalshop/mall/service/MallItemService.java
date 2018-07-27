@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.mall.service;
 
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
 
 import java.util.List;
 

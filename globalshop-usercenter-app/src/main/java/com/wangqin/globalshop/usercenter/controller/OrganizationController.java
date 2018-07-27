@@ -3,7 +3,7 @@
 import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
-import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.OrganizationQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;

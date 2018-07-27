@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
-import com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.OrganizationQueryVO;
 import com.wangqin.globalshop.common.result.Tree;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 

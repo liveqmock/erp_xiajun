@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.order.app.controller.shipping;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResultNode;
 import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;

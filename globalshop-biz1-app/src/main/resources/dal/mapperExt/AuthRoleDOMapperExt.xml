@@ -120,7 +120,7 @@
   </select>
 
 
-  <select id="queryRolesCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO">
+  <select id="queryRolesCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO">
     SELECT
     count(1)
     FROM
@@ -141,7 +141,7 @@
     </if>
   </select>
 
-  <select id="queryRoleQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO">
+  <select id="queryRoleQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO">
     SELECT
     <include refid="Base_Column_List2" />
     FROM
@@ -224,7 +224,7 @@
     AND name = #{newOne}
   </select>
 	
-  <insert id="insertByRoleVo" parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO" >
+  <insert id="insertByRoleVo" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO" >
     insert into auth_role (role_id, company_no, name, 
       seq, description, status, 
       creator, modifier)
@@ -233,7 +233,7 @@
       #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
   </insert>
   
-  <update id="updateByRoleVo" parameterType="com.wangqin.globalshop.biz1.app.vo.RoleQueryVO" >
+  <update id="updateByRoleVo" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO" >
     update auth_role
     set role_id = #{roleId,jdbcType=BIGINT},
       company_no = #{companyNo,jdbcType=VARCHAR},

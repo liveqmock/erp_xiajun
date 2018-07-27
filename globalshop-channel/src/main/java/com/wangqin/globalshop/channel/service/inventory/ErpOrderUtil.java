@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.channel.service.inventory;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.StockUpStatus;
+import com.wangqin.globalshop.biz1.app.enums.StockUpStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 
 public class ErpOrderUtil {

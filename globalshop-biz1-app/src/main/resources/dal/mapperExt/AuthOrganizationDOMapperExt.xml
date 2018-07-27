@@ -40,7 +40,7 @@
     from auth_organization order by seq
   </select>
 
-  <select id="queryOrganizationsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO">
+  <select id="queryOrganizationsCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.OrganizationQueryVO">
     SELECT
     count(1)
     FROM
@@ -78,7 +78,7 @@
    	T1.company_no = #{companyNo}
   </select>
   
-  <insert id="insertByOrganizationVo" parameterType="com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO" >
+  <insert id="insertByOrganizationVo" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.OrganizationQueryVO" >
     insert into auth_organization (company_no, org_id, name, 
       address, code, icon, 
       pid, seq, creator, modifier
@@ -89,7 +89,7 @@
       )
   </insert>
   
-  <update id="updateByOrganizationVo" parameterType="com.wangqin.globalshop.biz1.app.vo.OrganizationQueryVO" >
+  <update id="updateByOrganizationVo" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.OrganizationQueryVO" >
     update auth_organization
     set company_no = #{companyNo,jdbcType=VARCHAR},
       org_id = #{orgId,jdbcType=VARCHAR},

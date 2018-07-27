@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdShopOauthDOMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;

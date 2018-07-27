@@ -132,7 +132,7 @@
     <!--</select>-->
 
     <!--<select id="queryInventoryAreaCount" resultType="java.lang.Integer"-->
-    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.bean.vo.InventoryQueryVO">-->
     <!--SELECT-->
     <!--count(1)-->
     <!--FROM-->
@@ -163,7 +163,7 @@
     <!--</select>-->
 
     <!--<select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"-->
-    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.bean.vo.InventoryQueryVO">-->
     <!--SELECT-->
     <!--<include refid="inventoryAreaResultMapping"/>-->
     <!--,T2.buy_site As buySite,T3.sale_price As salePrice-->
@@ -207,7 +207,7 @@
 
     <!--<select id="queryInventoryAreaForExcel"-->
     <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"-->
-    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.bean.vo.InventoryQueryVO">-->
     <!--SELECT T2.sku_code AS skuCode,T2.item_name AS itemName,T2.sku_pic AS skuPic,T2.brand,T2.upc,T2.color,T2.scale,-->
     <!--T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.inventory,T1.locked_inv AS-->
     <!--lockedInv,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T2.sale_price AS salePrice-->
@@ -320,8 +320,8 @@
         WHERE company_no = #{companyNo}
         AND sku_code = #{skuCode}
     </select>
-    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseVO"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO">
         SELECT
         <include refid="Base_Column_List_For_Inventory_Mange"/>
         FROM

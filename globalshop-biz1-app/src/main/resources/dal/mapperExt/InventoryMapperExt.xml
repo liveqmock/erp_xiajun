@@ -178,7 +178,7 @@
 
     <!-- item_module -->
     <select id="queryInvBySkuCode" parameterType="java.lang.String"
-            resultType="com.wangqin.globalshop.biz1.app.vo.InventoryAddVO">
+            resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO">
         select
         <include refid="itemInventoryList"/>
         from inventory T1
@@ -187,7 +187,7 @@
     </select>
 
     <!-- item_module -->
-    <update id="lockVirtualInv" parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryAddVO">
+    <update id="lockVirtualInv" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO">
     	update `inventory` T1
     	set T1.locked_virtual_inv=#{lockedVirtualInv}
     	where T1.id=#{id}

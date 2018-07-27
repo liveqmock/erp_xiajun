@@ -3,20 +3,12 @@ package com.wangqin.globalshop.item.app.util;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import org.springframework.util.CollectionUtils;
-
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.common.enums.AppletType;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.common.enums.ItemIsSale;
-import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.PriceUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -58,8 +50,8 @@ public class ItemUtil {
      * 处理商品时间相关的字段
      */
     public static void setItemDate(ItemQueryVO item,ItemDO newItem) throws ParseException{    	
-    	newItem.setStartDate(DateUtil.transferStringToDate(item.getStartDate()));
-    	newItem.setEndDate(DateUtil.transferStringToDate(item.getEndDate()));
+    	newItem.setStartDate(item.getStartDate());
+    	newItem.setEndDate(item.getEndDate());
     	if(IsEmptyUtil.isStringNotEmpty(item.getBookingDate())) {
     		newItem.setBookingDate(DateUtil.transferStringToDate(item.getBookingDate()));
     	}

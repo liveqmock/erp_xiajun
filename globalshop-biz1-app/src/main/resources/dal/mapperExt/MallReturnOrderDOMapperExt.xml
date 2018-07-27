@@ -49,7 +49,7 @@
         </if>
     </select>
 
-    <update id="updateByMallReturnOrderNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO">
+    <update id="updateByMallReturnOrderNo" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallReturnOrderVO">
         UPDATE mall_return_order
         SET
             return_type = #{returnType},

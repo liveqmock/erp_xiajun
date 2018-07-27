@@ -2,17 +2,17 @@ package com.wangqin.globalshop.order.app.service.shipping;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Sets;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.TransferStatus;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.TransferStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.IShippingOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.LogisticCompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
-import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.MultiDeliveryFormDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
@@ -88,7 +88,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         Double totalSalePrice = 0D;
         for (MallSubOrderDO mallSubOrder : mallSubOrderList) {
 //            if (mallSubOrder.getStockStatus() == null || (mallSubOrder.getStockStatus() != StockUpStatus.STOCKUP.getCode() && mallSubOrder.getStockStatus() != StockUpStatus.PREPARE.getCode())) {
-//                throw new ErpCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
+//                throw new BizCommonException("商品备货状态不对，子订单号：" + mallSubOrder.getId());
 //            }
             // 只有“已付款待发货”状态的订单可以发货
             if (mallSubOrder.getStatus() != OrderStatus.PAID.getCode()
@@ -341,7 +341,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
         });
         /*if(shippingOrder.getIsBatch()==0 && erpOrderIdList.size()>1) {
-            throw new ErpCommonException("此操作仅为一个子订单发货，而您选中了多个子订单！");
+            throw new BizCommonException("此操作仅为一个子订单发货，而您选中了多个子订单！");
 		}*/
 
         if (shippingOrder.getStatus() == null) {
@@ -359,9 +359,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //                //修改子订单状态
 //                erpOrder.setStatus(OrderStatus.SENT.getCode());
 //            } else if(erpOrder.getStockStatus()!=StockUpStatus.STOCKUP.getCode()) {
-//                throw new ErpCommonException("商品备货状态不对，子订单号：" + erpOrder.getOrderNo());
+//                throw new BizCommonException("商品备货状态不对，子订单号：" + erpOrder.getOrderNo());
 //            } else {
-//                throw new ErpCommonException("商品不能重复发货，子订单号：" + erpOrder.getOrderNo());
+//                throw new BizCommonException("商品不能重复发货，子订单号：" + erpOrder.getOrderNo());
 //            }
             inventoryService.ship(erpOrder);
             shippingOrder.setMallOrders("[" + erpOrder.getId() + "]");
@@ -499,13 +499,13 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         });
         List<MallSubOrderDO> list = mallSubOrderService.selectBatchIds(erpOrderIdList);
 //        if (list.size() > 1) {
-//            throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
+//            throw new BizCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
 //        }
 //        if (list.get(0).getQuantity() > 1) {
-//            throw new ErpCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
+//            throw new BizCommonException("海狐的包裹只能包含一个商品且数量为1，请选择其他物流公司！");
 //        }
 //        if (org.apache.commons.lang.StringUtils.isEmpty(list.get(0).getIdCard())) {
-//            throw new ErpCommonException("海狐物流发货单号缺少身份证信息");
+//            throw new BizCommonException("海狐物流发货单号缺少身份证信息");
 //        }
 //
 //         //对接海狐
@@ -588,7 +588,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //        try {
 //            ChannelFactory
 //                    .getChannel(accountDO).syncLogisticsOnlineConfirm(erpOrderList,shippingOrder);
-//        } catch (Exception e) {
+//        } catch (exception e) {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }

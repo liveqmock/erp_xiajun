@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.inventory.app.service;
 
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import net.sf.json.JSONArray;
 
@@ -19,7 +19,7 @@ public interface InventoryService {
     /**超售入库*/
     void outbound(InventoryDO list);
     /**发货*/
-    Map<InventoryOnWareHouseDO, Long> ship(MallSubOrderDO mallSubOrderDO) throws ErpCommonException;
+    Map<InventoryOnWareHouseDO, Long> ship(MallSubOrderDO mallSubOrderDO) throws BizCommonException;
     /**下单*/
     void order(MallOrderDO mallOrderDO);
     /**下单*/

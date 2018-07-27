@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.channel.task;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.company.ICompanyService;

@@ -3,11 +3,11 @@ package com.wangqin.globalshop.inventory.app.service;
 import java.util.List;
 import java.util.Map;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
+import com.wangqin.globalshop.biz1.app.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
 
 /**
  * @author biscuit

@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.usercenter.service.IUserService;

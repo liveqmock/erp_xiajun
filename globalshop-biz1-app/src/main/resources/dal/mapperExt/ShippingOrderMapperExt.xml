@@ -41,7 +41,7 @@
     modifier
   </sql>
 
-    <select id="queryShippingOrders" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO" >
+    <select id="queryShippingOrders" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO" >
         SELECT
         <include refid="Base_Column_List" />
         FROM
@@ -112,7 +112,7 @@
         </foreach>
     </select>
 
-    <select id="queryShippingOrderCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO">
+    <select id="queryShippingOrderCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO">
         SELECT
         count(1)
         FROM
@@ -165,7 +165,7 @@
         </where>
     </select>
 
-    <select id="queryByShippingOrderPackageTime" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO">
+    <select id="queryByShippingOrderPackageTime" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO">
         SELECT
         <include refid="Base_Column_List" />
         FROM shipping_order

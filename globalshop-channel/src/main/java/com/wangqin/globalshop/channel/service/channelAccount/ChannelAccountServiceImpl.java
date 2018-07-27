@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.channel.service.channelAccount;
 
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;

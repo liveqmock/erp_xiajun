@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.order.app.controller.shipping;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.Barcode128;
@@ -10,14 +9,14 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.ShippingOrderType;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.ShippingOrderType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ShippingTrackVO;
-import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingTrackVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.MultiDeliveryFormDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -36,7 +35,6 @@ import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Ser
 import com.wangqin.globalshop.order.app.service.shipping.sifang.ISiFangService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -53,7 +51,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -700,7 +697,6 @@ public class ShippingOrderController {
             String[] nos = mallSubOrderNos.split(",");
             List<String> noList = Arrays.asList(nos);
             List<MallSubOrderDO> ErpOrderList = mallSubOrderService.queryByMallSubOrderNos(noList);
-//            List<MallSubOrderDO> ErpOrderList = shippingOrderService.queryShippingOrderDetail(erpOrderIds);
             for (MallSubOrderDO mallSubOrder : ErpOrderList) {
                 mallSubOrder.setSkuPic(ImgUtil.initImg2Json(mallSubOrder.getSkuPic()));
             }

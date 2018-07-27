@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 

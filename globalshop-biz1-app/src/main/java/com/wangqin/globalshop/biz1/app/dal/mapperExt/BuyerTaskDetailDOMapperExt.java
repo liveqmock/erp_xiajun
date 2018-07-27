@@ -1,9 +1,8 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.BuyerTaskDetailDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.BuyerTaskExportDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskExportDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

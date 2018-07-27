@@ -17,7 +17,7 @@
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
     </resultMap>
-    <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+    <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
         <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
@@ -46,7 +46,7 @@
   </sql>
 
     <select id="queryInventoryInoutCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO">
         SELECT
         count(1)
         FROM
@@ -74,7 +74,7 @@
     </select>
 
     <select id="queryInventoryInouts" resultMap="BaseResultMap"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM

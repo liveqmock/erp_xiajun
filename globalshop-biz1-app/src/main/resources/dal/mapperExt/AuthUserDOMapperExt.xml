@@ -41,7 +41,7 @@
   
   
 
-  <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+  <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
     <id column="id" property="id" jdbcType="BIGINT"/>
     <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
     <result column="name" property="name" jdbcType="VARCHAR"/>
@@ -313,7 +313,7 @@
   </select>
 
 
-  <select id="queryUsersCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+  <select id="queryUsersCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
     SELECT
     count(1)
     FROM
@@ -361,7 +361,7 @@
     </where>
   </select>
 
-  <select id="queryUserQueryVOList" resultMap="userQueryVOResultMap"  parameterType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO">
+  <select id="queryUserQueryVOList" resultMap="userQueryVOResultMap"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
     SELECT
     t.id,
     login_name,
@@ -405,7 +405,7 @@
   </select>
   
   
-  <select id="selectUserVoByUserNo" resultType="com.wangqin.globalshop.biz1.app.vo.UserQueryVO" parameterType="java.lang.String" >
+  <select id="selectUserVoByUserNo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List2" />
     from auth_user
@@ -446,7 +446,7 @@
   	</where>
   </select>	
   
-  <select id="queryUserListByCompanyNo" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO">
+  <select id="queryUserListByCompanyNo" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO">
   	select
   	<include refid="Base_Column_List3"/>
   	from 

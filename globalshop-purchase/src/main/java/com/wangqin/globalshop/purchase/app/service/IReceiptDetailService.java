@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.purchase.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerReceiptDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerReceiptDetailVo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerReceiptDetailVo;
 
 import java.util.List;
 

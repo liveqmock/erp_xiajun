@@ -13,7 +13,7 @@
 		 T1.weight,T1.size_level AS sizeLevel
 	</sql>
     
-   <select id="selectById" parameterType="java.lang.Long" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO">
+   <select id="selectById" parameterType="java.lang.Long" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO">
    		SELECT
    			<include refid="Base_Column_List"/>
    		FROM
@@ -24,7 +24,7 @@
    			is_del = 0
    </select>
    
-    <select id="queryAllPackageScale" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO" >
+    <select id="queryAllPackageScale" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO" >
         SELECT
         	 <include refid="Base_Column_List" />
         FROM
@@ -33,7 +33,7 @@
              T1.is_del=0
     </select>
     
-    <insert id="insertPackageScale" parameterType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO" >
+    <insert id="insertPackageScale" parameterType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO" >
     insert into shipping_packing_scale
     <trim prefix="(" suffix=")" suffixOverrides="," >
       id,
@@ -83,7 +83,7 @@
   
   
    <!-- 按条件修改商品(fin) -->
-    <update id="updateScaleSelectiveById" parameterType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO">
+    <update id="updateScaleSelectiveById" parameterType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO">
        UPDATE `shipping_packing_scale` T1
        SET
        <trim suffixOverrides="," >
@@ -107,7 +107,7 @@
     </update>
     
     <!-- 查list -->
-     <select id="queryScaleList" resultType="com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO">
+     <select id="queryScaleList" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingPackingScaleQueryVO">
         SELECT
         	 <include refid="Base_Column_List" />
         FROM
@@ -126,7 +126,7 @@
     </select>
     
     <!-- 按条件查scale -->
-     <select id="queryScaleListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingScaleDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO">
+     <select id="queryScaleListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingScaleDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingPackingScaleQueryVO">
         SELECT
         	 <include refid="Base_Column_List_2" />
         FROM

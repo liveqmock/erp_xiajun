@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.channel.service.channel;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.ItemStatus;
+import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
@@ -177,7 +177,7 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 		outerItemQuery.setItemCode(itemCode);
 		ChannelListingItemDO outerItemDb = this.outerItemService.queryPo(outerItemQuery);
 		if(outerItemDb==null){
-//			throw new ErpCommonException("更新outerItem 订单信息错误;");
+//			throw new BizCommonException("更新outerItem 订单信息错误;");
 //			this.logger.info("没有找到对应的有赞商品，itemId:"+itemId);
 		}
 		else{

@@ -3,7 +3,7 @@ package com.wangqin.globalshop.inventory.app.service;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
 
 import java.util.List;
 import java.util.Set;

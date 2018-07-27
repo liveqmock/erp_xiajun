@@ -2,7 +2,6 @@ package com.wangqin.globalshop.item.app.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +20,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.sql.ast.expr.SQLCaseExpr.Item;
-import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -264,7 +261,7 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	//@Transactional(rollbackFor = ErpCommonException.class)
+	//@Transactional(rollbackFor = BizCommonException.class)
 	public Object delete(Long id) {
 		JsonResult<String> result = new JsonResult<>();
 		/*
@@ -345,7 +342,7 @@ public class ItemSkuController  {
 					} else { // 下架
 						channelService.syncDelistingItem(item.getId());
 					}
-				} catch (Exception e) {
+				} catch (exception e) {
 					logger.error("SKU锁定虚拟库存时同步到有赞：", e);
 				}
 			}

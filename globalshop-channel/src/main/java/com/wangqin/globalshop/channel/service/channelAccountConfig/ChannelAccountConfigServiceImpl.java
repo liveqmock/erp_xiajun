@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.channel.service.channelAccountConfig;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
+import com.wangqin.globalshop.biz1.app.enums.AccountConfigKey;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountConfigSo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountConfigSo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountConfigDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountConfigDOMapperExt;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -32,7 +32,7 @@ public class ChannelAccountConfigServiceImpl implements IChannelAccountConfigSer
 	@Override
     public void createOrupdateConfig(String companyNo, String shopCode){
 		if(StringUtils.isBlank(shopCode)){
-             //throw new Exception("shopCode empty error");
+             //throw new exception("shopCode empty error");
 		}
 		ChannelAccountConfigSo so = new ChannelAccountConfigSo();
 		so.setShopcode(shopCode);

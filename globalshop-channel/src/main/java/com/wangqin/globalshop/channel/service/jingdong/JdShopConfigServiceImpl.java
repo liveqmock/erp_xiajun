@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.AccountConfigKey;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.AccountConfigKey;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdShopConfigDOMapperExt;

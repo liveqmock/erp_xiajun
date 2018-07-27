@@ -1,13 +1,13 @@
 package com.wangqin.globalshop.purchase.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemTask;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemTask;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
-import com.wangqin.globalshop.biz1.app.vo.BuyerTaskDetailVO;
-import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskDetailVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.purchase.app.comm.Constant;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
@@ -81,7 +81,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             resultVo.setUpc(detailDO.getUpc());
             resultVo.setSkuPicUrl(detailDO.getSkuPicUrl());
         } else {
-            throw new ErpCommonException("task_detail_error", "未找到对应商品");
+            throw new BizCommonException("task_detail_error", "未找到对应商品");
         }
         return resultVo;
     }
@@ -103,7 +103,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
      * 新增采购任务
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public void add(BuyerTaskVO vo) {
         List<ItemTask> list = JSON.parseArray(vo.getDetailList(), ItemTask.class);
 
@@ -184,7 +184,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     }
 
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public void importTask(List<List<Object>> list) throws Exception {
         try {
             List<String> errMsg = new ArrayList<>();
@@ -192,10 +192,10 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             List<BuyerTaskDetailDO> detailList = new ArrayList<>();
             int i = 0;
             if (list.size() > 200) {
-                throw new ErpCommonException("最多只能导入两百条");
+                throw new BizCommonException("最多只能导入两百条");
             }
             if (list.size() == 0) {
-                throw new ErpCommonException("当前导入为空");
+                throw new BizCommonException("当前导入为空");
             }
             Long nestTask = mapper.gainTASKSequence();
             for (List<Object> obj : list) {
@@ -272,12 +272,12 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
                 detailMapper.inserBatch(detailList);
                 mapper.insertBatch(taskList);
             } else if (size < 10) {
-                throw new ErpCommonException(errMsg.toString());
+                throw new BizCommonException(errMsg.toString());
             } else {
-                throw new ErpCommonException("上传文件错误过多,请验证后再次上传");
+                throw new BizCommonException("上传文件错误过多,请验证后再次上传");
             }
-        } catch (ErpCommonException e) {
-            throw new ErpCommonException(e.getErrorMsg());
+        } catch (BizCommonException e) {
+            throw new BizCommonException(e.getErrorMsg());
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -372,10 +372,10 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
         ItemSkuDO sku = itemSkuMapper.queryItemBySkuCode(itemTask.getSkucode());
 
         if (itemTask.getCount() == null || itemTask.getCount() <= 0) {
-            throw new ErpCommonException("采购数量要大于0");
+            throw new BizCommonException("采购数量要大于0");
         }
         if (itemTask.getPrice() == null || itemTask.getPrice().doubleValue() <= 0) {
-            throw new ErpCommonException("采购价要大于0");
+            throw new BizCommonException("采购价要大于0");
         }
 
         detail.init();
@@ -383,7 +383,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             detail.setBuyerName(by.getNickName());
             detail.setBuyerOpenId(by.getOpenId());
         } else {
-            throw new ErpCommonException("明细买手必填");
+            throw new BizCommonException("明细买手必填");
         }
 
         detail.setCount(itemTask.getCount());

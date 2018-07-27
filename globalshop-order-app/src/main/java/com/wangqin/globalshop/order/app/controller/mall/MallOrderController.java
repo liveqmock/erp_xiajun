@@ -3,13 +3,13 @@ package com.wangqin.globalshop.order.app.controller.mall;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channel.service.item.IItemSkuService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -158,7 +157,7 @@ public class MallOrderController {
 //        if (roles.contains("irhdaili")) {
 //            String[] logingNameArr = shiroUser.getLoginName().split("_");
 //            if (logingNameArr.length < 2 || StringUtils.isBlank(logingNameArr[1])) {
-//                throw new ErpCommonException("用户权限异常");
+//                throw new BizCommonException("用户权限异常");
 //            }
 //            outerOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
 //            Seller seller = sellerService.selectById(outerOrderQueryVO.getSalesId());

@@ -2,8 +2,8 @@ package com.wangqin.globalshop.item.app.service;
 
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
-import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ChannelAccountSo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountVO;
 
 import java.util.List;
 

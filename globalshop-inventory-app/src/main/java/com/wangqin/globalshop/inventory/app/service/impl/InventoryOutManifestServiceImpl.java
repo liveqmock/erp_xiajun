@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestMapperExt;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;

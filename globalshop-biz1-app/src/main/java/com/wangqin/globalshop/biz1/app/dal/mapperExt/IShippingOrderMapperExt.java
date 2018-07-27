@@ -3,7 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ShippingOrderDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

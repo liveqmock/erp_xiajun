@@ -142,7 +142,7 @@ public class AutoCreateTaskDailyOrderTask {
 //			itemListInit.forEach(item -> {
 //				try {
 //					outerItemService.synItemYouzan(item.getId());
-//				} catch(Exception e) {
+//				} catch(exception e) {
 //					logger.error("商品定时同步有赞ItemId:" + item.getId(), e);
 //				}
 //			});
@@ -159,7 +159,7 @@ public class AutoCreateTaskDailyOrderTask {
 //			itemListDelisting.forEach(item -> {
 //				try {
 //					outerItemService.listingYouzan(item);
-//				} catch(Exception e) {
+//				} catch(exception e) {
 //					logger.error("商品定时上架有赞ItemId:" + item.getId(), e);
 //				}
 //			});
@@ -176,7 +176,7 @@ public class AutoCreateTaskDailyOrderTask {
 //			itemListListing.forEach(item -> {
 //				try {
 //					outerItemService.delistingYouzan(item);
-//				} catch(Exception e) {
+//				} catch(exception e) {
 //					logger.error("商品定时下架有赞ItemId:" + item.getId(), e);
 //				}
 //			});
@@ -212,7 +212,7 @@ public class AutoCreateTaskDailyOrderTask {
 //					}
 //					shippingTrackMapper.updateInfo(info, shippingTrackList.get(i).getShippingNo());
 //					Thread.sleep(10000);
-//				} catch (Exception e) {
+//				} catch (exception e) {
 //					logger.error("抓取物流轨迹定时任务(非海狐)", e);
 //				}
 //
@@ -240,7 +240,7 @@ public class AutoCreateTaskDailyOrderTask {
 //				if (order.getLogisticCompany().contains("四方") || order.getLogisticCompany().contains("4PX")) {
 //					siFangService.createOrder(order.getId());
 //				}
-//			} catch (Exception e) {
+//			} catch (exception e) {
 //				logger.error("四方转运预报异常 id：" + order.getId(), e);
 //			}
 //		}
@@ -262,7 +262,7 @@ public class AutoCreateTaskDailyOrderTask {
 //					siFangService.shippingTrack(shippingOrder.getShippingNo());
 ////					siFangService.shippingTrack("1Z1Y84F50355689584");
 //					Thread.sleep(1000);
-//				} catch (Exception e) {
+//				} catch (exception e) {
 //					logger.error("抓取物流轨迹定时任务(4PX)", e);
 //				}
 //			}
@@ -305,7 +305,7 @@ public class AutoCreateTaskDailyOrderTask {
 //					ChannelFactory.getChannel(outerOrder.getCompanyId(), channelType).syncLogisticsOnlineConfirm(erpOrderList, shippingOrder);
 //
 //					Thread.sleep(1000);
-//				} catch (Exception e) {
+//				} catch (exception e) {
 //					logger.error("通知渠道，已经发货 异常", e);
 //				}
 //			}
@@ -326,7 +326,7 @@ public class AutoCreateTaskDailyOrderTask {
 //				try {
 //					fadRoadService.shippingTrack(shippingOrder.getShippingNo());
 //					Thread.sleep(1000);
-//				} catch (Exception e) {
+//				} catch (exception e) {
 //					logger.error("抓取物流轨迹定时任务(联邦转运)", e);
 //
 //				}

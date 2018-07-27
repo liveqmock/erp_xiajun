@@ -3,9 +3,9 @@ package com.wangqin.globalshop.usercenter.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.PublishStatus;
+import com.wangqin.globalshop.biz1.app.enums.PublishStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.*;
@@ -237,7 +237,7 @@ public class Wechat3rdPartyAuthorizationController {
             log.info("最终小程序信息=======" + applet);
             appletConfigServiceImplement.insert(applet);
             return result.buildMsg("授权成功").buildIsSuccess(false);
-        } catch (ErpCommonException e) {
+        } catch (BizCommonException e) {
             return result.buildMsg("授权失败" + e.getErrorMsg()).buildIsSuccess(false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -411,14 +411,14 @@ public class Wechat3rdPartyAuthorizationController {
 //        return null;
 //    }
 
-    public void auditApplet(AppletConfigDO applet) throws ErpCommonException {
+    public void auditApplet(AppletConfigDO applet) throws BizCommonException {
         String authorizerAccessToken = applet.getAuthorizerAccessToken();
         String url1 = "https://api.weixin.qq.com/wxa/get_category?access_token=" + authorizerAccessToken;
         String s1 = HttpClientUtil.get(url1);
         log.info("获取分类结果" + s1);
         JSONObject o1 = JSON.parseObject(s1);
         if (!"ok".equals(o1.getString("errmsg"))) {
-            throw new ErpCommonException("获取用户小程序分类失败");
+            throw new BizCommonException("获取用户小程序分类失败");
         }
         String category_list = o1.getString("category_list");
         JSONArray objects = JSON.parseArray(category_list);
@@ -445,7 +445,7 @@ public class Wechat3rdPartyAuthorizationController {
         JSONArray pageList = o2.getJSONArray("page_list");
         log.info("pageList" + pageList);
         if (pageList.isEmpty()) {
-            throw new ErpCommonException("小程序主页为空");
+            throw new BizCommonException("小程序主页为空");
         }
         String index = pageList.getString(0);
         log.info("审核页面信息" + index);
@@ -616,7 +616,7 @@ public class Wechat3rdPartyAuthorizationController {
         }
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
         if (StringUtils.isBlank(componentVerifyTicket)) {
-            throw new ErpCommonException("componentVerifyTicket为空");
+            throw new BizCommonException("componentVerifyTicket为空");
         }
         String url = "https://api.weixin.qq.com/cgi-bin/component/api_component_token";
         String param = "{\"component_appid\":\"" + componentAppid + "\",\"component_appsecret\": \"" + componentAppsecret + "\",\"component_verify_ticket\":\"" + componentVerifyTicket + "\"}";
@@ -636,7 +636,7 @@ public class Wechat3rdPartyAuthorizationController {
     private void initToken() {
         String componentVerifyTicket = (String) loginCache.get("componentVerifyTicket");
         if (StringUtils.isBlank(componentVerifyTicket)) {
-            throw new ErpCommonException("componentVerifyTicket为空");
+            throw new BizCommonException("componentVerifyTicket为空");
         }
         String url = "https://api.weixin.qq.com/cgi-bin/component/api_component_token";
         String param = "{\"component_appid\":\"" + componentAppid + "\",\"component_appsecret\": \"" + componentAppsecret + "\",\"component_verify_ticket\":\"" + componentVerifyTicket + "\"}";

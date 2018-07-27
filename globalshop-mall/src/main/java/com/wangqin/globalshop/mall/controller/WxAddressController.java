@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.YesOrNoEnum;
+import com.wangqin.globalshop.biz1.app.enums.YesOrNoEnum;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallShippingAddressDO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.mall.dal.mapperExt.MallShippingAddressDOMapperExt;
 

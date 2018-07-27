@@ -1,11 +1,8 @@
 package com.wangqin.globalshop.item.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.vo.ChannelAccountVO;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
 
 public interface IItemChannelAccountService {
 

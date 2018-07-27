@@ -3,7 +3,7 @@ package com.wangqin.globalshop.item.app.service;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO;
 
 
 public interface ItemIInventoryService {

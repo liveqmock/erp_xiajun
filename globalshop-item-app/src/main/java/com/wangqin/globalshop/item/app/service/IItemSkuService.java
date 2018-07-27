@@ -4,11 +4,10 @@ import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import org.apache.ibatis.annotations.Param;
+import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 
 
 public interface IItemSkuService  {

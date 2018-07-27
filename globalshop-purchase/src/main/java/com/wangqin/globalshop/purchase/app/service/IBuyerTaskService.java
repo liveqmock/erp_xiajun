@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.purchase.app.service;
 
-import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO;
 
 import java.util.List;
 

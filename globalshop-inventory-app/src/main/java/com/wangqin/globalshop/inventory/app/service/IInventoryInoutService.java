@@ -2,7 +2,7 @@ package com.wangqin.globalshop.inventory.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
 
 import java.util.List;
 

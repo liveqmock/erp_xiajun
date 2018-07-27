@@ -2,8 +2,7 @@ package com.wangqin.globalshop.channel.service.order;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.IShippingOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingOrderDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

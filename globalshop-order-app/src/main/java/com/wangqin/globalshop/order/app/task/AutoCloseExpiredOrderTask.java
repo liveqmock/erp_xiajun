@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.order.app.task;
 
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.channel.service.item.IItemService;
@@ -42,7 +42,7 @@ public class AutoCloseExpiredOrderTask {
 
     //先5分钟检查一次，后续缩小间隔到1分钟
     @Scheduled(cron = "0 0/1 * * * ?")
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(rollbackFor = BizCommonException.class)
     public void autoCloseExpiredOrder() {
         log.info("轮询关闭订单开始");
 //        List<String> errMsg = new ArrayList();
@@ -70,7 +70,7 @@ public class AutoCloseExpiredOrderTask {
         }
 //        if (errMsg.size() != 0){
 //            log.error(errMsg.toString());
-//            throw new ErpCommonException(errMsg.toString());
+//            throw new BizCommonException(errMsg.toString());
 //        }
         log.info("轮询关闭订单成功");
 

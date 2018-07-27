@@ -3,8 +3,7 @@ package com.wangqin.globalshop.inventory.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryInoutDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryInoutVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryInoutMapperExt;
 
 import com.wangqin.globalshop.inventory.app.service.IInventoryInoutService;

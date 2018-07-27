@@ -3,7 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemBrandDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

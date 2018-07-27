@@ -39,7 +39,7 @@
         <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
     </resultMap>
     
-    <resultMap id="SaleableMap" type="com.wangqin.globalshop.biz1.app.dto.InventoryItemSkuDTO" >
+    <resultMap id="SaleableMap" type="com.wangqin.globalshop.biz1.app.bean.dto.InventoryItemSkuDTO" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
         <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
@@ -134,7 +134,7 @@
              AND ((IFNULL(inv.inv,0)+IFNULL(inv.virtual_inv,0)-IFNULL(locked_inv,0)) > 0)
     </select>
 
-	<select id="queryItemSkusCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
+	<select id="queryItemSkusCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
         SELECT
         	count(1)
          FROM
@@ -174,7 +174,7 @@
     
     <!-- 查询sku列表 -->
     <!-- 可售库存=现货库存+虚拟库存-占用库存 -->
-    <select id="queryItemSkus" resultType="com.wangqin.globalshop.biz1.app.dto.ISkuDTO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
+    <select id="queryItemSkus" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
         SELECT
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
@@ -222,7 +222,7 @@
     </select>
     
     <!-- 根据条件查询itemSkuList，不涉及其他的表 ，不做分页-->
-     <select id="queryItemSkuListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
+     <select id="queryItemSkuListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
         SELECT
         	 T1.sku_code AS skuCode
         FROM
@@ -238,7 +238,7 @@
     </select>
     
     <!-- 通过skuCode查找单个sku -->
-     <select id="queryItemSkuBySkuCode" resultType="com.wangqin.globalshop.biz1.app.dto.ISkuDTO" parameterType="java.lang.String">
+     <select id="queryItemSkuBySkuCode" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO" parameterType="java.lang.String">
         SELECT
         	 T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
         	 T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
@@ -258,7 +258,7 @@
     </select>
 
     <!-- 根据id更新itemsku -->
-    <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO" >
+    <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO" >
     update item_sku
     <set >
       <if test="salePrice != null" >
@@ -722,7 +722,7 @@
      <!-- 根据itemCode查询sku列表,包含虚拟库存、颜色、尺寸这3个不在item_sku表里面的字段-->
      <!-- 商品编辑的时候使用 -->
      <!-- TODO颜色尺寸的查询 -->
-     <select id="querySkuListByItemCodeContainsVirtualInvScale" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO">
+     <select id="querySkuListByItemCodeContainsVirtualInvScale" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
      	select  <include refid="Base_Column_List_For_Item_Edit" />
      	from item_sku T1 LEFT JOIN inventory inv ON T1.sku_code=inv.sku_code
      	where T1.item_code = #{itemCode}

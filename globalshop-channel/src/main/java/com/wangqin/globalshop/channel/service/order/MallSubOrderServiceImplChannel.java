@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.channel.service.order;
 
 import com.google.common.collect.Maps;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.StockUpStatus;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.StockUpStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryBookingRecordDOMapperExt;
@@ -93,7 +93,7 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 //
 //				MallSubOrderDO erpOrder = mallSubOrderDOMapperExt.queryHaihuErpOrders(mallSubOrderSo);
 //				if (erpOrder == null) {
-//					throw new ErpCommonException("拆单数量不能超过订单数量,或订单状态不对");
+//					throw new BizCommonException("拆单数量不能超过订单数量,或订单状态不对");
 //				}
 //				this.splitErpOrder(erpOrder, outerOrderDetail.getQuantity());
 //				erpOrder.setReceiver("海狐海淘");
@@ -109,7 +109,7 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 //			}
 //
 //		} else {
-//			throw new ErpCommonException("拆单明细不能为空");
+//			throw new BizCommonException("拆单明细不能为空");
 //		}
 //	}
 

@@ -27,8 +27,8 @@
     </sql>
 
 
-    <select id="list" resultType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">
+    <select id="list" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO">
         SELECT
         buyer_task.id as id ,
         buyer_task.buyer_task_no as buyerTaskNo,
@@ -86,7 +86,7 @@
         ORDER BY buyer_task.gmt_create DESC
     </select>
 
-    <select id="selectVoById" resultType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO">
+    <select id="selectVoById" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO">
         SELECT
             buyer_task.*, buyer_task_detail.item_code as itemCode, buyer_task_detail.upc as upc, buyer_task_detail.sku_pic_url as skuPicUrl
         FROM

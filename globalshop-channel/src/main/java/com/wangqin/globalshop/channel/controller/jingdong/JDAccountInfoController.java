@@ -7,7 +7,7 @@ import com.jd.open.api.sdk.JdException;
 import com.jd.open.api.sdk.domain.seller.ShopSafService.ShopJosResult;
 import com.jd.open.api.sdk.request.seller.VenderShopQueryRequest;
 import com.jd.open.api.sdk.response.seller.VenderShopQueryResponse;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
@@ -219,7 +219,7 @@ public class JDAccountInfoController {
 //		pram.put("channelShop",JSON.toJSONString(channelShop));
 //		try {
 //			JSONObject json = HttpClientUtil.post("http://localhost:8100/channelshop/addOrupdate",pram);
-//		}catch (Exception e){
+//		}catch (exception e){
 //
 //		}
 //

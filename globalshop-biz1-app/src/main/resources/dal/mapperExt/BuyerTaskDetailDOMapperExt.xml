@@ -89,7 +89,7 @@
     </update>
 
 
-    <select id="taskDailyExportByTaskNo" resultType="com.wangqin.globalshop.biz1.app.vo.BuyerTaskExportDTO" parameterType="java.lang.String">
+    <select id="taskDailyExportByTaskNo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskExportDTO" parameterType="java.lang.String">
       SELECT b.item_name as itemName, b.sku_pic as skuPic,b.sku_code as skuCode,b.upc,b.brand_name as brand,a.count,c.title as taskTitle,c.gmt_create as gmtCreate,c.buyer_task_no as taskOrderNo, entry_count as entryCount,
       MAX(CASE s.scale_name WHEN '颜色' THEN s.scale_value ELSE null END ) color,
       MAX(CASE s.scale_name WHEN '尺寸' THEN s.scale_value ELSE null END ) scale,
