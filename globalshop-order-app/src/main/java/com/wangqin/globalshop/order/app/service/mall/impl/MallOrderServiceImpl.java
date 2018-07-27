@@ -2,11 +2,13 @@ package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
@@ -49,6 +51,8 @@ public class MallOrderServiceImpl implements IMallOrderService {
     private MallSubOrderMapperExt mallSubOrderDOMapper;
     @Autowired
     private IMallOrderService mallSubOrderService;
+    @Autowired
+    private CompanyDOMapperExt companyDOMapper;
 
     @Autowired
     private SequenceUtilMapperExt sequenceUtilMapperExt;
@@ -77,6 +81,10 @@ public class MallOrderServiceImpl implements IMallOrderService {
     @Transactional(rollbackFor = ErpCommonException.class)
     public void addOuterOrder(MallOrderVO outerOrder) {
         outerOrder.setOrderNo(CodeGenUtil.getOrderNo());
+        CompanyDO companyDO = companyDOMapper.selectByCompanyNo(AppUtil.getLoginUserCompanyNo());
+        if (companyDO == null){
+            throw new ErpCommonException("找不到对应的公司");
+        }
         List<MallSubOrderDO> os = outerOrder.getOuterOrderDetails();
         Double totalPrice = 0.0;
         String shopCode = CodeGenUtil.getShopCode();
@@ -91,15 +99,20 @@ public class MallOrderServiceImpl implements IMallOrderService {
             initSkuInfo2SubOrder(o);
             /**商品相关End*/
             initAddressInfo2SubOrder(o,outerOrder);
+            o.setFreight(0D);
+            o.setFreightReal(0D);
             o.setMemo(outerOrder.getMemo());
             o.setStatus(OrderStatus.NEW.getCode());
             o.setSubOrderNo(CodeGenUtil.getSubOrderNo());
             inventoryService.order(o);
             mallSubOrderDOMapper.insert(o);
+
         }
         outerOrder.setStatus(OrderStatus.NEW.getCode());
-//        outerOrder.setDealerName(deal.getName());
+        outerOrder.setDealerName(companyDO.getCompanyName());
         outerOrder.setShopCode(shopCode);
+        //todo 2018.7.27 缺少运费的算法
+        outerOrder.setFreight(0D);
         outerOrder.setMemo(outerOrder.getMemo());
         outerOrder.setTotalAmount(totalPrice);
         outerOrder.setActualAmount(totalPrice);

@@ -42,7 +42,7 @@ public class CodeGenUtil {
 	}
 
     public static String getShopCode() {
-		return "SHOP" + RandomUtils.nextInt(10000);
+		return "SHOP"+System.currentTimeMillis();
     }
 
 	public static String getOrderNo() {
