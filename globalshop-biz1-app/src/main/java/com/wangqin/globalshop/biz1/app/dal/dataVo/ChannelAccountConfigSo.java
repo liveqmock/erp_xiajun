@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.biz1.app.dal.dataSo;
+package com.wangqin.globalshop.biz1.app.dal.dataVo;
 
 /**
  * Create by 777 on 2018/5/24
