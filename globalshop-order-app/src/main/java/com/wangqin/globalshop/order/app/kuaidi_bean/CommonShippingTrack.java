@@ -212,4 +212,20 @@ public class CommonShippingTrack {
     public void setStateInfo(String stateInfo) {
         this.stateInfo = stateInfo;
     }
+
+    @Override
+    public String toString() {
+        return "CommonShippingTrack{" +
+                "platform='" + platform + '\'' +
+                ", shippingNo='" + shippingNo + '\'' +
+                ", logisticNo='" + logisticNo + '\'' +
+                ", logisticCompanyCode='" + logisticCompanyCode + '\'' +
+                ", logisticCompany='" + logisticCompany + '\'' +
+                ", status='" + status + '\'' +
+                ", statusInfo='" + statusInfo + '\'' +
+                ", state='" + state + '\'' +
+                ", stateInfo='" + stateInfo + '\'' +
+                ", shippingTrackInfo=" + shippingTrackInfo +
+                '}';
+    }
 }

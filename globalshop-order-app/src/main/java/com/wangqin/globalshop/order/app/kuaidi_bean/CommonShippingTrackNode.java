@@ -31,4 +31,12 @@ public class CommonShippingTrackNode {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    @Override
+    public String toString() {
+        return "CommonShippingTrackNode{" +
+                "date='" + date + '\'' +
+                ", info='" + info + '\'' +
+                '}';
+    }
 }
