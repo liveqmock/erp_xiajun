@@ -904,7 +904,7 @@ public class ItemServiceImplement implements IItemService {
                 String virInv = obj.get(12).toString();
                 virInv = StringUtil.isBlank(virInv) ? "0" : virInv;
                 if (isParseToLong(virInv)) {
-                    itemSku.setVirtualInv(Integer.valueOf(virInv));
+//                    itemSku.setVirtualInv(Integer.valueOf(virInv));
                     InventoryDO inventory = new InventoryDO();
                     inventory.setItemName(itemName);
                     inventory.setItemCode(itemCode);
