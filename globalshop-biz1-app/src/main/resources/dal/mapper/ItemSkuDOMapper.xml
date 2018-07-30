@@ -29,8 +29,9 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="sale_type" property="saleType" jdbcType="BIT" />
     <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="sku_rate" property="skuRate" jdbcType="DOUBLE" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" extends="BaseResultMap" >
     <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
@@ -39,7 +40,7 @@
     id, sku_code, item_code, item_name, company_no, category_code, category_name, upc, 
     saleable, purchase_price, freight, discount, logistic_type, cost_price, brand_name, 
     weight, sku_pic, package_code, package_name, package_en, package_weight, package_level_id, 
-    scale, model, status, sale_type, sale_price, creator, modifier
+    scale, model, status, sale_type, sale_price, sku_rate, modifier, creator
   </sql>
   <sql id="Blob_Column_List" >
     remark
@@ -68,8 +69,9 @@
       sku_pic, package_code, package_name, 
       package_en, package_weight, package_level_id, 
       scale, model, status, 
-      sale_type, sale_price, creator, 
-      modifier, remark)
+      sale_type, sale_price, sku_rate, 
+      modifier, creator, remark
+      )
     values (#{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
       #{companyNo,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}, 
       #{upc,jdbcType=VARCHAR}, #{saleable,jdbcType=TINYINT}, #{purchasePrice,jdbcType=DOUBLE}, 
@@ -78,8 +80,9 @@
       #{skuPic,jdbcType=VARCHAR}, #{packageCode,jdbcType=VARCHAR}, #{packageName,jdbcType=VARCHAR}, 
       #{packageEn,jdbcType=VARCHAR}, #{packageWeight,jdbcType=DOUBLE}, #{packageLevelId,jdbcType=VARCHAR}, 
       #{scale,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR})
+      #{saleType,jdbcType=BIT}, #{salePrice,jdbcType=DOUBLE}, #{skuRate,jdbcType=DOUBLE}, 
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -165,11 +168,14 @@
       <if test="salePrice != null" >
         sale_price,
       </if>
-      <if test="creator != null" >
-        creator,
+      <if test="skuRate != null" >
+        sku_rate,
       </if>
       <if test="modifier != null" >
         modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
       </if>
       <if test="remark != null" >
         remark,
@@ -254,11 +260,14 @@
       <if test="salePrice != null" >
         #{salePrice,jdbcType=DOUBLE},
       </if>
-      <if test="creator != null" >
-        #{creator,jdbcType=VARCHAR},
+      <if test="skuRate != null" >
+        #{skuRate,jdbcType=DOUBLE},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=LONGVARCHAR},
@@ -346,11 +355,14 @@
       <if test="salePrice != null" >
         sale_price = #{salePrice,jdbcType=DOUBLE},
       </if>
-      <if test="creator != null" >
-        creator = #{creator,jdbcType=VARCHAR},
+      <if test="skuRate != null" >
+        sku_rate = #{skuRate,jdbcType=DOUBLE},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=LONGVARCHAR},
@@ -386,8 +398,9 @@
       status = #{status,jdbcType=INTEGER},
       sale_type = #{saleType,jdbcType=BIT},
       sale_price = #{salePrice,jdbcType=DOUBLE},
-      creator = #{creator,jdbcType=VARCHAR},
+      sku_rate = #{skuRate,jdbcType=DOUBLE},
       modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -419,8 +432,9 @@
       status = #{status,jdbcType=INTEGER},
       sale_type = #{saleType,jdbcType=BIT},
       sale_price = #{salePrice,jdbcType=DOUBLE},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      sku_rate = #{skuRate,jdbcType=DOUBLE},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

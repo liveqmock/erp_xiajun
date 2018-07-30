@@ -1,8 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import lombok.ToString;
-
-@ToString
 public class AppletConfigDO extends BaseModel {
     private Long id;
 
