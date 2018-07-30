@@ -1,7 +1,8 @@
+#在item_sku表增加sku_rate字段
 ALTER TABLE `item_sku` ADD COLUMN `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例';
 
 
-
+#新建分佣申请表mall_commision_apply
 CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) DEFAULT NULL,
@@ -20,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+#订单快照表mall_sub_order_snapshot
 CREATE TABLE IF NOT EXISTS `mall_sub_order_snapshot` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) DEFAULT NULL,
