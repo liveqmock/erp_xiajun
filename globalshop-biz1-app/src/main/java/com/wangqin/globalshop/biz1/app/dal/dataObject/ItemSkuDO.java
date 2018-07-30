@@ -8,8 +8,6 @@ public class ItemSkuDO extends BaseModel {
     private String itemCode;
 
     private String itemName;
-    
-    private String color;
 
     private String companyNo;
 
@@ -57,13 +55,13 @@ public class ItemSkuDO extends BaseModel {
 
     private Double salePrice;
 
-    private String creator;
+    private Double skuRate;
 
     private String modifier;
 
+    private String creator;
+
     private String remark;
-    
-    private Integer virtualInv;
 
     public Long getId() {
         return id;
@@ -87,17 +85,9 @@ public class ItemSkuDO extends BaseModel {
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode == null ? null : itemCode.trim();
-    }    
-    
-    public String getColor() {
-		return color;
-	}
+    }
 
-	public void setColor(String color) {
-		this.color = color;
-	}
-
-	public String getItemName() {
+    public String getItemName() {
         return itemName;
     }
 
@@ -109,7 +99,6 @@ public class ItemSkuDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -290,22 +279,28 @@ public class ItemSkuDO extends BaseModel {
         this.salePrice = salePrice;
     }
 
-    public String getCreator() {
-        return creator;
+    public Double getSkuRate() {
+        return skuRate;
     }
 
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setSkuRate(Double skuRate) {
+        this.skuRate = skuRate;
     }
 
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 
     public String getRemark() {
@@ -315,14 +310,4 @@ public class ItemSkuDO extends BaseModel {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
-
-	public Integer getVirtualInv() {
-		return virtualInv;
-	}
-
-	public void setVirtualInv(Integer virtualInv) {
-		this.virtualInv = virtualInv;
-	}
-    
-    
 }
