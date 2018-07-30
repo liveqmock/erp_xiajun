@@ -9,6 +9,7 @@
         <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR"/>
         <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR"/>
         <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="quantity" property="quantity" jdbcType="BIGINT"/>
         <result column="operator_type" property="operatorType" jdbcType="TINYINT"/>
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
@@ -158,5 +159,83 @@
     		AND
     		is_del = 0
     		
+    </select>
+
+    <!-- 根据指定条件分页查询出入库记录 -->
+    <select id="listInventoryInout" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryInoutItemVO">
+        SELECT
+        T1.sku_code       skuCode,
+        T1.creator        creator,
+        T1.gmt_create     gmtCreate,
+        T1.shelf_no       shelfNo,
+        T1.quantity       quantity,
+        T1.remark         remark,
+        T1.operator_type  operatorType,
+        T2.item_name      itemName,
+        T2.upc            upc,
+        T2.sku_pic        skuPic,
+        T3.name           warehouseName
+        FROM
+        inventory_inout T1, item_sku T2, warehouse T3
+        <where>
+            AND T1.sku_code = T2.sku_code
+            AND T1.warehouse_no = T3.warehouse_no
+            <if test="inventoryInoutQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{inventoryInoutQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryInoutQueryVO.skuCode != null">
+                AND T1.sku_code = #{inventoryInoutQueryVO.skuCode}
+            </if>
+            <if test="inventoryInoutQueryVO.upc != null">
+                AND T2.upc = #{inventoryInoutQueryVO.upc}
+            </if>
+            <if test="inventoryInoutQueryVO.itemName != null">
+                AND T2.item_name = #{inventoryInoutQueryVO.itemName}
+            </if>
+            <if test="inventoryInoutQueryVO.operatorType != null">
+                AND T1.operator_type = #{inventoryInoutQueryVO.operatorType}
+            </if>
+            <if test="inventoryInoutQueryVO.shelfNo != null">
+                AND T1.shelf_no = #{inventoryInoutQueryVO.shelfNo}
+            </if>
+            AND T1.company_no = #{inventoryInoutQueryVO.companyNo}
+            AND T1.is_del = 0
+        </where>
+        ORDER BY T1.gmt_create DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex}, #{pageQueryParam.pageSize}
+        </if>
+    </select>
+
+    <!-- 获得指定条件查询出入库记录数目 -->
+    <select id="countInventoryInout" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        inventory_inout T1, item_sku T2, warehouse T3
+        <where>
+            AND T1.sku_code = T2.sku_code
+            AND T1.warehouse_no = T3.warehouse_no
+            <if test="inventoryInoutQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{inventoryInoutQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryInoutQueryVO.skuCode != null">
+                AND T1.sku_code = #{inventoryInoutQueryVO.skuCode}
+            </if>
+            <if test="inventoryInoutQueryVO.upc != null">
+                AND T2.upc = #{inventoryInoutQueryVO.upc}
+            </if>
+            <if test="inventoryInoutQueryVO.itemName != null">
+                AND T2.item_name = #{inventoryInoutQueryVO.itemName}
+            </if>
+            <if test="inventoryInoutQueryVO.operatorType != null">
+                AND T1.operator_type = #{inventoryInoutQueryVO.operatorType}
+            </if>
+            <if test="inventoryInoutQueryVO.shelfNo != null">
+                AND T1.shelf_no = #{inventoryInoutQueryVO.shelfNo}
+            </if>
+            AND T1.company_no = #{inventoryInoutQueryVO.companyNo}
+            AND T1.is_del = 0
+        </where>
     </select>
 </mapper>

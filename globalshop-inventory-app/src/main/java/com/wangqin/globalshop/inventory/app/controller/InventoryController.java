@@ -1,13 +1,14 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -254,6 +255,7 @@ public class InventoryController {
 //        return result;
     }
 
+
     /**
      * 出入库流水明细
      *
@@ -261,24 +263,26 @@ public class InventoryController {
      */
     @RequestMapping("/queryInventoryInout")
     @ResponseBody
-    public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-        JsonResult<List<InventoryQueryVO>> result = new JsonResult<>();
-        List<InventoryQueryVO> inventoryList = inventoryInoutService.queryInventoryInoutsVo(inventoryQueryVO);
-        for (InventoryQueryVO inv : inventoryList) {
-            ItemSkuDO itemSku = inventoryInoutService.selectItemBySkuCode(inv.getSkuCode());
-            InventoryOnWareHouseDO warehouseDO = inventoryAreaService.selectByInventoryOnWarehouseNo(inv.getInventoryOnWarehouseNo());
-            if (IsEmptyUtil.isCollectionNotEmpty(inventoryList)) {
-                inv.setItemName(itemSku.getItemName());
-                inv.setUpc(itemSku.getUpc());
-                inv.setSkuPic(itemSku.getSkuPic());
-                inv.setWarehouseName(warehouseDO.getWarehouseName());
-                inv.setCreator(itemSku.getCreator());
-            }
+    public Object queryInventoryInout(InventoryInoutQueryVO inventoryInoutQueryVO, PageQueryParam pageQueryParam) {
+        JsonPageResult<List<InventoryInoutItemVO>> result = new JsonPageResult<>();
+        try {
+
+            List<InventoryInoutItemVO> inventoryInoutList =
+                    inventoryInoutService.listInventoryInout(inventoryInoutQueryVO, pageQueryParam);
+
+            int totalCount = inventoryInoutService.countInventoryInout(inventoryInoutQueryVO);
+
+            return result.buildData(inventoryInoutList)
+                    .buildTotalCount(totalCount)
+                    .buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            return result.buildMsg(e.getErrorMsg())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return result.buildMsg("查询出现错误")
+                    .buildIsSuccess(false);
         }
-        result.buildData(inventoryList);
-        return result.buildIsSuccess(true);
-
-
     }
 
     /**
