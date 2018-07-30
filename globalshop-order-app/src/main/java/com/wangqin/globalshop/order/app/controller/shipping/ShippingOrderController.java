@@ -845,19 +845,27 @@ public class ShippingOrderController {
         return result;
     }
 
+    /**
+     *
+     * TODO: 后续需要优化
+     * @param shippingNo
+     * @return
+     */
     private List<ShippingTrackVO> getShippingTrackList(String shippingNo){
+        // 从 kuaidi100 获得物流信息
         Kuaidi100ShippingTrackResult kuaidi100Result = kuaidi100Service.queryShippingTrack(shippingNo);
-        CommonShippingTrack shippingTrack = kuaidi100Result.toCommonShippingTrack();
-
-        List<CommonShippingTrackNode> shippingTrackInfos = shippingTrack.getShippingTrackInfo();
+        // 将快递100物流轨迹信息转换为通用物流轨迹信息
+        CommonShippingTrack commonShippingTrack = kuaidi100Result.toCommonShippingTrack();
+        // 目前为了兼容旧接口，还需要进行转换
+        List<CommonShippingTrackNode> shippingTrackInfos = commonShippingTrack.getShippingTrackInfo();
         List<ShippingTrackVO> shippingTrackVOList = new ArrayList<>();
 
         if (shippingTrackInfos != null) {
             shippingTrackInfos.forEach(shippingTrackInfo -> {
-                ShippingTrackVO shippingOne = new ShippingTrackVO();
-                shippingOne.setInfo(shippingTrackInfo.getInfo());
-                shippingOne.setGmtCreate(DateUtil.parseDate(shippingTrackInfo.getDate()));
-                shippingTrackVOList.add(shippingOne);
+                ShippingTrackVO shippingTrackVO = new ShippingTrackVO();
+                shippingTrackVO.setInfo(shippingTrackInfo.getInfo());
+                shippingTrackVO.setGmtCreate(DateUtil.parseDate(shippingTrackInfo.getDate()));
+                shippingTrackVOList.add(shippingTrackVO);
             });
         }
         return shippingTrackVOList;

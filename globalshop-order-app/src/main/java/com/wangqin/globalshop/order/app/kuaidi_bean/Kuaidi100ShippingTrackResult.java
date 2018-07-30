@@ -91,7 +91,7 @@ public class Kuaidi100ShippingTrackResult {
     /**
      * 物流轨迹信息
      */
-    private ArrayList<Kuaidi100ShippingTrackResultNode> data;
+    private List<Kuaidi100ShippingTrackResultNode> data;
 
     public Boolean getResult() {
         return result;
@@ -232,27 +232,12 @@ public class Kuaidi100ShippingTrackResult {
     }
 
 
-    public ArrayList<Kuaidi100ShippingTrackResultNode> getData() {
+    public List<Kuaidi100ShippingTrackResultNode> getData() {
         return data;
     }
 
-    public void setData(ArrayList<Kuaidi100ShippingTrackResultNode> data) {
+    public void setData(List<Kuaidi100ShippingTrackResultNode> data) {
         this.data = data;
-    }
-
-    @Override
-    public Kuaidi100ShippingTrackResult clone() {
-        Kuaidi100ShippingTrackResult r = new Kuaidi100ShippingTrackResult();
-        r.setCom(this.getCom());
-        r.setIscheck(this.getIscheck());
-        r.setMessage(this.getMessage());
-        r.setNu(this.getNu());
-        r.setState(this.getState());
-        r.setStatus(this.getStatus());
-        r.setCondition(this.getCondition());
-        r.setData((ArrayList<Kuaidi100ShippingTrackResultNode>) this.getData().clone());
-
-        return r;
     }
 
     @Override
@@ -280,8 +265,10 @@ public class Kuaidi100ShippingTrackResult {
             return new CommonShippingTrack
                     .Builder(shippingTrackInfo)
                     .platform("kuaidi100")
-                    .status(statusInfo)
-                    .state(stateInfo)
+                    .status(status)
+                    .statusInfo(statusInfo)
+                    .state(state)
+                    .stateInfo(stateInfo)
                     .logisticNo(nu)
                     .logisticCompanyCode(com)
                     .build();

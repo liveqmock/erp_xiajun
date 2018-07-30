@@ -30,13 +30,21 @@ public class CommonShippingTrack {
      */
     private String logisticCompany;
     /**
-     * 查询结果状态信息
+     * 查询结果状态码
      */
     private String status;
     /**
-     * 运单状态信息
+     * 查询结果状态信息
+     */
+    private String statusInfo;
+    /**
+     * 运单状态码
      */
     private String state;
+    /**
+     * 运单状态信息
+     */
+    private String stateInfo;
     /**
      * 物流轨迹节点信息
      */
@@ -52,45 +60,57 @@ public class CommonShippingTrack {
         private String logisticCompanyCode;
         private String logisticCompany;
         private String status;
+        private String statusInfo;
         private String state;
+        private String stateInfo;
         private List<CommonShippingTrackNode> shippingTrackInfo;
 
-        public Builder(List<CommonShippingTrackNode> shippingTrackInfo){
+        public Builder(List<CommonShippingTrackNode> shippingTrackInfo) {
             this.shippingTrackInfo = shippingTrackInfo;
         }
 
-        public Builder platform(String platform){
+        public Builder platform(String platform) {
             this.platform = platform;
             return this;
         }
 
-        public Builder shippingNo(String shippingNo){
+        public Builder shippingNo(String shippingNo) {
             this.shippingNo = shippingNo;
             return this;
         }
 
-        public Builder logisticNo(String logisticNo){
+        public Builder logisticNo(String logisticNo) {
             this.logisticNo = logisticNo;
             return this;
         }
 
-        public Builder logisticCompanyCode(String logisticCompanyCode){
+        public Builder logisticCompanyCode(String logisticCompanyCode) {
             this.logisticCompanyCode = logisticCompanyCode;
             return this;
         }
 
-        public Builder logisticCompany(String logisticCompany){
+        public Builder logisticCompany(String logisticCompany) {
             this.logisticCompany = logisticCompany;
             return this;
         }
 
-        public Builder status(String status){
+        public Builder status(String status) {
             this.status = status;
             return this;
         }
 
-        public Builder state(String state){
+        public Builder statusInfo(String statusInfo) {
+            this.statusInfo = statusInfo;
+            return this;
+        }
+
+        public Builder state(String state) {
             this.state = state;
+            return this;
+        }
+
+        public Builder stateInfo(String stateInfo) {
+            this.stateInfo = stateInfo;
             return this;
         }
 
@@ -100,7 +120,7 @@ public class CommonShippingTrack {
 
     }
 
-    private CommonShippingTrack(Builder builder){
+    private CommonShippingTrack(Builder builder) {
         this.shippingTrackInfo = builder.shippingTrackInfo;
         this.platform = builder.platform;
         this.shippingNo = builder.shippingNo;
@@ -108,7 +128,9 @@ public class CommonShippingTrack {
         this.logisticCompanyCode = builder.logisticCompanyCode;
         this.logisticCompany = builder.logisticCompany;
         this.status = builder.status;
+        this.statusInfo = builder.statusInfo;
         this.state = builder.state;
+        this.stateInfo = builder.stateInfo;
     }
 
     public String getPlatform() {
@@ -173,5 +195,21 @@ public class CommonShippingTrack {
 
     public void setShippingTrackInfo(List<CommonShippingTrackNode> shippingTrackInfo) {
         this.shippingTrackInfo = shippingTrackInfo;
+    }
+
+    public String getStatusInfo() {
+        return statusInfo;
+    }
+
+    public void setStatusInfo(String statusInfo) {
+        this.statusInfo = statusInfo;
+    }
+
+    public String getStateInfo() {
+        return stateInfo;
+    }
+
+    public void setStateInfo(String stateInfo) {
+        this.stateInfo = stateInfo;
     }
 }
