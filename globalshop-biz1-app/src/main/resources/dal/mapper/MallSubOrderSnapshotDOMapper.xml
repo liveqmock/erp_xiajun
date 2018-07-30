@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallSubOrderSnapshotDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderSnapshotDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+    <result column="upc" property="upc" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="VARCHAR" />
+    <result column="ext" property="ext" jdbcType="VARCHAR" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, order_no, sub_order_no, item_code, item_name, sku_code, sku_pic, 
+    upc, scale, ext, sale_price, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mall_sub_order_snapshot
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mall_sub_order_snapshot
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderSnapshotDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_sub_order_snapshot (company_no, order_no, sub_order_no, 
+      item_code, item_name, sku_code, 
+      sku_pic, upc, scale, 
+      ext, sale_price, creator, 
+      modifier)
+    values (#{companyNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{subOrderNo,jdbcType=VARCHAR}, 
+      #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{skuPic,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
+      #{ext,jdbcType=VARCHAR}, #{salePrice,jdbcType=DECIMAL}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderSnapshotDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_sub_order_snapshot
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="skuCode != null" >
+        sku_code,
+      </if>
+      <if test="skuPic != null" >
+        sku_pic,
+      </if>
+      <if test="upc != null" >
+        upc,
+      </if>
+      <if test="scale != null" >
+        scale,
+      </if>
+      <if test="ext != null" >
+        ext,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null" >
+        #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null" >
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuPic != null" >
+        #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null" >
+        #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="ext != null" >
+        #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderSnapshotDO" >
+    update mall_sub_order_snapshot
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null" >
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuPic != null" >
+        sku_pic = #{skuPic,jdbcType=VARCHAR},
+      </if>
+      <if test="upc != null" >
+        upc = #{upc,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="ext != null" >
+        ext = #{ext,jdbcType=VARCHAR},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderSnapshotDO" >
+    update mall_sub_order_snapshot
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_pic = #{skuPic,jdbcType=VARCHAR},
+      upc = #{upc,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=VARCHAR},
+      ext = #{ext,jdbcType=VARCHAR},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
