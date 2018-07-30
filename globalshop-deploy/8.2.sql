@@ -1,0 +1,1 @@
+ALTER TABLE `item_sku` ADD COLUMN `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例';

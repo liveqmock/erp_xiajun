@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.alibaba.dubbo.config.support.Parameter;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
 import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
@@ -16,6 +17,10 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
 
+	List<ItemDO> queryItemSalable(Byte isSale);
+	
+	void updateItemIsSale(@Param("isSale")Byte isSale,@Param("itemCode")String itemCode);
+	
 	ItemDO queryItemDOByItemCode(String itemCode);
 	
 	String queryItemCodeById(Long id);
