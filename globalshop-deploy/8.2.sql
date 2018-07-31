@@ -1,4 +1,3 @@
-
 ALTER TABLE `item_sku` ADD COLUMN `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例';
 
 
@@ -10,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
   `sub_order_no` varchar(64) DEFAULT NULL,
   `commision` varchar(4096) DEFAULT NULL,
   `status` varchar(2) DEFAULT NULL COMMENT '0-新建; 1-订单签收确认; 2-清分',
+  `is_sync` int(2) DEFAULT '0' COMMENT '是否同步',
   `order_time` varchar(64) DEFAULT NULL,
   `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `share_user_id` varchar(64) DEFAULT NULL,

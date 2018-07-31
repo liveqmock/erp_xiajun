@@ -1,7 +1,8 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestMapperExt;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
@@ -21,12 +22,15 @@ public class InventoryOutManifestServiceImpl implements InventoryOutManifestServ
     @Autowired
     private InventoryOutManifestMapperExt inventoryOutManifestMapper;
 
-    /**
-     * 查询出货单列表
-     */
     @Override
-    public List<InventoryOutManifestDO> listInventoryOutManifest(InventoryOutManifestVO inventoryOutManifestVO) {
-        return inventoryOutManifestMapper.listInventoryOutManifest(inventoryOutManifestVO);
+    public List<InventoryOutManifestDO> listInventoryOutManifest(InventoryOutManifestQueryVO inventoryOutManifestQueryVO, PageQueryParam pageQueryParam) {
+        pageQueryParam.calculateRowIndex();
+        return inventoryOutManifestMapper.listInventoryOutManifest(inventoryOutManifestQueryVO, pageQueryParam);
+    }
+
+    @Override
+    public int countInventoryOutManifest(InventoryOutManifestQueryVO inventoryOutManifestQueryVO) {
+        return inventoryOutManifestMapper.countInventoryOutManifest(inventoryOutManifestQueryVO);
     }
 
     /**

@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.inventory.app.service;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
 
 import java.util.List;
 import java.util.Set;
@@ -39,10 +39,10 @@ public interface IInventoryOutManifestDetailService {
     /**
      * 查询出货单详情列表
      *
-     * @param inventoryOutManifestVO inventoryOutManifestVO
+     * @param inventoryOutManifestQueryVO inventoryOutManifestQueryVO
      * @return List<InventoryOutManifestDO>
      */
-    List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestVO inventoryOutManifestVO);
+    List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestQueryVO inventoryOutManifestQueryVO);
 
     /**
      * 添加出货单详情

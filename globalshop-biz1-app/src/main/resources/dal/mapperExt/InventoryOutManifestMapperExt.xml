@@ -28,7 +28,7 @@
     </sql>
 
     <select id="queryInventoryOutCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestQueryVO">
         SELECT
         count(1)
         FROM
@@ -49,35 +49,6 @@
         </if>
     </select>
 
-    <select id="listInventoryOutManifest"
-            resultMap="BaseResultMap"
-            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM
-        inventory_out_manifest T1
-        <where>
-            <if test="warehouseNo != null">
-                and warehouse_no = #{warehouseNo}
-            </if>
-            <if test=" inventoryOutNo != null and inventoryOutNo != '' ">
-                and T1.inventory_out_no = #{inventoryOutNo}
-            </if>
-            <if test=" startGmt!= null ">
-                and   <![CDATA[  T1.gmt_create >= #{startGmt} ]]>
-            </if>
-            <if test=" endGmt != null ">
-                and    <![CDATA[  T1.gmt_create <= #{endGmt} ]]>
-            </if>
-            and T1.is_del = 0
-        </where>
-        order by T1.id desc
-        <if test="firstStart != null and pageSize != null">
-            <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-        </if>
-
-    </select>
-
     <update id="updateIsdelById" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO">
         update inventory_out_manifest
         <set>
@@ -87,5 +58,57 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
+
+    <!-- 根据指定条件分页查询出库单记录 -->
+    <select id="listInventoryOutManifest" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_out_manifest T1
+        <where>
+            <if test="inventoryOutManifestQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{inventoryOutManifestQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryOutManifestQueryVO.inventoryOutNo != null">
+                AND T1.inventory_out_no = #{inventoryOutManifestQueryVO.inventoryOutNo}
+            </if>
+            <if test="inventoryOutManifestQueryVO.startGmt!= null ">
+                AND T1.gmt_create &gt;= #{inventoryOutManifestQueryVO.startGmt}
+            </if>
+            <if test="inventoryOutManifestQueryVO.endGmt != null ">
+                AND T1.gmt_create &lt;= #{inventoryOutManifestQueryVO.endGmt}
+            </if>
+            AND T1.company_no = #{inventoryOutManifestQueryVO.companyNo}
+            AND T1.is_del = 0
+        </where>
+        ORDER BY T1.id DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex},#{pageQueryParam.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据指定条件查询出库单记录数目 -->
+    <select id="countInventoryOutManifest" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        inventory_out_manifest T1
+        <where>
+            <if test="inventoryOutManifestQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{inventoryOutManifestQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryOutManifestQueryVO.inventoryOutNo != null">
+                AND T1.inventory_out_no = #{inventoryOutManifestQueryVO.inventoryOutNo}
+            </if>
+            <if test="inventoryOutManifestQueryVO.startGmt!= null ">
+                AND T1.gmt_create &gt;= #{inventoryOutManifestQueryVO.startGmt}
+            </if>
+            <if test="inventoryOutManifestQueryVO.endGmt != null ">
+                AND T1.gmt_create &lt;= #{inventoryOutManifestQueryVO.endGmt}
+            </if>
+            AND T1.company_no = #{inventoryOutManifestQueryVO.companyNo}
+            AND T1.is_del = 0
+        </where>
+    </select>
 
 </mapper>

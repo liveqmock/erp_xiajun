@@ -1,7 +1,8 @@
 package com.wangqin.globalshop.inventory.app.service;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestQueryVO;
 
 import java.util.List;
 
@@ -14,12 +15,22 @@ import java.util.List;
 public interface InventoryOutManifestService {
 
     /**
-     * 查询出库单列表
+     * 根据指定条件分页查询出库单记录
      *
-     * @param inventoryOutManifestVO inventoryOutManifestVO
+     * @param inventoryOutManifestQueryVO
+     * @param pageQueryParam
      * @return List<InventoryOutManifestDO>
      */
-    List<InventoryOutManifestDO> listInventoryOutManifest(InventoryOutManifestVO inventoryOutManifestVO);
+    List<InventoryOutManifestDO> listInventoryOutManifest(InventoryOutManifestQueryVO inventoryOutManifestQueryVO,
+                                                          PageQueryParam pageQueryParam);
+
+    /**
+     * 根据指定条件查询出库单记录数目
+     *
+     * @param inventoryOutManifestQueryVO
+     * @return
+     */
+    int countInventoryOutManifest(InventoryOutManifestQueryVO inventoryOutManifestQueryVO);
 
     /**
      * 添加出货单
