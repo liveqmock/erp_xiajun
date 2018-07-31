@@ -27,6 +27,13 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
     MallSaleAgentDO getByCompanyNoAndUserNo(@Param("companyNo") String companyNo, @Param("userNo") String userNo);
 
     /**
+     *
+     * @param mallSaleAgentDO
+     * @return
+     */
+    int updateByCompanyNoAndUserNo(MallSaleAgentDO mallSaleAgentDO);
+
+    /**
      * 根据指定条件分页查询代理列表
      *
      * @param mallSaleAgentQueryVO
