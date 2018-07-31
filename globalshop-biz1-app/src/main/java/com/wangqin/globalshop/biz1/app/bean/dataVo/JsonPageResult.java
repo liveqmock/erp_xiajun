@@ -3,11 +3,8 @@ package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
 /**
  * json分页结果封装
- *
  */
 public class JsonPageResult<T> extends JsonResult<T> {
-
-	private static final long serialVersionUID = -6468515082941696950L;
 
 	private int pageIndex = 1;
 
@@ -16,8 +13,6 @@ public class JsonPageResult<T> extends JsonResult<T> {
 	private int totalCount;
 	
 	private int totalPage;
-	
-	private boolean agentRoler = false;
 	
 	public int getPageIndex() {
 		return pageIndex;
@@ -95,22 +90,6 @@ public class JsonPageResult<T> extends JsonResult<T> {
 		JsonPageResult<T> result = new JsonPageResult<T>();
 		return result.buildData(data).buildMsg(msg).buildTotalCount(totalCount).buildIsSuccess(true).buildPageIndex(pageIndex).buildTotalPage(totalPage);
 	}
-/*	public static <T> JsonPageResult<T> buildSuccess(T data, int totalCount, int totalPage, int pageIndex){
-		JsonPageResult<T> result = new JsonPageResult<T>();
-		return result.buildData(data).buildMsg(CommonConstant.DEFAULT_EMPTY).buildTotalCount(totalCount).buildIsSuccess(true).buildPageIndex(pageIndex).buildTotalPage(totalPage);
-	}
-	public static <T> JsonPageResult<T> buildSuccess(T data, int totalCount, int totalPage){
-		JsonPageResult<T> result = new JsonPageResult<T>();
-		return result.buildData(data).buildMsg(CommonConstant.DEFAULT_EMPTY).buildTotalCount(totalCount).buildIsSuccess(true).buildPageIndex(0).buildTotalPage(totalPage);
-	}
-	public static <T> JsonPageResult<T> buildSuccess(T data, int totalCount){
-		JsonPageResult<T> result = new JsonPageResult<T>();
-		return result.buildData(data).buildMsg(CommonConstant.DEFAULT_EMPTY).buildTotalCount(totalCount).buildIsSuccess(true).buildPageIndex(0).buildTotalPage(0);
-	}
-	public static <T> JsonPageResult<T> buildSuccess(T data){
-		JsonPageResult<T> result = new JsonPageResult<T>();
-		return result.buildData(data).buildMsg(CommonConstant.DEFAULT_EMPTY).buildTotalCount(0).buildIsSuccess(true).buildPageIndex(0).buildTotalPage(0);
-	}*/
 
 	public static <T> JsonPageResult<T> buildError(String msg) {
 		JsonPageResult<T> result = new JsonPageResult<T>();
@@ -145,14 +124,4 @@ public class JsonPageResult<T> extends JsonResult<T> {
 		pageQueryVO.setFirstStart(this.getFirstStart());
 		return this;
 	}
-
-	public boolean isAgentRoler() {
-		return agentRoler;
-	}
-
-	public void setAgentRoler(boolean agentRoler) {
-		this.agentRoler = agentRoler;
-	}
-	
-
 }

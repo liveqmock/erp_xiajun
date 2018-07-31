@@ -32,7 +32,7 @@ public class PageQueryParam {
     /**
      * 分页查询结果总数
      */
-    private Integer totalNum;
+    private Integer totalCount;
 
     /**
      * 根据页码和页面大小，计算出起始行索引，用于分页查询
