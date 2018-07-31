@@ -15,6 +15,8 @@ public class MallCommisionApplyDO extends BaseModel {
 
     private String status;
 
+    private Integer isSync;
+
     private String orderTime;
 
     private Date orderDate;
@@ -71,6 +73,14 @@ public class MallCommisionApplyDO extends BaseModel {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
+    }
+
+    public Integer getIsSync() {
+        return isSync;
+    }
+
+    public void setIsSync(Integer isSync) {
+        this.isSync = isSync;
     }
 
     public String getOrderTime() {
