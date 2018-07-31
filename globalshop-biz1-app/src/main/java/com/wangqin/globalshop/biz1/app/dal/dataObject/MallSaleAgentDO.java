@@ -33,7 +33,7 @@ public class MallSaleAgentDO extends BaseModel {
 
     private Double commissionValue;
 
-    private Date firstLoginTime;
+    private Date joinTime;
 
     private Date lastLoginTime;
 
@@ -161,12 +161,12 @@ public class MallSaleAgentDO extends BaseModel {
         this.commissionValue = commissionValue;
     }
 
-    public Date getFirstLoginTime() {
-        return firstLoginTime;
+    public Date getJoinTime() {
+        return joinTime;
     }
 
-    public void setFirstLoginTime(Date firstLoginTime) {
-        this.firstLoginTime = firstLoginTime;
+    public void setJoinTime(Date joinTime) {
+        this.joinTime = joinTime;
     }
 
     public Date getLastLoginTime() {

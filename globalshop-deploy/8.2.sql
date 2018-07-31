@@ -61,7 +61,7 @@ CREATE TABLE `mall_sale_agent` (
   `country` varchar(64) DEFAULT NULL,
   `commission_mode` bigint(18) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
   `commission_value` double(6,2) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
-  `first_login_time` datetime DEFAULT NULL,
+  `join_time` datetime DEFAULT NULL COMMENT '加入时间',
   `last_login_time` datetime DEFAULT NULL,
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
