@@ -207,7 +207,7 @@
         </if>
     </select>
 
-    <!-- 获得指定条件查询出入库记录数目 -->
+    <!-- 根据指定条件查询出入库记录数目 -->
     <select id="countInventoryInout" resultType="java.lang.Integer">
         SELECT
         COUNT(*)

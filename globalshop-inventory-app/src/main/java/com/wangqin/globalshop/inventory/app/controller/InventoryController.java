@@ -443,11 +443,11 @@ public class InventoryController {
         String companyNo = AppUtil.getLoginUserCompanyNo();
 
         if (StringUtil.isNotBlank(inventoryOutNo) && StringUtil.isNotBlank(companyNo)) {
-            InventoryOutManifestVO inventoryOutManifestVO = new InventoryOutManifestVO();
-            inventoryOutManifestVO.setInventoryOutNo(inventoryOutNo);
-            inventoryOutManifestVO.setCompanyNo(companyNo);
+            InventoryOutManifestQueryVO inventoryOutManifestQueryVO = new InventoryOutManifestQueryVO();
+            inventoryOutManifestQueryVO.setInventoryOutNo(inventoryOutNo);
+            inventoryOutManifestQueryVO.setCompanyNo(companyNo);
             List<InventoryOutManifestDetailDO> inventoryOutManifestDetailList =
-                    inventoryOutManifestDetailService.listByInventoryOutManifestVO(inventoryOutManifestVO);
+                    inventoryOutManifestDetailService.listByInventoryOutManifestVO(inventoryOutManifestQueryVO);
 
             if (inventoryOutManifestDetailList == null || inventoryOutManifestDetailList.size() <= 0) {
                 result.buildIsSuccess(false).buildMsg("没有对应的数据");
@@ -528,21 +528,28 @@ public class InventoryController {
     /**
      * 查询出库单列表
      *
-     * @param inventoryOutManifestVO
+     * @param inventoryOutManifestQueryVO
      * @return
      */
     @RequestMapping("/inventoryOutQueryList")
     @ResponseBody
-    public Object inventoryOutQueryList(InventoryOutManifestVO inventoryOutManifestVO) {
-        JsonResult<List<InventoryOutManifestDO>> result = new JsonResult<>();
+    public Object inventoryOutQueryList(InventoryOutManifestQueryVO inventoryOutManifestQueryVO,
+                                        PageQueryParam pageQueryParam) {
+        JsonPageResult<List<InventoryOutManifestDO>> result = new JsonPageResult<>();
+
         try {
             List<InventoryOutManifestDO> inventoryOutManifestDOList =
-                    inventoryOutManifestService.listInventoryOutManifest(inventoryOutManifestVO);
-            result.buildData(inventoryOutManifestDOList);
-            result.buildIsSuccess(true);
+                    inventoryOutManifestService.listInventoryOutManifest(inventoryOutManifestQueryVO, pageQueryParam);
+            int totalCount = inventoryOutManifestService.countInventoryOutManifest(inventoryOutManifestQueryVO);
+
+            result.buildData(inventoryOutManifestDOList)
+                    .buildTotalCount(totalCount)
+                    .buildIsSuccess(true);
         } catch (Exception e) {
             e.printStackTrace();
-            result.buildIsSuccess(false);
+
+            result.buildMsg("查询出错")
+                    .buildIsSuccess(false);
         }
         return result;
     }
