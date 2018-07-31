@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
   `is_sync` int(2) DEFAULT '0' COMMENT '是否同步',
   `order_time` varchar(64) DEFAULT NULL,
   `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `receive_time` varchar(64) DEFAULT NULL COMMENT '签收时间',
+  `receive_date` datetime DEFAULT NULL COMMENT '签收日期',
   `share_user_id` varchar(64) DEFAULT NULL,
   `is_del` tinyint(1) DEFAULT '0',
   `creator` varchar(32) DEFAULT NULL,
