@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.CommissionSumarySettlementDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="settlement_no" property="settlementNo" jdbcType="VARCHAR" />
+    <result column="share_user_id" property="shareUserId" jdbcType="VARCHAR" />
+    <result column="share_user_name" property="shareUserName" jdbcType="VARCHAR" />
+    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+    <result column="settlement" property="settlement" jdbcType="DECIMAL" />
+    <result column="detail_count" property="detailCount" jdbcType="INTEGER" />
+    <result column="settlement_time" property="settlementTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, status, modifier, creator, settlement_no, share_user_id, share_user_name, 
+    total_price, settlement, detail_count, settlement_time, remark, pay_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from commission_sumary_settlement
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from commission_sumary_settlement
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into commission_sumary_settlement (company_no, status, modifier, 
+      creator, settlement_no, share_user_id, 
+      share_user_name, total_price, settlement, 
+      detail_count, settlement_time, remark, 
+      pay_type)
+    values (#{companyNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{modifier,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{settlementNo,jdbcType=VARCHAR}, #{shareUserId,jdbcType=VARCHAR}, 
+      #{shareUserName,jdbcType=VARCHAR}, #{totalPrice,jdbcType=DECIMAL}, #{settlement,jdbcType=DECIMAL}, 
+      #{detailCount,jdbcType=INTEGER}, #{settlementTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into commission_sumary_settlement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="settlementNo != null" >
+        settlement_no,
+      </if>
+      <if test="shareUserId != null" >
+        share_user_id,
+      </if>
+      <if test="shareUserName != null" >
+        share_user_name,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="settlement != null" >
+        settlement,
+      </if>
+      <if test="detailCount != null" >
+        detail_count,
+      </if>
+      <if test="settlementTime != null" >
+        settlement_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementNo != null" >
+        #{settlementNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUserId != null" >
+        #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUserName != null" >
+        #{shareUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="settlement != null" >
+        #{settlement,jdbcType=DECIMAL},
+      </if>
+      <if test="detailCount != null" >
+        #{detailCount,jdbcType=INTEGER},
+      </if>
+      <if test="settlementTime != null" >
+        #{settlementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO" >
+    update commission_sumary_settlement
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementNo != null" >
+        settlement_no = #{settlementNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUserId != null" >
+        share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUserName != null" >
+        share_user_name = #{shareUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="settlement != null" >
+        settlement = #{settlement,jdbcType=DECIMAL},
+      </if>
+      <if test="detailCount != null" >
+        detail_count = #{detailCount,jdbcType=INTEGER},
+      </if>
+      <if test="settlementTime != null" >
+        settlement_time = #{settlementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO" >
+    update commission_sumary_settlement
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      settlement_no = #{settlementNo,jdbcType=VARCHAR},
+      share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      share_user_name = #{shareUserName,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      settlement = #{settlement,jdbcType=DECIMAL},
+      detail_count = #{detailCount,jdbcType=INTEGER},
+      settlement_time = #{settlementTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
