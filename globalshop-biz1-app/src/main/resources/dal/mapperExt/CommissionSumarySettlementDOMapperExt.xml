@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.CommissionSumarySettlementDOMapperExt" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="settlement_no" property="settlementNo" jdbcType="VARCHAR" />
+        <result column="share_user_id" property="shareUserId" jdbcType="VARCHAR" />
+        <result column="share_user_name" property="shareUserName" jdbcType="VARCHAR" />
+        <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+        <result column="settlement" property="settlement" jdbcType="DECIMAL" />
+        <result column="detail_count" property="detailCount" jdbcType="INTEGER" />
+        <result column="settlement_time" property="settlementTime" jdbcType="TIMESTAMP" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, company_no, status, modifier, creator, settlement_no, share_user_id, share_user_name,
+    total_price, settlement, detail_count, settlement_time, remark, pay_type
+  </sql>
+
+
+    <select id="searchByUserNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from commission_sumary_settlement
+        where share_user_id = #{userNo}
+    </select>
+
+    <sql id="commonSelectSection">
+        1 = 1
+
+        <if test="companyNo != null">
+            and T.company_no = #{companyNo}
+        </if>
+
+        <if test="key != null">
+            and (  T.settlement_no = #{key} or T.share_user_name = #{key} )
+        </if>
+
+        <if test="shareUserId != null">
+            and T.share_user_id = #{shareUserId}
+        </if>
+        <if test="status != null">
+            and T.status = #{status}
+        </if>
+
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T.is_del is false
+        </if>
+
+    </sql>
+
+
+    <select id="searchPageList" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO">
+        SELECT
+        buyer_task.id as id ,
+        buyer_task.buyer_task_no as buyerTaskNo,
+        buyer_task.title,
+        buyer_task.owner_no as ownerNo,
+        buyer_task.company_no as companyNo,
+        buyer_task.remark,
+        buyer_task.start_time as startTime,
+        buyer_task.end_time as endTime,
+        buyer_task.status,
+        buyer_task.buyer_name as buyerName,
+        buyer_task.purchase_commission_mode as purchaseCommissionMode,
+        buyer_task.purchase_commission_str as purchaseCommissionStr,
+        buyer_task.buyer_open_id as buyerOpenId,
+        buyer_task.modifier,
+        buyer_task.creator,
+        buyer_task.task_desc as taskDesc,
+        buyer_task.image_url as imageUrl,
+
+        buyer_task_detail.item_code as itemCode,
+        buyer_task_detail.upc as upc,
+        buyer_task_detail.sku_pic_url as skuPicUrl
+        FROM
+        buyer_task
+        LEFT JOIN buyer_task_detail
+        ON  buyer_task.buyer_task_no = buyer_task_detail.buyer_task_no
+        WHERE
+        buyer_task.company_no = #{companyNo}
+        and buyer_task.is_del is false
+        and buyer_task_detail.is_del is false
+        <if test="buyerOpenId != null and buyerOpenId != ''">
+            AND buyer_task.buyer_open_id = #{buyerOpenId}
+        </if>
+        <if test="taskOrderNo != null and taskOrderNo != ''">
+            AND buyer_task.buyer_task_no = #{taskOrderNo}
+        </if>
+        <if test="taskTitle != null and taskTitle != ''">
+            AND buyer_task.title = #{taskTitle}
+        </if>
+        <if test="taskStart1 != null">
+            AND buyer_task_detail.start_time &gt;= #{taskStart1}
+        </if>
+        <if test="taskStart2 != null">
+            AND buyer_task_detail.start_time &lt;= #{taskStart2}
+        </if>
+        <if test="taskEnd1 != null">
+            AND buyer_task_detail.end_time &gt;= #{taskEnd1}
+        </if>
+        <if test="taskEnd2 != null">
+            AND buyer_task_detail.end_time &lt;= #{taskEnd2}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND buyer_task.buyer_name = #{buyerName}
+        </if>
+        ORDER BY buyer_task.gmt_create DESC
+    </select>
+
+    <select id="" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO">
+        select
+        <include refid="Base_Column_List" />
+        from commission_sumary_settlement as T
+        where
+        <include refid="commonSelectSection"/>
+
+        ORDER BY T.settlement_time desc
+
+        <if test=" pageIndex != null and pageIndex != '' and pageSize != null and pageSize != '' ">
+            limit (#{pageIndex}-1)*#{pageSize},#{pageSize}
+        </if>
+    </select>
+
+</mapper>

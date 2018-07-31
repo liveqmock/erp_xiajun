@@ -37,7 +37,7 @@ import java.util.*;
 
 @Service
 public class ItemServiceImplement implements IItemService {
-    @Value("#{test.IMGURL}")
+    //@Value("#{test.IMGURL}")
     private String imgUrl;
 
     @Autowired

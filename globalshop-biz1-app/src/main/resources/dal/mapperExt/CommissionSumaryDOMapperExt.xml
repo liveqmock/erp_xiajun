@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.CommissionSumaryDOMapperExt" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="sku_pic" property="skuPic" jdbcType="VARCHAR" />
+        <result column="upc" property="upc" jdbcType="VARCHAR" />
+        <result column="scale" property="scale" jdbcType="VARCHAR" />
+        <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+        <result column="quantity" property="quantity" jdbcType="INTEGER" />
+        <result column="total_settlement" property="totalSettlement" jdbcType="DECIMAL" />
+        <result column="receiver_info" property="receiverInfo" jdbcType="VARCHAR" />
+        <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+        <result column="order_status" property="orderStatus" jdbcType="VARCHAR" />
+        <result column="order_desc" property="orderDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, company_no, modifier, creator, order_no, sub_order_no, item_code, item_name,
+    sku_code, sku_pic, upc, scale, sale_price, quantity, total_settlement, receiver_info,
+    order_time, order_status, order_desc
+  </sql>
+
+    <sql id="commonSelectSection">
+        1 = 1
+
+        <if test="companyNo != null">
+            and T.company_no = #{companyNo}
+        </if>
+
+        <if test="key != null">
+            and (  T.settlement_no = #{key} or T.share_user_name = #{key} )
+        </if>
+
+        <if test="shareUserId != null">
+            and T.share_user_id = #{shareUserId}
+        </if>
+        <if test="status != null">
+            and T.status = #{status}
+        </if>
+
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T.is_del is false
+        </if>
+
+    </sql>
+
+
+    <select id="searchPageList" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO">
+        select
+        <include refid="Base_Column_List" />
+        from commission_sumary_detail
+        where
+        <include refid="commonSelectSection"/>
+
+        ORDER BY T.settlement_time desc
+
+        <if test=" pageIndex != null and pageIndex != '' and pageSize != null and pageSize != '' ">
+            limit (#{pageIndex}-1)*#{pageSize},#{pageSize}
+        </if>
+    </select>
+
+
+
+</mapper>
