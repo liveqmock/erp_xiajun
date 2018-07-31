@@ -749,5 +749,30 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
+        <!--<table tableName="commission_sumary" domainObjectName="CommissionSumaryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
+
+        <!--<table tableName="commission_sumary_detail" domainObjectName="CommissionSumaryDetailDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
+        <!--<table tableName="commission_sumary_settlement" domainObjectName="CommissionSumarySettlementDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
     </context>
 </generatorConfiguration>
