@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.agent.service.impl;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionValueVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
@@ -78,5 +79,33 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     public void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO) {
         // TODO: 根据 company_no 和 user_no 唯一确定 mall_sale_agent，将其更新
         mallSaleAgentDOMapper.updateByCompanyNoAndUserNo(mallSaleAgentDO);
+    }
+
+    @Override
+    public CommissionValueVO queryCommissionValue(String userNo, String companyNo) {
+        CommissionValueVO commissionValueVO = new CommissionValueVO();
+
+        MallSaleAgentDO mallSaleAgent = getMallSaleAgent(companyNo, userNo);
+
+        // 判断代理级别
+        String parentAgentNo = mallSaleAgent.getParentAgent();
+        if (parentAgentNo == null) {
+            // 一级代理
+            commissionValueVO.setLevelOneUserNo(mallSaleAgent.getUserNo());
+            commissionValueVO.setLevelOneCommissionMode(mallSaleAgent.getCommissionMode());
+            commissionValueVO.setLevelOneCommissionValue(mallSaleAgent.getCommissionValue());
+        } else {
+            // 二级代理
+            commissionValueVO.setLevelTwoUserNo(mallSaleAgent.getUserNo());
+            commissionValueVO.setLevelTwoCommissionMode(mallSaleAgent.getCommissionMode());
+            commissionValueVO.setLevelTwoCommissionValue(mallSaleAgent.getCommissionValue());
+            // 获取该二级代理的一级代理的信息
+            MallSaleAgentDO parentAgent = getMallSaleAgent(companyNo, parentAgentNo);
+            commissionValueVO.setLevelOneUserNo(parentAgent.getUserNo());
+            commissionValueVO.setLevelOneCommissionMode(parentAgent.getCommissionMode());
+            commissionValueVO.setLevelOneCommissionValue(parentAgent.getCommissionValue());
+        }
+
+        return commissionValueVO;
     }
 }

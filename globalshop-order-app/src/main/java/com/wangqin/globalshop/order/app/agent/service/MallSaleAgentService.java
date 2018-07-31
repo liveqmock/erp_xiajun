@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.agent.service;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionValueVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
@@ -54,6 +55,15 @@ public interface MallSaleAgentService {
      * @param mallSaleAgentDO
      */
     void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
+
+    /**
+     * 根据分享 userNo 查询代理的分佣比率
+     *
+     * @param userNo
+     * @param companyNo
+     * @return
+     */
+    CommissionValueVO queryCommissionValue(String userNo, String companyNo);
 
     // TODO: 考虑实现单独的佣金修改
 }

@@ -1,14 +1,12 @@
 package com.wangqin.globalshop.order.app.agent.controller;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +44,8 @@ public class MallSaleAgentController {
             result.buildMsg(e.getMessage())
                     .buildIsSuccess(false);
         } catch (Exception ex) {
-            result.buildMsg("操作出现错误")
+            ex.printStackTrace();
+            result.buildMsg("操作出现异常")
                     .buildIsSuccess(false);
         }
 
@@ -77,7 +76,8 @@ public class MallSaleAgentController {
                     .buildTotalCount(totalCount)
                     .buildIsSuccess(true);
         } catch (Exception e) {
-            result.buildMsg("查询出现错误")
+            e.printStackTrace();
+            result.buildMsg("查询出现异常")
                     .buildIsSuccess(false);
         }
 
@@ -106,10 +106,35 @@ public class MallSaleAgentController {
             result.buildMsg(e.getMessage())
                     .buildIsSuccess(false);
         } catch (Exception ex) {
-            result.buildMsg("操作出现错误")
+            ex.printStackTrace();
+            result.buildMsg("操作出现异常")
                     .buildIsSuccess(false);
         }
 
+        return result;
+    }
+
+    /**
+     * 根据分享 userNo 查询代理的分佣比率
+     * @param userNo
+     * @param companyNo
+     * @return
+     */
+    @GetMapping("/queryCommissionValue")
+    public Object queryCommissionValue(String userNo, String companyNo) {
+
+        JsonResult<CommissionValueVO> result = new JsonResult<>();
+
+        try {
+            CommissionValueVO commissionValueVO = mallSaleAgentService.queryCommissionValue(userNo, companyNo);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getMessage())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("查询出现异常")
+                    .buildIsSuccess(false);
+        }
         return result;
     }
 }

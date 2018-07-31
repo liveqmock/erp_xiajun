@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt">
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
-        <result column="parent_agent" property="parentAgent" jdbcType="BIGINT"/>
-        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
-        <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
-        <result column="agent_name" property="agentName" jdbcType="VARCHAR"/>
-        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
-        <result column="id_card" property="idCard" jdbcType="VARCHAR"/>
-        <result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR"/>
-        <result column="gender" property="gender" jdbcType="INTEGER"/>
-        <result column="city" property="city" jdbcType="VARCHAR"/>
-        <result column="province" property="province" jdbcType="VARCHAR"/>
-        <result column="country" property="country" jdbcType="VARCHAR"/>
-        <result column="commission_mode" property="commissionMode" jdbcType="BIGINT"/>
-        <result column="commission_value" property="commissionValue" jdbcType="DOUBLE"/>
-        <result column="join_time" property="joinTime" jdbcType="TIMESTAMP"/>
-        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
-        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
-        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="user_no" property="userNo" jdbcType="VARCHAR" />
+        <result column="parent_agent" property="parentAgent" jdbcType="VARCHAR" />
+        <result column="open_id" property="openId" jdbcType="VARCHAR" />
+        <result column="union_id" property="unionId" jdbcType="VARCHAR" />
+        <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+        <result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="commission_mode" property="commissionMode" jdbcType="BIGINT" />
+        <result column="commission_value" property="commissionValue" jdbcType="DOUBLE" />
+        <result column="status" property="status" jdbcType="BIT" />
+        <result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
     </resultMap>
-    <sql id="Base_Column_List">
-    id, company_no, parent_agent, open_id, union_id, agent_name, real_name, id_card, 
-    head_protrait_url, gender, city, province, country, commission_mode, commission_value, 
-    join_time, last_login_time, modifier, creator
-    </sql>
+    <sql id="Base_Column_List" >
+    id, company_no, user_no, parent_agent, open_id, union_id, agent_name, real_name,
+    id_card, head_protrait_url, gender, city, province, country, phone, commission_mode,
+    commission_value, status, join_time, last_login_time, modifier, creator
+  </sql>
 
     <select id="getByCompanyNoAndUserNo" resultMap="BaseResultMap">
         SELECT
@@ -40,6 +43,7 @@
         T1.head_protrait_url AS headProtraitUrl
         T1.agent_name        AS agentName
         T1.real_name         AS realName
+        T1.phone             AS phone
         T1.commission_mode   AS commissionMode
         T1.commission_value  AS commissionValue
         T1.status            AS status
