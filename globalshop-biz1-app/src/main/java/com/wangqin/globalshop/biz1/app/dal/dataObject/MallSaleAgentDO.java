@@ -7,7 +7,9 @@ public class MallSaleAgentDO extends BaseModel {
 
     private String companyNo;
 
-    private Long parentAgent;
+    private String userNo;
+
+    private String parentAgent;
 
     private String openId;
 
@@ -33,6 +35,8 @@ public class MallSaleAgentDO extends BaseModel {
 
     private Double commissionValue;
 
+    private Boolean status;
+
     private Date joinTime;
 
     private Date lastLoginTime;
@@ -57,12 +61,20 @@ public class MallSaleAgentDO extends BaseModel {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
 
-    public Long getParentAgent() {
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo == null ? null : userNo.trim();
+    }
+
+    public String getParentAgent() {
         return parentAgent;
     }
 
-    public void setParentAgent(Long parentAgent) {
-        this.parentAgent = parentAgent;
+    public void setParentAgent(String parentAgent) {
+        this.parentAgent = parentAgent == null ? null : parentAgent.trim();
     }
 
     public String getOpenId() {
@@ -159,6 +171,14 @@ public class MallSaleAgentDO extends BaseModel {
 
     public void setCommissionValue(Double commissionValue) {
         this.commissionValue = commissionValue;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Date getJoinTime() {

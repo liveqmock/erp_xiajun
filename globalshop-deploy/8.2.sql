@@ -44,11 +44,11 @@ CREATE TABLE IF NOT EXISTS `mall_sub_order_snapshot` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
 CREATE TABLE `mall_sale_agent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) NOT NULL COMMENT '所属公司id',
-  `parent_agent` bigint(20) DEFAULT NULL COMMENT '上级代理的agent_name，如已是一级代理该值为null',
+  `user_no` varchar(64) NOT NULL COMMENT '唯一userNo，需要跟Auth_User一致',
+  `parent_agent` varchar(64) DEFAULT NULL COMMENT '上级代理的userNo，如已是一级代理该值为null',
   `open_id` varchar(64) DEFAULT NULL COMMENT '微信open_id',
   `union_id` varchar(128) DEFAULT NULL COMMENT '微信union_id',
   `agent_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '代理人的微信号/昵称',
@@ -61,6 +61,7 @@ CREATE TABLE `mall_sale_agent` (
   `country` varchar(64) DEFAULT NULL,
   `commission_mode` bigint(18) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
   `commission_value` double(6,2) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态，0正常，1已解除',
   `join_time` datetime DEFAULT NULL COMMENT '加入时间',
   `last_login_time` datetime DEFAULT NULL,
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',

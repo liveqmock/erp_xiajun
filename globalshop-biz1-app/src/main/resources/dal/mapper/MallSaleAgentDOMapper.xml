@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="parent_agent" property="parentAgent" jdbcType="BIGINT" />
+    <result column="user_no" property="userNo" jdbcType="VARCHAR" />
+    <result column="parent_agent" property="parentAgent" jdbcType="VARCHAR" />
     <result column="open_id" property="openId" jdbcType="VARCHAR" />
     <result column="union_id" property="unionId" jdbcType="VARCHAR" />
     <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
@@ -17,15 +18,16 @@
     <result column="country" property="country" jdbcType="VARCHAR" />
     <result column="commission_mode" property="commissionMode" jdbcType="BIGINT" />
     <result column="commission_value" property="commissionValue" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="BIT" />
     <result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, parent_agent, open_id, union_id, agent_name, real_name, id_card, 
-    head_protrait_url, gender, city, province, country, commission_mode, commission_value, 
-    join_time, last_login_time, modifier, creator
+    id, company_no, user_no, parent_agent, open_id, union_id, agent_name, real_name, 
+    id_card, head_protrait_url, gender, city, province, country, commission_mode, commission_value, 
+    status, join_time, last_login_time, modifier, creator
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -41,20 +43,20 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into mall_sale_agent (company_no, parent_agent, open_id, 
-      union_id, agent_name, real_name, 
-      id_card, head_protrait_url, gender, 
-      city, province, country, 
-      commission_mode, commission_value, join_time, 
-      last_login_time, modifier, creator
-      )
-    values (#{companyNo,jdbcType=VARCHAR}, #{parentAgent,jdbcType=BIGINT}, #{openId,jdbcType=VARCHAR}, 
-      #{unionId,jdbcType=VARCHAR}, #{agentName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
-      #{idCard,jdbcType=VARCHAR}, #{headProtraitUrl,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
-      #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
-      #{commissionMode,jdbcType=BIGINT}, #{commissionValue,jdbcType=DOUBLE}, #{joinTime,jdbcType=TIMESTAMP}, 
-      #{lastLoginTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
-      )
+    insert into mall_sale_agent (company_no, user_no, parent_agent, 
+      open_id, union_id, agent_name, 
+      real_name, id_card, head_protrait_url, 
+      gender, city, province, 
+      country, commission_mode, commission_value, 
+      status, join_time, last_login_time, 
+      modifier, creator)
+    values (#{companyNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{parentAgent,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, #{agentName,jdbcType=VARCHAR}, 
+      #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{headProtraitUrl,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{commissionMode,jdbcType=BIGINT}, #{commissionValue,jdbcType=DOUBLE}, 
+      #{status,jdbcType=BIT}, #{joinTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -64,6 +66,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="companyNo != null" >
         company_no,
+      </if>
+      <if test="userNo != null" >
+        user_no,
       </if>
       <if test="parentAgent != null" >
         parent_agent,
@@ -104,6 +109,9 @@
       <if test="commissionValue != null" >
         commission_value,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
       <if test="joinTime != null" >
         join_time,
       </if>
@@ -121,8 +129,11 @@
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
+      <if test="userNo != null" >
+        #{userNo,jdbcType=VARCHAR},
+      </if>
       <if test="parentAgent != null" >
-        #{parentAgent,jdbcType=BIGINT},
+        #{parentAgent,jdbcType=VARCHAR},
       </if>
       <if test="openId != null" >
         #{openId,jdbcType=VARCHAR},
@@ -160,6 +171,9 @@
       <if test="commissionValue != null" >
         #{commissionValue,jdbcType=DOUBLE},
       </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
       <if test="joinTime != null" >
         #{joinTime,jdbcType=TIMESTAMP},
       </if>
@@ -180,8 +194,11 @@
       <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
+      <if test="userNo != null" >
+        user_no = #{userNo,jdbcType=VARCHAR},
+      </if>
       <if test="parentAgent != null" >
-        parent_agent = #{parentAgent,jdbcType=BIGINT},
+        parent_agent = #{parentAgent,jdbcType=VARCHAR},
       </if>
       <if test="openId != null" >
         open_id = #{openId,jdbcType=VARCHAR},
@@ -219,6 +236,9 @@
       <if test="commissionValue != null" >
         commission_value = #{commissionValue,jdbcType=DOUBLE},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIT},
+      </if>
       <if test="joinTime != null" >
         join_time = #{joinTime,jdbcType=TIMESTAMP},
       </if>
@@ -237,7 +257,8 @@
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
     update mall_sale_agent
     set company_no = #{companyNo,jdbcType=VARCHAR},
-      parent_agent = #{parentAgent,jdbcType=BIGINT},
+      user_no = #{userNo,jdbcType=VARCHAR},
+      parent_agent = #{parentAgent,jdbcType=VARCHAR},
       open_id = #{openId,jdbcType=VARCHAR},
       union_id = #{unionId,jdbcType=VARCHAR},
       agent_name = #{agentName,jdbcType=VARCHAR},
@@ -250,6 +271,7 @@
       country = #{country,jdbcType=VARCHAR},
       commission_mode = #{commissionMode,jdbcType=BIGINT},
       commission_value = #{commissionValue,jdbcType=DOUBLE},
+      status = #{status,jdbcType=BIT},
       join_time = #{joinTime,jdbcType=TIMESTAMP},
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
