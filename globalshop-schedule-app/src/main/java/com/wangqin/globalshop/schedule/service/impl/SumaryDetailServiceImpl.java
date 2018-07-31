@@ -71,7 +71,8 @@ public class SumaryDetailServiceImpl implements SumaryDetailService {
 
 		//先查detail  join sumary
 
-		List<SettlementDetailVo> pageResult = sumaryDOMapperExt.searchPageList(queryVO);
+		List<SettlementDetailVo> pageResult = new ArrayList<>();
+				//sumaryDetailDOMapperExt.searchPageList(queryVO);
 
 		//出来后再查user表
 

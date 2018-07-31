@@ -14,4 +14,7 @@ public interface CommissionSumarySettlementService {
 	void add(CommissionSumarySettlementDO settlementDO);
 
 	List<CommissionSumarySettlementDO> searchPageList(SettlementQueryVO queryVO);
+
+	void doSettlement(List<Long> idList, String shareUserId);
+
 }

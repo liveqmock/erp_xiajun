@@ -1,10 +1,12 @@
 package com.wangqin.globalshop.schedule.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerStorageDetailVo;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO;
+import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.schedule.service.CommissionSumarySettlementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,24 +61,29 @@ public class SettlementController {
 
 	}
 
-
 	/**
-	 * 一般查询的结算时间，代理人姓名，结算单号
-	 * @param queryVO
+	 * 结算选中的明细
+	 * @param
 	 * @return
 	 */
-	@RequestMapping("/searchPageList")
-	public Object searchPageList(SettlementQueryVO queryVO){
-		JsonResult<List<CommissionSumarySettlementDO>> result = new JsonResult<>();
+	@RequestMapping("/do")
+	public Object add(String idListStr,String shareUserId){
+		JsonResult<Object> result = new JsonResult<>();
 		try {
-			queryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-			List<CommissionSumarySettlementDO> list = settlementService.searchPageList(queryVO);
-			result.buildData(list);
+			List<Long> idList = BaseDto.fromJson(idListStr,new TypeReference<List<Long>>(){});
+			settlementService.doSettlement(idList,shareUserId);
 		} catch (Exception e) {
 			return result.buildIsSuccess(false).buildMsg(e.getMessage());
 		}
 		return result.buildIsSuccess(true);
 
 	}
+
+
+
+
+
+
+
 
 }

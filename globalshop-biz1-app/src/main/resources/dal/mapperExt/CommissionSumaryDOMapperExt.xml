@@ -34,8 +34,8 @@
         <include refid="Base_Column_List" />
         from commission_sumary
         where
-
-        ORDER BY T.settlement_time desc
+         datediff( dd, gmt_create, getdate() ) > 15
+        and is_del is false
     </select>
 
 
