@@ -1,21 +1,19 @@
-package com.wangqin.globalshop.biz1.app.dal.mapperExt;
+package com.wangqin.globalshop.order.app.agent.service;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.MallSaleAgentDOMapper;
-import org.apache.ibatis.annotations.Param;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
 
 import java.util.List;
 
 /**
- * mall_sale_agent 表对应的 mapper
+ * 与代理管理相关的 service
  *
  * @author angus
  * @date 2018/7/31
  */
-public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
+public interface MallSaleAgentService {
 
     /**
      * 通过 companyNo 和 userNo 获得唯一代理
@@ -24,7 +22,7 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
      * @param userNo
      * @return
      */
-    MallSaleAgentDO getByCompanyNoAndUserNo(@Param("companyNo") String companyNo, @Param("userNo") String userNo);
+    MallSaleAgentDO getByCompanyNoAndUserNo(String companyNo, String userNo);
 
     /**
      * 根据指定条件分页查询代理列表
@@ -42,4 +40,20 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
      * @return
      */
     int countMallSaleAgents(MallSaleAgentQueryVO mallSaleAgentQueryVO);
+
+    /**
+     * 添加代理
+     *
+     * @param mallSaleAgentDO
+     */
+    void insertMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
+
+    /**
+     * 更新代理
+     *
+     * @param mallSaleAgentDO
+     */
+    void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
+
+    // TODO: 考虑实现单独的佣金修改
 }
