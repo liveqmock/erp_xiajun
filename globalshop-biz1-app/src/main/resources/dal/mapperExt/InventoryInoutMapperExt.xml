@@ -164,17 +164,17 @@
     <!-- 根据指定条件分页查询出入库记录 -->
     <select id="listInventoryInout" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryInoutItemVO">
         SELECT
-        T1.sku_code       skuCode,
-        T1.creator        creator,
-        T1.gmt_create     gmtCreate,
-        T1.shelf_no       shelfNo,
-        T1.quantity       quantity,
-        T1.remark         remark,
-        T1.operator_type  operatorType,
-        T2.item_name      itemName,
-        T2.upc            upc,
-        T2.sku_pic        skuPic,
-        T3.name           warehouseName
+        T1.sku_code       AS skuCode,
+        T1.creator        AS creator,
+        T1.gmt_create     AS gmtCreate,
+        T1.shelf_no       AS shelfNo,
+        T1.quantity       AS quantity,
+        T1.remark         AS remark,
+        T1.operator_type  AS operatorType,
+        T2.item_name      AS itemName,
+        T2.upc            AS upc,
+        T2.sku_pic        AS skuPic,
+        T3.name           AS warehouseName
         FROM
         inventory_inout T1, item_sku T2, warehouse T3
         <where>
