@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
@@ -23,7 +24,7 @@
     <result column="order_desc" property="orderDesc" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, modifier, creator, order_no, sub_order_no, item_code, item_name,
+    id, company_no, status, modifier, creator, order_no, sub_order_no, item_code, item_name, 
     sku_code, sku_pic, upc, scale, sale_price, quantity, total_settlement, receiver_info, 
     order_time, order_status, order_desc
   </sql>
@@ -41,14 +42,14 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into commission_sumary (company_no,  modifier,
+    insert into commission_sumary (company_no, status, modifier, 
       creator, order_no, sub_order_no, 
       item_code, item_name, sku_code, 
       sku_pic, upc, scale, 
       sale_price, quantity, total_settlement, 
       receiver_info, order_time, order_status, 
       order_desc)
-    values (#{companyNo,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR},
+    values (#{companyNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{modifier,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{subOrderNo,jdbcType=VARCHAR}, 
       #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
       #{skuPic,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
@@ -64,6 +65,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="companyNo != null" >
         company_no,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="modifier != null" >
         modifier,
@@ -120,6 +124,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
@@ -180,7 +187,9 @@
       <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
@@ -238,7 +247,7 @@
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDO" >
     update commission_sumary
     set company_no = #{companyNo,jdbcType=VARCHAR},
-
+      status = #{status,jdbcType=INTEGER},
       modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},

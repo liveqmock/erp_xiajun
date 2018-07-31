@@ -8,6 +8,7 @@ public class CommissionSumaryDO extends BaseModel {
 
     private String companyNo;
 
+    private Integer status;
 
     private String modifier;
 
@@ -57,6 +58,14 @@ public class CommissionSumaryDO extends BaseModel {
 
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getModifier() {

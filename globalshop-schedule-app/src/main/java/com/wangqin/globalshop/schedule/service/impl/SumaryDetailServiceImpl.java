@@ -2,8 +2,10 @@ package com.wangqin.globalshop.schedule.service.impl;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementDetailVo;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SumaryDetailQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDetailDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.CommissionSumaryDetailDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CommissionSumaryDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.CommissionSumaryDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CommissionSumarySettlementDOMapperExt;
 import com.wangqin.globalshop.biz1.app.enums.SettlementStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -22,7 +24,33 @@ public class SumaryDetailServiceImpl implements SumaryDetailService {
 
 
 	@Autowired
-	private CommissionSumaryDOMapperExt sumaryDOMapperExt;
+	private CommissionSumaryDetailDOMapperExt sumaryDetailDOMapperExt;
+
+
+
+	public int deleteByPrimaryKey(Long id){
+		return sumaryDetailDOMapperExt.deleteByPrimaryKey(id);
+	}
+
+	public int insert(CommissionSumaryDetailDO record){
+		return sumaryDetailDOMapperExt.insert(record);
+	}
+
+	public int insertSelective(CommissionSumaryDetailDO record){
+		return sumaryDetailDOMapperExt.insertSelective(record);
+	}
+
+	public CommissionSumaryDetailDO selectByPrimaryKey(Long id){
+		return sumaryDetailDOMapperExt.selectByPrimaryKey(id);
+	}
+
+	public int updateByPrimaryKeySelective(CommissionSumaryDetailDO record){
+		return sumaryDetailDOMapperExt.updateByPrimaryKeySelective(record);
+	}
+
+	public int updateByPrimaryKey(CommissionSumaryDetailDO record){
+		return sumaryDetailDOMapperExt.updateByPrimaryKey(record);
+	}
 
 	public List<SettlementDetailVo> searchPageList(SumaryDetailQueryVO queryVO){
 
@@ -48,8 +76,9 @@ public class SumaryDetailServiceImpl implements SumaryDetailService {
 		//出来后再查user表
 
 		//再计算佣金总数
+		detailVoList.addAll(pageResult);
 
-
+		return detailVoList;
 	}
 
 }

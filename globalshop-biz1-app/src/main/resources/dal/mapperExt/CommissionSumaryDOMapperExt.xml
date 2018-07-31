@@ -28,50 +28,17 @@
     order_time, order_status, order_desc
   </sql>
 
-    <sql id="commonSelectSection">
-        1 = 1
 
-        <if test="companyNo != null">
-            and T.company_no = #{companyNo}
-        </if>
-
-        <if test="key != null">
-            and (  T.settlement_no = #{key} or T.share_user_name = #{key} )
-        </if>
-
-        <if test="shareUserId != null">
-            and T.share_user_id = #{shareUserId}
-        </if>
-        <if test="status != null">
-            and T.status = #{status}
-        </if>
-
-        <if test=" isDel == true">
-            and T.is_del is true
-        </if>
-        <if test=" isDel == false">
-            and T.is_del is false
-        </if>
-        <if test=" isDel == null">
-            and T.is_del is false
-        </if>
-
-    </sql>
-
-
-    <select id="searchPageList" resultMap="BaseResultMap" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO">
+    <select id="selectMorethan15Day" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
-        from commission_sumary_detail
+        from commission_sumary
         where
-        <include refid="commonSelectSection"/>
 
         ORDER BY T.settlement_time desc
-
-        <if test=" pageIndex != null and pageIndex != '' and pageSize != null and pageSize != '' ">
-            limit (#{pageIndex}-1)*#{pageSize},#{pageSize}
-        </if>
     </select>
+
+
 
 
 
