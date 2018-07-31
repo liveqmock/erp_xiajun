@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataSo.ChannelAccountConfigSo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountConfigSo;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelAccountConfigDOMapper;
 
 /**

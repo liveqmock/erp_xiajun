@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO;
-import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackagePatternDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PackageLevelQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingPackingPatternQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 
 

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.logging.log4j.core.appender.rolling.RolloverDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,8 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthOrganizationDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;

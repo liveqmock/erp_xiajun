@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemFindDO;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.item.app.service.IFindItemService;

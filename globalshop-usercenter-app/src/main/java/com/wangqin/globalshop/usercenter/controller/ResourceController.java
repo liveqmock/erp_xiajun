@@ -3,21 +3,16 @@ package com.wangqin.globalshop.usercenter.controller;
 import com.wangqin.globalshop.biz1.api.dto.response.BaseResp;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
-import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.DigestUtils;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.LogWorker;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.usercenter.service.IResourceService;
-
-import ch.qos.logback.classic.pattern.Util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

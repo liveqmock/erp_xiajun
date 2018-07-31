@@ -1,12 +1,12 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.Exception.ErpCommonException;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.TaskDailyStatus;
+import com.wangqin.globalshop.biz1.app.enums.TaskDailyStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerTaskDO;
-import com.wangqin.globalshop.biz1.app.vo.BuyerTaskVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
@@ -44,7 +44,7 @@ public class BuyerTaskController {
             }
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
-        } catch (ErpCommonException e) {
+        } catch (BizCommonException e) {
             String str = e.getErrorMsg().replace(",", "</br>");
             return result.buildIsSuccess(false).buildMsg(str);
         } catch (Exception e) {
@@ -81,7 +81,7 @@ public class BuyerTaskController {
         JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
         try {
             buyerTaskService.add(buyerTaskDO);
-        } catch (ErpCommonException e) {
+        } catch (BizCommonException e) {
 			return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
 		} catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.toString());
@@ -101,7 +101,7 @@ public class BuyerTaskController {
 		JsonResult<List<BuyerTaskDO>> result = new JsonResult<>();
 		try {
 			buyerTaskService.update(buyerTaskDO);
-		} catch (ErpCommonException e) {
+		} catch (BizCommonException e) {
 			return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
 		} catch (Exception e) {
 			return result.buildIsSuccess(false).buildMsg(e.toString());
@@ -143,9 +143,44 @@ public class BuyerTaskController {
         if (id == null) {
             return result.buildIsSuccess(false).buildMsg("id 不能为 null");
         }
-        BuyerTaskVO td = buyerTaskService.selectVoById(id);
-        return result.buildIsSuccess(true).buildData(td);
+		try {
+			BuyerTaskVO td = buyerTaskService.selectVoById(id);
+			return result.buildIsSuccess(true).buildData(td);
+		} catch (BizCommonException ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg(ex.getErrorMsg());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg("未知异常");
+		}
+
     }
+
+	/**
+	 * 查询单个采购任务
+	 *
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public Object delete(Long id) {
+		JsonResult<BuyerTaskVO> result = new JsonResult<>();
+		if (id == null) {
+			return result.buildIsSuccess(false).buildMsg("id 不能为 null");
+		}
+		try {
+			buyerTaskService.delete(id);
+			return result.buildIsSuccess(true).buildMsg("删除成功");
+		} catch (BizCommonException ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg(ex.getErrorMsg());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return result.buildIsSuccess(false).buildMsg("未知异常");
+		}
+
+	}
 
     /**
      * 完成采购按钮：采购中->采购结束

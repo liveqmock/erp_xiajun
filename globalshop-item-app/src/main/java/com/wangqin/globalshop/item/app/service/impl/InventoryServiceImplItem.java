@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO;
 import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 
 @Service

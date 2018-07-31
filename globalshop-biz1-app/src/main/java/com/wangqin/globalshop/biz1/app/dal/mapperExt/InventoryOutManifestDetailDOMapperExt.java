@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.InventoryOutManifestDetailDOMapper;
 
 import java.util.List;
@@ -22,8 +22,8 @@ public interface InventoryOutManifestDetailDOMapperExt extends InventoryOutManif
     /**
      * 获取出货详情单列表
      *
-     * @param inventoryOutManifestVO
+     * @param inventoryOutManifestQueryVO
      * @return
      */
-    List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestVO inventoryOutManifestVO);
+    List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestQueryVO inventoryOutManifestQueryVO);
 }

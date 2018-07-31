@@ -28,19 +28,6 @@
     shelf_no, batch_no, modifier, creator
   </sql>
 
-    <!-- xiajun,库存管理页面展示 -->
-    <sql id="Base_Column_List_For_Inventory_Mange">
-    inv.id, inv.inventory_on_warehouse_no AS inventoryOnWarehouseNo,
-    inv.company_no AS companyNo, inv.item_code AS itemCode, inv.item_name AS itemName,
-    inv.upc, inv.scale, inv.sku_code AS skuCode,
-    inv.sku_pic AS skuPic, inv.inventory, inv.locked_inv AS lockedInv, 
-    inv.trans_inv AS transInv, inv.locked_trans_inv AS lockedTransInv, 
-    inv.warehouse_no AS warehouseNo, inv.warehouse_name AS warehouseName,
-    inv.shelf_no AS shelfNo, inv.batch_no AS batchNo,
-    (inv.inventory-inv.locked_inv) AS totalAvailableInv,
-    T1.sale_price AS salePrice
-   </sql>
-
     <!--<select id="getInventoryArea" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO">-->
     <!--SELECT-->
     <!--<include refid="inventoryAreaResultMapping"/>-->
@@ -132,7 +119,7 @@
     <!--</select>-->
 
     <!--<select id="queryInventoryAreaCount" resultType="java.lang.Integer"-->
-    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.bean.vo.InventoryQueryVO">-->
     <!--SELECT-->
     <!--count(1)-->
     <!--FROM-->
@@ -163,7 +150,7 @@
     <!--</select>-->
 
     <!--<select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"-->
-    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.bean.vo.InventoryQueryVO">-->
     <!--SELECT-->
     <!--<include refid="inventoryAreaResultMapping"/>-->
     <!--,T2.buy_site As buySite,T3.sale_price As salePrice-->
@@ -207,7 +194,7 @@
 
     <!--<select id="queryInventoryAreaForExcel"-->
     <!--resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO"-->
-    <!--parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">-->
+    <!--parameterType="com.wangqin.globalshop.biz1.app.bean.vo.InventoryQueryVO">-->
     <!--SELECT T2.sku_code AS skuCode,T2.item_name AS itemName,T2.sku_pic AS skuPic,T2.brand,T2.upc,T2.color,T2.scale,-->
     <!--T1.warehouse_name AS warehouseName,T1.position_no AS positionNo,T1.inventory,T1.locked_inv AS-->
     <!--lockedInv,T1.trans_inv AS transInv,T1.locked_trans_inv AS lockedTransInv,T2.sale_price AS salePrice-->
@@ -320,40 +307,6 @@
         WHERE company_no = #{companyNo}
         AND sku_code = #{skuCode}
     </select>
-    <select id="queryInventoryAreas" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
-        SELECT
-        <include refid="Base_Column_List_For_Inventory_Mange"/>
-        FROM
-        inventory_on_warehouse inv LEFT JOIN item_sku T1 ON inv.sku_code = T1.sku_code
-        <where>
-            <if test="warehouseNo!=null and warehouseNo!=''">
-                and inv.warehouse_no = #{warehouseNo}
-            </if>
-            <if test="warehouseName!=null and warehouseName!=''">
-                and inv.warehouse_name = #{warehouseName}
-            </if>
-            <if test="companyNo!=null and companyNo!=''">
-                and inv.company_no = #{companyNo}
-            </if>
-            <if test="skuCode!=null and skuCode!=''">
-                and inv.sku_code = #{skuCode}
-            </if>
-            <if test="itemName!=null and itemName!=''">
-                and inv.item_name = #{itemName}
-            </if>
-            <if test="shelfNo!=null and shelfNo!=''">
-                and inv.shelf_no = #{shelfNo}
-            </if>
-            <if test="companyNo!=null and companyNo!=''">
-                and inv.company_no = #{companyNo}
-            </if>
-            <if test="upc!=null and upc!=''">
-                and inv.upc = #{upc}
-            </if>
-        </where>
-        ORDER BY inv.gmt_create DESC
-    </select>
     <select id="getINvOnWarehouseListOfShip"
             resultMap="BaseResultMap">
         SELECT
@@ -375,23 +328,104 @@
         sku_code = #{skuCode}
         ORDER BY inventory ASC
     </select>
-    
+
     <select id="selectByWarehouseNo" parameterType="java.lang.String" resultMap="BaseResultMap">
-    	SELECT
-    		<include refid="Base_Column_List"/>
-    	FROM
-    		inventory_on_warehouse
-    	WHERE
-    		 warehouse_no = #{warehouseNo}
-    
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        WHERE
+        warehouse_no = #{warehouseNo}
+
     </select>
-    
-    <select id="selectByInventoryOnWarehouseNo" parameterType="java.lang.String" resultMap="BaseResultMap" >
-    	SELECT
-    		<include refid="Base_Column_List"/>
-    	FROM
-    		inventory_on_warehouse
-    	WHERE
-    		 inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
+
+    <select id="selectByInventoryOnWarehouseNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        inventory_on_warehouse
+        WHERE
+        inventory_on_warehouse_no = #{inventoryOnWarehouseNo}
     </select>
+
+    <!-- xiajun,库存管理页面展示 -->
+    <sql id="Base_Column_List_For_Inventory_Mange">
+      inv.id                          AS id,
+      inv.inventory_on_warehouse_no   AS inventoryOnWarehouseNo,
+      inv.company_no                  AS companyNo,
+      inv.item_code                   AS itemCode,
+      inv.item_name                   AS itemName,
+      inv.upc                         AS upc,
+      inv.scale                       AS scale,
+      inv.sku_code                    AS skuCode,
+      inv.sku_pic                     AS skuPic,
+      inv.inventory                   AS inventory,
+      inv.locked_inv                  AS lockedInv,
+      inv.trans_inv                   AS transInv,
+      inv.locked_trans_inv            AS lockedTransInv,
+      inv.warehouse_no                AS warehouseNo,
+      inv.warehouse_name              AS warehouseName,
+      inv.shelf_no                    AS shelfNo,
+      inv.batch_no                    AS batchNo,
+      (inv.inventory-inv.locked_inv)  AS totalAvailableInv,
+      T1.sale_price                   AS salePrice
+    </sql>
+    <!-- 根据指定条件分页查询库存记录列表 -->
+    <select id="listInventoryOnWarehouse"
+            resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseItemVO">
+        SELECT
+        <include refid="Base_Column_List_For_Inventory_Mange"/>
+        FROM
+        inventory_on_warehouse inv LEFT JOIN item_sku T1 ON inv.sku_code = T1.sku_code
+        <where>
+            <if test="inventoryOnWarehouseQueryVO.warehouseNo != null">
+                AND inv.warehouse_no = #{inventoryOnWarehouseQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.skuCode != null">
+                AND inv.sku_code = #{inventoryOnWarehouseQueryVO.skuCode}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.upc != null">
+                AND inv.upc = #{inventoryOnWarehouseQueryVO.upc}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.itemName != null">
+                AND inv.item_name = #{inventoryOnWarehouseQueryVO.itemName}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.shelfNo != null">
+                AND inv.shelf_no = #{inventoryOnWarehouseQueryVO.shelfNo}
+            </if>
+            AND inv.company_no = #{inventoryOnWarehouseQueryVO.companyNo}
+            AND inv.is_del = 0
+        </where>
+        ORDER BY inv.gmt_create DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex}, #{pageQueryParam.pageSize}
+        </if>
+    </select>
+    <!-- 根据指定条件查询库存记录数目 -->
+    <select id="countInventoryOnWarehouse" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        inventory_on_warehouse inv LEFT JOIN item_sku T1 ON inv.sku_code = T1.sku_code
+        <where>
+            <if test="inventoryOnWarehouseQueryVO.warehouseNo != null">
+                AND inv.warehouse_no = #{inventoryOnWarehouseQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.skuCode != null">
+                AND inv.sku_code = #{inventoryOnWarehouseQueryVO.skuCode}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.upc != null">
+                AND inv.upc = #{inventoryOnWarehouseQueryVO.upc}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.itemName != null">
+                AND inv.item_name = #{inventoryOnWarehouseQueryVO.itemName}
+            </if>
+            <if test="inventoryOnWarehouseQueryVO.shelfNo != null">
+                AND inv.shelf_no = #{inventoryOnWarehouseQueryVO.shelfNo}
+            </if>
+            AND inv.company_no = #{inventoryOnWarehouseQueryVO.companyNo}
+            AND inv.is_del = 0
+        </where>
+    </select>
+
 </mapper>

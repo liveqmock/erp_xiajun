@@ -2,7 +2,7 @@ package com.wangqin.globalshop.order.app.controller.shipping;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingTrackDO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.order.app.service.shipping.IShippingTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

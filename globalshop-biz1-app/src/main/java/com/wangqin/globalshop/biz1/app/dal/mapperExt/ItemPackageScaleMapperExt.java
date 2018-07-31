@@ -3,8 +3,8 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingScaleDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingPackingScaleQueryVO;
 
 
 

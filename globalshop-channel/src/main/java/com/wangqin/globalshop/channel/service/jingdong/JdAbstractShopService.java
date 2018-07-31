@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.channel.service.jingdong;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdOrderDO;

@@ -13,10 +13,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
@@ -272,6 +272,11 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	@Override
 	public Integer queryRecordCountByUpcCompanyNotInSameItem(String companyNo,String upc,String itemCode) {
 		return itemSkuMapperExt.queryRecordCountByUpcCompanyNotInSameItem(companyNo, upc, itemCode);
+	}
+
+	@Override
+	public Integer queryCountByUpcAndCompanyNo(String companyNo, String upc) {
+		return itemSkuMapperExt.queryCountByUpcAndCompanyNo(companyNo,upc);
 	}
 
 }

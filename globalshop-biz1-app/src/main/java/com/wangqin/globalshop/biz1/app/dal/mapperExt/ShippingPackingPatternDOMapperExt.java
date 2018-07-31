@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ShippingPackingPatternDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.ShippingPackingPatternQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingPackingPatternQueryVO;
 
 import java.util.List;
 

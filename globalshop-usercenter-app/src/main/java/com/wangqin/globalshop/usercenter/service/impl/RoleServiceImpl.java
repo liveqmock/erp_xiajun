@@ -1,21 +1,17 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleResourceDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthRoleResourceDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserRoleDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.usercenter.service.IRoleService;
@@ -26,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.result.Tree;
 import com.wangqin.globalshop.common.utils.PageInfo;
-import com.wangqin.globalshop.common.utils.StringUtils;
 
 /**
  *

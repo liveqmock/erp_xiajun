@@ -30,7 +30,7 @@ public interface ChannelCommonService {
 
 	//public void syncItem(Long itemId);
 
-	//public void syncItem(HttpServletRequest request, HttpServletResponse respose) throws Exception;
+	//public void syncItem(HttpServletRequest request, HttpServletResponse respose) throws exception;
 
 	// 上架
 	//public void syncListingItem(Long itemId);
@@ -55,5 +55,5 @@ public interface ChannelCommonService {
 
 	//public void syncOrder() throws ParseException;
 
-	//public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception;
+	//public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws exception;
 }

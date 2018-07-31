@@ -3,12 +3,12 @@ package com.wangqin.globalshop.channel.service.channel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.dal.youzan.PicModel;
@@ -277,7 +277,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 //					} catch (InventoryException e) {
 //						this.logger.error("",e);
 //						result.buildMsg("库存记录错误："+e.getMessage()).buildIsSuccess(false);
-//					} catch (ErpCommonException e) {
+//					} catch (BizCommonException e) {
 //						this.logger.error("",e);
 //						result.buildMsg("库存记录错误:"+e.getErrorCode()+" "+e.getErrorMsg()).buildIsSuccess(false);
 //					}

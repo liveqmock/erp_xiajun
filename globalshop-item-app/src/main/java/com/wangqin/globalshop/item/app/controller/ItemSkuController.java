@@ -2,7 +2,6 @@ package com.wangqin.globalshop.item.app.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +20,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.sql.ast.expr.SQLCaseExpr.Item;
-import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.vo.InventoryAddVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -62,9 +59,6 @@ public class ItemSkuController  {
 	@Autowired
 	private IItemService itemService;
 
-//	@Autowired
-//	private IScaleTypeService scaleTypeService;
-
 	@Autowired
 	private InventoryService inventoryService;
 	
@@ -73,6 +67,7 @@ public class ItemSkuController  {
 
 	@Autowired
 	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
+	
 	/**
 	 * 更新sku
 	 *
@@ -84,57 +79,9 @@ public class ItemSkuController  {
 	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object update(ItemSkuQueryVO itemSku) {
 		JsonResult<String> result = new JsonResult<>();
-		if(null == AppUtil.getLoginUserCompanyNo() || null == AppUtil.getLoginUserCompanyNo()) {
+		if(!loginCheck()) {
 			return result.buildIsSuccess(false).buildMsg("请先登录");
 		}
-		if(null == itemSku.getId()){
-			return result.buildIsSuccess(false).buildMsg("没有SKU id");
-		}
-         /**
-		//if haven't item id ,add item
-		if(itemSku.getId()==null){
-			return result.buildIsSuccess(false).buildMsg("没有SKU id");
-		}else{
-			//当upc改变时，订正订单明细里面的upc数据
-			ItemSkuDO selItemSku = iItemSkuService.selectByPrimaryKey(itemSku.getId());
-			if(StringUtil.isNotBlank(itemSku.getUpc())) {
-				MallOrderDO erpOrder = new MallOrderDO();
-				//erpOrder.setSkuId(itemSku.getId());
-				//erpOrder.setUpc(itemSku.getUpc());
-				erpOrderService.updateUpcForOrder(erpOrder);
-			}
-			//当weight改变时，订正订单明细里面的weight数据
-			if(itemSku.getWeight()!=null && itemSku.getWeight()!=selItemSku.getWeight()) {
-				MallOrderDO erpOrder = new MallOrderDO();
-				//erpOrder.setS
-				//erpOrder.setWeight(itemSku.getWeight());
-				erpOrderService.updateWeightForOrder(erpOrder);
-			}
-
-			//1. find item
-			ItemDO item = iItemService.queryItemByItemCode(itemSku.getItemCode());
-			if(item==null){
-				return result.buildMsg("the item is not find").buildIsSuccess(false);
-			}
-			itemSku.setItemCode(item.getItemCode());
-			itemSku.setCategoryCode(item.getCategoryCode());
-			itemSku.setCategoryName(item.getCategoryName());
-			itemSku.setItemName(item.getItemName());
-			String skuPic = ImageUtil.getImageUrl(itemSku.getSkuPic());
-			itemSku.setSkuPic(skuPic);
-			//2.init
-			itemSku.setModel("admin");
-			itemSku.setGmtModify(new Date());
-//			iItemSkuService.updateById(itemSku);
-			iItemSkuService.updateItemSku(itemSku);
-
-			//同步到有赞并上架
-			/*
-			*/
-
-			//return result.buildIsSuccess(true);
-		//}
-		
 		//检测upc是否重复,一个公司旗下的upc不能重复
 		String companyNo = AppUtil.getLoginUserCompanyNo();
 		List<String> skuCodeList = iItemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
@@ -155,10 +102,10 @@ public class ItemSkuController  {
 			return result.buildIsSuccess(false).buildMsg("您填入的虚拟库存数据错误");
 		}
 		//更新尺寸
-		if(IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
+		if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
 			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "颜色", itemSku.getColor());
 		}
-		if(IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
+		if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
 			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", itemSku.getScale());
 		}		
 		//更新sku
@@ -232,7 +179,7 @@ public class ItemSkuController  {
 	@ResponseBody
 	public Object queryItemSkus(ItemSkuQueryVO itemSkuQueryVO) {
 		JsonPageResult<List<ISkuDTO>> result = new JsonPageResult<>();
-		if(null == AppUtil.getLoginUserCompanyNo()) {
+		if(!loginCheck()) {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
@@ -248,7 +195,7 @@ public class ItemSkuController  {
 	@ResponseBody
 	public Object queryItemList(ItemSkuQueryVO itemSkuQueryVO) {
 		JsonPageResult<List<ISkuDTO>> result = new JsonPageResult<>();
-		if(null == AppUtil.getLoginUserCompanyNo()) {
+		if(!loginCheck()) {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
@@ -264,23 +211,9 @@ public class ItemSkuController  {
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	//@Transactional(rollbackFor = ErpCommonException.class)
+	//@Transactional(rollbackFor = BizCommonException.class)
 	public Object delete(Long id) {
 		JsonResult<String> result = new JsonResult<>();
-		/*
-		if(id!=null){
-			if(iItemSkuService.isCanDeleteSku(id)) {
-				iItemSkuService.deleteByPrimaryKey(id);
-				return result.buildIsSuccess(true);
-			} else {
-				return result.buildIsSuccess(false).buildMsg("此sku已有业务记录，不能删除");
-			}
-		}else{
-			return result.buildIsSuccess(false).buildMsg("没有SKU id");
-		}*/
-		if(null == id) {
-			return result.buildIsSuccess(false).buildMsg("要删除的sku的id不能为空");
-		}
 		//如果这个sku对应的商品只有这一个sku，禁止删除该sku
 		if(1 >= iItemSkuService.querySkuNumberBySkuId(id)) {
 			return result.buildIsSuccess(false).buildMsg("商品只有这一个sku,暂时无法删除");
@@ -345,7 +278,7 @@ public class ItemSkuController  {
 					} else { // 下架
 						channelService.syncDelistingItem(item.getId());
 					}
-				} catch (Exception e) {
+				} catch (exception e) {
 					logger.error("SKU锁定虚拟库存时同步到有赞：", e);
 				}
 			}
@@ -439,25 +372,6 @@ public class ItemSkuController  {
     	return result;
 	}
     
-    /**
-     * 重新计算商品的价格区间
-     * @param newSkuPrice 当前sku的价格List
-     * @return
-     */
-//    private static String calNewPriceRange(List<Double> newSkuPrice) {
-//    	BigDecimal minPrice = new BigDecimal(newSkuPrice.get(0).toString());
-//		BigDecimal maxPrice = new BigDecimal(newSkuPrice.get(0).toString());		
-//		for(Double newPirce:newSkuPrice) {		
-//			BigDecimal curSkuPrice = new BigDecimal(newPirce.toString());
-//			maxPrice = maxPrice.compareTo(curSkuPrice) < 0 ? curSkuPrice : maxPrice;
-//			minPrice = minPrice.compareTo(curSkuPrice) > 0 ? curSkuPrice : minPrice;
-//		}   		 
-//		if(0 == maxPrice.compareTo(minPrice)) {
-//			return maxPrice.toPlainString();
-//		} else {
-//			return minPrice.toPlainString()+"-"+maxPrice.stripTrailingZeros().toPlainString();
-//		}
-//    }
     
     //查询规格列表，不用的请求
 	@RequestMapping("/scaleTypeList")
@@ -554,7 +468,19 @@ public class ItemSkuController  {
 		}
 		public void setScaleList(List<ScaleType> scaleList) {
 			this.scaleList = scaleList;
-		}
-		
+		}		
 	}
+	
+	/**
+     * 工具类
+     * 用户登录判断
+     * @param itemCode
+     * @return
+     */
+    public Boolean loginCheck() {
+    	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+         	return false;
+        }  
+    	return true;
+    }
 }

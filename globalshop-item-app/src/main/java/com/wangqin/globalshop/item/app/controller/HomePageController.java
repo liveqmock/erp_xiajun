@@ -2,10 +2,10 @@ package com.wangqin.globalshop.item.app.controller;
 
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.TaskDailyStatus;
-import com.wangqin.globalshop.biz1.app.dto.OneWeekSaleDTO;
+import com.wangqin.globalshop.biz1.app.enums.InoutOperatorType;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.TaskDailyStatus;
+import com.wangqin.globalshop.biz1.app.bean.dto.OneWeekSaleDTO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IItemService;

@@ -2,8 +2,8 @@ package com.wangqin.globalshop.item.app.service.impl;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemBrandDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,4 +115,9 @@ public class ItemBrandServiceImpl  implements IItemBrandService {
 	public List<Long> queryIdListByBrandName(String name) {
     	return itemBrandDOMapperExt.queryIdListByBrandName(name);
     }
+
+	@Override
+	public List<ItemBrandDO> queryByEnName(String brandEnName) {
+		return itemBrandDOMapperExt.queryByEnName(brandEnName);
+	}
 }

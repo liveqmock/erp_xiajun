@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
-import com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;

@@ -21,9 +21,33 @@
         unit,source,promotion,T1.id_card AS idCard,T1.detail,T1.start_date AS startDate,
         T1.end_date AS endDate,T1.is_sale AS isSale,T1.logistic_type as logisticType,
         T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.creator AS userCreate,
-        T1.modifier AS userModify 
+        T1.modifier AS userModify,
+        T1.sale_on_youzan AS saleOnYouzan,T1.third_sale AS thirdSale
     </sql>
 
+	<!--定时任务，扫描所有处于可售状态的商品-->
+    <select id="queryItemSalable" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" 
+    parameterType="java.lang.Byte">
+ 		SELECT
+		<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
+ 	    FROM
+ 	    `item`
+ 	    WHERE
+ 	    is_sale=#{isSale}
+ 	    AND 
+ 	    is_del=0
+ 	</select>
+ 	
+ 	<!--定时任务，更新商品状态为不可售-->
+    <select id="updateItemIsSale">
+ 		UPDATE
+ 		`item`
+ 		SET
+ 		is_sale=#{isSale}
+		WHERE
+		item_code=#{itemCode}
+ 	</select>
+ 	
     <!--通过item_code查询item-->
     <select id="queryItemDOByItemCode" parameterType="java.lang.String"
             resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
@@ -139,6 +163,12 @@
             <if test="isSale != null">
                 is_sale,
             </if>
+            <if test="saleOnYouzan != null" >
+        		sale_on_youzan,
+      		</if>
+      		<if test="thirdSale != null" >
+        		third_sale,
+      		</if>
             <if test="wxisSale != null">
                 wxis_sale,
             </if>
@@ -255,6 +285,12 @@
             <if test="isSale != null">
                 #{isSale,jdbcType=TINYINT},
             </if>
+            <if test="saleOnYouzan != null" >
+        		#{saleOnYouzan,jdbcType=INTEGER},
+      		</if>
+      		<if test="thirdSale != null" >
+        		#{thirdSale,jdbcType=INTEGER},
+      		</if>
             <if test="wxisSale != null">
                 #{wxisSale,jdbcType=TINYINT},
             </if>
@@ -420,7 +456,7 @@
 
     <!-- 根据条件查询商品总数量(fin)-->
     <select id="queryItemsCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
         count(1)
         FROM
@@ -477,8 +513,8 @@
     </select>
 
     <!-- 按条件查询商品(fin) -->
-    <select id="queryItems" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+    <select id="queryItems" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
         <include refid="Base_Column_List_2"/>,
         IFNULL(sum(IFNULL(T3.inv,0)),0) AS inventory,
@@ -545,7 +581,7 @@
 
 
     <!-- 根据id查询单个商品，修改时使用(fin) -->
-    <select id="queryItemById" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO" parameterType="java.lang.Long">
+    <select id="queryItemById" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO" parameterType="java.lang.Long">
         SELECT
         <include refid="Base_Column_List_2"/>
         FROM
@@ -573,7 +609,7 @@
 	</update>
 
     <select id="queryItemsCountByhaihu" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
         count(1)
         FROM
@@ -589,7 +625,7 @@
     </select>
 
     <select id="queryHaihuItems" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
         <include refid="Haihu_Column_List"/>,T2.sku_code As skuCode,T2.upc As skuUpc, T2.color As skuColor,
         T2.sale_price As salePrice,T2.weight As skuWeight
@@ -609,7 +645,7 @@
     </select>
 
     <select id="queryHaihuByUptime" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
         <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List"/>
         FROM
@@ -739,8 +775,8 @@
     </sql>
 
     <!-- 按条件查询商品(fin) -->
-    <select id="queryMallItems" resultType="com.wangqin.globalshop.biz1.app.dto.ItemDTO"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.ItemQueryVO">
+    <select id="queryMallItems" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
         <include refid="Mall_Base_Column_List"/>
         FROM
@@ -813,6 +849,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into item(
+        country,
         item_code,
         company_no,
         category_code,
@@ -836,6 +873,7 @@
         VALUES
         <foreach collection="list" item="item" separator=",">
             (
+            #{item.country},
             #{item.itemCode},
             #{item.companyNo},
             #{item.categoryCode},

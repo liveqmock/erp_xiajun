@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.item.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;

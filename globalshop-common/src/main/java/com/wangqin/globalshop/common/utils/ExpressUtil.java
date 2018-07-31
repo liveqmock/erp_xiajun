@@ -114,7 +114,7 @@ public class ExpressUtil {
 	 * @param charset
 	 *            编码方式
 	 * @throws UnsupportedEncodingException
-	 *             ,Exception
+	 *             ,exception
 	 * @return DataSign签名
 	 */
 	private static String encrypt(String content, String keyValue, String charset)

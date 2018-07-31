@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
 import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOutManifestQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOutManifestDetailDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOutManifestMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -114,8 +114,8 @@ public class InventoryOutManifestDetailServiceImpl implements IInventoryOutManif
     }
 
     @Override
-    public List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestVO inventoryOutManifestVO) {
-        return inventoryOutManifestDetailDOMapper.listByInventoryOutManifestVO(inventoryOutManifestVO);
+    public List<InventoryOutManifestDetailDO> listByInventoryOutManifestVO(InventoryOutManifestQueryVO inventoryOutManifestQueryVO) {
+        return inventoryOutManifestDetailDOMapper.listByInventoryOutManifestVO(inventoryOutManifestQueryVO);
     }
 
 

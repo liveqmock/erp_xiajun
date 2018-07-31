@@ -3,13 +3,13 @@ package com.wangqin.globalshop.order.app.controller.mall;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channel.service.item.IItemSkuService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -33,10 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author zhulu
@@ -118,7 +115,7 @@ public class MallOrderController {
             return result.buildMsg(e.getMessage()).buildIsSuccess(false);
         }
 
-        return result;
+        return result.buildIsSuccess(true).buildMsg("更新成功");
     }
 
     /**
@@ -160,7 +157,7 @@ public class MallOrderController {
 //        if (roles.contains("irhdaili")) {
 //            String[] logingNameArr = shiroUser.getLoginName().split("_");
 //            if (logingNameArr.length < 2 || StringUtils.isBlank(logingNameArr[1])) {
-//                throw new ErpCommonException("用户权限异常");
+//                throw new BizCommonException("用户权限异常");
 //            }
 //            outerOrderQueryVO.setSalesId(Integer.parseInt(logingNameArr[1]));
 //            Seller seller = sellerService.selectById(outerOrderQueryVO.getSalesId());
@@ -329,14 +326,27 @@ public class MallOrderController {
                 list.add(outerOrder.getOrderNo());            //主订单号
 //                list.add(outerOrder.getS());        //销售员
                 list.add(outerOrder.getTotalAmount());    //订单金额
+//                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//                list.add(sdf.format(outerOrder.getGmtCreate()));        //下单时间
                 list.add(outerOrder.getGmtCreate());        //下单时间
                 list.add(OrderStatus.of(outerOrder.getStatus()).getDescription());  //订单状态
-                list.add(outerOrder.getIdCard());            //收件人
+                List<MallSubOrderDO> subOrderDOList=mallSubOrderService.selectByOrderNo(outerOrder.getOrderNo());
+                if(subOrderDOList.size()>0) {
+                    list.add(subOrderDOList.get(0).getReceiver());            //收件人
+                    list.add(subOrderDOList.get(0).getTelephone());        //手机
+                    list.add(subOrderDOList.get(0).getReceiverState());    //省
+                    list.add(subOrderDOList.get(0).getReceiverCity());        //市
+                    list.add(subOrderDOList.get(0).getReceiverDistrict());    //区
+                    list.add(subOrderDOList.get(0).getReceiverAddress());    //详细地址
+                }else
+                {
+                    list.add(outerOrder.getIdCard());            //收件人
 //                list.add(outerOrder.getTelephone());        //手机
 //                list.add(outerOrder.getSt());    //省
 //                list.add(outerOrder.getReceiverCity());        //市
 //                list.add(outerOrder.getReceiverDistrict());    //区
 //                list.add(outerOrder.getAddressDetail());    //详细地址
+                }
 
                 rowDatas.add(list);
             }
@@ -344,10 +354,10 @@ public class MallOrderController {
         ExcelHelper excelHelper = new ExcelHelper();
 //        String[] columnTitles = new String[]{"主订单号", "销售员", "订单金额", "下单时间", "订单状态", "收件人", "手机", "省", "市", "区", "详细地址"};
 //        Integer[] columnWidth = new Integer[]{30, 15, 15, 20, 15, 15, 15, 15, 15, 15, 45};
-        String[] columnTitles = new String[]{"主订单号", "订单金额", "下单时间", "订单状态", "收件人"};
-        Integer[] columnWidth = new Integer[]{30, 15, 20, 15, 15};
+        String[] columnTitles = new String[]{"主订单号", "订单金额", "下单时间", "订单状态", "收件人", "手机", "省", "市", "区", "详细地址"};
+        Integer[] columnWidth = new Integer[]{30, 15, 20, 15, 15, 15, 15, 15, 15, 45};
 
-        excelHelper.setOuterOrderToSheet("Father Order", columnTitles, rowDatas, columnWidth);
+        excelHelper.setOuterOrderToSheet("主订单", columnTitles, rowDatas, columnWidth);
         //excelHelper.writeToFile("/Users/liuyang/Work/test.xls");
 
         ResponseEntity<byte[]> filebyte = null;

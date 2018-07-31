@@ -9,9 +9,9 @@ import com.taobao.api.request.TradeListGetRequest;
 import com.taobao.api.request.TradeReceiverGetRequest;
 import com.taobao.api.response.TradeListGetResponse;
 import com.taobao.api.response.TradeReceiverGetResponse;
-import com.wangqin.globalshop.biz1.app.constants.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.PlatformType;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
@@ -377,7 +377,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 ////					hasFailed = true;
 ////					this.logger.error("同步发货给 有赞 返回结果异常：" + result.toString());
 ////				}
-//			} catch (Exception e) {
+//			} catch (exception e) {
 //				hasFailed = true;
 //				logger.error("淘宝发货异常: ", e);
 //			}
@@ -387,7 +387,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 //			try {
 //				shippingOrder.setSyncSendStatus(1);
 //				shippingOrderService.updateByPrimaryKey(shippingOrder);
-//			} catch (Exception e) {
+//			} catch (exception e) {
 //				this.logger.error("同步发货给 淘宝 返回结果异常");
 //			}
 //		}

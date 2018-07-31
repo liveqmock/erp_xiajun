@@ -9,6 +9,7 @@
         <result column="inventory_on_warehouse_no" property="inventoryOnWarehouseNo" jdbcType="VARCHAR"/>
         <result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR"/>
         <result column="shelf_no" property="shelfNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="quantity" property="quantity" jdbcType="BIGINT"/>
         <result column="operator_type" property="operatorType" jdbcType="TINYINT"/>
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
@@ -17,7 +18,7 @@
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
     </resultMap>
-    <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+    <resultMap id="BaseResultMapVO" type="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
         <result column="item_code" property="itemCode" jdbcType="VARCHAR"/>
@@ -46,7 +47,7 @@
   </sql>
 
     <select id="queryInventoryInoutCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO">
         SELECT
         count(1)
         FROM
@@ -74,7 +75,7 @@
     </select>
 
     <select id="queryInventoryInouts" resultMap="BaseResultMap"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.InventoryQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -158,5 +159,83 @@
     		AND
     		is_del = 0
     		
+    </select>
+
+    <!-- 根据指定条件分页查询出入库记录 -->
+    <select id="listInventoryInout" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryInoutItemVO">
+        SELECT
+        T1.sku_code       AS skuCode,
+        T1.creator        AS creator,
+        T1.gmt_create     AS gmtCreate,
+        T1.shelf_no       AS shelfNo,
+        T1.quantity       AS quantity,
+        T1.remark         AS remark,
+        T1.operator_type  AS operatorType,
+        T2.item_name      AS itemName,
+        T2.upc            AS upc,
+        T2.sku_pic        AS skuPic,
+        T3.name           AS warehouseName
+        FROM
+        inventory_inout T1, item_sku T2, warehouse T3
+        <where>
+            AND T1.sku_code = T2.sku_code
+            AND T1.warehouse_no = T3.warehouse_no
+            <if test="inventoryInoutQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{inventoryInoutQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryInoutQueryVO.skuCode != null">
+                AND T1.sku_code = #{inventoryInoutQueryVO.skuCode}
+            </if>
+            <if test="inventoryInoutQueryVO.upc != null">
+                AND T2.upc = #{inventoryInoutQueryVO.upc}
+            </if>
+            <if test="inventoryInoutQueryVO.itemName != null">
+                AND T2.item_name = #{inventoryInoutQueryVO.itemName}
+            </if>
+            <if test="inventoryInoutQueryVO.operatorType != null">
+                AND T1.operator_type = #{inventoryInoutQueryVO.operatorType}
+            </if>
+            <if test="inventoryInoutQueryVO.shelfNo != null">
+                AND T1.shelf_no = #{inventoryInoutQueryVO.shelfNo}
+            </if>
+            AND T1.company_no = #{inventoryInoutQueryVO.companyNo}
+            AND T1.is_del = 0
+        </where>
+        ORDER BY T1.gmt_create DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex}, #{pageQueryParam.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据指定条件查询出入库记录数目 -->
+    <select id="countInventoryInout" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        inventory_inout T1, item_sku T2, warehouse T3
+        <where>
+            AND T1.sku_code = T2.sku_code
+            AND T1.warehouse_no = T3.warehouse_no
+            <if test="inventoryInoutQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{inventoryInoutQueryVO.warehouseNo}
+            </if>
+            <if test="inventoryInoutQueryVO.skuCode != null">
+                AND T1.sku_code = #{inventoryInoutQueryVO.skuCode}
+            </if>
+            <if test="inventoryInoutQueryVO.upc != null">
+                AND T2.upc = #{inventoryInoutQueryVO.upc}
+            </if>
+            <if test="inventoryInoutQueryVO.itemName != null">
+                AND T2.item_name = #{inventoryInoutQueryVO.itemName}
+            </if>
+            <if test="inventoryInoutQueryVO.operatorType != null">
+                AND T1.operator_type = #{inventoryInoutQueryVO.operatorType}
+            </if>
+            <if test="inventoryInoutQueryVO.shelfNo != null">
+                AND T1.shelf_no = #{inventoryInoutQueryVO.shelfNo}
+            </if>
+            AND T1.company_no = #{inventoryInoutQueryVO.companyNo}
+            AND T1.is_del = 0
+        </where>
     </select>
 </mapper>

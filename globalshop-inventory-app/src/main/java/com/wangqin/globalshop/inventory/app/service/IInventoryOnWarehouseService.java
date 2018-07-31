@@ -3,18 +3,16 @@ package com.wangqin.globalshop.inventory.app.service;
 import java.util.List;
 import java.util.Map;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.InoutOperatorType;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.enums.InoutOperatorType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 
 /**
  * @author biscuit
  * @data 2018/06/01
  */
 public interface IInventoryOnWarehouseService {
-    List<InventoryOnWarehouseVO> queryInventoryAreas(InventoryQueryVO inventoryQueryVO);
 
     InventoryOnWareHouseDO selectById(Long inventoryAreaId);
 
@@ -41,4 +39,20 @@ public interface IInventoryOnWarehouseService {
     InventoryOnWareHouseDO selectByWarehouseNo(String warehouseNo);
     
     InventoryOnWareHouseDO selectByInventoryOnWarehouseNo(String inventoryOnWarehouseNo);
+
+    /**
+     * 根据指定条件分页查询库存记录列表
+     * @param inventoryOnWarehouseQueryVO
+     * @param pageQueryParam
+     * @return
+     */
+    List<InventoryOnWarehouseItemVO> listInventoryOnWarehouse(InventoryOnWarehouseQueryVO inventoryOnWarehouseQueryVO,
+                                                              PageQueryParam pageQueryParam);
+
+    /**
+     * 根据指定条件查询库存记录数目
+     * @param inventoryOnWarehouseQueryVO
+     * @return
+     */
+    int countInventoryOnWarehouse(InventoryOnWarehouseQueryVO inventoryOnWarehouseQueryVO);
 }

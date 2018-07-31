@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.BuyerDOMapperExt">
-	<resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO" >
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-		<result column="open_id" property="openId" jdbcType="VARCHAR" />
-		<result column="union_id" property="unionId" jdbcType="VARCHAR" />
-		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
-		<result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR" />
-		<result column="gender" property="gender" jdbcType="INTEGER" />
-		<result column="city" property="city" jdbcType="VARCHAR" />
-		<result column="province" property="province" jdbcType="VARCHAR" />
-		<result column="country" property="country" jdbcType="VARCHAR" />
-		<result column="referer" property="referer" jdbcType="BIGINT" />
-		<result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT" />
-		<result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR" />
-		<result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP" />
-		<result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
-		<result column="creator" property="creator" jdbcType="VARCHAR" />
-		<result column="modifier" property="modifier" jdbcType="VARCHAR" />
-	</resultMap>
-	<sql id="Base_Column_List" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="INTEGER"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="country" property="country" jdbcType="VARCHAR"/>
+        <result column="referer" property="referer" jdbcType="BIGINT"/>
+        <result column="purchase_commission_mode" property="purchaseCommissionMode" jdbcType="BIGINT"/>
+        <result column="purchase_commission_str" property="purchaseCommissionStr" jdbcType="VARCHAR"/>
+        <result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
 		id, company_no, open_id, union_id, nick_name, head_protrait_url, gender, city, province,
 		country, referer, purchase_commission_mode, purchase_commission_str, first_login_time,
 		last_login_time, creator, modifier
@@ -36,133 +36,144 @@
     </sql>
 
 	-->
-	<!--<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerVO">-->
-		<!--SELECT COUNT(*) FROM buyer T1 WHERE T1.power_code !=0-->
-	<!--</select>-->
+    <!--<select id="queryWxPurchaseUserCount" resultType="java.lang.Integer" parameterType="BuyerVO">-->
+    <!--SELECT COUNT(*) FROM buyer T1 WHERE T1.power_code !=0-->
+    <!--</select>-->
 
-	<!--<select id="queryWxPurchaseUser" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">-->
-		<!--SELECT <include refid="Base_Column_List2" /> FROM buyer T1 WHERE T1.power_code !=0-->
-		<!--<if test="companyId != null ">-->
-			<!--and T1.company_no = #{companyNo}-->
-		<!--</if>-->
-	<!--</select>-->
-	<select id="list" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select <include refid="Base_Column_List" />
-		FROM `buyer`
-		WHERE
-	      is_del='0'
-		 AND company_no = #{companyNo}
-	</select>
-
-
-	<sql id="tableSection">buyer</sql>
-
-	<sql id="commonSelectSection">
-		1 = 1
-		<if test="companyNo != null">
-			and T.company_no = #{companyNo}
-		</if>
-
-		<if test="unionId != null">
-			and T.union_id = #{unionId}
-		</if>
-
-		<if test="openId != null">
-			and T.open_id = #{openId}
-		</if>
-
-		<if test=" isDel == true">
-			and T.is_del is true
-		</if>
-		<if test=" isDel == false">
-			and T.is_del is false
-		</if>
-		<if test=" isDel == null">
-			and T.is_del is false
-		</if>
-
-	</sql>
+    <!--<select id="queryWxPurchaseUser" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">-->
+    <!--SELECT <include refid="Base_Column_List2" /> FROM buyer T1 WHERE T1.power_code !=0-->
+    <!--<if test="companyId != null ">-->
+    <!--and T1.company_no = #{companyNo}-->
+    <!--</if>-->
+    <!--</select>-->
+    <select id="list" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        FROM `buyer`
+        WHERE
+        is_del='0'
+        AND company_no = #{companyNo}
+    </select>
 
 
-	<!--查询总条数 -->
-	<select id="searchBuyer" resultMap="BaseResultMap"
-	>
-		SELECT <include refid="Base_Column_List" />
-		FROM <include refid="tableSection"/> T
-		WHERE
-		<include refid="commonSelectSection"/>
-	</select>
+    <sql id="tableSection">buyer</sql>
 
-	<!--查询总条数 -->
-	<select id="searchBuyerCount" resultType="java.lang.Long"
-	>
-		SELECT COUNT(*)
-		FROM <include refid="tableSection"/> T
-		WHERE
-		<include refid="commonSelectSection"/>
-	</select>
+    <sql id="commonSelectSection">
+        1 = 1
+        <if test="companyNo != null">
+            and T.company_no = #{companyNo}
+        </if>
 
-	<!-- -->
-	<select id="searchBuyerList" resultMap="BaseResultMap">
-		SELECT  <include refid="Base_Column_List" />
-		FROM <include refid="tableSection"/> T
-		WHERE
-		<include refid="commonSelectSection"/>
-		ORDER BY T.id desc
-	</select>
+        <if test="unionId != null">
+            and T.union_id = #{unionId}
+        </if>
 
-    <update id="update" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO" >
+        <if test="openId != null">
+            and T.open_id = #{openId}
+        </if>
+
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T.is_del is false
+        </if>
+
+    </sql>
+
+
+    <!--查询总条数 -->
+    <select id="searchBuyer" resultMap="BaseResultMap"
+    >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableSection"/>
+        T
+        WHERE
+        T.company_no =#{companyNo}
+        and T.open_id = #{openId}
+        and T.is_del is FALSE
+    </select>
+
+    <!--查询总条数 -->
+    <select id="searchBuyerCount" resultType="java.lang.Long"
+    >
+        SELECT COUNT(*)
+        FROM
+        <include refid="tableSection"/>
+        T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="searchBuyerList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableSection"/>
+        T
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T.id desc
+    </select>
+
+    <update id="update" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
         update buyer
-        <set >
-            <if test="companyNo != null" >
+        <set>
+            <if test="companyNo != null">
                 company_no = #{companyNo,jdbcType=VARCHAR},
             </if>
-            <if test="openId != null" >
+            <if test="openId != null">
                 open_id = #{openId,jdbcType=VARCHAR},
             </if>
-            <if test="unionId != null" >
+            <if test="unionId != null">
                 union_id = #{unionId,jdbcType=VARCHAR},
             </if>
-            <if test="nickName != null" >
+            <if test="nickName != null">
                 nick_name = #{nickName,jdbcType=VARCHAR},
             </if>
-            <if test="headProtraitUrl != null" >
+            <if test="headProtraitUrl != null">
                 head_protrait_url = #{headProtraitUrl,jdbcType=VARCHAR},
             </if>
-            <if test="gender != null" >
+            <if test="gender != null">
                 gender = #{gender,jdbcType=INTEGER},
             </if>
-            <if test="city != null" >
+            <if test="city != null">
                 city = #{city,jdbcType=VARCHAR},
             </if>
-            <if test="province != null" >
+            <if test="province != null">
                 province = #{province,jdbcType=VARCHAR},
             </if>
-            <if test="country != null" >
+            <if test="country != null">
                 country = #{country,jdbcType=VARCHAR},
             </if>
-            <if test="referer != null" >
+            <if test="referer != null">
                 referer = #{referer,jdbcType=BIGINT},
             </if>
-            <if test="purchaseCommissionMode != null" >
+            <if test="purchaseCommissionMode != null">
                 purchase_commission_mode = #{purchaseCommissionMode,jdbcType=BIGINT},
             </if>
-            <if test="purchaseCommissionStr != null" >
+            <if test="purchaseCommissionStr != null">
                 purchase_commission_str = #{purchaseCommissionStr,jdbcType=VARCHAR},
             </if>
-            <if test="firstLoginTime != null" >
+            <if test="firstLoginTime != null">
                 first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="lastLoginTime != null" >
+            <if test="lastLoginTime != null">
                 last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="creator != null" >
+            <if test="creator != null">
                 creator = #{creator,jdbcType=VARCHAR},
             </if>
-            <if test="modifier != null" >
+            <if test="modifier != null">
                 modifier = #{modifier,jdbcType=VARCHAR},
             </if>
-            <if test="isDel != null" >
+            <if test="isDel != null">
                 is_del = #{isDel,jdbcType=BIGINT},
             </if>
         </set>

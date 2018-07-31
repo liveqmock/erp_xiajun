@@ -36,7 +36,7 @@
   	from auth_resource
   </select>
 
-  <select id="queryResourcesCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO">
+  <select id="queryResourcesCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO">
     SELECT
     count(1)
     FROM
@@ -60,7 +60,7 @@
     </if>
   </select>
 
-  <select id="queryResourceQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO">
+  <select id="queryResourceQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthResourceDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO">
     SELECT
     <include refid="Base_Column_List2" />
     FROM
@@ -96,7 +96,7 @@
     </where>
   </select>
   
-  <select id="queryTreeVoByResourceId" parameterType="com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO" resultMap="BaseResultMap">
+  <select id="queryTreeVoByResourceId" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO" resultMap="BaseResultMap">
   	SELECT
   	<include refid="Base_Column_List2"/>
   	FROM
@@ -106,7 +106,7 @@
   	</where>
   </select>
   
-  <insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO">
+  <insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO">
    insert into auth_resource
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="resourceId != null" >
@@ -186,7 +186,7 @@
     </trim>
   </insert>
   
-  <update id="updateByResourceVo" parameterType="com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO" >
+  <update id="updateByResourceVo" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO" >
     update auth_resource
     set resource_id = #{resourceId,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},

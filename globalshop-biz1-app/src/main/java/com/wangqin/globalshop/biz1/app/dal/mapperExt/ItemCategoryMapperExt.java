@@ -2,7 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemCategoryDOMapper;
-import com.wangqin.globalshop.biz1.app.dto.ItemCategoryDTO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemCategoryDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

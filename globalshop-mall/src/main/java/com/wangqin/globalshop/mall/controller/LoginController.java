@@ -13,7 +13,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallCustomerDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallWxCustomerTrackDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallWxCustomerTrackDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallCustomerDOMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.HttpClientUtil;
 

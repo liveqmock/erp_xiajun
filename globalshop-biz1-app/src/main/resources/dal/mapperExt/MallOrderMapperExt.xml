@@ -37,7 +37,7 @@
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="BaseResultVOMap" type="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+    <resultMap id="BaseResultVOMap" type="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="dealer_code" property="dealerCode" jdbcType="VARCHAR"/>
         <result column="dealer_name" property="dealerName" jdbcType="VARCHAR"/>
@@ -78,7 +78,7 @@
         source, freight, freight_agent, gmt_modify, gmt_create, is_del, modifier, creator
     </sql>
     <select id="queryErpOrdersCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderQueryVO">
         SELECT
         count(1)
         FROM
@@ -155,7 +155,7 @@
     </select>
 
     <select id="queryErpOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderQueryVO">
         SELECT
         <include refid="Base_Column_List"/>,T2.logistic_no AS logisticNo,T2.logistic_company AS logisticCompany
         FROM
@@ -312,7 +312,7 @@
     </select>
 
     <select id="queryErpOrderForExcel" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO"
-            parameterType="com.wangqin.globalshop.biz1.app.vo.MallOrderQueryVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderQueryVO">
         SELECT
         <include refid="Base_Column_List"/>
         , T2.nick_name AS nickName
@@ -375,6 +375,24 @@
         order by T1.id desc
     </select>
 
+    <select id="queryExpiredSubOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        mall_order
+        where
+        is_del is false
+        and status = #{status}
+        and <![CDATA[ gmt_create < date_sub(now(), interval #{timeOut} MINUTE ) ]]>
+    </select>
+    <update id="changeStatus"  >
+        UPDATE mall_order
+        SET
+        status=#{newStatus}
+        WHERE id=#{id} AND status = #{oldStatus}
+    </update>
+
+
     <update id="updateExpiredTaskStatus">
         UPDATE mall_order
         SET
@@ -391,7 +409,7 @@
     <update id="updateWeightForErpOrder" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
     UPDATE mall_sub_order SET upc=#{upc} WHERE (upc!=#{upc} or upc is null) and sku_code=#{skuCode}
     </update>
-    <update id="updateByIsDel" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+    <update id="updateByIsDel" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO">
     	update mall_order
     set dealer_code = #{dealerCode,jdbcType=VARCHAR},
       dealer_name = #{dealerName,jdbcType=VARCHAR},
@@ -460,7 +478,7 @@
         ORDER BY T1.id
     </select>
     <select id="queryOuterOrdersCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO">
         SELECT
         count(1)
         FROM
@@ -482,7 +500,7 @@
 
     </select>
     <select id="queryOuterOrders" resultMap="BaseResultMap"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -613,8 +631,8 @@
         WHERE
         <include refid="commonSelectSection"/>
     </select>
-    <select id="list" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO">
+    <select id="list" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO">
         SELECT
         DISTINCT
         t1.order_no orderNo,
@@ -674,6 +692,13 @@
             t1.gmt_create &lt;= #{endGmtCreate}
         </if>
         ORDER BY t1.order_time DESC
+        <if test="endGmtCreate != null ">
+            AND
+            t1.gmt_create &lt;= #{endGmtCreate}
+        </if>
+        <if  test="pageIndex != null and pageSize != null">
+
+        </if>
     </select>
 
     <!-- -->

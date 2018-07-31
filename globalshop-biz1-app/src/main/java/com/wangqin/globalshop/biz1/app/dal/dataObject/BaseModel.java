@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
 import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.czh.ICheackParam;
 
 import java.util.Date;
 
@@ -9,7 +8,7 @@ import java.util.Date;
  * @author biscuit
  * @data 2018/06/05
  */
-public class BaseModel implements ICheackParam {
+public class BaseModel {
     protected Boolean isDel;
     protected Date gmtCreate;
     protected Date gmtModify;

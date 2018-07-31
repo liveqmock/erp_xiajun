@@ -294,13 +294,13 @@ public class JdShopServiceImplTest {
 //			response=client.execute(request);
 //		} catch (JdException e) {
 //			logger.error("createItem_error",e);
-//			throw new ErpCommonException("createItem,商品发布时，京东内部出错");
+//			throw new BizCommonException("createItem,商品发布时，京东内部出错");
 //		}
 //
 //		if(!response.getCode().equals("0")){
 //			String errorMsg = "";
 //			errorMsg += response == null ? "" : response.getCode()+" "+response.getZhDesc()+response.getEnDesc();
-//			throw new ErpCommonException("商品发布时，京东内部出错:"+errorMsg);
+//			throw new BizCommonException("商品发布时，京东内部出错:"+errorMsg);
 //		}
 //		System.out.println("成功：");
 //		System.out.println(JSONObject.toJSON(response.getCategory()));

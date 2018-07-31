@@ -2,8 +2,8 @@ package com.wangqin.globalshop.usercenter.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.AuthUserVO;
-import com.wangqin.globalshop.biz1.app.vo.UserQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.PageInfo;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
@@ -63,6 +63,8 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
     List<AuthUserDO> selectByUnionid(String unionid);
 
     List<AuthUserDO> selectByUnionidAndCompanyNo(String unionid, String state);
+
+    AuthUserDO selectByUserNoAndCompanyNo(String userNo, String companyNo);
 
 
     /**

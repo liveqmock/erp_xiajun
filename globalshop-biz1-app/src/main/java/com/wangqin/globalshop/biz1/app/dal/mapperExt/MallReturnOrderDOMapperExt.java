@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallReturnOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallReturnOrderDOMapper;
 import org.apache.ibatis.annotations.Param;
 

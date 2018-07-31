@@ -4,8 +4,8 @@ package com.wangqin.globalshop.app;
 import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallOrderVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
 import org.junit.Test;
 
 import java.util.ArrayList;

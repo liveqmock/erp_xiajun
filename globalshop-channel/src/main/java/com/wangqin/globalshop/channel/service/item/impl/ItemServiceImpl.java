@@ -8,7 +8,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.vo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;

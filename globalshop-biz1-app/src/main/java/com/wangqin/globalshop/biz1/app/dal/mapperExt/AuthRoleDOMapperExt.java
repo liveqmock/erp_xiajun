@@ -2,10 +2,9 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.AuthRoleDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.ResourceQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.RoleQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ResourceQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
 
 import java.util.List;
 import java.util.Map;

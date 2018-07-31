@@ -1,11 +1,11 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderReturnStatus;
-import com.wangqin.globalshop.biz1.app.constants.enums.OrderStatus;
+import com.wangqin.globalshop.biz1.app.enums.OrderReturnStatus;
+import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallReturnOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallReturnOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
@@ -42,7 +42,7 @@ public class MallReturnOrderServiceImpl implements IMallReturnOrderService {
     public void add(MallReturnOrderVO erpReturnOrder) {
 
         if (erpReturnOrder.getErpOrderId() == null) {
-            new ErpCommonException("ErpCommonException");
+            new ErpCommonException("BizCommonException");
         }
         //todo
         erpReturnOrder.setReturnRefer(0);

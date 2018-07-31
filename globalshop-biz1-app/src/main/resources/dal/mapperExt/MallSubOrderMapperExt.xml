@@ -76,8 +76,8 @@
    	</sql>
 
     <!-- 导出子订单,根据时间@author:xiajun- -->
-    <select id="queryErpOrderForExcel" resultType="com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+    <select id="queryErpOrderForExcel" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderExcelVO"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO">
         SELECT
         <include refid="Base_Column_List_For_Excel"/>
         FROM `mall_sub_order` T1
@@ -98,7 +98,7 @@
     </select>
 
     <!-- 导出子订单,根据用户勾选了哪些子订单@author:xiajun- -->
-    <select id="queryErpOrderForExcelByIdList" resultType="com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO">
+    <select id="queryErpOrderForExcelByIdList" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderExcelVO">
         SELECT
         <include refid="Base_Column_List_For_Excel"/>
         FROM `mall_sub_order` T1
@@ -145,7 +145,7 @@
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
 		UPDATE mall_sub_order SET weight=#{weight} WHERE (weight!=#{weight} or weight is null) and sku_code=#{skuCode}
     </update>
-    <update id="updateByIsDel" parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+    <update id="updateByIsDel" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO">
         update mall_sub_order
         <set>
             <if test="orderNo != null">
@@ -331,7 +331,8 @@
         warehouse_no,
         order_time,
         sku_pic,
-        logistic_type
+        logistic_type,
+        status
         FROM
         mall_sub_order
         WHERE
@@ -362,13 +363,13 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         SELECT * FROM mall_sub_order WHERE id = #{id};
     </select>
-    <select id="selectByOrderNoVo" resultType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO"
+    <select id="selectByOrderNoVo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO"
             parameterType="java.lang.String">
         SELECT * FROM mall_sub_order WHERE order_no = #{orderNo};
     </select>
 
     <select id="queryErpOrdersCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO">
         SELECT
         count(1)
         FROM
@@ -447,7 +448,7 @@
     </update>
 
     <select id="queryErpOrders" resultMap="BaseResultMap"
-            parameterType="com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO">
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -503,7 +504,7 @@
                 and company_no = #{companyNo}
             </if>
         </where>
-        ORDER BY order_time DESC
+        ORDER BY gmt_create DESC
     </select>
     <select id="selectBySkuCode" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
@@ -638,7 +639,7 @@
     </select>
 
     <!-- 一键分享，我的订单 -->
-    <select id="queryOrderByShareUserId" resultType="com.wangqin.globalshop.biz1.app.dto.MyOrderDTO">
+    <select id="queryOrderByShareUserId" resultType="com.wangqin.globalshop.biz1.app.bean.dto.MyOrderDTO">
         SELECT
         share_time AS time,count(1) AS orderCount,sum(share_money) AS commission
         FROM mall_sub_order
@@ -674,7 +675,7 @@
     	order_no = #{orderNo}
     	AND status = #{status}
     </select>
-    <select id="queryByShippingOrder" parameterType="com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO"
+    <select id="queryByShippingOrder" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO"
             resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
         SELECT
         <include refid="Base_Column_List"/>
@@ -749,15 +750,20 @@
         WHERE
             order_no = #{orderNo}
     </delete>
-
+    <update id="changeStatus">
+        UPDATE mall_sub_order
+        SET
+        status=#{newStatus}
+        WHERE id=#{id} AND status = #{oldStatus}
+    </update>
     <select id="queryByMallSubOrderNos" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM mall_sub_order
         WHERE
         sub_order_no IN
-        <foreach collection="list" item="subOrderNo" open="(" separator="," close=")" >
-           #{subOrderNo}
+        <foreach collection="list" item="subOrderNo" open="(" separator="," close=")">
+            #{subOrderNo}
         </foreach>
     </select>
 

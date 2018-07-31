@@ -4,8 +4,8 @@ package com.wangqin.globalshop.order.app.service.shipping;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
-import com.wangqin.globalshop.biz1.app.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.MultiDeliveryFormDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.common.exception.InventoryException;
 
 import java.util.List;

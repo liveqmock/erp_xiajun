@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.order.app.service.mall;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.vo.MallSubOrderExcelVO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderExcelVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.common.exception.InventoryException;
 
 import java.util.List;
@@ -84,5 +84,7 @@ public interface IMallSubOrderService {
     void deleteByOrderNo(String orderNo);
 
     List<MallSubOrderDO> queryByMallSubOrderNos(List<String> noList);
+
+    Integer changeStatus(Long id,  Integer oldStatus, Integer newStatus);
 }
 

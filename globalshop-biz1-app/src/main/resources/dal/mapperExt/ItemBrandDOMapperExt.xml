@@ -15,7 +15,7 @@
 	</sql>
 
 	<!--查询总条数 -->
-	<select id="queryBrandCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
+	<select id="queryBrandCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO">
 		SELECT COUNT(*) 
 		FROM item_brand T1 
 		WHERE 
@@ -29,7 +29,7 @@
 	</select>
 
 	<!--分页查询 -->
-	<select id="queryBrands" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
+	<select id="queryBrands" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO">
 		SELECT 
 		<include refid="Base_Column_List_2" /> 
 		FROM item_brand T1 
@@ -46,7 +46,7 @@
 	</select>
 	
 	<!--按条件查询单个品牌 -->
-	<select id="queryBrandSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.vo.ItemBrandQueryVO">
+	<select id="queryBrandSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO">
 		SELECT <include refid="Base_Column_List_2" /> 
 		FROM item_brand T1 
 		WHERE T1.is_del=0
@@ -63,6 +63,12 @@
 		FROM item_brand T1
 		WHERE T1.is_del=0
         AND T1.name = #{enName} AND T1.name_china = #{cnName}
+	</select>
+	<select id="queryByEnName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" parameterType="java.lang.String">
+		SELECT <include refid="Base_Column_List_2" />
+		FROM item_brand T1
+		WHERE T1.is_del=0
+        AND T1.name = #{enName}
 	</select>
 
 	<!--总查询 -->

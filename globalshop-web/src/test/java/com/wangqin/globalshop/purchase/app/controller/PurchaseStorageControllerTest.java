@@ -1,8 +1,8 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerStorageDetailVo;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerStorageDetailVo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import org.junit.Test;
 
 import java.util.ArrayList;

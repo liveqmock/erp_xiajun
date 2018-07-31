@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper;
-import com.wangqin.globalshop.biz1.app.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuAddVO;
-import com.wangqin.globalshop.biz1.app.vo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
 
 
 
@@ -104,4 +104,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	
 	//询要更新的upc是否在别的商品名下已经存在,存在则表明出现了upc重复的问题
 	Integer queryRecordCountByUpcCompanyNotInSameItem(@Param("companyNo")String companyNo,@Param("upc")String upc,@Param("itemCode")String itemCode);
+
+    Integer queryCountByUpcAndCompanyNo(@Param("companyNo")String companyNo,@Param("upc") String upc);
 }

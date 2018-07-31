@@ -3,9 +3,9 @@ package com.wangqin.globalshop.mall.dal.mapperExt;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
-import com.wangqin.globalshop.biz1.app.vo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 
 public interface MallItemDOMapperExt extends ItemDOMapper {
 

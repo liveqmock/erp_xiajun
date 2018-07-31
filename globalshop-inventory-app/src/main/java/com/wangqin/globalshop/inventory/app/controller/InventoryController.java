@@ -1,13 +1,14 @@
 package com.wangqin.globalshop.inventory.app.controller;
 
-import com.wangqin.globalshop.biz1.app.constants.enums.GeneralStatus;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.enums.GeneralStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOnWarehouseVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryOutManifestVO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.InventoryQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.service.ISequenceUtilService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -47,7 +48,7 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
     @Autowired
-    private IInventoryOnWarehouseService inventoryAreaService;
+    private IInventoryOnWarehouseService inventoryOnWarehouseService;
     @Autowired
     private InventoryBookingRecordService inventoryRecordService;
     @Autowired
@@ -82,26 +83,38 @@ public class InventoryController {
 
     @RequestMapping("/area/queryList")
     @ResponseBody
-    public Object queryInventoryAreas(InventoryQueryVO inventoryQueryVO) {
-        JsonResult<List<InventoryOnWarehouseVO>> result = new JsonResult<>();
-        List<InventoryOnWarehouseVO> list = inventoryAreaService.queryInventoryAreas(inventoryQueryVO);
-        /**查规格**/
-        for (InventoryOnWarehouseVO inv : list) {
-            List<ItemSkuScaleDO> scaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(inv.getSkuCode());
-            if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
-                scaleList.forEach(skuScale -> {
-                    if ("颜色".equals(skuScale.getScaleName())) {
-                        inv.setColor(skuScale.getScaleValue());
-                    }
-                    if ("尺寸".equals(skuScale.getScaleName())) {
-                        inv.setScale(skuScale.getScaleValue());
-                    }
-                });
+    public Object queryInventoryAreas(InventoryOnWarehouseQueryVO inventoryOnWarehouseQueryVO,
+                                      PageQueryParam pageQueryParam) {
+        JsonPageResult<List<InventoryOnWarehouseItemVO>> result = new JsonPageResult<>();
+
+        try {
+            List<InventoryOnWarehouseItemVO> list =
+                    inventoryOnWarehouseService.listInventoryOnWarehouse(inventoryOnWarehouseQueryVO, pageQueryParam);
+            int totalCount = inventoryOnWarehouseService.countInventoryOnWarehouse(inventoryOnWarehouseQueryVO);
+
+            /**查规格**/
+            for (InventoryOnWarehouseItemVO inv : list) {
+                List<ItemSkuScaleDO> scaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(inv.getSkuCode());
+                if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
+                    scaleList.forEach(skuScale -> {
+                        if ("颜色".equals(skuScale.getScaleName())) {
+                            inv.setColor(skuScale.getScaleValue());
+                        }
+                        if ("尺寸".equals(skuScale.getScaleName())) {
+                            inv.setScale(skuScale.getScaleValue());
+                        }
+                    });
+                }
+                inv.setSkuPic(ImgUtil.initImg2Json(inv.getSkuPic()));
             }
-            inv.setSkuPic(ImgUtil.initImg2Json(inv.getSkuPic()));
+
+            result.buildData(list)
+                    .buildTotalCount(totalCount)
+                    .buildIsSuccess(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildMsg("查询出现错误").buildIsSuccess(false);
         }
-        result.buildData(list);
-        result.buildIsSuccess(true);
         return result;
     }
 
@@ -118,7 +131,7 @@ public class InventoryController {
 //		inventoryService.transToInventory(inventoryAreaId, toTrans, positionNo);
 //
 //		//对子订单进行库存分配
-//		InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+//		InventoryOnWareHouseDO inventoryArea = inventoryOnWarehouseService.selectById(inventoryAreaId);
 //		try {
 //			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
 //		} catch (InventoryException e) {
@@ -212,7 +225,7 @@ public class InventoryController {
         }
 //
 //			//对子订单进行库存分配
-//			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectByNo(inventoryAreaId);
+//			InventoryOnWareHouseDO inventoryArea = inventoryOnWarehouseService.selectByNo(inventoryAreaId);
 //			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
 //		}
         return JsonResult.buildSuccess(null);
@@ -231,7 +244,7 @@ public class InventoryController {
 //            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
 //            result.setData(inventoryRecordList);
 //            result.buildIsSuccess(true);
-//        } catch (Exception e) {
+//        } catch (exception e) {
 //            result.buildIsSuccess(false);
 //        }
 //        return result;
@@ -248,11 +261,12 @@ public class InventoryController {
 //            InventoryBookingRecordDO inventoryRecordList = inventoryRecordService.queryById(id);
 //            result.setData(inventoryRecordList);
 //            result.buildIsSuccess(true);
-//        } catch (Exception e) {
+//        } catch (exception e) {
 //            result.buildIsSuccess(false);
 //        }
 //        return result;
     }
+
 
     /**
      * 出入库流水明细
@@ -261,24 +275,26 @@ public class InventoryController {
      */
     @RequestMapping("/queryInventoryInout")
     @ResponseBody
-    public Object queryInventoryInout(InventoryQueryVO inventoryQueryVO) {
-        JsonResult<List<InventoryQueryVO>> result = new JsonResult<>();
-        List<InventoryQueryVO> inventoryList = inventoryInoutService.queryInventoryInoutsVo(inventoryQueryVO);
-        for (InventoryQueryVO inv : inventoryList) {
-            ItemSkuDO itemSku = inventoryInoutService.selectItemBySkuCode(inv.getSkuCode());
-            InventoryOnWareHouseDO warehouseDO = inventoryAreaService.selectByInventoryOnWarehouseNo(inv.getInventoryOnWarehouseNo());
-            if (IsEmptyUtil.isCollectionNotEmpty(inventoryList)) {
-                inv.setItemName(itemSku.getItemName());
-                inv.setUpc(itemSku.getUpc());
-                inv.setSkuPic(itemSku.getSkuPic());
-                inv.setWarehouseName(warehouseDO.getWarehouseName());
-                inv.setCreator(itemSku.getCreator());
-            }
+    public Object queryInventoryInout(InventoryInoutQueryVO inventoryInoutQueryVO, PageQueryParam pageQueryParam) {
+        JsonPageResult<List<InventoryInoutItemVO>> result = new JsonPageResult<>();
+        try {
+
+            List<InventoryInoutItemVO> inventoryInoutList =
+                    inventoryInoutService.listInventoryInout(inventoryInoutQueryVO, pageQueryParam);
+
+            int totalCount = inventoryInoutService.countInventoryInout(inventoryInoutQueryVO);
+
+            return result.buildData(inventoryInoutList)
+                    .buildTotalCount(totalCount)
+                    .buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            return result.buildMsg(e.getErrorMsg())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return result.buildMsg("查询出现错误")
+                    .buildIsSuccess(false);
         }
-        result.buildData(inventoryList);
-        return result.buildIsSuccess(true);
-
-
     }
 
     /**
@@ -287,7 +303,7 @@ public class InventoryController {
     @RequestMapping("/inventoryAreaExport")
     public ResponseEntity<byte[]> inventoryAreaExport(InventoryQueryVO inventoryQueryVO) throws Exception {
         List<List<Object>> rowDatas = new ArrayList<>();
-        List<InventoryOnWareHouseDO> inventoryAreaList = inventoryAreaService.queryInventoryAreaForExcel(inventoryQueryVO);
+        List<InventoryOnWareHouseDO> inventoryAreaList = inventoryOnWarehouseService.queryInventoryAreaForExcel(inventoryQueryVO);
         if (inventoryAreaList != null) {
             Double totalSalePrice = 0.0D;
             for (InventoryOnWareHouseDO inventoryArea : inventoryAreaList) {
@@ -396,17 +412,17 @@ public class InventoryController {
 //     */
 //    @RequestMapping("/changePositionNo")
 //    @ResponseBody
-//    @Transactional(rollbackFor = ErpCommonException.class)
+//    @Transactional(rollbackFor = BizCommonException.class)
 //    public Object changePositionNo(Long inventoryAreaId, String positionNo) {
 //        if (StringUtil.isBlank(positionNo)) {
 //            return JsonResult.buildFailed("货架号不能为空！");
 //        }
-//        InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+//        InventoryOnWareHouseDO inventoryArea = inventoryOnWarehouseService.selectById(inventoryAreaId);
 //        if (inventoryArea.getInventory() > 0 || inventoryArea.getLockedInv() > 0) {
 //            return JsonResult.buildFailed("此库存已有现货库存，不能更改货架号！");
 //        } else {
 ////    		inventoryArea.setPositionNo(positionNo);
-//            inventoryAreaService.changePositionNo(inventoryArea);
+//            inventoryOnWarehouseService.changePositionNo(inventoryArea);
 //            return JsonResult.buildSuccess(null);
 //        }
 //    }
@@ -439,11 +455,11 @@ public class InventoryController {
         String companyNo = AppUtil.getLoginUserCompanyNo();
 
         if (StringUtil.isNotBlank(inventoryOutNo) && StringUtil.isNotBlank(companyNo)) {
-            InventoryOutManifestVO inventoryOutManifestVO = new InventoryOutManifestVO();
-            inventoryOutManifestVO.setInventoryOutNo(inventoryOutNo);
-            inventoryOutManifestVO.setCompanyNo(companyNo);
+            InventoryOutManifestQueryVO inventoryOutManifestQueryVO = new InventoryOutManifestQueryVO();
+            inventoryOutManifestQueryVO.setInventoryOutNo(inventoryOutNo);
+            inventoryOutManifestQueryVO.setCompanyNo(companyNo);
             List<InventoryOutManifestDetailDO> inventoryOutManifestDetailList =
-                    inventoryOutManifestDetailService.listByInventoryOutManifestVO(inventoryOutManifestVO);
+                    inventoryOutManifestDetailService.listByInventoryOutManifestVO(inventoryOutManifestQueryVO);
 
             if (inventoryOutManifestDetailList == null || inventoryOutManifestDetailList.size() <= 0) {
                 result.buildIsSuccess(false).buildMsg("没有对应的数据");
@@ -503,9 +519,9 @@ public class InventoryController {
 //			details.forEach(
 //					detail -> {
 //							if(detail.getNo()==null || detail.getQuantity()==null || detail.getQuantity()<=0) {
-//								throw new ErpCommonException("参数异常");
+//								throw new BizCommonException("参数异常");
 //							}
-//							InventoryOnWareHouseDO inventoryArea= inventoryAreaService.selectById(detail.getInventoryAreaId());
+//							InventoryOnWareHouseDO inventoryArea= inventoryOnWarehouseService.selectById(detail.getInventoryAreaId());
 ////							detail.setItemId(inventoryArea.getItemId());
 //							detail.setSkuCode(inventoryArea.getSkuCode());
 //							detail.setItemName(inventoryArea.getItemName());
@@ -524,21 +540,28 @@ public class InventoryController {
     /**
      * 查询出库单列表
      *
-     * @param inventoryOutManifestVO
+     * @param inventoryOutManifestQueryVO
      * @return
      */
     @RequestMapping("/inventoryOutQueryList")
     @ResponseBody
-    public Object inventoryOutQueryList(InventoryOutManifestVO inventoryOutManifestVO) {
-        JsonResult<List<InventoryOutManifestDO>> result = new JsonResult<>();
+    public Object inventoryOutQueryList(InventoryOutManifestQueryVO inventoryOutManifestQueryVO,
+                                        PageQueryParam pageQueryParam) {
+        JsonPageResult<List<InventoryOutManifestDO>> result = new JsonPageResult<>();
+
         try {
             List<InventoryOutManifestDO> inventoryOutManifestDOList =
-                    inventoryOutManifestService.listInventoryOutManifest(inventoryOutManifestVO);
-            result.buildData(inventoryOutManifestDOList);
-            result.buildIsSuccess(true);
+                    inventoryOutManifestService.listInventoryOutManifest(inventoryOutManifestQueryVO, pageQueryParam);
+            int totalCount = inventoryOutManifestService.countInventoryOutManifest(inventoryOutManifestQueryVO);
+
+            result.buildData(inventoryOutManifestDOList)
+                    .buildTotalCount(totalCount)
+                    .buildIsSuccess(true);
         } catch (Exception e) {
             e.printStackTrace();
-            result.buildIsSuccess(false);
+
+            result.buildMsg("查询出错")
+                    .buildIsSuccess(false);
         }
         return result;
     }
@@ -580,7 +603,7 @@ public class InventoryController {
 //     */
 //    @RequestMapping("/inventoryOutConfirm")
 //    @ResponseBody
-//    @Transactional(rollbackFor = ErpCommonException.class)
+//    @Transactional(rollbackFor = BizCommonException.class)
 //    public Object inventoryOutConfirm(InventoryOutManifestDO inventoryOut) throws InventoryException {
 //        JsonResult<String> result = new JsonResult<>();
 //        Set<String> skuIdSet = null;
@@ -649,12 +672,12 @@ public class InventoryController {
 //			}
 //			try {
 //				inventoryService.inventoryCheckOut(inventoryAreaId, quantity);
-//			} catch (Exception ex) {
+//			} catch (exception ex) {
 //				return JsonResult.buildFailed("未知异常");
 //			}
 //
 //			//对子订单进行库存分配
-//			InventoryOnWareHouseDO inventoryArea = inventoryAreaService.selectById(inventoryAreaId);
+//			InventoryOnWareHouseDO inventoryArea = inventoryOnWarehouseService.selectById(inventoryAreaId);
 //			erpOrderService.lockErpOrderBySkuId(inventoryArea.getSkuCode());
 //		}
 //
@@ -704,10 +727,10 @@ public class InventoryController {
 //				return	JsonResult.buildFailed("增加库存要为正数");
 //			}
 //			try {
-//				inventoryAreaService.inventoryCheckIn(skuId, warehouseId, positionNo, quantity);
-//			} catch (ErpCommonException e) {
+//				inventoryOnWarehouseService.inventoryCheckIn(skuId, warehouseId, positionNo, quantity);
+//			} catch (BizCommonException e) {
 //				return JsonResult.buildFailed(e.getErrorMsg());
-//			} catch (Exception ex) {
+//			} catch (exception ex) {
 //				return JsonResult.buildFailed("未知异常");
 //			}
 //			try {

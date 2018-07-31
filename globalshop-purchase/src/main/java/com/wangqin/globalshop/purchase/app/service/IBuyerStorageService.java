@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.purchase.app.service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerStorageDO;
-import com.wangqin.globalshop.biz1.app.dal.dataVo.BuyerStorageDetailVo;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerStorageDetailVo;
 
 import java.util.List;
 

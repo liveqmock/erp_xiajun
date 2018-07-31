@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
-import com.wangqin.globalshop.biz1.app.dto.ItemPackagePatternDTO;
-import com.wangqin.globalshop.biz1.app.dto.ItemPackageScaleDTO;
-import com.wangqin.globalshop.biz1.app.vo.PackageLevelQueryVO;
-import com.wangqin.globalshop.biz1.app.vo.ShippingPackingScaleQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackagePatternDTO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PackageLevelQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingPackingScaleQueryVO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;

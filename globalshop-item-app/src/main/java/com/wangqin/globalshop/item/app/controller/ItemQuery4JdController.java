@@ -1,7 +1,7 @@
 package com.wangqin.globalshop.item.app.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.wangqin.globalshop.biz1.app.vo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;

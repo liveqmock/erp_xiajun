@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallCommisionApplyDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCommisionApplyDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="sub_order_no" property="subOrderNo" jdbcType="VARCHAR" />
+    <result column="commision" property="commision" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_sync" property="isSync" jdbcType="INTEGER" />
+    <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
+    <result column="order_date" property="orderDate" jdbcType="TIMESTAMP" />
+    <result column="share_user_id" property="shareUserId" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, order_no, sub_order_no, commision, status, is_sync, order_time, order_date, 
+    share_user_id, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mall_commision_apply
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mall_commision_apply
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCommisionApplyDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_commision_apply (company_no, order_no, sub_order_no, 
+      commision, status, is_sync, 
+      order_time, order_date, share_user_id, 
+      creator, modifier)
+    values (#{companyNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{subOrderNo,jdbcType=VARCHAR}, 
+      #{commision,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{isSync,jdbcType=INTEGER}, 
+      #{orderTime,jdbcType=VARCHAR}, #{orderDate,jdbcType=TIMESTAMP}, #{shareUserId,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCommisionApplyDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_commision_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no,
+      </if>
+      <if test="commision != null" >
+        commision,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isSync != null" >
+        is_sync,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="orderDate != null" >
+        order_date,
+      </if>
+      <if test="shareUserId != null" >
+        share_user_id,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null" >
+        #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="commision != null" >
+        #{commision,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isSync != null" >
+        #{isSync,jdbcType=INTEGER},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null" >
+        #{orderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shareUserId != null" >
+        #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCommisionApplyDO" >
+    update mall_commision_apply
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderNo != null" >
+        sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="commision != null" >
+        commision = #{commision,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isSync != null" >
+        is_sync = #{isSync,jdbcType=INTEGER},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null" >
+        order_date = #{orderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shareUserId != null" >
+        share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCommisionApplyDO" >
+    update mall_commision_apply
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      sub_order_no = #{subOrderNo,jdbcType=VARCHAR},
+      commision = #{commision,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      is_sync = #{isSync,jdbcType=INTEGER},
+      order_time = #{orderTime,jdbcType=VARCHAR},
+      order_date = #{orderDate,jdbcType=TIMESTAMP},
+      share_user_id = #{shareUserId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
