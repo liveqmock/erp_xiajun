@@ -22,7 +22,7 @@ public interface MallSaleAgentService {
      * @param userNo
      * @return
      */
-    MallSaleAgentDO getByCompanyNoAndUserNo(String companyNo, String userNo);
+    MallSaleAgentDO getMallSaleAgent(String companyNo, String userNo);
 
     /**
      * 根据指定条件分页查询代理列表
