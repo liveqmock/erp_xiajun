@@ -34,7 +34,8 @@
         <include refid="Base_Column_List" />
         from commission_sumary
         where
-         datediff( dd, gmt_create, getdate() ) > 15
+        <![CDATA[ DATEDIFF(NOW(), receive_date ) >= 15 ]]>
+        and status = 0
         and is_del is false
     </select>
     

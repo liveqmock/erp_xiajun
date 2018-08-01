@@ -12,7 +12,6 @@ import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,7 +39,6 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     }
 
     @Override
-    @Transactional(rollbackFor = BizCommonException.class)
     public void updateCommissionValue(String userNo, Long commissionMode, Double commissionValue) {
         if (StringUtil.isBlank(userNo) || commissionMode == null || commissionValue == null) {
             throw new BizCommonException("数据不完整！");
@@ -68,7 +66,6 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
             throw new BizCommonException("暂不支持分佣模式为金额模式的情况！");
         }
     }
-
 
     @Override
     public MallSaleAgentDO getMallSaleAgent(String companyNo, String userNo) {
@@ -118,10 +115,7 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         return mallSaleAgentDOMapper.countMallSaleAgents(mallSaleAgentQueryVO);
     }
 
-
-
     @Override
-    @Transactional(rollbackFor = BizCommonException.class)
     public CommissionValueVO queryCommissionValue(String userNo, String companyNo) {
         if (StringUtil.isBlank(userNo) || StringUtil.isBlank(companyNo)) {
             throw new BizCommonException("数据不完整！");

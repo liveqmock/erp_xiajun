@@ -86,7 +86,6 @@ public class MallSaleAgentController {
     /**
      * 代理信息修改
      * <li> 编辑信息
-     * <li> 佣金修改
      * <li> 解除代理
      * <li> 删除
      *

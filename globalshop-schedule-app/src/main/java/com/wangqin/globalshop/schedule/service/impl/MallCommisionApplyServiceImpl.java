@@ -44,9 +44,9 @@ public class MallCommisionApplyServiceImpl implements MallCommisionApplyService 
 		return applyDOMapperExt.updateByPrimaryKey(record);
 	}
 
-	public List<MallCommisionApplyDO> selectByStatusAndNotSync(String code){
+	public List<MallCommisionApplyDO> selectByStatusAndNotSync(String status){
 
-		   return applyDOMapperExt.selectByStatusAndNotSync(code);
+		   return applyDOMapperExt.selectByStatusAndNotSync(status);
 
 	}
 
