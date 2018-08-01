@@ -38,7 +38,7 @@ public class ItemUtil {
      * 设置商品是否可售
      */
     public static void setIsSale(ItemDO newItem) {
-        if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), DateUtil.getDateByCalculate(newItem.getEndDate(), Calendar.DATE, 1))) {
+        if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), newItem.getEndDate())) {
         	newItem.setIsSale(ItemIsSale.SALABLE.getCode().byteValue());
         } else {
         	newItem.setIsSale(ItemIsSale.UNSALABLE.getCode().byteValue());

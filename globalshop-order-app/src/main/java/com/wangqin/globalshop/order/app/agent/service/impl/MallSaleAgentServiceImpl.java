@@ -154,6 +154,17 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
 
         return commissionValueVO;
     }
+    
+    /**
+     * 根据userNo查询代理的信息（如头像，登录名等）
+     * @author xiajun
+     * @param userNo
+     * @return
+     */
+    @Override
+    public MallSaleAgentDO queryAgentInfoByUserNo(String userNo) {
+    	return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
+    }
 
 
 }
