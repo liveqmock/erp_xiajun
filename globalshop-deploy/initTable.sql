@@ -17,6 +17,93 @@ USE `haidb2new`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
+  `id` bigint(64) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) DEFAULT NULL,
+  `order_no` varchar(64) DEFAULT NULL,
+  `sub_order_no` varchar(64) DEFAULT NULL,
+  `commision` varchar(4096) DEFAULT NULL,
+  `status` varchar(2) DEFAULT NULL COMMENT '0-新建; 1-订单签收确认; 2-清分',
+  `is_sync` int(2) DEFAULT '0' COMMENT '是否同步',
+  `order_time` varchar(64) DEFAULT NULL,
+  `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `receive_time` varchar(64) DEFAULT NULL COMMENT '签收时间',
+  `receive_date` datetime DEFAULT NULL COMMENT '签收日期',
+  `share_user_id` varchar(64) DEFAULT NULL,
+  `is_del` tinyint(1) DEFAULT '0',
+  `creator` varchar(32) DEFAULT NULL,
+  `modifier` varchar(32) DEFAULT NULL,
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modify` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `mall_sub_order_snapshot` (
+  `id` bigint(64) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) DEFAULT NULL,
+  `order_no` varchar(64) DEFAULT NULL,
+  `sub_order_no` varchar(64) DEFAULT NULL,
+  `item_code` varchar(64) DEFAULT NULL,
+  `item_name` varchar(128) DEFAULT NULL,
+  `sku_code` varchar(64) DEFAULT NULL,
+  `sku_pic` varchar(512) DEFAULT NULL,
+  `upc` varchar(64) DEFAULT NULL,
+  `scale` varchar(128) DEFAULT NULL COMMENT '规格，用分号隔开',
+  `ext` varchar(4096) DEFAULT NULL,
+  `sale_price` decimal(16,2) DEFAULT NULL,
+  `is_del` tinyint(1) DEFAULT '0',
+  `creator` varchar(32) DEFAULT NULL,
+  `modifier` varchar(32) DEFAULT NULL,
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modify` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `mall_sale_agent` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司id',
+  `user_no` varchar(64) NOT NULL COMMENT '唯一userNo，需要跟Auth_User一致',
+  `parent_agent` varchar(64) DEFAULT NULL COMMENT '上级代理的userNo，如已是一级代理该值为null',
+  `open_id` varchar(64) DEFAULT NULL COMMENT '微信open_id',
+  `union_id` varchar(128) DEFAULT NULL COMMENT '微信union_id',
+  `agent_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '代理人的微信号/昵称',
+  `real_name` varchar(32) DEFAULT NULL COMMENT '真实姓名',
+  `id_card` varchar(32) DEFAULT NULL COMMENT '身份证号号码',
+  `head_protrait_url` varchar(256) DEFAULT NULL COMMENT '头像',
+  `gender` int(3) DEFAULT NULL COMMENT '0未知,1男,2女',
+  `city` varchar(64) DEFAULT NULL,
+  `province` varchar(64) DEFAULT NULL,
+  `country` varchar(64) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `commission_mode` bigint(18) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
+  `commission_value` double(6,2) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态，0正常，1已解除',
+  `join_time` datetime DEFAULT NULL COMMENT '加入时间',
+  `last_login_time` datetime DEFAULT NULL,
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `OPENID` (`open_id`,`union_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
+
+CREATE TABLE `haidb2new`.`monitor_record`(
+  `id` BIGINT(64) NOT NULL AUTO_INCREMENT,
+  `app_name` VARCHAR(64) COMMENT '应用名称',
+  `monitor_url` VARCHAR(256) COMMENT '监控url',
+  `status` VARCHAR(2) COMMENT '0-新建，1-生效，2-暂停',
+  `is_del` TINYINT(1) DEFAULT 0,
+  `creator` VARCHAR(32),
+  `modifier` VARCHAR(32),
+  `gmt_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modify` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB CHARSET=utf8;
+
 
 CREATE TABLE `applet_config` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
@@ -24,8 +111,8 @@ CREATE TABLE `applet_config` (
   `secret` varchar(64) DEFAULT NULL COMMENT '小程序secret',
   `appid` varchar(64) NOT NULL COMMENT '小程序appid',
   `applet_type` varchar(5) NOT NULL COMMENT '小程序的类型  1: 采购 2.商城',
-  `mch_id` varchar(64) DEFAULT NULL COMMENT '商户号',
-  `status` varchar(5) NOT NULL DEFAULT '1' COMMENT '区别微信支付是平台版还是商户版。1是平台版，2是商户版',
+  `mch_id` varchar(64) DEFAULT NULL COMMENT '商户号(微信支付用)',
+  `status` varchar(5) NOT NULL DEFAULT '1' COMMENT '微信支付类型。1是平台版，2是商户版',
   `pay_key` varchar(64) DEFAULT NULL COMMENT '商户版的支付秘钥',
   `authorizer_refresh_token` varchar(64) DEFAULT NULL COMMENT '第三方授权平台刷新token',
   `authorizer_access_token` varchar(512) DEFAULT NULL COMMENT '第三方授权平台token',
@@ -113,7 +200,7 @@ CREATE TABLE `db_migrate_receive_record` (
 CREATE TABLE `db_migrate_send_record` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
   `token` varchar(64) DEFAULT NULL,
-  `db_script` varchar(4096) DEFAULT NULL,
+  `db_script` varchar(6144)  CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `retry_times` int(2) DEFAULT '0',
   `status` varchar(2) DEFAULT '0' COMMENT '0 新增 1 成功 2 失败',
   `gmt_modify` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
@@ -295,7 +382,7 @@ CREATE TABLE `mall_shopping_cart` (
   `sku_name` varchar(64) DEFAULT NULL,
   `sku_code` varchar(64) DEFAULT NULL,
   `item_code` varchar(64) DEFAULT NULL,
-  `item_name` varchar(64) DEFAULT NULL COMMENT '商品名称',
+  `item_name` varchar(128) DEFAULT NULL COMMENT '商品名称',
   `scale` varchar(64) DEFAULT NULL COMMENT '尺寸',
   `quantity` int(11) DEFAULT NULL COMMENT '该商品在购物车的数量',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '购物车状态',
@@ -423,6 +510,7 @@ CREATE TABLE `buyer_task_detail` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT,
   `buyer_task_detail_no` VARCHAR(64) NULL DEFAULT NULL COMMENT '采购明细的编码，和小票明细有关联',
   `buyer_task_no` varchar(64) DEFAULT NULL,
+  `company_no` varchar(64) NOT NULL,
   `item_code` varchar(64) DEFAULT NULL,
   `upc` varchar(64) DEFAULT NULL,
   `price` float DEFAULT NULL COMMENT '采购价',
@@ -436,7 +524,7 @@ CREATE TABLE `buyer_task_detail` (
   `status` int(11) DEFAULT '0' COMMENT '-1为已取消，0为待采购，2为采购中，1为采购结束',
   `start_time` datetime DEFAULT NULL,
   `end_time` datetime DEFAULT NULL,
-  `mode` tinyint(2) DEFAULT NULL COMMENT '采购方式 0 线上 1线下',
+  `mode` tinyint(2) DEFAULT '1' COMMENT '采购方式 0 线上 1线下',
   `sku_code` varchar(64) DEFAULT NULL COMMENT 'sku代码',
   `remark`  varchar(200) DEFAULT NULL COMMENT '说明',
   `max_count` int(10) DEFAULT NULL COMMENT '最大采购数量',
@@ -755,7 +843,7 @@ CREATE TABLE `buyer` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `OPENID`(`open_id`, `union_id`) USING BTREE
+  UNIQUE INDEX `OPENID`(`open_id`, `union_id`, `is_del`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='买手';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -989,6 +1077,8 @@ CREATE TABLE `item_sku` (
   `status` INT(4) NOT NULL DEFAULT '1' COMMENT '0:未审核,1:审核通过',
   `sale_type` tinyint(1) DEFAULT NULL COMMENT '销售类型:现货,代购',
   `sale_price` double(10,2) DEFAULT NULL COMMENT '销售价',
+  `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例',
+  `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率(没有用到)',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
@@ -1164,6 +1254,11 @@ CREATE TABLE `channel` (
   `contact_name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `contact_email` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `contact_url` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sale_level` varchar(45) DEFAULT NULL,
+  `discount` double DEFAULT NULL,
+  `discount1` double DEFAULT NULL,
+  `discount2` double DEFAULT NULL,
+  `discount3` double DEFAULT NULL,
   `remark` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -1194,7 +1289,8 @@ CREATE TABLE `item_sku_scale` (
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `skucode_index` (`sku_code`) USING BTREE COMMENT 'skucode查询比较频繁'
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品对应的规格';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1828,6 +1924,7 @@ CREATE TABLE `item_find` (
   `currency` tinyint(3) DEFAULT NULL COMMENT '币种',
   `brand_no` VARCHAR(16) NULL COMMENT '品牌编码',
   `brand_name` VARCHAR(64) NULL COMMENT '品牌名字',
+  `main_pic` varchar(2048) COMMENT '主图',
   `buy_site` varchar(64) DEFAULT NULL COMMENT '采购站点',
   `origin` varchar(64) DEFAULT NULL COMMENT '产地',
   `logistic_type` tinyint(4) DEFAULT '0' COMMENT 'sku物流方式：0,直邮;1,拼邮',
@@ -2142,7 +2239,9 @@ CREATE TABLE `buyer_task` (
   `title` varchar(256) DEFAULT NULL,
   `owner_no` varchar(64) DEFAULT NULL,
   `company_no` varchar(64) NOT NULL,
-  `remark` varchar(256) DEFAULT NULL,
+  `task_desc` varchar(255) COMMENT '任务描述',
+  `image_url` varchar(2048) COMMENT '任务主图，item_find主图',
+  `remark` varchar(256) DEFAULT NULL COMMENT '任务备注',
   `start_time` datetime DEFAULT NULL,
   `end_time` datetime DEFAULT NULL,
   `status` int(11) DEFAULT NULL COMMENT '-1为已取消，0为待采购，2为采购中，1为采购结束',
