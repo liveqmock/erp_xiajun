@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.w3c.dom.css.ElementCSSInlineStyle;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.AgentCommissionVO;
@@ -59,6 +60,11 @@ public class CommissionController {
 	    	agentCommissionVO.setProfile(agentDO.getHeadProtraitUrl());
 	    	agentCommissionVO.setName(agentDO.getAgentName());
 	    	agentCommissionVO.setCommission(sumaryDetailService.sumSettlementAbleByUserNo(agentNo));
+	    	if(null == agentDO.getParentAgent()) {
+	    		agentCommissionVO.setAgentLevel("一级代理");
+	    	} else {
+	    		agentCommissionVO.setAgentLevel("二级代理");
+	    	}
 	    	//查询订单信息
 	    	List<AgentOrderVO> orderInfoList = new ArrayList<AgentOrderVO>();
 	    	List<String> orderNoList = sumaryDetailService.querySubOrderNoListByUserNo(qv);
