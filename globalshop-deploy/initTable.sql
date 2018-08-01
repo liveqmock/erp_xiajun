@@ -18,22 +18,32 @@ USE `haidb2new`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-CREATE TABLE applet_config
-(
-  id          BIGINT(64) AUTO_INCREMENT PRIMARY KEY,
-  company_no  VARCHAR(64) NOT NULL COMMENT '公司代号',
-  secret      VARCHAR(64) NOT NULL COMMENT '小程序secret',
-  appid       VARCHAR(64) NOT NULL COMMENT '小程序appid',
-  applet_type VARCHAR(5)  NOT NULL COMMENT '小程序的类型  1: 采购 2.商城',
-  authorizer_refresh_token VARCHAR(64) NULL COMMENT '第三方授权平台刷新token',
-  authorizer_access_token VARCHAR(512) NULL COMMENT '第三方授权平台token',
-  is_del      TINYINT(1) DEFAULT '0'             NULL,
-  creator     VARCHAR(32) DEFAULT 'system'       NULL,
-  modifier    VARCHAR(32) DEFAULT 'system'       NULL,
-  gmt_create  DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
-  gmt_modify  DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
-  UNIQUE KEY(company_no, applet_type)
-);
+CREATE TABLE `applet_config` (
+  `id` bigint(64) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) NOT NULL COMMENT '公司代号',
+  `secret` varchar(64) DEFAULT NULL COMMENT '小程序secret',
+  `appid` varchar(64) NOT NULL COMMENT '小程序appid',
+  `applet_type` varchar(5) NOT NULL COMMENT '小程序的类型  1: 采购 2.商城',
+  `mch_id` varchar(64) DEFAULT NULL COMMENT '商户号',
+  `status` varchar(5) NOT NULL DEFAULT '1' COMMENT '区别微信支付是平台版还是商户版。1是平台版，2是商户版',
+  `pay_key` varchar(64) DEFAULT NULL COMMENT '商户版的支付秘钥',
+  `authorizer_refresh_token` varchar(64) DEFAULT NULL COMMENT '第三方授权平台刷新token',
+  `authorizer_access_token` varchar(512) DEFAULT NULL COMMENT '第三方授权平台token',
+  `publish_status` int(11) DEFAULT NULL COMMENT '小程序发布状态：1.已授权 2.已提交体验版 3.待审核 4.审核通过待发布 5.已发布',
+  `templet_id` int(11) DEFAULT NULL COMMENT '小程序模板id',
+  `img_url` varchar(64) DEFAULT NULL COMMENT '体验版二维码',
+  `audit_id` varchar(64) DEFAULT NULL COMMENT ' 微信审核的id   用于查询审核状态等api',
+  `ext_json` varchar(1024) DEFAULT NULL COMMENT '小程序的ext.json文件',
+  `is_del` tinyint(1) DEFAULT '0',
+  `creator` varchar(32) DEFAULT 'system',
+  `modifier` varchar(32) DEFAULT 'system',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modify` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `applet_config_appid_uindex` (`appid`),
+  UNIQUE KEY `company_no` (`company_no`,`applet_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE wx_user
 (
