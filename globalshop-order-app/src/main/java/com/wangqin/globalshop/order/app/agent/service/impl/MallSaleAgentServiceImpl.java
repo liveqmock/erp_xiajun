@@ -119,4 +119,9 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
 
         return commissionValueVO;
     }
+    
+    @Override
+    public MallSaleAgentDO queryAgentInfoByUserNo(String userNo) {
+    	return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
+    }
 }
