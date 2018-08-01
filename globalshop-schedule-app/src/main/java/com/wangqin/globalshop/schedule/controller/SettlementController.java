@@ -67,11 +67,46 @@ public class SettlementController {
 	 * @return
 	 */
 	@RequestMapping("/do")
-	public Object add(String idListStr,String shareUserId){
+	public Object doSettle(String idListStr,String shareUserId){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
 			List<Long> idList = BaseDto.fromJson(idListStr,new TypeReference<List<Long>>(){});
 			settlementService.doSettlement(idList,shareUserId);
+		} catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg(e.getMessage());
+		}
+		return result.buildIsSuccess(true);
+
+	}
+
+	/**
+	 * 批量代理人 结算
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/doSettleList")
+	public Object doSettleList(String userIdListStr){
+		JsonResult<Object> result = new JsonResult<>();
+		try {
+			List<String> userIdList = BaseDto.fromJson(userIdListStr, new TypeReference<List<String>>(){});
+			settlementService.doSettleList(userIdList);
+		} catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg(e.getMessage());
+		}
+		return result.buildIsSuccess(true);
+
+	}
+
+	/**
+	 * 单个代理人 结算
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/doSettleSingle")
+	public Object doSettleSingle(String shareUserId){
+		JsonResult<Object> result = new JsonResult<>();
+		try {
+			settlementService.doSettleSigle(shareUserId);
 		} catch (Exception e) {
 			return result.buildIsSuccess(false).buildMsg(e.getMessage());
 		}

@@ -85,7 +85,7 @@
     </select>
 
 
-    <select id="sumPriceByIdList" resultType="map">
+    <select id="sumPriceByIdList" resultType="java.util.Map">
         SELECT
                IFNULL(sum(IFNULL(settlement,0)),0) settlement,
                IFNULL(sum(IFNULL(sale_price,0)),0) salePrice
