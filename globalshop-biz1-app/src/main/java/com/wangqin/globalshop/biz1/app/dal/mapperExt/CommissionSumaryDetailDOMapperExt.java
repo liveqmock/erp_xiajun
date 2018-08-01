@@ -38,4 +38,5 @@ public interface CommissionSumaryDetailDOMapperExt extends CommissionSumaryDetai
 	
 	Map<String,Object> sumOrderNumSaleCommissionByUserNo(@Param("status")Integer status,@Param("userNo")String userNo);
 
+	List<Map<String,Object>> sumSettlePageList(@Param("status") Integer status, @Param("companyNo") String companyNo);
 }

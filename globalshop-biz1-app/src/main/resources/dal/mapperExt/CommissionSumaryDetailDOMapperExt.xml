@@ -63,11 +63,36 @@
         IFNULL(count(1),0) AS orderNum,
         IFNULL(SUM(IFNULL(sale_price,0)),0) AS totalSalePrice,
         IFNULL(SUM(IFNULL(settlement,0)),0) AS totalCommission
-        FROM commission_sumary_detail
-        WHERE share_user_id = #{userNo}
+        FROM
+            commission_sumary_detail
+        WHERE
+            share_user_id = #{userNo}
         AND status=#{status}
         Group By share_user_id
     </select>
+
+    <select id="sumSettlePageList" resultType="java.util.Map">
+        SELECT
+        IFNULL(count(detail.id),0) AS orderNum,
+        IFNULL(SUM(IFNULL(detail.sale_price,0)),0) AS totalSalePrice,
+        IFNULL(SUM(IFNULL(detail.settlement,0)),0) AS totalCommission,
+        agent.head_protrait_url AS headProtraitUrl,
+		agent.parent_agent AS parentAgent,
+		agent.agent_name AS agentName,
+		detail.share_user_id as shareUserId
+        FROM
+            commission_sumary_detail as detail,
+            mall_sale_agent as agent
+        WHERE
+            detail.share_user_id = agent.userNo
+            and detail.company_no = #{companyNo}
+            and detail.is_del is false
+            and agent.is_del is false
+            and detail.status=#{status}
+        Group By detail.share_user_id
+    </select>
+
+
     
     <!--  根据user_no查询子订单编号list-->
      <select id="querySubOrderNoListByUserNo" resultType="java.lang.String" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionQueryVO">
