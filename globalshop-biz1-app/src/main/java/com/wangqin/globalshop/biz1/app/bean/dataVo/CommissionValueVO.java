@@ -19,30 +19,34 @@ public class CommissionValueVO {
     /**
      * 一级分佣 ID
      */
-    private String levelOneUserNo;
+    // private String levelOneUserNo;
+    private String levelOneUserId;
 
     /**
      * 一级分佣 佣金模式，0 为按百分比，1 为按金额
      */
-    private Long levelOneCommissionMode;
+    private String levelOneCommissionMode;
 
     /**
      * 一级分佣 佣金数字值，百分比模式如 5% 填 0.05，金额模式则为金额
      */
-    private Double levelOneCommissionValue;
+    // private Double levelOneCommissionValue;
+    private String levelOneCommissionRate;
 
     /**
      * 二级分佣 ID
      */
-    private String levelTwoUserNo;
+    // private String levelTwoUserNo;
+    private String levelTwoUserId;
 
     /**
      * 二级分佣 佣金模式，0 为按百分比，1 为按金额
      */
-    private Long levelTwoCommissionMode;
+    private String levelTwoCommissionMode;
 
     /**
      * 二级分佣 佣金数字值，百分比模式如 5% 填 0.05，金额模式则为金额
      */
-    private Double levelTwoCommissionValue;
+    // private Double levelTwoCommissionValue;
+    private String levelTwoCommissionRate;
 }

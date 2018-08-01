@@ -6,10 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -123,7 +120,8 @@ public class MallSaleAgentController {
      * @return
      */
     @GetMapping("/queryCommissionValue")
-    public Object queryCommissionValue(String userNo, String companyNo) {
+    public Object queryCommissionValue(@RequestParam("agentUserId") String userNo,
+                                       @RequestParam("companyNo") String companyNo) {
 
         JsonResult<CommissionValueVO> result = new JsonResult<>();
 
