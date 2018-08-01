@@ -30,25 +30,28 @@ public class SettlementController {
 	@Autowired
 	private CommissionSumarySettlementService settlementService;
 
+//	/**
+//	 * 暂时不开放
+//	 * @param searchByShareId
+//	 * @return
+//	 */
+//	@RequestMapping("/searchByShareId")
+//	public Object searchByOpenId(String searchByShareId){
+//		JsonResult<List<CommissionSumarySettlementDO>> result = new JsonResult<>();
+//		try {
+//			List<CommissionSumarySettlementDO> list = settlementService.searchByUserNo(searchByShareId);
+//			result.buildData(list);
+//		} catch (Exception e) {
+//			return result.buildIsSuccess(false).buildMsg(e.getMessage());
+//		}
+//		return result.buildIsSuccess(true);
+//
+//	}
 	/**
-	 * 暂时不开放
-	 * @param searchByShareId
+	 * 新增线下结算记录
+	 * @param settlementDO
 	 * @return
 	 */
-	@RequestMapping("/searchByShareId")
-	public Object searchByOpenId(String searchByShareId){
-		JsonResult<List<CommissionSumarySettlementDO>> result = new JsonResult<>();
-		try {
-			List<CommissionSumarySettlementDO> list = settlementService.searchByUserNo(searchByShareId);
-			result.buildData(list);
-		} catch (Exception e) {
-			return result.buildIsSuccess(false).buildMsg(e.getMessage());
-		}
-		return result.buildIsSuccess(true);
-
-	}
-
-
 	@RequestMapping("/add")
 	public Object add(CommissionSumarySettlementDO settlementDO){
 		JsonResult<Object> result = new JsonResult<>();
@@ -61,23 +64,23 @@ public class SettlementController {
 
 	}
 
-	/**
-	 * 结算选中的明细
-	 * @param
-	 * @return
-	 */
-	@RequestMapping("/do")
-	public Object doSettle(String idListStr,String shareUserId){
-		JsonResult<Object> result = new JsonResult<>();
-		try {
-			List<Long> idList = BaseDto.fromJson(idListStr,new TypeReference<List<Long>>(){});
-			settlementService.doSettlement(idList,shareUserId);
-		} catch (Exception e) {
-			return result.buildIsSuccess(false).buildMsg(e.getMessage());
-		}
-		return result.buildIsSuccess(true);
-
-	}
+//	/**
+//	 * 结算选中的明细
+//	 * @param
+//	 * @return
+//	 */
+//	@RequestMapping("/do")
+//	public Object doSettle(String idListStr,String shareUserId){
+//		JsonResult<Object> result = new JsonResult<>();
+//		try {
+//			List<Long> idList = BaseDto.fromJson(idListStr,new TypeReference<List<Long>>(){});
+//			settlementService.doSettlement(idList,shareUserId);
+//		} catch (Exception e) {
+//			return result.buildIsSuccess(false).buildMsg(e.getMessage());
+//		}
+//		return result.buildIsSuccess(true);
+//
+//	}
 
 	/**
 	 * 批量代理人 结算
