@@ -147,6 +147,7 @@ CREATE TABLE `commission_sumary`  (
   `order_status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `order_desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int(4) DEFAULT NULL COMMENT '0待结算1可结算2已结算',
+  `receive_date` datetime(0) DEFAULT NULL COMMENT '签收时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
