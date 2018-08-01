@@ -66,6 +66,7 @@
         FROM commission_sumary_detail
         WHERE share_user_id = #{userNo}
         AND status=#{status}
+        Group By share_user_id
     </select>
     
     <!--  根据user_no查询子订单编号list-->
