@@ -6,13 +6,17 @@ import java.util.List;
  * 佣金结算管理
  */
 public class AgentCommissionVO {
-	
+
 	private String userNo;
 private String profile;
 	
 	private String name;
 	
 	private Double commission;
+	
+	
+	
+	private String agentLevel;
 	
 	private List<AgentOrderVO> orderInfo;
 
@@ -46,6 +50,17 @@ private String profile;
 
 	public void setCommission(Double commission) {
 		this.commission = commission;
+	}
+
+	
+
+
+	public String getAgentLevel() {
+		return agentLevel;
+	}
+
+	public void setAgentLevel(String agentLevel) {
+		this.agentLevel = agentLevel;
 	}
 
 	public List<AgentOrderVO> getOrderInfo() {

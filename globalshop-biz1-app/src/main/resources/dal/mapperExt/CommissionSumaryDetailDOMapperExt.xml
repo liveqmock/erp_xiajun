@@ -20,7 +20,8 @@
     <update id="updateStatusById">
         UPDATE
         commission_sumary_detail
-        SET status=#{status}
+        SET status=#{status},
+            settlement_no=#{settlementNo}
         where id = #{id}
     </update>
 
@@ -64,8 +65,27 @@
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]> 
     </select>
 
+    <select id="selectByShareId" resultType="java.lang.Long">
+        SELECT id
+        FROM commission_sumary_detail
+        WHERE share_user_id = #{shareUserId}
+        and is_del= false
+        and status = 1
+    </select>
 
 
+    <select id="sumPriceByIdList" resultType="map">
+        SELECT
+               IFNULL(sum(IFNULL(settlement,0)),0) settlement,
+               IFNULL(sum(IFNULL(sale_price,0)),0) salePrice
+        FROM
+               commission_sumary_detail
+        WHERE
+               id IN
+                  <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                         #{item}
+                  </foreach>
+    </select>
 
 
 </mapper>

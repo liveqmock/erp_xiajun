@@ -320,13 +320,19 @@
     <select id="countMallSaleAgents" resultType="java.lang.Integer">
         SELECT
         COUNT(*)
-        FROM mall_sale_agent
+        FROM mall_sale_agent T1
         <where>
+            <if test="mallSaleAgentQueryVO.userNo != null">
+                AND T1.user_no = #{mallSaleAgentQueryVO.userNo}
+            </if>
             <if test="mallSaleAgentQueryVO.agentName != null">
-                AND agent_name = #{mallSaleAgentQueryVO.agentName}
+                AND T1.agent_name = #{mallSaleAgentQueryVO.agentName}
+            </if>
+            <if test="mallSaleAgentQueryVO.parentAgent == null">
+                AND T1.parent_agent IS NULL
             </if>
             <if test="mallSaleAgentQueryVO.parentAgent != null">
-                AND parent_agent = #{mallSaleAgentQueryVO.parentAgent}
+                AND T1.parent_agent = #{mallSaleAgentQueryVO.parentAgent}
             </if>
             AND company_no = #{mallSaleAgentQueryVO.companyNo}
             AND is_del = 0
