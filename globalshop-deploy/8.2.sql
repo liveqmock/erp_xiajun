@@ -77,3 +77,8 @@ CREATE TABLE `mall_sale_agent` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `OPENID` (`open_id`,`union_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
+
+ALTER TABLE applet_config ADD mch_id VARCHAR(64) NULL COMMENT '商户号(微信支付用)';
+ALTER TABLE applet_config ADD status VARCHAR(5) NULL COMMENT '支付类型 1.商户版 2.平台版';
+ALTER TABLE applet_config ADD pay_key VARCHAR(64) NULL COMMENT '商户版支付秘钥';
+ALTER TABLE buyer_task_detail ADD company_no VARCHAR(64) NULL;
