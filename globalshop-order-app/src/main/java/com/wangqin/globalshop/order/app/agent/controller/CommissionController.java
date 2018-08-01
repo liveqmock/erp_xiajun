@@ -21,6 +21,7 @@ import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 
 @Authenticated
+@RestController
 @RequestMapping("/agentInfo")
 public class CommissionController {
 	  @Autowired
