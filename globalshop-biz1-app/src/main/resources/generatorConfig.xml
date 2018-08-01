@@ -403,13 +403,13 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <table tableName="item_sku" domainObjectName="ItemSkuDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-        enableSelectByExample="false" selectByExampleQueryId="false" >
-        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
-            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
-            <ignoreColumn column="is_del" delimitedColumnName=""/>
-        </table>
+        <!--<table tableName="item_sku" domainObjectName="ItemSkuDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
 
         <!--<table tableName="item_sku_scale" domainObjectName="ItemSkuScaleDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
         <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -519,13 +519,13 @@
         <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
     <!--</table>-->
 
-        <!--<table tableName="mall_commision_apply" domainObjectName="MallCommisionApplyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
+        <table tableName="mall_commision_apply" domainObjectName="MallCommisionApplyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
+            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
+            <ignoreColumn column="is_del" delimitedColumnName=""/>
+        </table>
        
        <!--<table tableName="share_token_record" domainObjectName="ShareTokenRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->

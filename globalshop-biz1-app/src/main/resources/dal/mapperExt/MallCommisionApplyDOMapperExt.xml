@@ -6,9 +6,13 @@
     <update id="updateStatusBySubOrderNoAndCompanyNo">
         UPDATE
         mall_commision_apply
-        SET status=#{status}
-        AND sub_order_no=#{subOrderNo}
-        AND company_no=#{companyNo}
+        SET status=#{status},
+        sub_order_no=#{subOrderNo},
+        company_no=#{companyNo},
+        receive_time=#{receiveTime},
+        receive_date=#{receiveDate}
     </update>
+
+    <select id=""></select>
     
 </mapper>
