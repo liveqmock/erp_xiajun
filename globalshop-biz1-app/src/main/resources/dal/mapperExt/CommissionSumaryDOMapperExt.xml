@@ -35,6 +35,7 @@
         from commission_sumary
         where
         <![CDATA[ DATEDIFF(NOW(), receive_date ) >= 15 ]]>
+        and status = 0
         and is_del is false
     </select>
     

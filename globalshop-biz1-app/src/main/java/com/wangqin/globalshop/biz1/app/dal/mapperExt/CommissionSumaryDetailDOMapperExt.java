@@ -2,6 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDetailDO;
 import org.apache.ibatis.annotations.Param;
 
 
@@ -39,4 +40,6 @@ public interface CommissionSumaryDetailDOMapperExt extends CommissionSumaryDetai
 	Map<String,Object> sumOrderNumSaleCommissionByUserNo(@Param("status")Integer status,@Param("userNo")String userNo);
 
 	List<Map<String,Object>> sumSettlePageList(@Param("status") Integer status, @Param("companyNo") String companyNo);
+
+	List<CommissionSumaryDetailDO> selectBySubOrderNo(@Param("subOrderNo") String subOrderNo);
 }

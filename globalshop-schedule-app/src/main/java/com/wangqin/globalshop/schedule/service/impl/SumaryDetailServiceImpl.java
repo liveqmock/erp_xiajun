@@ -52,6 +52,13 @@ public class SumaryDetailServiceImpl implements SumaryDetailService {
 		return sumaryDetailDOMapperExt.updateByPrimaryKey(record);
 	}
 
+	public List<CommissionSumaryDetailDO> selectBySubOrderNo(String subOrderNo){
+		List<CommissionSumaryDetailDO> resultList = new ArrayList<>();
+		List<CommissionSumaryDetailDO> list = sumaryDetailDOMapperExt.selectBySubOrderNo(subOrderNo);
+		resultList.addAll(list);
+		return resultList;
+	}
+
 	public List<SettlementDetailVo> searchPageList(SumaryDetailQueryVO queryVO){
 
 		List<SettlementDetailVo> detailVoList = new ArrayList<>();

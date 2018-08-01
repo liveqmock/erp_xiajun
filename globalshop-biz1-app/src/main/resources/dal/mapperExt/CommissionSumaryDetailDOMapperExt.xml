@@ -110,6 +110,16 @@
         and status = 1
     </select>
 
+    <select id="selectBySubOrderNo" resultMap="BaseResultMap">
+        SELECT
+             <include refid="Base_Column_List" />
+        FROM
+             commission_sumary_detail
+        WHERE
+             sub_order_no = #{subOrderNo}
+             and is_del= false
+    </select>
+
 
     <select id="sumPriceByIdList" resultType="java.util.Map">
         SELECT

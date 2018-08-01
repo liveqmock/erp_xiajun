@@ -3,6 +3,7 @@ package com.wangqin.globalshop.schedule.service;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementDetailVo;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SumaryDetailQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDetailDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface SumaryDetailService {
 	int updateByPrimaryKeySelective(CommissionSumaryDetailDO record);
 
 	int updateByPrimaryKey(CommissionSumaryDetailDO record);
+
+	List<CommissionSumaryDetailDO> selectBySubOrderNo(String subOrderNo);
 }
