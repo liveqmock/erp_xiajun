@@ -3,10 +3,10 @@ package com.wangqin.globalshop.usercenter.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.enums.PublishStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
+import com.wangqin.globalshop.biz1.app.enums.PublishStatus;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.WxPay.PayUtil;
@@ -14,6 +14,8 @@ import com.wangqin.globalshop.usercenter.service.IAppletConfigService;
 import com.wangqin.globalshop.usercenter.service.UserUploadFileService;
 import com.wangqin.globalshop.usercenter.wechat_sdk.AesException;
 import com.wangqin.globalshop.usercenter.wechat_sdk.WXBizMsgCrypt;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -34,6 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.wangqin.globalshop.usercenter.constant.SysConstants.APPLET_TYPE;
 import static com.wangqin.globalshop.usercenter.constant.SysConstants.PAY_STATUS_PLATFORM;
@@ -168,7 +171,7 @@ public class Wechat3rdPartyAuthorizationController {
             /**预授权码*/
             String preAuthCode = object.getString("pre_auth_code");
             log.info("预授权码:" + preAuthCode);
-            //todo 配置的是http://"+wxBaseUrl+"/account/queryAuth 微信文档显示 该回调地址必须是http  把 test.buyer007写到配置文件里面去
+            //todo 配置的是http://"+wxBaseUrl+"/account/queryAuth 微信文档显示 该回调地址必须是http
             re_url = URLEncoder.encode("http://" + wxBaseUrl + "/#/myApp/appsetTest?companyNo=" + AppUtil.getLoginUserCompanyNo(), "UTF-8");
             String reUrl = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + componentAppid + "&pre_auth_code=" + preAuthCode + "&redirect_uri=" + re_url + "&auth_type=2";
             log.info("re_url:" + reUrl);
@@ -211,7 +214,7 @@ public class Wechat3rdPartyAuthorizationController {
             if (!info.containsKey("authorizer_access_token")) {
                 return result.buildMsg("授权失败").buildIsSuccess(false);
             }
-            /*设置小程序相关的 服务器域名、业务域名*/
+
             AppletConfigDO applet = appletConfigServiceImplement.selectByCompanyNoAndType(companyNo, APPLET_TYPE);
             if (applet != null) {
                 String accessToken = info.getString("authorizer_access_token");
@@ -228,6 +231,7 @@ public class Wechat3rdPartyAuthorizationController {
                 return result.buildMsg("授权成功").buildIsSuccess(false);
             }
             String token = info.getString("authorizer_access_token");
+              /*设置小程序相关的 服务器域名、业务域名*/
             setAppletRequestUrl(token, "set");
             applet = getAppletDO(info, APPLET_TYPE, companyNo);
 //            /*提交体验版*/
@@ -292,19 +296,24 @@ public class Wechat3rdPartyAuthorizationController {
 //    }
 
     private void updateApplet(Integer templateId, AppletConfigDO applet) throws IOException {
-        String url = "https://api.weixin.qq.com/wxa/commit?access_token=${token}";
+        String authorizerAccessToken = applet.getAuthorizerAccessToken();
+        String url = "https://api.weixin.qq.com/wxa/commit?access_token="+authorizerAccessToken;
         String imgUrl = "https://api.weixin.qq.com/wxa/get_qrcode?access_token=${token}";
         String str = System.currentTimeMillis() + "";
         str = str.substring(3, 13);
         //language=JSON
-        String extJson = "{\"extEnable\":true,\"extAppid\":\"${appid}\",\"ext\":{\"userAppId\":\"${appid}\"}}";
+        String appid = applet.getAppid();
+        String param = "{\"template_id\":"+templateId+",\n" +
+                "  \"user_version\": \"1.0.1\",\n" +
+                "  \"user_desc\": \"新增物流轨迹\",\n" +
+                "  \"ext_json\": \"{\\\"extEnable\\\":true,\\\"extAppid\\\":\\\""+ appid +"\\\",\\\"ext\\\":{\\\"userAppId\\\":\\\""+appid+"\\\"}}\"\n" +
+                "}";
         //language=JSON
-        String param = "{\"template_id\": " + templateId + ",\"user_version\": \"" + TimeUtil.getCurrentDateDefaultString() + "\",\"user_desc\": \"发布新版本\",\"ext_json\": \"+${extJson}+\"}";
+
              /*发布所有的满足条件的小程序的体验版  并返回二维码图片  保存到数据库中*/
-        String trueJson = extJson.replace("${appid}", applet.getAppid());
-        String trueUrl = url.replace("${token}", applet.getAuthorizerAccessToken());
-        String trueParam = param.replace("${extJson}", trueJson);
-        PayUtil.httpRequest(trueUrl, "POST", trueParam);
+        log.info("发布结果"+param);
+        String post = PayUtil.httpRequest(url, "POST", param);
+        log.info("发布结果"+post);
 
 //        String s = HttpClientUtil.get(imgUrl.replace("${token}", applet.getAuthorizerAccessToken()));
 //        String img;
@@ -314,9 +323,22 @@ public class Wechat3rdPartyAuthorizationController {
 //        applet.setImgUrl(img);
         applet.setTempletId(templateId);
         applet.setPublishStatus(PublishStatus.SUBMITTED.getCode());
-        applet.setExtJson(trueJson);
+//        applet.setExtJson();
         log.info("发布体验版后的小程序" + applet);
 
+    }
+    @Getter@Setter
+    class Applet{
+        private Integer template_id;
+        private String user_version;
+        private String user_desc;
+        private ExtJson ext_json;
+    }
+    @Getter@Setter
+    class ExtJson{
+        private Boolean extEnable;
+        private String extAppid;
+        private Map<String,String> ext;
     }
 
     @PostMapping("auditAll")
@@ -475,13 +497,13 @@ public class Wechat3rdPartyAuthorizationController {
         String url = "https://api.weixin.qq.com/wxa/modify_domain?access_token=" + token;
         //todo
         //language=JSON
-        String param = "{\"action\":\"" + type + "\",\"requestdomain\":[\"https://xcx.buyer007.cn\"],\"wsrequestdomain\":[\"wss://xcx.buyer007.cn\"],\"uploaddomain\":[\"https://xcx.buyer007.cn\"], \"downloaddomain\":[\"https://xcx.buyer007.cn\"]}";
+        String param = "{\"action\":\"" + type + "\",\"requestdomain\":[\"https://"+wxBaseUrl+"\"],\"wsrequestdomain\":[\"wss://"+wxBaseUrl+"\"],\"uploaddomain\":[\"https://"+wxBaseUrl+"\"], \"downloaddomain\":[\"https://"+wxBaseUrl+"\"]}";
         String post1 = PayUtil.httpRequest(url, "POST", param);
         log.info("设置小程序服务器域名结果" + post1);
         /*设置小程序业务域名*/
         String url1 = "https://api.weixin.qq.com/wxa/setwebviewdomain?access_token=" + token;
         //language=JSON
-        String param1 = "{\"action\":\"" + type + "\",\"webviewdomain\":[\"https://xcx.buyer007.cn\"]}";
+        String param1 = "{\"action\":\"" + type + "\",\"webviewdomain\":[\"https://"+wxBaseUrl+"\"]}";
         String post = PayUtil.httpRequest(url1, "POST", param1);
         log.info("设置小程序业务域名结果" + post);
     }
@@ -489,7 +511,7 @@ public class Wechat3rdPartyAuthorizationController {
     /***
      * 每三十分钟刷新第三方平台的token和各个授权商户的token
      */
-    @Scheduled(cron = "0 0/3 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     private void freashToken() {
         log.info("开始刷新各个授权商户的token");
         initToken();
