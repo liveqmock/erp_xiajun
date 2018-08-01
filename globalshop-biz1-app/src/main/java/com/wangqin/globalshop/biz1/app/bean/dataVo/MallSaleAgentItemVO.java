@@ -53,7 +53,7 @@ public class MallSaleAgentItemVO {
      * <li> 0 为按百分比
      * <li> 1 为按金额
      */
-    private Integer commissionMode;
+    private Long commissionMode;
 
     /**
      * 佣金数字值，百分比模式如 5% 填 0.05，金额模式则为金额
@@ -75,7 +75,7 @@ public class MallSaleAgentItemVO {
      * <li> 0 正常
      * <li> 1 已解除
      */
-    private Integer status;
+    private Boolean status;
 
     /**
      * 加入时间
