@@ -4,12 +4,14 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionValueVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,7 +41,6 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         String parentAgent = mallSaleAgentQueryVO.getParentAgent();
 
         if (StringUtil.isBlank(parentAgent)) {
-
             // 查询一级代理，需要为每个一级代理添加其二级代理人数
             mallSaleAgentItemVOList.forEach(mallSaleAgentItemVO -> {
 
@@ -51,15 +52,14 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
                 int childAgentsNum = countMallSaleAgents(childAgentsQueryVO);
                 mallSaleAgentItemVO.setChildAgentsNum(childAgentsNum);
             });
-        } else {
 
+        } else {
             // 查询二级代理，需要为每个二级代理添加其一级代理姓名
             MallSaleAgentDO parentMallSaleAgentDO =
                     getMallSaleAgent(mallSaleAgentQueryVO.getCompanyNo(), parentAgent);
 
-            mallSaleAgentItemVOList.forEach(mallSaleAgentItemVO -> {
-                mallSaleAgentItemVO.setParentAgentName(parentMallSaleAgentDO.getAgentName());
-            });
+            mallSaleAgentItemVOList.forEach(
+                    mallSaleAgentItemVO -> mallSaleAgentItemVO.setParentAgentName(parentMallSaleAgentDO.getAgentName()));
         }
 
         return mallSaleAgentItemVOList;
@@ -82,11 +82,19 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     }
 
     @Override
+    @Transactional(rollbackFor = BizCommonException.class)
     public CommissionValueVO queryCommissionValue(String userNo, String companyNo) {
-        CommissionValueVO commissionValueVO = new CommissionValueVO();
+        if (StringUtil.isBlank(userNo) || StringUtil.isBlank(companyNo)) {
+            throw new BizCommonException("userNo 或 companyNo 信息不完整！");
+        }
 
+        // 获取该代理详细信息
         MallSaleAgentDO mallSaleAgent = getMallSaleAgent(companyNo, userNo);
+        if (mallSaleAgent == null) {
+            throw new BizCommonException("数据库中无此记录！");
+        }
 
+        CommissionValueVO commissionValueVO = new CommissionValueVO();
         // 判断代理级别
         String parentAgentNo = mallSaleAgent.getParentAgent();
         if (parentAgentNo == null) {

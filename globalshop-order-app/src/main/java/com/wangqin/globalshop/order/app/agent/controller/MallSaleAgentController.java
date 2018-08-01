@@ -1,10 +1,10 @@
 package com.wangqin.globalshop.order.app.agent.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +19,7 @@ import java.util.List;
  * @author angus
  * @date 2018/7/31
  */
+@Authenticated
 @RestController
 @RequestMapping("/mallSaleAgent")
 public class MallSaleAgentController {
@@ -57,7 +58,7 @@ public class MallSaleAgentController {
      * 查询代理
      * <li> 搜索指定条件下的代理
      * <li> 列出一级代理（parent_agent 字段为 null）
-     * <li> 列出二级代理（parent_agent 字段为 一级代理 user_no）
+     * <li> 列出二级代理（parent_agent 字段需为 一级代理 user_no）
      *
      * @param mallSaleAgentQueryVO
      * @param pageQueryParam
@@ -116,6 +117,7 @@ public class MallSaleAgentController {
 
     /**
      * 根据分享 userNo 查询代理的分佣比率
+     *
      * @param userNo
      * @param companyNo
      * @return
@@ -127,6 +129,8 @@ public class MallSaleAgentController {
 
         try {
             CommissionValueVO commissionValueVO = mallSaleAgentService.queryCommissionValue(userNo, companyNo);
+            result.buildData(commissionValueVO)
+                    .buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getMessage())
                     .buildIsSuccess(false);
@@ -137,4 +141,6 @@ public class MallSaleAgentController {
         }
         return result;
     }
+
+
 }
