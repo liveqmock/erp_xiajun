@@ -62,9 +62,6 @@ public class SumaryDetailController{
 	public Object sumSettlePageList(Integer status){
 		JsonResult<List<Map<String,Object>>> result = new JsonResult<>();
 		try {
-//			String companyNo = "-1";
-//			List<Map<String,Object>> list = detailService.sumSettlePageList(status,companyNo);
-
 			List<Map<String,Object>> list = detailService.sumSettlePageList(status,AppUtil.getLoginUserCompanyNo());
 			result.buildData(list);
 		} catch (Exception e) {
