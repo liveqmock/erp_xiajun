@@ -9,7 +9,7 @@ CREATE PROCEDURE createUser(
   BEGIN
     DECLARE chars_str VARCHAR(100) DEFAULT 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     DECLARE companyno VARCHAR(64) DEFAULT '';
-    DECLARE orgid BIGINT DEFAULT 0;
+    DECLARE orgid BIGINT DEFAULT 100000;
     DECLARE userno VARCHAR(64) DEFAULT '';
     DECLARE roleid BIGINT DEFAULT 0;
     DECLARE roleid_default BIGINT DEFAULT 0;
@@ -43,7 +43,7 @@ CREATE PROCEDURE createUser(
     #INTO orgid
     #FROM auth_organization;
     #INSERT INTO auth_organization (company_no, org_id, code,name, address,seq, creator, modifier)
-    #VALUES (companyno, orgid, CONCAT('10000',orgid),'公司总部', '公司地址',1, 'SYSTEM', 'SYSTEM');
+    #VALUES (companyno, orgid, orgid,'公司总部', '公司地址',1, 'SYSTEM', 'SYSTEM');
 
 
     #     创建角色

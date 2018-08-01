@@ -356,9 +356,8 @@
     LEFT JOIN auth_user_role r ON t.id = r.user_id
     LEFT JOIN auth_role o ON r.role_id = o.id
     LEFT JOIN auth_organization s ON s.id = t.organization_id
-    <where>
+    WHERE
       t.id = #{id}
-    </where>
   </select>
 
   <select id="queryUserQueryVOList" resultMap="userQueryVOResultMap"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">

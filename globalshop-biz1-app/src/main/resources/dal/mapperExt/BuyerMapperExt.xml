@@ -121,7 +121,10 @@
         <include refid="commonSelectSection"/>
         ORDER BY T.id desc
     </select>
-
+    <delete id="deleteByUnionId" parameterType="java.lang.String" >
+        delete from buyer
+        where union_id = #{wxUnionId}
+    </delete>
     <update id="update" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO">
         update buyer
         <set>

@@ -15,6 +15,28 @@ import java.util.List;
  * @date 2018/7/31
  */
 public interface MallSaleAgentService {
+    /**
+     * 添加代理
+     *
+     * @param mallSaleAgentDO
+     */
+    void insertMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
+
+    /**
+     * 更新代理
+     *
+     * @param mallSaleAgentDO
+     */
+    void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
+
+    /**
+     * 分佣比率修改
+     *
+     * @param userNo
+     * @param commissionMode
+     * @param commissionValue
+     */
+    void updateCommissionValue(String userNo, Long commissionMode, Double commissionValue);
 
     /**
      * 通过 companyNo 和 userNo 获得唯一代理
@@ -43,20 +65,6 @@ public interface MallSaleAgentService {
     int countMallSaleAgents(MallSaleAgentQueryVO mallSaleAgentQueryVO);
 
     /**
-     * 添加代理
-     *
-     * @param mallSaleAgentDO
-     */
-    void insertMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
-
-    /**
-     * 更新代理
-     *
-     * @param mallSaleAgentDO
-     */
-    void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
-
-    /**
      * 根据分享 userNo 查询代理的分佣比率
      *
      * @param userNo
@@ -65,8 +73,16 @@ public interface MallSaleAgentService {
      */
     CommissionValueVO queryCommissionValue(String userNo, String companyNo);
 
-    // TODO: 考虑实现单独的佣金修改
     
-    //根据user_no查询代理的信息
+    /**
+     * 根据userNo查询代理的信息（如头像，登录名等）
+     * @author xiajun
+     * @param userNo
+     * @return
+     */
     MallSaleAgentDO queryAgentInfoByUserNo(String userNo);
+
+
+
+
 }

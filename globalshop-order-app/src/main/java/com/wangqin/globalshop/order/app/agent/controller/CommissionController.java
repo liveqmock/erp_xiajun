@@ -6,9 +6,9 @@ import java.util.List;
 import com.wangqin.globalshop.order.app.agent.service.IOrderCommissionSumaryDetailService;
 import com.wangqin.globalshop.order.app.agent.service.IOrderCommissionSumaryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.w3c.dom.css.ElementCSSInlineStyle;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.AgentCommissionVO;
@@ -20,6 +20,7 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 
+@Controller
 @Authenticated
 @RequestMapping("/agentInfo")
 public class CommissionController {
@@ -36,7 +37,8 @@ public class CommissionController {
 	     * @param mallSaleAgentDO
 	     * @return
 	     */
-	    @PostMapping("/orderList")
+	  	@RequestMapping("/orderList")
+	    @ResponseBody
 	    public Object getOrderList(CommissionQueryVO qv) {
 	    	JsonResult<AgentCommissionVO> result = new JsonResult<AgentCommissionVO>();
 	    	if(!loginCheck()) {
