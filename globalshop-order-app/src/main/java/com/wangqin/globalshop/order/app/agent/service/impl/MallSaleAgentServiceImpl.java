@@ -1,14 +1,14 @@
 package com.wangqin.globalshop.order.app.agent.service.impl;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionValueVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,12 +54,15 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
             });
 
         } else {
-            // 查询二级代理，需要为每个二级代理添加其一级代理姓名
+            // 查询二级代理，需要为每个二级代理添加其一级代理信息
             MallSaleAgentDO parentMallSaleAgentDO =
                     getMallSaleAgent(mallSaleAgentQueryVO.getCompanyNo(), parentAgent);
 
             mallSaleAgentItemVOList.forEach(
-                    mallSaleAgentItemVO -> mallSaleAgentItemVO.setParentAgentName(parentMallSaleAgentDO.getAgentName()));
+                    mallSaleAgentItemVO -> {
+                        mallSaleAgentItemVO.setParentAgent(parentAgent);
+                        mallSaleAgentItemVO.setParentAgentName(parentMallSaleAgentDO.getAgentName());
+                    });
         }
 
         return mallSaleAgentItemVOList;
@@ -99,21 +102,26 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         String parentAgentNo = mallSaleAgent.getParentAgent();
         if (parentAgentNo == null) {
             // 一级代理
-            commissionValueVO.setLevelOneUserNo(mallSaleAgent.getUserNo());
-            commissionValueVO.setLevelOneCommissionMode(mallSaleAgent.getCommissionMode());
-            commissionValueVO.setLevelOneCommissionValue(mallSaleAgent.getCommissionValue());
+            commissionValueVO.setLevelOneUserId(mallSaleAgent.getUserNo());
+            commissionValueVO.setLevelOneCommissionMode(String.valueOf(mallSaleAgent.getCommissionMode()));
+            commissionValueVO.setLevelOneCommissionRate(String.valueOf(mallSaleAgent.getCommissionValue()));
         } else {
             // 二级代理
-            commissionValueVO.setLevelTwoUserNo(mallSaleAgent.getUserNo());
-            commissionValueVO.setLevelTwoCommissionMode(mallSaleAgent.getCommissionMode());
-            commissionValueVO.setLevelTwoCommissionValue(mallSaleAgent.getCommissionValue());
+            commissionValueVO.setLevelTwoUserId(mallSaleAgent.getUserNo());
+            commissionValueVO.setLevelTwoCommissionMode(String.valueOf(mallSaleAgent.getCommissionMode()));
+            commissionValueVO.setLevelTwoCommissionRate(String.valueOf(mallSaleAgent.getCommissionValue()));
             // 获取该二级代理的一级代理的信息
             MallSaleAgentDO parentAgent = getMallSaleAgent(companyNo, parentAgentNo);
-            commissionValueVO.setLevelOneUserNo(parentAgent.getUserNo());
-            commissionValueVO.setLevelOneCommissionMode(parentAgent.getCommissionMode());
-            commissionValueVO.setLevelOneCommissionValue(parentAgent.getCommissionValue());
+            commissionValueVO.setLevelOneUserId(parentAgent.getUserNo());
+            commissionValueVO.setLevelOneCommissionMode(String.valueOf(parentAgent.getCommissionMode()));
+            commissionValueVO.setLevelOneCommissionRate(String.valueOf(parentAgent.getCommissionValue()));
         }
 
         return commissionValueVO;
+    }
+    
+    @Override
+    public MallSaleAgentDO queryAgentInfoByUserNo(String userNo) {
+    	return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
     }
 }

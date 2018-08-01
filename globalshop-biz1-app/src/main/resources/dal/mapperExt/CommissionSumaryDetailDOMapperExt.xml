@@ -20,7 +20,8 @@
     <update id="updateStatusById">
         UPDATE
         commission_sumary_detail
-        SET status=#{status}
+        SET status=#{status},
+            settlement_no=#{settlementNo}
         where id = #{id}
     </update>
 
@@ -47,9 +48,81 @@
         FROM commission_sumary_detail
         WHERE share_user_id = #{userId}
     </select>
+    
+    <!-- 根据user_no计算可结算佣金,@author:xiajun -->
+     <select id="sumSettlementAbleByUserNo" resultType="java.lang.Double">
+        SELECT IFNULL(sum(IFNULL(settlement,0)),0)
+        FROM commission_sumary_detail
+        WHERE share_user_id = #{userNo}
+        AND status=#{status}
+    </select>
+    
+    <!-- 根据user_no统计订单数、销售额和佣金（分可结算，待结算，已结算）,@author:xiajun -->
+     <select id="sumOrderNumSaleCommissionByUserNo" resultType="java.util.Map">
+        SELECT 
+        IFNULL(count(1),0) AS orderNum,
+        IFNULL(SUM(IFNULL(sale_price,0)),0) AS totalSalePrice,
+        IFNULL(SUM(IFNULL(settlement,0)),0) AS totalCommission
+        FROM
+            commission_sumary_detail
+        WHERE
+            share_user_id = #{userNo}
+        AND status=#{status}
+        Group By share_user_id
+    </select>
+
+    <select id="sumSettlePageList" resultType="java.util.Map">
+        SELECT
+        IFNULL(count(detail.id),0) AS orderNum,
+        IFNULL(SUM(IFNULL(detail.sale_price,0)),0) AS totalSalePrice,
+        IFNULL(SUM(IFNULL(detail.settlement,0)),0) AS totalCommission,
+        agent.head_protrait_url AS headProtraitUrl,
+		agent.parent_agent AS parentAgent,
+		agent.agent_name AS agentName,
+		detail.share_user_id as shareUserId
+        FROM
+            commission_sumary_detail as detail,
+            mall_sale_agent as agent
+        WHERE
+            detail.share_user_id = agent.userNo
+            and detail.company_no = #{companyNo}
+            and detail.is_del is false
+            and agent.is_del is false
+            and detail.status=#{status}
+        Group By detail.share_user_id
+    </select>
 
 
+    
+    <!--  根据user_no查询子订单编号list-->
+     <select id="querySubOrderNoListByUserNo" resultType="java.lang.String" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionQueryVO">
+        SELECT sub_order_no
+        FROM commission_sumary_detail
+        WHERE share_user_id = #{userNo}
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]> 
+    </select>
 
+    <select id="selectByShareId" resultType="java.lang.Long">
+        SELECT id
+        FROM commission_sumary_detail
+        WHERE share_user_id = #{shareUserId}
+        and is_del= false
+        and status = 1
+    </select>
+
+
+    <select id="sumPriceByIdList" resultType="java.util.Map">
+        SELECT
+               IFNULL(sum(IFNULL(settlement,0)),0) settlement,
+               IFNULL(sum(IFNULL(sale_price,0)),0) salePrice
+        FROM
+               commission_sumary_detail
+        WHERE
+               id IN
+                  <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                         #{item}
+                  </foreach>
+    </select>
 
 
 </mapper>

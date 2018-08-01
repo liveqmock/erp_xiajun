@@ -6,9 +6,10 @@
 <generatorConfiguration>
     <classPathEntry
             location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
-    <!--<classPathEntry-->
 
-            <!--location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
+
+
+    <!--<classPathEntry location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
 
            
 
@@ -23,7 +24,7 @@
 
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://47.98.230.111/haidb2new"
+                        connectionURL="jdbc:mysql://47.98.164.133/haidb2new"
                         userId="root" password="Tfbtech123@">
         </jdbcConnection>
         <!--默认false
@@ -519,13 +520,13 @@
         <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
     <!--</table>-->
 
-        <!--<table tableName="mall_commision_apply" domainObjectName="MallCommisionApplyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
+        <table tableName="mall_commision_apply" domainObjectName="MallCommisionApplyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
+            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
+            <ignoreColumn column="is_del" delimitedColumnName=""/>
+        </table>
        
        <!--<table tableName="share_token_record" domainObjectName="ShareTokenRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
