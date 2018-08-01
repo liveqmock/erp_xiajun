@@ -1,5 +1,7 @@
 ALTER TABLE `item_sku` ADD COLUMN `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例';
 
+ALTER TABLE `item` ADD COLUMN `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率';
+
 
 
 CREATE TABLE IF NOT EXISTS `mall_commision_apply` (

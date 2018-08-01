@@ -137,8 +137,7 @@ public class MallSaleAgentController {
             result.buildMsg("查询出现异常")
                     .buildIsSuccess(false);
         }
+
         return result;
     }
-
-
 }
