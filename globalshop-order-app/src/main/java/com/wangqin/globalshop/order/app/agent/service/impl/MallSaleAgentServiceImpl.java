@@ -64,7 +64,8 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
             // 更新代理信息
             updateMallSaleAgent(mallSaleAgentDO);
         } else {
-            // TODO: 目前暂不考虑分佣模式为金额模式的情况
+            // 分佣模式为金额模式的情况
+            throw new BizCommonException("暂不支持分佣模式为金额模式的情况！");
         }
     }
 
@@ -154,6 +155,16 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
 
         return commissionValueVO;
     }
-
+    
+    /**
+     * 根据userNo查询代理的信息（如头像，登录名等）
+     * @author xiajun
+     * @param userNo
+     * @return
+     */
+    @Override
+    public MallSaleAgentDO queryAgentInfoByUserNo(String userNo) {
+    	return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
+    }
 
 }

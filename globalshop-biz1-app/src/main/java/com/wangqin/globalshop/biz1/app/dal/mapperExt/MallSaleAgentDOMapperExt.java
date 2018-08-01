@@ -54,6 +54,7 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
     
     /**
      * 根据user_no查询记录
+     * @author xiajun
      * @param userNo
      * @return
      */
