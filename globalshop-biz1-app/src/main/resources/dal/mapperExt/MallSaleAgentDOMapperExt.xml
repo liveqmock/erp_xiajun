@@ -1,36 +1,104 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt">
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
-        <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-        <result column="user_no" property="userNo" jdbcType="VARCHAR" />
-        <result column="parent_agent" property="parentAgent" jdbcType="VARCHAR" />
-        <result column="open_id" property="openId" jdbcType="VARCHAR" />
-        <result column="union_id" property="unionId" jdbcType="VARCHAR" />
-        <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
-        <result column="real_name" property="realName" jdbcType="VARCHAR" />
-        <result column="id_card" property="idCard" jdbcType="VARCHAR" />
-        <result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR" />
-        <result column="gender" property="gender" jdbcType="INTEGER" />
-        <result column="city" property="city" jdbcType="VARCHAR" />
-        <result column="province" property="province" jdbcType="VARCHAR" />
-        <result column="country" property="country" jdbcType="VARCHAR" />
-        <result column="phone" property="phone" jdbcType="VARCHAR" />
-        <result column="commission_mode" property="commissionMode" jdbcType="BIGINT" />
-        <result column="commission_value" property="commissionValue" jdbcType="DOUBLE" />
-        <result column="status" property="status" jdbcType="BIT" />
-        <result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
-        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
-        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-        <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
+        <result column="parent_agent" property="parentAgent" jdbcType="VARCHAR"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
+        <result column="agent_name" property="agentName" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="id_card" property="idCard" jdbcType="VARCHAR"/>
+        <result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="INTEGER"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="country" property="country" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="commission_mode" property="commissionMode" jdbcType="BIGINT"/>
+        <result column="commission_value" property="commissionValue" jdbcType="DOUBLE"/>
+        <result column="status" property="status" jdbcType="BIT"/>
+        <result column="join_time" property="joinTime" jdbcType="TIMESTAMP"/>
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
     </resultMap>
-    <sql id="Base_Column_List" >
-    id, company_no, user_no, parent_agent, open_id, union_id, agent_name, real_name,
-    id_card, head_protrait_url, gender, city, province, country, phone, commission_mode,
-    commission_value, status, join_time, last_login_time, modifier, creator
-  </sql>
+    <sql id="Base_Column_List">
+        id, company_no, user_no, parent_agent, open_id, union_id, agent_name, real_name,
+        id_card, head_protrait_url, gender, city, province, country, phone, commission_mode,
+        commission_value, status, join_time, last_login_time, modifier, creator
+    </sql>
 
+    <!-- 根据 company_no 和 user_no 唯一确定 mall_sale_agent 表中的一条记录，将其更新 -->
+    <update id="updateByCompanyNoAndUserNo"
+            parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
+        UPDATE mall_sale_agent
+        <set>
+            <if test="parentAgent != null">
+                parent_agent = #{parentAgent},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId},
+            </if>
+            <if test="unionId != null">
+                union_id = #{unionId},
+            </if>
+            <if test="agentName != null">
+                agent_name = #{agentName},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard},
+            </if>
+            <if test="headProtraitUrl != null">
+                head_protrait_url = #{headProtraitUrl},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="city != null">
+                city = #{city},
+            </if>
+            <if test="province != null">
+                province = #{province},
+            </if>
+            <if test="country != null">
+                country = #{country},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="commissionMode != null">
+                commission_mode = #{commissionMode},
+            </if>
+            <if test="commissionValue != null">
+                commission_value = #{commissionValue},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="joinTime != null">
+                join_time = #{joinTime},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="modifier != null">
+                modifier = #{modifier},
+            </if>
+            <if test="creator != null">
+                creator = #{creator},
+            </if>
+        </set>
+        WHERE company_no = #{companyNo}
+        AND user_no = #{userNo}
+    </update>
+
+    <!-- 通过 companyNo 和 userNo 获得 mall_sale_agent 表中的一条记录 -->
     <select id="getByCompanyNoAndUserNo" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
