@@ -15,19 +15,15 @@ public class AgentOrderVO {
 	
 	private String scale;
 	
-	private Integer saleCount;
+	private Integer quantity;
 	
-	private String receiverName;
-	
-	private String receiverAddress;
-	
-	private String receiverPhone;
-	
+	private String receiverInfo;
+
 	private String orderStatus;
 	
-	private Date saleDate;
+	private Date orderTime;
 	
-	private Double commission;
+	private Double totalSettlement;
 
 	public String getSubOrderNo() {
 		return subOrderNo;
@@ -69,36 +65,24 @@ public class AgentOrderVO {
 		this.scale = scale;
 	}
 
-	public Integer getSaleCount() {
-		return saleCount;
+	
+
+	
+
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setSaleCount(Integer saleCount) {
-		this.saleCount = saleCount;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
-	public String getReceiverName() {
-		return receiverName;
+	public String getReceiverInfo() {
+		return receiverInfo;
 	}
 
-	public void setReceiverName(String receiverName) {
-		this.receiverName = receiverName;
-	}
-
-	public String getReceiverAddress() {
-		return receiverAddress;
-	}
-
-	public void setReceiverAddress(String receiverAddress) {
-		this.receiverAddress = receiverAddress;
-	}
-
-	public String getReceiverPhone() {
-		return receiverPhone;
-	}
-
-	public void setReceiverPhone(String receiverPhone) {
-		this.receiverPhone = receiverPhone;
+	public void setReceiverInfo(String receiverInfo) {
+		this.receiverInfo = receiverInfo;
 	}
 
 	public String getOrderStatus() {
@@ -108,22 +92,25 @@ public class AgentOrderVO {
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-
-	public Date getSaleDate() {
-		return saleDate;
+	public Date getOrderTime() {
+		return orderTime;
 	}
 
-	public void setSaleDate(Date saleDate) {
-		this.saleDate = saleDate;
+	public void setOrderTime(Date orderTime) {
+		this.orderTime = orderTime;
 	}
 
-	public Double getCommission() {
-		return commission;
+	public Double getTotalSettlement() {
+		return totalSettlement;
 	}
 
-	public void setCommission(Double commission) {
-		this.commission = commission;
+	public void setTotalSettlement(Double totalSettlement) {
+		this.totalSettlement = totalSettlement;
 	}
+
+
+
+	
 	
 	
 }

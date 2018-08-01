@@ -1,15 +1,11 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-
 import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
-
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.MallSaleAgentDOMapper;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 import java.util.List;
 
@@ -21,11 +17,8 @@ import java.util.List;
  */
 public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
 
-
-    List<MallSaleAgentDO> queryAgentListByCompanyNo(String companyNo);
-
     /**
-     * 通过 companyNo 和 userNo 获得唯一代理
+     * 通过 companyNo 和 userNo 获得 mall_sale_agent 表中的一条记录
      *
      * @param companyNo
      * @param userNo
@@ -34,6 +27,7 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
     MallSaleAgentDO getByCompanyNoAndUserNo(@Param("companyNo") String companyNo, @Param("userNo") String userNo);
 
     /**
+     * 根据 company_no 和 user_no 唯一确定 mall_sale_agent 表中的一条记录，将其更新
      *
      * @param mallSaleAgentDO
      * @return
@@ -47,7 +41,8 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
      * @param pageQueryParam
      * @return
      */
-    List<MallSaleAgentItemVO> listMallSaleAgents(MallSaleAgentQueryVO mallSaleAgentQueryVO, PageQueryParam pageQueryParam);
+    List<MallSaleAgentItemVO> listMallSaleAgents(@Param("mallSaleAgentQueryVO") MallSaleAgentQueryVO mallSaleAgentQueryVO,
+                                                 @Param("pageQueryParam") PageQueryParam pageQueryParam);
 
     /**
      * 根据指定条件查询代理数目
@@ -55,14 +50,12 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
      * @param mallSaleAgentQueryVO
      * @return
      */
-    int countMallSaleAgents(MallSaleAgentQueryVO mallSaleAgentQueryVO);
+    int countMallSaleAgents(@Param("mallSaleAgentQueryVO") MallSaleAgentQueryVO mallSaleAgentQueryVO);
     
     /**
-     * 
-     * @param userNo
      * 根据user_no查询记录
+     * @param userNo
      * @return
      */
     MallSaleAgentDO queryAgentInfoByUserNo(String userNo);
-
 }

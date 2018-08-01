@@ -66,4 +66,7 @@ public interface MallSaleAgentService {
     CommissionValueVO queryCommissionValue(String userNo, String companyNo);
 
     // TODO: 考虑实现单独的佣金修改
+    
+    //根据user_no查询代理的信息
+    MallSaleAgentDO queryAgentInfoByUserNo(String userNo);
 }
