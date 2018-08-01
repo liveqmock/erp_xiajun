@@ -352,7 +352,7 @@ public class WechatLoginController {
      */
     @RequestMapping("/getProxyHtml")
     public void getProxyHtml(HttpServletResponse response,String parentAgent) {
-        String baseUrl = sysurl + proxy_redirect;
+         String baseUrl = sysurl + proxy_redirect;
         try {
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
