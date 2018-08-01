@@ -18,6 +18,6 @@ public interface MallCommisionApplyDOMapperExt extends MallCommisionApplyDOMappe
                                               @Param("receiveDate")Date receiveDate, @Param("receiveTime")String receiveTime);
 
 
-	List<MallCommisionApplyDO> selectByStatusAndNotSync(@Param("code") String code);
+	List<MallCommisionApplyDO> selectByStatusAndNotSync(@Param("status") String status);
 }
 

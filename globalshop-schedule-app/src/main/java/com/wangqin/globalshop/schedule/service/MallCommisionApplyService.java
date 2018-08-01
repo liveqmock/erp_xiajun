@@ -9,7 +9,7 @@ import java.util.List;
  * Create by 777 on 2018/7/31
  */
 public interface MallCommisionApplyService {
-	List<MallCommisionApplyDO> selectByStatusAndNotSync(String code);
+	List<MallCommisionApplyDO> selectByStatusAndNotSync(String status);
 
 	int deleteByPrimaryKey(Long id);
 
