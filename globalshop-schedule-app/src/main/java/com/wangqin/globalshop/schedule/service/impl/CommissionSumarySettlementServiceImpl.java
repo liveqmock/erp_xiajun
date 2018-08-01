@@ -45,6 +45,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 		settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
 		settlementDO.setPayType("offline");
+		settlementDO.init();
 		settlementDOMapperExt.insert(settlementDO);
 	}
 
@@ -71,13 +72,9 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			settlementDO.setShareUserId(shareUserId);
 			settlementDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 			settlementDO.setDetailCount(idList.size());
-			//settlementDO.setPayType();
+			settlementDO.setPayType("onLine");
 			settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
 			settlementDO.setSettlementTime(new Date());
-
-
-
-			//Double settlement = detailDOMapperExt.sumSettlement(idList);
 
 			Map<String,Double> priceMap = detailDOMapperExt.sumPriceByIdList(idList);
 
@@ -87,11 +84,10 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			settlementDO.setTotalPrice(BigDecimal.valueOf(salePrice).setScale(2,BigDecimal.ROUND_HALF_UP));
 
 			settlementDO.setSettlement(BigDecimal.valueOf(settlement).setScale(2,BigDecimal.ROUND_HALF_UP));
-
+			settlementDO.init();
 			settlementDOMapperExt.insert(settlementDO);
 
 			for(Long id : idList){
-				//todo 结算单号未更新
 				detailDOMapperExt.updateStatusById(id, SettlementStatus.SUCCESS.getCode(),settlementDO.getSettlementNo());
 			}
 

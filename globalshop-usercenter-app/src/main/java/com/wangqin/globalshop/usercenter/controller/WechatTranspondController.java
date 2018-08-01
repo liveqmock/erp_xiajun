@@ -31,8 +31,8 @@ public class WechatTranspondController {
     }
 
     @RequestMapping("/test/authorized")
-    public void authorizedTest(String code,HttpServletResponse response) {
-        String trueUrl = testUrl + "/#/permission/test?code=" + code;
+    public void authorizedTest(String code,String state,HttpServletResponse response) {
+        String trueUrl = testUrl + "/#/permission/test?code=" + code+"&state="+state;
         try {
             response.sendRedirect(trueUrl);
         } catch (IOException e) {
@@ -51,8 +51,8 @@ public class WechatTranspondController {
     }
 
     @RequestMapping("/dev/authorized")
-    public void authorizedDev(String code,HttpServletResponse response) {
-        String trueUrl = devUrl + "/#/permission/test?code=" + code;
+    public void authorizedDev(String code,String state,HttpServletResponse response) {
+        String trueUrl = devUrl + "/#/permission/test?code=" + code+"&state="+state;
         try {
             response.sendRedirect(trueUrl);
         } catch (IOException e) {

@@ -212,28 +212,50 @@ public class CommissionSumaryJob {
 	/**
 	 *  校验状态，检验是否已签收15天，是则可结算
 	 */
-	//@Scheduled(cron = "0 0 1,3,5 * * ? ")
-	@Scheduled(cron = "0/30 * * * * ? ")
+	@Scheduled(cron = "0 0 1,3,5 * * ? ")
+	//@Scheduled(cron = "0/30 * * * * ? ")
 	public void checkStatusCommissionSumary(){
-		List<CommissionSumaryDO> sumaryDOList = sumaryService.selectMorethan15Day();
+		List<CommissionSumaryDO> sumaryDOList = sumaryService.selectMorethan15Day();//待结算状态， 且结算时间超过15天的
 		if(!EasyUtil.isListEmpty(sumaryDOList)){
 			for(CommissionSumaryDO sumaryDO : sumaryDOList){
 
-				//检查订单状态，如果是从已签收-->售后，则不应该进入可结算，增加关闭结算状态
-				MallSubOrderDO subOrderDO = subOrderMapperExt.selectBySubOrderNo(sumaryDO.getSubOrderNo());
 
-				if(subOrderDO == null){
-					sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
-				}else if(OrderStatus.SUCCESS.getCode() == subOrderDO.getStatus() || OrderStatus.COMFIRM.getCode() == subOrderDO.getStatus() ){
-					//既不是已签收，也不是已完成，则关闭
-					sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
-				}else {
-					sumaryDO.setStatus(SettlementStatus.can.getCode());
-				}
-				sumaryService.updateByPrimaryKeySelective(sumaryDO);
+				boolean result = transactionTemplate.execute(new TransactionCallback<Boolean>() {
+
+					@Override
+					public Boolean doInTransaction(TransactionStatus transactionStatus) {
+
+						doCheckStatusCommissionSumary(sumaryDO);
+
+						return Boolean.TRUE;
+					}
+				});
+
+
 			}
 		}
 	}
 
+
+	private void doCheckStatusCommissionSumary(CommissionSumaryDO sumaryDO){
+		//检查订单状态，如果是从已签收-->售后，则不应该进入可结算，增加关闭结算状态
+		MallSubOrderDO subOrderDO = subOrderMapperExt.selectBySubOrderNo(sumaryDO.getSubOrderNo());
+
+		if(subOrderDO == null){
+			sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
+		}else if(OrderStatus.SUCCESS.getCode() == subOrderDO.getStatus() || OrderStatus.COMFIRM.getCode() == subOrderDO.getStatus() ){
+			sumaryDO.setStatus(SettlementStatus.can.getCode());
+		}else {
+			//既不是已签收，也不是已完成，则关闭
+			sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
+		}
+
+		List<CommissionSumaryDetailDO> detailDOList = sumaryDetailService.selectBySubOrderNo(sumaryDO.getSubOrderNo());
+		for(CommissionSumaryDetailDO detailDO : detailDOList){
+			detailDO.setStatus(sumaryDO.getStatus());
+			sumaryDetailService.updateByPrimaryKeySelective(detailDO);
+		}
+		sumaryService.updateByPrimaryKeySelective(sumaryDO);
+	}
 
 }
