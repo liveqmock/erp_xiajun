@@ -69,7 +69,6 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         }
     }
 
-
     @Override
     public MallSaleAgentDO getMallSaleAgent(String companyNo, String userNo) {
         return mallSaleAgentDOMapper.getByCompanyNoAndUserNo(companyNo, userNo);
@@ -117,8 +116,6 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     public int countMallSaleAgents(MallSaleAgentQueryVO mallSaleAgentQueryVO) {
         return mallSaleAgentDOMapper.countMallSaleAgents(mallSaleAgentQueryVO);
     }
-
-
 
     @Override
     @Transactional(rollbackFor = BizCommonException.class)
