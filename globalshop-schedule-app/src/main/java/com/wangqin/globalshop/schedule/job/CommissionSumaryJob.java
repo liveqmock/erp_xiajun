@@ -97,6 +97,7 @@ public class CommissionSumaryJob {
 		sumaryDO.setUpc(subOrderDO.getUpc());
 		sumaryDO.setSkuPic(subOrderDO.getSkuPic());
 		sumaryDO.setStatus(SettlementStatus.wait.getCode());
+		sumaryDO.setSalePrice(BigDecimal.valueOf(subOrderDO.getSalePrice()).setScale(2,BigDecimal.ROUND_HALF_UP));
 		sumaryService.insert(sumaryDO);
 
 		//创建detail:1、查询代理，是否二级等
@@ -106,7 +107,7 @@ public class CommissionSumaryJob {
 		if (StringUtils.isBlank(commission)){
 
 		}else{
-			handleCommission(applyDO, commission);
+			handleCommission(sumaryDO,applyDO, commission);
 		}
 
 		//更新applyDO is_sync = 1
@@ -114,7 +115,7 @@ public class CommissionSumaryJob {
 		applyService.updateByPrimaryKeySelective(applyDO);
 	}
 
-	public void handleCommission(MallCommisionApplyDO applyDO, String commission) {
+	public void handleCommission(CommissionSumaryDO sumaryDO, MallCommisionApplyDO applyDO, String commission) {
 		CommisionModel model = BaseDto.fromJson(commission, CommisionModel.class);
 		String strategy = model.getStrategy();
 		if ("1".equals(strategy)){
@@ -164,6 +165,7 @@ public class CommissionSumaryJob {
 				detailDO.setStatus(SettlementStatus.wait.getCode());
 				detailDO.setShareUserId(agencyModel.getLevelOneUserId());
 				detailDO.setSubOrderNo(applyDO.getSubOrderNo());
+				detailDO.setSalePrice(sumaryDO.getSalePrice());
 				sumaryDetailService.insert(detailDO);
 
 			}
@@ -174,6 +176,7 @@ public class CommissionSumaryJob {
 				detailDO.setStatus(SettlementStatus.wait.getCode());
 				detailDO.setShareUserId(agencyModel.getLevelTwoUserId());
 				detailDO.setSubOrderNo(applyDO.getSubOrderNo());
+				detailDO.setSalePrice(sumaryDO.getSalePrice());
 				sumaryDetailService.insert(detailDO);
 			}
 		}

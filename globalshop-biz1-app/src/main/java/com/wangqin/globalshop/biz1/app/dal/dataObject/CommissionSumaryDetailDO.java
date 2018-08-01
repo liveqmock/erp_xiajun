@@ -21,6 +21,8 @@ public class CommissionSumaryDetailDO extends BaseModel {
 
     private String subOrderNo;
 
+    private BigDecimal salePrice;
+
     public Long getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class CommissionSumaryDetailDO extends BaseModel {
 
     public void setSubOrderNo(String subOrderNo) {
         this.subOrderNo = subOrderNo == null ? null : subOrderNo.trim();
+    }
+
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
     }
 }
