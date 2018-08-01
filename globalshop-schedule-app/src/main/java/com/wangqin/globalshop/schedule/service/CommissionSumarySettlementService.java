@@ -17,4 +17,7 @@ public interface CommissionSumarySettlementService {
 
 	void doSettlement(List<Long> idList, String shareUserId);
 
+	void doSettleList(List<String> userIdList);
+
+	void doSettleSigle(String shareUserId);
 }
