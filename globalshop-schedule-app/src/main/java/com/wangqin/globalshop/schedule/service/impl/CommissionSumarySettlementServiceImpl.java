@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create by 777 on 2018/7/31
@@ -60,6 +61,11 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			throw new ErpCommonException("shareUserId_empty","结算ID必填");
 		}
 
+		//优化一下
+		if(EasyUtil.isListEmpty(idList)){
+			idList = detailDOMapperExt.selectByShareId(shareUserId);
+		}
+
 		if(!EasyUtil.isListEmpty(idList)){
 			CommissionSumarySettlementDO settlementDO = new CommissionSumarySettlementDO();
 			settlementDO.setShareUserId(shareUserId);
@@ -69,7 +75,16 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
 			settlementDO.setSettlementTime(new Date());
 
-			Double settlement = detailDOMapperExt.sumSettlement(idList);
+
+
+			//Double settlement = detailDOMapperExt.sumSettlement(idList);
+
+			Map<String,Double> priceMap = detailDOMapperExt.sumPriceByIdList(idList);
+
+			Double settlement = priceMap.get("settlement");
+			Double salePrice = priceMap.get("salePrice");
+
+			settlementDO.setTotalPrice(BigDecimal.valueOf(salePrice).setScale(2,BigDecimal.ROUND_HALF_UP));
 
 			settlementDO.setSettlement(BigDecimal.valueOf(settlement).setScale(2,BigDecimal.ROUND_HALF_UP));
 
@@ -77,30 +92,11 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 			for(Long id : idList){
 				//todo 结算单号未更新
-				detailDOMapperExt.updateStatusById(id, SettlementStatus.SUCCESS.getCode());
+				detailDOMapperExt.updateStatusById(id, SettlementStatus.SUCCESS.getCode(),settlementDO.getSettlementNo());
 			}
 
 		}else {
-
-
-			//没有结算，则结算这个ID下所有的数据
-			CommissionSumarySettlementDO settlementDO = new CommissionSumarySettlementDO();
-			settlementDO.setShareUserId(shareUserId);
-			settlementDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-			settlementDO.setDetailCount(idList.size());
-			//settlementDO.setPayType();
-			settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
-			settlementDO.setSettlementTime(new Date());
-
-			Double settlement = detailDOMapperExt.sumSettlementByUserId(shareUserId);
-
-			settlementDO.setSettlement(BigDecimal.valueOf(settlement).setScale(2,BigDecimal.ROUND_HALF_UP));
-
-			settlementDOMapperExt.insert(settlementDO);
-
-			//todo 结算单号未更新
-			detailDOMapperExt.updateStatusByUserId(shareUserId,SettlementStatus.SUCCESS.getCode());
-
+		      throw new ErpCommonException("can settlement error","当前无可结算订单");
 		}
 
 	}
