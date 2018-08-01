@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import sun.awt.geom.AreaOp;
 
 import java.math.BigDecimal;
@@ -58,60 +59,59 @@ public class CommissionSumaryJob {
 	 * 2、计算总佣金
 	 * 3、生成 佣金记录，默认状态待结算
 	 */
-	@Scheduled(cron = "0 0/5 * * * ? ")
+	@Scheduled(cron = "0 0 1,3,5 * * ? ")
 	public void createCommissionSumary(){
-
-
 		List<MallCommisionApplyDO> applyDOList =  applyService.selectByStatusAndNotSync(MallCommisionApplyStatus.RECEIVE.getCode());
-
 		if(!EasyUtil.isListEmpty(applyDOList)){
 			for(MallCommisionApplyDO applyDO : applyDOList){
-
-				//创建sumary
-				MallSubOrderDO subOrderDO = subOrderMapperExt.selectBySubOrderNo(applyDO.getSubOrderNo());
-				if(subOrderDO == null){
-					break;
-				}
-				CommissionSumaryDO sumaryDO = new CommissionSumaryDO();
-				sumaryDO.setCompanyNo(subOrderDO.getCompanyNo());
-				sumaryDO.setItemCode(subOrderDO.getItemCode());
-				sumaryDO.setItemName(subOrderDO.getItemName());
-				sumaryDO.setOrderNo(subOrderDO.getOrderNo());
-				sumaryDO.setOrderStatus(subOrderDO.getStatus().toString());
-				sumaryDO.setOrderStatus(OrderStatus.of(subOrderDO.getStatus()).getDescription());
-
-				sumaryDO.setQuantity(subOrderDO.getQuantity());
-				sumaryDO.setOrderTime(subOrderDO.getOrderTime());
-				sumaryDO.setReceiverInfo(subOrderDO.getReceiver()+" "
-						+subOrderDO.getReceiverState()
-						+subOrderDO.getReceiverCity()
-						+subOrderDO.getReceiverCountry()
-						+subOrderDO.getReceiverDistrict()
-						+subOrderDO.getReceiverAddress());
-				sumaryDO.setScale(subOrderDO.getScale());
-				sumaryDO.setSkuCode(subOrderDO.getSkuCode());
-				sumaryDO.setUpc(subOrderDO.getUpc());
-				sumaryDO.setSkuPic(subOrderDO.getSkuPic());
-				sumaryDO.setStatus(SettlementStatus.wait.getCode());
-				sumaryService.insert(sumaryDO);
-
-				//创建detail:1、查询代理，是否二级等
-				String shareUserId = applyDO.getShareUserId();
-
-				String commission = applyDO.getCommision();
-				if (StringUtils.isBlank(commission)){
-
-				}else{
-					handleCommission(applyDO, commission);
-				}
-
-				//更新applyDO is_sync = 1
-				applyDO.setIsSync(1);
-				applyService.updateByPrimaryKeySelective(applyDO);
-
+				doCreateCommissionSumary(applyDO);
 			}
 		}
+	}
 
+	@Transactional
+	public void doCreateCommissionSumary(MallCommisionApplyDO applyDO){
+		//创建sumary
+		MallSubOrderDO subOrderDO = subOrderMapperExt.selectBySubOrderNo(applyDO.getSubOrderNo());
+		if(subOrderDO == null){
+			return;
+		}
+		CommissionSumaryDO sumaryDO = new CommissionSumaryDO();
+		sumaryDO.setCompanyNo(subOrderDO.getCompanyNo());
+		sumaryDO.setItemCode(subOrderDO.getItemCode());
+		sumaryDO.setItemName(subOrderDO.getItemName());
+		sumaryDO.setOrderNo(subOrderDO.getOrderNo());
+		sumaryDO.setOrderStatus(subOrderDO.getStatus().toString());
+		sumaryDO.setOrderDesc(OrderStatus.of(subOrderDO.getStatus()).getDescription());
+
+		sumaryDO.setQuantity(subOrderDO.getQuantity());
+		sumaryDO.setOrderTime(subOrderDO.getOrderTime());
+		sumaryDO.setReceiverInfo(subOrderDO.getReceiver()+" "
+				+subOrderDO.getReceiverState()
+				+subOrderDO.getReceiverCity()
+				+subOrderDO.getReceiverCountry()
+				+subOrderDO.getReceiverDistrict()
+				+subOrderDO.getReceiverAddress());
+		sumaryDO.setScale(subOrderDO.getScale());
+		sumaryDO.setSkuCode(subOrderDO.getSkuCode());
+		sumaryDO.setUpc(subOrderDO.getUpc());
+		sumaryDO.setSkuPic(subOrderDO.getSkuPic());
+		sumaryDO.setStatus(SettlementStatus.wait.getCode());
+		sumaryService.insert(sumaryDO);
+
+		//创建detail:1、查询代理，是否二级等
+		String shareUserId = applyDO.getShareUserId();
+
+		String commission = applyDO.getCommision();
+		if (StringUtils.isBlank(commission)){
+
+		}else{
+			handleCommission(applyDO, commission);
+		}
+
+		//更新applyDO is_sync = 1
+		applyDO.setIsSync(1);
+		applyService.updateByPrimaryKeySelective(applyDO);
 	}
 
 	public void handleCommission(MallCommisionApplyDO applyDO, String commission) {
@@ -184,7 +184,7 @@ public class CommissionSumaryJob {
 	/**
 	 *  校验状态，检验是否已签收15天，是则可结算
 	 */
-	@Scheduled(cron = "30 0/5 * * * ? ")
+	@Scheduled(cron = "0 0 1,3,5 * * ? ")
 	public void checkStatusCommissionSumary(){
 		List<CommissionSumaryDO> sumaryDOList = sumaryService.selectMorethan15Day();
 		if(!EasyUtil.isListEmpty(sumaryDOList)){

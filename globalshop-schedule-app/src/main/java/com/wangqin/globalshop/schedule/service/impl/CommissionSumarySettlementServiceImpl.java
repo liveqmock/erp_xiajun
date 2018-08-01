@@ -76,6 +76,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			settlementDOMapperExt.insert(settlementDO);
 
 			for(Long id : idList){
+				//todo 结算单号未更新
 				detailDOMapperExt.updateStatusById(id, SettlementStatus.SUCCESS.getCode());
 			}
 
@@ -97,7 +98,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 			settlementDOMapperExt.insert(settlementDO);
 
-
+			//todo 结算单号未更新
 			detailDOMapperExt.updateStatusByUserId(shareUserId,SettlementStatus.SUCCESS.getCode());
 
 		}
