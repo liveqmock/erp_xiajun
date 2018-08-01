@@ -59,12 +59,19 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
 
     void addUserByqrcode(String companyNo, WxUserDO wxInfoJson);
 
+    /***
+     * 新增代理
+     * @param state 父级代理的编号
+     * @param user
+     */
+    void addProxy(String state, WxUserDO user);
 
     List<AuthUserDO> selectByUnionid(String unionid);
 
     List<AuthUserDO> selectByUnionidAndCompanyNo(String unionid, String state);
 
     AuthUserDO selectByUserNoAndCompanyNo(String userNo, String companyNo);
+
 
 
     /**

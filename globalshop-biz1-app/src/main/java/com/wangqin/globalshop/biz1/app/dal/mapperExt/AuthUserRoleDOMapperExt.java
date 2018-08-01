@@ -43,4 +43,13 @@ public interface AuthUserRoleDOMapperExt extends AuthUserRoleDOMapper {
     List<AuthUserRoleDO> searchUserRoleList(AuthUserRoleDO record);
 
     void deleteRoleByUserId(@Param("userId") Long userId);
+
+    /**
+     * 找出该用户的所有角色id
+     * @param id 用户id
+     * @return
+     */
+    List<Long> selectAllRole(Long id);
+
+    void deleteByUserIdAndRoleId(@Param("userId")Long userId, @Param("roleId")Long roleId);
 }

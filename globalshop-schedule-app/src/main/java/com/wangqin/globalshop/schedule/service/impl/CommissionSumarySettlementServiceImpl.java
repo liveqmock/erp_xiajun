@@ -43,9 +43,9 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 	public void add(CommissionSumarySettlementDO settlementDO){
 
-		//todo 需要校验一些字段的合法性
+		settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
+		settlementDO.setPayType("offline");
 		settlementDOMapperExt.insert(settlementDO);
-
 	}
 
 	public List<CommissionSumarySettlementDO> searchPageList(SettlementQueryVO queryVO){

@@ -21,6 +21,10 @@ public class MallCommisionApplyDO extends BaseModel {
 
     private Date orderDate;
 
+    private String receiveTime;
+
+    private Date receiveDate;
+
     private String shareUserId;
 
     private String creator;
@@ -97,6 +101,22 @@ public class MallCommisionApplyDO extends BaseModel {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public String getReceiveTime() {
+        return receiveTime;
+    }
+
+    public void setReceiveTime(String receiveTime) {
+        this.receiveTime = receiveTime == null ? null : receiveTime.trim();
+    }
+
+    public Date getReceiveDate() {
+        return receiveDate;
+    }
+
+    public void setReceiveDate(Date receiveDate) {
+        this.receiveDate = receiveDate;
     }
 
     public String getShareUserId() {

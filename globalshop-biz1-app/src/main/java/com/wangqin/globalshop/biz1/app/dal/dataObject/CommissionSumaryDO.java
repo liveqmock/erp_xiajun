@@ -8,8 +8,6 @@ public class CommissionSumaryDO extends BaseModel {
 
     private String companyNo;
 
-    private Integer status;
-
     private String modifier;
 
     private String creator;
@@ -44,6 +42,10 @@ public class CommissionSumaryDO extends BaseModel {
 
     private String orderDesc;
 
+    private Integer status;
+
+    private Date receiveDate;
+
     public Long getId() {
         return id;
     }
@@ -58,14 +60,6 @@ public class CommissionSumaryDO extends BaseModel {
 
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getModifier() {
@@ -202,5 +196,21 @@ public class CommissionSumaryDO extends BaseModel {
 
     public void setOrderDesc(String orderDesc) {
         this.orderDesc = orderDesc == null ? null : orderDesc.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getReceiveDate() {
+        return receiveDate;
+    }
+
+    public void setReceiveDate(Date receiveDate) {
+        this.receiveDate = receiveDate;
     }
 }

@@ -11,13 +11,15 @@
     <result column="is_sync" property="isSync" jdbcType="INTEGER" />
     <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
     <result column="order_date" property="orderDate" jdbcType="TIMESTAMP" />
+    <result column="receive_time" property="receiveTime" jdbcType="VARCHAR" />
+    <result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
     <result column="share_user_id" property="shareUserId" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, order_no, sub_order_no, commision, status, is_sync, order_time, order_date, 
-    share_user_id, creator, modifier
+    receive_time, receive_date, share_user_id, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -35,12 +37,14 @@
     </selectKey>
     insert into mall_commision_apply (company_no, order_no, sub_order_no, 
       commision, status, is_sync, 
-      order_time, order_date, share_user_id, 
-      creator, modifier)
+      order_time, order_date, receive_time, 
+      receive_date, share_user_id, creator, 
+      modifier)
     values (#{companyNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{subOrderNo,jdbcType=VARCHAR}, 
       #{commision,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{isSync,jdbcType=INTEGER}, 
-      #{orderTime,jdbcType=VARCHAR}, #{orderDate,jdbcType=TIMESTAMP}, #{shareUserId,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+      #{orderTime,jdbcType=VARCHAR}, #{orderDate,jdbcType=TIMESTAMP}, #{receiveTime,jdbcType=VARCHAR}, 
+      #{receiveDate,jdbcType=TIMESTAMP}, #{shareUserId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallCommisionApplyDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -71,6 +75,12 @@
       </if>
       <if test="orderDate != null" >
         order_date,
+      </if>
+      <if test="receiveTime != null" >
+        receive_time,
+      </if>
+      <if test="receiveDate != null" >
+        receive_date,
       </if>
       <if test="shareUserId != null" >
         share_user_id,
@@ -106,6 +116,12 @@
       </if>
       <if test="orderDate != null" >
         #{orderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveTime != null" >
+        #{receiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveDate != null" >
+        #{receiveDate,jdbcType=TIMESTAMP},
       </if>
       <if test="shareUserId != null" >
         #{shareUserId,jdbcType=VARCHAR},
@@ -145,6 +161,12 @@
       <if test="orderDate != null" >
         order_date = #{orderDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="receiveTime != null" >
+        receive_time = #{receiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveDate != null" >
+        receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
       <if test="shareUserId != null" >
         share_user_id = #{shareUserId,jdbcType=VARCHAR},
       </if>
@@ -167,6 +189,8 @@
       is_sync = #{isSync,jdbcType=INTEGER},
       order_time = #{orderTime,jdbcType=VARCHAR},
       order_date = #{orderDate,jdbcType=TIMESTAMP},
+      receive_time = #{receiveTime,jdbcType=VARCHAR},
+      receive_date = #{receiveDate,jdbcType=TIMESTAMP},
       share_user_id = #{shareUserId,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}

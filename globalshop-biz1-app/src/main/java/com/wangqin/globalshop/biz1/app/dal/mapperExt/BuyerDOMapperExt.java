@@ -18,4 +18,6 @@ public interface BuyerDOMapperExt extends BuyerDOMapper{
     List<BuyerDO> searchBuyerList(BuyerDO record);
 
     int update(BuyerDO buyerDO);
+
+    void deleteByUnionId(String wxUnionId);
 }
