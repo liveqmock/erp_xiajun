@@ -9,10 +9,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WxUserDO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.redis.Cache;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.CookieUtil;
-import com.wangqin.globalshop.common.utils.HttpClientUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.czh.ParseObj2Obj;
 import com.wangqin.globalshop.usercenter.service.IUserCompanyService;
 import com.wangqin.globalshop.usercenter.service.IUserService;
@@ -168,6 +165,7 @@ public class WechatLoginController {
         }
         return false;
     }
+
     @RequestMapping("/setProxy")
     public Object setProxy(String code, String state, HttpServletResponse response) {
         JsonResult<List<AuthUserDO>> result = new JsonResult<>();
@@ -200,7 +198,7 @@ public class WechatLoginController {
             user.setUnionId(unionid);
             String headImgUrl = uploadFileService.uploadImg(new URL(object.getString("headimgurl")).openStream(), unionid);
             user.setAvatarUrl(headImgUrl);
-            userService.addProxy(state,user);
+            userService.addProxy(state, user);
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         } catch (IOException e) {
@@ -351,9 +349,10 @@ public class WechatLoginController {
      * @return
      */
     @RequestMapping("/getProxyHtml")
-    public void getProxyHtml(HttpServletResponse response,String parentAgent) {
+    public void getProxyHtml(HttpServletResponse response, String parentAgent) {
 
-         String baseUrl = sysurl + proxy_redirect;
+        String baseUrl = sysurl + proxy_redirect;
+        parentAgent = StringUtil.isBlank(parentAgent)?"":parentAgent;
         try {
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
