@@ -43,7 +43,7 @@ CREATE PROCEDURE createUser(
     #INTO orgid
     #FROM auth_organization;
     #INSERT INTO auth_organization (company_no, org_id, name, address,code,seq, creator, modifier)
-    #VALUES (companyno, orgid, '公司总部', '公司地址',orgid+100000000,1, 'SYSTEM', 'SYSTEM');
+    #VALUES (companyno, orgid, '公司总部', '公司地址',CONCAT(orgid+100000000,''),1, 'SYSTEM', 'SYSTEM');
 
 
     #     创建角色
