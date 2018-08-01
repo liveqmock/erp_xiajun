@@ -169,7 +169,7 @@
      <!-- 根据user_no查询记录，@author:xiajun -->
     <select id="queryAgentInfoByUserNo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO"
     parameterType="java.lang.String">
-    select id,user_no AS userNo,head_protrait_url AS headProtraitUrl
+    select id,user_no AS userNo,head_protrait_url AS headProtraitUrl,
     parent_agent AS parentAgent,agent_name AS agentName
     from mall_sale_agent
     where user_no = #{userNo}
