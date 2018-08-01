@@ -7,8 +7,8 @@ import java.util.Objects;
  * @author  xiajun
  */
 public enum CommissionStatus {
-    BALANCE_ABLE(1,"可结算"),
-    WAIT_BALANCE(2,"待结算"),
+    BALANCE_ABLE(2,"可结算"),
+    WAIT_BALANCE(1,"待结算"),
     BALANCED(3,"已结算");
 
     private Integer value;
