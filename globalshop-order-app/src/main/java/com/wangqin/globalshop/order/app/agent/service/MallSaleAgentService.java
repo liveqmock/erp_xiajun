@@ -73,9 +73,10 @@ public interface MallSaleAgentService {
      */
     CommissionValueVO queryCommissionValue(String userNo, String companyNo);
 
+
     /**
-     * 根据user_no查询代理的信息
-     *
+     * 根据userNo查询代理的信息（如头像，登录名等）
+     * @author xiajun
      * @param userNo
      * @return
      */
