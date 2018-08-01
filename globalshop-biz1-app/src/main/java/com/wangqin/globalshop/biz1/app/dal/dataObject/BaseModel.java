@@ -75,6 +75,7 @@ public class BaseModel {
         this.setModifier("-1");
         this.setCreator("-1");
         this.setIsDel(false);
+		this.setCompanyNo("sys");
     }
 
 }

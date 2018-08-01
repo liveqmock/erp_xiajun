@@ -15,6 +15,7 @@ import com.wangqin.globalshop.schedule.service.CommissionSumarySettlementService
 import net.sourceforge.htmlunit.corejs.javascript.optimizer.Codegen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 		   return resultList;
 	}
 
+	@Transactional
 	public void doSettlement(List<Long> idList, String shareUserId){
 
 		if(EasyUtil.isStringEmpty(shareUserId)){
@@ -76,15 +78,16 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
 			settlementDO.setSettlementTime(new Date());
 
-			Map<String,Double> priceMap = detailDOMapperExt.sumPriceByIdList(idList);
+			Map<String,BigDecimal> priceMap = detailDOMapperExt.sumPriceByIdList(idList);
 
-			Double settlement = priceMap.get("settlement");
-			Double salePrice = priceMap.get("salePrice");
+			BigDecimal settlement = priceMap.get("settlement");
+			BigDecimal salePrice = priceMap.get("salePrice");
 
-			settlementDO.setTotalPrice(BigDecimal.valueOf(salePrice).setScale(2,BigDecimal.ROUND_HALF_UP));
+			settlementDO.setTotalPrice(salePrice);
 
-			settlementDO.setSettlement(BigDecimal.valueOf(settlement).setScale(2,BigDecimal.ROUND_HALF_UP));
+			settlementDO.setSettlement(settlement);
 			settlementDO.init();
+
 			settlementDOMapperExt.insert(settlementDO);
 
 			for(Long id : idList){
