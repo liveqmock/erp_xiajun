@@ -67,6 +67,7 @@ public class MallSaleAgentController {
         JsonPageResult<List<MallSaleAgentItemVO>> result = new JsonPageResult<>();
 
         try {
+            // TODO: 后期建议将一级代理和二级代理查询分开，简化逻辑
             List<MallSaleAgentItemVO> mallSaleAgentItemVOList =
                     mallSaleAgentService.listMallSaleAgents(mallSaleAgentQueryVO, pageQueryParam);
             int totalCount = mallSaleAgentService.countMallSaleAgents(mallSaleAgentQueryVO);
