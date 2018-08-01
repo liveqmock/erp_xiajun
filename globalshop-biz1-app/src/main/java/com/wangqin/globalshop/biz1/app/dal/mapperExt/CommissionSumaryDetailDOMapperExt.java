@@ -35,5 +35,7 @@ public interface CommissionSumaryDetailDOMapperExt extends CommissionSumaryDetai
 	List<Long> selectByShareId(@Param("shareUserId") String shareUserId);
 
 	Map<String,Double> sumPriceByIdList(@Param("list") List<Long> list);
+	
+	Map<String,Object> sumOrderNumSaleCommissionByUserNo(@Param("status")Integer status,@Param("userNo")String userNo);
 
 }
