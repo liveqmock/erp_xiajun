@@ -1,8 +1,6 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -12,9 +10,7 @@ import java.util.Date;
  * @author angus
  * @date 2018/7/31
  */
-@Setter
-@Getter
-@ToString
+@Data
 public class MallSaleAgentItemVO {
 
     /**

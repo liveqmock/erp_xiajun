@@ -113,6 +113,34 @@ public class MallSaleAgentController {
         return result;
     }
 
+
+    /**
+     * 分佣比率修改
+     *
+     * @param userNo
+     * @param commissionMode
+     * @param commissionValue
+     * @return
+     */
+    @PostMapping("/updateCommissionValue")
+    public Object updateCommissionValue(String userNo, Long commissionMode, Double commissionValue) {
+        JsonResult result = new JsonResult();
+
+        try {
+            mallSaleAgentService.updateCommissionValue(userNo, commissionMode, commissionValue);
+            result.buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getMessage())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出现异常")
+                    .buildIsSuccess(false);
+        }
+
+        return result;
+    }
+
     /**
      * 根据分享 userNo 查询代理的分佣比率
      *
