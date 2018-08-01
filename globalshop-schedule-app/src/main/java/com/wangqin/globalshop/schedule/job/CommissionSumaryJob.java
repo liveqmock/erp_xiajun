@@ -189,7 +189,18 @@ public class CommissionSumaryJob {
 		List<CommissionSumaryDO> sumaryDOList = sumaryService.selectMorethan15Day();
 		if(!EasyUtil.isListEmpty(sumaryDOList)){
 			for(CommissionSumaryDO sumaryDO : sumaryDOList){
-				sumaryDO.setStatus(SettlementStatus.can.getCode());
+
+				//检查订单状态，如果是从已签收-->售后，则不应该进入可结算，增加关闭结算状态
+				MallSubOrderDO subOrderDO = subOrderMapperExt.selectBySubOrderNo(sumaryDO.getSubOrderNo());
+
+				if(subOrderDO == null){
+					sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
+				}else if(OrderStatus.SUCCESS.getCode() == subOrderDO.getStatus() || OrderStatus.COMFIRM.getCode() == subOrderDO.getStatus() ){
+					//既不是已签收，也不是已完成，则关闭
+					sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
+				}else {
+					sumaryDO.setStatus(SettlementStatus.can.getCode());
+				}
 				sumaryService.updateByPrimaryKeySelective(sumaryDO);
 			}
 		}
