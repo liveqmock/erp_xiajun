@@ -947,3 +947,6 @@ insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_ku
 insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('天天','006',NULL,'tiantian','SYSTEM','SYSTEM');
 insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('4PX','007',NULL,'zhuanyunsifang','SYSTEM','SYSTEM');
 insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('百世快递','008',NULL,'baishiwuliu','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('邮政（国内）','009',NULL,'youzhengguonei','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('邮政（国际）','010',NULL,'youzhengguoji','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('EMS','011',NULL,'ems','SYSTEM','SYSTEM');

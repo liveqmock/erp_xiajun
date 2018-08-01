@@ -16,9 +16,9 @@ insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_
 insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('15','天天','006','tiantian','2018-06-14 15:21:06','2018-06-14 15:21:06','SYSTEM','SYSTEM','0');
 insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('16','4PX','007','zhuanyunsifang','2018-06-14 15:21:07','2018-06-14 15:21:07','SYSTEM','SYSTEM','0');
 insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('17','百世快递','008','baishiwuliu','2018-06-14 15:21:07','2018-06-14 15:21:07','SYSTEM','SYSTEM','0');
-insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('18','邮政（国内）',NULL,'youzhengguonei','2018-07-26 10:42:57','2018-07-26 10:42:59','SYSTEM','SYSTEM','0');
-insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('19','邮政（国际）',NULL,'youzhengguoji','2018-07-26 10:43:54','2018-07-26 10:43:55','SYSTEM','SYSTEM','0');
-insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('20','EMS',NULL,'ems','2018-07-26 10:45:11','2018-07-26 10:45:16','SYSTEM','SYSTEM','0');
+insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('18','邮政（国内）','009','youzhengguonei','2018-07-26 10:42:57','2018-07-26 10:42:59','SYSTEM','SYSTEM','0');
+insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('19','邮政（国际）','010','youzhengguoji','2018-07-26 10:43:54','2018-07-26 10:43:55','SYSTEM','SYSTEM','0');
+insert into `logistic_company` (`id`, `name`, `code`, `code_in_kuaidi100`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`) values('20','EMS','011','ems','2018-07-26 10:45:11','2018-07-26 10:45:16','SYSTEM','SYSTEM','0');
 
 ###增加任务主图的字段长度
 ALTER TABLE `haidb2new`.`buyer_task`
