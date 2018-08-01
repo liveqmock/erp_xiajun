@@ -1,70 +1,62 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
+import java.util.List;
+
 /**
  * 佣金结算管理
  */
 public class AgentCommissionVO {
-    private Long id;
-    private String userNo;
-    private String headProtraitUrl;
-    private String level;
-    private Integer orderNum;
-    private Double totalSaleMoney;
-    private Double commission;//佣金
+	
+	private String userNo;
+private String profile;
+	
+	private String name;
+	
+	private Double commission;
+	
+	private List<AgentOrderVO> orderInfo;
 
-    public Long getId() {
-        return id;
-    }
+	public String getUserNo() {
+		return userNo;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setUserNo(String userNo) {
+		this.userNo = userNo;
+	}
 
-    public String getUserNo() {
-        return userNo;
-    }
+	public String getProfile() {
+		return profile;
+	}
 
-    public void setUserNo(String userNo) {
-        this.userNo = userNo;
-    }
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
 
-    public String getHeadProtraitUrl() {
-        return headProtraitUrl;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setHeadProtraitUrl(String headProtraitUrl) {
-        this.headProtraitUrl = headProtraitUrl;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getLevel() {
-        return level;
-    }
+	public Double getCommission() {
+		return commission;
+	}
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
+	public void setCommission(Double commission) {
+		this.commission = commission;
+	}
 
-    public Integer getOrderNum() {
-        return orderNum;
-    }
+	public List<AgentOrderVO> getOrderInfo() {
+		return orderInfo;
+	}
 
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
+	public void setOrderInfo(List<AgentOrderVO> orderInfo) {
+		this.orderInfo = orderInfo;
+	}
+	
+	
 
-    public Double getTotalSaleMoney() {
-        return totalSaleMoney;
-    }
-
-    public void setTotalSaleMoney(Double totalSaleMoney) {
-        this.totalSaleMoney = totalSaleMoney;
-    }
-
-    public Double getCommission() {
-        return commission;
-    }
-
-    public void setCommission(Double commission) {
-        this.commission = commission;
-    }
+  
 }

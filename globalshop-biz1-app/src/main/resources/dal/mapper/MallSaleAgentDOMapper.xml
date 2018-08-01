@@ -16,6 +16,7 @@
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="commission_mode" property="commissionMode" jdbcType="BIGINT" />
     <result column="commission_value" property="commissionValue" jdbcType="DOUBLE" />
     <result column="status" property="status" jdbcType="BIT" />
@@ -26,8 +27,8 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, company_no, user_no, parent_agent, open_id, union_id, agent_name, real_name, 
-    id_card, head_protrait_url, gender, city, province, country, commission_mode, commission_value, 
-    status, join_time, last_login_time, modifier, creator
+    id_card, head_protrait_url, gender, city, province, country, phone, commission_mode, 
+    commission_value, status, join_time, last_login_time, modifier, creator
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -47,16 +48,18 @@
       open_id, union_id, agent_name, 
       real_name, id_card, head_protrait_url, 
       gender, city, province, 
-      country, commission_mode, commission_value, 
-      status, join_time, last_login_time, 
-      modifier, creator)
+      country, phone, commission_mode, 
+      commission_value, status, join_time, 
+      last_login_time, modifier, creator
+      )
     values (#{companyNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{parentAgent,jdbcType=VARCHAR}, 
       #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, #{agentName,jdbcType=VARCHAR}, 
       #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{headProtraitUrl,jdbcType=VARCHAR}, 
       #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{country,jdbcType=VARCHAR}, #{commissionMode,jdbcType=BIGINT}, #{commissionValue,jdbcType=DOUBLE}, 
-      #{status,jdbcType=BIT}, #{joinTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
-      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
+      #{country,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{commissionMode,jdbcType=BIGINT}, 
+      #{commissionValue,jdbcType=DOUBLE}, #{status,jdbcType=BIT}, #{joinTime,jdbcType=TIMESTAMP}, 
+      #{lastLoginTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -102,6 +105,9 @@
       </if>
       <if test="country != null" >
         country,
+      </if>
+      <if test="phone != null" >
+        phone,
       </if>
       <if test="commissionMode != null" >
         commission_mode,
@@ -164,6 +170,9 @@
       </if>
       <if test="country != null" >
         #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
       </if>
       <if test="commissionMode != null" >
         #{commissionMode,jdbcType=BIGINT},
@@ -230,6 +239,9 @@
       <if test="country != null" >
         country = #{country,jdbcType=VARCHAR},
       </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
       <if test="commissionMode != null" >
         commission_mode = #{commissionMode,jdbcType=BIGINT},
       </if>
@@ -269,6 +281,7 @@
       city = #{city,jdbcType=VARCHAR},
       province = #{province,jdbcType=VARCHAR},
       country = #{country,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
       commission_mode = #{commissionMode,jdbcType=BIGINT},
       commission_value = #{commissionValue,jdbcType=DOUBLE},
       status = #{status,jdbcType=BIT},

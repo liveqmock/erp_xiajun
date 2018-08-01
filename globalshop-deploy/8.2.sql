@@ -61,6 +61,7 @@ CREATE TABLE `mall_sale_agent` (
   `city` varchar(64) DEFAULT NULL,
   `province` varchar(64) DEFAULT NULL,
   `country` varchar(64) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
   `commission_mode` bigint(18) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
   `commission_value` double(6,2) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
   `status` tinyint(1) DEFAULT NULL COMMENT '状态，0正常，1已解除',

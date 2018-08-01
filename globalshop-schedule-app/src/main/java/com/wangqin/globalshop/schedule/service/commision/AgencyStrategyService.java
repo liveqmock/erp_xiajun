@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.schedule.service.commision;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallCommisionApplyDO;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.schedule.dto.AgencyModel;
@@ -7,7 +8,7 @@ import com.wangqin.globalshop.schedule.dto.CommisionModel;
 
 public class AgencyStrategyService implements IStrategy {
     @Override
-    public void handle(CommisionModel model) {
+    public void handle(CommisionModel model, MallCommisionApplyDO applyDO) {
 
         if (model == null || StringUtil.isNotBlank(model.getModel())){
             return ;

@@ -31,6 +31,8 @@ public class MallSaleAgentDO extends BaseModel {
 
     private String country;
 
+    private String phone;
+
     private Long commissionMode;
 
     private Double commissionValue;
@@ -155,6 +157,14 @@ public class MallSaleAgentDO extends BaseModel {
 
     public void setCountry(String country) {
         this.country = country == null ? null : country.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
     }
 
     public Long getCommissionMode() {

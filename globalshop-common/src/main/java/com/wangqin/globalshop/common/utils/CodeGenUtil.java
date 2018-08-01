@@ -73,4 +73,8 @@ public class CodeGenUtil {
 	public static String getInventoryOutNo() {
 		return "INO" + System.currentTimeMillis();
 	}
+
+	public static String getSettlementNo(){
+		return "SN"+ DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS);
+	}
 }
