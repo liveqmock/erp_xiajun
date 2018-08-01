@@ -31,6 +31,247 @@
     commission_value, status, join_time, last_login_time, modifier, creator
   </sql>
 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mall_sale_agent
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from mall_sale_agent
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_sale_agent (company_no, parent_agent, open_id, 
+      union_id, agent_name, real_name, 
+      id_card, head_protrait_url, gender, 
+      city, province, country, 
+      commission_mode, commission_value, join_time, 
+      last_login_time, modifier, creator
+      )
+    values (#{companyNo,jdbcType=VARCHAR}, #{parentAgent,jdbcType=BIGINT}, #{openId,jdbcType=VARCHAR}, 
+      #{unionId,jdbcType=VARCHAR}, #{agentName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{headProtraitUrl,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
+      #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{commissionMode,jdbcType=BIGINT}, #{commissionValue,jdbcType=DOUBLE}, #{joinTime,jdbcType=TIMESTAMP}, 
+      #{lastLoginTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mall_sale_agent
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="parentAgent != null" >
+        parent_agent,
+      </if>
+      <if test="openId != null" >
+        open_id,
+      </if>
+      <if test="unionId != null" >
+        union_id,
+      </if>
+      <if test="agentName != null" >
+        agent_name,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="headProtraitUrl != null" >
+        head_protrait_url,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="commissionMode != null" >
+        commission_mode,
+      </if>
+      <if test="commissionValue != null" >
+        commission_value,
+      </if>
+      <if test="joinTime != null" >
+        join_time,
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAgent != null" >
+        #{parentAgent,jdbcType=BIGINT},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null" >
+        #{unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentName != null" >
+        #{agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="headProtraitUrl != null" >
+        #{headProtraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionMode != null" >
+        #{commissionMode,jdbcType=BIGINT},
+      </if>
+      <if test="commissionValue != null" >
+        #{commissionValue,jdbcType=DOUBLE},
+      </if>
+      <if test="joinTime != null" >
+        #{joinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+    update mall_sale_agent
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAgent != null" >
+        parent_agent = #{parentAgent,jdbcType=BIGINT},
+      </if>
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null" >
+        union_id = #{unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="agentName != null" >
+        agent_name = #{agentName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="headProtraitUrl != null" >
+        head_protrait_url = #{headProtraitUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionMode != null" >
+        commission_mode = #{commissionMode,jdbcType=BIGINT},
+      </if>
+      <if test="commissionValue != null" >
+        commission_value = #{commissionValue,jdbcType=DOUBLE},
+      </if>
+      <if test="joinTime != null" >
+        join_time = #{joinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+    update mall_sale_agent
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      parent_agent = #{parentAgent,jdbcType=BIGINT},
+      open_id = #{openId,jdbcType=VARCHAR},
+      union_id = #{unionId,jdbcType=VARCHAR},
+      agent_name = #{agentName,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      head_protrait_url = #{headProtraitUrl,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      city = #{city,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      commission_mode = #{commissionMode,jdbcType=BIGINT},
+      commission_value = #{commissionValue,jdbcType=DOUBLE},
+      join_time = #{joinTime,jdbcType=TIMESTAMP},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--查询公司名下的所有代理-->
+  <select id="queryAgentListByCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallSaleAgentDOMapper.BaseResultMap"
+          parameterType="java.lang.String">
+    SELECT
+    <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallSaleAgentDOMapper.Base_Column_List" />
+    FROM mall_sale_agent
+    WHERE
+    company_no=#{companyNo}
+    AND is_del=0
+</select>
+
     <select id="getByCompanyNoAndUserNo" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -97,4 +338,15 @@
             AND is_del = 0
         </where>
     </select>
+    
+    <!-- 根据user_no查询记录，@author:xiajun -->
+    <select id="queryAgentInfoByUserNo" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO"
+    parameterType="java.lang.String">
+    select id,user_no AS userNo,head_protrait_url AS headProtraitUrl
+    parent_agent AS parentAgent,agent_name AS agentName
+    from mall_sale_agent
+    where user_no = #{userNo}
+    limit 0,1
+    </select>
+
 </mapper>

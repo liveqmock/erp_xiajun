@@ -54,12 +54,15 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
             });
 
         } else {
-            // 查询二级代理，需要为每个二级代理添加其一级代理姓名
+            // 查询二级代理，需要为每个二级代理添加其一级代理信息
             MallSaleAgentDO parentMallSaleAgentDO =
                     getMallSaleAgent(mallSaleAgentQueryVO.getCompanyNo(), parentAgent);
 
             mallSaleAgentItemVOList.forEach(
-                    mallSaleAgentItemVO -> mallSaleAgentItemVO.setParentAgentName(parentMallSaleAgentDO.getAgentName()));
+                    mallSaleAgentItemVO -> {
+                        mallSaleAgentItemVO.setParentAgent(parentAgent);
+                        mallSaleAgentItemVO.setParentAgentName(parentMallSaleAgentDO.getAgentName());
+                    });
         }
 
         return mallSaleAgentItemVOList;
@@ -115,5 +118,10 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         }
 
         return commissionValueVO;
+    }
+    
+    @Override
+    public MallSaleAgentDO queryAgentInfoByUserNo(String userNo) {
+    	return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
     }
 }

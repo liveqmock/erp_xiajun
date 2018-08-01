@@ -51,4 +51,11 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
      * @return
      */
     int countMallSaleAgents(@Param("mallSaleAgentQueryVO") MallSaleAgentQueryVO mallSaleAgentQueryVO);
+    
+    /**
+     * 根据user_no查询记录
+     * @param userNo
+     * @return
+     */
+    MallSaleAgentDO queryAgentInfoByUserNo(String userNo);
 }

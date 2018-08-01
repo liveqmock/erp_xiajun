@@ -37,6 +37,17 @@
          datediff( dd, gmt_create, getdate() ) > 15
         and is_del is false
     </select>
+    
+    <select id="queryOrderInfoBySubOrderNo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.AgentOrderVO">
+    select sub_order_no AS subOrderNo,item_name AS itemName,upc AS upc,sale_price AS salePrice,
+    scale AS scale,quantity AS quantity,receiver_info AS receiverInfo,
+    order_status AS orderStatus,order_time AS orderTime,
+    total_settlement AS totalSettlement
+    from commission_sumary
+    where 
+    sub_order_no=#{subOrderNo}
+    limit 0,1
+    </select>
 
 
 

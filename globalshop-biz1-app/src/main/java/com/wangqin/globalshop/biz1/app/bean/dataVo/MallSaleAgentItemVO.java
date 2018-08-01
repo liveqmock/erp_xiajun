@@ -38,14 +38,19 @@ public class MallSaleAgentItemVO {
     private String realName;
 
     /**
-     * 一级代理姓名（二级代理列表下有效）
-     */
-    private String parentAgentName;
-
-    /**
      * 二级代理人数（一级代理列表下有效）
      */
     private Integer childAgentsNum;
+
+    /**
+     * 二级代理所属的一级代理（二级代理列表下有效）
+     */
+    private String parentAgent;
+
+    /**
+     * 一级代理姓名（二级代理列表下有效）
+     */
+    private String parentAgentName;
 
     /**
      * 佣金模式

@@ -101,5 +101,15 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 	}
 
+	public void doSettleSigle(String shareUserId){
+		doSettlement(new ArrayList<>(),shareUserId);
+	}
+
+	public void doSettleList(List<String> userIdList){
+		for(String shareUserId : userIdList){
+			doSettlement(new ArrayList<>(),shareUserId);
+		}
+	}
+
 
 }
