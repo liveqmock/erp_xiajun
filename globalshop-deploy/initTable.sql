@@ -91,7 +91,7 @@ CREATE TABLE `mall_sale_agent` (
   UNIQUE KEY `OPENID` (`open_id`,`union_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
 
-CREATE TABLE `haidb2new`.`monitor_record`(
+CREATE TABLE `monitor_record`(
   `id` BIGINT(64) NOT NULL AUTO_INCREMENT,
   `app_name` VARCHAR(64) COMMENT '应用名称',
   `monitor_url` VARCHAR(256) COMMENT '监控url',
