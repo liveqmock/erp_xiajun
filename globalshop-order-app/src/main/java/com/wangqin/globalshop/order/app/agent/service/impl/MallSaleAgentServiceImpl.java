@@ -7,6 +7,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,49 @@ import java.util.List;
 public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     @Autowired
     private MallSaleAgentDOMapperExt mallSaleAgentDOMapper;
+
+    @Override
+    public void insertMallSaleAgent(MallSaleAgentDO mallSaleAgentDO) {
+        // TODO: 要从 auth_user 表获取信息，才能进行下一步的操作
+    }
+
+    @Override
+    public void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO) {
+
+        int effectedNum = mallSaleAgentDOMapper.updateByCompanyNoAndUserNo(mallSaleAgentDO);
+        if (effectedNum <= 0) {
+            throw new BizCommonException("更新出现异常！");
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = BizCommonException.class)
+    public void updateCommissionValue(String userNo, Long commissionMode, Double commissionValue) {
+        if (StringUtil.isBlank(userNo) || commissionMode == null || commissionValue == null) {
+            throw new BizCommonException("数据不完整！");
+        }
+
+        if (commissionMode != 0 && commissionMode != 1) {
+            throw new BizCommonException("分佣模式非法！");
+        }
+
+        if (commissionMode == 0) {
+            // 分佣模式为百分比模式（分佣最大百分比是否为 100%？）
+            if (commissionValue < 0 || commissionValue > 1) {
+                throw new BizCommonException("分佣比率非法！");
+            }
+            // 构造更新模板
+            MallSaleAgentDO mallSaleAgentDO = new MallSaleAgentDO();
+            mallSaleAgentDO.setUserNo(userNo);
+            mallSaleAgentDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+            mallSaleAgentDO.setCommissionMode(commissionMode);
+            mallSaleAgentDO.setCommissionValue(commissionValue);
+            // 更新代理信息
+            updateMallSaleAgent(mallSaleAgentDO);
+        } else {
+            // TODO: 目前暂不考虑分佣模式为金额模式的情况
+        }
+    }
 
 
     @Override
@@ -73,22 +117,13 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         return mallSaleAgentDOMapper.countMallSaleAgents(mallSaleAgentQueryVO);
     }
 
-    @Override
-    public void insertMallSaleAgent(MallSaleAgentDO mallSaleAgentDO) {
-        // TODO: 要从 auth_user 表获取信息，才能进行下一步的操作
-    }
 
-    @Override
-    public void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO) {
-        // TODO: 根据 company_no 和 user_no 唯一确定 mall_sale_agent，将其更新
-        mallSaleAgentDOMapper.updateByCompanyNoAndUserNo(mallSaleAgentDO);
-    }
 
     @Override
     @Transactional(rollbackFor = BizCommonException.class)
     public CommissionValueVO queryCommissionValue(String userNo, String companyNo) {
         if (StringUtil.isBlank(userNo) || StringUtil.isBlank(companyNo)) {
-            throw new BizCommonException("userNo 或 companyNo 信息不完整！");
+            throw new BizCommonException("数据不完整！");
         }
 
         // 获取该代理详细信息
@@ -110,7 +145,7 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
             commissionValueVO.setLevelTwoUserId(mallSaleAgent.getUserNo());
             commissionValueVO.setLevelTwoCommissionMode(String.valueOf(mallSaleAgent.getCommissionMode()));
             commissionValueVO.setLevelTwoCommissionRate(String.valueOf(mallSaleAgent.getCommissionValue()));
-            // 获取该二级代理的一级代理的信息
+            // 获取该二级代理所属一级代理的信息
             MallSaleAgentDO parentAgent = getMallSaleAgent(companyNo, parentAgentNo);
             commissionValueVO.setLevelOneUserId(parentAgent.getUserNo());
             commissionValueVO.setLevelOneCommissionMode(String.valueOf(parentAgent.getCommissionMode()));
@@ -119,9 +154,6 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
 
         return commissionValueVO;
     }
-    
-    @Override
-    public MallSaleAgentDO queryAgentInfoByUserNo(String userNo) {
-    	return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
-    }
+
+
 }

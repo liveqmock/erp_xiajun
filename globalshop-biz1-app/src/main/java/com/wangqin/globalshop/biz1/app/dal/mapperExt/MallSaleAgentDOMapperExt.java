@@ -18,6 +18,14 @@ import java.util.List;
 public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
 
     /**
+     * 根据 company_no 和 user_no 唯一确定 mall_sale_agent 表中的一条记录，将其更新
+     *
+     * @param mallSaleAgentDO
+     * @return 受影响的行数
+     */
+    int updateByCompanyNoAndUserNo(MallSaleAgentDO mallSaleAgentDO);
+
+    /**
      * 通过 companyNo 和 userNo 获得 mall_sale_agent 表中的一条记录
      *
      * @param companyNo
@@ -25,14 +33,6 @@ public interface MallSaleAgentDOMapperExt extends MallSaleAgentDOMapper {
      * @return
      */
     MallSaleAgentDO getByCompanyNoAndUserNo(@Param("companyNo") String companyNo, @Param("userNo") String userNo);
-
-    /**
-     * 根据 company_no 和 user_no 唯一确定 mall_sale_agent 表中的一条记录，将其更新
-     *
-     * @param mallSaleAgentDO
-     * @return
-     */
-    int updateByCompanyNoAndUserNo(MallSaleAgentDO mallSaleAgentDO);
 
     /**
      * 根据指定条件分页查询代理列表

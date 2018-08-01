@@ -1,9 +1,7 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
 import com.wangqin.globalshop.common.utils.AppUtil;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 /**
  * 代理管理查询参数对应的 VO
@@ -16,9 +14,7 @@ import lombok.ToString;
  * @author angus
  * @date 2018/7/31
  */
-@Setter
-@Getter
-@ToString
+@Data
 public class MallSaleAgentQueryVO {
 
     /**
