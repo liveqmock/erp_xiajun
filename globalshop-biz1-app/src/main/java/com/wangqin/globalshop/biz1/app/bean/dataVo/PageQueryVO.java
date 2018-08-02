@@ -38,8 +38,17 @@ public class PageQueryVO {
 	public void setFirstStart(Integer firstStart) {
 		this.firstStart = firstStart;
 	}
-	
-	
+
+	public void initFirstStart(){
+		if(pageSize == null || pageSize < 0){
+			this.pageSize = 20;
+		}
+
+		if(pageIndex == null || pageIndex < 1){
+			this.pageIndex = 1;
+		}
+		this.firstStart = (pageIndex-1)*pageSize;
+	}
 	
 	
 }

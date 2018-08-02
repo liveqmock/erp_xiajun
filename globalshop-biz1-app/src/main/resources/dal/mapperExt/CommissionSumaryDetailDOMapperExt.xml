@@ -98,6 +98,7 @@
                 and detail.company_no = #{companyNo}
             </if>
         Group By detail.share_user_id
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
 
 

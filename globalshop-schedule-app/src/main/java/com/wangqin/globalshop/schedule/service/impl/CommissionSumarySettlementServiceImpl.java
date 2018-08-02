@@ -66,6 +66,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 	public List<CommissionSumarySettlementDO> searchPageList(SettlementQueryVO queryVO){
            List<CommissionSumarySettlementDO> resultList = new ArrayList<>();
+		   queryVO.initFirstStart();
 		   List<CommissionSumarySettlementDO> pageList = settlementDOMapperExt.searchPageList(queryVO);
 		   resultList.addAll(pageList);
 		   return resultList;
