@@ -12,13 +12,20 @@ public class SettlementQueryVO extends PageQueryVO {
 
 	private String key;  //结算单号、代理人名字
 
-	private int status;//1待结算，2可结算，3已结算
+	private Integer status; //
 
 	private Date settlementTime; //结算时间
 
 	private String shareUserId;
 
+	private Boolean isDel;
 
+	public Boolean getDel() {
+		return isDel;
+	}
+	public void setDel(Boolean del) {
+		isDel = del;
+	}
 	public String getCompanyNo() {
 		return companyNo;
 	}
@@ -37,10 +44,10 @@ public class SettlementQueryVO extends PageQueryVO {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	public Date getSettlementTime() {

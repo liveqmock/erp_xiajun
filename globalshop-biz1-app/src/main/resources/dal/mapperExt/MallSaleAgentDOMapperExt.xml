@@ -104,6 +104,7 @@
         <include refid="Base_Column_List"/>
         FROM mall_sale_agent
         WHERE company_no = #{companyNo} AND user_no = #{userNo}
+        and is_del is false
     </select>
 
     <sql id="Column_List_For_MallSaleAgentItemVO">

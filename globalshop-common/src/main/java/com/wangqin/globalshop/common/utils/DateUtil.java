@@ -31,6 +31,16 @@ public class DateUtil {
 		return format.parse(date);		
 	}
 	
+	/**
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String transferDateToString(Date date){
+		SimpleDateFormat sdf = new SimpleDateFormat(formateStr19);
+		return sdf.format(date);
+	}
+	
 	public static boolean isToday(Date date) {
 		if (date != null) {
 			Calendar calendar = Calendar.getInstance();
