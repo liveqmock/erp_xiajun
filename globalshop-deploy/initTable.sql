@@ -77,9 +77,9 @@ CREATE TABLE `mall_sale_agent` (
   `province` varchar(64) DEFAULT NULL,
   `country` varchar(64) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
-  `commission_mode` bigint(18) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
+  `commission_mode` int(1) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
   `commission_value` double(6,2) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
-  `status` tinyint(1) DEFAULT NULL COMMENT '状态，0正常，1已解除',
+  `status` int(1) DEFAULT 1 COMMENT '状态，1正常，0已解除',
   `join_time` datetime DEFAULT NULL COMMENT '加入时间',
   `last_login_time` datetime DEFAULT NULL,
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
@@ -90,6 +90,7 @@ CREATE TABLE `mall_sale_agent` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `OPENID` (`open_id`,`union_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
+
 
 CREATE TABLE `monitor_record`(
   `id` BIGINT(64) NOT NULL AUTO_INCREMENT,
