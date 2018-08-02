@@ -49,6 +49,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 		return settlementDOMapperExt.searchByUserNo(searchByShareId);
 	}
 
+	@Transactional(rollbackFor=Exception.class)
 	public void add(SumarySettlementVO settlementVo){
 
 		CommissionSumarySettlementDO settlementDO = new CommissionSumarySettlementDO();
@@ -70,7 +71,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 		   return resultList;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public void doSettlement(List<Long> idList, String shareUserId){
 
 		if(EasyUtil.isStringEmpty(shareUserId)){
