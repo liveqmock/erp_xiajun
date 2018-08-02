@@ -33,8 +33,8 @@ public class MallSaleAgentEditVO {
 
     /**
      * 状态
-     * <li> 0 正常
-     * <li> 1 已解除
+     * <li> 0/false 正常
+     * <li> 1/true 已解除
      */
     private Boolean status;
 
