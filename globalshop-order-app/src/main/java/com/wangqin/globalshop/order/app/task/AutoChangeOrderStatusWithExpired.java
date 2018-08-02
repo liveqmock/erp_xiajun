@@ -5,8 +5,10 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrack;
 import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;
+import com.wangqin.globalshop.order.app.service.mall.IMallCommisionApplyService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
@@ -32,6 +34,8 @@ public class AutoChangeOrderStatusWithExpired {
     private IMallOrderService mallOrderService;
     @Autowired
     private IKuaidi100Service kuaidi100Service;
+    @Autowired
+    private IMallCommisionApplyService applyService;
 
     @Scheduled(cron = "0 0/30 * * * ?")
     @Transactional(rollbackFor = BizCommonException.class)
@@ -49,8 +53,14 @@ public class AutoChangeOrderStatusWithExpired {
             String state = commonShippingTrack.getState();
             /*如果物流轨迹的状态为已签收  则更新子订单的状态*/
             if ("3".equals(state)) {
-                //todo @夏军
+                
                 updateOrderStatus(subOrder);
+                
+                //更新分佣申请表的状态,mall_commmision_apply.status,@author:xiajun
+                if(IsEmptyUtil.isStringNotEmpty(subOrder.getSubOrderNo())) {
+                	 applyService.updateStatusBySubOrderNo(subOrder.getSubOrderNo());
+                }              	
+               
             }
             //todo 更新shippingOrder状态
 
