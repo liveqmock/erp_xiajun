@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.order.app.kuaidi_bean;
 
+import lombok.Data;
+
 /**
  * 快递100物流轨迹节点信息，形如：
  * <pre>
@@ -13,42 +15,15 @@ package com.wangqin.globalshop.order.app.kuaidi_bean;
  * @author angus
  * @date 2018/7/25
  */
+@Data
 public class Kuaidi100ShippingTrackResultNode {
+
     private String time;
+
     private String ftime;
+
     /**
      * 物流信息
      */
     private String context;
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
-
-    public String getFtime() {
-        return ftime;
-    }
-
-    public void setFtime(String ftime) {
-        this.ftime = ftime;
-    }
-
-    @Override
-    public String toString() {
-        return "ResultItem [time=" + time + ", ftime="
-                + ftime + ", context=" + context + "]";
-    }
-
 }

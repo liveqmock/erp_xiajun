@@ -1,7 +1,9 @@
 package com.wangqin.globalshop.order.app.kuaidi_bean;
 
+import lombok.Data;
+
 /**
- * 物流轨迹节点信息，形如：
+ * 通用物流轨迹节点信息，形如：
  * <pre>
  * {
  *   "date":"2018-05-15 15:39:04",
@@ -12,31 +14,8 @@ package com.wangqin.globalshop.order.app.kuaidi_bean;
  * @author angus
  * @date 2018/7/25
  */
+@Data
 public class CommonShippingTrackNode {
     private String date;
     private String info;
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    @Override
-    public String toString() {
-        return "CommonShippingTrackNode{" +
-                "date='" + date + '\'' +
-                ", info='" + info + '\'' +
-                '}';
-    }
 }
