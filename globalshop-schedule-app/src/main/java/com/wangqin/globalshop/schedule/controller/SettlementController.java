@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,7 +60,7 @@ public class SettlementController extends BaseController {
 	 * @param settlementDO
 	 * @return
 	 */
-	@RequestMapping("/add")
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public Object add(SumarySettlementVO settlementDO){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
@@ -77,7 +78,7 @@ public class SettlementController extends BaseController {
 	 * @param
 	 * @return
 	 */
-	@RequestMapping("/searchPageList")
+	@RequestMapping(value = "/searchPageList", method = RequestMethod.POST)
 	public Object searchPageList(SettlementQueryVO queryVO){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
@@ -97,7 +98,7 @@ public class SettlementController extends BaseController {
 	 * @param
 	 * @return
 	 */
-	@RequestMapping("/doSettleList")
+	@RequestMapping(value = "/doSettleList", method = RequestMethod.POST)
 	public Object doSettleList(String userIdListStr){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
@@ -116,7 +117,7 @@ public class SettlementController extends BaseController {
 	 * @param
 	 * @return
 	 */
-	@RequestMapping("/doSettleSingle")
+	@RequestMapping(value = "/doSettleSingle", method = RequestMethod.POST)
 	public Object doSettleSingle(String shareUserId){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
