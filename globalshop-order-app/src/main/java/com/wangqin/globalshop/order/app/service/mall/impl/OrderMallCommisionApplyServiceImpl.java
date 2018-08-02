@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallCommisionApplyDOMapperExt;
 import com.wangqin.globalshop.common.enums.MallCommisionApplyStatus;
 import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.order.app.service.mall.IMallCommisionApplyService;
+import com.wangqin.globalshop.order.app.service.mall.IOrderMallCommisionApplyService;
 
 @Service
-public class MallCommisionApplyServiceImpl implements IMallCommisionApplyService{
+public class OrderMallCommisionApplyServiceImpl implements IOrderMallCommisionApplyService{
 	@Autowired
 	private MallCommisionApplyDOMapperExt mapperExt;
 	

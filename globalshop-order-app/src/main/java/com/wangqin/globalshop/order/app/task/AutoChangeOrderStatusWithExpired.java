@@ -8,7 +8,7 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrack;
 import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;
-import com.wangqin.globalshop.order.app.service.mall.IMallCommisionApplyService;
+import com.wangqin.globalshop.order.app.service.mall.IOrderMallCommisionApplyService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import com.wangqin.globalshop.order.app.service.shipping.kuaidi100.IKuaidi100Service;
@@ -35,7 +35,7 @@ public class AutoChangeOrderStatusWithExpired {
     @Autowired
     private IKuaidi100Service kuaidi100Service;
     @Autowired
-    private IMallCommisionApplyService applyService;
+    private IOrderMallCommisionApplyService applyService;
 
     @Scheduled(cron = "0 0/30 * * * ?")
     @Transactional(rollbackFor = BizCommonException.class)

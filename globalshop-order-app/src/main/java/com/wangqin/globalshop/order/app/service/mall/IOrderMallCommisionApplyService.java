@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
  * @author xiajun
  *
  */
-public interface IMallCommisionApplyService {
+public interface IOrderMallCommisionApplyService {
 
 	 void updateStatusBySubOrderNo(String subOrderNo);
 }
