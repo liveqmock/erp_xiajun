@@ -40,7 +40,8 @@
     </select>
     
     <select id="queryOrderInfoBySubOrderNo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.AgentOrderVO">
-    select sub_order_no AS subOrderNo,item_name AS itemName,upc AS upc,sale_price AS salePrice,
+    select sub_order_no AS subOrderNo,sku_pic AS skuPic,
+    item_name AS itemName,upc AS upc,sale_price AS salePrice,
     scale AS scale,quantity AS quantity,receiver_info AS receiverInfo,
     order_status AS orderStatus,order_time AS orderTime,
     total_settlement AS totalSettlement
