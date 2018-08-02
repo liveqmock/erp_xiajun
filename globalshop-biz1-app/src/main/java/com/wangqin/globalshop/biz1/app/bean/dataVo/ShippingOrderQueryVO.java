@@ -1,123 +1,111 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
+import com.wangqin.globalshop.common.utils.AppUtil;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
-public class ShippingOrderQueryVO extends PageQueryVO {
-	
-	private String shippingNo;
-	private String logisticNo;
-	private String logisticCompany;
-	private String erpNo;
-	private String receiver;
-	private String telephone;
-	//状态
-	private Integer status;
-	private Integer type;
-	//发货时间
-	private Date startOrderTime;
-	private Date endOrderTime;
-	/**
-	 * 销售ID
-	 */
-	private Integer salesId;
-	
-	private String openId;
-	
-	public String getShippingNo() {
-		return shippingNo;
-	}
+/**
+ * 发货单管理查询表单对应的 VO
+ * <p>
+ * 前端查询参数示例：
+ * <pre>
+ *  status: 0
+ *  logisticCompany: 申通
+ *  logisticNo: EZ486544467CN
+ *  erpNo: SUB1533105970733 // 建议更名为 mallOrders
+ *  receiver: Angus Liu
+ *  telephone: 18328635851
+ *  shippingNo: PKG18080209282010003
+ *  type: 1
+ *  startOrderTime: 2018-08-16
+ *  endOrderTime: 2018-08-26
+ * </pre>
+ *
+ * @author angus
+ * @date 2018/8/2
+ */
+@Data
+public class ShippingOrderQueryVO {
+    /**
+     * 物流状态
+     * <p>
+     * 对应 shipping_order 表的 status 字段
+     */
+    private Integer status;
 
-	public void setShippingNo(String shippingNo) {
-		this.shippingNo = shippingNo;
-	}
+    /**
+     * 物流公司名称
+     * <p>
+     * 对应 shipping_order 表的 logistic_company 字段
+     */
+    private String logisticCompany;
 
-	public String getLogisticNo() {
-		return logisticNo;
-	}
+    /**
+     * 物流订单号
+     * <p>
+     * 对应 shipping_order 表的 logistic_no 字段
+     */
+    private String logisticNo;
 
-	public void setLogisticNo(String logisticNo) {
-		this.logisticNo = logisticNo;
-	}
+    /**
+     * 子订单号
+     * <p>
+     * 对应 shipping_order 表的 mall_orders 字段
+     */
+    private String mallOrders;
 
-	public String getLogisticCompany() {
-		return logisticCompany;
-	}
+    /**
+     * 收件人
+     * <p>
+     * 对应 shipping_order 表的 receiver 字段
+     */
+    private String receiver;
 
-	public void setLogisticCompany(String logisticCompany) {
-		this.logisticCompany = logisticCompany;
-	}
+    /**
+     * 电话
+     * <p>
+     * 对应 shipping_order 表的 telephone 字段
+     */
+    private String telephone;
 
-	public String getErpNo() {
-		return erpNo;
-	}
+    /**
+     * 发货单号
+     * <p>
+     * 对应 shipping_order 表的 shipping_no 字段
+     */
+    private String shippingNo;
 
-	public void setErpNo(String erpNo) {
-		this.erpNo = erpNo;
-	}
+    /**
+     * 发货时间（起）
+     * <p>
+     * 对应 shipping_order 表的 gmt_create 字段
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startOrderTime;
 
-	public String getReceiver() {
-		return receiver;
-	}
+    /**
+     * 发货时间（止）
+     * <p>
+     * 对应 shipping_order 表的 gmt_create 字段
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endOrderTime;
 
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
+    /**
+     * 渠道
+     * <p>
+     * 对应 shipping_order 表的 type 字段
+     */
+    private Integer type;
 
-	public String getTelephone() {
-		return telephone;
-	}
+    /**
+     * 公司编号
+     */
+    private String CompanyNo;
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
-	public Date getStartOrderTime() {
-		return startOrderTime;
-	}
-
-	public void setStartOrderTime(Date startOrderTime) {
-		this.startOrderTime = startOrderTime;
-	}
-
-	public Date getEndOrderTime() {
-		return endOrderTime;
-	}
-
-	public void setEndOrderTime(Date endOrderTime) {
-		this.endOrderTime = endOrderTime;
-	}
-
-	public Integer getSalesId() {
-		return salesId;
-	}
-
-	public void setSalesId(Integer salesId) {
-		this.salesId = salesId;
-	}
-
-	public String getOpenId() {
-		return openId;
-	}
-
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
-	
-	
+    public ShippingOrderQueryVO() {
+        this.CompanyNo = AppUtil.getLoginUserCompanyNo();
+    }
 }

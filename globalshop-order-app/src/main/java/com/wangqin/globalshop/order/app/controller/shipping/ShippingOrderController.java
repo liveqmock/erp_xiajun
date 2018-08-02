@@ -9,14 +9,13 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.enums.ShippingOrderType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingTrackVO;
 import com.wangqin.globalshop.biz1.app.bean.dto.MultiDeliveryFormDTO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -43,8 +42,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -58,7 +59,7 @@ import java.util.List;
  * @author biscuits
  * @date 2018/5/24
  */
-@Controller
+@RestController
 @RequestMapping("/shippingOrder")
 @Authenticated
 public class ShippingOrderController {
@@ -80,28 +81,31 @@ public class ShippingOrderController {
     @Autowired
     private IKuaidi100Service kuaidi100Service;
 
-    @RequestMapping("/query")
-    @ResponseBody
-    public Object query(ShippingOrderVO shippingOrderVO) {
-        JsonResult<List<ShippingOrderDO>> result = new JsonResult<>();
+    @PostMapping("/query")
+    public Object listShippingOrders(ShippingOrderQueryVO shippingOrderQueryVO, PageQueryParam pageQueryParam) {
+        JsonPageResult<List<ShippingOrderDO>> result = new JsonPageResult<>();
+
         try {
-            List<ShippingOrderDO> list = shippingOrderService.queryShippingOrders(shippingOrderVO);
-            result.buildData(list);
-            result.setSuccess(true);
+            List<ShippingOrderDO> shippingOrderDOList =
+                    shippingOrderService.listShippingOrders(shippingOrderQueryVO, pageQueryParam);
+            int totalCount = shippingOrderService.countShippingOrders(shippingOrderQueryVO);
+            result.buildData(shippingOrderDOList)
+                    .buildTotalCount(totalCount)
+                    .buildIsSuccess(true);
         } catch (ErpCommonException e) {
-            result.buildMsg(e.getErrorMsg());
-            result.buildIsSuccess(false);
+            result.buildMsg(e.getErrorMsg())
+                    .buildIsSuccess(false);
         } catch (Exception ex) {
             ex.printStackTrace();
-            result.buildMsg("未知异常");
-            result.buildIsSuccess(false);
+            result.buildMsg("未知异常")
+                    .buildIsSuccess(false);
         }
+
         return result;
     }
 
     // 合单发货表单
     @RequestMapping("/multiDeliveryForm")
-    @ResponseBody
     public Object multiDeliveryForm(String erpOrderId) {
         JsonResult<MultiDeliveryFormDTO> result = new JsonResult();
         MultiDeliveryFormDTO dto;
@@ -116,7 +120,6 @@ public class ShippingOrderController {
 
     // 合单发货(将多个子订单合并成一个包裹)
     @RequestMapping("/multiDelivery")
-    @ResponseBody
     public Object multiDelivery(ShippingOrderDO shippingOrder) {
         JsonResult<String> result = new JsonResult<>();
         try {
@@ -130,7 +133,6 @@ public class ShippingOrderController {
 
     // 批量发货表单(检查是否有需要合单发货的，检查是否有需要等待一起合单发货的)
     @RequestMapping("/batchDeliveryForm")
-    @ResponseBody
     public Object batchDeliveryForm(String erpOrderId) {
         JsonResult<String> result = new JsonResult<>();
 
@@ -202,7 +204,6 @@ public class ShippingOrderController {
 
     // 批量发货(每个子订单作为一个包裹)
     @RequestMapping("/batchDelivery")
-    @ResponseBody
     public Object batchDelivery(ShippingOrderDO shippingOrder) throws InventoryException {
         JsonResult<String> result = new JsonResult<>();
         if (StringUtils.isNotBlank(shippingOrder.getMallOrders())) {
@@ -290,7 +291,6 @@ public class ShippingOrderController {
 
     // 修改发货单
     @RequestMapping("/update")
-    @ResponseBody
     public Object update(ShippingOrderDO shippingOrder) {
         JsonResult<String> result = new JsonResult<>();
         // ShiroUser shiroUser = this.getShiroUser();
@@ -357,7 +357,6 @@ public class ShippingOrderController {
 
     // 查询物流公司
     @RequestMapping("/queryLogisticCompany")
-    @ResponseBody
     public Object queryLogisticCompany() {
         JsonResult<List<LogisticCompanyDO>> result = new JsonResult<>();
         List<LogisticCompanyDO> LogisticCompanyList = shippingOrderService.queryLogisticCompany();
@@ -379,7 +378,6 @@ public class ShippingOrderController {
 
     // 包裹号标签导出
     @RequestMapping("/shippingOrderExportPdf")
-    @ResponseBody
     public ResponseEntity<byte[]> shippingOrderExportPdf(String shippingOrderIds) throws Exception {
         if (StringUtil.isBlank(shippingOrderIds) || "[]".equals(shippingOrderIds)) {
             return null;
@@ -506,7 +504,6 @@ public class ShippingOrderController {
 
     // 包裹明细导出
     @RequestMapping("/shippingOrderExportExcel")
-    @ResponseBody
     public ResponseEntity<byte[]> shippingOrderExportExcel(ShippingOrderVO shippingOrderQueryVO, BindingResult bindingResult) throws Exception {
         if (shippingOrderQueryVO.getStartOrderTime() == null || shippingOrderQueryVO.getEndOrderTime() == null) {
             throw new ErpCommonException("必须选择发货时间段");
@@ -600,7 +597,6 @@ public class ShippingOrderController {
     }
 
     @RequestMapping("/shippingOrderPackageExportExcel")
-    @ResponseBody
     public ResponseEntity<byte[]> shippingOrderPackageExportExcel(ShippingOrderVO shippingOrderQueryVO, BindingResult bindingResult) throws Exception {
         if (shippingOrderQueryVO.getStartOrderTime() == null || shippingOrderQueryVO.getEndOrderTime() == null) {
             throw new ErpCommonException("必须选择发货时间段");
@@ -656,7 +652,6 @@ public class ShippingOrderController {
 
     // 预出库
     @RequestMapping("/prepareShipping")
-    @ResponseBody
     public Object prepareShipping(String erpOrderId) {
         String s = erpOrderId.replace("&quot;", "\"");
         List<Long> erpOrderIdList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
@@ -688,7 +683,6 @@ public class ShippingOrderController {
      * 查看发货单明细
      */
     @RequestMapping("/queryShippingOrderDetail")
-    @ResponseBody
     public Object queryShippingOrderDetail(Long shippingOrderId) {
         JsonPageResult<List<MallSubOrderDO>> result = new JsonPageResult<>();
         try {
@@ -751,7 +745,6 @@ public class ShippingOrderController {
      * 判断一个人一周内发货包裹数
      */
     @RequestMapping("/checkManyTimesDelivery")
-    @ResponseBody
     public Object checkManyTimesDelivery(String idCard, String logisticCompany, String erpOrderIds, boolean isBatch) {
         if (StringUtil.isNotBlank(idCard) && StringUtil.isNotBlank(logisticCompany) && !isBatch) {
             int num = shippingOrderService.selectCount(idCard, logisticCompany);
@@ -803,7 +796,6 @@ public class ShippingOrderController {
      * @return
      */
     @RequestMapping("/getShippingTrackDetail")
-    @ResponseBody
     public JsonResult getShippingTrackDetail(String shippingNo) {
         JsonResult<List<ShippingTrackVO>> result = new JsonResult<>();
         try {
@@ -825,11 +817,10 @@ public class ShippingOrderController {
      * @return
      */
     @RequestMapping("/getShippingTrackDetails")
-    @ResponseBody
     public JsonResult getShippingTrackDetails(Set<String> shippingNos) {
-        JsonResult<Map<String,List<ShippingTrackVO>>> result = new JsonResult<>();
+        JsonResult<Map<String, List<ShippingTrackVO>>> result = new JsonResult<>();
         try {
-            Map<String,List<ShippingTrackVO>> resultMap = new HashMap<>();
+            Map<String, List<ShippingTrackVO>> resultMap = new HashMap<>();
             for (String shippingNo : shippingNos) {
                 List<ShippingTrackVO> shippingTrackVOList = getShippingTrackList(shippingNo);
                 resultMap.put(shippingNo, shippingTrackVOList);
@@ -846,12 +837,12 @@ public class ShippingOrderController {
     }
 
     /**
-     *
      * TODO: 后续需要优化
+     *
      * @param shippingNo
      * @return
      */
-    private List<ShippingTrackVO> getShippingTrackList(String shippingNo){
+    private List<ShippingTrackVO> getShippingTrackList(String shippingNo) {
         // 从 kuaidi100 获得物流信息
         Kuaidi100ShippingTrackResult kuaidi100Result = kuaidi100Service.queryShippingTrack(shippingNo);
         // 将快递100物流轨迹信息转换为通用物流轨迹信息

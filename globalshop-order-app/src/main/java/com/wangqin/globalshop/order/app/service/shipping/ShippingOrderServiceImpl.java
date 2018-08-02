@@ -2,6 +2,8 @@ package com.wangqin.globalshop.order.app.service.shipping;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Sets;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderQueryVO;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.enums.TransferStatus;
@@ -626,6 +628,17 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
 //        List<ShippingOrderDO> haihuOrders = this.selectList(selEntityWrapper);
         List<ShippingOrderDO> haihuOrders = shippingOrderMapper.listByLogisticCompany("海狐");
         return haihuOrders;
+    }
+
+    @Override
+    public List<ShippingOrderDO> listShippingOrders(ShippingOrderQueryVO shippingOrderQueryVO, PageQueryParam pageQueryParam) {
+        pageQueryParam.calculateRowIndex();
+        return shippingOrderMapper.listShippingOrders(shippingOrderQueryVO, pageQueryParam);
+    }
+
+    @Override
+    public int countShippingOrders(ShippingOrderQueryVO shippingOrderQueryVO) {
+        return shippingOrderMapper.countShippingOrders(shippingOrderQueryVO);
     }
 
 

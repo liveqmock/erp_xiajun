@@ -1,8 +1,6 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 /**
  * 分页查询参数对应的实体类
@@ -10,9 +8,7 @@ import lombok.ToString;
  * @author angus
  * @date 2018/7/30
  */
-@Getter
-@Setter
-@ToString
+@Data
 public class PageQueryParam {
     /**
      * 分页查询页码

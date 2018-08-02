@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.ShippingOrderDOMapper;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
@@ -24,7 +26,7 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
 
     ShippingOrderDO selectByShippingNo(String shippingNo);
 
-    int selectCount(@Param("idCard") String idCard,@Param("logisticCompany") String logisticCompany);
+    int selectCount(@Param("idCard") String idCard, @Param("logisticCompany") String logisticCompany);
 
     ShippingOrderDO selectByLogisticNo(String logisticNo);
 
@@ -35,4 +37,22 @@ public interface IShippingOrderMapperExt extends ShippingOrderDOMapper {
     List<ShippingOrderDO> selectInOneMonth();
 
     List<ShippingOrderDO> listByLogisticCompany(String logistCompany);
+
+    /**
+     * 根据指定条件分页查询发货单列表
+     *
+     * @param shippingOrderQueryVO
+     * @param pageQueryParam
+     * @return
+     */
+    List<ShippingOrderDO> listShippingOrders(@Param("shippingOrderQueryVO") ShippingOrderQueryVO shippingOrderQueryVO,
+                                             @Param("pageQueryParam") PageQueryParam pageQueryParam);
+
+    /**
+     * 根据指定条件查询发货单数目
+     *
+     * @param shippingOrderQueryVO
+     * @return
+     */
+    int countShippingOrders(@Param("shippingOrderQueryVO") ShippingOrderQueryVO shippingOrderQueryVO);
 }

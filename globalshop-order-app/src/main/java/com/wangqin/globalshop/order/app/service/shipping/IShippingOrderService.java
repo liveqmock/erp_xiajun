@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.order.app.service.shipping;
 
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.LogisticCompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
@@ -80,4 +82,21 @@ public interface IShippingOrderService {
 //	List<ShippingOrder> queryAllFad();
 //
 //	List<ShippingOrder> queryByShippingOrderPackageTime(ShippingOrderQueryVO shippingOrderQueryVO);
+
+    /**
+     * 根据指定条件分页查询发货单列表
+     *
+     * @param shippingOrderQueryVO
+     * @param pageQueryParam
+     * @return
+     */
+    List<ShippingOrderDO> listShippingOrders(ShippingOrderQueryVO shippingOrderQueryVO, PageQueryParam pageQueryParam);
+
+    /**
+     * 根据指定条件查询发货单数目
+     *
+     * @param shippingOrderQueryVO
+     * @return
+     */
+    int countShippingOrders(ShippingOrderQueryVO shippingOrderQueryVO);
 }
