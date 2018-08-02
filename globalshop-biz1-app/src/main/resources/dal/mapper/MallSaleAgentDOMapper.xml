@@ -17,9 +17,9 @@
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="country" property="country" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
-    <result column="commission_mode" property="commissionMode" jdbcType="BIGINT" />
+    <result column="commission_mode" property="commissionMode" jdbcType="INTEGER" />
     <result column="commission_value" property="commissionValue" jdbcType="DOUBLE" />
-    <result column="status" property="status" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
@@ -56,8 +56,8 @@
       #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, #{agentName,jdbcType=VARCHAR}, 
       #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{headProtraitUrl,jdbcType=VARCHAR}, 
       #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{country,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{commissionMode,jdbcType=BIGINT}, 
-      #{commissionValue,jdbcType=DOUBLE}, #{status,jdbcType=BIT}, #{joinTime,jdbcType=TIMESTAMP}, 
+      #{country,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{commissionMode,jdbcType=INTEGER}, 
+      #{commissionValue,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, #{joinTime,jdbcType=TIMESTAMP}, 
       #{lastLoginTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
       )
   </insert>
@@ -175,13 +175,13 @@
         #{phone,jdbcType=VARCHAR},
       </if>
       <if test="commissionMode != null" >
-        #{commissionMode,jdbcType=BIGINT},
+        #{commissionMode,jdbcType=INTEGER},
       </if>
       <if test="commissionValue != null" >
         #{commissionValue,jdbcType=DOUBLE},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=BIT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="joinTime != null" >
         #{joinTime,jdbcType=TIMESTAMP},
@@ -243,13 +243,13 @@
         phone = #{phone,jdbcType=VARCHAR},
       </if>
       <if test="commissionMode != null" >
-        commission_mode = #{commissionMode,jdbcType=BIGINT},
+        commission_mode = #{commissionMode,jdbcType=INTEGER},
       </if>
       <if test="commissionValue != null" >
         commission_value = #{commissionValue,jdbcType=DOUBLE},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=BIT},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="joinTime != null" >
         join_time = #{joinTime,jdbcType=TIMESTAMP},
@@ -282,9 +282,9 @@
       province = #{province,jdbcType=VARCHAR},
       country = #{country,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      commission_mode = #{commissionMode,jdbcType=BIGINT},
+      commission_mode = #{commissionMode,jdbcType=INTEGER},
       commission_value = #{commissionValue,jdbcType=DOUBLE},
-      status = #{status,jdbcType=BIT},
+      status = #{status,jdbcType=INTEGER},
       join_time = #{joinTime,jdbcType=TIMESTAMP},
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},

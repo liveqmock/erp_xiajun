@@ -33,11 +33,11 @@ public class MallSaleAgentDO extends BaseModel {
 
     private String phone;
 
-    private Long commissionMode;
+    private Integer commissionMode;
 
     private Double commissionValue;
 
-    private Boolean status;
+    private Integer status;
 
     private Date joinTime;
 
@@ -167,11 +167,11 @@ public class MallSaleAgentDO extends BaseModel {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public Long getCommissionMode() {
+    public Integer getCommissionMode() {
         return commissionMode;
     }
 
-    public void setCommissionMode(Long commissionMode) {
+    public void setCommissionMode(Integer commissionMode) {
         this.commissionMode = commissionMode;
     }
 
@@ -183,11 +183,11 @@ public class MallSaleAgentDO extends BaseModel {
         this.commissionValue = commissionValue;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

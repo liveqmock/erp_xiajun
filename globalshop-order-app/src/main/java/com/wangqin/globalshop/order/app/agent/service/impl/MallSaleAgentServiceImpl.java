@@ -1,17 +1,16 @@
 package com.wangqin.globalshop.order.app.agent.service.impl;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionValueVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,11 +30,33 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
 
     @Override
     public void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO) {
+        if (StringUtil.isBlank(mallSaleAgentDO.getUserNo())) {
+            throw new BizCommonException("数据不完整！");
+        }
 
         int effectedNum = mallSaleAgentDOMapper.updateByCompanyNoAndUserNo(mallSaleAgentDO);
+
         if (effectedNum <= 0) {
-            throw new BizCommonException("更新出现异常！");
+            throw new BizCommonException("数据库中无此记录！");
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = BizCommonException.class)
+    public void updateMallSaleAgent(MallSaleAgentEditVO mallSaleAgentEditVO) {
+        // 不直接用 MallSaleAgentDO 是为了防止修改重要字段
+        MallSaleAgentDO mallSaleAgentDO = new MallSaleAgentDO();
+        mallSaleAgentDO.setUserNo(mallSaleAgentEditVO.getUserNo());
+        mallSaleAgentDO.setCompanyNo(mallSaleAgentEditVO.getCompanyNo());
+        mallSaleAgentDO.setAgentName(mallSaleAgentEditVO.getAgentName());
+        mallSaleAgentDO.setRealName(mallSaleAgentEditVO.getRealName());
+        mallSaleAgentDO.setIdCard(mallSaleAgentEditVO.getIdCard());
+        mallSaleAgentDO.setStatus(mallSaleAgentEditVO.getStatus());
+        // 更新基本信息
+        updateMallSaleAgent(mallSaleAgentDO);
+        // 更新佣金信息
+        updateCommissionValue(mallSaleAgentEditVO.getUserNo(), mallSaleAgentEditVO.getCommissionMode(),
+                mallSaleAgentEditVO.getCommissionValue());
     }
 
     @Override
@@ -149,16 +170,17 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
 
         return commissionValueVO;
     }
-    
+
     /**
      * 根据userNo查询代理的信息（如头像，登录名等）
-     * @author xiajun
+     *
      * @param userNo
      * @return
+     * @author xiajun
      */
     @Override
     public MallSaleAgentDO queryAgentInfoByUserNo(String userNo) {
-    	return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
+        return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
     }
 
 }

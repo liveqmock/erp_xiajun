@@ -4,17 +4,14 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry
-            location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
-
-
-
+    <classPathEntry location="../../mysql-connector-java-5.1.44.jar"/>
     <!--<classPathEntry location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
+    <!--<classPathEntry location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
 
-           
 
 
-    <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
 
         <!--去除注释  -->
         <commentGenerator>
@@ -511,22 +508,6 @@
             <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
        <!--</table>-->
-
-        <!--<table tableName="mall_sub_order_snapshot" domainObjectName="MallSubOrderSnapshotDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-                        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-        <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-        <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-    <!--</table>-->
-
-        <table tableName="mall_commision_apply" domainObjectName="MallCommisionApplyDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
-            <ignoreColumn column="gmt_create" delimitedColumnName=""/>
-            <ignoreColumn column="is_del" delimitedColumnName=""/>
-        </table>
        
        <!--<table tableName="share_token_record" domainObjectName="ShareTokenRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
@@ -716,32 +697,6 @@
         <!--</table>-->
 
 
-        <!--<table tableName="db_migrate_receive_record" domainObjectName="DbMigrateReceiveRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
-
-        <!--<table tableName="db_migrate_send_record" domainObjectName="DbMigrateSendRecordDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
-
-        <!--<table tableName="applet_config" domainObjectName="AppletConfigDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
-            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
-        <!--</table>-->
-
-
-
         <!--<table tableName="wx_user_share_history" domainObjectName="WxUserShareHistoryDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
@@ -774,6 +729,22 @@
             <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
+
+        <!--<table tableName="mall_commision_apply" domainObjectName="MallCommisionApplyDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+        <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+        <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
+        <table tableName="mall_sale_agent" domainObjectName="MallSaleAgentDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+        enableSelectByExample="false" selectByExampleQueryId="false" >
+        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
+        <ignoreColumn column="gmt_create" delimitedColumnName=""/>
+        <ignoreColumn column="is_del" delimitedColumnName=""/>
+        </table>
 
     </context>
 </generatorConfiguration>
