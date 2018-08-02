@@ -58,7 +58,7 @@ public class CommissionController {
 	    		return result.buildFailed("代理不存在");
 	    	}
 	    	AgentCommissionVO agentCommissionVO = new AgentCommissionVO();
-	    	agentCommissionVO.setStatus(qv.getS);
+	    	agentCommissionVO.setStatus(qv.getStatus());
 	    	agentCommissionVO.setUserNo(agentNo);
 	    	agentCommissionVO.setProfile(agentDO.getHeadProtraitUrl());
 	    	agentCommissionVO.setName(agentDO.getAgentName());
