@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrack;
 import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
@@ -49,28 +50,30 @@ public class AutoChangeOrderStatusWithExpired {
             /*如果物流轨迹的状态为已签收  则更新子订单的状态*/
             if ("3".equals(state)) {
                 //todo @夏军
-                subOrder.setStatus(OrderStatus.COMFIRM.getCode());
-                mallSubOrderService.update(subOrder);
-                 /*找出对应的主订单*/
-                String orderNo = subOrder.getOrderNo();
-                MallOrderDO mallOrderDO = mallOrderService.selectByOrderNo(orderNo);
-                /*如果主订单的状态为全部发货*/
-                if (OrderStatus.SENT.getCode() == mallOrderDO.getStatus()) {
-                    List<MallSubOrderDO> list = mallSubOrderService.selectByOrderNo(orderNo);
-                    list.remove(subOrder);
-                    if (needChangeMallOrderStatus(list)) {
-                        mallOrderDO.setStatus(OrderStatus.COMFIRM.getCode());
-                        mallOrderService.updateById(mallOrderDO);
-                    }
-                }
-
-
+                updateOrderStatus(subOrder);
             }
             //todo 更新shippingOrder状态
 
         }
 
 
+    }
+    @Transactional(rollbackFor = ErpCommonException.class)
+    void updateOrderStatus(MallSubOrderDO subOrder) {
+        subOrder.setStatus(OrderStatus.COMFIRM.getCode());
+        mallSubOrderService.update(subOrder);
+        /*找出对应的主订单*/
+        String orderNo = subOrder.getOrderNo();
+        MallOrderDO mallOrderDO = mallOrderService.selectByOrderNo(orderNo);
+        /*如果主订单的状态为全部发货*/
+        if (OrderStatus.SENT.getCode() == mallOrderDO.getStatus()) {
+            List<MallSubOrderDO> list = mallSubOrderService.selectByOrderNo(orderNo);
+            list.remove(subOrder);
+            if (needChangeMallOrderStatus(list)) {
+                mallOrderDO.setStatus(OrderStatus.COMFIRM.getCode());
+                mallOrderService.updateById(mallOrderDO);
+            }
+        }
     }
 
     /**
