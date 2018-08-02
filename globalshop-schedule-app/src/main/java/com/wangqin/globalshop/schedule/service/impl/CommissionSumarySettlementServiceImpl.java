@@ -15,6 +15,7 @@ import com.wangqin.globalshop.schedule.service.CommissionSumarySettlementService
 import net.sourceforge.htmlunit.corejs.javascript.optimizer.Codegen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -43,9 +44,10 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 	public void add(CommissionSumarySettlementDO settlementDO){
 
-		//todo 需要校验一些字段的合法性
+		settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
+		settlementDO.setPayType("offline");
+		settlementDO.init();
 		settlementDOMapperExt.insert(settlementDO);
-
 	}
 
 	public List<CommissionSumarySettlementDO> searchPageList(SettlementQueryVO queryVO){
@@ -55,6 +57,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 		   return resultList;
 	}
 
+	@Transactional
 	public void doSettlement(List<Long> idList, String shareUserId){
 
 		if(EasyUtil.isStringEmpty(shareUserId)){
@@ -71,27 +74,23 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			settlementDO.setShareUserId(shareUserId);
 			settlementDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 			settlementDO.setDetailCount(idList.size());
-			//settlementDO.setPayType();
+			settlementDO.setPayType("onLine");
 			settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
 			settlementDO.setSettlementTime(new Date());
 
+			Map<String,BigDecimal> priceMap = detailDOMapperExt.sumPriceByIdList(idList);
 
+			BigDecimal settlement = priceMap.get("settlement");
+			BigDecimal salePrice = priceMap.get("salePrice");
 
-			//Double settlement = detailDOMapperExt.sumSettlement(idList);
+			settlementDO.setTotalPrice(salePrice);
 
-			Map<String,Double> priceMap = detailDOMapperExt.sumPriceByIdList(idList);
-
-			Double settlement = priceMap.get("settlement");
-			Double salePrice = priceMap.get("salePrice");
-
-			settlementDO.setTotalPrice(BigDecimal.valueOf(salePrice).setScale(2,BigDecimal.ROUND_HALF_UP));
-
-			settlementDO.setSettlement(BigDecimal.valueOf(settlement).setScale(2,BigDecimal.ROUND_HALF_UP));
+			settlementDO.setSettlement(settlement);
+			settlementDO.init();
 
 			settlementDOMapperExt.insert(settlementDO);
 
 			for(Long id : idList){
-				//todo 结算单号未更新
 				detailDOMapperExt.updateStatusById(id, SettlementStatus.SUCCESS.getCode(),settlementDO.getSettlementNo());
 			}
 

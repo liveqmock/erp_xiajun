@@ -76,15 +76,16 @@
         IFNULL(count(detail.id),0) AS orderNum,
         IFNULL(SUM(IFNULL(detail.sale_price,0)),0) AS totalSalePrice,
         IFNULL(SUM(IFNULL(detail.settlement,0)),0) AS totalCommission,
-        agent.head_protrait_url AS headProtraitUrl,
-		agent.parent_agent AS parentAgent,
-		agent.agent_name AS agentName,
-		detail.share_user_id as shareUserId
+        IFNULL(agent.head_protrait_url,'') AS headProtraitUrl,
+		IFNULL(agent.parent_agent,'') AS parentAgent,
+		IF(agent.parent_agent is null,'一级代理','二级代理') AS agentLevel,
+		IFNULL(agent.agent_name,'') AS agentName,
+		IFNULL(detail.share_user_id,'') as shareUserId
         FROM
             commission_sumary_detail as detail,
             mall_sale_agent as agent
         WHERE
-            detail.share_user_id = agent.userNo
+            detail.share_user_id = agent.user_no
             and detail.company_no = #{companyNo}
             and detail.is_del is false
             and agent.is_del is false
@@ -108,6 +109,16 @@
         WHERE share_user_id = #{shareUserId}
         and is_del= false
         and status = 1
+    </select>
+
+    <select id="selectBySubOrderNo" resultMap="BaseResultMap">
+        SELECT
+             <include refid="Base_Column_List" />
+        FROM
+             commission_sumary_detail
+        WHERE
+             sub_order_no = #{subOrderNo}
+             and is_del= false
     </select>
 
 

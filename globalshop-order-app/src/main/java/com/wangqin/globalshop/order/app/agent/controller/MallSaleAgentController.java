@@ -84,22 +84,18 @@ public class MallSaleAgentController {
     }
 
     /**
-     * 代理信息修改
-     * <li> 编辑信息
-     * <li> 佣金修改
-     * <li> 解除代理
-     * <li> 删除
+     * 代理信息更新
      *
-     * @param mallSaleAgentDO
+     * @param mallSaleAgentEditVO
      * @return
      */
     @PostMapping("/updateMallSaleAgent")
-    public Object updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO) {
+    public Object updateMallSaleAgent(MallSaleAgentEditVO mallSaleAgentEditVO) {
 
         JsonResult result = new JsonResult();
 
         try {
-            mallSaleAgentService.updateMallSaleAgent(mallSaleAgentDO);
+            mallSaleAgentService.updateMallSaleAgent(mallSaleAgentEditVO);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getMessage())
@@ -112,6 +108,8 @@ public class MallSaleAgentController {
 
         return result;
     }
+
+     // TODO: 解除代理 AND 删除代理
 
 
     /**

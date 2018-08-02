@@ -1,10 +1,7 @@
 package com.wangqin.globalshop.order.app.agent.service;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionValueVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentItemVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSaleAgentQueryVO;
 
 import java.util.List;
 
@@ -28,6 +25,13 @@ public interface MallSaleAgentService {
      * @param mallSaleAgentDO
      */
     void updateMallSaleAgent(MallSaleAgentDO mallSaleAgentDO);
+
+    /**
+     * 更新代理
+     *
+     * @param mallSaleAgentEditVO
+     */
+    void updateMallSaleAgent(MallSaleAgentEditVO mallSaleAgentEditVO);
 
     /**
      * 分佣比率修改
@@ -73,7 +77,7 @@ public interface MallSaleAgentService {
      */
     CommissionValueVO queryCommissionValue(String userNo, String companyNo);
 
-    
+
     /**
      * 根据userNo查询代理的信息（如头像，登录名等）
      * @author xiajun
@@ -81,8 +85,4 @@ public interface MallSaleAgentService {
      * @return
      */
     MallSaleAgentDO queryAgentInfoByUserNo(String userNo);
-
-
-
-
 }
