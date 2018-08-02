@@ -38,9 +38,10 @@ public class ItemSalableJob {
 				 Date endDate = item.getEndDate();
 				 if (!DateUtil.belongCalendar(new Date(), startDate, endDate)) {
 					 scheduleItemService.updateItemIsSale(ItemIsSale.UNSALABLE.getCode().byteValue(), item.getItemCode());
+					 scheduleItemService.putOffItemByItemCode(item.getItemCode());
 				 }
 			 }
 		 }
-		// System.out.println("scheduled job-->end to scan item sale state");
+		//System.out.println("scheduled job-->end to scan item sale state");
 	 }
 }

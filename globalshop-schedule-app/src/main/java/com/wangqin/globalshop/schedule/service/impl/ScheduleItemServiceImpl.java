@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.schedule.service.ScheduleItemService;
 
 @Service
@@ -23,5 +24,10 @@ public class ScheduleItemServiceImpl implements ScheduleItemService{
 	@Override
 	public void updateItemIsSale(Byte isSale,String itemCode) {
 		itemDOMapperExt.updateItemIsSale(isSale, itemCode);
+	}
+	
+	@Override
+	public void putOffItemByItemCode(String itemCode) {
+		itemDOMapperExt.putOffItemByItemCode(ItemStatus.DELISTING.getCode(), itemCode);
 	}
 }

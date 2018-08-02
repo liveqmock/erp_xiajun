@@ -21,6 +21,8 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	
 	void updateItemIsSale(@Param("isSale")Byte isSale,@Param("itemCode")String itemCode);
 	
+	void putOffItemByItemCode(@Param("status")Integer status,@Param("itemCode")String itemCode);
+	
 	ItemDO queryItemDOByItemCode(String itemCode);
 	
 	String queryItemCodeById(Long id);

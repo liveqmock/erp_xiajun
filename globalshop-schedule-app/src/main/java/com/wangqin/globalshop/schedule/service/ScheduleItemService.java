@@ -9,4 +9,6 @@ public interface ScheduleItemService {
 	List<ItemDO> queryItemSalable(Byte isSale);
 	
 	void updateItemIsSale(Byte isSale,String itemCode);
+	
+	void putOffItemByItemCode(String itemCode);
 }
