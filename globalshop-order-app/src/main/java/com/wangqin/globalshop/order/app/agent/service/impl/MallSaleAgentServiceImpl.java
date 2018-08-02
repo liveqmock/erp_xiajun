@@ -3,9 +3,9 @@ package com.wangqin.globalshop.order.app.agent.service.impl;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
+import com.wangqin.globalshop.biz1.app.enums.CommissionModeEnum;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.wangqin.globalshop.biz1.app.enums.CommissionModeEnum.AMOUNT_MODE;
+import static com.wangqin.globalshop.biz1.app.enums.CommissionModeEnum.PERCENTAGE_MODE;
 
 /**
  * @author angus
@@ -65,11 +68,11 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
             throw new BizCommonException("数据不完整！");
         }
 
-        if (commissionMode != 0 && commissionMode != 1) {
+        if (commissionMode != PERCENTAGE_MODE.getValue() && commissionMode != AMOUNT_MODE.getValue()) {
             throw new BizCommonException("分佣模式非法！");
         }
 
-        if (commissionMode == 0) {
+        if (commissionMode == PERCENTAGE_MODE.getValue()) {
             // 分佣模式为百分比模式（分佣最大百分比是否为 100%？）
             if (commissionValue < 0 || commissionValue > 1) {
                 throw new BizCommonException("分佣比率非法！");

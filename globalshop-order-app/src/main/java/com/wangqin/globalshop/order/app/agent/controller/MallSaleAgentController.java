@@ -109,9 +109,6 @@ public class MallSaleAgentController {
         return result;
     }
 
-     // TODO: 解除代理 AND 删除代理
-
-
     /**
      * 分佣比率修改
      *
@@ -136,6 +133,30 @@ public class MallSaleAgentController {
                     .buildIsSuccess(false);
         }
 
+        return result;
+    }
+
+    /**
+     * TODO: 解除代理
+     *
+     * @param userNo
+     * @return
+     */
+    public Object removeMallSaleAgent(String userNo) {
+        JsonResult result = new JsonResult();
+        // do something
+        return result;
+    }
+
+    /**
+     * TODO: 删除代理
+     *
+     * @param userNo
+     * @return
+     */
+    public Object deleteMallSaleAgent(String userNo) {
+        JsonResult result = new JsonResult();
+        // do something
         return result;
     }
 
