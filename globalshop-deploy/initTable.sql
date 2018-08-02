@@ -888,6 +888,7 @@ CREATE TABLE `shipping_order` (
   `shipping_no` varchar(64) DEFAULT NULL COMMENT '发货单号(包裹号),erp系统自动生产',
   `logistic_no` varchar(64) DEFAULT NULL COMMENT '物流运单号,外部物流公司的运单号',
   `logistic_company` varchar(128) DEFAULT NULL COMMENT '外部物流公司名称',
+  `logistic_type` varchar(45) DEFAULT NULL COMMENT '物流类型',
   `type` int(4) DEFAULT NULL COMMENT '快递渠道：包税线，身份证线，BC线',
   `status` int(2) DEFAULT NULL COMMENT '运单状态',
   `transfer_status` int(4) NOT NULL DEFAULT '0' COMMENT '转运状态。0: 未预报；1: 预报失败；10：预报成功；20：创建转运单成功',
