@@ -48,6 +48,16 @@
 		item_code=#{itemCode}
  	</select>
  	
+ 	<!--定时任务，下架商品-->
+    <select id="putOffItemByItemCode">
+ 		UPDATE
+ 		`item`
+ 		SET
+ 		status=#{status}
+		WHERE
+		item_code=#{itemCode}
+ 	</select>
+ 	
     <!--通过item_code查询item-->
     <select id="queryItemDOByItemCode" parameterType="java.lang.String"
             resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
