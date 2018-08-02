@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerStorageDetailVo;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SumarySettlementVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.AppUtil;
@@ -55,7 +56,7 @@ public class SettlementController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Object add(CommissionSumarySettlementDO settlementDO){
+	public Object add(SumarySettlementVO settlementDO){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
 			settlementService.add(settlementDO);

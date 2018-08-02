@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.schedule.service;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SumarySettlementVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface CommissionSumarySettlementService {
 	List<CommissionSumarySettlementDO> searchByUserNo(String searchByShareId);
 
-	void add(CommissionSumarySettlementDO settlementDO);
+	void add(SumarySettlementVO settlementDO);
 
 	List<CommissionSumarySettlementDO> searchPageList(SettlementQueryVO queryVO);
 
