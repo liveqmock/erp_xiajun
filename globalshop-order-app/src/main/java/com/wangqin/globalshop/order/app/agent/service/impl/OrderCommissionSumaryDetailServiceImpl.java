@@ -15,8 +15,8 @@ public class OrderCommissionSumaryDetailServiceImpl implements IOrderCommissionS
 	@Autowired
 	private CommissionSumaryDetailDOMapperExt mapperExt;
 	@Override
-	public Double sumSettlementAbleByUserNo(String userNo) {
-		return mapperExt.sumSettlementAbleByUserNo(userNo, CommissionStatus.BALANCE_ABLE.getValue());
+	public Double sumSettlementAbleByUserNo(String userNo,Integer status) {
+		return mapperExt.sumSettlementAbleByUserNo(userNo, status);
 	}
 	@Override
 	public List<String> querySubOrderNoListByUserNo(CommissionQueryVO qv) {
