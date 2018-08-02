@@ -44,18 +44,6 @@ public class MallSaleAgentEditVO {
     private String phone;
 
     /**
-     * 佣金模式
-     * <li> 0 为按百分比
-     * <li> 1 为按金额
-     */
-    private Integer commissionMode;
-
-    /**
-     * 佣金数字值，百分比模式如 5% 填 0.05，金额模式则为金额
-     */
-    private Double commissionValue;
-
-    /**
      * 所属公司id
      * <p>
      * 与 mall_sale_agent 表中的 company_no 字段对应

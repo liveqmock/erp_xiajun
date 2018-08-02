@@ -3,6 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SumaryDetailQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDetailDO;
 import com.wangqin.globalshop.common.utils.BigDecimalHelper;
 import org.apache.ibatis.annotations.Param;
@@ -41,7 +42,7 @@ public interface CommissionSumaryDetailDOMapperExt extends CommissionSumaryDetai
 	
 	Map<String,Object> sumOrderNumSaleCommissionByUserNo(@Param("status")Integer status,@Param("userNo")String userNo);
 
-	List<Map<String,Object>> sumSettlePageList(@Param("status") Integer status, @Param("companyNo") String companyNo);
+	List<Map<String,Object>> sumSettlePageList(SumaryDetailQueryVO queryVO);
 
 	List<CommissionSumaryDetailDO> selectBySubOrderNo(@Param("subOrderNo") String subOrderNo);
 }

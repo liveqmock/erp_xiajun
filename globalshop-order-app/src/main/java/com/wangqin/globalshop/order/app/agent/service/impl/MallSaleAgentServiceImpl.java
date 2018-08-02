@@ -8,6 +8,7 @@ import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,17 +50,17 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     public void updateMallSaleAgent(MallSaleAgentEditVO mallSaleAgentEditVO) {
         // 不直接用 MallSaleAgentDO 是为了防止修改重要字段
         MallSaleAgentDO mallSaleAgentDO = new MallSaleAgentDO();
+        // 下面的简化拷贝属性语句在未确定之前先不使用，先用 setter 替代
+        // BeanUtils.copyProperties(mallSaleAgentEditVO, mallSaleAgentDO);
         mallSaleAgentDO.setUserNo(mallSaleAgentEditVO.getUserNo());
         mallSaleAgentDO.setCompanyNo(mallSaleAgentEditVO.getCompanyNo());
         mallSaleAgentDO.setAgentName(mallSaleAgentEditVO.getAgentName());
         mallSaleAgentDO.setRealName(mallSaleAgentEditVO.getRealName());
         mallSaleAgentDO.setIdCard(mallSaleAgentEditVO.getIdCard());
         mallSaleAgentDO.setStatus(mallSaleAgentEditVO.getStatus());
+        mallSaleAgentDO.setPhone(mallSaleAgentEditVO.getPhone());
         // 更新基本信息
         updateMallSaleAgent(mallSaleAgentDO);
-        // 更新佣金信息
-        updateCommissionValue(mallSaleAgentEditVO.getUserNo(), mallSaleAgentEditVO.getCommissionMode(),
-                mallSaleAgentEditVO.getCommissionValue());
     }
 
     @Override

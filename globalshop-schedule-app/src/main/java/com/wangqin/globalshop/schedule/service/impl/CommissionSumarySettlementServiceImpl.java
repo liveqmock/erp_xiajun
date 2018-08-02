@@ -3,9 +3,11 @@ package com.wangqin.globalshop.schedule.service.impl;
 import com.mchange.v2.codegen.CodegenUtils;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.CommissionSumarySettlementDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CommissionSumaryDetailDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CommissionSumarySettlementDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
 import com.wangqin.globalshop.biz1.app.enums.SettlementStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
@@ -36,6 +38,9 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 
 	@Autowired
 	private CommissionSumaryDetailDOMapperExt detailDOMapperExt;
+
+	@Autowired
+	private MallSaleAgentDOMapperExt saleAgentDOMapperExt;
 
 	public List<CommissionSumarySettlementDO> searchByUserNo(String searchByShareId){
 
@@ -69,6 +74,12 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			idList = detailDOMapperExt.selectByShareId(shareUserId);
 		}
 
+		MallSaleAgentDO saleAgentDO = saleAgentDOMapperExt.getByCompanyNoAndUserNo(AppUtil.getLoginUserCompanyNo(),shareUserId);
+
+        if(saleAgentDO == null){
+        	throw new ErpCommonException("agent_empty_error","代理人未找到");
+		}
+
 		if(!EasyUtil.isListEmpty(idList)){
 			CommissionSumarySettlementDO settlementDO = new CommissionSumarySettlementDO();
 			settlementDO.setShareUserId(shareUserId);
@@ -86,6 +97,9 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 			settlementDO.setTotalPrice(salePrice);
 
 			settlementDO.setSettlement(settlement);
+
+			settlementDO.setShareUserName(saleAgentDO.getAgentName());
+
 			settlementDO.init();
 
 			settlementDOMapperExt.insert(settlementDO);
