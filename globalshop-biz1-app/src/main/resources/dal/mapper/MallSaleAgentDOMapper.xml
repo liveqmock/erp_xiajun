@@ -1,47 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallSaleAgentDOMapper">
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    <result column="user_no" jdbcType="VARCHAR" property="userNo" />
-    <result column="parent_agent" jdbcType="VARCHAR" property="parentAgent" />
-    <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="union_id" jdbcType="VARCHAR" property="unionId" />
-    <result column="agent_name" jdbcType="VARCHAR" property="agentName" />
-    <result column="real_name" jdbcType="VARCHAR" property="realName" />
-    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
-    <result column="head_protrait_url" jdbcType="VARCHAR" property="headProtraitUrl" />
-    <result column="gender" jdbcType="INTEGER" property="gender" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="commission_mode" jdbcType="BIGINT" property="commissionMode" />
-    <result column="commission_value" jdbcType="DOUBLE" property="commissionValue" />
-    <result column="status" jdbcType="BIT" property="status" />
-    <result column="join_time" jdbcType="TIMESTAMP" property="joinTime" />
-    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.MallSaleAgentDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="user_no" property="userNo" jdbcType="VARCHAR" />
+    <result column="parent_agent" property="parentAgent" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="union_id" property="unionId" jdbcType="VARCHAR" />
+    <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="head_protrait_url" property="headProtraitUrl" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="commission_mode" property="commissionMode" jdbcType="INTEGER" />
+    <result column="commission_value" property="commissionValue" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, company_no, user_no, parent_agent, open_id, union_id, agent_name, real_name, 
     id_card, head_protrait_url, gender, city, province, country, phone, commission_mode, 
     commission_value, status, join_time, last_login_time, modifier, creator
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from mall_sale_agent
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from mall_sale_agent
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_sale_agent (company_no, user_no, parent_agent, 
@@ -56,217 +56,217 @@
       #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, #{agentName,jdbcType=VARCHAR}, 
       #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{headProtraitUrl,jdbcType=VARCHAR}, 
       #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{country,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{commissionMode,jdbcType=BIGINT}, 
-      #{commissionValue,jdbcType=DOUBLE}, #{status,jdbcType=BIT}, #{joinTime,jdbcType=TIMESTAMP}, 
+      #{country,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{commissionMode,jdbcType=INTEGER}, 
+      #{commissionValue,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, #{joinTime,jdbcType=TIMESTAMP}, 
       #{lastLoginTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into mall_sale_agent
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="companyNo != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
         company_no,
       </if>
-      <if test="userNo != null">
+      <if test="userNo != null" >
         user_no,
       </if>
-      <if test="parentAgent != null">
+      <if test="parentAgent != null" >
         parent_agent,
       </if>
-      <if test="openId != null">
+      <if test="openId != null" >
         open_id,
       </if>
-      <if test="unionId != null">
+      <if test="unionId != null" >
         union_id,
       </if>
-      <if test="agentName != null">
+      <if test="agentName != null" >
         agent_name,
       </if>
-      <if test="realName != null">
+      <if test="realName != null" >
         real_name,
       </if>
-      <if test="idCard != null">
+      <if test="idCard != null" >
         id_card,
       </if>
-      <if test="headProtraitUrl != null">
+      <if test="headProtraitUrl != null" >
         head_protrait_url,
       </if>
-      <if test="gender != null">
+      <if test="gender != null" >
         gender,
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         city,
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         province,
       </if>
-      <if test="country != null">
+      <if test="country != null" >
         country,
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         phone,
       </if>
-      <if test="commissionMode != null">
+      <if test="commissionMode != null" >
         commission_mode,
       </if>
-      <if test="commissionValue != null">
+      <if test="commissionValue != null" >
         commission_value,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
-      <if test="joinTime != null">
+      <if test="joinTime != null" >
         join_time,
       </if>
-      <if test="lastLoginTime != null">
+      <if test="lastLoginTime != null" >
         last_login_time,
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier,
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="companyNo != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="userNo != null">
+      <if test="userNo != null" >
         #{userNo,jdbcType=VARCHAR},
       </if>
-      <if test="parentAgent != null">
+      <if test="parentAgent != null" >
         #{parentAgent,jdbcType=VARCHAR},
       </if>
-      <if test="openId != null">
+      <if test="openId != null" >
         #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="unionId != null">
+      <if test="unionId != null" >
         #{unionId,jdbcType=VARCHAR},
       </if>
-      <if test="agentName != null">
+      <if test="agentName != null" >
         #{agentName,jdbcType=VARCHAR},
       </if>
-      <if test="realName != null">
+      <if test="realName != null" >
         #{realName,jdbcType=VARCHAR},
       </if>
-      <if test="idCard != null">
+      <if test="idCard != null" >
         #{idCard,jdbcType=VARCHAR},
       </if>
-      <if test="headProtraitUrl != null">
+      <if test="headProtraitUrl != null" >
         #{headProtraitUrl,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
+      <if test="gender != null" >
         #{gender,jdbcType=INTEGER},
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         #{city,jdbcType=VARCHAR},
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         #{province,jdbcType=VARCHAR},
       </if>
-      <if test="country != null">
+      <if test="country != null" >
         #{country,jdbcType=VARCHAR},
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="commissionMode != null">
-        #{commissionMode,jdbcType=BIGINT},
+      <if test="commissionMode != null" >
+        #{commissionMode,jdbcType=INTEGER},
       </if>
-      <if test="commissionValue != null">
+      <if test="commissionValue != null" >
         #{commissionValue,jdbcType=DOUBLE},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=BIT},
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
-      <if test="joinTime != null">
+      <if test="joinTime != null" >
         #{joinTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastLoginTime != null">
+      <if test="lastLoginTime != null" >
         #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
     update mall_sale_agent
-    <set>
-      <if test="companyNo != null">
+    <set >
+      <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
       </if>
-      <if test="userNo != null">
+      <if test="userNo != null" >
         user_no = #{userNo,jdbcType=VARCHAR},
       </if>
-      <if test="parentAgent != null">
+      <if test="parentAgent != null" >
         parent_agent = #{parentAgent,jdbcType=VARCHAR},
       </if>
-      <if test="openId != null">
+      <if test="openId != null" >
         open_id = #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="unionId != null">
+      <if test="unionId != null" >
         union_id = #{unionId,jdbcType=VARCHAR},
       </if>
-      <if test="agentName != null">
+      <if test="agentName != null" >
         agent_name = #{agentName,jdbcType=VARCHAR},
       </if>
-      <if test="realName != null">
+      <if test="realName != null" >
         real_name = #{realName,jdbcType=VARCHAR},
       </if>
-      <if test="idCard != null">
+      <if test="idCard != null" >
         id_card = #{idCard,jdbcType=VARCHAR},
       </if>
-      <if test="headProtraitUrl != null">
+      <if test="headProtraitUrl != null" >
         head_protrait_url = #{headProtraitUrl,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
+      <if test="gender != null" >
         gender = #{gender,jdbcType=INTEGER},
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         city = #{city,jdbcType=VARCHAR},
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         province = #{province,jdbcType=VARCHAR},
       </if>
-      <if test="country != null">
+      <if test="country != null" >
         country = #{country,jdbcType=VARCHAR},
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="commissionMode != null">
-        commission_mode = #{commissionMode,jdbcType=BIGINT},
+      <if test="commissionMode != null" >
+        commission_mode = #{commissionMode,jdbcType=INTEGER},
       </if>
-      <if test="commissionValue != null">
+      <if test="commissionValue != null" >
         commission_value = #{commissionValue,jdbcType=DOUBLE},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=BIT},
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="joinTime != null">
+      <if test="joinTime != null" >
         join_time = #{joinTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastLoginTime != null">
+      <if test="lastLoginTime != null" >
         last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="modifier != null">
+      <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
+      <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO">
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO" >
     update mall_sale_agent
     set company_no = #{companyNo,jdbcType=VARCHAR},
       user_no = #{userNo,jdbcType=VARCHAR},
@@ -282,9 +282,9 @@
       province = #{province,jdbcType=VARCHAR},
       country = #{country,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      commission_mode = #{commissionMode,jdbcType=BIGINT},
+      commission_mode = #{commissionMode,jdbcType=INTEGER},
       commission_value = #{commissionValue,jdbcType=DOUBLE},
-      status = #{status,jdbcType=BIT},
+      status = #{status,jdbcType=INTEGER},
       join_time = #{joinTime,jdbcType=TIMESTAMP},
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
