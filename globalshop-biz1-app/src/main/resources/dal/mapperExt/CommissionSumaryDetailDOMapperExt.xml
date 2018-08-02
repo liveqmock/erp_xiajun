@@ -71,7 +71,7 @@
         Group By share_user_id
     </select>
 
-    <select id="sumSettlePageList" resultType="java.util.Map">
+    <select id="sumSettlePageList" resultType="java.util.Map" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.SumaryDetailQueryVO">
         SELECT
             IFNULL(count(detail.id),0) AS orderNum,
             IFNULL(SUM(IFNULL(detail.sale_price,0)),0) AS totalSalePrice,
@@ -80,16 +80,23 @@
 		    IFNULL(agent.parent_agent,'') AS parentAgent,
 		    IF(agent.parent_agent is null,'一级代理','二级代理') AS agentLevel,
 		    IFNULL(agent.agent_name,'') AS agentName,
-		    IFNULL(detail.share_user_id,'') as shareUserId
+		    IFNULL(detail.share_user_id,'') as shareUserId,
+		    SUM(CASE detail.status WHEN 0 THEN detail.settlement ELSE 0 END ) waitSettlement,
+            SUM(CASE detail.status WHEN 1 THEN detail.settlement ELSE 0 END ) canSettlement,
+            SUM(CASE detail.status WHEN 2 THEN detail.settlement ELSE 0 END ) beenSettlement
         FROM
             commission_sumary_detail as detail,
             mall_sale_agent as agent
         WHERE
                 detail.share_user_id = agent.user_no
-            and detail.company_no = #{companyNo}
             and detail.is_del is false
             and agent.is_del is false
-            and detail.status=#{status}
+            <if test="shareUserId != null and shareUserId != '' ">
+                and detail.share_user_id = #{shareUserId}
+            </if>
+            <if test="companyNo != null and companyNo != '' ">
+                and detail.company_no = #{companyNo}
+            </if>
         Group By detail.share_user_id
     </select>
 

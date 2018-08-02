@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/settlement")
 @ResponseBody
 @Controller
-//@Authenticated
+@Authenticated
 public class SettlementController {
 
 	@Autowired
@@ -75,11 +75,7 @@ public class SettlementController {
 	public Object searchPageList(SettlementQueryVO queryVO){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
-
-			//post man测试接口
-			queryVO.setCompanyNo("-1");
-
-			//queryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+			queryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 			List<CommissionSumarySettlementDO> list = settlementService.searchPageList(queryVO);
 			result.buildData(list);
 		} catch (Exception e) {
