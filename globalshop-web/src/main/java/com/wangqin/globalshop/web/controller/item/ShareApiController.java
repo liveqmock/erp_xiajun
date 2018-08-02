@@ -1,26 +1,25 @@
 package com.wangqin.globalshop.web.controller.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.item.app.service.IAppletConfigService;
+import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
+import com.wangqin.globalshop.web.dto.api.ItemShareEntity;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.common.base.BaseDto;
-import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
-import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.service.IAppletConfigService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.web.dto.api.ItemShareEntity;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ShareApiController {
@@ -59,13 +58,20 @@ public class ShareApiController {
 
         //获取商城小程序的appid和screat
         AppletConfigDO appletConfigDO = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, TYPE_OF_MALL_APPLET);
-        String accessTokenParam = ACCESS_TOKENPARAM_PART+appletConfigDO.getAppid()+"&secret="+appletConfigDO.getSecret();
-        System.out.println("config:"+accessTokenParam);
-        //TODO refactor
-        //生成分享
-        String reponse = DimensionCodeUtil.sendGet(ACCESS_TOKENURL, accessTokenParam);
-        JSONObject myJson = JSONObject.fromObject(reponse);
-        String token = (String) myJson.get("access_token");
+        String accessToken = appletConfigDO.getAuthorizerAccessToken();
+        String token;
+        if (StringUtil.isBlank(accessToken)){
+            String accessTokenParam = ACCESS_TOKENPARAM_PART+appletConfigDO.getAppid()+"&secret="+appletConfigDO.getSecret();
+            System.out.println("config:"+accessTokenParam);
+            //TODO refactor
+            //生成分享
+            String reponse = DimensionCodeUtil.sendGet(ACCESS_TOKENURL, accessTokenParam);
+            JSONObject myJson = JSONObject.fromObject(reponse);
+            token = (String) myJson.get("access_token");
+        }  else {
+            token =accessToken;
+        }
+
         String picUrl = itemService.generateItemShareUrl(userId, companyNo, itemCode, "pages/item/detail", token);
 
 
