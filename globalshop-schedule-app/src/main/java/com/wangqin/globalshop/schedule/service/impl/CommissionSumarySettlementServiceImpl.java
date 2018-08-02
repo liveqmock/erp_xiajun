@@ -2,6 +2,7 @@ package com.wangqin.globalshop.schedule.service.impl;
 
 import com.mchange.v2.codegen.CodegenUtils;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SumarySettlementVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.CommissionSumarySettlementDOMapper;
@@ -11,6 +12,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
 import com.wangqin.globalshop.biz1.app.enums.SettlementStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.schedule.service.CommissionSumarySettlementService;
@@ -47,11 +49,18 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 		return settlementDOMapperExt.searchByUserNo(searchByShareId);
 	}
 
-	public void add(CommissionSumarySettlementDO settlementDO){
+	@Transactional(rollbackFor=Exception.class)
+	public void add(SumarySettlementVO settlementVo){
+
+		CommissionSumarySettlementDO settlementDO = new CommissionSumarySettlementDO();
+		BeanUtils.copies(settlementVo,settlementDO);
 
 		settlementDO.setSettlementNo(CodeGenUtil.getSettlementNo());
 		settlementDO.setPayType("offline");
 		settlementDO.init();
+		if(settlementDO.getSettlementTime() != null){
+			settlementDO.setSettlementTime(new Date());
+		}
 		settlementDOMapperExt.insert(settlementDO);
 	}
 
@@ -62,7 +71,7 @@ public class CommissionSumarySettlementServiceImpl implements CommissionSumarySe
 		   return resultList;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public void doSettlement(List<Long> idList, String shareUserId){
 
 		if(EasyUtil.isStringEmpty(shareUserId)){

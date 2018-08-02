@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementDetailVo;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SumaryDetailQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO;
+import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.schedule.service.CommissionSumaryDetailService;
 import com.wangqin.globalshop.schedule.service.SumaryDetailService;
@@ -25,7 +26,7 @@ import java.util.Map;
 @ResponseBody
 @Controller
 @Authenticated
-public class SumaryDetailController{
+public class SumaryDetailController extends BaseController {
 
 	   @Autowired
 	   private SumaryDetailService sumaryDetailService;
@@ -59,12 +60,14 @@ public class SumaryDetailController{
 	 * @return
 	 */
 	@RequestMapping("/sumSettlePageList")
-	public Object sumSettlePageList(Integer status){
+	public Object sumSettlePageList(SumaryDetailQueryVO queryVO){
 		JsonResult<List<Map<String,Object>>> result = new JsonResult<>();
 		try {
-			List<Map<String,Object>> list = detailService.sumSettlePageList(status,AppUtil.getLoginUserCompanyNo());
+			queryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+			List<Map<String,Object>> list = detailService.sumSettlePageList(queryVO);
 			result.buildData(list);
 		} catch (Exception e) {
+			logger.error("",e);
 			return result.buildIsSuccess(false).buildMsg(e.getMessage());
 		}
 		return result.buildIsSuccess(true);

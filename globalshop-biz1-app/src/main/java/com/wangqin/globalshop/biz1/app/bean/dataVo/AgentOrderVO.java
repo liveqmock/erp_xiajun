@@ -7,6 +7,8 @@ public class AgentOrderVO {
 
 	private String subOrderNo;
 	
+	private String skuPic;
+	
 	private String itemName;
 	
 	private String upc;
@@ -31,6 +33,15 @@ public class AgentOrderVO {
 
 	public void setSubOrderNo(String subOrderNo) {
 		this.subOrderNo = subOrderNo;
+	}
+
+	
+	public String getSkuPic() {
+		return skuPic;
+	}
+
+	public void setSkuPic(String skuPic) {
+		this.skuPic = skuPic;
 	}
 
 	public String getItemName() {

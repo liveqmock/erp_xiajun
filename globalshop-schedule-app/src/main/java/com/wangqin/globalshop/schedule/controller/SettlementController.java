@@ -5,12 +5,15 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerStorageDetailVo;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SumarySettlementVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumarySettlementDO;
+import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.schedule.service.CommissionSumarySettlementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +27,15 @@ import java.util.List;
 @RequestMapping("/settlement")
 @ResponseBody
 @Controller
-//@Authenticated
-public class SettlementController {
+@Authenticated
+public class SettlementController extends BaseController {
 
 	@Autowired
 	private CommissionSumarySettlementService settlementService;
 
-//	/**
+
+
+	//	/**
 //	 *
 //	 * @param searchByShareId
 //	 * @return
@@ -55,11 +60,12 @@ public class SettlementController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Object add(CommissionSumarySettlementDO settlementDO){
+	public Object add(SumarySettlementVO settlementDO){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
 			settlementService.add(settlementDO);
 		} catch (Exception e) {
+			logger.error("",e);
 			return result.buildIsSuccess(false).buildMsg(e.getMessage());
 		}
 		return result.buildIsSuccess(true);
@@ -75,14 +81,11 @@ public class SettlementController {
 	public Object searchPageList(SettlementQueryVO queryVO){
 		JsonResult<Object> result = new JsonResult<>();
 		try {
-
-			//post man测试接口
-			queryVO.setCompanyNo("-1");
-
-			//queryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+			queryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 			List<CommissionSumarySettlementDO> list = settlementService.searchPageList(queryVO);
 			result.buildData(list);
 		} catch (Exception e) {
+			logger.error("",e);
 			return result.buildIsSuccess(false).buildMsg(e.getMessage());
 		}
 		return result.buildIsSuccess(true);
@@ -101,6 +104,7 @@ public class SettlementController {
 			List<String> userIdList = BaseDto.fromJson(userIdListStr, new TypeReference<List<String>>(){});
 			settlementService.doSettleList(userIdList);
 		} catch (Exception e) {
+			logger.error("",e);
 			return result.buildIsSuccess(false).buildMsg(e.getMessage());
 		}
 		return result.buildIsSuccess(true);
@@ -118,6 +122,7 @@ public class SettlementController {
 		try {
 			settlementService.doSettleSigle(shareUserId);
 		} catch (Exception e) {
+			logger.error("",e);
 			return result.buildIsSuccess(false).buildMsg(e.getMessage());
 		}
 		return result.buildIsSuccess(true);
