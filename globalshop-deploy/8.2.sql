@@ -2,7 +2,7 @@ ALTER TABLE `item_sku` ADD COLUMN `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' C
 
 ALTER TABLE `item` ADD COLUMN `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率';
 
-
+ALTER TABLE shipping_order ADD logistic_type VARCHAR(45) NULL;
 
 CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
