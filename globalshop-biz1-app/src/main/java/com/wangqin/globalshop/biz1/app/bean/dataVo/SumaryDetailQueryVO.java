@@ -9,8 +9,16 @@ public class SumaryDetailQueryVO extends PageQueryVO{
 
 	private String shareUserId;
 
+	private String agentName;
+
 	private Integer status;
 
+	public String getAgentName() {
+		return agentName;
+	}
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
 	public String getCompanyNo() {
 		return companyNo;
 	}
