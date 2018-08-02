@@ -223,28 +223,28 @@
                 AND T1.logistic_company = #{shippingOrderQueryVO.logisticCompany}
             </if>
             <if test="shippingOrderQueryVO.logisticNo != null">
-                AND T1.logistic_no = #{shippingOrderQueryVO.logisticNo }
+                AND T1.logistic_no = #{shippingOrderQueryVO.logisticNo}
             </if>
             <if test="shippingOrderQueryVO.mallOrders != null">
-                AND T1.mall_orders = #{shippingOrderQueryVO.mallOrders }
+                AND T1.mall_orders = #{shippingOrderQueryVO.mallOrders}
             </if>
             <if test="shippingOrderQueryVO.receiver != null">
-                AND T1.receiver = #{shippingOrderQueryVO.receiver }
+                AND T1.receiver = #{shippingOrderQueryVO.receiver}
             </if>
             <if test="shippingOrderQueryVO.telephone != null">
-                AND T1.telephone = #{shippingOrderQueryVO.telephone }
+                AND T1.telephone = #{shippingOrderQueryVO.telephone}
             </if>
             <if test="shippingOrderQueryVO.shippingNo != null">
-                AND T1.shipping_no = #{shippingOrderQueryVO.shippingNo }
+                AND T1.shipping_no = #{shippingOrderQueryVO.shippingNo}
             </if>
             <if test="shippingOrderQueryVO.startOrderTime != null">
-                AND T1.gmt_create &gt;= #{shippingOrderQueryVO.startOrderTime }
+                AND T1.gmt_create &gt;= #{shippingOrderQueryVO.startOrderTime}
             </if>
             <if test="shippingOrderQueryVO.endOrderTime != null">
-                AND T1.gmt_create &lt;= #{shippingOrderQueryVO.endOrderTime }
+                AND T1.gmt_create &lt;= #{shippingOrderQueryVO.endOrderTime}
             </if>
             <if test="shippingOrderQueryVO.type != null">
-                AND T1.type = #{shippingOrderQueryVO.type }
+                AND T1.type = #{shippingOrderQueryVO.type}
             </if>
             AND T1.company_no = #{shippingOrderQueryVO.companyNo}
             ORDER BY T1.gmt_create DESC
@@ -265,28 +265,28 @@
                 AND T1.logistic_company = #{shippingOrderQueryVO.logisticCompany}
             </if>
             <if test="shippingOrderQueryVO.logisticNo != null">
-                AND T1.logistic_no = #{shippingOrderQueryVO.logisticNo }
+                AND T1.logistic_no = #{shippingOrderQueryVO.logisticNo}
             </if>
             <if test="shippingOrderQueryVO.mallOrders != null">
-                AND T1.mall_orders = #{shippingOrderQueryVO.mallOrders }
+                AND T1.mall_orders = #{shippingOrderQueryVO.mallOrders}
             </if>
             <if test="shippingOrderQueryVO.receiver != null">
-                AND T1.receiver = #{shippingOrderQueryVO.receiver }
+                AND T1.receiver = #{shippingOrderQueryVO.receiver}
             </if>
             <if test="shippingOrderQueryVO.telephone != null">
-                AND T1.telephone = #{shippingOrderQueryVO.telephone }
+                AND T1.telephone = #{shippingOrderQueryVO.telephone}
             </if>
             <if test="shippingOrderQueryVO.shippingNo != null">
-                AND T1.shipping_no = #{shippingOrderQueryVO.shippingNo }
+                AND T1.shipping_no = #{shippingOrderQueryVO.shippingNo}
             </if>
             <if test="shippingOrderQueryVO.startOrderTime != null">
-                AND T1.gmt_create &gt;= #{shippingOrderQueryVO.startOrderTime }
+                AND T1.gmt_create &gt;= #{shippingOrderQueryVO.startOrderTime}
             </if>
             <if test="shippingOrderQueryVO.endOrderTime != null">
-                AND T1.gmt_create &lt;= #{shippingOrderQueryVO.endOrderTime }
+                AND T1.gmt_create &lt;= #{shippingOrderQueryVO.endOrderTime}
             </if>
             <if test="shippingOrderQueryVO.type != null">
-                AND T1.type = #{shippingOrderQueryVO.type }
+                AND T1.type = #{shippingOrderQueryVO.type}
             </if>
             AND T1.company_no = #{shippingOrderQueryVO.companyNo}
         </where>
