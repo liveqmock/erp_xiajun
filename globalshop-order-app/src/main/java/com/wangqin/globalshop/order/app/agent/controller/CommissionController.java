@@ -81,7 +81,7 @@ public class CommissionController {
 	    		}
 	    		agentCommissionVO.setOrderInfo(orderInfoList);
 	    	}
-	    	result.buildData(agentCommissionVO).buildMsg("查找成功");
+	    	result.buildData(agentCommissionVO).buildMsg("查找成功").buildIsSuccess(true);
 	    	return result;	    		    	
 	    }
 	    
