@@ -73,10 +73,7 @@
         <include refid="commonSelectSection"/>
 
         ORDER BY T.settlement_time desc
-
-        <!--<if test=" pageIndex != null and pageIndex != '' and pageSize != null and pageSize != '' ">-->
-            <!--limit (#{pageIndex}-1)*#{pageSize},#{pageSize}-->
-        <!--</if>-->
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
 
 </mapper>

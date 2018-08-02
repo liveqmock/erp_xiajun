@@ -94,10 +94,14 @@
             <if test="shareUserId != null and shareUserId != '' ">
                 and detail.share_user_id = #{shareUserId}
             </if>
+            <if test="agentName != null and agentName != '' ">
+                and agent.agent_name = #{agentName}
+            </if>
             <if test="companyNo != null and companyNo != '' ">
                 and detail.company_no = #{companyNo}
             </if>
         Group By detail.share_user_id
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
 
 
