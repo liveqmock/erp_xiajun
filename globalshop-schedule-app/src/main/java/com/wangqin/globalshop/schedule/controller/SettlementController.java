@@ -24,14 +24,14 @@ import java.util.List;
 @RequestMapping("/settlement")
 @ResponseBody
 @Controller
-@Authenticated
+//@Authenticated
 public class SettlementController {
 
 	@Autowired
 	private CommissionSumarySettlementService settlementService;
 
 //	/**
-//	 * 暂时不开放
+//	 *
 //	 * @param searchByShareId
 //	 * @return
 //	 */
@@ -47,6 +47,8 @@ public class SettlementController {
 //		return result.buildIsSuccess(true);
 //
 //	}
+
+
 	/**
 	 * 新增线下结算记录
 	 * @param settlementDO
@@ -64,23 +66,28 @@ public class SettlementController {
 
 	}
 
-//	/**
-//	 * 结算选中的明细
-//	 * @param
-//	 * @return
-//	 */
-//	@RequestMapping("/do")
-//	public Object doSettle(String idListStr,String shareUserId){
-//		JsonResult<Object> result = new JsonResult<>();
-//		try {
-//			List<Long> idList = BaseDto.fromJson(idListStr,new TypeReference<List<Long>>(){});
-//			settlementService.doSettlement(idList,shareUserId);
-//		} catch (Exception e) {
-//			return result.buildIsSuccess(false).buildMsg(e.getMessage());
-//		}
-//		return result.buildIsSuccess(true);
-//
-//	}
+	/**
+	 * 根据关键字，结算单号，结算userid查询结算记录
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/searchPageList")
+	public Object searchPageList(SettlementQueryVO queryVO){
+		JsonResult<Object> result = new JsonResult<>();
+		try {
+
+			//post man测试接口
+			queryVO.setCompanyNo("-1");
+
+			//queryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+			List<CommissionSumarySettlementDO> list = settlementService.searchPageList(queryVO);
+			result.buildData(list);
+		} catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg(e.getMessage());
+		}
+		return result.buildIsSuccess(true);
+
+	}
 
 	/**
 	 * 批量代理人 结算
