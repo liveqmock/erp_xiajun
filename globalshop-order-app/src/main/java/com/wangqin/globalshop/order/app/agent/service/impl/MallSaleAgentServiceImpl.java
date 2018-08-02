@@ -57,9 +57,6 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         mallSaleAgentDO.setStatus(mallSaleAgentEditVO.getStatus());
         // 更新基本信息
         updateMallSaleAgent(mallSaleAgentDO);
-        // 更新佣金信息
-        updateCommissionValue(mallSaleAgentEditVO.getUserNo(), mallSaleAgentEditVO.getCommissionMode(),
-                mallSaleAgentEditVO.getCommissionValue());
     }
 
     @Override
