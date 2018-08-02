@@ -73,19 +73,19 @@
 
     <select id="sumSettlePageList" resultType="java.util.Map">
         SELECT
-        IFNULL(count(detail.id),0) AS orderNum,
-        IFNULL(SUM(IFNULL(detail.sale_price,0)),0) AS totalSalePrice,
-        IFNULL(SUM(IFNULL(detail.settlement,0)),0) AS totalCommission,
-        IFNULL(agent.head_protrait_url,'') AS headProtraitUrl,
-		IFNULL(agent.parent_agent,'') AS parentAgent,
-		IF(agent.parent_agent is null,'一级代理','二级代理') AS agentLevel,
-		IFNULL(agent.agent_name,'') AS agentName,
-		IFNULL(detail.share_user_id,'') as shareUserId
+            IFNULL(count(detail.id),0) AS orderNum,
+            IFNULL(SUM(IFNULL(detail.sale_price,0)),0) AS totalSalePrice,
+            IFNULL(SUM(IFNULL(detail.settlement,0)),0) AS totalCommission,
+            IFNULL(agent.head_protrait_url,'') AS headProtraitUrl,
+		    IFNULL(agent.parent_agent,'') AS parentAgent,
+		    IF(agent.parent_agent is null,'一级代理','二级代理') AS agentLevel,
+		    IFNULL(agent.agent_name,'') AS agentName,
+		    IFNULL(detail.share_user_id,'') as shareUserId
         FROM
             commission_sumary_detail as detail,
             mall_sale_agent as agent
         WHERE
-            detail.share_user_id = agent.user_no
+                detail.share_user_id = agent.user_no
             and detail.company_no = #{companyNo}
             and detail.is_del is false
             and agent.is_del is false
