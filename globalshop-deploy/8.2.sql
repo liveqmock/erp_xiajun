@@ -65,7 +65,7 @@ CREATE TABLE `mall_sale_agent` (
   `country` varchar(64) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `commission_mode` int(1) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
-  `commission_value` double(6,2) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
+  `commission_value` double(6,4) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
   `status` int(1) DEFAULT 1 COMMENT '状态，1正常，0已解除',
   `join_time` datetime DEFAULT NULL COMMENT '加入时间',
   `last_login_time` datetime DEFAULT NULL,
@@ -163,4 +163,12 @@ CREATE TABLE `haidb2new`.`monitor_record`(
   `gmt_modify` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB CHARSET=utf8;
+
+
+ALTER TABLE auth_user ADD  UNIQUE KEY `login_name` (`login_name`);
+
+ALTER TABLE mall_sub_order ADD  UNIQUE KEY `SUBORDERNO` (`sub_order_no`);
+
+ALTER TABLE mall_sub_order DROP KEY `OUTERORDERID`;
+
 

@@ -78,7 +78,7 @@ CREATE TABLE `mall_sale_agent` (
   `country` varchar(64) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `commission_mode` int(1) DEFAULT '0' COMMENT '佣金模式，0为按百分比，1为按金额',
-  `commission_value` double(6,2) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
+  `commission_value` double(6,4) DEFAULT '0.0' COMMENT '佣金数字值，百分比模式如5%填0.05，金额模式则为金额',
   `status` int(1) DEFAULT 1 COMMENT '状态，1正常，0已解除',
   `join_time` datetime DEFAULT NULL COMMENT '加入时间',
   `last_login_time` datetime DEFAULT NULL,
@@ -253,7 +253,7 @@ CREATE TABLE `mall_order` (
   `order_no` varchar(64) NOT NULL COMMENT '订单编号',
   `company_no` varchar(64) NOT NULL COMMENT '公司编号',
   `channel_no` varchar(64) DEFAULT '0' COMMENT '渠道编号',
-  `channel_name` varchar(64) DEFAULT '微信小程序' COMMENT '销售名称',
+  `channel_name` varchar(64) DEFAULT '管理平台' COMMENT '销售名称',
   `channel_order_no` varchar(64) DEFAULT NULL COMMENT '第三方平台订单编号',
   `channel_customer_no` varchar(64) DEFAULT NULL,
   `channel_type` varchar(32) DEFAULT '0',
@@ -787,7 +787,8 @@ CREATE TABLE `mall_sub_order` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `OUTERORDERID` (`channel_order_no`)
+  UNIQUE KEY `SUBORDERNO` (`sub_order_no`),
+  INDEX `OUTERORDERID` (`channel_order_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8 COMMENT='商城子订单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2292,6 +2293,7 @@ CREATE TABLE `auth_user` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `login_name` (`login_name`),
   UNIQUE KEY `user_no` (`user_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='用户';
 /*!40101 SET character_set_client = @saved_cs_client */;
