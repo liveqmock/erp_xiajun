@@ -50,15 +50,12 @@
             <if test="shippingNo!=null and shippingNo!=''">
                 shipping_no = #{shippingNo}
             </if>
-            <!--<if test="logisticNo!=null and logisticNo!=''">-->
-                <!--and   logistic_no = #{logisticNo}-->
-            <!--</if>-->
+            <if test="logisticNo!=null and logisticNo!=''">
+                and   logistic_no = #{logisticNo}
+            </if>
             <if test="logisticCompany!=null and logisticCompany!=''">
                 and   logistic_company = #{logisticCompany}
             </if>
-            <!--<if test="erpNo!=null and erpNo!=''">-->
-                <!--and   erp_no LIKE concat('%',#{erpNo},'%')-->
-            <!--</if>-->
             <if test="receiver!=null and receiver!=''">
                 and   receiver = #{receiver}
             </if>
