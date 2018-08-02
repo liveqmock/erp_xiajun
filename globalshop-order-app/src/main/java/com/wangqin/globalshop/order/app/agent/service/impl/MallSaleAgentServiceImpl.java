@@ -60,7 +60,7 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     }
 
     @Override
-    public void updateCommissionValue(String userNo, Long commissionMode, Double commissionValue) {
+    public void updateCommissionValue(String userNo, Integer commissionMode, Double commissionValue) {
         if (StringUtil.isBlank(userNo) || commissionMode == null || commissionValue == null) {
             throw new BizCommonException("数据不完整！");
         }

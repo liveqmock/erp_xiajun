@@ -121,7 +121,7 @@ public class MallSaleAgentController {
      * @return
      */
     @PostMapping("/updateCommissionValue")
-    public Object updateCommissionValue(String userNo, Long commissionMode, Double commissionValue) {
+    public Object updateCommissionValue(String userNo, Integer commissionMode, Double commissionValue) {
         JsonResult result = new JsonResult();
 
         try {

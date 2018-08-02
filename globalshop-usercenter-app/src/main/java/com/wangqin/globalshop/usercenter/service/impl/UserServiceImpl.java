@@ -432,7 +432,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         proxy.setCity(wxUser.getCity());
         proxy.setProvince(wxUser.getProvince());
         proxy.setCountry(wxUser.getCountry());
-        proxy.setStatus(Boolean.FALSE);
+        proxy.setStatus(1);
         proxy.setJoinTime(new Date());
 
         mallSaleAgentDOMapper.insertSelective(proxy);

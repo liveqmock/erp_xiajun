@@ -40,7 +40,7 @@ public interface MallSaleAgentService {
      * @param commissionMode
      * @param commissionValue
      */
-    void updateCommissionValue(String userNo, Long commissionMode, Double commissionValue);
+    void updateCommissionValue(String userNo, Integer commissionMode, Double commissionValue);
 
     /**
      * 通过 companyNo 和 userNo 获得唯一代理
