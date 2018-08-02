@@ -3,6 +3,7 @@ package com.wangqin.globalshop.schedule.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SumaryDetailQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public Map<String,Object> sumOrderNumSaleCommissionByUserNo(Integer status,Strin
 	return mapperExt.sumOrderNumSaleCommissionByUserNo(status, userNo);
 }
 
-	public List<Map<String,Object>> sumSettlePageList(Integer status, String companyNo){
-		return mapperExt.sumSettlePageList(status, companyNo);
+	public List<Map<String,Object>> sumSettlePageList(SumaryDetailQueryVO queryVO){
+		return mapperExt.sumSettlePageList(queryVO);
 	}
 }
