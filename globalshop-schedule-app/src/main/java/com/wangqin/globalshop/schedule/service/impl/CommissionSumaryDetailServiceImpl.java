@@ -19,6 +19,7 @@ public Map<String,Object> sumOrderNumSaleCommissionByUserNo(Integer status,Strin
 }
 
 	public List<Map<String,Object>> sumSettlePageList(SumaryDetailQueryVO queryVO){
+		queryVO.initFirstStart();
 		return mapperExt.sumSettlePageList(queryVO);
 	}
 }
