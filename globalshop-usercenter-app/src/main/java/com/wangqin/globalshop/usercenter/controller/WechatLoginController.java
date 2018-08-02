@@ -349,7 +349,8 @@ public class WechatLoginController {
      * @return
      */
     @RequestMapping("/getProxyHtml")
-    public void getProxyHtml(HttpServletResponse response, String parentAgent) {
+    public void getProxyHtml(HttpServletResponse response) {
+        String parentAgent = "";
 
         String baseUrl = sysurl + proxy_redirect;
         parentAgent = StringUtil.isBlank(parentAgent)?"":parentAgent;
