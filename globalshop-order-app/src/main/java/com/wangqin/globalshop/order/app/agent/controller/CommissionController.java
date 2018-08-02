@@ -32,7 +32,7 @@ public class CommissionController {
 	    private IOrderCommissionSumaryDetailService sumaryDetailService;
 	  
 	  /**
-	     * 查询代理的订单列表
+	     * 查询代理的订单列表s
 	     *
 	     * @param mallSaleAgentDO
 	     * @return
@@ -61,7 +61,8 @@ public class CommissionController {
 	    	agentCommissionVO.setUserNo(agentNo);
 	    	agentCommissionVO.setProfile(agentDO.getHeadProtraitUrl());
 	    	agentCommissionVO.setName(agentDO.getAgentName());
-	    	agentCommissionVO.setCommission(sumaryDetailService.sumSettlementAbleByUserNo(agentNo));
+	    	//计算佣金，根据传来的状态计算（可计算，待结算，已结算）
+	    	agentCommissionVO.setCommission(sumaryDetailService.sumSettlementAbleByUserNo(agentNo,qv.getStatus()));
 	    	if(null == agentDO.getParentAgent()) {
 	    		agentCommissionVO.setAgentLevel("一级代理");
 	    	} else {

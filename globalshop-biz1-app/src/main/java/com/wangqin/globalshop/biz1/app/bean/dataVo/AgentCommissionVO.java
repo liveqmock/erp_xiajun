@@ -18,6 +18,8 @@ private String profile;
 	
 	private String agentLevel;
 	
+	private Integer status;//可结算，待结算，已结算
+	
 	private List<AgentOrderVO> orderInfo;
 
 	public String getUserNo() {
@@ -61,6 +63,15 @@ private String profile;
 
 	public void setAgentLevel(String agentLevel) {
 		this.agentLevel = agentLevel;
+	}
+
+	
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 	public List<AgentOrderVO> getOrderInfo() {

@@ -95,11 +95,12 @@
 
 
     
-    <!--  根据user_no查询子订单编号list-->
+    <!--  根据user_no查询子订单编号list,@author:xiajun-->
      <select id="querySubOrderNoListByUserNo" resultType="java.lang.String" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.CommissionQueryVO">
         SELECT sub_order_no
         FROM commission_sumary_detail
         WHERE share_user_id = #{userNo}
+        AND status=#{status}
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]> 
     </select>
 
