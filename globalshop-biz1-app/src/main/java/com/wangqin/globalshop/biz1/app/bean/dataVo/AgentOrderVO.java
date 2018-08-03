@@ -21,7 +21,7 @@ public class AgentOrderVO {
 	
 	private String receiverInfo;
 
-	private String orderStatus;
+	private Integer orderStatus;
 	
 	private Date orderTime;
 	
@@ -96,13 +96,15 @@ public class AgentOrderVO {
 		this.receiverInfo = receiverInfo;
 	}
 
-	public String getOrderStatus() {
+	
+	public Integer getOrderStatus() {
 		return orderStatus;
 	}
 
-	public void setOrderStatus(String orderStatus) {
+	public void setOrderStatus(Integer orderStatus) {
 		this.orderStatus = orderStatus;
 	}
+
 	public Date getOrderTime() {
 		return orderTime;
 	}
