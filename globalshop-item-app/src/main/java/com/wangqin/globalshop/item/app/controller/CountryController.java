@@ -32,13 +32,13 @@ public class CountryController {
 	public Object add(CountryDO country) {
 		JsonResult<CountryDO> result = new JsonResult<>();
 		CountryDO countryDO=countryService.queryCountrySelective(country);
-		if( countryDO!= null) {
+		if(null != countryDO) {
 			//已有国家但没显示的，改成可显示
-//			return result.buildMsg("添加失败，该国已存在").buildIsSuccess(false);
 			countryDO.setIsDel(false);
 			countryService.undeleteCountry(countryDO);
 			return result.buildIsSuccess(true).buildMsg("添加成功");
 		}
+		//库里面不存在的国家，直接新增
 		countryService.insertCountrySelective(country);
 		result.buildData(countryService.queryCountrySelective(country));
 		return result.buildIsSuccess(true).buildMsg("添加成功");
