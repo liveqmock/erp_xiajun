@@ -415,8 +415,7 @@
         T2.receiver_district  AS receiverDistrict,
         T2.receiver_address   AS addressDetail,
         T2.telephone          AS telephone,
-        T2.id_card            AS idCard,
-        T2.sku_code           AS skuCode
+        T2.id_card            AS idCard
     </sql>
     <!-- 根据指定条件分页查询订单列表 -->
     <select id="listMallOrders" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderItemVO">
