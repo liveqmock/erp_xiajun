@@ -13,13 +13,15 @@
         <result column="is_sync" property="isSync" jdbcType="INTEGER" />
         <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
         <result column="order_date" property="orderDate" jdbcType="TIMESTAMP" />
+        <result column="receive_time" property="receiveTime" jdbcType="VARCHAR" />
+        <result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
         <result column="share_user_id" property="shareUserId" jdbcType="VARCHAR" />
         <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
     id, company_no, order_no, sub_order_no, commision, status, is_sync, order_time, order_date,
-    share_user_id, creator, modifier
+    receive_time, receive_date, share_user_id, creator, modifier
   </sql>
 
    <!--更新分佣申请表的状态为已签收-->

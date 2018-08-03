@@ -65,7 +65,8 @@ public class CommissionSumaryJob {
 	 * 2、计算总佣金
 	 * 3、生成 佣金记录，默认状态待结算
 	 */
-	@Scheduled(cron = "0 0 1,3,5 * * ? ")
+	//@Scheduled(cron = "0 0 1,3,5 * * ? ")
+	@Scheduled(cron = "0/30 * * * * ? ")
 	public void createCommissionSumary(){
 		List<MallCommisionApplyDO> applyDOList =  applyService.selectByStatusAndNotSync(MallCommisionApplyStatus.RECEIVE.getCode());
 		if(!EasyUtil.isListEmpty(applyDOList)){
@@ -113,7 +114,7 @@ public class CommissionSumaryJob {
 			sumaryDO.setUpc(subOrderDO.getUpc());
 			sumaryDO.setSkuPic(subOrderDO.getSkuPic());
 			sumaryDO.setStatus(SettlementStatus.wait.getCode());
-			sumaryDO.setSalePrice(BigDecimal.valueOf(subOrderDO.getSalePrice()).setScale(2,BigDecimal.ROUND_HALF_UP));
+			sumaryDO.setSalePrice(BigDecimal.valueOf(subOrderDO.getSalePrice()*subOrderDO.getQuantity()).setScale(2,BigDecimal.ROUND_HALF_UP));
 
 			sumaryDO.setReceiveDate(applyDO.getReceiveDate());
 
@@ -212,8 +213,8 @@ public class CommissionSumaryJob {
 	/**
 	 *  校验状态，检验是否已签收15天，是则可结算
 	 */
-	@Scheduled(cron = "0 0 1,3,5 * * ? ")
-	//@Scheduled(cron = "0/30 * * * * ? ")
+	@Scheduled(cron = "0/30 * * * * ? ")
+	//@Scheduled(cron = "0 0 1,3,5 * * ? ")
 	public void checkStatusCommissionSumary(){
 		List<CommissionSumaryDO> sumaryDOList = sumaryService.selectMorethan15Day();//待结算状态， 且结算时间超过15天的
 		if(!EasyUtil.isListEmpty(sumaryDOList)){
@@ -243,7 +244,7 @@ public class CommissionSumaryJob {
 
 		if(subOrderDO == null){
 			sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
-		}else if(OrderStatus.SUCCESS.getCode() == subOrderDO.getStatus() || OrderStatus.COMFIRM.getCode() == subOrderDO.getStatus() ){
+		}else if(subOrderDO.getStatus().equals(OrderStatus.SUCCESS.getCode()) || subOrderDO.getStatus().equals(OrderStatus.COMFIRM.getCode()) ){
 			sumaryDO.setStatus(SettlementStatus.can.getCode());
 		}else {
 			//既不是已签收，也不是已完成，则关闭

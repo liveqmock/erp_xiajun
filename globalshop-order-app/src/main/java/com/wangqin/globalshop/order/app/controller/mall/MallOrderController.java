@@ -3,17 +3,19 @@ package com.wangqin.globalshop.order.app.controller.mall;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channel.service.item.IItemSkuService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
+import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
@@ -38,9 +41,9 @@ import java.util.*;
 /**
  * @author zhulu
  */
-@Controller
-@RequestMapping("/outerOrder")
 @Authenticated
+@RestController
+@RequestMapping("/outerOrder")
 public class MallOrderController {
 
     @Autowired
@@ -59,21 +62,38 @@ public class MallOrderController {
     private IItemSkuScaleService itemSkuScaleService;
 
     /**
-     * 主页
+     * 根据条件分页查询订单列表
+     *
+     * @param mallOrderQueryVO
+     * @param pageQueryParam
+     * @return
      */
     @RequestMapping("/index")
-    @ResponseBody
-    public Object index(MallOrderVO vo) {
-        JsonResult<List<MallOrderVO>> result = new JsonResult<>();
-        List<MallOrderVO> outerOrder = mallOrderService.list(vo);
-        return result.buildData(outerOrder).buildIsSuccess(true);
+    public Object queryMallOrders(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam) {
+        JsonPageResult<List<MallOrderItemVO>> result = new JsonPageResult<>();
+
+        try {
+            List<MallOrderItemVO> mallOrderItemVOList = mallOrderService.listMallOrders(mallOrderQueryVO, pageQueryParam);
+            int totalCount = mallOrderService.countMallOrders(mallOrderQueryVO);
+            result.buildData(mallOrderItemVOList)
+                    .buildTotalCount(totalCount)
+                    .buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getErrorMsg())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("查询异常！")
+                    .buildIsSuccess(false);
+        }
+
+        return result;
     }
 
     /**
      * 增加订单
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ResponseBody
     public Object add(MallOrderVO mallOrderVO) {
         JsonResult<List<MallOrderVO>> result = new JsonResult<>();
         if (mallOrderVO.getId() == null) {
@@ -104,7 +124,6 @@ public class MallOrderController {
      * @return
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody
     public Object update(MallOrderVO mallOrderVO) {
         JsonResult<String> result = new JsonResult<>();
         try {
@@ -122,7 +141,6 @@ public class MallOrderController {
      * 查询单个订单
      */
     @RequestMapping("/query")
-    @ResponseBody
     public Object query(String orderNo) {
         JsonResult<MallOrderDO> result = new JsonResult<>();
         if (orderNo == null) {
@@ -141,7 +159,6 @@ public class MallOrderController {
      * @return
      */
     @RequestMapping(value = "/queryOuterOrderList", method = RequestMethod.POST)
-    @ResponseBody
     public Object queryOuterOrderList(MallOrderVO mallOrderVO) {
 //        if (mallOrderVO.getStatus() != null && mallOrderVO.getStatus() == 10) {//10代表查询全部订单
 //            mallOrderVO.setStatus(null);
@@ -178,7 +195,6 @@ public class MallOrderController {
      * 删除单个订单
      */
     @RequestMapping("/delete")
-    @ResponseBody
     public Object delete(String orderNo) {
         JsonResult<String> result = new JsonResult<>();
         try {
@@ -200,7 +216,6 @@ public class MallOrderController {
      * 批量关闭订单
      */
     @RequestMapping("/close")
-    @ResponseBody
     public Object close(String orderIds) {
         JsonResult result = new JsonResult();
         List<String> errorMsg = Lists.newArrayList();
@@ -259,7 +274,6 @@ public class MallOrderController {
      * 查询子订单备货信息
      */
     @RequestMapping("/erpStockup")
-    @ResponseBody
     public Object erpStockup(String orderNo) {
         JsonResult<List<MallSubOrderDO>> result = new JsonResult<>();
         try {
@@ -297,14 +311,12 @@ public class MallOrderController {
 
     //手动确认主订单
     @RequestMapping("/reviewOuterOrder")
-    @ResponseBody
     public void reviewOuterOrder(String orderNo) {
         mallOrderService.review(orderNo);
     }
 
     //主订单导出
     @RequestMapping(value = "/OuterOrderExportExcel")
-    @ResponseBody
     public ResponseEntity<byte[]> OuterOrderExportExcel(MallOrderVO mallOrderVO) throws Exception {//
         if (mallOrderVO.getStartGmtCreate() == null || mallOrderVO.getEndGmtCreate() == null) {
             throw new ErpCommonException("必须选择创建时间段");
@@ -375,7 +387,6 @@ public class MallOrderController {
 
     //微信录单确认
     @RequestMapping("/outerOrderReview")
-    @ResponseBody
     public Object outerOrderReview() {
         List<MallOrderDO> outerOrderList = mallOrderService.selectByStatus((byte) -2);
         if (outerOrderList.size() > 0) {

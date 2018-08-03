@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,8 +30,8 @@ public class WechatTranspondController {
     }
 
     @RequestMapping("/test/authorized")
-    public void authorizedTest(String code,String state,HttpServletResponse response) {
-        String trueUrl = testUrl + "/#/permission/test?code=" + code+"&state="+state;
+    public void authorizedTest(String code, String state, HttpServletResponse response) {
+        String trueUrl = testUrl + "/#/permission/test?code=" + code + "&state=" + state;
         try {
             response.sendRedirect(trueUrl);
         } catch (IOException e) {
@@ -49,10 +48,29 @@ public class WechatTranspondController {
             e.printStackTrace();
         }
     }
+    @RequestMapping("/test/proxy")
+    public void testProxy(String code, String state, HttpServletResponse response) {
+        String trueUrl = testUrl + "/#/Order/AgentTest?code=" + code + "&state=" + state;
+        try {
+            response.sendRedirect(trueUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("/dev/proxy")
+    public void devProxy(String code,String state, HttpServletResponse response) {
+        String trueUrl = devUrl + "/#/Order/AgentTest?code=" + code + "&state=" + state;
+        try {
+            response.sendRedirect(trueUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @RequestMapping("/dev/authorized")
-    public void authorizedDev(String code,String state,HttpServletResponse response) {
-        String trueUrl = devUrl + "/#/permission/test?code=" + code+"&state="+state;
+    public void authorizedDev(String code, String state, HttpServletResponse response) {
+        String trueUrl = devUrl + "/#/permission/test?code=" + code + "&state=" + state;
         try {
             response.sendRedirect(trueUrl);
         } catch (IOException e) {
@@ -61,20 +79,22 @@ public class WechatTranspondController {
     }
 
 
-    @RequestMapping("/devGetCode/{url}")
-    public void dev(@PathVariable String url, String code, HttpServletResponse response) {
-        String trueUrl = devUrl +url+ "?code=" + code;
+    @RequestMapping("/devGetCode")
+    public void dev(String trueUrl, String code, HttpServletResponse response) {
+        trueUrl = trueUrl.replace("$", "/");
+        String url = devUrl + "#" + trueUrl + "?code=" + code;
         try {
-            response.sendRedirect(trueUrl);
+            response.sendRedirect(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    @RequestMapping("/testGetCode/{url}")
-    public void test(@PathVariable String url, String code, HttpServletResponse response) {
-        String trueUrl = testUrl +url+ "?code=" + code;
+
+    @RequestMapping("/testGetCode")
+    public void test(String trueUrl, String code, HttpServletResponse response) {
+        String url = testUrl + "#" + trueUrl + "?code=" + code;
         try {
-            response.sendRedirect(trueUrl);
+            response.sendRedirect(url);
         } catch (IOException e) {
             e.printStackTrace();
         }

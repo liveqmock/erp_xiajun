@@ -77,166 +77,8 @@
         pay_type, order_time, status, memo, id_card, idcard_pic_front, idcard_pic_reverse,
         source, freight, freight_agent, gmt_modify, gmt_create, is_del, modifier, creator
     </sql>
-    <select id="queryErpOrdersCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderQueryVO">
-        SELECT
-        count(1)
-        FROM
-        mall_sub_order T1
-        LEFT JOIN mall_order T2 ON T1.order_no = T2.id
-        <where>
-            <if test="status != null">
-                T1.status = #{status}
-            </if>
-            <if test="stockStatus != null">
-                and T1.stock_status = #{stockStatus}
-            </if>
-            <if test="outerOrderId != null ">
-                and T1.outer_order_id = #{outerOrderId}
-            </if>
-            <if test="targetNo!=null and targetNo!=''">
-                and T1.target_no = #{targetNo}
-            </if>
-            <if test="orderNo!=null and orderNo!=''">
-                and T1.order_no LIKE concat('%',#{orderNo},'%')
-            </if>
-            <if test="erpNo!=null and erpNo!=''">
-                and T1.erp_no LIKE concat('%',#{erpNo},'%')
-            </if>
-            <if test="upc!=null and upc!=''">
-                and T1.upc = #{upc}
-            </if>
-            <if test="skuCode!=null and skuCode!=''">
-                and T1.sku_code = #{skuCode}
-            </if>
-            <if test="openId!=null and openId!='' and salesId==null">
-                and T1.open_id = #{openId}
-            </if>
-            <if test="itemName!=null and itemName!=''">
-                and T1.item_name LIKE concat('%',#{itemName},'%')
-            </if>
-            <if test="receiver!=null and receiver!=''">
-                and T1.receiver LIKE concat('%',#{receiver},'%')
-            </if>
-            <if test="telephone!=null and telephone!=''">
-                and T1.telephone = #{telephone}
-            </if>
-            <if test="salesName!=null and salesName!=''">
-                and T1.sales_name = #{salesName}
-            </if>
-            <if test="salesId!=null">
-                <if test="openId == null">
-                    and T2.sales_id = #{salesId}
-                </if>
-                <if test="openId != null">
-                    and (T2.sales_id = #{salesId} || T2.open_id=#{openId})
-                </if>
-            </if>
-            <if test="warehouseId!=null and warehouseId!=''">
-                and T1.warehouse_id = #{warehouseId}
-            </if>
-            <if test="logisticType!=null and logisticType!=''">
-                and T1.logistic_type = #{logisticType}
-            </if>
-            <if test="closeReason!=null and closeReason!=''">
-                and T1.close_reason = #{closeReason}
-            </if>
 
-            <if test=" startGmtCreate!= null ">
-                and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
-            </if>
-            <if test=" endGmtCreate != null ">
-                and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
-            </if>
-            <if test="companyId != null">
-                and T1.company_id = #{companyId}
-            </if>
-        </where>
-    </select>
 
-    <select id="queryErpOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO"
-            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderQueryVO">
-        SELECT
-        <include refid="Base_Column_List"/>,T2.logistic_no AS logisticNo,T2.logistic_company AS logisticCompany
-        FROM
-        `mall_order` T1
-        LEFT JOIN `shipping_order` T2 ON T1.shipping_order_no=T2.id
-        <where>
-            <if test="status != null">
-                T1.status = #{status}
-            </if>
-            <if test="stockStatus != null">
-                and T1.stock_status = #{stockStatus}
-            </if>
-            <if test="outerOrderId != null ">
-                and T1.outer_order_id = #{outerOrderId}
-            </if>
-            <if test="targetNo!=null and targetNo!=''">
-                and T1.target_no = #{targetNo}
-            </if>
-            <if test="orderNo!=null and orderNo!=''">
-                and T1.order_no LIKE concat('%',#{orderNo},'%')
-            </if>
-            <if test="erpNo!=null and erpNo!=''">
-                and T1.erp_no LIKE concat('%',#{erpNo},'%')
-            </if>
-            <if test="upc!=null and upc!=''">
-                and T1.upc = #{upc}
-            </if>
-            <if test="skuCode!=null and skuCode!=''">
-                and T1.sku_code = #{skuCode}
-            </if>
-            <if test="openId!=null and openId!='' and salesId==null">
-                and T1.open_id = #{openId}
-            </if>
-            <if test="itemName!=null and itemName!=''">
-                and T1.item_name LIKE concat('%',#{itemName},'%')
-            </if>
-            <if test="receiver!=null and receiver!=''">
-                and T1.receiver LIKE concat('%',#{receiver},'%')
-            </if>
-            <if test="telephone!=null and telephone!=''">
-                and T1.telephone = #{telephone}
-            </if>
-            <if test="salesName!=null and salesName!=''">
-                and T1.sales_name = #{salesName}
-            </if>
-            <if test="salesId!=null">
-                <if test="openId == null">
-                    and T3.sales_id = #{salesId}
-                </if>
-                <if test="openId != null">
-                    and (T3.sales_id = #{salesId} || T3.open_id=#{openId})
-                </if>
-            </if>
-            <if test="warehouseId!=null and warehouseId!=''">
-                and T1.warehouse_id = #{warehouseId}
-            </if>
-            <if test="logisticType!=null and logisticType!=''">
-                and T1.logistic_type = #{logisticType}
-            </if>
-            <if test="closeReason!=null and closeReason!=''">
-                and T1.close_reason = #{closeReason}
-            </if>
-            <if test="idCard==0">
-                and T1.id_card is null
-            </if>
-            <if test="idCard==1">
-                and T1.id_card is not null
-            </if>
-            <if test=" startGmtCreate!= null ">
-                and   <![CDATA[ T1.gmt_create >= #{startGmtCreate} ]]>
-            </if>
-            <if test=" endGmtCreate != null ">
-                and    <![CDATA[ T1.gmt_create <= #{endGmtCreate} ]]>
-            </if>
-            <if test="companyId != null">
-                and T1.company_id = #{companyId}
-            </if>
-        </where>
-        order by T1.id desc
-        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-    </select>
 
     <select id="queryByErpOrderId" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
         SELECT
@@ -309,70 +151,6 @@
             and    <![CDATA[ T2.logistic_company = #{logisticCompany} ]]>
         </if>
         ORDER BY T2.gmt_create asc
-    </select>
-
-    <select id="queryErpOrderForExcel" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO"
-            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderQueryVO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        , T2.nick_name AS nickName
-        FROM
-        `mall_order` T1
-        LEFT JOIN wx_user T2 ON T1.open_id = T2.open_id
-        <where>
-            <if test="status != null">
-                T1.status = #{status}
-            </if>
-            <if test="stockStatus != null">
-                and T1.stock_status = #{stockStatus}
-            </if>
-            <if test="outerOrderId != null ">
-                and T1.outer_order_id = #{outerOrderId}
-            </if>
-            <if test="targetNo!=null and targetNo!=''">
-                and T1.target_no = #{targetNo}
-            </if>
-            <if test="orderNo!=null and orderNo!=''">
-                and T1.order_no LIKE concat('%',#{orderNo},'%')
-            </if>
-            <if test="erpNo!=null and erpNo!=''">
-                and T1.erp_no LIKE concat('%',#{erpNo},'%')
-            </if>
-            <if test="upc!=null and upc!=''">
-                and T1.upc = #{upc}
-            </if>
-            <if test="openId!=null and openId!=''">
-                and T1.open_id = #{openId}
-            </if>
-            <if test="skuCode!=null and skuCode!=''">
-                and T1.sku_code = #{skuCode}
-            </if>
-            <if test="itemName!=null and itemName!=''">
-                and T1.item_name LIKE concat('%',#{itemName},'%')
-            </if>
-            <if test="receiver!=null and receiver!=''">
-                and T1.receiver = #{receiver}
-            </if>
-            <if test="telephone!=null and telephone!=''">
-                and T1.telephone = #{telephone}
-            </if>
-            <if test="salesName!=null and salesName!=''">
-                and T1.sales_name = #{salesName}
-            </if>
-            <if test="warehouseId!=null and warehouseId!=''">
-                and T1.warehouse_id = #{warehouseId}
-            </if>
-            <if test="logisticType!=null and logisticType!=''">
-                and T1.logistic_type = #{logisticType}
-            </if>
-            <if test=" startGmtCreate!= null ">
-                and   <![CDATA[ T1.order_time >= #{startGmtCreate} ]]>
-            </if>
-            <if test=" endGmtCreate != null ">
-                and    <![CDATA[ T1.order_time <= #{endGmtCreate} ]]>
-            </if>
-        </where>
-        order by T1.id desc
     </select>
 
     <select id="queryExpiredSubOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
@@ -476,28 +254,6 @@
             and T1.target_no = #{targetNo}
         </if>
         ORDER BY T1.id
-    </select>
-    <select id="queryOuterOrdersCount" resultType="java.lang.Integer"
-            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO">
-        SELECT
-        count(1)
-        FROM
-        `mall_order` T1
-        where
-        1=1
-        <if test="status != null">
-            AND T1.status = #{status}
-        </if>
-        <if test="orderNo!=null and orderNo!=''">
-            and T1.order_no LIKE concat('%',#{orderNo},'%')
-        </if>
-        <if test=" startGmtCreate!= null ">
-            and   <![CDATA[ T1.order_time >= #{startGmtCreate} ]]>
-        </if>
-        <if test=" endGmtCreate != null ">
-            and    <![CDATA[ T1.order_time <= #{endGmtCreate} ]]>
-        </if>
-
     </select>
     <select id="queryOuterOrders" resultMap="BaseResultMap"
             parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO">
@@ -701,9 +457,7 @@
         </if>
     </select>
 
-    <!-- -->
-    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap"
-    >
+    <select id="queryPoList" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.BaseResultMap">
         SELECT
         <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.MallOrderDOMapper.Base_Column_List"/>
         FROM
@@ -715,4 +469,91 @@
     </select>
 
 
+    <sql id="Column_List_For_MallOrderItemVO">
+        T1.order_no           AS orderNo,
+        T1.channel_order_no   AS channelOrderNo,
+        T1.shop_code          AS shopCode,
+        T1.order_time         AS orderTime,
+        T1.status             AS status,
+        T1.memo               AS remark,
+        T1.pay_type           AS payType,
+        T2.receiver           AS receiver,
+        T2.receiver_country   AS receiverCountry,
+        T2.receiver_state     AS receiverState,
+        T2.receiver_city      AS receiverCity,
+        T2.receiver_district  AS receiverDistrict,
+        T2.receiver_address   AS addressDetail,
+        T2.telephone          AS telephone,
+        T2.id_card            AS idCard,
+        T2.sku_code           AS skuCode
+    </sql>
+    <!-- 根据指定条件分页查询订单列表 -->
+    <select id="listMallOrders" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderItemVO">
+        SELECT
+        <include refid="Column_List_For_MallOrderItemVO"/>
+        FROM mall_order T1, mall_sub_order T2
+        <where>
+            T1.order_no = T2.order_no
+            <if test="mallOrderQueryVO.orderNo != null">
+                AND T1.order_no = #{mallOrderQueryVO.orderNo}
+            </if>
+            <if test="mallOrderQueryVO.channelOrderNo != null">
+                AND T1.channel_order_no = #{mallOrderQueryVO.channelOrderNo}
+            </if>
+            <if test="mallOrderQueryVO.status != null and mallOrderQueryVO.status != 10">
+                AND T1.status = #{mallOrderQueryVO.status}
+            </if>
+            <if test="mallOrderQueryVO.receiver != null">
+                AND T2.receiver = #{mallOrderQueryVO.receiver}
+            </if>
+            <if test="mallOrderQueryVO.telephone != null">
+                AND T2.telephone = #{mallOrderQueryVO.telephone}
+            </if>
+            <if test="mallOrderQueryVO.startGmtCreate != null ">
+                AND T1.gmt_create &gt;= #{mallOrderQueryVO.startGmtCreate}
+            </if>
+            <if test="mallOrderQueryVO.endGmtCreate != null ">
+                AND T1.gmt_create &lt;= #{mallOrderQueryVO.endGmtCreate}
+            </if>
+            AND T1.company_no = #{mallOrderQueryVO.companyNo}
+            AND T1.is_del = 0
+            AND T2.is_del = 0
+        </where>
+        ORDER BY T1.order_time DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex},#{pageQueryParam.pageSize}
+        </if>
+    </select>
+    <!-- 根据指定条件查询订单数目 -->
+    <select id="countMallOrders" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM mall_order T1, mall_sub_order T2
+        <where>
+            T1.order_no = T2.order_no
+            <if test="mallOrderQueryVO.orderNo != null">
+                AND T1.order_no = #{mallOrderQueryVO.orderNo}
+            </if>
+            <if test="mallOrderQueryVO.channelOrderNo != null">
+                AND T1.channel_order_no = #{mallOrderQueryVO.channelOrderNo}
+            </if>
+            <if test="mallOrderQueryVO.status != null and mallOrderQueryVO.status != 10">
+                AND T1.status = #{mallOrderQueryVO.status}
+            </if>
+            <if test="mallOrderQueryVO.receiver != null">
+                AND T2.receiver = #{mallOrderQueryVO.receiver}
+            </if>
+            <if test="mallOrderQueryVO.telephone != null">
+                AND T2.telephone = #{mallOrderQueryVO.telephone}
+            </if>
+            <if test="mallOrderQueryVO.startGmtCreate != null ">
+                AND T1.gmt_create &gt;= #{mallOrderQueryVO.startGmtCreate}
+            </if>
+            <if test="mallOrderQueryVO.endGmtCreate != null ">
+                AND T1.gmt_create &lt;= #{mallOrderQueryVO.endGmtCreate}
+            </if>
+            AND T1.company_no = #{mallOrderQueryVO.companyNo}
+            AND T1.is_del = 0
+            AND T2.is_del = 0
+        </where>
+    </select>
 </mapper>

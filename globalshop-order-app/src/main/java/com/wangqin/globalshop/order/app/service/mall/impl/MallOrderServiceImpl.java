@@ -1,13 +1,12 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
@@ -393,6 +392,17 @@ public class MallOrderServiceImpl implements IMallOrderService {
             o.setLogisticType(0);
         }
         o.setWeight(itemSku.getWeight());
+    }
+
+    @Override
+    public List<MallOrderItemVO> listMallOrders(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam) {
+        pageQueryParam.calculateRowIndex();
+        return mallOrderDOMapper.listMallOrders(mallOrderQueryVO, pageQueryParam);
+    }
+
+    @Override
+    public int countMallOrders(MallOrderQueryVO mallOrderQueryVO) {
+        return mallOrderDOMapper.countMallOrders(mallOrderQueryVO);
     }
 
 }
