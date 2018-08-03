@@ -84,6 +84,7 @@
             AND buyer_task.buyer_name = #{buyerName}
         </if>
         ORDER BY buyer_task.gmt_create DESC
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
 
     <select id="selectVoById" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO">

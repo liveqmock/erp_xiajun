@@ -44,6 +44,7 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     @Override
     public List<BuyerTaskVO> list(BuyerTaskVO buyerTask) {
         buyerTask.initCompany();
+		buyerTask.initFirstStart();
         return mapper.list(buyerTask);
     }
 
