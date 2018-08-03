@@ -40,15 +40,26 @@
     </select>
     
     <select id="queryOrderInfoBySubOrderNo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.AgentOrderVO">
-    select sub_order_no AS subOrderNo,sku_pic AS skuPic,
-    item_name AS itemName,upc AS upc,sale_price AS salePrice,
-    scale AS scale,quantity AS quantity,receiver_info AS receiverInfo,
-    order_status AS orderStatus,order_time AS orderTime,
-    total_settlement AS totalSettlement
-    from commission_sumary
-    where 
-    sub_order_no=#{subOrderNo}
-    limit 0,1
+    SELECT 
+    	T1.sub_order_no AS subOrderNo,
+    	T1.sku_pic AS skuPic,
+    	T1.item_name AS itemName,
+    	T1.upc AS upc,
+    	T1.sale_price AS salePrice,
+    	T1.scale AS scale,
+    	T1.quantity AS quantity,
+    	T1.receiver_info AS receiverInfo,
+    	T2.status AS orderStatus,
+    	T1.order_time AS orderTime,
+    	T3.settlement AS totalSettlement
+    FROM
+    	commission_sumary T1 LEFT JOIN mall_sub_order T2 
+    		ON T1.sub_order_no=T2.sub_order_no
+    	LEFT JOIN commission_sumary_detail T3
+    		ON T1.sub_order_no=T3.sub_order_no
+    WHERE 
+    	T1.sub_order_no=#{subOrderNo}
+    LIMIT 0,1
     </select>
 
 
