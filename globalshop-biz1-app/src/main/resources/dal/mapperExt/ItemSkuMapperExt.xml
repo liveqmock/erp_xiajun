@@ -101,6 +101,7 @@
     <!-- 商品编辑使用 -->
     <sql id="Base_Column_List_For_Item_Edit" >
         T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
+        T1.sku_rate AS skuRate,
         T1.item_name AS itemName,T1.company_no AS companyNo, 
         T1.category_code AS itemCode,
         T1.category_name AS categoryName,  
@@ -377,7 +378,7 @@
         </selectKey>
         insert into item_sku
         (sku_code,sku_pic,cost_price,weight,item_code,item_name,company_no,upc,creator,modifier,
-        sale_price,category_name,category_code,package_level_id,brand_name)
+        sale_price,category_name,category_code,package_level_id,brand_name,sku_rate)
 
         values
         <foreach collection="list" item="wdSolr" index="index"
@@ -386,7 +387,8 @@
             #{wdSolr.skuCode}, #{wdSolr.skuPic}, #{wdSolr.costPrice},#{wdSolr.weight},
             #{wdSolr.itemCode},#{wdSolr.itemName},#{wdSolr.companyNo},
             #{wdSolr.upc},#{wdSolr.creator},#{wdSolr.modifier},#{wdSolr.salePrice},
-            #{wdSolr.categoryName},#{wdSolr.categoryCode},#{wdSolr.packageLevelId},#{wdSolr.brand}
+            #{wdSolr.categoryName},#{wdSolr.categoryCode},
+            #{wdSolr.packageLevelId},#{wdSolr.brand},#{wdSolr.skuRate}
             )
         </foreach>
 </insert>
