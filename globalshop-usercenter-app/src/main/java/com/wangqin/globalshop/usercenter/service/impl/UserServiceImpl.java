@@ -425,6 +425,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         proxy.init();
         proxy.setUserNo(user.getUserNo());
         proxy.setParentAgent(state);
+        proxy.setAgentName(wxUser.getNickName());
         proxy.setOpenId(wxUser.getOpenId());
         proxy.setUnionId(wxUser.getUnionId());
         proxy.setHeadProtraitUrl(wxUser.getAvatarUrl());
