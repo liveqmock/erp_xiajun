@@ -1,5 +1,8 @@
 package com.wangqin.globalshop.order.app.service.mall;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderItemVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderVO;
 import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
@@ -54,4 +57,21 @@ public interface IMallOrderService  {
     List<MallOrderDO> queryExpiredSubOrders(int code, Long timeOut);
 
     Integer changeStatus(Long id,Integer oldStatus, Integer newStatus);
+
+    /**
+     * 根据指定条件分页查询订单列表
+     *
+     * @param mallOrderQueryVO
+     * @param pageQueryParam
+     * @return
+     */
+    List<MallOrderItemVO> listMallOrders(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam);
+
+    /**
+     * 根据指定条件查询订单数目
+     *
+     * @param mallOrderQueryVO
+     * @return
+     */
+    int countMallOrders(MallOrderQueryVO mallOrderQueryVO);
 }

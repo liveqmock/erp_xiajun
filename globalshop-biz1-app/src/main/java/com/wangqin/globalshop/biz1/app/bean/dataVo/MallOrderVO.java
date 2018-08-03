@@ -43,16 +43,4 @@ public class MallOrderVO extends MallOrderDO {
     private String addressDetail;
     private String skuCode;
     private boolean isDel;
-
-
-    /**
-     * 页码，用于分页
-     */
-    private Integer pageIndex;
-    /**
-     * 页面大小，用于分页
-     */
-    private Integer pageSize;
-    // TODO: 原 PAGE 类耦合太严重，建议重写
-
 }
