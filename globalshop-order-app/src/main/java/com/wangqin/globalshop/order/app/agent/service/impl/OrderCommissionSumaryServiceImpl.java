@@ -11,7 +11,7 @@ public class OrderCommissionSumaryServiceImpl implements IOrderCommissionSumaryS
 @Autowired
 private CommissionSumaryDOMapperExt mapperExt;
 @Override
-public AgentOrderVO queryOrderInfoBySubOrderNo(String subOrderNo) {
-	return mapperExt.queryOrderInfoBySubOrderNo(subOrderNo);
+public AgentOrderVO queryOrderInfoBySubOrderNo(String subOrderNo, String userNo) {
+	return mapperExt.queryOrderInfoBySubOrderNo(subOrderNo,userNo);
 }
 }

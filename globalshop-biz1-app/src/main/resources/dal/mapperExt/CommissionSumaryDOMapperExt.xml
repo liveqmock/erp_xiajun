@@ -46,6 +46,7 @@
     	T1.item_name AS itemName,
     	T1.upc AS upc,
     	T1.sale_price AS salePrice,
+    	T1.quantity AS quantity,
     	T1.scale AS scale,
     	T1.quantity AS quantity,
     	T1.receiver_info AS receiverInfo,
@@ -59,6 +60,7 @@
     		ON T1.sub_order_no=T3.sub_order_no
     WHERE 
     	T1.sub_order_no=#{subOrderNo}
+      and T3.share_user_id = #{userNo}
     LIMIT 0,1
     </select>
 

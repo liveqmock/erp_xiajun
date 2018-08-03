@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.SettlementDetailVo;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SumaryDetailQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CommissionSumaryDO;
 import com.wangqin.globalshop.biz1.app.dal.mapper.CommissionSumaryDOMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface CommissionSumaryDOMapperExt extends CommissionSumaryDOMapper {
 
 	List<CommissionSumaryDO> selectMorethan15Day();
 
-	AgentOrderVO queryOrderInfoBySubOrderNo(String subOrderNo);
+	AgentOrderVO queryOrderInfoBySubOrderNo(@Param("subOrderNo") String subOrderNo,@Param("userNo") String userNo);
 
 }
