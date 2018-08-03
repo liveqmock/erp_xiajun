@@ -421,6 +421,7 @@
     <!-- 根据指定条件分页查询订单列表 -->
     <select id="listMallOrders" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderItemVO">
         SELECT
+        DISTINCT
         <include refid="Column_List_For_MallOrderItemVO"/>
         FROM mall_order T1, mall_sub_order T2
         <where>
