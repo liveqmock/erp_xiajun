@@ -92,7 +92,8 @@ public class WechatLoginController {
             String unionid = o.getString("unionid");
             List<AuthUserDO> list = userService.selectByUnionid(unionid);
             if (list.size() > 1) {
-                return result.buildIsSuccess(true).buildData(list);
+                return result.buildIsSuccess(true).buildData(list).buildMsg("请选择您要登陆的账户");
+
             }
             if (list.size() == 1) {
                 AuthUserDO user = list.get(0);
