@@ -1080,7 +1080,7 @@ CREATE TABLE `item_sku` (
   `status` INT(4) NOT NULL DEFAULT '1' COMMENT '0:未审核,1:审核通过',
   `sale_type` tinyint(1) DEFAULT NULL COMMENT '销售类型:现货,代购',
   `sale_price` double(10,2) DEFAULT NULL COMMENT '销售价',
-  `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例',
+  `sku_rate` DOUBLE(10,4) NOT NULL DEFAULT '0' COMMENT '代理佣金比例',
   `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率(没有用到)',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
