@@ -114,7 +114,7 @@ public class CommissionSumaryJob {
 			sumaryDO.setUpc(subOrderDO.getUpc());
 			sumaryDO.setSkuPic(subOrderDO.getSkuPic());
 			sumaryDO.setStatus(SettlementStatus.wait.getCode());
-			sumaryDO.setSalePrice(BigDecimal.valueOf(subOrderDO.getSalePrice()).setScale(2,BigDecimal.ROUND_HALF_UP));
+			sumaryDO.setSalePrice(BigDecimal.valueOf(subOrderDO.getSalePrice()*subOrderDO.getQuantity()).setScale(2,BigDecimal.ROUND_HALF_UP));
 
 			sumaryDO.setReceiveDate(applyDO.getReceiveDate());
 
@@ -244,7 +244,7 @@ public class CommissionSumaryJob {
 
 		if(subOrderDO == null){
 			sumaryDO.setStatus(SettlementStatus.CLOSE.getCode());
-		}else if(OrderStatus.SUCCESS.getCode() == subOrderDO.getStatus() || OrderStatus.COMFIRM.getCode() == subOrderDO.getStatus() ){
+		}else if(subOrderDO.getStatus().equals(OrderStatus.SUCCESS.getCode()) || subOrderDO.getStatus().equals(OrderStatus.COMFIRM.getCode()) ){
 			sumaryDO.setStatus(SettlementStatus.can.getCode());
 		}else {
 			//既不是已签收，也不是已完成，则关闭
