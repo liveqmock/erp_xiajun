@@ -176,8 +176,12 @@ public class CommissionSumaryJob {
 				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum).setScale(2, BigDecimal.ROUND_HALF_UP);
 			}else{
 				//2.2  没有
+				BigDecimal rateSum = levelOneRate;
+				if (rateSum.compareTo(BigDecimal.ZERO) == 0){
+					rateSum = BigDecimal.ONE;
+				}
 				shareMoney = totalAmount.multiply(levelOneRate).setScale(2, RoundingMode.HALF_UP);
-				levelTwoAmount = shareMoney.multiply(levelTwoRate).setScale(2, BigDecimal.ROUND_HALF_UP);
+				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum).setScale(2, BigDecimal.ROUND_HALF_UP);
 			}
 			levelOneAmount = shareMoney.subtract(levelTwoAmount);
 			//3 插入detail表
