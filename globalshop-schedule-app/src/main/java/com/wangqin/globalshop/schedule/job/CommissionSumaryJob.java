@@ -103,11 +103,11 @@ public class CommissionSumaryJob {
 
 			sumaryDO.setQuantity(subOrderDO.getQuantity());
 			sumaryDO.setOrderTime(subOrderDO.getOrderTime());
-			sumaryDO.setReceiverInfo(subOrderDO.getReceiver()+" "
-					+subOrderDO.getReceiverState()
-					+subOrderDO.getReceiverCity()
-					+subOrderDO.getReceiverCountry()
-					+subOrderDO.getReceiverDistrict()
+			sumaryDO.setReceiverInfo(subOrderDO.getReceiver()+"  "
+					+subOrderDO.getTelephone()+" "
+					+subOrderDO.getReceiverState()+" "
+					+subOrderDO.getReceiverCity()+" "
+					+subOrderDO.getReceiverDistrict()+" "
 					+subOrderDO.getReceiverAddress());
 			sumaryDO.setScale(subOrderDO.getScale());
 			sumaryDO.setSkuCode(subOrderDO.getSkuCode());
@@ -173,26 +173,17 @@ public class CommissionSumaryJob {
 				if (rateSum.compareTo(BigDecimal.ZERO) == 0){
 					rateSum = BigDecimal.ONE;
 				}
-				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum).setScale(2, BigDecimal.ROUND_HALF_UP);
+				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum,2, BigDecimal.ROUND_HALF_EVEN).setScale(2, BigDecimal.ROUND_HALF_UP);
 			}else{
 				//2.2  没有
 				BigDecimal rateSum = levelOneRate;
 				if (rateSum.compareTo(BigDecimal.ZERO) == 0){
 					rateSum = BigDecimal.ONE;
 				}
-				log.info("rateSum: "+rateSum);
-				log.info("levelOneRate: "+levelOneRate);
-				log.info("totalAmount: "+totalAmount);
 				shareMoney = totalAmount.multiply(levelOneRate).setScale(2, RoundingMode.HALF_UP);
-				log.info("shareMoney: "+shareMoney);
-				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum).setScale(2, BigDecimal.ROUND_HALF_UP);
-				log.info("levelTwoRate: "+levelTwoRate);
-				log.info("levelTwoAmount: "+levelTwoAmount);
+				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum,2, BigDecimal.ROUND_HALF_EVEN).setScale(2, BigDecimal.ROUND_HALF_UP);
 			}
 			levelOneAmount = shareMoney.subtract(levelTwoAmount);
-			log.info("levelOneAmount: "+levelOneAmount);
-			log.info("levelOneUserID: "+agencyModel.getLevelOneUserId());
-			log.info("levelTwoUserID: "+agencyModel.getLevelTwoUserId());
 			//3 插入detail表
 
 			if(StringUtils.isNotBlank(agencyModel.getLevelOneUserId())){
