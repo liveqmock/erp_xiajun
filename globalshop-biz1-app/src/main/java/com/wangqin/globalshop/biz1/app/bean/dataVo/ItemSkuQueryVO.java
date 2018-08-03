@@ -15,6 +15,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 public class ItemSkuQueryVO extends PageQueryVO {
 	
+	private Double skuRate;
+	
 	private Integer saleMode;
 
 	private List<ChannelSalePriceVO> priceList = new ArrayList<ChannelSalePriceVO>();
@@ -118,6 +120,15 @@ public class ItemSkuQueryVO extends PageQueryVO {
 	private String skuPic;
 	private String creator;
 	private String modifier;
+
+	
+	public Double getSkuRate() {
+		return skuRate;
+	}
+
+	public void setSkuRate(Double skuRate) {
+		this.skuRate = skuRate;
+	}
 
 	public Integer getSaleMode() {
 		return saleMode;
