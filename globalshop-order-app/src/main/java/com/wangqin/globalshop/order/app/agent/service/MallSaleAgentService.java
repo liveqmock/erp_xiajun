@@ -36,11 +36,9 @@ public interface MallSaleAgentService {
     /**
      * 分佣比率修改
      *
-     * @param userNo
-     * @param commissionMode
-     * @param commissionValue
+     * @param mallSaleAgentEditVO
      */
-    void updateCommissionValue(String userNo, Integer commissionMode, Double commissionValue);
+    void updateCommissionValue(MallSaleAgentEditVO mallSaleAgentEditVO);
 
     /**
      * 通过 companyNo 和 userNo 获得唯一代理

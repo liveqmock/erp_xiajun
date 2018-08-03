@@ -3,12 +3,10 @@ package com.wangqin.globalshop.order.app.agent.service.impl;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSaleAgentDOMapperExt;
-import com.wangqin.globalshop.biz1.app.enums.CommissionModeEnum;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +62,11 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
     }
 
     @Override
-    public void updateCommissionValue(String userNo, Integer commissionMode, Double commissionValue) {
+    public void updateCommissionValue(MallSaleAgentEditVO mallSaleAgentEditVO) {
+        String userNo = mallSaleAgentEditVO.getUserNo();
+        Integer commissionMode = mallSaleAgentEditVO.getCommissionMode();
+        Double commissionValue = mallSaleAgentEditVO.getCommissionValue();
+
         if (StringUtil.isBlank(userNo) || commissionMode == null || commissionValue == null) {
             throw new BizCommonException("数据不完整！");
         }

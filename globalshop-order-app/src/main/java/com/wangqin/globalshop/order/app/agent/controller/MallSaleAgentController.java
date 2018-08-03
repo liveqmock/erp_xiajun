@@ -112,19 +112,15 @@ public class MallSaleAgentController {
     /**
      * 分佣比率修改
      *
-     * @param userNo
-     * @param commissionMode
-     * @param commissionValue
+     * @param mallSaleAgentEditVO
      * @return
      */
     @PostMapping("/updateCommissionValue")
-    public Object updateCommissionValue(@RequestParam("userNo") String userNo,
-                                        @RequestParam("commissionMode") Integer commissionMode,
-                                        @RequestParam("commissionValue") Double commissionValue) {
+    public Object updateCommissionValue(MallSaleAgentEditVO mallSaleAgentEditVO) {
         JsonResult result = new JsonResult();
 
         try {
-            mallSaleAgentService.updateCommissionValue(userNo, commissionMode, commissionValue);
+            mallSaleAgentService.updateCommissionValue(mallSaleAgentEditVO);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getMessage())
