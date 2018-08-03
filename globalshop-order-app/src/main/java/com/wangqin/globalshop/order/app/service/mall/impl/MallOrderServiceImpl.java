@@ -231,15 +231,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     }
 
-    @Override
-    public List<MallOrderVO> list(MallOrderVO vo) {
-        vo.init();
-        if (Integer.valueOf("10").equals(vo.getStatus())) {
-            vo.setStatus(null);
-        }
-        return mallOrderDOMapper.list(vo);
-    }
-
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
