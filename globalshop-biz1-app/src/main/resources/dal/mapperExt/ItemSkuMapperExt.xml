@@ -296,6 +296,9 @@
       <if test="categoryName != null" >
         category_name = #{categoryName},
       </if>
+      <if test="skuRate != null" >
+        sku_rate = #{skuRate},
+      </if>
     </set>
     where id = #{id}
   </update>
@@ -484,6 +487,9 @@
       <if test="remark != null" >
         remark,
       </if>
+      <if test="skuRate != null" >
+        sku_rate,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="skuCode != null" >
@@ -572,6 +578,9 @@
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="skuRate != null" >
+        #{skuRate},
       </if>
     </trim>
 </insert>

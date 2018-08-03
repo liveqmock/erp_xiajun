@@ -249,6 +249,7 @@ public class ItemController {
                     //todo skuCode
                     String skuCode = "S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandomMillSeconds() + "Q" + String.format("%0" + 2 + "d", (startIndex++));
                     addSku.setSkuCode(skuCode);
+                    addSku.setSkuRate(newSku.getSkuRate());
                     addSku.setScale(newSku.getScale());
                     addSku.setSalePrice((double) newSku.getSalePrice());
                     addSku.setWeight(newSku.getWeight());
