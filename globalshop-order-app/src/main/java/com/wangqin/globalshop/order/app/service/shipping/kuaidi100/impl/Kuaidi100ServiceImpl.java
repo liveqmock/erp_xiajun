@@ -109,22 +109,26 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
     @Override
     public Kuaidi100ShippingTrackResult queryShippingTrack(String shippingNo) {
         if (shippingNo == null) {
-            throw new ErpCommonException("发货单号为空");
+//            throw new ErpCommonException("发货单号为空");
+            throw new ErpCommonException("暂无物流信息");
         }
         // 根据shippingNo查询ShippingOrder
         ShippingOrderDO shippingOrder = shippingOrderService.selectByShippingNo(shippingNo);
         if (shippingOrder == null) {
-            throw new ErpCommonException("没有该发货单");
+//            throw new ErpCommonException("没有该发货单");
+            throw new ErpCommonException("暂无物流信息");
         }
         String logisticCompany = shippingOrder.getLogisticCompany();
         // 根据物流公司名获取其对应的快递100 Code
         String com = codeInKuaidi100(logisticCompany);
         if (com == null) {
-            throw new ErpCommonException("不支持该物流公司");
+//            throw new ErpCommonException("不支持该物流公司");
+            throw new ErpCommonException("暂无物流信息");
         }
         String num = shippingOrder.getLogisticNo();
         if (num == null) {
-            throw new ErpCommonException("物流单号信息缺失");
+//            throw new ErpCommonException("物流单号信息缺失");
+            throw new ErpCommonException("暂无物流信息");
         }
         return this.queryShippingTrack(shippingNo, com, num);
     }

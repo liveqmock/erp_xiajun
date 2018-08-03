@@ -103,11 +103,11 @@ public class CommissionSumaryJob {
 
 			sumaryDO.setQuantity(subOrderDO.getQuantity());
 			sumaryDO.setOrderTime(subOrderDO.getOrderTime());
-			sumaryDO.setReceiverInfo(subOrderDO.getReceiver()+" "
-					+subOrderDO.getReceiverState()
-					+subOrderDO.getReceiverCity()
-					+subOrderDO.getReceiverCountry()
-					+subOrderDO.getReceiverDistrict()
+			sumaryDO.setReceiverInfo(subOrderDO.getReceiver()+"  "
+					+subOrderDO.getTelephone()+" "
+					+subOrderDO.getReceiverState()+" "
+					+subOrderDO.getReceiverCity()+" "
+					+subOrderDO.getReceiverDistrict()+" "
 					+subOrderDO.getReceiverAddress());
 			sumaryDO.setScale(subOrderDO.getScale());
 			sumaryDO.setSkuCode(subOrderDO.getSkuCode());
@@ -173,11 +173,15 @@ public class CommissionSumaryJob {
 				if (rateSum.compareTo(BigDecimal.ZERO) == 0){
 					rateSum = BigDecimal.ONE;
 				}
-				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum).setScale(2, BigDecimal.ROUND_HALF_UP);
+				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum,2, BigDecimal.ROUND_HALF_EVEN).setScale(2, BigDecimal.ROUND_HALF_UP);
 			}else{
 				//2.2  没有
+				BigDecimal rateSum = levelOneRate;
+				if (rateSum.compareTo(BigDecimal.ZERO) == 0){
+					rateSum = BigDecimal.ONE;
+				}
 				shareMoney = totalAmount.multiply(levelOneRate).setScale(2, RoundingMode.HALF_UP);
-				levelTwoAmount = shareMoney.multiply(levelTwoRate).setScale(2, BigDecimal.ROUND_HALF_UP);
+				levelTwoAmount = shareMoney.multiply(levelTwoRate).divide(rateSum,2, BigDecimal.ROUND_HALF_EVEN).setScale(2, BigDecimal.ROUND_HALF_UP);
 			}
 			levelOneAmount = shareMoney.subtract(levelTwoAmount);
 			//3 插入detail表
