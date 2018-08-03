@@ -76,6 +76,9 @@ public class CommissionController {
 	    		for(String orderNo:orderNoList) {
 	    			AgentOrderVO orderVO = sumaryService.queryOrderInfoBySubOrderNo(orderNo,agentNo);
 	    			if(null != orderVO) {
+	    				if(orderVO.getQuantity() != null && orderVO.getQuantity() > 0){
+							orderVO.setSalePrice(orderVO.getSalePrice()/orderVO.getQuantity());
+						}
 	    				orderInfoList.add(orderVO);
 	    			}	    			
 	    		}

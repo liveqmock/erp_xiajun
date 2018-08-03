@@ -46,6 +46,7 @@
     	T1.item_name AS itemName,
     	T1.upc AS upc,
     	T1.sale_price AS salePrice,
+    	T1.quantity AS quantity,
     	T1.scale AS scale,
     	T1.quantity AS quantity,
     	T1.receiver_info AS receiverInfo,
