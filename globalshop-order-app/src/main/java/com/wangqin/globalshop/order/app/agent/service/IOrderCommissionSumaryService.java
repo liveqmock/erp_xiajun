@@ -4,5 +4,5 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.AgentOrderVO;
 
 public interface IOrderCommissionSumaryService {
 
-	AgentOrderVO queryOrderInfoBySubOrderNo(String subOrderNo);
+	AgentOrderVO queryOrderInfoBySubOrderNo(String subOrderNo,String userNo);
 }

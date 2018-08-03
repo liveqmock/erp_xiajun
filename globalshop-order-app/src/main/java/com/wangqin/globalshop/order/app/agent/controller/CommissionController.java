@@ -74,7 +74,7 @@ public class CommissionController {
 	    	List<String> orderNoList = sumaryDetailService.querySubOrderNoListByUserNo(qv);
 	    	if(IsEmptyUtil.isCollectionNotEmpty(orderNoList)) {
 	    		for(String orderNo:orderNoList) {
-	    			AgentOrderVO orderVO = sumaryService.queryOrderInfoBySubOrderNo(orderNo);
+	    			AgentOrderVO orderVO = sumaryService.queryOrderInfoBySubOrderNo(orderNo,agentNo);
 	    			if(null != orderVO) {
 	    				orderInfoList.add(orderVO);
 	    			}	    			

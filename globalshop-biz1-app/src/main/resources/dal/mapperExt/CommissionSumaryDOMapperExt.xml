@@ -59,6 +59,7 @@
     		ON T1.sub_order_no=T3.sub_order_no
     WHERE 
     	T1.sub_order_no=#{subOrderNo}
+      and T3.share_user_id = #{userNo}
     LIMIT 0,1
     </select>
 
