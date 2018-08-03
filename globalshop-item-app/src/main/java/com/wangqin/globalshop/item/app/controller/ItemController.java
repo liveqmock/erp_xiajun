@@ -598,7 +598,7 @@ public class ItemController {
     public Object getDimensionCodeUtil(Long itemId) {
         //logger.info("getDimensionCodeUtil start");
         JsonResult<Object> result = new JsonResult<>();
-        if (IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        if (!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
         }
         AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
@@ -643,6 +643,7 @@ public class ItemController {
 
     /**
      * 新增商品同时生成二维码
+     * 这个方法没有用到
      *
      * @param itemId
      */

@@ -1120,12 +1120,18 @@ public class ItemServiceImplement implements IItemService {
         }
         String appId = appletConfig.getAppid();
         String secret = appletConfig.getSecret();
-        if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
-            return null;
-        }
-        String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART + appId + ACCESS_TOKEN_MI + secret);
-        JSONObject myJson = JSONObject.fromObject(reponse);
-        String token = (String) myJson.get("access_token");
+        String accessToken = appletConfig.getAuthorizerAccessToken();
+        String token = "";
+        if (IsEmptyUtil.isStringNotEmpty(accessToken)) {
+        	token = accessToken;
+        } else {
+        	if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
+                return null;
+            }
+            String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART + appId + ACCESS_TOKEN_MI + secret);
+            JSONObject myJson = JSONObject.fromObject(reponse);
+            token = (String) myJson.get("access_token");
+        }       
         String picUrl = insertIntoItemDimension(itemCode, "pages/item/detail", token);
         return picUrl;
     }
