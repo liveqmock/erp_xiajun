@@ -131,7 +131,7 @@
                 AND T1.agent_name LIKE '%${mallSaleAgentQueryVO.agentName}%'
             </if>
             <if test="mallSaleAgentQueryVO.parentAgent == null">
-                AND T1.parent_agent IS NULL OR T1.parent_agent =''
+                AND (T1.parent_agent IS NULL OR T1.parent_agent ='')
             </if>
             <if test="mallSaleAgentQueryVO.parentAgent != null">
                 AND T1.parent_agent = #{mallSaleAgentQueryVO.parentAgent}
@@ -157,7 +157,7 @@
                 AND T1.agent_name LIKE '%${mallSaleAgentQueryVO.agentName}%'
             </if>
             <if test="mallSaleAgentQueryVO.parentAgent == null">
-                AND T1.parent_agent IS NULL
+                AND (T1.parent_agent IS NULL OR T1.parent_agent ='')
             </if>
             <if test="mallSaleAgentQueryVO.parentAgent != null">
                 AND T1.parent_agent = #{mallSaleAgentQueryVO.parentAgent}
