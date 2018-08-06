@@ -50,7 +50,7 @@ public class WechatTranspondController {
     }
     @RequestMapping("/test/proxy")
     public void testProxy(String code, String state, HttpServletResponse response) {
-        String trueUrl = testUrl + "/#/Order/AgentTest?code=" + code + "&state=" + state;
+        String trueUrl = testUrl + "#/marketing/AgentTest?code=" + code + "&state=" + state;
         try {
             response.sendRedirect(trueUrl);
         } catch (IOException e) {
@@ -60,7 +60,7 @@ public class WechatTranspondController {
 
     @RequestMapping("/dev/proxy")
     public void devProxy(String code,String state, HttpServletResponse response) {
-        String trueUrl = devUrl + "/#/Order/AgentTest?code=" + code + "&state=" + state;
+        String trueUrl = devUrl + "#/marketing/AgentTest?code=" + code + "&state=" + state;
         try {
             response.sendRedirect(trueUrl);
         } catch (IOException e) {

@@ -149,26 +149,44 @@ public class MallSaleAgentController {
     }
 
     /**
-     * TODO: 解除代理
+     * 解除代理
      *
      * @param userNo
      * @return
      */
     public Object removeMallSaleAgent(String userNo) {
         JsonResult result = new JsonResult();
-        // do something
+        try {
+            mallSaleAgentService.removeMallSaleAgent(userNo);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getMessage())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出现异常")
+                    .buildIsSuccess(false);
+        }
         return result;
     }
 
     /**
-     * TODO: 删除代理
+     * 删除代理
      *
      * @param userNo
      * @return
      */
     public Object deleteMallSaleAgent(String userNo) {
         JsonResult result = new JsonResult();
-        // do something
+        try {
+            mallSaleAgentService.deleteMallSaleAgent(userNo);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getMessage())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出现异常")
+                    .buildIsSuccess(false);
+        }
         return result;
     }
 

@@ -81,6 +81,9 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
         if (warehouse == null) {
             WarehouseDO warehouseDO = warehouseMapper.selectByWarehouseNo(warehouseNo);
             ItemSkuDO itemSkuDO = itemSkuMapper.queryItemBySkuCode(inventory.getSkuCode());
+            if (itemSkuDO == null){
+                throw new ErpCommonException("找不到该sku对应的商品");
+            }
             warehouse = new InventoryOnWareHouseDO();
             warehouse.setUpc(itemSkuDO.getUpc());
             warehouse.setItemName(itemSkuDO.getItemName());

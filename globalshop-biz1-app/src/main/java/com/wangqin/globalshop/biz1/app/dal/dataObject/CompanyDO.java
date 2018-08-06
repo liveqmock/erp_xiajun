@@ -23,9 +23,27 @@ public class CompanyDO extends BaseModel {
 
     private Integer forceIdcardUpload;
 
+    private String modifier;
+
     private String creator;
 
-    private String modifier;
+    private String state;
+
+    private String city;
+
+    private String district;
+
+    private String fullAddress;
+
+    private String overseaAddress;
+
+    private String country;
+
+    private String mainCategory;
+
+    private Double offlineAnnualSale;
+
+    private Double onlineAnnualSale;
 
     private String intro;
 
@@ -41,7 +59,6 @@ public class CompanyDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -118,22 +135,92 @@ public class CompanyDO extends BaseModel {
         this.forceIdcardUpload = forceIdcardUpload;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district == null ? null : district.trim();
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress == null ? null : fullAddress.trim();
+    }
+
+    public String getOverseaAddress() {
+        return overseaAddress;
+    }
+
+    public void setOverseaAddress(String overseaAddress) {
+        this.overseaAddress = overseaAddress == null ? null : overseaAddress.trim();
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country == null ? null : country.trim();
+    }
+
+    public String getMainCategory() {
+        return mainCategory;
+    }
+
+    public void setMainCategory(String mainCategory) {
+        this.mainCategory = mainCategory == null ? null : mainCategory.trim();
+    }
+
+    public Double getOfflineAnnualSale() {
+        return offlineAnnualSale;
+    }
+
+    public void setOfflineAnnualSale(Double offlineAnnualSale) {
+        this.offlineAnnualSale = offlineAnnualSale;
+    }
+
+    public Double getOnlineAnnualSale() {
+        return onlineAnnualSale;
+    }
+
+    public void setOnlineAnnualSale(Double onlineAnnualSale) {
+        this.onlineAnnualSale = onlineAnnualSale;
     }
 
     public String getIntro() {
