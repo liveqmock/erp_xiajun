@@ -171,4 +171,44 @@ ALTER TABLE mall_sub_order ADD  UNIQUE KEY `SUBORDERNO` (`sub_order_no`);
 
 ALTER TABLE mall_sub_order DROP KEY `OUTERORDERID`;
 
+ALTER TABLE `company` ADD `state` VARCHAR(20) DEFAULT NULL COMMENT '省';
+ALTER TABLE `company` ADD `city` VARCHAR(20) DEFAULT NULL COMMENT '市';
+ALTER TABLE `company` ADD `district` VARCHAR(20) DEFAULT NULL COMMENT '区';
+ALTER TABLE `company` ADD `full_address` VARCHAR(100) DEFAULT NULL COMMENT '详细地址';
+ALTER TABLE `company` ADD `oversea_address` VARCHAR(100) DEFAULT NULL COMMENT '海外地址';
+ALTER TABLE `company` ADD `country` VARCHAR(20) DEFAULT NULL COMMENT '国家';
+ALTER TABLE `company` ADD `main_category` VARCHAR(20) DEFAULT NULL COMMENT '主要品类';
+ALTER TABLE `company` ADD `offline_annual_sale` DOUBLE(10,2) DEFAULT NULL COMMENT '线下年销售额';
+ALTER TABLE `company` ADD `online_annual_sale` DOUBLE(10,2) DEFAULT NULL COMMENT '线上年销售额';
+
+CREATE TABLE `company` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) NOT NULL COMMENT '索引唯一',
+  `company_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '公司名称',
+  `status` int(4) DEFAULT '0' COMMENT '状态 0:正常，1:关闭',
+  `shop_name` varchar(45) DEFAULT NULL COMMENT '公司的店铺名称',
+  `logo_url` varchar(256) DEFAULT NULL,
+  `intro` text COMMENT '介绍',
+  `force_idcard` int(2) NOT NULL DEFAULT '1' COMMENT '身份证号，默认需要',
+  `tel` varchar(45) NOT NULL,
+  `im` varchar(45) NOT NULL COMMENT '及时通讯工具，如微信',
+  `service_time` varchar(128) DEFAULT NULL COMMENT '服务时间',
+  `force_idcard_upload` int(2) NOT NULL DEFAULT '0' COMMENT '身份证图片，默认不需要',
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT '0',
+  `state` varchar(20) DEFAULT NULL COMMENT '省',
+  `city` varchar(20) DEFAULT NULL COMMENT '市',
+  `district` varchar(20) DEFAULT NULL COMMENT '区',
+  `full_address` varchar(100) DEFAULT NULL COMMENT '详细地址',
+  `oversea_address` varchar(100) DEFAULT NULL COMMENT '海外地址',
+  `country` varchar(20) DEFAULT NULL COMMENT '国家',
+  `main_category` varchar(20) DEFAULT NULL COMMENT '主要品类',
+  `offline_annual_sale` double(10,2) DEFAULT NULL COMMENT '线下年销售额',
+  `online_annual_sale` double(10,2) DEFAULT NULL COMMENT '线上年销售额',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `company_no` (`company_no`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='买手公司'
 
