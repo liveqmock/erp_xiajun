@@ -212,3 +212,23 @@ CREATE TABLE `company` (
   UNIQUE KEY `company_no` (`company_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='买手公司'
 
+ALTER TABLE auth_organization MODIFY address VARCHAR(200);
+
+CREATE TABLE `auth_organization` (
+  `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `company_no` varchar(64) NOT NULL DEFAULT '0',
+  `org_id` varchar(10) NOT NULL,
+  `name` varchar(64) NOT NULL COMMENT '组织名',
+  `address` varchar(200) DEFAULT NULL,
+  `code` varchar(64) NOT NULL COMMENT '编号',
+  `icon` varchar(32) DEFAULT NULL COMMENT '图标',
+  `pid` bigint(19) DEFAULT NULL COMMENT '父级主键',
+  `seq` int(2) NOT NULL DEFAULT '0' COMMENT '排序',
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `org_id` (`org_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='组织机构'
