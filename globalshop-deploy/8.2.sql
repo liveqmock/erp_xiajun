@@ -75,7 +75,7 @@ CREATE TABLE `mall_sale_agent` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `OPENID` (`open_id`,`union_id`) USING BTREE
+  UNIQUE KEY `USER_NO_IDX` (`user_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
 
 
