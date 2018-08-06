@@ -38,7 +38,7 @@ public class AutoChangeOrderStatusWithExpired {
     private IOrderMallCommisionApplyService applyService;
 
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void AutoChangeOrderStatusWithExpired() {
         log.info("轮询更新订单物流状态");
         /*查询创建时间超过一天的订单记录*/
