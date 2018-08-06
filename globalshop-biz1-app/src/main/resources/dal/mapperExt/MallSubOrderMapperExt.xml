@@ -767,5 +767,125 @@
         </foreach>
     </select>
 
-
+    <!-- 根据指定条件分页查询子订单 -->
+    <select id="listMallSubOrders" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mall_sub_order T1
+        <where>
+            <if test="mallSubOrderQueryVO.orderNo != null">
+                AND T1.order_no = #{mallSubOrderQueryVO.orderNo}
+            </if>
+            <if test="mallSubOrderQueryVO.subOrderNo != null">
+                AND T1.sub_order_no = #{mallSubOrderQueryVO.subOrderNo}
+            </if>
+            <if test="mallSubOrderQueryVO.shopCode != null">
+                AND T1.shop_code = #{mallSubOrderQueryVO.shopCode}
+            </if>
+            <if test="mallSubOrderQueryVO.status != null and mallSubOrderQueryVO.status != 10">
+                AND T1.status = #{mallSubOrderQueryVO.status}
+            </if>
+            <if test="mallSubOrderQueryVO.stockStatus != null">
+                AND T1.stock_status = #{mallSubOrderQueryVO.stockStatus}
+            </if>
+            <if test="mallSubOrderQueryVO.skuCode != null">
+                AND T1.sku_code = #{mallSubOrderQueryVO.skuCode}
+            </if>
+            <if test="mallSubOrderQueryVO.itemName != null">
+                AND T1.item_name = #{mallSubOrderQueryVO.itemName}
+            </if>
+            <if test="mallSubOrderQueryVO.upc != null">
+                AND T1.upc = #{mallSubOrderQueryVO.upc}
+            </if>
+            <if test="mallSubOrderQueryVO.receiver != null">
+                AND T1.receiver = #{mallSubOrderQueryVO.receiver}
+            </if>
+            <if test="mallSubOrderQueryVO.logisticType != null">
+                AND T1.logistic_type = #{mallSubOrderQueryVO.logisticType}
+            </if>
+            <if test="mallSubOrderQueryVO.telephone != null">
+                AND T1.telephone = #{mallSubOrderQueryVO.telephone}
+            </if>
+            <if test="mallSubOrderQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{mallSubOrderQueryVO.warehouseNo}
+            </if>
+            <if test="mallSubOrderQueryVO.closeReason != null">
+                AND T1.close_reason = #{mallSubOrderQueryVO.closeReason}
+            </if>
+            <if test="mallSubOrderQueryVO.openId != null">
+                AND T1.open_id = #{mallSubOrderQueryVO.openId}
+            </if>
+            <if test="mallSubOrderQueryVO.idCard != null">
+                AND T1.id_card = #{mallSubOrderQueryVO.idCard}
+            </if>
+            <if test="mallSubOrderQueryVO.startGmtCreate != null">
+                AND T1.gmt_create &gt;= #{mallSubOrderQueryVO.startGmtCreate}
+            </if>
+            <if test="mallSubOrderQueryVO.endGmtCreate != null">
+                AND T1.gmt_create &lt;= #{mallSubOrderQueryVO.endGmtCreate}
+            </if>
+        </where>
+        ORDER BY T1.gmt_create DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex},#{pageQueryParam.pageSize}
+        </if>
+    </select>
+    <!-- 根据指定条件查询子订单数目 -->
+    <select id="countMallSubOrders" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM mall_sub_order T1
+        <where>
+            <if test="mallSubOrderQueryVO.orderNo != null">
+                AND T1.order_no = #{mallSubOrderQueryVO.orderNo}
+            </if>
+            <if test="mallSubOrderQueryVO.subOrderNo != null">
+                AND T1.sub_order_no = #{mallSubOrderQueryVO.subOrderNo}
+            </if>
+            <if test="mallSubOrderQueryVO.shopCode != null">
+                AND T1.shop_code = #{mallSubOrderQueryVO.shopCode}
+            </if>
+            <if test="mallSubOrderQueryVO.status != null and mallSubOrderQueryVO.status != 10">
+                AND T1.status = #{mallSubOrderQueryVO.status}
+            </if>
+            <if test="mallSubOrderQueryVO.stockStatus != null">
+                AND T1.stock_status = #{mallSubOrderQueryVO.stockStatus}
+            </if>
+            <if test="mallSubOrderQueryVO.skuCode != null">
+                AND T1.sku_code = #{mallSubOrderQueryVO.skuCode}
+            </if>
+            <if test="mallSubOrderQueryVO.itemName != null">
+                AND T1.item_name = #{mallSubOrderQueryVO.itemName}
+            </if>
+            <if test="mallSubOrderQueryVO.upc != null">
+                AND T1.upc = #{mallSubOrderQueryVO.upc}
+            </if>
+            <if test="mallSubOrderQueryVO.receiver != null">
+                AND T1.receiver = #{mallSubOrderQueryVO.receiver}
+            </if>
+            <if test="mallSubOrderQueryVO.logisticType != null">
+                AND T1.logistic_type = #{mallSubOrderQueryVO.logisticType}
+            </if>
+            <if test="mallSubOrderQueryVO.telephone != null">
+                AND T1.telephone = #{mallSubOrderQueryVO.telephone}
+            </if>
+            <if test="mallSubOrderQueryVO.warehouseNo != null">
+                AND T1.warehouse_no = #{mallSubOrderQueryVO.warehouseNo}
+            </if>
+            <if test="mallSubOrderQueryVO.closeReason != null">
+                AND T1.close_reason = #{mallSubOrderQueryVO.closeReason}
+            </if>
+            <if test="mallSubOrderQueryVO.openId != null">
+                AND T1.open_id = #{mallSubOrderQueryVO.openId}
+            </if>
+            <if test="mallSubOrderQueryVO.idCard != null">
+                AND T1.id_card = #{mallSubOrderQueryVO.idCard}
+            </if>
+            <if test="mallSubOrderQueryVO.startGmtCreate != null">
+                AND T1.gmt_create &gt;= #{mallSubOrderQueryVO.startGmtCreate}
+            </if>
+            <if test="mallSubOrderQueryVO.endGmtCreate != null">
+                AND T1.gmt_create &lt;= #{mallSubOrderQueryVO.endGmtCreate}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -1,18 +1,16 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.google.common.collect.Maps;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.enums.OrderReturnStatus;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryBookingRecordDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallReturnOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallReturnOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderExcelVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.common.enums.InventoryRecord;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -454,5 +452,16 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
 
     private int getMallOrderStatus(List<MallSubOrderDO> list) {
         return OrderStatus.RETURNING.getCode();
+    }
+
+    @Override
+    public List<MallSubOrderDO> listMallSubOrders(MallSubOrderQueryVO mallSubOrderQueryVO, PageQueryParam pageQueryParam) {
+        pageQueryParam.calculateRowIndex();
+        return mallSubOrderDOMapper.listMallSubOrders(mallSubOrderQueryVO, pageQueryParam);
+    }
+
+    @Override
+    public int countMallSubOrders(MallSubOrderQueryVO mallSubOrderQueryVO) {
+        return mallSubOrderDOMapper.countMallSubOrders(mallSubOrderQueryVO);
     }
 }
