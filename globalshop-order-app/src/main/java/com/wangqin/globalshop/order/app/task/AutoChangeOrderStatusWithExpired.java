@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrack;
+import com.wangqin.globalshop.order.app.kuaidi_bean.CommonShippingTrackState;
 import com.wangqin.globalshop.order.app.kuaidi_bean.Kuaidi100ShippingTrackResult;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
@@ -36,6 +37,7 @@ public class AutoChangeOrderStatusWithExpired {
     @Autowired
     private IOrderMallCommisionApplyService applyService;
 
+
     @Scheduled(cron = "0 0/30 * * * ?")
     public void AutoChangeOrderStatusWithExpired() {
         log.info("轮询更新订单物流状态");
@@ -46,13 +48,19 @@ public class AutoChangeOrderStatusWithExpired {
         for (MallSubOrderDO subOrder : mallSubOrderDOList) {
             /*通过子订单查询通用的物流轨迹*/
             String shippingNo = subOrder.getShippingNo();
-            Kuaidi100ShippingTrackResult kuaidi100ShippingTrackResult = kuaidi100Service.queryShippingTrack(shippingNo);
-            CommonShippingTrack commonShippingTrack = kuaidi100ShippingTrackResult.toCommonShippingTrack();
-            String state = commonShippingTrack.getState();
-            /*如果物流轨迹的状态为已签收  则更新子订单的状态*/
-            if ("3".equals(state)) {
-                updateOrderStatus(subOrder);
+            try {
 
+                Kuaidi100ShippingTrackResult kuaidi100ShippingTrackResult = kuaidi100Service.queryShippingTrack(shippingNo);
+                CommonShippingTrack commonShippingTrack = kuaidi100ShippingTrackResult.toCommonShippingTrack();
+                String state = commonShippingTrack.getState();
+            /*如果物流轨迹的状态为已签收  则更新子订单的状态*/
+                if (Integer.valueOf(state) == CommonShippingTrackState.HAVE_RECEIVE.getState()) {
+                    log.info("开始更新主订单的状态" + subOrder.getOrderNo());
+                    updateOrderStatus(subOrder);
+
+                }
+            } catch (ErpCommonException e) {
+                log.error(e.getErrorMsg());
             }
             //todo 更新shippingOrder状态
 

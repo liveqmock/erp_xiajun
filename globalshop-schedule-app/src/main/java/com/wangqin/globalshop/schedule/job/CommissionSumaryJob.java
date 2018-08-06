@@ -65,8 +65,8 @@ public class CommissionSumaryJob {
 	 * 2、计算总佣金
 	 * 3、生成 佣金记录，默认状态待结算
 	 */
-	@Scheduled(cron = "0 0 1,3,5 * * ? ")
-	//@Scheduled(cron = "0/30 * * * * ? ")
+	//@Scheduled(cron = "0 0 1,3,5 * * ? ")
+	@Scheduled(cron = "0/30 * * * * ? ")
 	public void createCommissionSumary(){
 		List<MallCommisionApplyDO> applyDOList =  applyService.selectByStatusAndNotSync(MallCommisionApplyStatus.RECEIVE.getCode());
 		if(!EasyUtil.isListEmpty(applyDOList)){
@@ -217,8 +217,8 @@ public class CommissionSumaryJob {
 	/**
 	 *  校验状态，检验是否已签收15天，是则可结算
 	 */
-	//@Scheduled(cron = "0/30 * * * * ? ")
-	@Scheduled(cron = "0 0 1,3,5 * * ? ")
+	@Scheduled(cron = "0/30 * * * * ? ")
+	//@Scheduled(cron = "0 0 1,3,5 * * ? ")
 	public void checkStatusCommissionSumary(){
 		List<CommissionSumaryDO> sumaryDOList = sumaryService.selectMorethan15Day();//待结算状态， 且结算时间超过15天的
 		if(!EasyUtil.isListEmpty(sumaryDOList)){
