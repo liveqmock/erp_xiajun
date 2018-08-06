@@ -49,7 +49,13 @@ public class MallSaleAgentEditVO {
     private Integer commissionMode;
 
     /**
+     * 佣金数字字符串，百分比模式如5%填5，金额模式则为金额
+     */
+    private String commissionValueStr;
+
+    /**
      * 佣金数字值，百分比模式如5%填0.05，金额模式则为金额
+     * 此处不要直接在前端赋值
      */
     private Double commissionValue;
 

@@ -4,10 +4,13 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
+import com.wangqin.globalshop.common.utils.BigDecimalHelper;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -120,6 +123,17 @@ public class MallSaleAgentController {
         JsonResult result = new JsonResult();
 
         try {
+            if(!StringUtil.isEmpty(mallSaleAgentEditVO.getCommissionValueStr()))
+            {
+                try{
+                    BigDecimal value= BigDecimal.valueOf(Double.parseDouble(mallSaleAgentEditVO.getCommissionValueStr()));
+                    value=value.divide(new BigDecimal(100));
+                    mallSaleAgentEditVO.setCommissionValue(value.doubleValue());
+                }catch (Exception e){
+                    result.buildMsg("非正常数字: CommissionValueStr"+mallSaleAgentEditVO.getCommissionValueStr())
+                            .buildIsSuccess(false);
+                }
+            }
             mallSaleAgentService.updateCommissionValue(mallSaleAgentEditVO);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
