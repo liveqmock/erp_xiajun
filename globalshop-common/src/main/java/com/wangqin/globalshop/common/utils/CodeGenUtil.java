@@ -77,4 +77,8 @@ public class CodeGenUtil {
 	public static String getSettlementNo(){
 		return "SN"+ DateUtil.formatDate(new Date(), DateUtil.DATE_PARTEN_YYMMDDHHMMSS);
 	}
+
+    public static String getWareHouseNo() {
+		return "WARE"+System.currentTimeMillis()+RandomUtils.nextInt(10000);
+    }
 }
