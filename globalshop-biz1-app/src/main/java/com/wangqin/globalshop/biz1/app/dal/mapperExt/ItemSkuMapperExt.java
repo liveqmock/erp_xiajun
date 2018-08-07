@@ -2,6 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import org.apache.ibatis.annotations.Param;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -106,4 +107,8 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	Integer queryRecordCountByUpcCompanyNotInSameItem(@Param("companyNo")String companyNo,@Param("upc")String upc,@Param("itemCode")String itemCode);
 
     Integer queryCountByUpcAndCompanyNo(@Param("companyNo")String companyNo,@Param("upc") String upc);
+
+    List<SkuChannelPriceDTO> queryItemSkuPrices(ItemSkuQueryVO itemSkuQueryVO);
+
+    List<ItemSkuDO> queryItemSkuListOnly(ItemSkuQueryVO itemSkuQueryVO);
 }

@@ -61,6 +61,11 @@ public class MallSaleAgentItemVO {
     private Double commissionValue;
 
     /**
+     * 佣金数字字符串，百分比模式如5%填5，金额模式则为金额
+     */
+    private String commissionValueStr;
+
+    /**
      * 待结佣金（由其他接口给出）
      */
     private Double outstandingCommission;
