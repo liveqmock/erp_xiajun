@@ -14,6 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  */
 public class ItemSkuQueryVO extends PageQueryVO {
+
+	private String skuRateString;
 	
 	private Double skuRate;
 	
@@ -122,6 +124,14 @@ public class ItemSkuQueryVO extends PageQueryVO {
 	private String modifier;
 
 	
+	public String getSkuRateString() {
+		return skuRateString;
+	}
+
+	public void setSkuRateString(String skuRateString) {
+		this.skuRateString = skuRateString;
+	}
+
 	public Double getSkuRate() {
 		return skuRate;
 	}

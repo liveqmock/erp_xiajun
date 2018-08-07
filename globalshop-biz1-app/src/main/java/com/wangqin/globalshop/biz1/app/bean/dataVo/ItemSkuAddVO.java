@@ -15,7 +15,7 @@ import java.util.List;
  *
  */
 public class ItemSkuAddVO implements Serializable {
-	
+	private String skuRateString;
 	private Double skuRate;
 	private Integer saleMode;
 
@@ -26,6 +26,13 @@ public class ItemSkuAddVO implements Serializable {
 	private String modifier;
 	private String categoryCode;
 	
+	
+	public String getSkuRateString() {
+		return skuRateString;
+	}
+	public void setSkuRateString(String skuRateString) {
+		this.skuRateString = skuRateString;
+	}
 	public Double getSkuRate() {
 		return skuRate;
 	}

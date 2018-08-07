@@ -254,6 +254,7 @@ public class ItemServiceImplement implements IItemService {
             itemSku.setCreator(AppUtil.getLoginUserId());
             itemSku.setCompanyNo(companyNo);
             itemSku.setSalePrice(itemSku.getSalePrice());
+            itemSku.setSkuRate(ItemUtil.divideOneHundred(itemSku.getSkuRateString()));
         }
         //判断用户添加的几个upc之间是否重复
         HashSet<String> upcSet = new HashSet<String>(upcList);
@@ -386,6 +387,8 @@ public class ItemServiceImplement implements IItemService {
             throw new RuntimeException("商品无sku，无法编辑");
         }
         for (ItemSkuQueryVO sku : itemSkus) {
+        	//处理佣金比率
+        	sku.setSkuRateString(ItemUtil.multiplyOneHundred(sku.getSkuRate()));
             String skuCode = sku.getSkuCode();
             List<ItemSkuScaleDO> skuScaleList = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(skuCode);
             if (!EasyUtil.isListEmpty(skuScaleList)) {
@@ -401,7 +404,7 @@ public class ItemServiceImplement implements IItemService {
             //查询渠道价格
             //sku.setChannelSalePriceList(channelSalePriceService.queryPriceListBySkuCode(skuCode));
             List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(skuCode);
-            System.out.println("length:" + channelSalePriceList.size());
+            //System.out.println("length:" + channelSalePriceList.size());
             List<ChannelSalePriceVO> salePriceList = new ArrayList<ChannelSalePriceVO>();
             if (IsEmptyUtil.isCollectionNotEmpty(channelSalePriceList)) {
                 for (ChannelSalePriceDO channelSalePriceDO : channelSalePriceList) {

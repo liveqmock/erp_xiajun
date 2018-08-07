@@ -235,6 +235,7 @@ public class ItemController {
                     updateSku.setItemName(item.getName());
                     updateSku.setCategoryCode(item.getCategoryCode());
                     updateSku.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
+                    updateSku.setSkuRate(ItemUtil.divideOneHundred(updateSku.getSkuRateString()));
                     itemSkuService.updateById(updateSku);
                 }
             }
@@ -261,6 +262,7 @@ public class ItemController {
                     addSku.setItemName(itemDTO.getName());
                     addSku.setCategoryCode(itemDTO.getCategoryCode());
                     addSku.setCategoryName(itemDTO.getCategoryName());
+                    addSku.setSkuRate(ItemUtil.divideOneHundred(newSku.getSkuRateString()));
                     //插入item_sku_scale表
                     ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
                     ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();

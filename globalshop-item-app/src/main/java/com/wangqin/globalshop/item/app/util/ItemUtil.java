@@ -1,8 +1,11 @@
 package com.wangqin.globalshop.item.app.util;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+
+import org.springframework.context.annotation.EnableLoadTimeWeaving;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
@@ -91,6 +94,28 @@ public class ItemUtil {
             }
         }
     }	
+    
+    public static Double divideOneHundred(String s) {
+    	//构造以字符串内容为值的BigDecimal类型的变量bd 
+    	BigDecimal bd = new BigDecimal(s); 
+    	BigDecimal divisor = new BigDecimal(100);
+    	BigDecimal result = bd.divide(divisor);
+    	//设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入) 
+    	result = result.setScale(2, BigDecimal.ROUND_HALF_UP); 
+    	//转化为字符串输出 
+    	return result.doubleValue();
+    }
+    
+    public static String multiplyOneHundred(Double s) {
+    	//构造以字符串内容为值的BigDecimal类型的变量bd 
+    	BigDecimal bd = new BigDecimal(s); 
+    	BigDecimal divisor = new BigDecimal(100);
+    	BigDecimal result = bd.multiply(divisor);
+    	//设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入) 
+    	result = result.setScale(2, BigDecimal.ROUND_HALF_UP); 
+    	//转化为字符串输出 
+    	return result.toString();
+    }
     
 
 }
