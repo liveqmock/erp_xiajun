@@ -46,7 +46,12 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(rollbackFor = BizCommonException.class)
     public void addCompany(CompanyEditVO companyEditVO) {
 
-        // TODO: 增加权限认证
+        // 权限认证（粗略）
+        String loginUserCompanyNo = AppUtil.getLoginUserCompanyNo();
+        String legalCompanyNo = "-1";
+        if (!legalCompanyNo.equals(loginUserCompanyNo)) {
+            throw new BizCommonException("没有操作权限！");
+        }
 
         if (StringUtil.isBlank(companyEditVO.getCompanyName())
                 || StringUtil.isBlank(companyEditVO.getLoginName())
@@ -56,11 +61,44 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BizCommonException("信息不完整！");
         }
 
-        // 创建商户
-        CompanyDO companyDO = new CompanyDO();
-        String companyNo = CodeGenUtil.getCompanyNo();
+        // 创建者信息
         String creator = AppUtil.getLoginUserId();
         String modifier = AppUtil.getLoginUserId();
+
+        // 创建商户
+        String companyNo = CodeGenUtil.getCompanyNo();
+        addCompany(companyEditVO, companyNo, creator, modifier);
+
+        // 创建部门（公司总部）
+        addAuthOrganization(companyEditVO, companyNo, creator, modifier);
+
+        // 创建角色（所有）
+        Long roleId = CodeGenUtil.getRoleId();
+        addAuthRole(companyNo, roleId, creator, modifier);
+
+        // 创建用户（管理员）
+        Long userId = addAuthUser(companyEditVO, companyNo, creator, modifier);
+
+        // 创建用户与角色对应关系（管理员）
+        addAuthUserRole(companyNo, userId, roleId, creator, modifier);
+
+        // 创建资源（管理员）
+        addAuthRoleResource(companyNo, roleId, creator, modifier);
+
+        // 添加 applet_config
+        addAppletConfig(companyEditVO, companyNo, creator, modifier);
+    }
+
+    /**
+     * 创建商户
+     *
+     * @param companyEditVO
+     * @param companyNo
+     * @param creator
+     * @param modifier
+     */
+    private void addCompany(CompanyEditVO companyEditVO, String companyNo, String creator, String modifier) {
+        CompanyDO companyDO = new CompanyDO();
         try {
             // 商户必需字段
             companyDO.setCompanyNo(companyNo);
@@ -88,27 +126,7 @@ public class CompanyServiceImpl implements CompanyService {
             e.printStackTrace();
             throw new BizCommonException("公司新增失败！");
         }
-
-        // 创建部门（公司总部）
-        addAuthOrganization(companyEditVO, companyNo, creator, modifier);
-
-        // 创建角色（所有）
-        Long roleId = CodeGenUtil.getRoleId();
-        addAuthRole(companyNo, roleId, creator, modifier);
-
-        // 创建用户（管理员）
-        Long userId = addAuthUser(companyEditVO, companyNo, creator, modifier);
-
-        // 创建用户与角色对应关系（管理员）
-        addAuthUserRole(companyNo, userId, roleId, creator, modifier);
-
-        // 创建资源（管理员）
-        addAuthRoleResource(companyNo, roleId, creator, modifier);
-
-        // 添加 applet_config
-        addAppletConfig(companyEditVO, companyNo, creator, modifier);
     }
-
 
     /**
      * 创建部门（公司总部）
@@ -242,6 +260,7 @@ public class CompanyServiceImpl implements CompanyService {
         appletConfigDO.setCreator(creator);
         appletConfigDO.setModifier(modifier);
         appletConfigDO.setStatus(companyEditVO.getStatus());
+        // TODO: 需要根据接入模式判断是否需要填 PayKey
         appletConfigDO.setMchId(companyEditVO.getMchId());
         appletConfigDO.setPayKey(companyEditVO.getPayKey());
         appletConfigDO.setAppletType("2");
