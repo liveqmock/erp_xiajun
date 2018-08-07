@@ -738,13 +738,21 @@
         <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <table tableName="mall_sale_agent" domainObjectName="MallSaleAgentDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-        enableSelectByExample="false" selectByExampleQueryId="false" >
-        <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        <ignoreColumn column="gmt_modify" delimitedColumnName=""/>
-        <ignoreColumn column="gmt_create" delimitedColumnName=""/>
-        <ignoreColumn column="is_del" delimitedColumnName=""/>
-        </table>
+        <!--<table tableName="mall_sale_agent" domainObjectName="MallSaleAgentDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+        <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+        <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+        <!--</table>-->
+
+            <!--<table tableName="item_qrcode_share" domainObjectName="ItemQrcodeShareDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+                   <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+                <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+                <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+                <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+                <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+            <!--</table>-->
 
     </context>
 </generatorConfiguration>
