@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +12,20 @@ import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 public class AppletConfigServiceImpl implements IAppletConfigService{
 
 	@Autowired
-	private AppletConfigDOMapperExt appletConfigDOMapperExt;
+	private AppletConfigDOMapperExt appletConfigDOMapper;
 	
 	@Override
 	public AppletConfigDO queryWxMallConfigInfoByCompanyNo(String companyNo,String appletType) {
-		return appletConfigDOMapperExt.queryWxMallConfigInfoByCompanyNo(companyNo, appletType);
+		return appletConfigDOMapper.queryWxMallConfigInfoByCompanyNo(companyNo, appletType);
+	}
+
+	@Override
+	public void addAppletConfig(AppletConfigDO appletConfigDO) {
+		try {
+			appletConfigDOMapper.insertSelective(appletConfigDO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw  new BizCommonException("新增 Applet Config 失败！");
+		}
 	}
 }
