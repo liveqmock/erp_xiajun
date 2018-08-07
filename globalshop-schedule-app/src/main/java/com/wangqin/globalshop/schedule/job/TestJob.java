@@ -13,13 +13,13 @@ import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.schedule.service.ScheduleItemService;
 
-@Component
+//@Component
 public class TestJob {
 
 	@Autowired
 	private ScheduleItemService scheduleItemService;
 	 
-    @Scheduled(cron = "0/30 * * * * ? ")
+    @Scheduled(cron = "0 * * * * ? ")
     public void testJob(){
         System.out.println("========Test Job==========");
     }

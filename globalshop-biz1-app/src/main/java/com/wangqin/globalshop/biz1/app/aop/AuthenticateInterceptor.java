@@ -46,7 +46,8 @@ public class AuthenticateInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         //设置不拦截的对象
         String[] noFilters = new String[] {  "js",
-                "images", "ico","css", "/login" };
+                "images", "ico","css", "/login",
+				"swagger-ui.html", "/webjars" };
         boolean beFilter = true;
         for (String s : noFilters) {
             if (uri.contains(s)) {
