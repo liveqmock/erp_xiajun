@@ -76,6 +76,10 @@ public class ItemServiceImplement implements IItemService {
     private IChannelSalePriceService channelSalePriceService;
     @Autowired
     private ChannelAccountDOMapperExt channelAccountDOMapperExt;
+
+    @Autowired
+	private ItemQrcodeShareDOMapperExt qrcodeShareDOMapperExt;
+
     @Autowired
     private ICountryService countryServiceImpl;
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
@@ -472,16 +476,26 @@ public class ItemServiceImplement implements IItemService {
     public String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken) {
 
         String key = String.format("%s-uuid-%s-%s-%s", "token", userId, companyNo, itemCode);
-        String picUrl = (String) shareCache.get(key);
+
+        //String picUrl = (String) shareCache.get(key);
+
+        String picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId,companyNo,itemCode);
+
         if (StringUtils.isBlank(picUrl)) {
             UUID uid = UUID.randomUUID();
             String uuid = uid.toString().replaceAll("-", "");
-            ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
+            //ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
             picUrl = insertIntoItemDimension(uuid, pages, accessToken);
-            // uuid:picUrl
-            shareCache.put(uuid, BaseDto.toString(tokenEntity));
-            // key:uuid
-            shareCache.put(key, picUrl);
+
+			ItemQrcodeShareDO itemQrcodeShareDO = new ItemQrcodeShareDO();
+			itemQrcodeShareDO.setCompanyNo(companyNo);
+			itemQrcodeShareDO.setShareNo(uuid);
+			itemQrcodeShareDO.setItemCode(itemCode);
+			itemQrcodeShareDO.setUserNo(userId);
+			itemQrcodeShareDO.setPicUrl(picUrl);
+			itemQrcodeShareDO.init4NoLogin();
+
+			qrcodeShareDOMapperExt.insert(itemQrcodeShareDO);
         }
         return picUrl;
     }

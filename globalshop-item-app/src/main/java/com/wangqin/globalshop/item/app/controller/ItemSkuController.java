@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -184,6 +185,26 @@ public class ItemSkuController  {
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
+		result.buildIsSuccess(true);
+		return result;
+	}
+
+
+	/**
+	 * sku多渠道价格展示
+	 * @param itemSkuQueryVO
+	 * @return
+	 */
+	@RequestMapping("/queryItemSkuPriceList")
+	@ResponseBody
+	public Object queryItemSkuPriceList(ItemSkuQueryVO itemSkuQueryVO) {
+		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+		if(!loginCheck()) {
+			return result.buildIsSuccess(false).buildMsg("请登录");
+		}
+		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+//		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
+		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
 		result.buildIsSuccess(true);
 		return result;
 	}
@@ -480,7 +501,7 @@ public class ItemSkuController  {
     public Boolean loginCheck() {
     	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
          	return false;
-        }  
+        }
     	return true;
     }
 }

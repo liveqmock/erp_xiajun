@@ -2,8 +2,11 @@ package com.wangqin.globalshop.web.controller.item;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemQrcodeShareDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemQrcodeShareDOMapperExt;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.item.app.service.IAppletConfigService;
@@ -30,6 +33,9 @@ public class ShareApiController {
     @Autowired
     private IAppletConfigService appletConfigService;
 
+	@Autowired
+	private ItemQrcodeShareDOMapperExt qrcodeShareDOMapperExt;
+
     private static final String TYPE_OF_MALL_APPLET = "2";
     public static final String ACCESS_TOKENURL = "https://api.weixin.qq.com/cgi-bin/token";
     //public static final String ACCESS_TOKENPARAM = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
@@ -39,8 +45,12 @@ public class ShareApiController {
     @ResponseBody
     public String token(@RequestParam("uuid") String uuid){
 
-        ShareTokenEntity tokenEntity = itemService.getTokenFromCache(uuid);
-        JsonResult<String> jsonResult = new JsonResult<>();
+		ItemQrcodeShareDO qrcodeShareDO = qrcodeShareDOMapperExt.selectByShareNo(uuid);
+		ShareTokenEntity tokenEntity = null;
+		if(qrcodeShareDO != null){
+			tokenEntity = ShareTokenEntity.buildShareToken(qrcodeShareDO.getUserNo(), qrcodeShareDO.getCompanyNo(), qrcodeShareDO.getItemCode(), uuid);
+		}
+		JsonResult<String> jsonResult = new JsonResult<>();
         if (tokenEntity == null){
             tokenEntity = new ShareTokenEntity();
         }
@@ -56,26 +66,45 @@ public class ShareApiController {
 
         JsonResult<ItemShareEntity> jsonResult = new JsonResult<>();
 
-        //获取商城小程序的appid和screat
-        AppletConfigDO appletConfigDO = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, TYPE_OF_MALL_APPLET);
-        String accessToken = appletConfigDO.getAuthorizerAccessToken();
-        String token;
-        if (StringUtil.isBlank(accessToken)){
-            String accessTokenParam = ACCESS_TOKENPARAM_PART+appletConfigDO.getAppid()+"&secret="+appletConfigDO.getSecret();
-            System.out.println("config:"+accessTokenParam);
-            //TODO refactor
-            //生成分享
-            String reponse = DimensionCodeUtil.sendGet(ACCESS_TOKENURL, accessTokenParam);
-            JSONObject myJson = JSONObject.fromObject(reponse);
-            token = (String) myJson.get("access_token");
-        }  else {
-            token =accessToken;
-        }
 
-        String picUrl = itemService.generateItemShareUrl(userId, companyNo, itemCode, "pages/item/detail", token);
+		String picUrl = null;
+		picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId,companyNo,itemCode);
+		if(EasyUtil.isStringEmpty(picUrl)){
+			//获取商城小程序的appid和screat
+			AppletConfigDO appletConfigDO = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, TYPE_OF_MALL_APPLET);
+			String accessToken = appletConfigDO.getAuthorizerAccessToken();
+			String token;
+			if (StringUtil.isBlank(accessToken)){
+				String accessTokenParam = ACCESS_TOKENPARAM_PART+appletConfigDO.getAppid()+"&secret="+appletConfigDO.getSecret();
+				System.out.println("config:"+accessTokenParam);
+				//TODO refactor
+				//生成分享
+				String reponse = DimensionCodeUtil.sendGet(ACCESS_TOKENURL, accessTokenParam);
+				JSONObject myJson = JSONObject.fromObject(reponse);
+				token = (String) myJson.get("access_token");
+			}  else {
+				token = accessToken;
+			}
+
+			try {
+				picUrl = itemService.generateItemShareUrl(userId, companyNo, itemCode, "pages/item/detail", token);
+			} catch (Exception e) {
+				try {
+					Thread.sleep(100);
+					picUrl = itemService.generateItemShareUrl(userId, companyNo, itemCode, "pages/item/detail", token);
+				} catch (InterruptedException e1) {
+					jsonResult.buildIsSuccess(false).buildMsg("服务器繁忙，请稍后重试");
+					return BaseDto.toString(jsonResult);
+				} catch (Exception ex){
+					jsonResult.buildIsSuccess(false).buildMsg("服务器繁忙，请稍后重试");
+					return BaseDto.toString(jsonResult);
+				}
+
+			}
+		}
 
 
-        ItemShareEntity itemShareEntity = new ItemShareEntity();
+		ItemShareEntity itemShareEntity = new ItemShareEntity();
         
         ItemDO item = itemService.itemDetailByItemCode(itemCode, companyNo);
         itemShareEntity.setItemDesc(item.getItemName());

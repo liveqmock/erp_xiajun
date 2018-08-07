@@ -221,7 +221,84 @@
           order by T1.id desc
           	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
-    
+
+    <!-- 多渠道价格 -->
+    <select id="queryItemSkuPrices" resultType="com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
+        SELECT
+        T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
+        T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
+        T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,
+        T1.sku_code AS skuCode,T1.sale_price AS salePrice,T1.gmt_modify AS gmtModify,
+        csp.channal_no as channelNo,
+        csp.sale_price as channelSalePrice,
+        csp.batch_no as batchNo,
+        csp.shop_code as shopCode
+        FROM
+        item_sku T1 left join channel_sale_price csp on T1.sku_code= csp.sku_code
+        where
+        T1.is_del=0
+        AND T1.status=1
+        <if test=" categoryCode != null and categoryCode != '' ">
+            and T1.category_code = #{categoryCode}
+        </if>
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
+        <if test=" itemName != null and itemName != '' ">
+            and T1.item_name LIKE concat('%',#{itemName},'%')
+        </if>
+        <if test=" itemCode != null and itemCode != '' ">
+            and T1.item_code = #{itemCode}
+        </if>
+        <if test=" upc != null and upc != '' ">
+            and T1.upc = #{upc}
+        </if>
+        <if test=" skuCode != null and skuCode != '' ">
+            and T1.sku_code = #{skuCode}
+        </if>
+
+        <if test=" brand != null and brand != ''">
+            and  T1.brand_name = #{brand}
+        </if>
+        <if test=" startGmt!= null ">
+            and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+        </if>
+        <if test=" endGmt != null ">
+            and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+        </if>
+        order by T1.id desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+
+    <!-- 根据条件查询itemSkuList，分页-->
+    <select id="queryItemSkuListOnly" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
+        SELECT
+
+        T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
+        T1.sku_rate AS skuRate,
+        T1.item_name AS itemName,T1.company_no AS companyNo,
+        T1.category_code AS itemCode,
+        T1.category_name AS categoryName,
+        T1.upc AS upc,
+        T1.weight AS weight,T1.sku_pic AS skuPic,
+        T1.package_level_id AS packageLevelId,
+        T1.sale_price AS salePrice
+
+        FROM
+        item_sku T1
+        where
+        T1.is_del=0
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
+        <if test=" itemCode != null and itemCode != '' ">
+            and T1.item_code = #{itemCode}
+        </if>
+        order by T1.id desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+
+
     <!-- 根据条件查询itemSkuList，不涉及其他的表 ，不做分页-->
      <select id="queryItemSkuListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
         SELECT

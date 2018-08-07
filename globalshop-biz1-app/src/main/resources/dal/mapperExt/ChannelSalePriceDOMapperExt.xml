@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelSalePriceDOMapperExt" >
-	
-	<select id="queryPriceListBySkuCode" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelSalePriceDOMapper.BaseResultMap"
+
+    <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="channal_no" property="channalNo" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="shop_code" property="shopCode" jdbcType="BIGINT" />
+        <result column="sale_price" property="salePrice" jdbcType="REAL" />
+        <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List2" >
+        id, channal_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no,
+        creator, modifier
+    </sql>
+
+	<select id="queryPriceListBySkuCode" resultMap="BaseResultMap2"
 	 parameterType="java.lang.String">
 		SELECT 
-		<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelSalePriceDOMapper.Base_Column_List" />
+		<include refid="Base_Column_List2" />
 		FROM channel_sale_price T1 
 		WHERE T1.sku_code = #{skuCode}
 		AND T1.is_del=0

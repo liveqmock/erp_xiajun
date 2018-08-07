@@ -3,6 +3,14 @@ package com.wangqin.globalshop.item.app.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelSalePriceVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
+import com.wangqin.globalshop.common.enums.ChannelSaleType;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.item.app.service.IChannelSalePriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +43,14 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	
 	@Autowired
 	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
+
+	@Autowired
+	private ChannelAccountDOMapperExt channelAccountDOMapperExt;
+
+	@Autowired
+	private IChannelSalePriceService channelSalePriceService;
+
+
 
 	//查询和本sku同属一个商品的所有sku的sale_price
 	@Override
@@ -78,8 +94,70 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		}
 		return itemResult;
 	}
-	
-	
+
+	/**
+	 * 按照条件分页查询商品多渠道价格(分页)
+	 */
+	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
+	public JsonPageResult<List<SkuChannelPriceDTO>> queryItemSkuPrices(ItemSkuQueryVO itemSkuQueryVO) {
+
+
+		JsonPageResult<List<SkuChannelPriceDTO>> itemResult = new JsonPageResult<>();
+		//1、查询总的记录数量
+		Integer totalCount =  itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
+		//2、查询分页记录
+		if(totalCount!=null&&totalCount!=0L) {
+			itemResult.buildPage(totalCount, itemSkuQueryVO);
+			List<ItemSkuDO> itemSkus = itemSkuMapperExt.queryItemSkuListOnly(itemSkuQueryVO);
+			String companyNo = itemSkuQueryVO.getCompanyNo();
+			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
+			for (ItemSkuDO itemSku : itemSkus) {
+				//渠道价格
+				List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(itemSku.getSkuCode());
+
+				SkuChannelPriceDTO skuChannelPriceDTO = new SkuChannelPriceDTO();
+				BeanUtils.copy(itemSku, skuChannelPriceDTO);
+//				skuChannelPriceDTO.setSkuCode(itemSku.getSkuCode());
+//				skuChannelPriceDTO.setItemCode(itemSku.getItemCode());
+//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
+//
+//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
+				skuChannelPriceDTO.setChannelSalePriceList(channelSalePriceList);
+
+//				channelSalePriceList.forEach(channelPrice -> {
+//					ChannelSalePriceDO channelSalePrice = new ChannelSalePriceDO();
+//					String channelNo = channelAccountDOMapperExt.queryChannelNoByChannelNameAndCompanyNo(channelPrice.getChannelName(), companyNo);
+//					channelSalePrice.setChannalNo(channelNo);
+//					channelSalePrice.setCompanyNo(companyNo);
+//					channelSalePrice.setShopCode(1L);//TEMP
+//					channelSalePrice.setSalePrice(channelPrice.getSalePrice());
+//					channelSalePrice.setSkuCode(itemSku.getSkuCode());
+//					channelSalePrice.setItemCode(itemSku.getItemCode());
+//					channelSalePrice.setCreator(AppUtil.getLoginUserId());
+//					channelSalePrice.setModifier(AppUtil.getLoginUserId());
+//					channelSalePriceService.insertChannelSalePriceSelective(channelSalePrice);
+//				});
+//			//查询sku的规格信息
+//			itemSkus.forEach(itemSku -> {
+//				List<ItemSkuScaleDO> skuScaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
+//				if(!EasyUtil.isListEmpty(skuScaleList)) {
+//					for(ItemSkuScaleDO scale:skuScaleList) {
+//						if("颜色".equals(scale.getScaleName())) {
+//							itemSku.setColor(scale.getScaleValue());
+//						}
+//						if("尺寸".equals(scale.getScaleName())) {
+//							itemSku.setScale(scale.getScaleValue());
+//						}
+//					}
+//				}
+//			});
+				skuChannelPriceDTOList.add(skuChannelPriceDTO);
+			}
+			itemResult.setData(skuChannelPriceDTOList);
+		}
+		return itemResult;
+	}
 
 	/**
 	 * 初始化库存信息，添加商品时用
