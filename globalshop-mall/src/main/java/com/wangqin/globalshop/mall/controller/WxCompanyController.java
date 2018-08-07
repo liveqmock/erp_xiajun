@@ -11,7 +11,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 
 @Controller
 @RequestMapping("/wx/company")
-public class CompanyController {
+public class WxCompanyController {
 
     @Autowired
     CompanyDOMapper companyDOMapper;
