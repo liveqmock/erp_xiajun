@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
-import com.sun.jdi.LongValue;
+
 import com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
@@ -425,6 +425,7 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         proxy.init();
         proxy.setUserNo(user.getUserNo());
         proxy.setParentAgent(state);
+        proxy.setAgentName(wxUser.getNickName());
         proxy.setOpenId(wxUser.getOpenId());
         proxy.setUnionId(wxUser.getUnionId());
         proxy.setHeadProtraitUrl(wxUser.getAvatarUrl());
