@@ -24,6 +24,12 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
+    /**
+     * 添加商户
+     *
+     * @param companyEditVO
+     * @return
+     */
     @PostMapping("/add")
     public Object addCompany(CompanyEditVO companyEditVO) {
         JsonResult result = new JsonResult();
@@ -41,6 +47,12 @@ public class CompanyController {
         return result;
     }
 
+    /**
+     * 查询商户
+     *
+     * @param companyNo
+     * @return
+     */
     @PostMapping("/get")
     public Object getCompany(String companyNo) {
         JsonResult<CompanyDO> result = new JsonResult<>();
@@ -58,6 +70,13 @@ public class CompanyController {
         return result;
     }
 
+    /**
+     * 查询商户
+     *
+     * @param companyQueryVO
+     * @param pageQueryParam
+     * @return
+     */
     @PostMapping("/list")
     public Object listCompanies(CompanyQueryVO companyQueryVO, PageQueryParam pageQueryParam) {
         JsonPageResult<List<CompanyItemVO>> result = new JsonPageResult<>();
@@ -76,7 +95,71 @@ public class CompanyController {
         return result;
     }
 
-//    public Object updateCompany() {
-//
-//    }
+    /**
+     * 更新商户
+     *
+     * @return
+     */
+    @PostMapping("/update")
+    public Object updateCompany() {
+        JsonResult result = new JsonResult();
+
+        try {
+            // companyService.updateCompany(companyEditVO);
+            result.buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出错！").buildIsSuccess(false);
+        }
+
+        return result;
+    }
+
+    /**
+     * 停用商户
+     *
+     * @param companyNo
+     * @return
+     */
+    @PostMapping("/disable")
+    public Object disableCompany(String companyNo) {
+        JsonResult result = new JsonResult();
+
+        try {
+             companyService.disableCompany(companyNo);
+            result.buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出错！").buildIsSuccess(false);
+        }
+
+        return result;
+    }
+
+    /**
+     * 删除商户
+     *
+     * @param companyNo
+     * @return
+     */
+    @PostMapping("/delete")
+    public Object deleteCompany(String companyNo) {
+        JsonResult result = new JsonResult();
+
+        try {
+            companyService.deleteCompany(companyNo);
+            result.buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出错！").buildIsSuccess(false);
+        }
+
+        return result;
+    }
 }

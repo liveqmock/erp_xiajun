@@ -101,6 +101,7 @@
             <if test="companyQueryVO.status != null">
                 AND T1.status = companyQueryVO.status
             </if>
+            AND T1.is_del = 0
         </where>
         ORDER BY T1.gmt_create DESC
         <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
@@ -118,6 +119,84 @@
             <if test="companyQueryVO.status != null">
                 AND T1.status = companyQueryVO.status
             </if>
+            AND T1.is_del = 0
         </where>
     </select>
+
+    <!-- 根据 companyNo 更新指定商户 -->
+    <update id="updateByCompanyNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO">
+        UPDATE company
+        <set >
+            <if test="companyName != null" >
+                company_name = #{companyName},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="shopName != null" >
+                shop_name = #{shopName},
+            </if>
+            <if test="logoUrl != null" >
+                logo_url = #{logoUrl},
+            </if>
+            <if test="forceIdcard != null" >
+                force_idcard = #{forceIdcard},
+            </if>
+            <if test="tel != null" >
+                tel = #{tel},
+            </if>
+            <if test="im != null" >
+                im = #{im},
+            </if>
+            <if test="serviceTime != null" >
+                service_time = #{serviceTime},
+            </if>
+            <if test="forceIdcardUpload != null" >
+                force_idcard_upload = #{forceIdcardUpload},
+            </if>
+            <if test="modifier != null" >
+                modifier = #{modifier},
+            </if>
+            <if test="creator != null" >
+                creator = #{creator},
+            </if>
+            <if test="state != null" >
+                state = #{state},
+            </if>
+            <if test="city != null" >
+                city = #{city},
+            </if>
+            <if test="district != null" >
+                district = #{district},
+            </if>
+            <if test="fullAddress != null" >
+                full_address = #{fullAddress},
+            </if>
+            <if test="overseaAddress != null" >
+                oversea_address = #{overseaAddress},
+            </if>
+            <if test="country != null" >
+                country = #{country},
+            </if>
+            <if test="mainCategory != null" >
+                main_category = #{mainCategory},
+            </if>
+            <if test="offlineAnnualSale != null" >
+                offline_annual_sale = #{offlineAnnualSale},
+            </if>
+            <if test="onlineAnnualSale != null" >
+                online_annual_sale = #{onlineAnnualSale},
+            </if>
+            <if test="adminNo != null" >
+                admin_no = #{adminNo},
+            </if>
+            <if test="intro != null" >
+                intro = #{intro},
+            </if>
+            <if test="isDel != null" >
+                is_del = #{isDel},
+            </if>
+        </set>
+        where company_no = #{companyNo}
+    </update>
 </mapper>

@@ -114,6 +114,37 @@ public class CompanyServiceImpl implements CompanyService {
         return companyDOMapper.countCompanies(companyQueryVO);
     }
 
+    @Override
+    public void updateCompany(CompanyDO companyDO) {
+        if (companyDO.getCompanyNo() == null) {
+            throw new BizCommonException("数据不完整！");
+        }
+
+        int effectedNum = companyDOMapper.updateByCompanyNo(companyDO);
+
+        if (effectedNum <= 0) {
+            throw new BizCommonException("数据库中无此记录！");
+        }
+    }
+
+    @Override
+    public void disableCompany(String companyNo) {
+        CompanyDO companyDO = new CompanyDO();
+        companyDO.setCompanyNo(companyNo);
+        // 将状态改为 1（关闭）
+        companyDO.setStatus(1);
+        updateCompany(companyDO);
+    }
+
+    @Override
+    public void deleteCompany(String companyNo) {
+        CompanyDO companyDO = new CompanyDO();
+        companyDO.setCompanyNo(companyNo);
+        // 软删除
+        companyDO.setIsDel(true);
+        updateCompany(companyDO);
+    }
+
     /**
      * 创建商户
      *

@@ -36,4 +36,12 @@ public interface CompanyDOMapperExt extends CompanyDOMapper {
      * @return
      */
     int countCompanies(@Param("companyQueryVO") CompanyQueryVO companyQueryVO);
+
+    /**
+     * 根据 companyNo 更新指定商户
+     *
+     * @param companyDO
+     * @return
+     */
+    int updateByCompanyNo(CompanyDO companyDO);
 }

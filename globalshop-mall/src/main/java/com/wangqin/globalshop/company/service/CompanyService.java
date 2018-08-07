@@ -47,4 +47,25 @@ public interface CompanyService {
      * @return
      */
     int countCompanies(CompanyQueryVO companyQueryVO);
+
+    /**
+     * 更新商户
+     *
+     * @param companyDO
+     */
+    void updateCompany(CompanyDO companyDO);
+
+    /**
+     * 停用商户
+     *
+     * @param companyNo
+     */
+    void disableCompany(String companyNo);
+
+    /**
+     * 删除商户
+     *
+     * @param companyNo
+     */
+    void deleteCompany(String companyNo);
 }
