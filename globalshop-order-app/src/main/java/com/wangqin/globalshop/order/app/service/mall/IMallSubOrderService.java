@@ -1,9 +1,7 @@
 package com.wangqin.globalshop.order.app.service.mall;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.MallSubOrderExcelVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.common.exception.InventoryException;
 
 import java.util.List;
@@ -86,5 +84,22 @@ public interface IMallSubOrderService {
     List<MallSubOrderDO> queryByMallSubOrderNos(List<String> noList);
 
     Integer changeStatus(Long id,  Integer oldStatus, Integer newStatus);
+
+    /**
+     * 根据指定条件分页查询子订单
+     *
+     * @param mallSubOrderQueryVO
+     * @param pageQueryParam
+     * @return
+     */
+    List<MallSubOrderDO> listMallSubOrders(MallSubOrderQueryVO mallSubOrderQueryVO, PageQueryParam pageQueryParam);
+
+    /**
+     * 根据指定条件查询子订单数目
+     *
+     * @param mallSubOrderQueryVO
+     * @return
+     */
+    int countMallSubOrders(MallSubOrderQueryVO mallSubOrderQueryVO);
 }
 

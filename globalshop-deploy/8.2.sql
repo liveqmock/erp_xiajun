@@ -1,4 +1,4 @@
-ALTER TABLE `item_sku` ADD COLUMN `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例';
+ALTER TABLE `item_sku` ADD COLUMN `sku_rate` DOUBLE(10,4) NOT NULL DEFAULT '0' COMMENT '代理佣金比例';
 
 ALTER TABLE `item` ADD COLUMN `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率';
 
@@ -75,7 +75,7 @@ CREATE TABLE `mall_sale_agent` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `OPENID` (`open_id`,`union_id`) USING BTREE
+  UNIQUE KEY `USER_NO_IDX` (`user_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
 
 
@@ -170,5 +170,3 @@ ALTER TABLE auth_user ADD  UNIQUE KEY `login_name` (`login_name`);
 ALTER TABLE mall_sub_order ADD  UNIQUE KEY `SUBORDERNO` (`sub_order_no`);
 
 ALTER TABLE mall_sub_order DROP KEY `OUTERORDERID`;
-
-

@@ -88,7 +88,7 @@ CREATE TABLE `mall_sale_agent` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `OPENID` (`open_id`,`union_id`) USING BTREE
+  UNIQUE KEY `USER_NO_IDX` (`user_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
 
 
@@ -110,7 +110,7 @@ CREATE TABLE `applet_config` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) NOT NULL COMMENT '公司代号',
   `secret` varchar(64) DEFAULT NULL COMMENT '小程序secret',
-  `appid` varchar(64) NOT NULL COMMENT '小程序appid',
+  `appid` varchar(64) NULL COMMENT '小程序appid',
   `applet_type` varchar(5) NOT NULL COMMENT '小程序的类型  1: 采购 2.商城',
   `mch_id` varchar(64) DEFAULT NULL COMMENT '商户号(微信支付用)',
   `status` varchar(5) NOT NULL DEFAULT '1' COMMENT '微信支付类型。1是平台版，2是商户版',
@@ -668,6 +668,15 @@ CREATE TABLE `company` (
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
+  `state` varchar(20) DEFAULT NULL COMMENT '省',
+  `city` varchar(20) DEFAULT NULL COMMENT '市',
+  `district` varchar(20) DEFAULT NULL COMMENT '区',
+  `full_address` varchar(100) DEFAULT NULL COMMENT '详细地址',
+  `oversea_address` varchar(100) DEFAULT NULL COMMENT '海外地址',
+  `country` varchar(20) DEFAULT NULL COMMENT '国家',
+  `main_category` varchar(20) DEFAULT NULL COMMENT '主要品类',
+  `offline_annual_sale` double(10,2) DEFAULT NULL COMMENT '线下年销售额',
+  `online_annual_sale` double(10,2) DEFAULT NULL COMMENT '线上年销售额',
   PRIMARY KEY (`id`),
   UNIQUE KEY `company_no` (`company_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='买手公司';
@@ -1080,7 +1089,7 @@ CREATE TABLE `item_sku` (
   `status` INT(4) NOT NULL DEFAULT '1' COMMENT '0:未审核,1:审核通过',
   `sale_type` tinyint(1) DEFAULT NULL COMMENT '销售类型:现货,代购',
   `sale_price` double(10,2) DEFAULT NULL COMMENT '销售价',
-  `sku_rate` DOUBLE(10,2) NOT NULL DEFAULT '0' COMMENT '代理佣金比例',
+  `sku_rate` DOUBLE(10,4) NOT NULL DEFAULT '0' COMMENT '代理佣金比例',
   `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率(没有用到)',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -1857,9 +1866,9 @@ DROP TABLE IF EXISTS `auth_organization`;
 CREATE TABLE `auth_organization` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `company_no` varchar(64) NOT NULL DEFAULT '0',
-  `org_id` varchar(10) NOT NULL,
+  `org_id` varchar(64) NOT NULL,
   `name` varchar(64) NOT NULL COMMENT '组织名',
-  `address` varchar(100) DEFAULT NULL COMMENT '地址',
+  `address` varchar(200) DEFAULT NULL COMMENT '地址',
   `code` varchar(64) NOT NULL COMMENT '编号',
   `icon` varchar(32) DEFAULT NULL COMMENT '图标',
   `pid` bigint(19) DEFAULT NULL COMMENT '父级主键',

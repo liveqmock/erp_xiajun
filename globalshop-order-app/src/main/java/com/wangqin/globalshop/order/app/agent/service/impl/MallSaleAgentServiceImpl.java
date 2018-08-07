@@ -189,4 +189,41 @@ public class MallSaleAgentServiceImpl implements MallSaleAgentService {
         return mallSaleAgentDOMapper.queryAgentInfoByUserNo(userNo);
     }
 
+    @Override
+    public void removeMallSaleAgent(String userNo) {
+        MallSaleAgentDO mallSaleAgent = getMallSaleAgent(AppUtil.getLoginUserCompanyNo(), userNo);
+        // 判断是一级代理还是二级代理
+        String parentAgent = mallSaleAgent.getParentAgent();
+        if (parentAgent == null || "".equals(parentAgent)) {
+            // 一级代理
+            // TODO:与佣金有关的操作
+        } else {
+            // 二级代理
+        }
+        // 判断是否已经是解除状态
+        Integer status = mallSaleAgent.getStatus();
+        if (status == 0) {
+            throw new BizCommonException("已处于解除状态，操作失败！");
+        }
+        // 更新为解除状态
+        mallSaleAgent.setStatus(0);
+        updateMallSaleAgent(mallSaleAgent);
+    }
+
+    @Override
+    public void deleteMallSaleAgent(String userNo) {
+        MallSaleAgentDO mallSaleAgent = getMallSaleAgent(AppUtil.getLoginUserCompanyNo(), userNo);
+        // 判断是一级代理还是二级代理
+        String parentAgent = mallSaleAgent.getParentAgent();
+        if (parentAgent == null || "".equals(parentAgent)) {
+            // 一级代理
+            // TODO:与佣金有关的操作
+        } else {
+            // 二级代理
+        }
+        // 更新为删除状态
+        mallSaleAgent.setIsDel(true);
+        updateMallSaleAgent(mallSaleAgent);
+    }
+
 }

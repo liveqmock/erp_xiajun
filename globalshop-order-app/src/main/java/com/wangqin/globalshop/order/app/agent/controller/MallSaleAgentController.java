@@ -4,10 +4,13 @@ import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSaleAgentDO;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
+import com.wangqin.globalshop.common.utils.BigDecimalHelper;
+import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.order.app.agent.service.MallSaleAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -70,6 +73,20 @@ public class MallSaleAgentController {
             // TODO: 后期建议将一级代理和二级代理查询分开，简化逻辑
             List<MallSaleAgentItemVO> mallSaleAgentItemVOList =
                     mallSaleAgentService.listMallSaleAgents(mallSaleAgentQueryVO, pageQueryParam);
+            for (MallSaleAgentItemVO mallSaleAgentItemVO:mallSaleAgentItemVOList) {
+                if(mallSaleAgentItemVO.getCommissionValue()!=null)
+                {
+                    try{
+                        BigDecimal value= BigDecimal.valueOf(mallSaleAgentItemVO.getCommissionValue());
+                        value=value.multiply(new BigDecimal(100));
+                        mallSaleAgentItemVO.setCommissionValue(value.doubleValue());
+                    }catch (Exception e){
+                        result.buildMsg("非正常数字: CommissionValueStr"+mallSaleAgentItemVO.getCommissionValue())
+                                .buildIsSuccess(false);
+                    }
+                }
+
+            }
             int totalCount = mallSaleAgentService.countMallSaleAgents(mallSaleAgentQueryVO);
             result.buildData(mallSaleAgentItemVOList)
                     .buildTotalCount(totalCount)
@@ -120,6 +137,17 @@ public class MallSaleAgentController {
         JsonResult result = new JsonResult();
 
         try {
+            if(!StringUtil.isEmpty(mallSaleAgentEditVO.getCommissionValueStr()))
+            {
+                try{
+                    BigDecimal value= BigDecimal.valueOf(Double.parseDouble(mallSaleAgentEditVO.getCommissionValueStr()));
+                    value=value.divide(new BigDecimal(100));
+                    mallSaleAgentEditVO.setCommissionValue(value.doubleValue());
+                }catch (Exception e){
+                    result.buildMsg("非正常数字: CommissionValueStr"+mallSaleAgentEditVO.getCommissionValueStr())
+                            .buildIsSuccess(false);
+                }
+            }
             mallSaleAgentService.updateCommissionValue(mallSaleAgentEditVO);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
@@ -135,26 +163,44 @@ public class MallSaleAgentController {
     }
 
     /**
-     * TODO: 解除代理
+     * 解除代理
      *
      * @param userNo
      * @return
      */
     public Object removeMallSaleAgent(String userNo) {
         JsonResult result = new JsonResult();
-        // do something
+        try {
+            mallSaleAgentService.removeMallSaleAgent(userNo);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getMessage())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出现异常")
+                    .buildIsSuccess(false);
+        }
         return result;
     }
 
     /**
-     * TODO: 删除代理
+     * 删除代理
      *
      * @param userNo
      * @return
      */
     public Object deleteMallSaleAgent(String userNo) {
         JsonResult result = new JsonResult();
-        // do something
+        try {
+            mallSaleAgentService.deleteMallSaleAgent(userNo);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getMessage())
+                    .buildIsSuccess(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.buildMsg("操作出现异常")
+                    .buildIsSuccess(false);
+        }
         return result;
     }
 

@@ -13,15 +13,25 @@
     <result column="im" property="im" jdbcType="VARCHAR" />
     <result column="service_time" property="serviceTime" jdbcType="VARCHAR" />
     <result column="force_idcard_upload" property="forceIdcardUpload" jdbcType="INTEGER" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="full_address" property="fullAddress" jdbcType="VARCHAR" />
+    <result column="oversea_address" property="overseaAddress" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="main_category" property="mainCategory" jdbcType="VARCHAR" />
+    <result column="offline_annual_sale" property="offlineAnnualSale" jdbcType="DOUBLE" />
+    <result column="online_annual_sale" property="onlineAnnualSale" jdbcType="DOUBLE" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" extends="BaseResultMap" >
     <result column="intro" property="intro" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, company_name, status, shop_name, logo_url, force_idcard,
-    tel, im, service_time, force_idcard_upload, creator, modifier
+    id, company_no, company_name, status, shop_name, logo_url, force_idcard, tel, im, 
+    service_time, force_idcard_upload, modifier, creator, state, city, district, full_address, 
+    oversea_address, country, main_category, offline_annual_sale, online_annual_sale
   </sql>
   <sql id="Blob_Column_List" >
     intro
@@ -43,15 +53,21 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into company (company_no, company_name, status, 
-      shop_name, logo_url,
-      force_idcard, tel, im, 
-      service_time, force_idcard_upload, creator, 
-      modifier, intro)
+      shop_name, logo_url, force_idcard, 
+      tel, im, service_time, 
+      force_idcard_upload, modifier, creator, 
+      state, city, district, 
+      full_address, oversea_address, country, 
+      main_category, offline_annual_sale, online_annual_sale, 
+      intro)
     values (#{companyNo,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{shopName,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR},
-      #{forceIdcard,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, #{im,jdbcType=VARCHAR}, 
-      #{serviceTime,jdbcType=VARCHAR}, #{forceIdcardUpload,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{intro,jdbcType=LONGVARCHAR})
+      #{shopName,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, #{forceIdcard,jdbcType=INTEGER}, 
+      #{tel,jdbcType=VARCHAR}, #{im,jdbcType=VARCHAR}, #{serviceTime,jdbcType=VARCHAR}, 
+      #{forceIdcardUpload,jdbcType=INTEGER}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{state,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
+      #{fullAddress,jdbcType=VARCHAR}, #{overseaAddress,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{mainCategory,jdbcType=VARCHAR}, #{offlineAnnualSale,jdbcType=DOUBLE}, #{onlineAnnualSale,jdbcType=DOUBLE}, 
+      #{intro,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -89,11 +105,38 @@
       <if test="forceIdcardUpload != null" >
         force_idcard_upload,
       </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
       <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null" >
-        modifier,
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="district != null" >
+        district,
+      </if>
+      <if test="fullAddress != null" >
+        full_address,
+      </if>
+      <if test="overseaAddress != null" >
+        oversea_address,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="mainCategory != null" >
+        main_category,
+      </if>
+      <if test="offlineAnnualSale != null" >
+        offline_annual_sale,
+      </if>
+      <if test="onlineAnnualSale != null" >
+        online_annual_sale,
       </if>
       <if test="intro != null" >
         intro,
@@ -130,11 +173,38 @@
       <if test="forceIdcardUpload != null" >
         #{forceIdcardUpload,jdbcType=INTEGER},
       </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="fullAddress != null" >
+        #{fullAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="overseaAddress != null" >
+        #{overseaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="mainCategory != null" >
+        #{mainCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineAnnualSale != null" >
+        #{offlineAnnualSale,jdbcType=DOUBLE},
+      </if>
+      <if test="onlineAnnualSale != null" >
+        #{onlineAnnualSale,jdbcType=DOUBLE},
       </if>
       <if test="intro != null" >
         #{intro,jdbcType=LONGVARCHAR},
@@ -174,11 +244,38 @@
       <if test="forceIdcardUpload != null" >
         force_idcard_upload = #{forceIdcardUpload,jdbcType=INTEGER},
       </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        modifier = #{modifier,jdbcType=VARCHAR},
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="fullAddress != null" >
+        full_address = #{fullAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="overseaAddress != null" >
+        oversea_address = #{overseaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="mainCategory != null" >
+        main_category = #{mainCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineAnnualSale != null" >
+        offline_annual_sale = #{offlineAnnualSale,jdbcType=DOUBLE},
+      </if>
+      <if test="onlineAnnualSale != null" >
+        online_annual_sale = #{onlineAnnualSale,jdbcType=DOUBLE},
       </if>
       <if test="intro != null" >
         intro = #{intro,jdbcType=LONGVARCHAR},
@@ -198,8 +295,17 @@
       im = #{im,jdbcType=VARCHAR},
       service_time = #{serviceTime,jdbcType=VARCHAR},
       force_idcard_upload = #{forceIdcardUpload,jdbcType=INTEGER},
-      creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      full_address = #{fullAddress,jdbcType=VARCHAR},
+      oversea_address = #{overseaAddress,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      main_category = #{mainCategory,jdbcType=VARCHAR},
+      offline_annual_sale = #{offlineAnnualSale,jdbcType=DOUBLE},
+      online_annual_sale = #{onlineAnnualSale,jdbcType=DOUBLE},
       intro = #{intro,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -215,8 +321,17 @@
       im = #{im,jdbcType=VARCHAR},
       service_time = #{serviceTime,jdbcType=VARCHAR},
       force_idcard_upload = #{forceIdcardUpload,jdbcType=INTEGER},
+      modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      state = #{state,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      full_address = #{fullAddress,jdbcType=VARCHAR},
+      oversea_address = #{overseaAddress,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      main_category = #{mainCategory,jdbcType=VARCHAR},
+      offline_annual_sale = #{offlineAnnualSale,jdbcType=DOUBLE},
+      online_annual_sale = #{onlineAnnualSale,jdbcType=DOUBLE}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

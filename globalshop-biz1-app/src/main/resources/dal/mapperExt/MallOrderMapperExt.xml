@@ -415,12 +415,14 @@
         T2.receiver_district  AS receiverDistrict,
         T2.receiver_address   AS addressDetail,
         T2.telephone          AS telephone,
-        T2.id_card            AS idCard,
-        T2.sku_code           AS skuCode
+        T2.id_card            AS idCard
     </sql>
     <!-- 根据指定条件分页查询订单列表 -->
     <select id="listMallOrders" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.MallOrderItemVO">
         SELECT
+        DISTINCT
+        * from
+        (select
         <include refid="Column_List_For_MallOrderItemVO"/>
         FROM mall_order T1, mall_sub_order T2
         <where>
@@ -450,7 +452,7 @@
             AND T1.is_del = 0
             AND T2.is_del = 0
         </where>
-        ORDER BY T1.order_time DESC
+        ) a  order by a.orderTime DESC
         <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
             LIMIT #{pageQueryParam.rowIndex},#{pageQueryParam.pageSize}
         </if>

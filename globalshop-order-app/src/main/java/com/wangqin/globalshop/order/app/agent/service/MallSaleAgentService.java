@@ -83,4 +83,18 @@ public interface MallSaleAgentService {
      * @return
      */
     MallSaleAgentDO queryAgentInfoByUserNo(String userNo);
+
+    /**
+     * 解除代理
+     *
+     * @param userNo
+     */
+    void removeMallSaleAgent(String userNo);
+
+    /**
+     * 删除代理
+     *
+     * @param userNo
+     */
+    void deleteMallSaleAgent(String userNo);
 }
