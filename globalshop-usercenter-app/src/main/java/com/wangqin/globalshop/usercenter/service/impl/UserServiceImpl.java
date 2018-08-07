@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.usercenter.service.impl;
 
-import com.sun.jdi.LongValue;
+
 import com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
