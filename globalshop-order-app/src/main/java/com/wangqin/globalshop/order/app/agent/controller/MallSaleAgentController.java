@@ -73,6 +73,20 @@ public class MallSaleAgentController {
             // TODO: 后期建议将一级代理和二级代理查询分开，简化逻辑
             List<MallSaleAgentItemVO> mallSaleAgentItemVOList =
                     mallSaleAgentService.listMallSaleAgents(mallSaleAgentQueryVO, pageQueryParam);
+            for (MallSaleAgentItemVO mallSaleAgentItemVO:mallSaleAgentItemVOList) {
+                if(mallSaleAgentItemVO.getCommissionValue()!=null)
+                {
+                    try{
+                        BigDecimal value= BigDecimal.valueOf(mallSaleAgentItemVO.getCommissionValue());
+                        value=value.multiply(new BigDecimal(100));
+                        mallSaleAgentItemVO.setCommissionValue(value.doubleValue());
+                    }catch (Exception e){
+                        result.buildMsg("非正常数字: CommissionValueStr"+mallSaleAgentItemVO.getCommissionValue())
+                                .buildIsSuccess(false);
+                    }
+                }
+
+            }
             int totalCount = mallSaleAgentService.countMallSaleAgents(mallSaleAgentQueryVO);
             result.buildData(mallSaleAgentItemVOList)
                     .buildTotalCount(totalCount)
