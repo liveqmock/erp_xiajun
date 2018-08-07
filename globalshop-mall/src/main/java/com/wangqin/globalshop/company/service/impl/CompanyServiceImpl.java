@@ -46,8 +46,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(rollbackFor = BizCommonException.class)
     public void addCompany(CompanyEditVO companyEditVO) {
 
-        if (StringUtil.isBlank(companyEditVO.getCompanyName()) || StringUtil.isBlank(companyEditVO.getLoginName()) ||
-                StringUtil.isBlank(companyEditVO.getPassword())) {
+        // TODO: 增加权限认证
+
+        if (StringUtil.isBlank(companyEditVO.getCompanyName())
+                || StringUtil.isBlank(companyEditVO.getLoginName())
+                || StringUtil.isBlank(companyEditVO.getPassword())
+                || StringUtil.isBlank(companyEditVO.getName())
+                || StringUtil.isBlank(companyEditVO.getPhone())) {
             throw new BizCommonException("信息不完整！");
         }
 
@@ -122,9 +127,9 @@ public class CompanyServiceImpl implements CompanyService {
         authOrganizationDO.setOrgId(orgId);
         authOrganizationDO.setCode(orgId);
         authOrganizationDO.setName("公司总部");
-        authOrganizationDO.setAddress(companyEditVO.getState() + " "
-                + companyEditVO.getCity() + " "
-                + companyEditVO.getDistrict() + " "
+        authOrganizationDO.setAddress(companyEditVO.getState() + "-"
+                + companyEditVO.getCity() + "-"
+                + companyEditVO.getDistrict() + "-"
                 + companyEditVO.getFullAddress());
         authOrganizationDO.setSeq(1);
         authOrganizationService.addAuthOrganization(authOrganizationDO);
