@@ -1,6 +1,12 @@
 package com.wangqin.globalshop.company.service;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyEditVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyItemVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
+
+import java.util.List;
 
 /**
  * 商户管理 service
@@ -16,4 +22,29 @@ public interface CompanyService {
      * @param companyEditVO
      */
     void addCompany(CompanyEditVO companyEditVO);
+
+    /**
+     * 根据 companyNo 获取指定商户
+     *
+     * @param companyNo
+     * @return
+     */
+    CompanyDO getCompany(String companyNo);
+
+    /**
+     * 根据指定条件分页查询商户
+     *
+     * @param companyQueryVO
+     * @param pageQueryParam
+     * @return
+     */
+    List<CompanyItemVO> listCompanies(CompanyQueryVO companyQueryVO, PageQueryParam pageQueryParam);
+
+    /**
+     * 根据指定条件查询商户数目
+     *
+     * @param companyQueryVO
+     * @return
+     */
+    int countCompanies(CompanyQueryVO companyQueryVO);
 }

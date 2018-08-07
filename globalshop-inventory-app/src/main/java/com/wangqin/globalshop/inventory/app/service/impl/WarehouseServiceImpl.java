@@ -3,6 +3,7 @@ package com.wangqin.globalshop.inventory.app.service.impl;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.BaseModel;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.inventory.app.service.IWarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,8 +43,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
 		WarehouseDO warehouse = new WarehouseDO();
 		warehouse.init();
 		warehouse.setName(name);
-		warehouse.setWarehouseNo("WARE"+System.currentTimeMillis());
-		warehouse.init();
+		warehouse.setWarehouseNo(CodeGenUtil.getWareHouseNo());
 		warehouse.setContactPerson("person");
 		mapper.insertSelective(warehouse);
 	}
