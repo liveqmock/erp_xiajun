@@ -45,6 +45,8 @@ public class CompanyDO extends BaseModel {
 
     private Double onlineAnnualSale;
 
+    private String adminNo;
+
     private String intro;
 
     public Long getId() {
@@ -221,6 +223,14 @@ public class CompanyDO extends BaseModel {
 
     public void setOnlineAnnualSale(Double onlineAnnualSale) {
         this.onlineAnnualSale = onlineAnnualSale;
+    }
+
+    public String getAdminNo() {
+        return adminNo;
+    }
+
+    public void setAdminNo(String adminNo) {
+        this.adminNo = adminNo == null ? null : adminNo.trim();
     }
 
     public String getIntro() {

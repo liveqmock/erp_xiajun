@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+        <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+        <result column="force_idcard" property="forceIdcard" jdbcType="INTEGER" />
+        <result column="tel" property="tel" jdbcType="VARCHAR" />
+        <result column="im" property="im" jdbcType="VARCHAR" />
+        <result column="service_time" property="serviceTime" jdbcType="VARCHAR" />
+        <result column="force_idcard_upload" property="forceIdcardUpload" jdbcType="INTEGER" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="district" property="district" jdbcType="VARCHAR" />
+        <result column="full_address" property="fullAddress" jdbcType="VARCHAR" />
+        <result column="oversea_address" property="overseaAddress" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="main_category" property="mainCategory" jdbcType="VARCHAR" />
+        <result column="offline_annual_sale" property="offlineAnnualSale" jdbcType="DOUBLE" />
+        <result column="online_annual_sale" property="onlineAnnualSale" jdbcType="DOUBLE" />
+        <result column="admin_no" property="adminNo" jdbcType="VARCHAR" />
+    </resultMap>
 
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
-        <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="INTEGER"/>
-        <result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
-        <result column="logo_url" property="logoUrl" jdbcType="VARCHAR"/>
-        <result column="force_idcard" property="forceIdcard" jdbcType="INTEGER"/>
-        <result column="tel" property="tel" jdbcType="VARCHAR"/>
-        <result column="im" property="im" jdbcType="VARCHAR"/>
-        <result column="service_time" property="serviceTime" jdbcType="VARCHAR"/>
-        <result column="force_idcard_upload" property="forceIdcardUpload" jdbcType="INTEGER"/>
-        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
-        <result column="creator" property="creator" jdbcType="VARCHAR"/>
-        <result column="state" property="state" jdbcType="VARCHAR"/>
-        <result column="city" property="city" jdbcType="VARCHAR"/>
-        <result column="district" property="district" jdbcType="VARCHAR"/>
-        <result column="full_address" property="fullAddress" jdbcType="VARCHAR"/>
-        <result column="oversea_address" property="overseaAddress" jdbcType="VARCHAR"/>
-        <result column="country" property="country" jdbcType="VARCHAR"/>
-        <result column="main_category" property="mainCategory" jdbcType="VARCHAR"/>
-        <result column="offline_annual_sale" property="offlineAnnualSale" jdbcType="DOUBLE"/>
-        <result column="online_annual_sale" property="onlineAnnualSale" jdbcType="DOUBLE"/>
-    </resultMap>
-    <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO"
-               extends="BaseResultMap">
-        <result column="intro" property="intro" jdbcType="LONGVARCHAR"/>
-    </resultMap>
-    <sql id="Base_Column_List">
+    <sql id="Base_Column_List" >
     id, company_no, company_name, status, shop_name, logo_url, force_idcard, tel, im,
     service_time, force_idcard_upload, modifier, creator, state, city, district, full_address,
-    oversea_address, country, main_category, offline_annual_sale, online_annual_sale
+    oversea_address, country, main_category, offline_annual_sale, online_annual_sale,
+    admin_no
   </sql>
-    <sql id="Blob_Column_List">
-        intro
-    </sql>
-
 
     <sql id="commonSelectSection">
         1 = 1
@@ -84,5 +78,35 @@
         where company_no = #{companyNo}
     </select>
 
-
+    <!-- 根据条件分页查询商户 -->
+    <select id="listCompanies" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM company T1
+        <where>
+            <if test="companyQueryVO.companyName != null">
+                AND T1.company_name LIKE "%" #{companyQueryVO.companyName} "%"
+            </if>
+            <if test="companyQueryVO.status != null">
+                AND T1.status = companyQueryVO.status
+            </if>
+        </where>
+        ORDER BY T1.gmt_create DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex}, #{pageQueryParam.pageSize}
+        </if>
+    </select>
+    <!-- 根据条件查询商户数目 -->
+    <select id="countCompanies" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM company T1
+        <where>
+            <if test="companyQueryVO.companyName != null">
+                AND T1.company_name LIKE '%' #{companyQueryVO.companyName} '%'
+            </if>
+            <if test="companyQueryVO.status != null">
+                AND T1.status = companyQueryVO.status
+            </if>
+        </where>
+    </select>
 </mapper>

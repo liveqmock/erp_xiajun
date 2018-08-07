@@ -654,6 +654,7 @@ CREATE TABLE `company` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) NOT NULL COMMENT '索引唯一',
   `company_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '公司名称',
+  `admin_no` varchar(64) NOT NULL COMMENT '管理员ID',
   `status` int(4) DEFAULT '0' COMMENT '状态 0:正常，1:关闭',
   `shop_name` varchar(45) DEFAULT NULL COMMENT '公司的店铺名称',
   `logo_url` varchar(256) DEFAULT NULL,
