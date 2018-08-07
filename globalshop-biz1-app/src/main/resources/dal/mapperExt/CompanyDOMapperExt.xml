@@ -78,12 +78,23 @@
         where company_no = #{companyNo}
     </select>
 
+    <sql id="Column_List_For_CompanyItemVO">
+        T1.company_no   AS companyNo,
+        T1.company_name AS companyName,
+        T1.status       AS status,
+        T1.gmt_create   AS gmtCreate,
+        T2.name         AS adminName,
+        T2.login_name   AS loginName,
+        T2.phone        AS phone,
+        T2.email        AS email
+    </sql>
     <!-- 根据条件分页查询商户 -->
-    <select id="listCompanies" resultMap="BaseResultMap">
+    <select id="listCompanies" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyItemVO">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM company T1
+        <include refid="Column_List_For_CompanyItemVO"/>
+        FROM company T1, auth_user T2
         <where>
+            T1.admin_no = T2.user_no
             <if test="companyQueryVO.companyName != null">
                 AND T1.company_name LIKE "%" #{companyQueryVO.companyName} "%"
             </if>

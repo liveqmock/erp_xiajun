@@ -10,7 +10,6 @@ import lombok.Data;
  */
 @Data
 public class CompanyEditVO {
-    // ===== 以下信息需要由前端获取 =====
 
     /**
      * 公司 logo

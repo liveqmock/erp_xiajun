@@ -1,6 +1,9 @@
 package com.wangqin.globalshop.company.service.impl;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyEditVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyItemVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
@@ -13,6 +16,8 @@ import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author angus
@@ -61,13 +66,17 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BizCommonException("信息不完整！");
         }
 
-        // 创建者信息
+        // 基础信息
+        String companyNo = CodeGenUtil.getCompanyNo();
         String creator = AppUtil.getLoginUserId();
         String modifier = AppUtil.getLoginUserId();
 
+        // 创建用户（公司管理员）
+        String adminNo = CodeGenUtil.genUserNo();
+        Long adminId = addAuthUser(companyEditVO, companyNo, adminNo, creator, modifier);
+
         // 创建商户
-        String companyNo = CodeGenUtil.getCompanyNo();
-        addCompany(companyEditVO, companyNo, creator, modifier);
+        addCompany(companyEditVO, companyNo, adminNo, creator, modifier);
 
         // 创建部门（公司总部）
         addAuthOrganization(companyEditVO, companyNo, creator, modifier);
@@ -76,17 +85,33 @@ public class CompanyServiceImpl implements CompanyService {
         Long roleId = CodeGenUtil.getRoleId();
         addAuthRole(companyNo, roleId, creator, modifier);
 
-        // 创建用户（管理员）
-        Long userId = addAuthUser(companyEditVO, companyNo, creator, modifier);
+        // 创建用户与角色对应关系（公司管理员所属）
+        addAuthUserRole(companyNo, adminId, roleId, creator, modifier);
 
-        // 创建用户与角色对应关系（管理员）
-        addAuthUserRole(companyNo, userId, roleId, creator, modifier);
-
-        // 创建资源（管理员）
+        // 创建资源（公司管理员所属）
         addAuthRoleResource(companyNo, roleId, creator, modifier);
 
         // 添加 applet_config
         addAppletConfig(companyEditVO, companyNo, creator, modifier);
+    }
+
+    @Override
+    public CompanyDO getCompany(String companyNo) {
+        if (companyNo == null) {
+            throw new BizCommonException("信息不完整！");
+        }
+        return companyDOMapper.selectByCompanyNo(companyNo);
+    }
+
+    @Override
+    public List<CompanyItemVO> listCompanies(CompanyQueryVO companyQueryVO, PageQueryParam pageQueryParam) {
+        pageQueryParam.calculateRowIndex();
+        return companyDOMapper.listCompanies(companyQueryVO, pageQueryParam);
+    }
+
+    @Override
+    public int countCompanies(CompanyQueryVO companyQueryVO) {
+        return companyDOMapper.countCompanies(companyQueryVO);
     }
 
     /**
@@ -94,14 +119,16 @@ public class CompanyServiceImpl implements CompanyService {
      *
      * @param companyEditVO
      * @param companyNo
+     * @param adminNo
      * @param creator
      * @param modifier
      */
-    private void addCompany(CompanyEditVO companyEditVO, String companyNo, String creator, String modifier) {
+    private void addCompany(CompanyEditVO companyEditVO, String companyNo, String adminNo, String creator, String modifier) {
         CompanyDO companyDO = new CompanyDO();
         try {
             // 商户必需字段
             companyDO.setCompanyNo(companyNo);
+            companyDO.setAdminNo(adminNo);
             companyDO.setCreator(creator);
             companyDO.setModifier(modifier);
             companyDO.setCompanyName(companyEditVO.getCompanyName());
@@ -187,16 +214,15 @@ public class CompanyServiceImpl implements CompanyService {
      * @param creator
      * @param modifier
      */
-    private Long addAuthUser(CompanyEditVO companyEditVO, String companyNo, String creator, String modifier) {
+    private Long addAuthUser(CompanyEditVO companyEditVO, String companyNo, String userNo, String creator, String modifier) {
         AuthUserDO authUserDO = new AuthUserDO();
         authUserDO.setCompanyNo(companyNo);
         authUserDO.setCreator(creator);
         authUserDO.setModifier(modifier);
-        authUserDO.setUserNo(CodeGenUtil.genUserNo());
+        authUserDO.setUserNo(userNo);
         authUserDO.setLoginName(companyEditVO.getLoginName());
         authUserDO.setPassword(Md5Util.getMD5(companyEditVO.getPassword()));
         authUserDO.setName(companyEditVO.getName());
-        authUserDO.setPhone(companyEditVO.getPhone());
         authUserDO.setEmail(companyEditVO.getEmail());
         authUserService.addAuthUser(authUserDO);
         return authUserDO.getId();
