@@ -138,7 +138,7 @@
                 AND T1.company_name LIKE '%' #{companyQueryVO.companyName} '%'
             </if>
             <if test="companyQueryVO.status != null">
-                AND T1.status = companyQueryVO.status
+                AND T1.status = #{companyQueryVO.status}
             </if>
             AND T1.is_del = 0
         </where>
@@ -157,7 +157,7 @@
                 AND T1.company_name LIKE '%' #{companyQueryVO.companyName} '%'
             </if>
             <if test="companyQueryVO.status != null">
-                AND T1.status = companyQueryVO.status
+                AND T1.status = #{companyQueryVO.status}
             </if>
             AND T1.is_del = 0
         </where>
