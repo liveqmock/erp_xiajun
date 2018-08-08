@@ -39,4 +39,12 @@ public class AuthUserServiceImpl implements AuthUserService {
             throw new BizCommonException("数据库中无此记录！");
         }
     }
+
+    @Override
+    public AuthUserDO getByLoginName(String loginName) {
+        if (loginName == null) {
+            throw new BizCommonException("数据不完整！");
+        }
+        return authUserDOMapper.getByLoginName(loginName);
+    }
 }

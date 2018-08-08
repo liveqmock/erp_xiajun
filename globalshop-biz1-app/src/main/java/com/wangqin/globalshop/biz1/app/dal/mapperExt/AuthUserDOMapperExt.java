@@ -80,4 +80,12 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
      * @return
      */
     int updateByUserNo(AuthUserDO authUserDO);
+
+    /**
+     * 通过 login_name 获取 auth_user
+     *
+     * @param loginName
+     * @return
+     */
+    AuthUserDO getByLoginName(String loginName);
 }

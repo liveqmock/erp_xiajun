@@ -299,17 +299,24 @@ public class CompanyServiceImpl implements CompanyService {
      * @param modifier
      */
     private Long addAuthUser(CompanyDetailVO companyDetailVO, String companyNo, String userNo, String creator, String modifier) {
-        AuthUserDO authUserDO = new AuthUserDO();
-        authUserDO.setCompanyNo(companyNo);
-        authUserDO.setCreator(creator);
-        authUserDO.setModifier(modifier);
-        authUserDO.setUserNo(userNo);
-        authUserDO.setLoginName(companyDetailVO.getLoginName());
-        authUserDO.setPassword(Md5Util.getMD5(companyDetailVO.getPassword()));
-        authUserDO.setName(companyDetailVO.getName());
-        authUserDO.setEmail(companyDetailVO.getEmail());
-        authUserService.addAuthUser(authUserDO);
-        return authUserDO.getId();
+        // 判断用户登录账户是否合法
+        AuthUserDO authUserDO = authUserService.getByLoginName(companyDetailVO.getLoginName());
+        if (authUserDO != null) {
+            throw new BizCommonException("管理员账号已存在！");
+        }
+
+        AuthUserDO adminAuthUserDO = new AuthUserDO();
+        adminAuthUserDO.setCompanyNo(companyNo);
+        adminAuthUserDO.setCreator(creator);
+        adminAuthUserDO.setModifier(modifier);
+        adminAuthUserDO.setUserNo(userNo);
+        adminAuthUserDO.setLoginName(companyDetailVO.getLoginName());
+        adminAuthUserDO.setPassword(Md5Util.getMD5(companyDetailVO.getPassword()));
+        adminAuthUserDO.setName(companyDetailVO.getName());
+        adminAuthUserDO.setEmail(companyDetailVO.getEmail());
+        authUserService.addAuthUser(adminAuthUserDO);
+
+        return adminAuthUserDO.getId();
     }
 
     /**

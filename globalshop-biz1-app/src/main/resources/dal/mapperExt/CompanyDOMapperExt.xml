@@ -134,7 +134,6 @@
         FROM company T1, auth_user T2
         <where>
             T1.admin_no = T2.user_no
-            AND T1.company_no = T2.company_no
             <if test="companyQueryVO.companyName != null">
                 AND T1.company_name LIKE '%' #{companyQueryVO.companyName} '%'
             </if>
@@ -151,8 +150,9 @@
     <!-- 根据条件查询商户数目 -->
     <select id="countCompanies" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM company T1
+        FROM company T1, auth_user T2
         <where>
+            T1.admin_no = T2.user_no
             <if test="companyQueryVO.companyName != null">
                 AND T1.company_name LIKE '%' #{companyQueryVO.companyName} '%'
             </if>
