@@ -20,6 +20,7 @@
         </commentGenerator>
 
 
+
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://47.98.164.133/haidb2new"
                         userId="root" password="Tfbtech123@">
@@ -746,6 +747,7 @@
         <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
+
             <!--<table tableName="item_qrcode_share" domainObjectName="ItemQrcodeShareDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                    <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
                 <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
@@ -753,6 +755,7 @@
                 <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
                 <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
             <!--</table>-->
+
 
     </context>
 </generatorConfiguration>

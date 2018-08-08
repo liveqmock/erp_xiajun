@@ -108,6 +108,19 @@
             #{idList}
         </foreach>
     </select>
+    
+    <!-- 销量的计算，用在商品管理商品列表，计算已付款的订单和通过erp新建的订单 -->
+    <select id="calItemSalesVolume" resultType="java.lang.Integer">
+        SELECT
+   			IFNULL(SUM(IFNULL(quantity,0)),0)
+   		FROM mall_sub_order
+   		WHERE company_no = #{companyNo}
+     	AND item_code =  #{itemCode}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+       </foreach>  
+    </select>
 
     <update id="updateOuterOrderDetailByItemSku">
         UPDATE mall_sub_order a

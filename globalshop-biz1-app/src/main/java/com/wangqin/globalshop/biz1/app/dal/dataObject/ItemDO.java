@@ -81,11 +81,17 @@ public class ItemDO extends BaseModel {
 
     private String originSalePrice;
 
-    private String commissionRate;
+    private String commissionMode;
+
+    private String modifier;
 
     private String creator;
 
-    private String modifier;
+    private String commissionRate;
+
+    private Integer isAbroad;
+
+    private Integer shelfMethod;
 
     private String remark;
 
@@ -403,12 +409,20 @@ public class ItemDO extends BaseModel {
         this.originSalePrice = originSalePrice == null ? null : originSalePrice.trim();
     }
 
-    public String getCommissionRate() {
-        return commissionRate;
+    public String getCommissionMode() {
+        return commissionMode;
     }
 
-    public void setCommissionRate(String commissionRate) {
-        this.commissionRate = commissionRate == null ? null : commissionRate.trim();
+    public void setCommissionMode(String commissionMode) {
+        this.commissionMode = commissionMode == null ? null : commissionMode.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
     }
 
     public String getCreator() {
@@ -419,12 +433,28 @@ public class ItemDO extends BaseModel {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    public String getModifier() {
-        return modifier;
+    public String getCommissionRate() {
+        return commissionRate;
     }
 
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+    public void setCommissionRate(String commissionRate) {
+        this.commissionRate = commissionRate == null ? null : commissionRate.trim();
+    }
+
+    public Integer getIsAbroad() {
+        return isAbroad;
+    }
+
+    public void setIsAbroad(Integer isAbroad) {
+        this.isAbroad = isAbroad;
+    }
+
+    public Integer getShelfMethod() {
+        return shelfMethod;
+    }
+
+    public void setShelfMethod(Integer shelfMethod) {
+        this.shelfMethod = shelfMethod;
     }
 
     public String getRemark() {

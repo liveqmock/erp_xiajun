@@ -14,12 +14,18 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
 
 
 /**
- * 商品
+ * 商品列表，商品编辑
  * @author zhulu
  *
  */
 public class ItemDTO implements Serializable{
 
+	private Integer salesVolume;//销量
+	
+	private Integer shelfMethod;
+	
+	private Integer isAbroad;
+	
 	//库存,商品列表展示需要的字段
 	private Long inventory;
 	//虚拟库存,商品列表展示需要的字段
@@ -153,6 +159,24 @@ public class ItemDTO implements Serializable{
 	
 
 	
+	public Integer getSalesVolume() {
+		return salesVolume;
+	}
+	public void setSalesVolume(Integer salesVolume) {
+		this.salesVolume = salesVolume;
+	}
+	public Integer getShelfMethod() {
+		return shelfMethod;
+	}
+	public void setShelfMethod(Integer shelfMethod) {
+		this.shelfMethod = shelfMethod;
+	}
+	public Integer getIsAbroad() {
+		return isAbroad;
+	}
+	public void setIsAbroad(Integer isAbroad) {
+		this.isAbroad = isAbroad;
+	}
 	public Long getInventory() {
 		return inventory;
 	}
