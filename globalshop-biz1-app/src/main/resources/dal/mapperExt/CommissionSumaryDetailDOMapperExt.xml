@@ -78,7 +78,7 @@
             IFNULL(SUM(IFNULL(detail.settlement,0)),0) AS totalCommission,
             IFNULL(agent.head_protrait_url,'') AS headProtraitUrl,
 		    IFNULL(agent.parent_agent,'') AS parentAgent,
-		    IF(agent.parent_agent is null,'一级代理','二级代理') AS agentLevel,
+		    IF(agent.parent_agent is null or agent.parent_agent = '','一级代理','二级代理') AS agentLevel,
 		    IFNULL(agent.agent_name,'') AS agentName,
 		    IFNULL(detail.share_user_id,'') as shareUserId,
 		    SUM(CASE detail.status WHEN 0 THEN detail.settlement ELSE 0 END ) waitSettlement,
@@ -95,7 +95,7 @@
                 and detail.share_user_id = #{shareUserId}
             </if>
             <if test="agentName != null and agentName != '' ">
-                and agent.agent_name = #{agentName}
+                and agent.agent_name LIKE concat('%',#{agentName},'%')
             </if>
             <if test="companyNo != null and companyNo != '' ">
                 and detail.company_no = #{companyNo}
