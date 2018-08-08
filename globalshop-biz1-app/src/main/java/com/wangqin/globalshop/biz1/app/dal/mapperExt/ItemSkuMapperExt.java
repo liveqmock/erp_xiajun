@@ -2,6 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO;
 import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -111,4 +112,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
     List<SkuChannelPriceDTO> queryItemSkuPrices(ItemSkuQueryVO itemSkuQueryVO);
 
     List<ItemSkuDO> queryItemSkuListOnly(ItemSkuQueryVO itemSkuQueryVO);
+
+    List<ItemSkuDO> queryAllSalableItemSkuList(QueryItemSkuPriceListDTO queryItemSkuPriceListDTO);
 }
