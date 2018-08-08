@@ -53,7 +53,6 @@ public class MallSaleAgentController {
         return result;
     }
 
-
     /**
      * 查询代理
      * <li> 搜索指定条件下的代理
@@ -79,7 +78,8 @@ public class MallSaleAgentController {
                     try{
                         BigDecimal value= BigDecimal.valueOf(mallSaleAgentItemVO.getCommissionValue());
                         value=value.multiply(new BigDecimal(100));
-                        mallSaleAgentItemVO.setCommissionValue(value.doubleValue());
+                        mallSaleAgentItemVO.setCommissionValueStr(value.toPlainString());
+//                        mallSaleAgentItemVO.setCommissionValue(value.doubleValue());
                     }catch (Exception e){
                         result.buildMsg("非正常数字: CommissionValueStr"+mallSaleAgentItemVO.getCommissionValue())
                                 .buildIsSuccess(false);
