@@ -17,11 +17,11 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
 
-	List<ItemDO> queryItemSalable(Byte isSale);
+	//定时任务
+	List<ItemDO> queryItemSelfDefineTime(Integer shelfMethod);
 	
-	void updateItemIsSale(@Param("isSale")Byte isSale,@Param("itemCode")String itemCode);
-	
-	void putOffItemByItemCode(@Param("status")Integer status,@Param("itemCode")String itemCode);
+	//定时任务
+	void updateItemIsSaleAndStatus(@Param("isSale")Byte isSale,@Param("status")Integer status,@Param("itemCode")String itemCode);
 	
 	ItemDO queryItemDOByItemCode(String itemCode);
 	

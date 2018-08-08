@@ -55,11 +55,13 @@ public class ItemSkuDO extends BaseModel {
 
     private Double salePrice;
 
-    private Double skuRate;
-
     private String modifier;
 
     private String creator;
+
+    private Double skuRate;
+
+    private String goodsNo;
 
     private String remark;
 
@@ -279,14 +281,6 @@ public class ItemSkuDO extends BaseModel {
         this.salePrice = salePrice;
     }
 
-    public Double getSkuRate() {
-        return skuRate;
-    }
-
-    public void setSkuRate(Double skuRate) {
-        this.skuRate = skuRate;
-    }
-
     public String getModifier() {
         return modifier;
     }
@@ -301,6 +295,22 @@ public class ItemSkuDO extends BaseModel {
 
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
+    }
+
+    public Double getSkuRate() {
+        return skuRate;
+    }
+
+    public void setSkuRate(Double skuRate) {
+        this.skuRate = skuRate;
+    }
+
+    public String getGoodsNo() {
+        return goodsNo;
+    }
+
+    public void setGoodsNo(String goodsNo) {
+        this.goodsNo = goodsNo == null ? null : goodsNo.trim();
     }
 
     public String getRemark() {

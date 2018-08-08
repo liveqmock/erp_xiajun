@@ -16,6 +16,11 @@ import java.util.List;
  * @author zhulu
  */
 public interface MallSubOrderMapperExt extends MallSubOrderDOMapper {
+	
+	//销量的计算，用在商品管理商品列表，计算已付款的订单和通过erp新建的订单
+	Integer calItemSalesVolume(@Param("statusList")List statusList,@Param("itemCode")String itemCode,
+			@Param("companyNo")String companyNo);
+	
     @Override
     int deleteByPrimaryKey(Long id);
 
