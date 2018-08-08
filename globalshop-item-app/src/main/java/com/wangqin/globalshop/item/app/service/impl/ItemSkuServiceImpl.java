@@ -3,7 +3,7 @@ package com.wangqin.globalshop.item.app.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelSalePriceVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
@@ -22,9 +22,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
@@ -110,7 +107,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		if(totalCount!=null&&totalCount!=0L) {
 			itemResult.buildPage(totalCount, itemSkuQueryVO);
 			List<ItemSkuDO> itemSkus = itemSkuMapperExt.queryItemSkuListOnly(itemSkuQueryVO);
-			String companyNo = itemSkuQueryVO.getCompanyNo();
+//			String companyNo = itemSkuQueryVO.getCompanyNo();
 			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
 			for (ItemSkuDO itemSku : itemSkus) {
 				//渠道价格
@@ -125,38 +122,28 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 //				skuChannelPriceDTO.setUpc(itemSku.getUpc());
 				skuChannelPriceDTO.setChannelSalePriceList(channelSalePriceList);
 
-//				channelSalePriceList.forEach(channelPrice -> {
-//					ChannelSalePriceDO channelSalePrice = new ChannelSalePriceDO();
-//					String channelNo = channelAccountDOMapperExt.queryChannelNoByChannelNameAndCompanyNo(channelPrice.getChannelName(), companyNo);
-//					channelSalePrice.setChannalNo(channelNo);
-//					channelSalePrice.setCompanyNo(companyNo);
-//					channelSalePrice.setShopCode(1L);//TEMP
-//					channelSalePrice.setSalePrice(channelPrice.getSalePrice());
-//					channelSalePrice.setSkuCode(itemSku.getSkuCode());
-//					channelSalePrice.setItemCode(itemSku.getItemCode());
-//					channelSalePrice.setCreator(AppUtil.getLoginUserId());
-//					channelSalePrice.setModifier(AppUtil.getLoginUserId());
-//					channelSalePriceService.insertChannelSalePriceSelective(channelSalePrice);
-//				});
-//			//查询sku的规格信息
-//			itemSkus.forEach(itemSku -> {
-//				List<ItemSkuScaleDO> skuScaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
-//				if(!EasyUtil.isListEmpty(skuScaleList)) {
-//					for(ItemSkuScaleDO scale:skuScaleList) {
-//						if("颜色".equals(scale.getScaleName())) {
-//							itemSku.setColor(scale.getScaleValue());
-//						}
-//						if("尺寸".equals(scale.getScaleName())) {
-//							itemSku.setScale(scale.getScaleValue());
-//						}
-//					}
-//				}
-//			});
 				skuChannelPriceDTOList.add(skuChannelPriceDTO);
 			}
 			itemResult.setData(skuChannelPriceDTOList);
 		}
 		return itemResult;
+	}
+
+	/**
+	 * 批量保存SKU+多渠道价格
+	 */
+	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
+	public void saveItemSkuPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList) {
+
+		for (SkuChannelPriceEditVO skuChannelPriceEditVO :skuChannelPriceEditVOList ) {
+			List<ChannelSalePriceDO> channelSalePriceList=skuChannelPriceEditVO.getChannelSalePriceList();
+			if(channelSalePriceList!=null) {
+				for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
+					channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannalNo());
+				}
+			}
+		}
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
 import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -29,6 +30,8 @@ public interface IItemSkuService  {
 	 * @return
 	 */
 	JsonPageResult<List<SkuChannelPriceDTO>> queryItemSkuPrices(ItemSkuQueryVO itemSkuQueryVO);
+
+	public void saveItemSkuPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList);
 
 	/**
 	 * 根据SKU初始化库存信息
