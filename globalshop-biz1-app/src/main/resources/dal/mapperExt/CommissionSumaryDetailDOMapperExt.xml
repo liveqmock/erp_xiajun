@@ -78,7 +78,7 @@
             IFNULL(SUM(IFNULL(detail.settlement,0)),0) AS totalCommission,
             IFNULL(agent.head_protrait_url,'') AS headProtraitUrl,
 		    IFNULL(agent.parent_agent,'') AS parentAgent,
-		    IF(agent.parent_agent is null,'一级代理','二级代理') AS agentLevel,
+		    IF(agent.parent_agent is null or agent.parent_agent = '','一级代理','二级代理') AS agentLevel,
 		    IFNULL(agent.agent_name,'') AS agentName,
 		    IFNULL(detail.share_user_id,'') as shareUserId,
 		    SUM(CASE detail.status WHEN 0 THEN detail.settlement ELSE 0 END ) waitSettlement,
