@@ -16,4 +16,6 @@ public interface BuyerTaskDOMapperExt extends BuyerTaskDOMapper {
 
     BuyerTaskDO selectVoById(Long id);
 
+	Long listCount(BuyerTaskVO buyerTask);
+
 }

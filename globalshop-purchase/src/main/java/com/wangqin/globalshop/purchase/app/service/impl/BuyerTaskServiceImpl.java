@@ -49,6 +49,12 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
     }
 
     @Override
+	public Long listCount(BuyerTaskVO buyerTask){
+		buyerTask.initCompany();
+		return mapper.listCount(buyerTask);
+	}
+
+    @Override
     public BuyerTaskVO selectVoById(Long id) {
 
         //buyer_task_detail.item_code, buyer_task_detail.upc, buyer_task_detail.sku_pic_url

@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.purchase.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.enums.TaskDailyStatus;
@@ -11,6 +12,7 @@ import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.purchase.app.service.IBuyerTaskService;
 import org.eclipse.jetty.util.StringUtil;
+import org.jboss.netty.util.internal.ReusableIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,14 +63,20 @@ public class BuyerTaskController {
      */
     @PostMapping("/queryTaskDailyList")
     public Object queryTaskDailyList(BuyerTaskVO buyerTaskVO) {
-        JsonResult<List<BuyerTaskVO>> result = new JsonResult<>();
+		JsonPageResult<List<BuyerTaskVO>> result = new JsonPageResult<>();
         List<BuyerTaskVO> buyerTaskList = null;
         try {
             buyerTaskList = buyerTaskService.list(buyerTaskVO);
+            Long totalCount = buyerTaskService.listCount(buyerTaskVO);
+			result.setTotalCount(totalCount.intValue());
+			result.buildData(buyerTaskList);
+			result.buildPageIndex(buyerTaskVO.getPageIndex());
+			result.buildPageSize(buyerTaskVO.getPageSize());
+			result.buildTotalPage();
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
         }
-        return result.buildData(buyerTaskList).buildIsSuccess(true);
+        return result.buildIsSuccess(true);
     }
 
     /**
