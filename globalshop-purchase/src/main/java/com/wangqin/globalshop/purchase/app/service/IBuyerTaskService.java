@@ -24,4 +24,6 @@ public interface IBuyerTaskService {
 	void update(BuyerTaskVO buyerTaskDO);
 
 	void delete(Long id);
+
+	Long listCount(BuyerTaskVO buyerTaskVO);
 }
