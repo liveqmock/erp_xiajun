@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -187,6 +188,27 @@ public class ItemSkuController  {
 		result.buildIsSuccess(true);
 		return result;
 	}
+
+
+	/**
+	 * sku多渠道价格展示
+	 * @param itemSkuQueryVO
+	 * @return
+	 * 这里与ItemSkuPriceController的请求路径重合，先注释掉
+	 */
+//	@RequestMapping("/queryItemSkuPriceList")
+//	@ResponseBody
+//	public Object queryItemSkuPriceList(ItemSkuQueryVO itemSkuQueryVO) {
+//		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+//		if(!loginCheck()) {
+//			return result.buildIsSuccess(false).buildMsg("请登录");
+//		}
+//		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+////		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
+//		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
+//		result.buildIsSuccess(true);
+//		return result;
+//	}
 	/**
 	 * 订单管理中要修改订单时添加商品的接口
 	 * 新添加
@@ -480,7 +502,7 @@ public class ItemSkuController  {
     public Boolean loginCheck() {
     	if(IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
          	return false;
-        }  
+        }
     	return true;
     }
 }

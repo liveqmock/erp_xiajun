@@ -87,6 +87,44 @@
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
 
+    <select id="listCount" resultType="java.lang.Long"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO">
+        SELECT
+            count( distinct buyer_task.id)
+        FROM
+        buyer_task
+        LEFT JOIN buyer_task_detail
+        ON  buyer_task.buyer_task_no = buyer_task_detail.buyer_task_no
+        WHERE
+        buyer_task.company_no = #{companyNo}
+        and buyer_task.is_del is false
+        and buyer_task_detail.is_del is false
+        <if test="buyerOpenId != null and buyerOpenId != ''">
+            AND buyer_task.buyer_open_id = #{buyerOpenId}
+        </if>
+        <if test="taskOrderNo != null and taskOrderNo != ''">
+            AND buyer_task.buyer_task_no = #{taskOrderNo}
+        </if>
+        <if test="taskTitle != null and taskTitle != ''">
+            AND buyer_task.title = #{taskTitle}
+        </if>
+        <if test="taskStart1 != null">
+            AND buyer_task_detail.start_time &gt;= #{taskStart1}
+        </if>
+        <if test="taskStart2 != null">
+            AND buyer_task_detail.start_time &lt;= #{taskStart2}
+        </if>
+        <if test="taskEnd1 != null">
+            AND buyer_task_detail.end_time &gt;= #{taskEnd1}
+        </if>
+        <if test="taskEnd2 != null">
+            AND buyer_task_detail.end_time &lt;= #{taskEnd2}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND buyer_task.buyer_name = #{buyerName}
+        </if>
+    </select>
+
     <select id="selectVoById" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerTaskVO">
         SELECT
             buyer_task.*, buyer_task_detail.item_code as itemCode, buyer_task_detail.upc as upc, buyer_task_detail.sku_pic_url as skuPicUrl

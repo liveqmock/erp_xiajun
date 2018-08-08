@@ -8,14 +8,10 @@ import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
-import com.wangqin.globalshop.biz1.app.enums.ItemShelfMethod;
-import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.channelapi.dal.*;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.enums.AppletType;
-import com.wangqin.globalshop.common.enums.ChannelSaleType;
-import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -70,15 +66,13 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private IItemCategoryService categoryService;
     @Autowired
-    private ShippingPackingPatternDOMapperExt shippingPackingPatternDOMapper;
-    @Autowired
     private Cache shareCache;
     @Autowired
     private IAppletConfigService appletConfigService;
+
     @Autowired
-    private IChannelSalePriceService channelSalePriceService;
-    @Autowired
-    private ChannelAccountDOMapperExt channelAccountDOMapperExt;
+	private ItemQrcodeShareDOMapperExt qrcodeShareDOMapperExt;
+
     @Autowired
     private ICountryService countryServiceImpl;
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
@@ -403,16 +397,26 @@ public class ItemServiceImplement implements IItemService {
     public String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken) {
 
         String key = String.format("%s-uuid-%s-%s-%s", "token", userId, companyNo, itemCode);
-        String picUrl = (String) shareCache.get(key);
+
+        //String picUrl = (String) shareCache.get(key);
+
+        String picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId,companyNo,itemCode);
+
         if (StringUtils.isBlank(picUrl)) {
             UUID uid = UUID.randomUUID();
             String uuid = uid.toString().replaceAll("-", "");
-            ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
+            //ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
             picUrl = insertIntoItemDimension(uuid, pages, accessToken);
-            // uuid:picUrl
-            shareCache.put(uuid, BaseDto.toString(tokenEntity));
-            // key:uuid
-            shareCache.put(key, picUrl);
+
+			ItemQrcodeShareDO itemQrcodeShareDO = new ItemQrcodeShareDO();
+			itemQrcodeShareDO.setCompanyNo(companyNo);
+			itemQrcodeShareDO.setShareNo(uuid);
+			itemQrcodeShareDO.setItemCode(itemCode);
+			itemQrcodeShareDO.setUserNo(userId);
+			itemQrcodeShareDO.setPicUrl(picUrl);
+			itemQrcodeShareDO.init4NoLogin();
+
+			qrcodeShareDOMapperExt.insert(itemQrcodeShareDO);
         }
         return picUrl;
     }

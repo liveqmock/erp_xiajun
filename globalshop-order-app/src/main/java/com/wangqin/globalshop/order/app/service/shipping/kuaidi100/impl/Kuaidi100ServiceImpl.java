@@ -60,8 +60,13 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
     private Map<String, String> companyCodeMap = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
-        Kuaidi100ServiceImpl impl = new Kuaidi100ServiceImpl();
-        impl.queryShippingTrack("yunda", "3101738504868");
+//        Kuaidi100ServiceImpl impl = new Kuaidi100ServiceImpl();
+//        impl.queryShippingTrack("yunda", "3101738504868");
+        String shippingNo = "PKG18080719371310035";//运单号
+		String com = "youzhengguonei";//快递公司
+		String num = "9977997381713";//快递公司编码
+        //queryShippingTrack(shippingNo,com,num);
+
     }
 
     @Override
@@ -73,7 +78,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             String signedStr = paramStr + key + customer;
             String sign = Md5Util.string2MD5(signedStr).toUpperCase();
 
-            logger.debug("主动查询参数 shippingNo:{}, paramStr:{}", shippingNo, paramStr);
+            logger.info("主动查询参数 shippingNo:{}, paramStr:{}", shippingNo, paramStr);
             Map<String, String> params = new HashMap<>();
             params.put("customer", customer);
             params.put("sign", sign);
@@ -86,7 +91,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
                 return null;
             }
 
-            logger.debug("主动查询结果 shippingNo:{}, num:{}, response:{} ", shippingNo, num, resultStr);
+            logger.info("主动查询结果 shippingNo:{}, num:{}, response:{} ", shippingNo, num, resultStr);
             Kuaidi100ShippingTrackResult result = JacksonHelper.fromJSON(resultStr, Kuaidi100ShippingTrackResult.class);
             if (result.getResult() != null && !result.getResult()) {
                 // 查询失败，返回快递100给出的失败信息
@@ -100,6 +105,7 @@ public class Kuaidi100ServiceImpl implements IKuaidi100Service {
             return null;
         }
     }
+
 
     @Override
     public Kuaidi100ShippingTrackResult queryShippingTrack(String com, String num) {

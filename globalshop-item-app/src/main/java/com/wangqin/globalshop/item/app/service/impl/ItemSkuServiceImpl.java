@@ -3,6 +3,14 @@ package com.wangqin.globalshop.item.app.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
+import com.wangqin.globalshop.common.enums.ChannelSaleType;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.item.app.service.IChannelSalePriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +22,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
@@ -35,6 +40,14 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	
 	@Autowired
 	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
+
+	@Autowired
+	private ChannelAccountDOMapperExt channelAccountDOMapperExt;
+
+	@Autowired
+	private IChannelSalePriceService channelSalePriceService;
+
+
 
 	//查询和本sku同属一个商品的所有sku的sale_price
 	@Override
@@ -78,8 +91,60 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		}
 		return itemResult;
 	}
-	
-	
+
+	/**
+	 * 按照条件分页查询商品多渠道价格(分页)
+	 */
+	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
+	public JsonPageResult<List<SkuChannelPriceDTO>> queryItemSkuPrices(ItemSkuQueryVO itemSkuQueryVO) {
+
+
+		JsonPageResult<List<SkuChannelPriceDTO>> itemResult = new JsonPageResult<>();
+		//1、查询总的记录数量
+		Integer totalCount =  itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
+		//2、查询分页记录
+		if(totalCount!=null&&totalCount!=0L) {
+			itemResult.buildPage(totalCount, itemSkuQueryVO);
+			List<ItemSkuDO> itemSkus = itemSkuMapperExt.queryItemSkuListOnly(itemSkuQueryVO);
+//			String companyNo = itemSkuQueryVO.getCompanyNo();
+			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
+			for (ItemSkuDO itemSku : itemSkus) {
+				//渠道价格
+				List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(itemSku.getSkuCode());
+
+				SkuChannelPriceDTO skuChannelPriceDTO = new SkuChannelPriceDTO();
+				BeanUtils.copy(itemSku, skuChannelPriceDTO);
+//				skuChannelPriceDTO.setSkuCode(itemSku.getSkuCode());
+//				skuChannelPriceDTO.setItemCode(itemSku.getItemCode());
+//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
+//
+//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
+				skuChannelPriceDTO.setChannelSalePriceList(channelSalePriceList);
+
+				skuChannelPriceDTOList.add(skuChannelPriceDTO);
+			}
+			itemResult.setData(skuChannelPriceDTOList);
+		}
+		return itemResult;
+	}
+
+	/**
+	 * 批量保存SKU+多渠道价格
+	 */
+	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
+	public void saveItemSkuPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList) {
+
+		for (SkuChannelPriceEditVO skuChannelPriceEditVO :skuChannelPriceEditVOList ) {
+			List<ChannelSalePriceDO> channelSalePriceList=skuChannelPriceEditVO.getChannelSalePriceList();
+			if(channelSalePriceList!=null) {
+				for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
+					channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannalNo());
+				}
+			}
+		}
+	}
 
 	/**
 	 * 初始化库存信息，添加商品时用

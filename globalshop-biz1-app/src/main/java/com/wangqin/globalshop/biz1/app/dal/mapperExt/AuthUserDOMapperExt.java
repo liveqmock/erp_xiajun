@@ -72,4 +72,20 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     List<AuthUserDO> selectByUnionidAndCompanyNo(@Param("unionid")String unionid, @Param("companyNo")String companyNo);
 
     AuthUserDO selectByUserNoAndCompanyNo(@Param("userNo")String userNo,@Param("companyNo") String companyNo);
+
+    /**
+     * 通过 user_no 更新指定 auth_user 信息
+     *
+     * @param authUserDO
+     * @return
+     */
+    int updateByUserNo(AuthUserDO authUserDO);
+
+    /**
+     * 通过 login_name 获取 auth_user
+     *
+     * @param loginName
+     * @return
+     */
+    AuthUserDO getByLoginName(String loginName);
 }

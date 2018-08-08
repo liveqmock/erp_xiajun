@@ -2,6 +2,8 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
@@ -17,13 +19,20 @@ public interface IItemSkuService  {
 		
 	/**
 	 * 按照条件分页查询商品(分页)
-	 * @param itemQueryVO
+	 * @param
 	 * @return
 	 */
 	JsonPageResult<List<ISkuDTO>> queryItemSkus(ItemSkuQueryVO itemSkuQueryVO);
-	
-	
-	
+
+	/**
+	 * 按照条件分页查询商品多渠道价格(分页)
+	 * @param
+	 * @return
+	 */
+	JsonPageResult<List<SkuChannelPriceDTO>> queryItemSkuPrices(ItemSkuQueryVO itemSkuQueryVO);
+
+	public void saveItemSkuPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList);
+
 	/**
 	 * 根据SKU初始化库存信息
 	 * @param itemSkuList

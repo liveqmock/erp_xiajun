@@ -1,341 +1,341 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="user_no" property="userNo" jdbcType="VARCHAR" />
-    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="sex" property="sex" jdbcType="TINYINT" />
-    <result column="age" property="age" jdbcType="TINYINT" />
-    <result column="phone" property="phone" jdbcType="VARCHAR" />
-    <result column="user_type" property="userType" jdbcType="TINYINT" />
-    <result column="status" property="status" jdbcType="TINYINT" />
-    <result column="organization_id" property="organizationId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="wx_union_id" property="wxUnionId" jdbcType="BIGINT" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="is_del" property="isDel" jdbcType="BIT" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List_SECURE_PASSWORD" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AuthUserDOMapperExt">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="TINYINT"/>
+        <result column="age" property="age" jdbcType="TINYINT"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="user_type" property="userType" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="wx_union_id" property="wxUnionId" jdbcType="BIGINT"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="is_del" property="isDel" jdbcType="BIT"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List_SECURE_PASSWORD">
     id, company_no, user_no, login_name, name, password, sex, age, phone, user_type,
     status, organization_id, create_time, wx_union_id, email, creator, modifier,gmt_create
   </sql>
-  <sql id="Base_Column_List2" >
+    <sql id="Base_Column_List2">
     id, company_no, user_no, login_name, name, '********' as password, sex, age, phone, user_type,
     status, organization_id, create_time, wx_union_id, email, creator, modifier,gmt_create
   </sql>
-  <sql id="Base_Column_List3" >
+    <sql id="Base_Column_List3">
     id,gmt_create AS gmtCreate,login_name AS loginName, creator, modifier,
     company_no AS companyNo, user_no AS userNo,
     name,  sex, age, phone, 
     user_type AS userType,status, organization_id AS organizationId,
     wx_union_id AS wxUnionId
   </sql>
-  
-  
 
-  <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
-    <id column="id" property="id" jdbcType="BIGINT"/>
-    <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
-    <result column="name" property="name" jdbcType="VARCHAR"/>
-    <result column="password" property="password" jdbcType="VARCHAR"/>
-    <result column="sex" property="sex" jdbcType="TINYINT"/>
-    <result column="age" property="age" jdbcType="TINYINT"/>
-    <result column="user_type" property="userType" jdbcType="TINYINT"/>
-    <result column="status" property="status" jdbcType="TINYINT"/>
-    <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
-    <result column="phone" property="phone" jdbcType="VARCHAR"/>
 
-    <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+    <resultMap id="userQueryVOResultMap" type="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="TINYINT"/>
+        <result column="age" property="age" jdbcType="TINYINT"/>
+        <result column="user_type" property="userType" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
 
-    <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
-      <id column="roleId" property="id"/>
-      <result column="roleName" property="name"/>
-    </collection>
-  </resultMap>
+        <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
 
-  <resultMap id="userVoResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
-    <id column="id" property="id" jdbcType="BIGINT"/>
-    <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
-    <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
-    <result column="name" property="name" jdbcType="VARCHAR"/>
-    <result column="password" property="password" jdbcType="VARCHAR"/>
-    <result column="sex" property="sex" jdbcType="TINYINT"/>
-    <result column="age" property="age" jdbcType="TINYINT"/>
-    <result column="user_type" property="userType" jdbcType="TINYINT"/>
-    <result column="status" property="status" jdbcType="TINYINT"/>
-    <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
-    <result column="phone" property="phone" jdbcType="VARCHAR"/>
-    <!-- <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/> -->
+        <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+            <id column="roleId" property="id"/>
+            <result column="roleName" property="name"/>
+        </collection>
+    </resultMap>
 
-    <!-- <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
-      <id column="roleId" property="id"/>
-      <result column="role_id" property="roleId"/>
-      <result column="name" property="name"/>
-    </collection> -->
-  </resultMap>
-  
-	<insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
-    insert into auth_user
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="companyNo != null" >
-        company_no,
-      </if>
-      <if test="userNo != null" >
-        user_no,
-      </if>
-      <if test="loginName != null" >
-        login_name,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="password != null" >
-        password,
-      </if>
-      <if test="sex != null" >
-        sex,
-      </if>
-      <if test="age != null" >
-        age,
-      </if>
-      <if test="phone != null" >
-        phone,
-      </if>
-      <if test="userType != null" >
-        user_type,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="organizationId != null" >
-        organization_id,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="wxUnionId != null" >
-        wx_union_id,
-      </if>
-      <if test="email != null" >
-        email,
-      </if>
-      <if test="isDel != null" >
-        is_del,
-      </if>
-      <if test="creator != null" >
-        creator,
-      </if>
-      <if test="modifier != null" >
-        modifier,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="companyNo != null" >
-        #{companyNo,jdbcType=VARCHAR},
-      </if>
-      <if test="userNo != null" >
-        #{userNo,jdbcType=VARCHAR},
-      </if>
-      <if test="loginName != null" >
-        #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        #{sex,jdbcType=TINYINT},
-      </if>
-      <if test="age != null" >
-        #{age,jdbcType=TINYINT},
-      </if>
-      <if test="phone != null" >
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="userType != null" >
-        #{userType,jdbcType=TINYINT},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="organizationId != null" >
-        #{organizationId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="wxUnionId != null" >
-        #{wxUnionId,jdbcType=BIGINT},
-      </if>
-      <if test="email != null" >
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="isDel != null" >
-        #{isDel,jdbcType=BIT},
-      </if>
-      <if test="creator != null" >
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <resultMap id="userVoResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_no" property="userNo" jdbcType="VARCHAR"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="TINYINT"/>
+        <result column="age" property="age" jdbcType="TINYINT"/>
+        <result column="user_type" property="userType" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <!-- <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/> -->
 
-  <!-- 普通查询勿用此sql，用下面那个selectByLoginName-->
-  <select id="selectSecureByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List_SECURE_PASSWORD" />
-    from auth_user
-    where login_name = #{userNo,jdbcType=VARCHAR}
-  </select>
+        <!-- <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
+          <id column="roleId" property="id"/>
+          <result column="role_id" property="roleId"/>
+          <result column="name" property="name"/>
+        </collection> -->
+    </resultMap>
 
-  <select id="selectByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List2" />
-    from auth_user
-    where login_name = #{userNo,jdbcType=VARCHAR}
-  </select>
+    <insert id="insertByNoId" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+        insert into auth_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyNo != null">
+                company_no,
+            </if>
+            <if test="userNo != null">
+                user_no,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="userType != null">
+                user_type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="organizationId != null">
+                organization_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="wxUnionId != null">
+                wx_union_id,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="modifier != null">
+                modifier,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyNo != null">
+                #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="userNo != null">
+                #{userNo,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=TINYINT},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                #{userType,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="organizationId != null">
+                #{organizationId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="wxUnionId != null">
+                #{wxUnionId,jdbcType=BIGINT},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=BIT},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="modifier != null">
+                #{modifier,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="updatePasswordByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    <!-- 普通查询勿用此sql，用下面那个selectByLoginName-->
+    <select id="selectSecureByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List_SECURE_PASSWORD"/>
+        from auth_user
+        where login_name = #{userNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from auth_user
+        where login_name = #{userNo,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updatePasswordByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
     update auth_user
      set
        password = #{password,jdbcType=VARCHAR}
     where login_name = #{loginName,jdbcType=VARCHAR}
   </update>
 
-  <update id="updateUserInfoByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
-  update auth_user
-  <set >
-  <if test="userNo != null" >
-  user_no = #{userNo,jdbcType=VARCHAR},
-  </if>
-  <if test="loginName != null" >
-  login_name = #{loginName,jdbcType=VARCHAR},
-  </if>
-  <if test="name != null" >
-  name = #{name,jdbcType=VARCHAR},
-  </if>
+    <update id="updateUserInfoByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+        update auth_user
+        <set>
+            <if test="userNo != null">
+                user_no = #{userNo,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                login_name = #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
 
-  <!--<if test="password != null" >-->
-  <!--password = #{password,jdbcType=VARCHAR},-->
-  <!--</if>-->
-  <if test="sex != null" >
-  sex = #{sex,jdbcType=TINYINT},
-  </if>
-  <if test="age != null" >
-  age = #{age,jdbcType=TINYINT},
-  </if>
-  <if test="phone != null" >
-  phone = #{phone,jdbcType=VARCHAR},
-  </if>
-  <if test="userType != null" >
-  user_type = #{userType,jdbcType=TINYINT},
-  </if>
-  <if test="status != null" >
-  status = #{status,jdbcType=TINYINT},
-  </if>
-  <if test="organizationId != null" >
-  organization_id = #{organizationId,jdbcType=INTEGER},
-  </if>
-  <if test="createTime != null" >
-  create_time = #{createTime,jdbcType=TIMESTAMP},
-  </if>
-  <if test="wxUnionId != null" >
-  wx_union_id = #{wxUnionId,jdbcType=BIGINT},
-  </if>
-  <if test="email != null" >
-  email = #{email,jdbcType=VARCHAR},
-  </if>
-  <if test="companyNo != null" >
-  company_no = #{companyNo,jdbcType=VARCHAR},
-  </if>
-  <if test="isDel != null" >
-  is_del = #{isDel,jdbcType=BIT},
-  </if>
-  <if test="gmtCreate != null" >
-  gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-  </if>
-  <if test="gmtModify != null" >
-  gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
-  </if>
-  <if test="creator != null" >
-  creator = #{creator,jdbcType=VARCHAR},
-  </if>
-  <if test="modifier != null" >
-  modifier = #{modifier,jdbcType=VARCHAR},
-  </if>
-  </set>
-  where login_name = #{loginName,jdbcType=VARCHAR}
-  </update>
+            <!--<if test="password != null" >-->
+            <!--password = #{password,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <if test="sex != null">
+                sex = #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=TINYINT},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="organizationId != null">
+                organization_id = #{organizationId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="wxUnionId != null">
+                wx_union_id = #{wxUnionId,jdbcType=BIGINT},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="companyNo != null">
+                company_no = #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=BIT},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModify != null">
+                gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="modifier != null">
+                modifier = #{modifier,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </update>
 
-  <update id="deleteByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO" >
+    <update id="deleteByLoginName" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
     update auth_user set is_del=1
     where login_name = #{loginName,jdbcType=VARCHAR}
   </update>
 
-  <select id="selectUserVoById" resultMap="userVoResultMap" parameterType="java.lang.Long">
-    SELECT
-    t.id,
-    login_name,
-    t.`name`,
-    '********' as `password`,
-    sex,
-    age,
-    user_type,
-    t.`status`,
-    organization_id,
-    t.create_time,
-    phone,
-    s.`name` AS organizationName,
-    o.id AS roleId,
-    o.`name` AS roleName
-    FROM
-    auth_user t
-    LEFT JOIN auth_user_role r ON t.id = r.user_id
-    LEFT JOIN auth_role o ON r.role_id = o.id
-    LEFT JOIN auth_organization s ON s.id = t.organization_id
-    <where>
-      t.id = #{id}
-    </where>
-  </select>
+    <select id="selectUserVoById" resultMap="userVoResultMap" parameterType="java.lang.Long">
+        SELECT
+        t.id,
+        login_name,
+        t.`name`,
+        '********' as `password`,
+        sex,
+        age,
+        user_type,
+        t.`status`,
+        organization_id,
+        t.create_time,
+        phone,
+        s.`name` AS organizationName,
+        o.id AS roleId,
+        o.`name` AS roleName
+        FROM
+        auth_user t
+        LEFT JOIN auth_user_role r ON t.id = r.user_id
+        LEFT JOIN auth_role o ON r.role_id = o.id
+        LEFT JOIN auth_organization s ON s.id = t.organization_id
+        <where>
+            t.id = #{id}
+        </where>
+    </select>
 
 
-  <select id="queryUsersCount" resultType="java.lang.Integer"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
-    SELECT
-    count(1)
-    FROM
-    `auth_user` t
-    where
-    1=1
-    <if test=" name != null and name != '' ">
-      t.name = #{name}
-    </if>
-    <if test=" organizationId != null ">
-      t.organization_id = #{organizationId}
-    </if>
-    <if test=" startTime != null ">
-      <![CDATA[ and t.gmt_create >= #{startTime} ]]>
-    </if>
-    <if test=" endTime != null ">
-      <![CDATA[ and t.gmt_create <= #{endTime} ]]>
-    </if>
+    <select id="queryUsersCount" resultType="java.lang.Integer"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
+        SELECT
+        count(1)
+        FROM
+        `auth_user` t
+        where
+        1=1
+        <if test=" name != null and name != '' ">
+            t.name = #{name}
+        </if>
+        <if test=" organizationId != null ">
+            t.organization_id = #{organizationId}
+        </if>
+        <if test=" startTime != null ">
+            <![CDATA[ and t.gmt_create >= #{startTime} ]]>
+        </if>
+        <if test=" endTime != null ">
+            <![CDATA[ and t.gmt_create <= #{endTime} ]]>
+        </if>
 
-  </select>
+    </select>
 
-  <select id="queryUserQueryVOById" resultMap="userQueryVOResultMap" parameterType="java.lang.Long">
+    <select id="queryUserQueryVOById" resultMap="userQueryVOResultMap" parameterType="java.lang.Long">
     SELECT
     t.id,
     login_name,
@@ -360,169 +360,213 @@
       t.id = #{id}
   </select>
 
-  <select id="queryUserQueryVOList" resultMap="userQueryVOResultMap"  parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
-    SELECT
-    t.id,
-    login_name,
-    t.`name`,
-    '********' as `password`,
-    sex,
-    age,
-    user_type,
-    t.`status`,
-    organization_id,
-    t.gmt_create,
-    phone,
-    s.`name` AS organizationName,
-    o.id AS roleId,
-    o.`name` AS roleName
-    FROM
-    auth_user t
-    LEFT JOIN auth_user_role r ON t.id = r.user_id
-    LEFT JOIN auth_role o ON r.role_id = o.id
-    LEFT JOIN auth_organization s ON s.id = t.organization_id
-    <where>
-      1=1
-      <if test=" name != null and name != '' ">
-       and t.name = #{name}
-      </if>
-      <if test=" organizationId != null ">
-       and t.organization_id = #{organizationId}
-      </if>
-      <if test="companyNo != null ">
-       and t.company_no = #{companyNo}
-      </if>
-      <if test=" startTime != null ">
-        <![CDATA[ and t.gmt_create >= #{startTime} ]]>
-      </if>
-      <if test=" endTime != null ">
-        <![CDATA[ and t.gmt_create <= #{endTime} ]]>
-      </if>
-    </where>
-    order by t.gmt_create desc
-    <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
-  </select>
-  
-  
-  <select id="selectUserVoByUserNo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List2" />
-    from auth_user
-    where user_no = #{userNo,jdbcType=VARCHAR}
-  </select>
+    <select id="queryUserQueryVOList" resultMap="userQueryVOResultMap"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO">
+        SELECT
+        t.id,
+        login_name,
+        t.`name`,
+        '********' as `password`,
+        sex,
+        age,
+        user_type,
+        t.`status`,
+        organization_id,
+        t.gmt_create,
+        phone,
+        s.`name` AS organizationName,
+        o.id AS roleId,
+        o.`name` AS roleName
+        FROM
+        auth_user t
+        LEFT JOIN auth_user_role r ON t.id = r.user_id
+        LEFT JOIN auth_role o ON r.role_id = o.id
+        LEFT JOIN auth_organization s ON s.id = t.organization_id
+        <where>
+            1=1
+            <if test=" name != null and name != '' ">
+                and t.name = #{name}
+            </if>
+            <if test=" organizationId != null ">
+                and t.organization_id = #{organizationId}
+            </if>
+            <if test="companyNo != null ">
+                and t.company_no = #{companyNo}
+            </if>
+            <if test=" startTime != null ">
+                <![CDATA[ and t.gmt_create >= #{startTime} ]]>
+            </if>
+            <if test=" endTime != null ">
+                <![CDATA[ and t.gmt_create <= #{endTime} ]]>
+            </if>
+        </where>
+        order by t.gmt_create desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
 
-  
-  <!-- 一键分享微信登录接口-->
-  <select id="selectUserByWxUnionId" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+
+    <select id="selectUserVoByUserNo" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.UserQueryVO"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from auth_user
+        where user_no = #{userNo,jdbcType=VARCHAR}
+    </select>
+
+
+    <!-- 一键分享微信登录接口-->
+    <select id="selectUserByWxUnionId"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap"
+            parameterType="java.lang.String">
     select 
     company_no AS companyNo,user_no AS userNo,name
     from auth_user
     where wx_union_id = #{wxUnionId}
   </select>
-  
-    
-  <!-- 一键分享手机号登录接口-->
-  <select id="selectUserByPhone" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
+
+
+    <!-- 一键分享手机号登录接口-->
+    <select id="selectUserByPhone" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap"
+            parameterType="java.lang.String">
     select 
     company_no AS companyNo,user_no AS userNo,name
     from auth_user
     where phone = #{phone}
   </select>
 
-  <select id="selectByUnionid" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List2" />
-    from auth_user
-    where wx_union_id = #{unionid,jdbcType=VARCHAR}
-  </select>
-  <select id="queryUserByCompanyNo" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	select
-  	<include refid="Base_Column_List2"/>
-  	from 
-  		auth_user
-  	<where>
-  		company_no = #{companyNo}
-  	</where>
-  </select>	
-  
-  <select id="queryUserListByCompanyNo" parameterType="java.lang.String" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO">
-  	select
-  	<include refid="Base_Column_List3"/>
-  	from 
-  		auth_user
-  	<where>
-  		company_no = #{companyNo}
-  		AND
-  		is_del=0
-  	</where>
-  </select>	
-  
-  <select id="selectByUnionidAndCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List2" />
-    from auth_user
-    where wx_union_id = #{unionid,jdbcType=VARCHAR}
-    AND company_no = #{companyNo,jdbcType=VARCHAR}
-  </select>
-  <select id="selectByUserNoAndCompanyNo" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap" >
-    select
-    <include refid="Base_Column_List2" />
-    from auth_user
-    where user_no = #{userNo,jdbcType=VARCHAR}
-    AND company_no = #{companyNo,jdbcType=VARCHAR}
-  </select>
-  <sql id="tableSection">auth_user</sql>
+    <select id="selectByUnionid" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from auth_user
+        where wx_union_id = #{unionid,jdbcType=VARCHAR}
+    </select>
+    <select id="queryUserByCompanyNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List2"/>
+        from
+        auth_user
+        <where>
+            company_no = #{companyNo}
+        </where>
+    </select>
 
-  <sql id="commonSelectSection">
-    1 = 1
+    <select id="queryUserListByCompanyNo" parameterType="java.lang.String"
+            resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.AuthUserVO">
+        select
+        <include refid="Base_Column_List3"/>
+        from
+        auth_user
+        <where>
+            company_no = #{companyNo}
+            AND
+            is_del=0
+        </where>
+    </select>
 
-    <if test="openId != null">
-      and T.open_id = #{openId}
-    </if>
+    <select id="selectByUnionidAndCompanyNo"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from auth_user
+        where wx_union_id = #{unionid,jdbcType=VARCHAR}
+        AND company_no = #{companyNo,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByUserNoAndCompanyNo"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.AuthUserDOMapper.BaseResultMap">
+        select
+        <include refid="Base_Column_List2"/>
+        from auth_user
+        where user_no = #{userNo,jdbcType=VARCHAR}
+        AND company_no = #{companyNo,jdbcType=VARCHAR}
+    </select>
+    <sql id="tableSection">auth_user</sql>
 
-    <if test="unionId != null">
-      and T.union_id = #{unionId}
-    </if>
+    <sql id="commonSelectSection">
+        1 = 1
 
-    <if test=" isDel == true">
-      and T.is_del is true
-    </if>
-    <if test=" isDel == false">
-      and T.is_del is false
-    </if>
-    <if test=" isDel == null">
-      and T.is_del is false
-    </if>
+        <if test="openId != null">
+            and T.open_id = #{openId}
+        </if>
 
-  </sql>
+        <if test="unionId != null">
+            and T.union_id = #{unionId}
+        </if>
 
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T.is_del is false
+        </if>
 
-  <!--查询总条数 -->
-  <select id="searchAuthUser" resultMap="userVoResultMap"
-  >
-    SELECT <include refid="Base_Column_List2" />
-    FROM <include refid="tableSection"/> T
-    WHERE
-    <include refid="commonSelectSection"/>
-  </select>
-
-  <!--查询总条数 -->
-  <select id="searchAuthUserCount" resultType="java.lang.Long"
-  >
-    SELECT COUNT(*)
-    FROM <include refid="tableSection"/> T
-    WHERE
-    <include refid="commonSelectSection"/>
-  </select>
-
-  <!-- -->
-  <select id="searchAuthUserList" resultMap="userVoResultMap">
-    SELECT  <include refid="Base_Column_List2" />
-    FROM <include refid="tableSection"/> T
-    WHERE
-    <include refid="commonSelectSection"/>
-    ORDER BY T.id desc
-  </select>
+    </sql>
 
 
+    <!--查询总条数 -->
+    <select id="searchAuthUser" resultMap="userVoResultMap"
+    >
+        SELECT
+        <include refid="Base_Column_List2"/>
+        FROM
+        <include refid="tableSection"/>
+        T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="searchAuthUserCount" resultType="java.lang.Long"
+    >
+        SELECT COUNT(*)
+        FROM
+        <include refid="tableSection"/>
+        T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="searchAuthUserList" resultMap="userVoResultMap">
+        SELECT
+        <include refid="Base_Column_List2"/>
+        FROM
+        <include refid="tableSection"/>
+        T
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T.id desc
+    </select>
+
+    <!-- 通过 user_no 更新指定 auth_user 信息 -->
+    <update id="updateByUserNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+        UPDATE auth_user T1
+        <set>
+            <if test="loginName != null">
+                T1.login_name = #{loginName},
+            </if>
+            <if test="name != null">
+                T1.name = #{name},
+            </if>
+            <if test="phone != null">
+                T1.phone = #{phone},
+            </if>
+            <if test="email != null">
+                T1.email = #{email},
+            </if>
+        </set>
+        WHERE T1.user_no = #{userNo}
+    </update>
+
+    <!-- 通过 login_name 获取 auth_user -->
+    <select id="getByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List_SECURE_PASSWORD"/>
+        FROM auth_user T1
+        WHERE T1.login_name = #{loginName}
+    </select>
 </mapper>

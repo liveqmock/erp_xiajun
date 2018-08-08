@@ -73,21 +73,7 @@
         <result column="is_del" property="isDel" jdbcType="BIT" />
         <result column="virtual_inv" property="virtualInv" jdbcType="BIGINT" />
     </resultMap>
-    
-    <!-- 根据sku_code查询一条item_sku表里面的记录，不关联其他的表，不做分页，只查一条记录-->
-    <select id="queryItemSkuDOBySkuCodeAndCompanyNo" 
-    	resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.BaseResultMap">
-    	SELECT 
-    	 <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.Base_Column_List" />
-    	FROM
-    	`item_sku` 
-    	WHERE
-    	sku_code=#{skuCode}
-    	AND company_no=#{companyNo}
-    	AND is_del is false
-    	LIMIT 0,1
-    </select>
-    
+
     <sql id="Base_Column_List" >
        	 id,  sku_code,  item_code,  item_name,  company_no,  category_code, 
          category_name,  upc, saleable,  purchase_price,  freight, 
@@ -112,7 +98,21 @@
         T1.goods_no AS goodsNo,
         inv.virtual_inv AS virtualInv
     </sql>
-    
+
+    <!-- 根据sku_code查询一条item_sku表里面的记录，不关联其他的表，不做分页，只查一条记录-->
+    <select id="queryItemSkuDOBySkuCodeAndCompanyNo"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.BaseResultMap">
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemSkuDOMapper.Base_Column_List" />
+        FROM
+        `item_sku`
+        WHERE
+        sku_code=#{skuCode}
+        AND company_no=#{companyNo}
+        AND is_del is false
+        LIMIT 0,1
+    </select>
+
     <!-- 查询和本sku同属一个商品的所有sku的sale_price -->
     <select id="querySalePriceListBySkuCode" resultType="java.lang.Double" parameterType="java.lang.String">
     	select sale_price 
@@ -222,7 +222,112 @@
           order by T1.id desc
           	<![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
-    
+
+    <!-- 多渠道价格 -->
+    <select id="queryItemSkuPrices" resultType="com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
+        SELECT
+        T1.id as id,T1.sale_type AS saleType,T1.brand_name as brand,
+        T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
+        T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,
+        T1.sku_code AS skuCode,T1.sale_price AS salePrice,T1.gmt_modify AS gmtModify,
+        csp.channal_no as channelNo,
+        csp.sale_price as channelSalePrice,
+        csp.batch_no as batchNo,
+        csp.shop_code as shopCode
+        FROM
+        item_sku T1 left join channel_sale_price csp on T1.sku_code= csp.sku_code
+        where
+        T1.is_del=0
+        AND T1.status=1
+        <if test=" categoryCode != null and categoryCode != '' ">
+            and T1.category_code = #{categoryCode}
+        </if>
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
+        <if test=" itemName != null and itemName != '' ">
+            and T1.item_name LIKE concat('%',#{itemName},'%')
+        </if>
+        <if test=" itemCode != null and itemCode != '' ">
+            and T1.item_code = #{itemCode}
+        </if>
+        <if test=" upc != null and upc != '' ">
+            and T1.upc = #{upc}
+        </if>
+        <if test=" skuCode != null and skuCode != '' ">
+            and T1.sku_code = #{skuCode}
+        </if>
+
+        <if test=" brand != null and brand != ''">
+            and  T1.brand_name = #{brand}
+        </if>
+        <if test=" startGmt!= null ">
+            and   <![CDATA[ T1.gmt_create >= #{startGmt} ]]>
+        </if>
+        <if test=" endGmt != null ">
+            and    <![CDATA[ T1.gmt_create <= #{endGmt} ]]>
+        </if>
+        order by T1.id desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+
+    <!-- 根据条件查询itemSkuList，分页-->
+    <select id="queryItemSkuListOnly" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
+        SELECT
+
+        T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
+        T1.sku_rate AS skuRate,
+        T1.item_name AS itemName,T1.company_no AS companyNo,
+        T1.category_code AS itemCode,
+        T1.category_name AS categoryName,
+        T1.upc AS upc,
+        T1.weight AS weight,T1.sku_pic AS skuPic,
+        T1.package_level_id AS packageLevelId,
+        T1.sale_price AS salePrice
+
+        FROM
+        item_sku T1
+        where
+        T1.is_del=0
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
+        <if test=" itemCode != null and itemCode != '' ">
+            and T1.item_code = #{itemCode}
+        </if>
+        order by T1.id desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+
+    <!-- 根据条件查询全部itemSkuList-->
+    <select id="queryAllSalableItemSkuList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO">
+        SELECT
+        T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
+        T1.sku_rate AS skuRate,
+        T1.item_name AS itemName,T1.company_no AS companyNo,
+        T1.category_code AS itemCode,
+        T1.category_name AS categoryName,
+        T1.upc AS upc,
+        T1.weight AS weight,T1.sku_pic AS skuPic,
+        T1.package_level_id AS packageLevelId,
+        T1.sale_price AS salePrice,
+        T2.is_sale AS isSale,
+        T2.sale_on_youzan AS saleOnYouzan,
+        T2.third_sale AS saleOnHaihu,
+        T2.wxis_sale AS saleOnXcx,
+        T2.status as status,
+        T1.saleable as saleable,
+        T2.origin_sale_price as originSalePrice
+        FROM
+        item_sku T1, item T2
+        where
+        T1.status=1
+        and T2.is_sale=1
+        and T1.is_del=0
+        and T1.company_no = #{companyNo}
+        order by T1.id desc
+    </select>
+
     <!-- 根据条件查询itemSkuList，不涉及其他的表 ，不做分页-->
      <select id="queryItemSkuListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
         SELECT
