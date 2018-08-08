@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.order.app.agent.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class CommissionController {
 	    			AgentOrderVO orderVO = sumaryService.queryOrderInfoBySubOrderNo(orderNo,agentNo);
 	    			if(null != orderVO) {
 	    				if(orderVO.getQuantity() != null && orderVO.getQuantity() > 0){
-							orderVO.setSalePrice(orderVO.getSalePrice()/orderVO.getQuantity());
+							orderVO.setSalePrice(BigDecimal.valueOf(orderVO.getSalePrice()/orderVO.getQuantity()).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
 						}
 	    				orderInfoList.add(orderVO);
 	    			}	    			
