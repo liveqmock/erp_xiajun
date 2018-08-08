@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyDetailVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyItemVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
@@ -20,7 +21,15 @@ public interface CompanyDOMapperExt extends CompanyDOMapper {
     CompanyDO selectByCompanyNo(String companyNo);
 
     /**
-     * 根据指定条件分页查询商户
+     * 根据 companyNo 查询商家
+     *
+     * @param companyNo
+     * @return
+     */
+    CompanyDetailVO getCompanyDetailVO(String companyNo);
+
+    /**
+     * 根据指定条件分页查询商家
      *
      * @param companyQueryVO
      * @param pageQueryParam
@@ -30,7 +39,7 @@ public interface CompanyDOMapperExt extends CompanyDOMapper {
                                       @Param("pageQueryParam") PageQueryParam pageQueryParam);
 
     /**
-     * 根据指定条件查询商户数目
+     * 根据指定条件查询商家数目
      *
      * @param companyQueryVO
      * @return
@@ -38,7 +47,7 @@ public interface CompanyDOMapperExt extends CompanyDOMapper {
     int countCompanies(@Param("companyQueryVO") CompanyQueryVO companyQueryVO);
 
     /**
-     * 根据 companyNo 更新指定商户
+     * 根据 companyNo 更新指定商家
      *
      * @param companyDO
      * @return

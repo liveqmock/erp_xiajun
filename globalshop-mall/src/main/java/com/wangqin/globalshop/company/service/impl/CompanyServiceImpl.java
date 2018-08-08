@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.company.service.impl;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyEditVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyDetailVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyItemVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.CompanyQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
@@ -49,7 +49,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional(rollbackFor = BizCommonException.class)
-    public void addCompany(CompanyEditVO companyEditVO) {
+    public void addCompany(CompanyDetailVO companyDetailVO) {
 
         // 权限认证（粗略）
         String loginUserCompanyNo = AppUtil.getLoginUserCompanyNo();
@@ -58,11 +58,11 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BizCommonException("没有操作权限！");
         }
 
-        if (StringUtil.isBlank(companyEditVO.getCompanyName())
-                || StringUtil.isBlank(companyEditVO.getLoginName())
-                || StringUtil.isBlank(companyEditVO.getPassword())
-                || StringUtil.isBlank(companyEditVO.getName())
-                || StringUtil.isBlank(companyEditVO.getPhone())) {
+        if (StringUtil.isBlank(companyDetailVO.getCompanyName())
+                || StringUtil.isBlank(companyDetailVO.getLoginName())
+                || StringUtil.isBlank(companyDetailVO.getPassword())
+                || StringUtil.isBlank(companyDetailVO.getName())
+                || StringUtil.isBlank(companyDetailVO.getPhone())) {
             throw new BizCommonException("信息不完整！");
         }
 
@@ -73,13 +73,13 @@ public class CompanyServiceImpl implements CompanyService {
 
         // 创建用户（公司管理员）
         String adminNo = CodeGenUtil.genUserNo();
-        Long adminId = addAuthUser(companyEditVO, companyNo, adminNo, creator, modifier);
+        Long adminId = addAuthUser(companyDetailVO, companyNo, adminNo, creator, modifier);
 
         // 创建商户
-        addCompany(companyEditVO, companyNo, adminNo, creator, modifier);
+        addCompany(companyDetailVO, companyNo, adminNo, creator, modifier);
 
         // 创建部门（公司总部）
-        addAuthOrganization(companyEditVO, companyNo, creator, modifier);
+        addAuthOrganization(companyDetailVO, companyNo, creator, modifier);
 
         // 创建角色（所有）
         Long roleId = CodeGenUtil.getRoleId();
@@ -92,7 +92,7 @@ public class CompanyServiceImpl implements CompanyService {
         addAuthRoleResource(companyNo, roleId, creator, modifier);
 
         // 添加 applet_config
-        addAppletConfig(companyEditVO, companyNo, creator, modifier);
+        addAppletConfig(companyDetailVO, companyNo, creator, modifier);
     }
 
     @Override
@@ -101,6 +101,14 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BizCommonException("信息不完整！");
         }
         return companyDOMapper.selectByCompanyNo(companyNo);
+    }
+
+    @Override
+    public CompanyDetailVO getCompanyDetailVO(String companyNo) {
+        if (companyNo == null) {
+            throw new BizCommonException("信息不完整！");
+        }
+        return companyDOMapper.getCompanyDetailVO(companyNo);
     }
 
     @Override
@@ -128,6 +136,51 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional(rollbackFor = BizCommonException.class)
+    public void updateCompany(CompanyDetailVO companyDetailVO) {
+        // TODO: 还需前端页面参考完善
+        if (StringUtil.isBlank(companyDetailVO.getCompanyNo())
+                || StringUtil.isBlank(companyDetailVO.getAdminNo())) {
+            throw new BizCommonException("信息不完整！");
+        }
+
+        // 更新商家信息
+        CompanyDO companyDO = new CompanyDO();
+        companyDO.setCompanyNo(companyDetailVO.getCompanyNo());
+        companyDO.setLogoUrl(companyDetailVO.getLogoUrl());
+        companyDO.setCompanyName(companyDetailVO.getCompanyName());
+        companyDO.setIntro(companyDetailVO.getIntro());
+        companyDO.setState(companyDetailVO.getState());
+        companyDO.setCity(companyDetailVO.getCity());
+        companyDO.setDistrict(companyDetailVO.getDistrict());
+        companyDO.setFullAddress(companyDetailVO.getFullAddress());
+        companyDO.setCountry(companyDetailVO.getCountry());
+        companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
+        companyDO.setMainCategory(companyDetailVO.getMainCategory());
+        companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
+        companyDO.setOnlineAnnualSale(companyDetailVO.getOnlineAnnualSale());
+        updateCompany(companyDO);
+
+        // 更新商家管理员/联系人信息
+        AuthUserDO authUserDO = new AuthUserDO();
+        authUserDO.setUserNo(companyDetailVO.getAdminNo());
+        authUserDO.setCompanyNo(companyDetailVO.getCompanyNo());
+        authUserDO.setLoginName(companyDetailVO.getLoginName());
+        authUserDO.setName(companyDetailVO.getName());
+        authUserDO.setPhone(companyDetailVO.getPhone());
+        authUserDO.setEmail(companyDetailVO.getEmail());
+        authUserService.updateAuthUser(authUserDO);
+
+        // 更新 Applet config 信息
+        AppletConfigDO appletConfigDO = new AppletConfigDO();
+        appletConfigDO.setCompanyNo(companyDetailVO.getCompanyNo());
+        appletConfigDO.setStatus(companyDetailVO.getStatus());
+        appletConfigDO.setMchId(companyDetailVO.getMchId());
+        appletConfigDO.setPayKey(companyDetailVO.getPayKey());
+        appletConfigService.updateAppletConfig(appletConfigDO);
+    }
+
+    @Override
     public void disableCompany(String companyNo) {
         CompanyDO companyDO = new CompanyDO();
         companyDO.setCompanyNo(companyNo);
@@ -148,13 +201,13 @@ public class CompanyServiceImpl implements CompanyService {
     /**
      * 创建商户
      *
-     * @param companyEditVO
+     * @param companyDetailVO
      * @param companyNo
      * @param adminNo
      * @param creator
      * @param modifier
      */
-    private void addCompany(CompanyEditVO companyEditVO, String companyNo, String adminNo, String creator, String modifier) {
+    private void addCompany(CompanyDetailVO companyDetailVO, String companyNo, String adminNo, String creator, String modifier) {
         CompanyDO companyDO = new CompanyDO();
         try {
             // 商户必需字段
@@ -162,23 +215,23 @@ public class CompanyServiceImpl implements CompanyService {
             companyDO.setAdminNo(adminNo);
             companyDO.setCreator(creator);
             companyDO.setModifier(modifier);
-            companyDO.setCompanyName(companyEditVO.getCompanyName());
+            companyDO.setCompanyName(companyDetailVO.getCompanyName());
             companyDO.setStatus(0);
             companyDO.setForceIdcard(1);
-            companyDO.setTel(companyEditVO.getPhone());
+            companyDO.setTel(companyDetailVO.getPhone());
             companyDO.setIm("微信");
             // 商户可选字段
-            companyDO.setLogoUrl(companyEditVO.getLogoUrl());
-            companyDO.setIntro(companyEditVO.getIntro());
-            companyDO.setState(companyEditVO.getState());
-            companyDO.setCity(companyEditVO.getCity());
-            companyDO.setDistrict(companyEditVO.getDistrict());
-            companyDO.setFullAddress(companyEditVO.getFullAddress());
-            companyDO.setCountry(companyEditVO.getCountry());
-            companyDO.setOverseaAddress(companyEditVO.getOverseaAddress());
-            companyDO.setMainCategory(companyEditVO.getMainCategory());
-            companyDO.setOfflineAnnualSale(companyEditVO.getOfflineAnnualSale());
-            companyDO.setOnlineAnnualSale(companyEditVO.getOnlineAnnualSale());
+            companyDO.setLogoUrl(companyDetailVO.getLogoUrl());
+            companyDO.setIntro(companyDetailVO.getIntro());
+            companyDO.setState(companyDetailVO.getState());
+            companyDO.setCity(companyDetailVO.getCity());
+            companyDO.setDistrict(companyDetailVO.getDistrict());
+            companyDO.setFullAddress(companyDetailVO.getFullAddress());
+            companyDO.setCountry(companyDetailVO.getCountry());
+            companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
+            companyDO.setMainCategory(companyDetailVO.getMainCategory());
+            companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
+            companyDO.setOnlineAnnualSale(companyDetailVO.getOnlineAnnualSale());
             companyDOMapper.insertSelective(companyDO);
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,12 +242,12 @@ public class CompanyServiceImpl implements CompanyService {
     /**
      * 创建部门（公司总部）
      *
-     * @param companyEditVO
+     * @param companyDetailVO
      * @param companyNo
      * @param creator
      * @param modifier
      */
-    private void addAuthOrganization(CompanyEditVO companyEditVO, String companyNo, String creator, String modifier) {
+    private void addAuthOrganization(CompanyDetailVO companyDetailVO, String companyNo, String creator, String modifier) {
         AuthOrganizationDO authOrganizationDO = new AuthOrganizationDO();
         String orgId = CodeGenUtil.getOrgId();
         authOrganizationDO.setCompanyNo(companyNo);
@@ -203,10 +256,10 @@ public class CompanyServiceImpl implements CompanyService {
         authOrganizationDO.setOrgId(orgId);
         authOrganizationDO.setCode(orgId);
         authOrganizationDO.setName("公司总部");
-        authOrganizationDO.setAddress(companyEditVO.getState() + "-"
-                + companyEditVO.getCity() + "-"
-                + companyEditVO.getDistrict() + "-"
-                + companyEditVO.getFullAddress());
+        authOrganizationDO.setAddress(companyDetailVO.getState() + "-"
+                + companyDetailVO.getCity() + "-"
+                + companyDetailVO.getDistrict() + "-"
+                + companyDetailVO.getFullAddress());
         authOrganizationDO.setSeq(1);
         authOrganizationService.addAuthOrganization(authOrganizationDO);
     }
@@ -240,21 +293,21 @@ public class CompanyServiceImpl implements CompanyService {
     /**
      * 创建用户（管理员）
      *
-     * @param companyEditVO
+     * @param companyDetailVO
      * @param companyNo
      * @param creator
      * @param modifier
      */
-    private Long addAuthUser(CompanyEditVO companyEditVO, String companyNo, String userNo, String creator, String modifier) {
+    private Long addAuthUser(CompanyDetailVO companyDetailVO, String companyNo, String userNo, String creator, String modifier) {
         AuthUserDO authUserDO = new AuthUserDO();
         authUserDO.setCompanyNo(companyNo);
         authUserDO.setCreator(creator);
         authUserDO.setModifier(modifier);
         authUserDO.setUserNo(userNo);
-        authUserDO.setLoginName(companyEditVO.getLoginName());
-        authUserDO.setPassword(Md5Util.getMD5(companyEditVO.getPassword()));
-        authUserDO.setName(companyEditVO.getName());
-        authUserDO.setEmail(companyEditVO.getEmail());
+        authUserDO.setLoginName(companyDetailVO.getLoginName());
+        authUserDO.setPassword(Md5Util.getMD5(companyDetailVO.getPassword()));
+        authUserDO.setName(companyDetailVO.getName());
+        authUserDO.setEmail(companyDetailVO.getEmail());
         authUserService.addAuthUser(authUserDO);
         return authUserDO.getId();
     }
@@ -306,20 +359,20 @@ public class CompanyServiceImpl implements CompanyService {
     /**
      * 添加 applet_config
      *
-     * @param companyEditVO
+     * @param companyDetailVO
      * @param companyNo
      * @param creator
      * @param modifier
      */
-    private void addAppletConfig(CompanyEditVO companyEditVO, String companyNo, String creator, String modifier) {
+    private void addAppletConfig(CompanyDetailVO companyDetailVO, String companyNo, String creator, String modifier) {
         AppletConfigDO appletConfigDO = new AppletConfigDO();
         appletConfigDO.setCompanyNo(companyNo);
         appletConfigDO.setCreator(creator);
         appletConfigDO.setModifier(modifier);
-        appletConfigDO.setStatus(companyEditVO.getStatus());
+        appletConfigDO.setStatus(companyDetailVO.getStatus());
         // TODO: 需要根据接入模式判断是否需要填 PayKey
-        appletConfigDO.setMchId(companyEditVO.getMchId());
-        appletConfigDO.setPayKey(companyEditVO.getPayKey());
+        appletConfigDO.setMchId(companyDetailVO.getMchId());
+        appletConfigDO.setPayKey(companyDetailVO.getPayKey());
         appletConfigDO.setAppletType("2");
         appletConfigService.addAppletConfig(appletConfigDO);
     }

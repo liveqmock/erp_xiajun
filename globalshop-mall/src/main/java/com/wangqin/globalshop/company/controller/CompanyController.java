@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 商户管理 controller
+ * 商家管理 controller
  *
  * @author angus
  * @date 2018/8/6
@@ -25,17 +25,17 @@ public class CompanyController {
     private CompanyService companyService;
 
     /**
-     * 添加商户
+     * 添加商家
      *
-     * @param companyEditVO
+     * @param companyDetailVO
      * @return
      */
     @PostMapping("/add")
-    public Object addCompany(CompanyEditVO companyEditVO) {
+    public Object addCompany(CompanyDetailVO companyDetailVO) {
         JsonResult result = new JsonResult();
 
         try {
-            companyService.addCompany(companyEditVO);
+            companyService.addCompany(companyDetailVO);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
@@ -48,12 +48,11 @@ public class CompanyController {
     }
 
     /**
-     * 查询商户
+     * 查询单个商家
      *
      * @param companyNo
      * @return
      */
-    @PostMapping("/get")
     public Object getCompany(String companyNo) {
         JsonResult<CompanyDO> result = new JsonResult<>();
 
@@ -71,7 +70,30 @@ public class CompanyController {
     }
 
     /**
-     * 查询商户
+     * 查询单个商家
+     *
+     * @param companyNo
+     * @return
+     */
+    @PostMapping("/get")
+    public Object getCompanyDetailVO(String companyNo) {
+        JsonResult<CompanyDetailVO> result = new JsonResult<>();
+
+        try {
+            CompanyDetailVO companyDetailVO = companyService.getCompanyDetailVO(companyNo);
+            result.buildData(companyDetailVO).buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildMsg("查询出错").buildIsSuccess(false);
+        }
+
+        return result;
+    }
+
+    /**
+     * 分页查询多个商家
      *
      * @param companyQueryVO
      * @param pageQueryParam
@@ -96,16 +118,16 @@ public class CompanyController {
     }
 
     /**
-     * 更新商户
+     * 更新商家
      *
      * @return
      */
     @PostMapping("/update")
-    public Object updateCompany() {
+    public Object updateCompany(CompanyDetailVO companyDetailVO) {
         JsonResult result = new JsonResult();
 
         try {
-            // companyService.updateCompany(companyEditVO);
+            companyService.updateCompany(companyDetailVO);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
@@ -118,7 +140,7 @@ public class CompanyController {
     }
 
     /**
-     * 停用商户
+     * 停用商家
      *
      * @param companyNo
      * @return
@@ -128,7 +150,7 @@ public class CompanyController {
         JsonResult result = new JsonResult();
 
         try {
-             companyService.disableCompany(companyNo);
+            companyService.disableCompany(companyNo);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
@@ -141,7 +163,7 @@ public class CompanyController {
     }
 
     /**
-     * 删除商户
+     * 删除商家
      *
      * @param companyNo
      * @return

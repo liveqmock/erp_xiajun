@@ -1,68 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AppletConfigDOMapperExt" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
-    <result column="secret" property="secret" jdbcType="VARCHAR" />
-    <result column="appid" property="appid" jdbcType="VARCHAR" />
-    <result column="applet_type" property="appletType" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
-    <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
-    <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR" />
-    <result column="publish_status" property="publishStatus" jdbcType="INTEGER" />
-    <result column="templet_id" property="templetId" jdbcType="INTEGER" />
-    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
-    <result column="audit_id" property="auditId" jdbcType="VARCHAR" />
-    <result column="ext_json" property="extJson" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AppletConfigDOMapperExt">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="secret" property="secret" jdbcType="VARCHAR"/>
+        <result column="appid" property="appid" jdbcType="VARCHAR"/>
+        <result column="applet_type" property="appletType" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="mch_id" property="mchId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="pay_key" property="payKey" jdbcType="VARCHAR"/>
+        <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR"/>
+        <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR"/>
+        <result column="publish_status" property="publishStatus" jdbcType="INTEGER"/>
+        <result column="templet_id" property="templetId" jdbcType="INTEGER"/>
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="audit_id" property="auditId" jdbcType="VARCHAR"/>
+        <result column="ext_json" property="extJson" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, company_no, secret, appid, applet_type, creator, modifier, mch_id, status, pay_key,
     authorizer_access_token, authorizer_refresh_token, publish_status, templet_id, img_url,
     audit_id, ext_json
   </sql>
-  <!-- 一键分享：查询公司对应的商城小程序的appid和screat -->
-  <select id="queryWxMallConfigInfoByCompanyNo" resultMap="BaseResultMap"
-    parameterType="java.lang.String">
-    SELECT 
-    <include refid="Base_Column_List"/>
-    FROM 
-    applet_config
-    <where>
-    company_no=#{companyNo}
-    AND applet_type=#{appletType}
-    AND is_del=0
-    </where>
-    LIMIT 0,1
-  </select>
+    <!-- 一键分享：查询公司对应的商城小程序的appid和screat -->
+    <select id="queryWxMallConfigInfoByCompanyNo" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        applet_config
+        <where>
+            company_no=#{companyNo}
+            AND applet_type=#{appletType}
+            AND is_del=0
+        </where>
+        LIMIT 0,1
+    </select>
 
-  <select id="selectByCompanyNoAndType" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select
-    <include refid="Base_Column_List"/>
-    from applet_config
-    where company_no = #{companyNo,jdbcType=VARCHAR}
-    AND applet_type =#{type,jdbcType=VARCHAR}
-  </select>
-  <select id="selectByAppid" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select
-    <include refid="Base_Column_List"/>
-    from applet_config
-    where appid = #{appid,jdbcType=VARCHAR}
-  </select>
-  <select id="selectByPublishStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    select
-    <include refid="Base_Column_List"/>
-    from applet_config
-    where publish_status = #{publishStatus,jdbcType=VARCHAR}
-  </select>
-  <select id="list" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from applet_config
-  </select>
+    <select id="selectByCompanyNoAndType" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from applet_config
+        where company_no = #{companyNo,jdbcType=VARCHAR}
+        AND applet_type =#{type,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByAppid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from applet_config
+        where appid = #{appid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByPublishStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from applet_config
+        where publish_status = #{publishStatus,jdbcType=VARCHAR}
+    </select>
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from applet_config
+    </select>
 
+    <!-- 根据 company_no 更新指定 applet_config -->
+    <update id="updateByCompanyNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO">
+        UPDATE applet_config T1
+        <set>
+            <if test="status != null">
+                T1.status = #{status},
+            </if>
+            <if test="mchId != null">
+                T1.mch_id = #{mchId},
+            </if>
+            <if test="payKey != null">
+                T1.pay_key = #{payKey},
+            </if>
+        </set>
+        WHERE T1.company_no = #{companyNo}
+    </update>
 </mapper>

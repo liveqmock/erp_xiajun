@@ -16,4 +16,11 @@ public interface AuthUserService {
      * @param authUserDO
      */
     void addAuthUser(AuthUserDO authUserDO);
+
+    /**
+     * 更新用户
+     *
+     * @param authUserDO
+     */
+    void updateAuthUser(AuthUserDO authUserDO);
 }

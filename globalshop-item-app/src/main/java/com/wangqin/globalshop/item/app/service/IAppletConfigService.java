@@ -13,4 +13,11 @@ public interface IAppletConfigService {
      * @param appletConfigDO
      */
     void addAppletConfig(AppletConfigDO appletConfigDO);
+
+    /**
+     * 更新 Applet Config
+     *
+     * @param appletConfigDO
+     */
+    void updateAppletConfig(AppletConfigDO appletConfigDO);
 }

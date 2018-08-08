@@ -26,4 +26,17 @@ public class AuthUserServiceImpl implements AuthUserService {
             throw new BizCommonException("用户新增失败！");
         }
     }
+
+    @Override
+    public void updateAuthUser(AuthUserDO authUserDO) {
+        if (authUserDO.getUserNo() == null) {
+            throw new BizCommonException("数据不完整！");
+        }
+
+        int effectedNum = authUserDOMapper.updateByUserNo(authUserDO);
+
+        if (effectedNum <= 0) {
+            throw new BizCommonException("数据库中无此记录！");
+        }
+    }
 }

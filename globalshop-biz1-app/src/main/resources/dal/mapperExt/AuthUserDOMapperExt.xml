@@ -524,5 +524,23 @@
     ORDER BY T.id desc
   </select>
 
-
+  <!-- 通过 user_no 更新指定 auth_user 信息 -->
+  <update id="updateByUserNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthUserDO">
+    UPDATE auth_user T1
+    <set>
+      <if test="loginName != null">
+        T1.login_name = #{loginName},
+      </if>
+      <if test="name != null">
+        T1.name = #{name},
+      </if>
+      <if test="phone != null">
+        T1.phone = #{phone},
+      </if>
+      <if test="email != null">
+        T1.email = #{email},
+      </if>
+    </set>
+    WHERE T1.user_no = #{userNo}
+  </update>
 </mapper>
