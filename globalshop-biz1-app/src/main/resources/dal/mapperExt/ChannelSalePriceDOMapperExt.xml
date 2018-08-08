@@ -41,12 +41,12 @@
 		WHERE item_code = #{itemCode}
 	</delete>
 	
-	<delete id="updatePriceBySkuCodeAndChannelNo" >
+	<update id="updatePriceBySkuCodeAndChannelNo" >
 		UPDATE channel_sale_price
 		SET sale_price=#{salePrice}
 		WHERE sku_code=#{skuCode}
 		AND channal_no=#{channelNo}
-	</delete>
+	</update>
 	
 	<insert id="insertChannelSalePriceSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     insert into channel_sale_price
