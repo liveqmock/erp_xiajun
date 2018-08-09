@@ -458,11 +458,11 @@ public class MallSubOrderServiceImpl implements IMallSubOrderService {
     @Override
     public List<MallSubOrderDO> listMallSubOrders(MallSubOrderQueryVO mallSubOrderQueryVO, PageQueryParam pageQueryParam) {
         pageQueryParam.calculateRowIndex();
-        return mallSubOrderDOMapper.listMallSubOrders(mallSubOrderQueryVO, pageQueryParam, AppUtil.getLoginUserCompanyNo());
+        return mallSubOrderDOMapper.listMallSubOrders(mallSubOrderQueryVO, pageQueryParam);
     }
 
     @Override
     public int countMallSubOrders(MallSubOrderQueryVO mallSubOrderQueryVO) {
-        return mallSubOrderDOMapper.countMallSubOrders(mallSubOrderQueryVO, AppUtil.getLoginUserCompanyNo());
+        return mallSubOrderDOMapper.countMallSubOrders(mallSubOrderQueryVO);
     }
 }

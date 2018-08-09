@@ -786,9 +786,6 @@
         <include refid="Base_Column_List"/>
         FROM mall_sub_order T1
         <where>
-            <if test="companyNo != null">
-                AND T1.company_no = #{companyNo}
-            </if>
             <if test="mallSubOrderQueryVO.orderNo != null">
                 AND T1.order_no = #{mallSubOrderQueryVO.orderNo}
             </if>
@@ -840,6 +837,8 @@
             <if test="mallSubOrderQueryVO.endGmtCreate != null">
                 AND T1.gmt_create &lt;= #{mallSubOrderQueryVO.endGmtCreate}
             </if>
+            AND T1.company_no = #{mallSubOrderQueryVO.companyNo}
+            AND T1.is_del = 0
         </where>
         ORDER BY T1.gmt_create DESC
         <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
@@ -851,9 +850,6 @@
         SELECT COUNT(*)
         FROM mall_sub_order T1
         <where>
-            <if test="companyNo != null">
-                AND T1.company_no = #{companyNo}
-            </if>
             <if test="mallSubOrderQueryVO.orderNo != null">
                 AND T1.order_no = #{mallSubOrderQueryVO.orderNo}
             </if>
@@ -905,6 +901,8 @@
             <if test="mallSubOrderQueryVO.endGmtCreate != null">
                 AND T1.gmt_create &lt;= #{mallSubOrderQueryVO.endGmtCreate}
             </if>
+            AND T1.company_no = #{mallSubOrderQueryVO.companyNo}
+            AND T1.is_del = 0
         </where>
     </select>
 </mapper>

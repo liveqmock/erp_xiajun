@@ -141,7 +141,7 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper {
      * @return
      */
     List<MallSubOrderDO> listMallSubOrders(@Param("mallSubOrderQueryVO") MallSubOrderQueryVO mallSubOrderQueryVO,
-                                           @Param("pageQueryParam") PageQueryParam pageQueryParam, @Param("companyNo") String  companyNo);
+                                           @Param("pageQueryParam") PageQueryParam pageQueryParam);
 
     /**
      * 根据指定条件查询子订单数目
@@ -149,5 +149,5 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper {
      * @param mallSubOrderQueryVO
      * @return
      */
-    int countMallSubOrders(@Param("mallSubOrderQueryVO") MallSubOrderQueryVO mallSubOrderQueryVO, @Param("companyNo") String  companyNo);
+    int countMallSubOrders(@Param("mallSubOrderQueryVO") MallSubOrderQueryVO mallSubOrderQueryVO);
 }
