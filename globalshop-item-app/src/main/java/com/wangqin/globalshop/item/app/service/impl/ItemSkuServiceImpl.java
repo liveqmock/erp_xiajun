@@ -1,24 +1,25 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO;
 import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelShopDOMapperExt;
 import com.wangqin.globalshop.common.enums.ChannelSaleType;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.BigDecimalHelper;
 import com.wangqin.globalshop.item.app.service.IChannelSalePriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
@@ -47,6 +48,8 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	@Autowired
 	private IChannelSalePriceService channelSalePriceService;
 
+	@Autowired
+	private ChannelShopDOMapperExt channelShopDOMapperExt;
 
 
 	//查询和本sku同属一个商品的所有sku的sale_price
@@ -134,16 +137,93 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	 */
 	@Override
 	@Transactional(rollbackFor = ErpCommonException.class)
-	public void saveItemSkuPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList) {
-
+	public void saveItemSkuMultiPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList) {
 		for (SkuChannelPriceEditVO skuChannelPriceEditVO :skuChannelPriceEditVOList ) {
-			List<ChannelSalePriceDO> channelSalePriceList=skuChannelPriceEditVO.getChannelSalePriceList();
-			if(channelSalePriceList!=null) {
-				for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
-					channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannalNo());
-				}
+			saveOneItemSkuMultiPrice(skuChannelPriceEditVO);
+		}
+	}
+
+	/**
+	 * 保存一个SKU的多渠道价格
+	 */
+	@Override
+	@Transactional(rollbackFor = ErpCommonException.class)
+	public void saveOneItemSkuMultiPrice(SkuChannelPriceEditVO skuChannelPriceEditVO) {
+		List<ChannelSalePriceDO> channelSalePriceList = skuChannelPriceEditVO.getChannelSalePriceList();
+		if (channelSalePriceList != null) {
+			for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
+				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannalNo());
 			}
 		}
+	}
+
+
+
+	/**
+	 * 设置所有SKU的渠道价格
+	 * @param discountPercent 折扣，比如85折，传85，但折扣不能超过100
+	 */
+	@Override
+	public void saveAllItemSkuInOneChannelPrice(String discountPercent, String channelNo){
+
+		BigDecimal discount=new BigDecimal(discountPercent).multiply(new BigDecimal(0.01));
+
+		QueryItemSkuPriceListDTO queryItemSkuPriceListDTO=new QueryItemSkuPriceListDTO();
+		queryItemSkuPriceListDTO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		queryItemSkuPriceListDTO.setSalable(1);
+
+		List<ItemSkuPriceVO> itemSkus = itemSkuMapperExt.queryAllSalableItemSkuList(queryItemSkuPriceListDTO);
+		for (ItemSkuPriceVO itemSku : itemSkus) {
+			//渠道价格
+//			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
+			Double salePrice=itemSku.getSalePrice();
+			Double discountPrice=discount.multiply(BigDecimal.valueOf(salePrice)).doubleValue();
+			List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(itemSku.getSkuCode());
+			if(channelSalePriceList==null || channelSalePriceList.size()==0){
+				//没有多渠道，需加上n条
+//				List<ChannelShopDO> channels=channelShopDOMapperExt.searchShopList(null);
+				ChannelSalePriceDO channelSalePriceDO=new ChannelSalePriceDO();
+				channelSalePriceDO.setChannalNo(channelNo);
+				channelSalePriceDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+				channelSalePriceDO.setSkuCode(itemSku.getSkuCode());
+				channelSalePriceDO.setCreator("SYSTEM");
+				channelSalePriceDO.setModifier("SYSTEM");
+				//TODO 此处不对，shopCode不定，先填
+				channelSalePriceDO.setShopCode(itemSku.getId());
+
+				//TODO channelNo现在写死是1，2，3，以后优化
+				if(itemSku.getSaleOnYouzan()==1) {
+					channelSalePriceDO.setSalePrice(salePrice.floatValue());
+					//如果是当前渠道
+					if ((channelNo=="1")) {
+						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
+					}
+					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
+				}
+				if(itemSku.getSaleOnHaihu()==1){
+					channelSalePriceDO.setSalePrice(salePrice.floatValue());
+					//如果是当前渠道
+					if ((channelNo=="2")) {
+						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
+					}
+					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
+				}
+				if(itemSku.getSaleOnHaihu()==1){
+					channelSalePriceDO.setSalePrice(salePrice.floatValue());
+					//如果是当前渠道
+					if ((channelNo=="3")) {
+						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
+					}
+					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
+				}
+			}else
+			{
+				//已有多渠道，只需更新一条
+				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(itemSku.getSkuCode(),discountPrice,channelNo);
+
+			}
+		}
+
 	}
 
 	/**

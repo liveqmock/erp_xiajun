@@ -278,7 +278,7 @@
         T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
         T1.sku_rate AS skuRate,
         T1.item_name AS itemName,T1.company_no AS companyNo,
-        T1.category_code AS itemCode,
+        T1.category_code AS categoryCode,
         T1.category_name AS categoryName,
         T1.upc AS upc,
         T1.weight AS weight,T1.sku_pic AS skuPic,
@@ -300,12 +300,12 @@
     </select>
 
     <!-- 根据条件查询全部itemSkuList-->
-    <select id="queryAllSalableItemSkuList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO">
+    <select id="queryAllSalableItemSkuList" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuPriceVO" parameterType="com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO">
         SELECT
         T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
         T1.sku_rate AS skuRate,
         T1.item_name AS itemName,T1.company_no AS companyNo,
-        T1.category_code AS itemCode,
+        T1.category_code AS categoryCode,
         T1.category_name AS categoryName,
         T1.upc AS upc,
         T1.weight AS weight,T1.sku_pic AS skuPic,
