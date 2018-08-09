@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.item.app.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
@@ -10,6 +11,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
@@ -17,6 +19,8 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -88,12 +92,13 @@ public class ItemSkuPriceController {
 	 */
 	@PostMapping("/itemSku/saveItemSkuPriceList")
 	@ResponseBody
-	public Object saveAllItemSkuInOneChannelPrice(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList) {
+	public Object saveAllItemSkuInOneChannelPrice(String skuChannelPriceEditVOList) {
 		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+		List<SkuChannelPriceEditVO> jsonList = BaseDto.fromJson(skuChannelPriceEditVOList, new TypeReference<List<SkuChannelPriceEditVO>>(){});
 		if(!loginCheck()) {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
-		 iItemSkuService.saveItemSkuMultiPriceList(skuChannelPriceEditVOList);
+		 iItemSkuService.saveItemSkuMultiPriceList(jsonList);
 		result.buildIsSuccess(true).buildMsg("保存成功");
 		return result;
 	}
@@ -105,12 +110,13 @@ public class ItemSkuPriceController {
      */
     @PostMapping("/itemSku/saveOneItemSkuMultiPrice")
     @ResponseBody
-    public Object saveOneItemSkuMultiPrice(SkuChannelPriceEditVO skuChannelPriceEditVO) {
+    public Object saveOneItemSkuMultiPrice(String skuChannelPriceEditVO) {
         JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+		SkuChannelPriceEditVO json = BaseDto.fromJson(skuChannelPriceEditVO, SkuChannelPriceEditVO.class);
         if(!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请登录");
         }
-        iItemSkuService.saveOneItemSkuMultiPrice(skuChannelPriceEditVO);
+        iItemSkuService.saveOneItemSkuMultiPrice(json);
         result.buildIsSuccess(true).buildMsg("保存成功");;
         return result;
     }
