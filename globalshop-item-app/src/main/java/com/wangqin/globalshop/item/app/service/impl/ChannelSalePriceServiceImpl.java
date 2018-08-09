@@ -37,4 +37,9 @@ public class ChannelSalePriceServiceImpl implements IChannelSalePriceService{
 	public void updatePriceBySkuCodeAndChannelNo(String skuCode,Double salePrice,String channelNo) {
 		channelSalePriceDOMapperExt.updatePriceBySkuCodeAndChannelNo(skuCode, salePrice,channelNo);
 	}
+
+	@Override
+	public List<ChannelSalePriceDO> queryPriceListBySkuCodeAndChannel(String skuCode, int value){
+		return channelSalePriceDOMapperExt.queryPriceListBySkuCodeAndChannel(skuCode, value);
+	}
 }

@@ -22,5 +22,6 @@ public interface ChannelSalePriceDOMapperExt extends ChannelSalePriceDOMapper {
 	
 	void updatePriceBySkuCodeAndChannelNo(@Param("skuCode")String skuCode,
 			@Param("salePrice")Double salePrice,@Param("channelNo")String channelNo);
-	
+
+	List<ChannelSalePriceDO> queryPriceListBySkuCodeAndChannel(@Param("skuCode") String skuCode, @Param("channelNo") int channelNo);
 }

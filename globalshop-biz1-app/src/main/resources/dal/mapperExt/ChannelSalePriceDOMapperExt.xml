@@ -27,7 +27,17 @@
 		WHERE T1.sku_code = #{skuCode}
 		AND T1.is_del=0
 	</select>
-	
+
+    <select id="queryPriceListBySkuCodeAndChannel" resultMap="BaseResultMap2"
+            >
+        SELECT
+        <include refid="Base_Column_List2" />
+        FROM channel_sale_price T1
+        WHERE T1.sku_code = #{skuCode}
+        and T1.channel_no = #{channelNo}
+        AND T1.is_del=0
+    </select>
+
 	
 	<delete id="deletePriceListBySkuCode"  parameterType="java.lang.String">
 		DELETE
