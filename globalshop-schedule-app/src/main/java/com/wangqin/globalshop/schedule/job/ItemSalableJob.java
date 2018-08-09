@@ -56,7 +56,7 @@ public class ItemSalableJob {
 	 /**
 	  * 自定义上架时间上架
 	  */
-	 @Scheduled(cron = "* 0/1 * * * ? ")
+	 @Scheduled(cron = "* 0/10 * * * ? ")
 	 public void updateItemSalable() {
 		 System.out.println("scheduled job-->start to scan item sale state");
 		 List<ItemDO> itemList = scheduleItemService.queryItemSelfDefineTime();

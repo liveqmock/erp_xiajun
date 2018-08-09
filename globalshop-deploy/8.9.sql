@@ -1,4 +1,4 @@
-ALTER TABLE `company` ADD `state` VARCHAR(20) DEFAULT NULL COMMENT '省';
+﻿ALTER TABLE `company` ADD `state` VARCHAR(20) DEFAULT NULL COMMENT '省';
 ALTER TABLE `company` ADD `city` VARCHAR(20) DEFAULT NULL COMMENT '市';
 ALTER TABLE `company` ADD `district` VARCHAR(20) DEFAULT NULL COMMENT '区';
 ALTER TABLE `company` ADD `full_address` VARCHAR(100) DEFAULT NULL COMMENT '详细地址';
@@ -34,3 +34,10 @@ CREATE TABLE `item_qrcode_share`  (
   UNIQUE INDEX `unique_index`(`share_no`) USING BTREE COMMENT '唯一性性索引',
   UNIQUE INDEX `search_index`(`item_code`, `user_no`, `company_no`) USING BTREE COMMENT '加快查询'
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+
+
+ALTER TABLE `item` ADD COLUMN `is_abroad` INT(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外';
+ALTER TABLE `item` ADD COLUMN `shelf_method` INT(4) NOT NULL DEFAULT '0' COMMENT '0:立即售卖,1:暂不售卖;2:自定义';
+ALTER TABLE `item_sku` ADD COLUMN `goods_no` VARCHAR(64) NULL COMMENT '货号';

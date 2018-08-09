@@ -33,6 +33,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
@@ -85,6 +86,7 @@ public class ItemSkuController  {
 		}
 		//检测upc是否重复,一个公司旗下的upc不能重复
 		String companyNo = AppUtil.getLoginUserCompanyNo();
+		String user = AppUtil.getLoginUserCompanyNo();
 		List<String> skuCodeList = iItemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
 		if(!EasyUtil.isListEmpty(skuCodeList)) {//查到数据库里面有这个upc
 			String currentSkuCode = iItemSkuService.querySkuCodeById(itemSku.getId());
@@ -102,13 +104,7 @@ public class ItemSkuController  {
 		} catch (Exception e) {
 			return result.buildIsSuccess(false).buildMsg("您填入的虚拟库存数据错误");
 		}
-		//更新尺寸
-		if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
-			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "颜色", itemSku.getColor());
-		}
-		if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
-			itemSkuScaleMapperExt.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", itemSku.getScale());
-		}		
+			
 		//更新sku
 		iItemSkuService.updateById(itemSku);
 		
@@ -124,8 +120,37 @@ public class ItemSkuController  {
 		updateItem.setPriceRange(newPriceRange);
 		itemService.updateByIdSelective(updateItem);
 		
+		//更新尺寸（先删除后插入）
+		if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
+			itemSkuScaleMapperExt.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
+			ItemSkuScaleDO colorScale = new ItemSkuScaleDO();
+			colorScale.setCompanyNo(companyNo);
+			colorScale.setCreator(user);
+			colorScale.setModifier(user);
+			colorScale.setItemCode(sku.getItemCode());
+			colorScale.setScaleCode(CodeGenUtil.getScaleCode());
+			colorScale.setScaleValue(itemSku.getColor());
+			colorScale.setScaleName("颜色");
+			colorScale.setSkuCode(skuCode);
+			itemSkuScaleMapperExt.insertSelective(colorScale);
+		}
+		if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
+			itemSkuScaleMapperExt.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
+			ItemSkuScaleDO scale = new ItemSkuScaleDO();
+			scale.setCompanyNo(companyNo);
+			scale.setCreator(user);
+			scale.setModifier(user);
+			scale.setItemCode(sku.getItemCode());
+			scale.setScaleCode(CodeGenUtil.getScaleCode());
+			scale.setScaleValue(itemSku.getScale());
+			scale.setScaleName("尺寸");
+			scale.setSkuCode(skuCode);
+			itemSkuScaleMapperExt.insertSelective(scale);
+		}	
+	
 		return result.buildIsSuccess(true).buildMsg("更新成功");
 	}
+	
 
 	/**
 	 * 根据sku_code获取sku
