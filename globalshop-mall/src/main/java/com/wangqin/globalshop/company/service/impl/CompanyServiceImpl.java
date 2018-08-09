@@ -84,9 +84,7 @@ public class CompanyServiceImpl implements CompanyService {
         if (companyNo == null) {
             throw new BizCommonException("信息不完整！");
         }
-        CompanyDO companyDO = companyDOMapper.selectByCompanyNo(companyNo);
-        companyDO.setLogoUrl(ImgUtil.initImg2Json(companyDO.getLogoUrl()));
-        return companyDO;
+        return companyDOMapper.selectByCompanyNo(companyNo);
     }
 
     @Override
@@ -94,7 +92,9 @@ public class CompanyServiceImpl implements CompanyService {
         if (companyNo == null) {
             throw new BizCommonException("信息不完整！");
         }
-        return companyDOMapper.getCompanyDetailVO(companyNo);
+        CompanyDetailVO companyDetailVO = companyDOMapper.getCompanyDetailVO(companyNo);
+        companyDetailVO.setLogoUrl(ImgUtil.initImg2Json(companyDetailVO.getLogoUrl()));
+        return companyDetailVO;
     }
 
     @Override
