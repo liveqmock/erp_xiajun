@@ -15,7 +15,7 @@ ALTER TABLE auth_organization MODIFY org_id VARCHAR(64);
 
 ALTER TABLE applet_config MODIFY appid VARCHAR(64) NULL COMMENT '小程序appid';
 
-ALTER TABLE `company` ADD COLUMN `admin_no` VARCHAR(64) NOT NULL COMMENT '管理员ID';
+ALTER TABLE `company` ADD COLUMN `admin_no` VARCHAR(64) NOT NULL COMMENT '管理员UserNo';
 
 
 CREATE TABLE `item_qrcode_share`  (

@@ -15,7 +15,7 @@
         <property name="username" value="${db.name}"/>
         <property name="password" value="${db.password}"/>
         <property name="initialSize" value="${db.initialSize}"/>
-        <property name="maxIdle" value="${db.maxIdle}"/>
+        <property name="maxActive" value="${db.maxActive}"/>
         <property name="minIdle" value="${db.minIdle}"/>
         <property name="filters" value="stat" />
     </bean>
