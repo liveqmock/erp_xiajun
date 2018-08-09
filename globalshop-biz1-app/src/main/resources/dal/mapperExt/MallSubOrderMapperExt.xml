@@ -786,6 +786,9 @@
         <include refid="Base_Column_List"/>
         FROM mall_sub_order T1
         <where>
+            <if test="companyNo != null">
+                AND T1.company_no = #{companyNo}
+            </if>
             <if test="mallSubOrderQueryVO.orderNo != null">
                 AND T1.order_no = #{mallSubOrderQueryVO.orderNo}
             </if>
@@ -848,6 +851,9 @@
         SELECT COUNT(*)
         FROM mall_sub_order T1
         <where>
+            <if test="companyNo != null">
+                AND T1.company_no = #{companyNo}
+            </if>
             <if test="mallSubOrderQueryVO.orderNo != null">
                 AND T1.order_no = #{mallSubOrderQueryVO.orderNo}
             </if>
