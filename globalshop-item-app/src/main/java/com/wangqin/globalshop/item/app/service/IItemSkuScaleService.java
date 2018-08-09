@@ -18,6 +18,7 @@ public interface IItemSkuScaleService {
 
     void insertBatch(List<ItemSkuScaleDO> scaleList);
     
+    void insertSelective(ItemSkuScaleDO scaleList);
 
     //更新skuscale
     void updateSkuScaleBySkuCodeAndScaleName(String skuCode,
