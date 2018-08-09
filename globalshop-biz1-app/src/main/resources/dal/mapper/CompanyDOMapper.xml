@@ -20,7 +20,7 @@
     <result column="district" property="district" jdbcType="VARCHAR" />
     <result column="full_address" property="fullAddress" jdbcType="VARCHAR" />
     <result column="oversea_address" property="overseaAddress" jdbcType="VARCHAR" />
-    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="INTEGER" />
     <result column="main_category" property="mainCategory" jdbcType="VARCHAR" />
     <result column="offline_annual_sale" property="offlineAnnualSale" jdbcType="DOUBLE" />
     <result column="online_annual_sale" property="onlineAnnualSale" jdbcType="DOUBLE" />
@@ -69,7 +69,7 @@
       #{tel,jdbcType=VARCHAR}, #{im,jdbcType=VARCHAR}, #{serviceTime,jdbcType=VARCHAR}, 
       #{forceIdcardUpload,jdbcType=INTEGER}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{state,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
-      #{fullAddress,jdbcType=VARCHAR}, #{overseaAddress,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{fullAddress,jdbcType=VARCHAR}, #{overseaAddress,jdbcType=VARCHAR}, #{country,jdbcType=INTEGER}, 
       #{mainCategory,jdbcType=VARCHAR}, #{offlineAnnualSale,jdbcType=DOUBLE}, #{onlineAnnualSale,jdbcType=DOUBLE}, 
       #{adminNo,jdbcType=VARCHAR}, #{companyGroup,jdbcType=VARCHAR}, #{intro,jdbcType=LONGVARCHAR}
       )
@@ -206,7 +206,7 @@
         #{overseaAddress,jdbcType=VARCHAR},
       </if>
       <if test="country != null" >
-        #{country,jdbcType=VARCHAR},
+        #{country,jdbcType=INTEGER},
       </if>
       <if test="mainCategory != null" >
         #{mainCategory,jdbcType=VARCHAR},
@@ -283,7 +283,7 @@
         oversea_address = #{overseaAddress,jdbcType=VARCHAR},
       </if>
       <if test="country != null" >
-        country = #{country,jdbcType=VARCHAR},
+        country = #{country,jdbcType=INTEGER},
       </if>
       <if test="mainCategory != null" >
         main_category = #{mainCategory,jdbcType=VARCHAR},
@@ -325,7 +325,7 @@
       district = #{district,jdbcType=VARCHAR},
       full_address = #{fullAddress,jdbcType=VARCHAR},
       oversea_address = #{overseaAddress,jdbcType=VARCHAR},
-      country = #{country,jdbcType=VARCHAR},
+      country = #{country,jdbcType=INTEGER},
       main_category = #{mainCategory,jdbcType=VARCHAR},
       offline_annual_sale = #{offlineAnnualSale,jdbcType=DOUBLE},
       online_annual_sale = #{onlineAnnualSale,jdbcType=DOUBLE},
@@ -353,7 +353,7 @@
       district = #{district,jdbcType=VARCHAR},
       full_address = #{fullAddress,jdbcType=VARCHAR},
       oversea_address = #{overseaAddress,jdbcType=VARCHAR},
-      country = #{country,jdbcType=VARCHAR},
+      country = #{country,jdbcType=INTEGER},
       main_category = #{mainCategory,jdbcType=VARCHAR},
       offline_annual_sale = #{offlineAnnualSale,jdbcType=DOUBLE},
       online_annual_sale = #{onlineAnnualSale,jdbcType=DOUBLE},

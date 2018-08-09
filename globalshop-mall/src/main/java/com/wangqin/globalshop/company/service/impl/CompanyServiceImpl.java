@@ -136,7 +136,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyDO.setCity(companyDetailVO.getCity());
         companyDO.setDistrict(companyDetailVO.getDistrict());
         companyDO.setFullAddress(companyDetailVO.getFullAddress());
-        companyDO.setCountry(String.valueOf(companyDetailVO.getCountry()));
+        companyDO.setCountry(companyDetailVO.getCountry());
         companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
         companyDO.setMainCategory(companyDetailVO.getMainCategory());
         companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
@@ -248,7 +248,7 @@ public class CompanyServiceImpl implements CompanyService {
             companyDO.setCity(companyDetailVO.getCity());
             companyDO.setDistrict(companyDetailVO.getDistrict());
             companyDO.setFullAddress(companyDetailVO.getFullAddress());
-            companyDO.setCountry(String.valueOf(companyDetailVO.getCountry()));
+            companyDO.setCountry(companyDetailVO.getCountry());
             companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
             companyDO.setMainCategory(companyDetailVO.getMainCategory());
             companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
@@ -333,6 +333,7 @@ public class CompanyServiceImpl implements CompanyService {
         adminAuthUserDO.setUserNo(userNo);
         adminAuthUserDO.setLoginName(companyDetailVO.getLoginName());
         adminAuthUserDO.setPassword(Md5Util.getMD5(companyDetailVO.getPassword()));
+        adminAuthUserDO.setPhone(companyDetailVO.getPhone());
         adminAuthUserDO.setName(companyDetailVO.getName());
         adminAuthUserDO.setEmail(companyDetailVO.getEmail());
         authUserService.addAuthUser(adminAuthUserDO);

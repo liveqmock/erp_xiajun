@@ -1,8 +1,5 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-import lombok.ToString;
-
-@ToString
 public class CompanyDO extends BaseModel {
     private Long id;
 
@@ -40,7 +37,7 @@ public class CompanyDO extends BaseModel {
 
     private String overseaAddress;
 
-    private String country;
+    private Integer country;
 
     private String mainCategory;
 
@@ -198,12 +195,12 @@ public class CompanyDO extends BaseModel {
         this.overseaAddress = overseaAddress == null ? null : overseaAddress.trim();
     }
 
-    public String getCountry() {
+    public Integer getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
-        this.country = country == null ? null : country.trim();
+    public void setCountry(Integer country) {
+        this.country = country;
     }
 
     public String getMainCategory() {

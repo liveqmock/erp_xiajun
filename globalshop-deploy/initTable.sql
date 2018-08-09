@@ -674,7 +674,7 @@ CREATE TABLE `company` (
   `district` varchar(20) DEFAULT NULL COMMENT '区',
   `full_address` varchar(100) DEFAULT NULL COMMENT '详细地址',
   `oversea_address` varchar(100) DEFAULT NULL COMMENT '海外地址',
-  `country` varchar(20) DEFAULT NULL COMMENT '国家',
+  `country` int(2) DEFAULT NULL COMMENT '国家代码',
   `main_category` varchar(20) DEFAULT NULL COMMENT '主要品类',
   `offline_annual_sale` double(10,2) DEFAULT NULL COMMENT '线下年销售额',
   `online_annual_sale` double(10,2) DEFAULT NULL COMMENT '线上年销售额',
