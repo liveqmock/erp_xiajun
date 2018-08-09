@@ -10,10 +10,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /**
+ * 商家管理权限控制切面
+ *
  * @author angus
  * @date 2018/8/9
  */
-@Slf4j
 @Aspect
 @Component
 public class CompanyOptAspect {
