@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.wangqin.globalshop.usercenter.constant.SysConstants.APPLET_TYPE;
-import static com.wangqin.globalshop.usercenter.constant.SysConstants.PAY_STATUS_PLATFORM;
+import static com.wangqin.globalshop.usercenter.constant.SysConstants.PAY_STATUS_PROVIDER;
 
 /**
  * @author biscuit
@@ -619,7 +619,7 @@ public class Wechat3rdPartyAuthorizationController {
         applet.setAppid(appid);
         applet.setAppletType(appletType);
         applet.setCompanyNo(companyNo);
-        applet.setStatus(PAY_STATUS_PLATFORM);
+        applet.setStatus(PAY_STATUS_PROVIDER);
         applet.setPublishStatus(PublishStatus.AUTHORIZED.getCode());
         applet.setAuthorizerAccessToken(accessToken);
         applet.setAuthorizerRefreshToken(refreshToken);

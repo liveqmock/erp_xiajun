@@ -31,11 +31,11 @@ CREATE PROCEDURE createUser(
       SET i = i + 1;
     END WHILE;
     #创建公司
-    INSERT INTO company (company_no, company_name, status,
+    INSERT INTO company (company_no, company_name, status, admin_no,
                          force_idcard, tel, im,
                          creator, modifier)
     VALUES
-      (companyno, companyName, 0, 1, '13777828256', '微信',
+      (companyno, companyName, 0, 1, '13777828256', '微信', userno,
        'SYSTEM', 'SYSTEM');
 
     #     创建部门 (待测试)

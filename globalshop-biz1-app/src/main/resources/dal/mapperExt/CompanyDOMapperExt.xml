@@ -25,13 +25,14 @@
         <result column="offline_annual_sale" property="offlineAnnualSale" jdbcType="DOUBLE"/>
         <result column="online_annual_sale" property="onlineAnnualSale" jdbcType="DOUBLE"/>
         <result column="admin_no" property="adminNo" jdbcType="VARCHAR"/>
+        <result column="company_group" property="companyGroup" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
     id, company_no, company_name, status, shop_name, logo_url, force_idcard, tel, im,
     service_time, force_idcard_upload, modifier, creator, state, city, district, full_address,
     oversea_address, country, main_category, offline_annual_sale, online_annual_sale,
-    admin_no
+    admin_no,company_group
   </sql>
 
     <sql id="commonSelectSection">

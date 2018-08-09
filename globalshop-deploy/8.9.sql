@@ -15,7 +15,7 @@ ALTER TABLE auth_organization MODIFY org_id VARCHAR(64);
 
 ALTER TABLE applet_config MODIFY appid VARCHAR(64) NULL COMMENT '小程序appid';
 
-ALTER TABLE `company` ADD COLUMN `admin_no` VARCHAR(64) NOT NULL COMMENT '管理员ID';
+ALTER TABLE `company` ADD COLUMN `admin_no` VARCHAR(64) NOT NULL COMMENT '管理员UserNo';
 
 
 CREATE TABLE `item_qrcode_share`  (
@@ -42,3 +42,6 @@ CREATE TABLE `item_qrcode_share`  (
 ALTER TABLE `item` ADD COLUMN `is_abroad` INT(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外';
 ALTER TABLE `item` ADD COLUMN `shelf_method` INT(4) NOT NULL DEFAULT '0' COMMENT '0:立即售卖,1:暂不售卖;2:自定义';
 ALTER TABLE `item_sku` ADD COLUMN `goods_no` VARCHAR(64) NULL COMMENT '货号';
+
+
+ALTER TABLE channel_sale_price MODIFY channal_no channel_no varchar(64) NOT NULL DEFAULT '';

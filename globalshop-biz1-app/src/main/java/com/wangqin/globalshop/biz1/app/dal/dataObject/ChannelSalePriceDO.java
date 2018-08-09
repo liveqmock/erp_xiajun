@@ -3,7 +3,7 @@ package com.wangqin.globalshop.biz1.app.dal.dataObject;
 public class ChannelSalePriceDO extends BaseModel {
     private Long id;
 
-    private String channalNo;
+    private String channelNo;
 
     private String companyNo;
 
@@ -29,12 +29,12 @@ public class ChannelSalePriceDO extends BaseModel {
         this.id = id;
     }
 
-    public String getChannalNo() {
-        return channalNo;
+    public String getChannelNo() {
+        return channelNo;
     }
 
-    public void setChannalNo(String channalNo) {
-        this.channalNo = channalNo == null ? null : channalNo.trim();
+    public void setChannelNo(String channelNo) {
+        this.channelNo = channelNo == null ? null : channelNo.trim();
     }
 
     public String getCompanyNo() {
