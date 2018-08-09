@@ -38,6 +38,18 @@
             share_no = #{shareNo}
         and is_del is false
     </select>
+    
+
+    
+    <!-- 更新二维码图片的地址 -->
+    <update id="updatePicUrlByShareNo" parameterType="java.lang.String">
+        UPDATE
+        	item_qrcode_share
+        SET
+        	pic_url=#{picUrl}
+        WHERE
+        	share_no=#{shareNo}
+    </update>
 
 
 </mapper>

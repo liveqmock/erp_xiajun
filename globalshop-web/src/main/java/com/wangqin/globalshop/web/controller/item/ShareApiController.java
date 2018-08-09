@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemQrcodeShareDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemQrcodeShareDOMapperExt;
 import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
@@ -78,14 +79,15 @@ public class ShareApiController {
         CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
         log.info("company="+companyDO);
         log.info("companyGroup="+companyDO.getCompanyGroup());
+        String baseCompanyNo = companyNo;
         if (StringUtil.isNotEmpty(companyDO.getCompanyGroup())) {
-            companyNo = companyDO.getCompanyGroup();
+            baseCompanyNo = companyDO.getCompanyGroup();
         }
         picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId, companyNo, itemCode);
         if (EasyUtil.isStringEmpty(picUrl)) {
             //获取商城小程序的appid和screat
             log.info("生成二维码用的companyNo="+companyNo);
-            AppletConfigDO appletConfigDO = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, TYPE_OF_MALL_APPLET);
+            AppletConfigDO appletConfigDO = appletConfigService.queryWxMallConfigInfoByCompanyNo(baseCompanyNo, TYPE_OF_MALL_APPLET);
             String accessToken = appletConfigDO.getAuthorizerAccessToken();
             String token;
             if (StringUtil.isBlank(accessToken)) {
@@ -121,6 +123,9 @@ public class ShareApiController {
         ItemShareEntity itemShareEntity = new ItemShareEntity();
 
         ItemDO item = itemService.itemDetailByItemCode(itemCode, companyNo);
+        if(item == null){
+            jsonResult.buildIsSuccess(false).buildMsg("找不到对应商品");
+        }
         itemShareEntity.setItemDesc(item.getItemName());
 
         String mainPic = item.getMainPic();

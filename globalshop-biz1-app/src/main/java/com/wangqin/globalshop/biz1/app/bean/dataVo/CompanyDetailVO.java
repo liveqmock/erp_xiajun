@@ -67,7 +67,8 @@ public class CompanyDetailVO {
     private String email;
 
     /**
-     * 支付类型 1.商家版 2.平台版
+     * 原：支付类型 1.商家版 2.平台版
+     * 现：支付模式 1.商户模式 2.服务商模式
      * <p>
      * 对应 applet_config 表的 status 字段
      */
