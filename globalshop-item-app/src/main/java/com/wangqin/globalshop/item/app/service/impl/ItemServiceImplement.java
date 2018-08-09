@@ -1078,10 +1078,24 @@ public class ItemServiceImplement implements IItemService {
             JSONObject myJson = JSONObject.fromObject(reponse);
             token = (String) myJson.get("access_token");
         }       
-        String picUrl = insertIntoItemDimension(newItem.getItemCode(), "pages/item/detail", token);
+        String uuid = "item="+newItem.getItemCode();
+        String picUrl = insertIntoItemDimension(uuid, "pages/item/detail", token);
         if (IsEmptyUtil.isStringNotEmpty(picUrl)) {
         	newItem.setQrCodeUrl(picUrl);
+        	//插入item_qrcode_share表
+            ItemQrcodeShareDO shareDO = new ItemQrcodeShareDO();
+            String currentUserNo = AppUtil.getLoginUserId();
+            shareDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+            
+            shareDO.setShareNo(uuid);
+            shareDO.setCreator(currentUserNo);
+            shareDO.setModifier(currentUserNo);
+            shareDO.setItemCode(newItem.getItemCode());
+            shareDO.setPicUrl(picUrl);          
+//            shareDO.setUserNo(currentUserNo);
+            qrcodeShareDOMapperExt.insertSelective(shareDO);
         }
+       
     }
 
 }

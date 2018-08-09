@@ -12,4 +12,6 @@ public interface ItemQrcodeShareDOMapperExt extends ItemQrcodeShareDOMapper {
 	String selectPicUrl(@Param("userNo") String userNo, @Param("companyNo") String companyNo,@Param("itemCode") String itemCode);
 
 	ItemQrcodeShareDO selectByShareNo(@Param("shareNo") String shareNo);
+	
+	void updatePicUrlByShareNo(@Param("shareNo") String shareNo,@Param("picUrl") String picUrl);
 }
