@@ -3,7 +3,7 @@
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ChannelSalePriceDOMapper" >
   <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="channal_no" property="channalNo" jdbcType="VARCHAR" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
     <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
     <result column="shop_code" property="shopCode" jdbcType="BIGINT" />
     <result column="sale_price" property="salePrice" jdbcType="REAL" />
@@ -14,7 +14,7 @@
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, channal_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no, 
+    id, channel_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no,
     creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -31,11 +31,11 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into channel_sale_price (channal_no, company_no, shop_code, 
+    insert into channel_sale_price (channel_no, company_no, shop_code,
       sale_price, sku_code, item_code, 
       batch_no, creator, modifier
       )
-    values (#{channalNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=BIGINT}, 
+    values (#{channelNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=BIGINT},
       #{salePrice,jdbcType=REAL}, #{skuCode,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
       #{batchNo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
       )
@@ -46,8 +46,8 @@
     </selectKey>
     insert into channel_sale_price
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="channalNo != null" >
-        channal_no,
+      <if test="channelNo != null" >
+        channel_no,
       </if>
       <if test="companyNo != null" >
         company_no,
@@ -75,8 +75,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="channalNo != null" >
-        #{channalNo,jdbcType=VARCHAR},
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
       </if>
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},
@@ -107,8 +107,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     update channel_sale_price
     <set >
-      <if test="channalNo != null" >
-        channal_no = #{channalNo,jdbcType=VARCHAR},
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
       </if>
       <if test="companyNo != null" >
         company_no = #{companyNo,jdbcType=VARCHAR},
@@ -139,7 +139,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     update channel_sale_price
-    set channal_no = #{channalNo,jdbcType=VARCHAR},
+    set channel_no = #{channelNo,jdbcType=VARCHAR},
       company_no = #{companyNo,jdbcType=VARCHAR},
       shop_code = #{shopCode,jdbcType=BIGINT},
       sale_price = #{salePrice,jdbcType=REAL},

@@ -153,7 +153,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		if (channelSalePriceList != null) {
 			for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
 				channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannalNo());
+				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
 			}
 		}
 	}
@@ -185,7 +185,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 //				List<ChannelShopDO> channels=channelShopDOMapperExt.searchShopList(null);
 				ChannelSalePriceDO channelSalePriceDO=new ChannelSalePriceDO();
 				channelSalePriceDO.setItemCode(itemSkuPrice.getItemCode());
-				channelSalePriceDO.setChannalNo(channelNo);
+				channelSalePriceDO.setChannelNo(channelNo);
 				channelSalePriceDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 				channelSalePriceDO.setSkuCode(itemSkuPrice.getSkuCode());
 				channelSalePriceDO.setCreator("SYSTEM");
@@ -198,7 +198,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="1")) {
-						channelSalePriceDO.setChannalNo(channelNo);
+						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
@@ -207,7 +207,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="2")) {
-						channelSalePriceDO.setChannalNo(channelNo);
+						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
@@ -216,7 +216,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="3")) {
-						channelSalePriceDO.setChannalNo(channelNo);
+						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
