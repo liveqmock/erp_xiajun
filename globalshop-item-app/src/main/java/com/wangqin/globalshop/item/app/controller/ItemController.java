@@ -34,6 +34,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemQrcodeShareDOMapperExt;
 import com.wangqin.globalshop.biz1.app.enums.ItemShelfMethod;
 import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
@@ -93,6 +94,8 @@ public class ItemController {
     private IItemSubOrderService orderService;
     @Autowired
     private IItemCompanyService companyService;
+    @Autowired
+    private ItemQrcodeShareDOMapperExt mapperExt;
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     //public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
@@ -579,6 +582,8 @@ public class ItemController {
                 item.setQrCodeUrl(picUrl);
                 iItemService.updateByIdSelective(item);
             }
+            //更新item_qrcode_url表
+            mapperExt.updatePicUrlByShareNo("item="+itemCode, picUrl);
         }
         return result.buildIsSuccess(true);
     }
