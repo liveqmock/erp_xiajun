@@ -349,6 +349,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	
 	@Override
 	public void updateById(ItemSkuQueryVO itemSkuUpdateVO) {
+		System.out.println("service:"+itemSkuUpdateVO.getSkuRate());
 		itemSkuMapperExt.updateById(itemSkuUpdateVO);
 	}
 	

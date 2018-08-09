@@ -368,6 +368,12 @@
     <update id="updateById" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO" >
     update item_sku
     <set >
+      <if test="skuRate != null" >
+        sku_rate = #{skuRate,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsNo != null" >
+        goods_no = #{goodsNo},
+      </if>
       <if test="salePrice != null" >
         sale_price = #{salePrice},
       </if>
@@ -401,12 +407,6 @@
       </if>
       <if test="categoryName != null" >
         category_name = #{categoryName},
-      </if>
-      <if test="skuRate != null" >
-        sku_rate = #{skuRate},
-      </if>
-      <if test="goodsNo != null" >
-        goods_no = #{goodsNo},
       </if>
     </set>
     where id = #{id}
