@@ -1,5 +1,8 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
+import lombok.ToString;
+
+@ToString
 public class CompanyDO extends BaseModel {
     private Long id;
 

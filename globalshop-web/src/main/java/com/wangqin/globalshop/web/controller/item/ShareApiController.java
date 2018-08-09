@@ -17,6 +17,8 @@ import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
 import com.wangqin.globalshop.web.dto.api.ItemShareEntity;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,7 @@ import java.util.List;
 
 @Controller
 public class ShareApiController {
-
+    private static Logger log = LoggerFactory.getLogger("Wechat3rdPartyAuthorization");
     @Autowired
     private IItemService itemService;
 
@@ -72,13 +74,17 @@ public class ShareApiController {
 
 
         String picUrl = null;
+        log.info("当前公司的companyNo="+companyNo);
+        CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
+        log.info("company="+companyDO);
+        log.info("companyGroup="+companyDO.getCompanyGroup());
+        if (StringUtil.isNotEmpty(companyDO.getCompanyGroup())) {
+            companyNo = companyDO.getCompanyGroup();
+        }
         picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId, companyNo, itemCode);
         if (EasyUtil.isStringEmpty(picUrl)) {
-            CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
-            if (StringUtil.isNotEmpty(companyDO.getCompanyGroup())) {
-                companyNo = companyDO.getCompanyGroup();
-            }
             //获取商城小程序的appid和screat
+            log.info("生成二维码用的companyNo="+companyNo);
             AppletConfigDO appletConfigDO = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, TYPE_OF_MALL_APPLET);
             String accessToken = appletConfigDO.getAuthorizerAccessToken();
             String token;
