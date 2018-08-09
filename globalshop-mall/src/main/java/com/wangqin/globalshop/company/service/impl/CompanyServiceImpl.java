@@ -85,7 +85,7 @@ public class CompanyServiceImpl implements CompanyService {
             throw new BizCommonException("信息不完整！");
         }
         CompanyDO companyDO = companyDOMapper.selectByCompanyNo(companyNo);
-        companyDO.setLogoUrl(ImgUtil.initImg2Url(companyDO.getLogoUrl()));
+        companyDO.setLogoUrl(ImgUtil.initImg2Json(companyDO.getLogoUrl()));
         return companyDO;
     }
 
