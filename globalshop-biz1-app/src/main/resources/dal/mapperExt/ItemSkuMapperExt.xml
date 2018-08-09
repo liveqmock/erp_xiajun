@@ -319,7 +319,7 @@
         T1.saleable as saleable,
         T2.origin_sale_price as originSalePrice
         FROM
-        item_sku T1, item T2
+        item_sku T1 left join item T2 on T1.item_code =T2.item_code
         where
         T1.status=1
         and T2.is_sale=1
