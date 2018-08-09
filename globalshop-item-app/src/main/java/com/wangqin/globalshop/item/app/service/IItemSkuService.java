@@ -31,7 +31,21 @@ public interface IItemSkuService  {
 	 */
 	JsonPageResult<List<SkuChannelPriceDTO>> queryItemSkuPrices(ItemSkuQueryVO itemSkuQueryVO);
 
-	public void saveItemSkuPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList);
+	/**
+	 * 批量保存SKU+多渠道价格
+	 */
+	public void saveItemSkuMultiPriceList(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList);
+
+	/**
+	 * 保存一个SKU的多渠道价格
+	 */
+	public void saveOneItemSkuMultiPrice(SkuChannelPriceEditVO skuChannelPriceEditVO);
+
+	/**
+	 * 设置所有SKU的渠道价格
+	 * @param discount 折扣，比如85折，传85，但折扣不能超过100
+	 */
+	public void saveAllItemSkuInOneChannelPrice(String discount, String channelNo);
 
 	/**
 	 * 根据SKU初始化库存信息

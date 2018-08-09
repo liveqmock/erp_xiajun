@@ -1,4 +1,4 @@
-ALTER TABLE `company` ADD `state` VARCHAR(20) DEFAULT NULL COMMENT '省';
+﻿ALTER TABLE `company` ADD `state` VARCHAR(20) DEFAULT NULL COMMENT '省';
 ALTER TABLE `company` ADD `city` VARCHAR(20) DEFAULT NULL COMMENT '市';
 ALTER TABLE `company` ADD `district` VARCHAR(20) DEFAULT NULL COMMENT '区';
 ALTER TABLE `company` ADD `full_address` VARCHAR(100) DEFAULT NULL COMMENT '详细地址';
@@ -7,7 +7,8 @@ ALTER TABLE `company` ADD `country` VARCHAR(20) DEFAULT NULL COMMENT '国家';
 ALTER TABLE `company` ADD `main_category` VARCHAR(20) DEFAULT NULL COMMENT '主要品类';
 ALTER TABLE `company` ADD `offline_annual_sale` DOUBLE(10,2) DEFAULT NULL COMMENT '线下年销售额';
 ALTER TABLE `company` ADD `online_annual_sale` DOUBLE(10,2) DEFAULT NULL COMMENT '线上年销售额';
-
+ALTER TABLE company ADD company_group VARCHAR(64) NULL COMMENT '归属公司   如果与companyNo相同，则表示当前为一个公司
+如果与companyNo不同，表示当前的companyNo对应得到company为companyGroup对应的公司下面的一个商户';
 ALTER TABLE auth_organization MODIFY address VARCHAR(200) COMMENT '地址';
 
 ALTER TABLE auth_organization MODIFY org_id VARCHAR(64);
@@ -34,3 +35,10 @@ CREATE TABLE `item_qrcode_share`  (
   UNIQUE INDEX `unique_index`(`share_no`) USING BTREE COMMENT '唯一性性索引',
   UNIQUE INDEX `search_index`(`item_code`, `user_no`, `company_no`) USING BTREE COMMENT '加快查询'
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+
+
+ALTER TABLE `item` ADD COLUMN `is_abroad` INT(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外';
+ALTER TABLE `item` ADD COLUMN `shelf_method` INT(4) NOT NULL DEFAULT '0' COMMENT '0:立即售卖,1:暂不售卖;2:自定义';
+ALTER TABLE `item_sku` ADD COLUMN `goods_no` VARCHAR(64) NULL COMMENT '货号';

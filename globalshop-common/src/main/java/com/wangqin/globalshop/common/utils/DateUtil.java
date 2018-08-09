@@ -32,6 +32,17 @@ public class DateUtil {
 	}
 	
 	/**
+	 * 时间字符串转Date类对象，结果类似2017-09-09
+	 * @param date
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date transferStringToDay(String date) throws ParseException{
+		DateFormat format = new SimpleDateFormat(SIMPLE_DATE_PARTEN);
+		return format.parse(date);		
+	}
+	
+	/**
 	 * 
 	 * @param date
 	 * @return
@@ -329,5 +340,22 @@ public class DateUtil {
         before.setTime(to);
 
         return date.after(after) && date.before(before);
+    }
+    
+    /**
+     * 判断time是否在from之后
+     * @author xiajun
+     * @param time 指定日期
+     * @param from 开始日期
+     * @return
+     */
+    public static boolean afterCalendar(Date time, Date from) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(time);
+
+        Calendar after = Calendar.getInstance();
+        after.setTime(from);
+
+        return date.after(after);
     }
 }

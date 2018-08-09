@@ -12,23 +12,35 @@ import java.util.List;
 /**
  * 商品
  *
- * @author zhulu
+ * @author xiajun
  */
 public class ItemQueryVO extends PageQueryVO {
 
+	/**
+	 * 商品列表：按条件查询
+	 */
+	private String itemCode;
+    private String name;
+    private String categoryCode;
+    private String startTime;//前端传来的
+    private String endTime;
+    private Integer status;
+    private Date startDate;//转化成数据库使用的
+    private Date endDate;
+    
+    
+    //0808新加字段
+    private Integer isAbroad;
+    private Integer shelfMethod;
+    
+    
+    
+    
     private Long id;
 
     private String companyNo;
 
-    /**
-     * 商品编码
-     */
-    private String itemCode;
-
-    /**
-     * 商品名称
-     */
-    private String name;
+    
 
     /**
      * 英文名称
@@ -61,17 +73,8 @@ public class ItemQueryVO extends PageQueryVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endGmt;
 
-    /**
-     * 销售开始日期
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startDate;
 
-    /**
-     * 销售结束日期
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endDate;
+
 
     /**
      * 商品状态
@@ -83,7 +86,7 @@ public class ItemQueryVO extends PageQueryVO {
 
     private String owners;
 
-    private String categoryCode;
+    
 
 
     private String categoryName;
@@ -127,8 +130,7 @@ public class ItemQueryVO extends PageQueryVO {
     private List<ItemSkuAddVO> itemSkus = new ArrayList<ItemSkuAddVO>();
 
     private String skuList;
-    //商品状态 0新档 1上架 2下架 3删除
-    private Integer status;
+    
 
     private String remark; //商品描述信息
 
@@ -735,4 +737,39 @@ public class ItemQueryVO extends PageQueryVO {
     public void setPurchaseStatus(Integer purchaseStatus) {
         this.purchaseStatus = purchaseStatus;
     }
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public Integer getIsAbroad() {
+		return isAbroad;
+	}
+
+	public void setIsAbroad(Integer isAbroad) {
+		this.isAbroad = isAbroad;
+	}
+
+	public Integer getShelfMethod() {
+		return shelfMethod;
+	}
+
+	public void setShelfMethod(Integer shelfMethod) {
+		this.shelfMethod = shelfMethod;
+	}
+    
+	
+    
 }

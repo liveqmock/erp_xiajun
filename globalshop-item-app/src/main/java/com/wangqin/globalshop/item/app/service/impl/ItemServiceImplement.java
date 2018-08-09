@@ -12,7 +12,6 @@ import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.channelapi.dal.*;
 import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.enums.AppletType;
-import com.wangqin.globalshop.common.enums.ChannelSaleType;
 import com.wangqin.globalshop.common.redis.Cache;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
@@ -67,15 +66,9 @@ public class ItemServiceImplement implements IItemService {
     @Autowired
     private IItemCategoryService categoryService;
     @Autowired
-    private ShippingPackingPatternDOMapperExt shippingPackingPatternDOMapper;
-    @Autowired
     private Cache shareCache;
     @Autowired
     private IAppletConfigService appletConfigService;
-    @Autowired
-    private IChannelSalePriceService channelSalePriceService;
-    @Autowired
-    private ChannelAccountDOMapperExt channelAccountDOMapperExt;
 
     @Autowired
 	private ItemQrcodeShareDOMapperExt qrcodeShareDOMapperExt;
@@ -119,9 +112,7 @@ public class ItemServiceImplement implements IItemService {
         }
         String companyNo = AppUtil.getLoginUserCompanyNo();
         ItemDO newItem = new ItemDO();
-        //商品名称处理
-        newItem.setItemShort(item.getName());
-        ItemUtil.setItemNewName(item);
+        
         //类目处理
         String categoryCode = item.getCategoryCode();
         item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
@@ -158,15 +149,14 @@ public class ItemServiceImplement implements IItemService {
             return result.buildMsg("解析SKU错误").buildIsSuccess(false);
         }
 
-        //对前端传来的时间进行处理
+        //上架处理
         try {
-            ItemUtil.setItemDate(item, newItem);
+        	ItemUtil.handleShelf(item, newItem);
         } catch (Exception e) {
-            return result.buildIsSuccess(false).buildMsg("时间填写的有错误");
-        }
-        //是否可售                  
-        ItemUtil.setIsSale(newItem);
+			return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
+		}
 
+        newItem.setIsAbroad(item.getIsAbroad());
         newItem.setDetail(item.getDetail());
         detailDecoder(newItem);
         newItem.setPriceRange(PriceUtil.calNewPriceRange(itemSkuPriceList));
@@ -174,13 +164,8 @@ public class ItemServiceImplement implements IItemService {
         newItem.setCategoryCode(categoryCode);
         newItem.setBrandName(item.getBrand());
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
-        newItem.setEnName(item.getEnName());
         newItem.setItemName(item.getName());
-        newItem.setCurrency(item.getCurrency().byteValue());
         newItem.setIdCard(item.getIdCard().byteValue());
-        if (null != item.getLogisticType()) {
-            newItem.setLogisticType(item.getLogisticType().byteValue());
-        }
         String qrCodeUrl = generateQrCode(itemCode);
         if (IsEmptyUtil.isStringNotEmpty(qrCodeUrl)) {
             newItem.setQrCodeUrl(qrCodeUrl);
@@ -189,7 +174,6 @@ public class ItemServiceImplement implements IItemService {
         newItem.setItemCode(itemCode);
         newItem.setWxisSale(item.getWxisSale().byteValue());
         newItem.setMainPic(item.getMainPic());
-        newItem.setRemark(item.getRemark());
         newItem.setCompanyNo(companyNo);
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setCreator(AppUtil.getLoginUserId());
@@ -207,48 +191,17 @@ public class ItemServiceImplement implements IItemService {
 
             itemSku.setItemCode(itemCode);
 
-            //渠道价格
-            if (ChannelSaleType.DIFFERENT.getValue() == itemSku.getSaleMode()) {//分渠道
-                List<ChannelSalePriceVO> channelSalePriceList = itemSku.getPriceList();
-                channelSalePriceList.forEach(channelPrice -> {
-                    ChannelSalePriceDO channelSalePrice = new ChannelSalePriceDO();
-                    String channelNo = channelAccountDOMapperExt.queryChannelNoByChannelNameAndCompanyNo(channelPrice.getChannelName(), companyNo);
-                    channelSalePrice.setChannalNo(channelNo);
-                    channelSalePrice.setCompanyNo(companyNo);
-                    channelSalePrice.setShopCode(1L);//TEMP
-                    channelSalePrice.setSalePrice(channelPrice.getSalePrice());
-                    channelSalePrice.setSkuCode(itemSku.getSkuCode());
-                    channelSalePrice.setItemCode(itemCode);
-                    channelSalePrice.setCreator(AppUtil.getLoginUserId());
-                    channelSalePrice.setModifier(AppUtil.getLoginUserId());
-                    channelSalePriceService.insertChannelSalePriceSelective(channelSalePrice);
-                });
-            } else {//全渠道
-                List<ChannelAccountDO> channelList = channelAccountDOMapperExt.queryChannelAccountListByCompanyNo(companyNo);
-                if (IsEmptyUtil.isCollectionNotEmpty(channelList)) {
-                    for (ChannelAccountDO channel : channelList) {
-                        ChannelSalePriceDO channelSalePrice = new ChannelSalePriceDO();
-                        channelSalePrice.setChannalNo(channel.getChannelNo());
-                        channelSalePrice.setCompanyNo(companyNo);
-                        channelSalePrice.setShopCode(1L);//TEMP
-                        channelSalePrice.setSalePrice(itemSku.getSalePrice().floatValue());
-                        channelSalePrice.setSkuCode(itemSku.getSkuCode());
-                        channelSalePrice.setItemCode(itemCode);
-                        channelSalePrice.setCreator(AppUtil.getLoginUserId());
-                        channelSalePrice.setModifier(AppUtil.getLoginUserId());
-                        channelSalePriceService.insertChannelSalePriceSelective(channelSalePrice);
-                    }
-                }
+            /**插入规格信息*/                 
+            if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
+            	ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
+            	setInfo(colorObject, itemSku, itemSku.getColor(), "颜色");
+            	scaleList.add(colorObject);
             }
-
-
-            /**插入ItemSkuScale*/
-            ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
-            ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
-            setInfo(colorObject, itemSku, itemSku.getColor(), "颜色");
-            setInfo(scaleObject, itemSku, itemSku.getScale(), "尺寸");
-            scaleList.add(colorObject);
-            scaleList.add(scaleObject);
+            if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
+            	ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+            	setInfo(scaleObject, itemSku, itemSku.getScale(), "尺寸");
+            	scaleList.add(scaleObject);
+            }                                 
 
             itemSku.setItemName(newItem.getItemName());
             itemSku.setCategoryName(item.getCategoryName());
@@ -270,10 +223,10 @@ public class ItemServiceImplement implements IItemService {
 
         itemSkuService.insertBatch(itemSkuList);
         List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
-        scaleService.insertBatch(scaleList);
+        if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
+        	scaleService.insertBatch(scaleList);
+        }       
         invService.outbound(inventoryList);
-        //处理第三方销售平台，TEMP
-        ItemUtil.setChannel(item, newItem);
         insertItemSelective(newItem);
         return result.buildIsSuccess(true).buildMsg("添加商品成功");
 
@@ -368,21 +321,7 @@ public class ItemServiceImplement implements IItemService {
     @Override
     @Transactional(rollbackFor = BizCommonException.class)
     public ItemDTO queryItemById(Long id) {
-        if (null == id) {
-            throw new RuntimeException("商品的id不能为空");
-        }
         ItemDTO item = itemDOMapperExt.queryItemById(id);
-        //处理销售渠道
-        List<String> cList = new ArrayList<String>();
-        if (null != item.getSaleOnYouzan() && null != item.getThirdSale()) {
-            if (1 == item.getSaleOnYouzan()) {
-                cList.add("有赞");
-            }
-            if (1 == item.getSaleOnYouzan()) {
-                cList.add("海狐海淘");
-            }
-            item.setSaleOnChannels(cList);
-        }
         if (null == item) {
             throw new RuntimeException("商品不存在或者已删除");
         }
@@ -405,22 +344,6 @@ public class ItemServiceImplement implements IItemService {
                     }
                 }
             }
-            //查询渠道价格
-            //sku.setChannelSalePriceList(channelSalePriceService.queryPriceListBySkuCode(skuCode));
-            List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(skuCode);
-            //System.out.println("length:" + channelSalePriceList.size());
-            List<ChannelSalePriceVO> salePriceList = new ArrayList<ChannelSalePriceVO>();
-            if (IsEmptyUtil.isCollectionNotEmpty(channelSalePriceList)) {
-                for (ChannelSalePriceDO channelSalePriceDO : channelSalePriceList) {
-                    ChannelSalePriceVO channelSalePriceVO = new ChannelSalePriceVO();
-                    channelSalePriceVO.setSkuCode(skuCode);
-                    String channelName = channelAccountDOMapperExt.queryChannelNameByChannelNoAndCompanyNo(channelSalePriceDO.getChannalNo(), AppUtil.getLoginUserCompanyNo());
-                    channelSalePriceVO.setChannelName(channelName);
-                    channelSalePriceVO.setSalePrice(channelSalePriceDO.getSalePrice());
-                    salePriceList.add(channelSalePriceVO);
-                }
-            }
-            sku.setChannelSalePriceList(salePriceList);
         }
 
         item.setItemSkus(itemSkus);

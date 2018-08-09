@@ -11,52 +11,44 @@
     <sql id="Haihu_Column_List">
         T1.id,item_name AS itemName,T1.category_name AS categoryName,T1.item_code AS itemCode,T1.main_pic AS mainPic,T1.brand_no,T1.currency,T1.id_card AS idCard,T1.start_date AS startDate,T1.end_date AS endDate,T1.status As status
     </sql>
-    <!-- 2.0版通用查询结果列,xiajun-->
+    <!-- 2.0版通用查询结果列,商品列表，商品编辑-->
     <sql id="Base_Column_List_2">
-        T1.id,T1.item_name AS name,T1.status, T1.spec,T1.model,T1.country,T1.booking_date AS bookingDate,
-        T1.category_name AS categoryName,T1.category_code AS categoryCode,T1.item_code AS itemCode,
-        sale_type AS saleType,T1.remark AS remark,T1.detail AS detail,
-        main_pic AS mainPic,qr_code_url AS dimensionCodePic,item_short AS itemShort,
-        en_name AS enName,brand_name AS brand,currency,origin,weight,price_range as priceRange,
-        unit,source,promotion,T1.id_card AS idCard,T1.detail,T1.start_date AS startDate,
-        T1.end_date AS endDate,T1.is_sale AS isSale,T1.logistic_type as logisticType,
-        T1.gmt_create AS gmtCreate,T1.gmt_modify AS gmtModify,T1.creator AS userCreate,
-        T1.modifier AS userModify,
-        T1.sale_on_youzan AS saleOnYouzan,T1.third_sale AS thirdSale
+        T1.id,T1.item_name AS name,
+        T1.status, T1.country,
+        T1.category_name AS categoryName,T1.category_code AS categoryCode,
+        T1.item_code AS itemCode,T1.detail AS detail,
+        T1.main_pic AS mainPic,T1.qr_code_url AS dimensionCodePic,
+        T1.brand_name AS brand,T1.currency,
+        T1.price_range as priceRange,T1.id_card AS idCard,
+        T1.start_date AS startDate,T1.shelf_method AS shelfMethod,
+        T1.is_sale AS isSale,T1.is_abroad AS isAbroad,
+        T1.wxis_sale AS wxisSale       
     </sql>
 
-	<!--定时任务，扫描所有处于可售状态的商品-->
-    <select id="queryItemSalable" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" 
-    parameterType="java.lang.Byte">
+	<!--定时任务，扫描自定义上架时间的商品-->
+    <select id="queryItemSelfDefineTime" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" 
+    parameterType="java.lang.Integer">
  		SELECT
 		<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
  	    FROM
  	    `item`
  	    WHERE
- 	    is_sale=#{isSale}
+ 	    shelf_method=#{shelfMethod}
  	    AND 
- 	    is_del=0
+ 	    is_del is false
  	</select>
  	
- 	<!--定时任务，更新商品状态为不可售-->
-    <select id="updateItemIsSale">
+ 	<!--定时任务，更新商品状态为可售，同时上架该商品-->
+    <select id="updateItemIsSaleAndStatus">
  		UPDATE
  		`item`
  		SET
- 		is_sale=#{isSale}
-		WHERE
-		item_code=#{itemCode}
- 	</select>
- 	
- 	<!--定时任务，下架商品-->
-    <select id="putOffItemByItemCode">
- 		UPDATE
- 		`item`
- 		SET
+ 		is_sale=#{isSale},
  		status=#{status}
 		WHERE
 		item_code=#{itemCode}
  	</select>
+ 	
  	
     <!--通过item_code查询item-->
     <select id="queryItemDOByItemCode" parameterType="java.lang.String"
@@ -206,6 +198,12 @@
             <if test="detail != null">
                 `detail`,
             </if>
+            <if test="isAbroad != null">
+                is_abroad,
+            </if>
+            <if test="shelfMethod != null">
+                shelf_method,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="itemCode != null">
@@ -327,6 +325,12 @@
             </if>
             <if test="detail != null">
                 #{detail},
+            </if>
+            <if test="isAbroad != null">
+                #{isAbroad},
+            </if>
+            <if test="shelfMethod != null">
+                #{shelfMethod},
             </if>
         </trim>
     </insert>
@@ -459,22 +463,26 @@
                 <if test="remark != null">
                     `remark` = #{remark},
                 </if>
+                <if test="isAbroad != null">
+                	is_abroad = #{isAbroad},
+            	</if>
+            	<if test="shelfMethod != null">
+                	shelf_method = #{shelfMethod},
+            	</if>
             </trim>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <!-- 根据条件查询商品总数量(fin)-->
+    <!-- 根据条件查询商品总数量(商品列表页面)-->
     <select id="queryItemsCount" resultType="java.lang.Integer"
             parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
         count(1)
         FROM
-        item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
+        item T1
         where
-        T1.is_del=0
-
-
+        T1.is_del is false
         <if test=" name != null and name != '' ">
             and T1.item_name LIKE concat('%',#{name},'%')
         </if>
@@ -484,28 +492,12 @@
         <if test=" companyNo != null and companyNo != '' ">
             and T1.company_no = #{companyNo}
         </if>
-        <!--
-         <if test=" enName != null and enName != '' ">
-          and  T1.en_name LIKE concat('%',#{enName},'%')
+        <if test=" categoryCode != null and categoryCode != '' ">
+          	and  T1.category_code = #{categoryCode}
         </if>
-        -->
-        <!--
-        <if test=" categoryId != null">
-          and  T1.category_id = #{categoryId}
+        <if test=" status != null ">
+            and T1.status = #{status}
         </if>
-        -->
-        <if test=" brand != null and brand != ''">
-            and T1.brand_name = #{brand}
-        </if>
-        <!--
-        <if test=" buySite != null and buySite != ''">
-          and  T1.buy_site = #{buySite}
-        </if>
-
-        <if test=" owners != null and owners != '' ">
-          and  T1.owners LIKE concat('%',#{owners},'%')
-        </if>
-         -->
         <if test=" startDate!= null and endDate!= null">
             and (
             (<![CDATA[  T1.start_date >= #{startDate} ]]> and <![CDATA[  T1.start_date <= #{endDate} ]]>)
@@ -513,16 +505,9 @@
             (<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
             )
         </if>
-        <if test="hasInventory > 0">
-            <![CDATA[and T3.inv > 0 ]]>
-        </if>
-        <if test="hasVirtualInventory > 0">
-            <![CDATA[and T3.virtual_inv > 0 ]]>
-        </if>
-
     </select>
 
-    <!-- 按条件查询商品(fin) -->
+    <!-- 按条件查询商品(商品列表页面) -->
     <select id="queryItems" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO"
             parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
@@ -531,17 +516,9 @@
         IFNULL(sum(IFNULL(T3.virtual_inv,0)),0) AS virtualInv
         FROM
         item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
-        where
-        T1.is_del=0
-        <if test="id != null">
-            and T1.id = #{id}
-        </if>
-        <!--
-        <if test="companyId != null">
-            and T1.company_id = #{companyId}
-        </if>
-         -->
-        <if test=" name != null and name != '' ">
+        WHERE
+        T1.is_del is false
+         <if test=" name != null and name != '' ">
             and T1.item_name LIKE concat('%',#{name},'%')
         </if>
         <if test=" itemCode != null and itemCode != '' ">
@@ -550,27 +527,12 @@
         <if test=" companyNo != null and companyNo != '' ">
             and T1.company_no = #{companyNo}
         </if>
-        <!--
-         <if test=" enName != null and enName != '' ">
-          and  T1.en_name LIKE concat('%',#{enName},'%')
+        <if test=" categoryCode != null and categoryCode != '' ">
+          	and  T1.category_code = #{categoryCode}
         </if>
-        -->
-        <!--
-        <if test=" categoryId != null">
-          and  T1.category_id = #{categoryId}
+        <if test=" status != null ">
+            and T1.status = #{status}
         </if>
-        -->
-        <if test=" brand != null and brand != ''">
-            and T1.brand_name = #{brand}
-        </if>
-        <!--
-        <if test=" buySite != null and buySite != ''">
-          and  T1.buy_site = #{buySite}
-        </if>
-
-        <if test=" owners != null and owners != '' ">
-          and  T1.owners LIKE concat('%',#{owners},'%')
-        </if>-->
         <if test=" startDate!= null and endDate!= null">
             and (
             (<![CDATA[  T1.start_date >= #{startDate} ]]> and <![CDATA[  T1.start_date <= #{endDate} ]]>)
@@ -578,15 +540,8 @@
             (<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
             )
         </if>
-        <if test="hasInventory > 0">
-            and <![CDATA[ T3.inv > 0 ]]>
-        </if>
-        <if test="hasVirtualInventory > 0">
-            and    <![CDATA[ T3.virtual_inv > 0 ]]>
-        </if>
         GROUP BY T3.item_code
-        order by T1.gmt_modify desc;
-
+        ORDER BY T1.gmt_modify desc
     </select>
 
 
@@ -596,8 +551,8 @@
         <include refid="Base_Column_List_2"/>
         FROM
         item T1
-        where
-        T1.is_del=0
+        WHERE
+        T1.is_del is false
         AND T1.id=#{id}
     </select>
 

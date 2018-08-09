@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `haidb2new` /*!40100 DEFAULT CHARACTER SET utf8 */;
+﻿CREATE DATABASE  IF NOT EXISTS `haidb2new` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `haidb2new`;
 -- MySQL dump 10.13  Distrib 5.6.17, for osx10.6 (i386)
 --
@@ -1061,7 +1061,7 @@ CREATE TABLE `inventory_booking_record` (
 DROP TABLE IF EXISTS `item_sku`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `item_sku` (
+CREATE TABLE IF NOT EXISTS `item_sku` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `sku_code` varchar(64) NOT NULL DEFAULT '0' COMMENT 'sku编码',
   `item_code` varchar(64) NOT NULL DEFAULT '0' COMMENT '商品编码',
@@ -1087,21 +1087,22 @@ CREATE TABLE `item_sku` (
   `package_level_id` varchar(64) DEFAULT NULL COMMENT 'shipping_packing_pattern_no的索引',
   `scale` varchar(64) DEFAULT NULL COMMENT '尺寸',
   `model` varchar(45) DEFAULT NULL COMMENT '商品型号',
-  `status` INT(4) NOT NULL DEFAULT '1' COMMENT '0:未审核,1:审核通过',
+  `status` int(4) NOT NULL DEFAULT '1' COMMENT '0:未审核,1:审核通过',
   `sale_type` tinyint(1) DEFAULT NULL COMMENT '销售类型:现货,代购',
   `sale_price` double(10,2) DEFAULT NULL COMMENT '销售价',
-  `sku_rate` DOUBLE(10,4) NOT NULL DEFAULT '0' COMMENT '代理佣金比例',
-  `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率(没有用到)',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
+  `sku_rate` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '代理佣金比例',
+  `goods_no` varchar(64) DEFAULT NULL COMMENT '货号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `SKUCODE` (`sku_code`),
   KEY `ITEMCODE` (`item_code`),
   KEY `GMTCREATE` (`gmt_create`)
-) ENGINE=InnoDB AUTO_INCREMENT=186 DEFAULT CHARSET=utf8 COMMENT='商品sku';
+) ENGINE=InnoDB AUTO_INCREMENT=4877 DEFAULT CHARSET=utf8 COMMENT='商品sku';
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1176,7 +1177,7 @@ CREATE TABLE `jd_item_operate` (
 DROP TABLE IF EXISTS `item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `item` (
+CREATE TABLE IF NOT EXISTS `item` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `item_code` varchar(64) NOT NULL DEFAULT '0' COMMENT '商品编码',
   `company_no` varchar(64) NOT NULL COMMENT '所属公司编号',
@@ -1212,21 +1213,24 @@ CREATE TABLE `item` (
   `third_sale` int(4) DEFAULT NULL COMMENT '是否第三方可售（海狐，1可售，0不可售）',
   `wxis_sale` tinyint(4) DEFAULT '1' COMMENT '小程序是否可售 (1:小程序可售 0:小程序不可售)',
   `is_find` tinyint(4) DEFAULT '0' COMMENT '是否为小程序发现，0否 1是',
-  `status` int(4) DEFAULT '0' COMMENT '//0新档 1上架 2下架 -1删除',
+  `status` int(4) DEFAULT '0' COMMENT '0新档 1上架 2下架 -1删除',
   `spec` varchar(64) DEFAULT NULL COMMENT '规格',
   `model` varchar(64) DEFAULT NULL COMMENT '型号',
   `detail` text COMMENT '商品详情',
   `buyer_open_id` varchar(128) DEFAULT NULL COMMENT '买手open_id，可以有多个',
-  `origin_sale_price` VARCHAR(64) NULL DEFAULT NULL COMMENT '原始销售价格',
-  `commission_mode` VARCHAR(64) NULL DEFAULT NULL COMMENT '佣金比率',
+  `origin_sale_price` varchar(64) DEFAULT NULL COMMENT '原始销售价格',
+  `commission_mode` varchar(64) DEFAULT NULL COMMENT '佣金比率',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
+  `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率',
+  `is_abroad` int(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外',
+  `shelf_method` int(4) NOT NULL DEFAULT '0' COMMENT '0:立即售卖,1:暂不售卖;2:自定义',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ITEMCODE` (`item_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8 COMMENT='商品';
+) ENGINE=InnoDB AUTO_INCREMENT=10311 DEFAULT CHARSET=utf8 COMMENT='商品';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

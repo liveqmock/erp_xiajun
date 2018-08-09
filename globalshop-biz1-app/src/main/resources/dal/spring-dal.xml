@@ -8,14 +8,16 @@
 		http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
-    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">-->
         <property name="driverClassName" value="${db.driver}"/>
         <property name="url" value="${db.url}"/>
         <property name="username" value="${db.name}"/>
         <property name="password" value="${db.password}"/>
         <property name="initialSize" value="${db.initialSize}"/>
-        <property name="maxIdle" value="${db.maxIdle}"/>
+        <property name="maxActive" value="${db.maxActive}"/>
         <property name="minIdle" value="${db.minIdle}"/>
+        <property name="filters" value="stat" />
     </bean>
     <!-- mapper scanner configurer -->
     <bean id="mappers" class="org.mybatis.spring.mapper.MapperScannerConfigurer">

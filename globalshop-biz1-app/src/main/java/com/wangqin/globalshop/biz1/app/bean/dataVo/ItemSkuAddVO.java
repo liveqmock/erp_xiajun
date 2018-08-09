@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+
 
 /**
  * 商品SKU
@@ -15,6 +17,7 @@ import java.util.List;
  *
  */
 public class ItemSkuAddVO implements Serializable {
+	private String goodsNo;
 	private String skuRateString;
 	private Double skuRate;
 	private Integer saleMode;
@@ -27,6 +30,12 @@ public class ItemSkuAddVO implements Serializable {
 	private String categoryCode;
 	
 	
+	public String getGoodsNo() {
+		return goodsNo;
+	}
+	public void setGoodsNo(String goodsNo) {
+		this.goodsNo = goodsNo;
+	}
 	public String getSkuRateString() {
 		return skuRateString;
 	}

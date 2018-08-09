@@ -284,7 +284,7 @@ public class UserController extends BaseController {
     @Transactional(rollbackFor = ErpCommonException.class)
     public Object editUserPwd(String oldPwd, String pwd) {
     	JsonResult<AuthUserDO> result = new JsonResult<>();
-    	AuthUserDO user = userService.selectByLoginName(AppUtil.getLoginUserId());
+    	AuthUserDO user = userService.selectSecureByLoginName(AppUtil.getLoginUserId());
         if (user ==null ) {
             return result.buildIsSuccess(false).buildMsg("该用户不存在!");
         }
