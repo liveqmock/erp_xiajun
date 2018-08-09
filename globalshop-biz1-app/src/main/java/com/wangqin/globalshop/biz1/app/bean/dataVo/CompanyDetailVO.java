@@ -120,7 +120,7 @@ public class CompanyDetailVO {
      * <p>
      * 对应 company 表的 country 字段
      */
-    private String country;
+    private Integer country;
 
     /**
      * 海外商家地址（详细地址）

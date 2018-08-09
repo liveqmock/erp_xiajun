@@ -50,14 +50,6 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional(rollbackFor = BizCommonException.class)
     public void addCompany(CompanyDetailVO companyDetailVO) {
-
-        // 权限认证（粗略）
-        String loginUserCompanyNo = AppUtil.getLoginUserCompanyNo();
-        String legalCompanyNo = "-1";
-        if (!legalCompanyNo.equals(loginUserCompanyNo)) {
-            throw new BizCommonException("没有操作权限！");
-        }
-
         if (StringUtil.isBlank(companyDetailVO.getCompanyName())
                 || StringUtil.isBlank(companyDetailVO.getLoginName())
                 || StringUtil.isBlank(companyDetailVO.getPassword())
@@ -154,7 +146,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyDO.setCity(companyDetailVO.getCity());
         companyDO.setDistrict(companyDetailVO.getDistrict());
         companyDO.setFullAddress(companyDetailVO.getFullAddress());
-        companyDO.setCountry(companyDetailVO.getCountry());
+        companyDO.setCountry(String.valueOf(companyDetailVO.getCountry()));
         companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
         companyDO.setMainCategory(companyDetailVO.getMainCategory());
         companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
@@ -198,6 +190,8 @@ public class CompanyServiceImpl implements CompanyService {
         updateCompany(companyDO);
     }
 
+
+
     /**
      * 创建商户
      *
@@ -227,7 +221,7 @@ public class CompanyServiceImpl implements CompanyService {
             companyDO.setCity(companyDetailVO.getCity());
             companyDO.setDistrict(companyDetailVO.getDistrict());
             companyDO.setFullAddress(companyDetailVO.getFullAddress());
-            companyDO.setCountry(companyDetailVO.getCountry());
+            companyDO.setCountry(String.valueOf(companyDetailVO.getCountry()));
             companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
             companyDO.setMainCategory(companyDetailVO.getMainCategory());
             companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
