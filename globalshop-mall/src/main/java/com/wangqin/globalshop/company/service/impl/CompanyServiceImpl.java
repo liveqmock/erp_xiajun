@@ -50,13 +50,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional(rollbackFor = BizCommonException.class)
     public void addCompany(CompanyDetailVO companyDetailVO) {
-        if (StringUtil.isBlank(companyDetailVO.getCompanyName())
-                || StringUtil.isBlank(companyDetailVO.getLoginName())
-                || StringUtil.isBlank(companyDetailVO.getPassword())
-                || StringUtil.isBlank(companyDetailVO.getName())
-                || StringUtil.isBlank(companyDetailVO.getPhone())) {
-            throw new BizCommonException("信息不完整！");
-        }
+        // 校验表单
+        validateForm(companyDetailVO, false);
 
         // 基础信息
         String companyNo = CodeGenUtil.getCompanyNo();
@@ -130,12 +125,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional(rollbackFor = BizCommonException.class)
     public void updateCompany(CompanyDetailVO companyDetailVO) {
-        // TODO: 还需前端页面参考完善
-        if (StringUtil.isBlank(companyDetailVO.getCompanyNo())
-                || StringUtil.isBlank(companyDetailVO.getAdminNo())) {
-            throw new BizCommonException("信息不完整！");
-        }
-
+        validateForm(companyDetailVO, true);
         // 更新商家信息
         CompanyDO companyDO = new CompanyDO();
         companyDO.setCompanyNo(companyDetailVO.getCompanyNo());
@@ -190,7 +180,44 @@ public class CompanyServiceImpl implements CompanyService {
         updateCompany(companyDO);
     }
 
-
+    /**
+     * 校验表单
+     *
+     * @param companyDetailVO
+     * @param isUpdate
+     */
+    private void validateForm(CompanyDetailVO companyDetailVO, boolean isUpdate) {
+        // 判断是否为更新，更新时需要多校验两个字段
+        if (isUpdate) {
+            if (StringUtil.isBlank(companyDetailVO.getCompanyNo())
+                    || StringUtil.isBlank(companyDetailVO.getAdminNo())) {
+                throw new BizCommonException("信息不完整！");
+            }
+        } else {
+            // 若为新增，则需要判断密码
+            if (StringUtil.isBlank(companyDetailVO.getPassword())) {
+                throw new BizCommonException("信息不完整！");
+            }
+        }
+        // 以下是新增和更新都需要判断的字段
+        if (StringUtil.isBlank(companyDetailVO.getCompanyName())
+                || StringUtil.isBlank(companyDetailVO.getLoginName())
+                || StringUtil.isBlank(companyDetailVO.getPhone())
+                || StringUtil.isBlank(companyDetailVO.getName())
+                || StringUtil.isBlank(companyDetailVO.getStatus())
+                || StringUtil.isBlank(companyDetailVO.getMchId())) {
+            throw new BizCommonException("信息不完整！");
+        }
+        // 商户模式
+        final String companyStatus = "1";
+        // 服务商模式
+        final String serverStatus = "2";
+        if (companyStatus.equals(companyDetailVO.getStatus())
+                && StringUtil.isBlank(companyDetailVO.getPayKey())) {
+            // 需要根据接入模式判断是否需要填 PayKey
+            throw new BizCommonException("商户模式下 PayKey 必填！");
+        }
+    }
 
     /**
      * 创建商户
@@ -371,7 +398,6 @@ public class CompanyServiceImpl implements CompanyService {
         appletConfigDO.setCreator(creator);
         appletConfigDO.setModifier(modifier);
         appletConfigDO.setStatus(companyDetailVO.getStatus());
-        // TODO: 需要根据接入模式判断是否需要填 PayKey
         appletConfigDO.setMchId(companyDetailVO.getMchId());
         appletConfigDO.setPayKey(companyDetailVO.getPayKey());
         appletConfigDO.setAppletType("2");
