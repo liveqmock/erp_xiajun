@@ -7,10 +7,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.Md5Util;
-import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.company.service.*;
 import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +92,9 @@ public class CompanyServiceImpl implements CompanyService {
         if (companyNo == null) {
             throw new BizCommonException("信息不完整！");
         }
-        return companyDOMapper.getCompanyDetailVO(companyNo);
+        CompanyDetailVO companyDetailVO = companyDOMapper.getCompanyDetailVO(companyNo);
+        companyDetailVO.setLogoUrl(ImgUtil.initImg2Json(companyDetailVO.getLogoUrl()));
+        return companyDetailVO;
     }
 
     @Override

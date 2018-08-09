@@ -71,6 +71,8 @@ public class ItemServiceImplement implements IItemService {
     private Cache shareCache;
     @Autowired
     private IAppletConfigService appletConfigService;
+    @Autowired
+    private IItemSubOrderService orderService;
 
     @Autowired
 	private ItemQrcodeShareDOMapperExt qrcodeShareDOMapperExt;
@@ -305,6 +307,12 @@ public class ItemServiceImplement implements IItemService {
         // 2、查询分页记录
         if (totalCount != null && totalCount != 0) {
             List<ItemDTO> items = itemDOMapperExt.queryItems(itemQueryVO);
+            if (IsEmptyUtil.isCollectionNotEmpty(items)) {
+            	for (ItemDTO item:items) {
+            		Integer salesVolume = orderService.calItemSalesVolume(item.getItemCode(), AppUtil.getLoginUserCompanyNo());
+            		item.setSalesVolume(salesVolume);
+            	}
+            }
             totalCount = items.size();
             itemResult.buildPage(totalCount, itemQueryVO);
             itemResult.setData(items);
@@ -1078,7 +1086,7 @@ public class ItemServiceImplement implements IItemService {
             JSONObject myJson = JSONObject.fromObject(reponse);
             token = (String) myJson.get("access_token");
         }       
-        String uuid = "item="+newItem.getItemCode();
+        String uuid = "item"+newItem.getItemCode();
         String picUrl = insertIntoItemDimension(uuid, "pages/item/detail", token);
         if (IsEmptyUtil.isStringNotEmpty(picUrl)) {
         	newItem.setQrCodeUrl(picUrl);
