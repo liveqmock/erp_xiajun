@@ -1,8 +1,7 @@
 package com.wangqin.globalshop.item.app.controller;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
@@ -83,41 +82,55 @@ public class ItemSkuPriceController {
 
 
 	/**
-	 * 设置所有SKU的渠道价格
-	 * @param itemSkuQueryVO
+	 * 批量设置SKU的多渠道价格
+	 * @param
 	 * @return
 	 */
 	@PostMapping("/itemSku/saveItemSkuPriceList")
 	@ResponseBody
-	public Object saveAllItemSkuInOneChannelPrice(ItemSkuQueryVO itemSkuQueryVO) {
+	public Object saveAllItemSkuInOneChannelPrice(List<SkuChannelPriceEditVO> skuChannelPriceEditVOList) {
 		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
 		if(!loginCheck()) {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
-		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-//		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
-		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
+		 iItemSkuService.saveItemSkuMultiPriceList(skuChannelPriceEditVOList);
 		result.buildIsSuccess(true);
 		return result;
 	}
 
-	/**
-	 * 保存一个SKU的多渠道价格
-	 * @param itemSkuQueryVO
-	 * @return
-	 */
-	@PostMapping("/itemSku/saveOneItemSkuMultiPrice")
-	@ResponseBody
-	public Object saveOneItemSkuMultiPrice(ItemSkuQueryVO itemSkuQueryVO) {
-		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
-		if(!loginCheck()) {
-			return result.buildIsSuccess(false).buildMsg("请登录");
-		}
-		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
-		result.buildIsSuccess(true);
-		return result;
-	}
+    /**
+     * 保存一个SKU的多渠道价格
+     * @param
+     * @return
+     */
+    @PostMapping("/itemSku/saveOneItemSkuMultiPrice")
+    @ResponseBody
+    public Object saveOneItemSkuMultiPrice(SkuChannelPriceEditVO skuChannelPriceEditVO) {
+        JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+        if(!loginCheck()) {
+            return result.buildIsSuccess(false).buildMsg("请登录");
+        }
+        iItemSkuService.saveOneItemSkuMultiPrice(skuChannelPriceEditVO);
+        result.buildIsSuccess(true);
+        return result;
+    }
+
+    /**
+     * 设置所有SKU的某渠道上价格
+     * @param itemSkuQueryVO
+     * @return
+     */
+    @PostMapping("/itemSku/saveAllItemSkuInOneChannelPrice")
+    @ResponseBody
+    public Object saveAllItemSkuInOneChannelPrice(String discountPercent, String channelNo) {
+        JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+        if(!loginCheck()) {
+            return result.buildIsSuccess(false).buildMsg("请登录");
+        }
+        iItemSkuService.saveAllItemSkuInOneChannelPrice( discountPercent,  channelNo);
+        result.buildIsSuccess(true);
+        return result;
+    }
 	
 	/**
      * 工具类

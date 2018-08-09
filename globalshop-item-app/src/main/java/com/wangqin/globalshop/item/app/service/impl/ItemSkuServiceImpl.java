@@ -133,7 +133,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	}
 
 	/**
-	 * 批量保存SKU+多渠道价格
+	 * 批量保存SKU的多渠道价格
 	 */
 	@Override
 	@Transactional(rollbackFor = ErpCommonException.class)
@@ -152,6 +152,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		List<ChannelSalePriceDO> channelSalePriceList = skuChannelPriceEditVO.getChannelSalePriceList();
 		if (channelSalePriceList != null) {
 			for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
+				channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannalNo());
 			}
 		}
@@ -160,7 +161,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 
 
 	/**
-	 * 设置所有SKU的渠道价格
+	 * 设置所有SKU的某渠道上价格
 	 * @param discountPercent 折扣，比如85折，传85，但折扣不能超过100
 	 */
 	@Override
