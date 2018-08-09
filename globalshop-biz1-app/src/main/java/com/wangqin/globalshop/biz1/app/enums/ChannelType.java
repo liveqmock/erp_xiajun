@@ -10,7 +10,10 @@ public enum ChannelType {
 	HaiHu(2,"海狐海淘"),
 	TaoBao(3,"淘宝"),
 
-	JingDong(4,"京东");
+	JingDong(4,"京东"),
+
+	WEIXIN(101, "微信"),
+	WEIXINXCX(102, "微信小程序");
 
 	private int value;
 	private String name;

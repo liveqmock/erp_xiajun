@@ -8,8 +8,8 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO;
 import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelShopDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.common.enums.ChannelSaleType;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.BeanUtils;
@@ -20,8 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -47,6 +45,9 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 
 	@Autowired
 	private IChannelSalePriceService channelSalePriceService;
+
+	@Autowired
+	private ChannelSalePriceDOMapperExt salePriceDOMapperExt;
 
 	@Autowired
 	private ChannelShopDOMapperExt channelShopDOMapperExt;
@@ -105,16 +106,69 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 
 		JsonPageResult<List<SkuChannelPriceDTO>> itemResult = new JsonPageResult<>();
 		//1、查询总的记录数量
-		Integer totalCount =  itemSkuMapperExt.queryItemSkusCount(itemSkuQueryVO);
+		Integer totalCount =  itemSkuMapperExt.querySalableItemSkuCount(itemSkuQueryVO);
 		//2、查询分页记录
 		if(totalCount!=null&&totalCount!=0L) {
 			itemResult.buildPage(totalCount, itemSkuQueryVO);
-			List<ItemSkuDO> itemSkus = itemSkuMapperExt.queryItemSkuListOnly(itemSkuQueryVO);
+			//List<ItemSkuDO> itemSkus = itemSkuMapperExt.queryItemSkuListOnly(itemSkuQueryVO);
 //			String companyNo = itemSkuQueryVO.getCompanyNo();
+			itemSkuQueryVO.initFirstStart();
+			List<ItemSkuPriceVO> itemSkuPrices = itemSkuMapperExt.querySalableItemSkuList(itemSkuQueryVO);
+
+
 			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
-			for (ItemSkuDO itemSku : itemSkus) {
+			for (ItemSkuPriceVO itemSku : itemSkuPrices) {
 				//渠道价格
-				List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(itemSku.getSkuCode());
+
+				List<ChannelSalePriceDO> salePriceDOList = new ArrayList<>();
+
+				if(Integer.valueOf(1).equals(itemSku.getSaleOnYouzan())){
+					List<ChannelSalePriceDO> youzanSalePriceList = channelSalePriceService.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.YouZan.getValue());
+					if(EasyUtil.isListEmpty(youzanSalePriceList)){
+						ChannelSalePriceDO youzanSalePrice = new ChannelSalePriceDO();
+						youzanSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+						//youzanSalePrice.setCompanyNo("KZQA3rqCwV");
+						youzanSalePrice.setChannelNo(ChannelType.YouZan.getValue()+"");
+						youzanSalePrice.setSkuCode(itemSku.getSkuCode());
+						youzanSalePrice.setItemCode(itemSku.getItemCode());
+						youzanSalePrice.setSalePrice(itemSku.getSalePrice().floatValue());
+						salePriceDOList.add(youzanSalePrice);
+					}else {
+						salePriceDOList.addAll(youzanSalePriceList);
+					}
+				}
+
+				if(Integer.valueOf(1).equals(itemSku.getSaleOnXcx())){
+					List<ChannelSalePriceDO> xcxSalePriceList  = channelSalePriceService.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.WEIXINXCX.getValue());
+					if(EasyUtil.isListEmpty(xcxSalePriceList)){
+						ChannelSalePriceDO xcxSalePrice = new ChannelSalePriceDO();
+						xcxSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+						//xcxSalePrice.setCompanyNo("KZQA3rqCwV");
+						xcxSalePrice.setChannelNo(ChannelType.WEIXINXCX.getValue()+"");
+						xcxSalePrice.setSkuCode(itemSku.getSkuCode());
+						xcxSalePrice.setItemCode(itemSku.getItemCode());
+						xcxSalePrice.setSalePrice(itemSku.getSalePrice().floatValue());
+						salePriceDOList.add(xcxSalePrice);
+					}else {
+						salePriceDOList.addAll(xcxSalePriceList);
+					}
+				}
+
+				if(Integer.valueOf(1).equals(itemSku.getSaleOnHaihu())){
+					List<ChannelSalePriceDO> haihuSalePriceList  = channelSalePriceService.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.HaiHu.getValue());
+					if(EasyUtil.isListEmpty(haihuSalePriceList)){
+						ChannelSalePriceDO haihuSalePrice = new ChannelSalePriceDO();
+						haihuSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+						//haihuSalePrice.setCompanyNo("KZQA3rqCwV");
+						haihuSalePrice.setChannelNo(ChannelType.HaiHu.getValue()+"");
+						haihuSalePrice.setSkuCode(itemSku.getSkuCode());
+						haihuSalePrice.setItemCode(itemSku.getItemCode());
+						haihuSalePrice.setSalePrice(itemSku.getSalePrice().floatValue());
+						salePriceDOList.add(haihuSalePrice);
+					}else {
+						salePriceDOList.addAll(haihuSalePriceList);
+					}
+				}
 
 				SkuChannelPriceDTO skuChannelPriceDTO = new SkuChannelPriceDTO();
 				BeanUtils.copy(itemSku, skuChannelPriceDTO);
@@ -123,7 +177,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 //				skuChannelPriceDTO.setUpc(itemSku.getUpc());
 //
 //				skuChannelPriceDTO.setUpc(itemSku.getUpc());
-				skuChannelPriceDTO.setChannelSalePriceList(channelSalePriceList);
+				skuChannelPriceDTO.setChannelSalePriceList(salePriceDOList);
 
 				skuChannelPriceDTOList.add(skuChannelPriceDTO);
 			}
@@ -152,8 +206,18 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		List<ChannelSalePriceDO> channelSalePriceList = skuChannelPriceEditVO.getChannelSalePriceList();
 		if (channelSalePriceList != null) {
 			for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
-				channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
+				if(channelSalePrice.getId() != null){
+					channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+					channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
+				}else{
+					channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+					channelSalePrice.init();
+					if(channelSalePrice.getShopCode() == null){
+						channelSalePrice.setShopCode(1L);
+					}
+					salePriceDOMapperExt.insert(channelSalePrice);
+				}
+
 			}
 		}
 	}

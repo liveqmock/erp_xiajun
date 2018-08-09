@@ -7,10 +7,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.Md5Util;
-import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.company.service.*;
 import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +92,9 @@ public class CompanyServiceImpl implements CompanyService {
         if (companyNo == null) {
             throw new BizCommonException("信息不完整！");
         }
-        return companyDOMapper.getCompanyDetailVO(companyNo);
+        CompanyDetailVO companyDetailVO = companyDOMapper.getCompanyDetailVO(companyNo);
+        companyDetailVO.setLogoUrl(ImgUtil.initImg2Json(companyDetailVO.getLogoUrl()));
+        return companyDetailVO;
     }
 
     @Override
@@ -136,7 +135,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyDO.setCity(companyDetailVO.getCity());
         companyDO.setDistrict(companyDetailVO.getDistrict());
         companyDO.setFullAddress(companyDetailVO.getFullAddress());
-        companyDO.setCountry(String.valueOf(companyDetailVO.getCountry()));
+        companyDO.setCountry(companyDetailVO.getCountry());
         companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
         companyDO.setMainCategory(companyDetailVO.getMainCategory());
         companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
@@ -248,7 +247,7 @@ public class CompanyServiceImpl implements CompanyService {
             companyDO.setCity(companyDetailVO.getCity());
             companyDO.setDistrict(companyDetailVO.getDistrict());
             companyDO.setFullAddress(companyDetailVO.getFullAddress());
-            companyDO.setCountry(String.valueOf(companyDetailVO.getCountry()));
+            companyDO.setCountry(companyDetailVO.getCountry());
             companyDO.setOverseaAddress(companyDetailVO.getOverseaAddress());
             companyDO.setMainCategory(companyDetailVO.getMainCategory());
             companyDO.setOfflineAnnualSale(companyDetailVO.getOfflineAnnualSale());
@@ -333,6 +332,7 @@ public class CompanyServiceImpl implements CompanyService {
         adminAuthUserDO.setUserNo(userNo);
         adminAuthUserDO.setLoginName(companyDetailVO.getLoginName());
         adminAuthUserDO.setPassword(Md5Util.getMD5(companyDetailVO.getPassword()));
+        adminAuthUserDO.setPhone(companyDetailVO.getPhone());
         adminAuthUserDO.setName(companyDetailVO.getName());
         adminAuthUserDO.setEmail(companyDetailVO.getEmail());
         authUserService.addAuthUser(adminAuthUserDO);

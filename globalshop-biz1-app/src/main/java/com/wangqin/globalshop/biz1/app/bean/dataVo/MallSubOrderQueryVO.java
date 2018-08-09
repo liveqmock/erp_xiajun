@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
+import com.wangqin.globalshop.common.utils.AppUtil;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -154,4 +155,15 @@ public class MallSubOrderQueryVO {
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endGmtCreate;
+
+    /**
+     * 商家编号
+     * <p>
+     * 对应 mall_sub_order 表的 company_no 字段
+     */
+    private String companyNo;
+
+    public MallSubOrderQueryVO() {
+        this.companyNo = AppUtil.getLoginUserCompanyNo();
+    }
 }
