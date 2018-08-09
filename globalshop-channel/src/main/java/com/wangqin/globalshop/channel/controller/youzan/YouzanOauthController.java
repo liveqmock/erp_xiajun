@@ -61,7 +61,7 @@ public class YouzanOauthController extends BaseController {
 	@Autowired
 	private TransactionTemplate transactionTemplate;
 
-	@RequestMapping(value = "/oauth", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	@RequestMapping(value = "/oauth", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
 	@ResponseBody
 	public Object oauth(@RequestParam("code") String code, @RequestParam("state") String state) {
 		logger.info("=======youzan oauth begin======> code: " + code + " state: "+state);
