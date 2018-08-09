@@ -78,7 +78,6 @@ public class ItemSkuPriceController {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-//		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
 		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
 		result.buildIsSuccess(true);
 		return result;
@@ -117,7 +116,7 @@ public class ItemSkuPriceController {
             return result.buildIsSuccess(false).buildMsg("请登录");
         }
         iItemSkuService.saveOneItemSkuMultiPrice(json);
-        result.buildIsSuccess(true).buildMsg("保存成功");;
+        result.buildIsSuccess(true).buildMsg("保存成功");
         return result;
     }
 
@@ -134,7 +133,7 @@ public class ItemSkuPriceController {
             return result.buildIsSuccess(false).buildMsg("请登录");
         }
         iItemSkuService.saveAllItemSkuInOneChannelPrice( discountPercent,  channelNo);
-        result.buildIsSuccess(true).buildMsg("保存成功");;
+        result.buildIsSuccess(true).buildMsg("保存成功");
         return result;
     }
 	

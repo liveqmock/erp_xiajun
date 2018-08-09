@@ -328,6 +328,80 @@
         order by T1.id desc
     </select>
 
+    <!-- 根据条件查询全部itemSkuList-->
+    <select id="querySalableItemSkuList" resultType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuPriceVO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
+        SELECT
+        T1.id,T1.sku_code AS skuCode,T1.item_code AS itemCode,
+        T1.sku_rate AS skuRate,
+        T1.item_name AS itemName,T1.company_no AS companyNo,
+        T1.category_code AS categoryCode,
+        T1.category_name AS categoryName,
+        T1.upc AS upc,
+        T1.weight AS weight,T1.sku_pic AS skuPic,
+        T1.package_level_id AS packageLevelId,
+        T1.sale_price AS salePrice,
+        T2.is_sale AS isSale,
+        T2.sale_on_youzan AS saleOnYouzan,
+        T2.third_sale AS saleOnHaihu,
+        T2.wxis_sale AS saleOnXcx,
+        T2.status as status,
+        T1.saleable as saleable,
+        T2.origin_sale_price as originSalePrice
+        FROM
+        item_sku T1 left join item T2 on T1.item_code =T2.item_code
+        where
+        T1.status=1
+        and T2.is_sale=1
+        and T1.is_del=0
+
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
+        <if test=" itemCode != null and itemCode != '' ">
+            and T1.item_code = #{itemCode}
+        </if>
+        <if test=" itemName != null and itemName != '' ">
+            and T2.item_name = #{itemName}
+        </if>
+        <if test=" skuCode != null and skuCode != '' ">
+            and T1.sku_code = #{skuCode}
+        </if>
+        <if test=" upc != null and upc != '' ">
+            and T1.upc = #{upc}
+        </if>
+        order by T1.id desc
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
+    </select>
+
+    <!-- 根据条件查询全部itemSkuList-->
+    <select id="querySalableItemSkuCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
+        SELECT
+            count(distinct T1.id)
+        FROM
+        item_sku T1 left join item T2 on T1.item_code =T2.item_code
+        where
+        T1.status=1
+        and T2.is_sale=1
+        and T1.is_del=0
+
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
+        <if test=" itemCode != null and itemCode != '' ">
+            and T1.item_code = #{itemCode}
+        </if>
+        <if test=" itemName != null and itemName != '' ">
+            and T2.item_name = #{itemName}
+        </if>
+        <if test=" skuCode != null and skuCode != '' ">
+            and T1.sku_code = #{skuCode}
+        </if>
+        <if test=" upc != null and upc != '' ">
+            and T1.upc = #{upc}
+        </if>
+    </select>
+
+
     <!-- 根据条件查询itemSkuList，不涉及其他的表 ，不做分页-->
      <select id="queryItemSkuListSelective" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
         SELECT
