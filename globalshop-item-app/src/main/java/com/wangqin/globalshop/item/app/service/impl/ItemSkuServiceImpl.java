@@ -153,7 +153,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		if (channelSalePriceList != null) {
 			for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
 				channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannalNo());
+				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
 			}
 		}
 	}
@@ -184,7 +184,8 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 				//没有多渠道，需加上n条
 //				List<ChannelShopDO> channels=channelShopDOMapperExt.searchShopList(null);
 				ChannelSalePriceDO channelSalePriceDO=new ChannelSalePriceDO();
-				channelSalePriceDO.setChannalNo(channelNo);
+				channelSalePriceDO.setItemCode(itemSkuPrice.getItemCode());
+				channelSalePriceDO.setChannelNo(channelNo);
 				channelSalePriceDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 				channelSalePriceDO.setSkuCode(itemSkuPrice.getSkuCode());
 				channelSalePriceDO.setCreator("SYSTEM");
@@ -193,26 +194,29 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 				channelSalePriceDO.setShopCode(itemSkuPrice.getId());
 
 				//TODO channelNo现在写死是1，2，3，以后优化
-				if(itemSkuPrice.getSaleOnYouzan()==1) {
+				if(itemSkuPrice.getSaleOnYouzan()!=null && itemSkuPrice.getSaleOnYouzan()==1) {
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="1")) {
+						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
 				}
-				if(itemSkuPrice.getSaleOnHaihu()==1){
+				if(itemSkuPrice.getSaleOnHaihu()!=null && itemSkuPrice.getSaleOnHaihu()==1){
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="2")) {
+						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
 				}
-				if(itemSkuPrice.getSaleOnHaihu()==1){
+				if(itemSkuPrice.getSaleOnXcx()!=null && itemSkuPrice.getSaleOnXcx()==1){
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="3")) {
+						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
