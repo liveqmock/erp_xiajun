@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap2" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="channal_no" property="channalNo" jdbcType="VARCHAR" />
+        <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
         <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
         <result column="shop_code" property="shopCode" jdbcType="BIGINT" />
         <result column="sale_price" property="salePrice" jdbcType="REAL" />
@@ -15,7 +15,7 @@
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List2" >
-        id, channal_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no,
+        id, channel_no, company_no, shop_code, sale_price, sku_code, item_code, batch_no,
         creator, modifier
     </sql>
 
@@ -45,14 +45,14 @@
 		UPDATE channel_sale_price
 		SET sale_price=#{salePrice}
 		WHERE sku_code=#{skuCode}
-		AND channal_no=#{channelNo}
+		AND channel_no=#{channelNo}
 	</update>
 	
 	<insert id="insertChannelSalePriceSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO" >
     insert into channel_sale_price
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="channalNo != null" >
-        channal_no,
+      <if test="channelNo != null" >
+        channel_no,
       </if>
       <if test="companyNo != null" >
         company_no,
@@ -80,8 +80,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="channalNo != null" >
-        #{channalNo,jdbcType=VARCHAR},
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
       </if>
       <if test="companyNo != null" >
         #{companyNo,jdbcType=VARCHAR},

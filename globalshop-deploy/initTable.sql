@@ -484,7 +484,7 @@ DROP TABLE IF EXISTS `channel_sale_price`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `channel_sale_price` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT,
-  `channal_no` varchar(64) NOT NULL,
+  `channel_no` varchar(64) NOT NULL,
   `company_no` varchar(64) NOT NULL,
   `shop_code` bigint(20) NOT NULL,
   `sale_price` float(20,2) NOT NULL,
