@@ -39,15 +39,7 @@
         and is_del is false
     </select>
     
-    <select id="selectByShareNo" resultMap="BaseResultMap">
-        select
-            <include refid="Base_Column_List" />
-        from
-            item_qrcode_share
-        where
-            share_no = #{shareNo}
-        and is_del is false
-    </select>
+
     
     <!-- 更新二维码图片的地址 -->
     <update id="updatePicUrlByShareNo" parameterType="java.lang.String">
