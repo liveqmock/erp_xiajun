@@ -25,6 +25,7 @@
     <result column="offline_annual_sale" property="offlineAnnualSale" jdbcType="DOUBLE" />
     <result column="online_annual_sale" property="onlineAnnualSale" jdbcType="DOUBLE" />
     <result column="admin_no" property="adminNo" jdbcType="VARCHAR" />
+    <result column="company_group" property="companyGroup" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" extends="BaseResultMap" >
     <result column="intro" property="intro" jdbcType="LONGVARCHAR" />
@@ -33,7 +34,7 @@
     id, company_no, company_name, status, shop_name, logo_url, force_idcard, tel, im, 
     service_time, force_idcard_upload, modifier, creator, state, city, district, full_address, 
     oversea_address, country, main_category, offline_annual_sale, online_annual_sale, 
-    admin_no
+    admin_no, company_group
   </sql>
   <sql id="Blob_Column_List" >
     intro
@@ -61,7 +62,8 @@
       state, city, district, 
       full_address, oversea_address, country, 
       main_category, offline_annual_sale, online_annual_sale, 
-      admin_no, intro)
+      admin_no, company_group, intro
+      )
     values (#{companyNo,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, #{forceIdcard,jdbcType=INTEGER}, 
       #{tel,jdbcType=VARCHAR}, #{im,jdbcType=VARCHAR}, #{serviceTime,jdbcType=VARCHAR}, 
@@ -69,7 +71,8 @@
       #{state,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
       #{fullAddress,jdbcType=VARCHAR}, #{overseaAddress,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
       #{mainCategory,jdbcType=VARCHAR}, #{offlineAnnualSale,jdbcType=DOUBLE}, #{onlineAnnualSale,jdbcType=DOUBLE}, 
-      #{adminNo,jdbcType=VARCHAR}, #{intro,jdbcType=LONGVARCHAR})
+      #{adminNo,jdbcType=VARCHAR}, #{companyGroup,jdbcType=VARCHAR}, #{intro,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -143,6 +146,9 @@
       <if test="adminNo != null" >
         admin_no,
       </if>
+      <if test="companyGroup != null" >
+        company_group,
+      </if>
       <if test="intro != null" >
         intro,
       </if>
@@ -213,6 +219,9 @@
       </if>
       <if test="adminNo != null" >
         #{adminNo,jdbcType=VARCHAR},
+      </if>
+      <if test="companyGroup != null" >
+        #{companyGroup,jdbcType=VARCHAR},
       </if>
       <if test="intro != null" >
         #{intro,jdbcType=LONGVARCHAR},
@@ -288,6 +297,9 @@
       <if test="adminNo != null" >
         admin_no = #{adminNo,jdbcType=VARCHAR},
       </if>
+      <if test="companyGroup != null" >
+        company_group = #{companyGroup,jdbcType=VARCHAR},
+      </if>
       <if test="intro != null" >
         intro = #{intro,jdbcType=LONGVARCHAR},
       </if>
@@ -318,6 +330,7 @@
       offline_annual_sale = #{offlineAnnualSale,jdbcType=DOUBLE},
       online_annual_sale = #{onlineAnnualSale,jdbcType=DOUBLE},
       admin_no = #{adminNo,jdbcType=VARCHAR},
+      company_group = #{companyGroup,jdbcType=VARCHAR},
       intro = #{intro,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -344,7 +357,8 @@
       main_category = #{mainCategory,jdbcType=VARCHAR},
       offline_annual_sale = #{offlineAnnualSale,jdbcType=DOUBLE},
       online_annual_sale = #{onlineAnnualSale,jdbcType=DOUBLE},
-      admin_no = #{adminNo,jdbcType=VARCHAR}
+      admin_no = #{adminNo,jdbcType=VARCHAR},
+      company_group = #{companyGroup,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
