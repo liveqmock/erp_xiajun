@@ -94,7 +94,7 @@ public class ItemSkuPriceController {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
 		 iItemSkuService.saveItemSkuMultiPriceList(skuChannelPriceEditVOList);
-		result.buildIsSuccess(true);
+		result.buildIsSuccess(true).buildMsg("保存成功");
 		return result;
 	}
 
@@ -111,13 +111,13 @@ public class ItemSkuPriceController {
             return result.buildIsSuccess(false).buildMsg("请登录");
         }
         iItemSkuService.saveOneItemSkuMultiPrice(skuChannelPriceEditVO);
-        result.buildIsSuccess(true);
+        result.buildIsSuccess(true).buildMsg("保存成功");;
         return result;
     }
 
     /**
      * 设置所有SKU的某渠道上价格
-     * @param itemSkuQueryVO
+     * @param
      * @return
      */
     @PostMapping("/itemSku/saveAllItemSkuInOneChannelPrice")
@@ -128,7 +128,7 @@ public class ItemSkuPriceController {
             return result.buildIsSuccess(false).buildMsg("请登录");
         }
         iItemSkuService.saveAllItemSkuInOneChannelPrice( discountPercent,  channelNo);
-        result.buildIsSuccess(true);
+        result.buildIsSuccess(true).buildMsg("保存成功");;
         return result;
     }
 	

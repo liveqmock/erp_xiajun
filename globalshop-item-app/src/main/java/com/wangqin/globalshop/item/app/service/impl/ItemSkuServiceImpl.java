@@ -173,27 +173,27 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		queryItemSkuPriceListDTO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 		queryItemSkuPriceListDTO.setSalable(1);
 
-		List<ItemSkuPriceVO> itemSkus = itemSkuMapperExt.queryAllSalableItemSkuList(queryItemSkuPriceListDTO);
-		for (ItemSkuPriceVO itemSku : itemSkus) {
+		List<ItemSkuPriceVO> itemSkuPrices = itemSkuMapperExt.queryAllSalableItemSkuList(queryItemSkuPriceListDTO);
+		for (ItemSkuPriceVO itemSkuPrice : itemSkuPrices) {
 			//渠道价格
 //			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
-			Double salePrice=itemSku.getSalePrice();
+			Double salePrice=itemSkuPrice.getSalePrice();
 			Double discountPrice=discount.multiply(BigDecimal.valueOf(salePrice)).doubleValue();
-			List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(itemSku.getSkuCode());
+			List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(itemSkuPrice.getSkuCode());
 			if(channelSalePriceList==null || channelSalePriceList.size()==0){
 				//没有多渠道，需加上n条
 //				List<ChannelShopDO> channels=channelShopDOMapperExt.searchShopList(null);
 				ChannelSalePriceDO channelSalePriceDO=new ChannelSalePriceDO();
 				channelSalePriceDO.setChannalNo(channelNo);
 				channelSalePriceDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-				channelSalePriceDO.setSkuCode(itemSku.getSkuCode());
+				channelSalePriceDO.setSkuCode(itemSkuPrice.getSkuCode());
 				channelSalePriceDO.setCreator("SYSTEM");
 				channelSalePriceDO.setModifier("SYSTEM");
 				//TODO 此处不对，shopCode不定，先填
-				channelSalePriceDO.setShopCode(itemSku.getId());
+				channelSalePriceDO.setShopCode(itemSkuPrice.getId());
 
 				//TODO channelNo现在写死是1，2，3，以后优化
-				if(itemSku.getSaleOnYouzan()==1) {
+				if(itemSkuPrice.getSaleOnYouzan()==1) {
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="1")) {
@@ -201,7 +201,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
 				}
-				if(itemSku.getSaleOnHaihu()==1){
+				if(itemSkuPrice.getSaleOnHaihu()==1){
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="2")) {
@@ -209,7 +209,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 					}
 					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
 				}
-				if(itemSku.getSaleOnHaihu()==1){
+				if(itemSkuPrice.getSaleOnHaihu()==1){
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
 					//如果是当前渠道
 					if ((channelNo=="3")) {
@@ -220,7 +220,7 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 			}else
 			{
 				//已有多渠道，只需更新一条
-				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(itemSku.getSkuCode(),discountPrice,channelNo);
+				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(itemSkuPrice.getSkuCode(),discountPrice,channelNo);
 
 			}
 		}
