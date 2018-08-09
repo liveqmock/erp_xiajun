@@ -81,61 +81,42 @@ public class ItemSkuPriceController {
 		return result;
 	}
 
-	
-	private class ScaleType {
-		private Long id;
-		private String name;
-		private Long typeId;
-		private Integer seq;
-		public Long getId() {
-			return id;
+
+	/**
+	 * 设置所有SKU的渠道价格
+	 * @param itemSkuQueryVO
+	 * @return
+	 */
+	@PostMapping("/itemSku/saveItemSkuPriceList")
+	@ResponseBody
+	public Object saveAllItemSkuInOneChannelPrice(ItemSkuQueryVO itemSkuQueryVO) {
+		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+		if(!loginCheck()) {
+			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
-		public void setId(Long id) {
-			this.id = id;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public Long getTypeId() {
-			return typeId;
-		}
-		public void setTypeId(Long typeId) {
-			this.typeId = typeId;
-		}
-		public Integer getSeq() {
-			return seq;
-		}
-		public void setSeq(Integer seq) {
-			this.seq = seq;
-		}
-		
+		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+//		result = iItemSkuService.queryItemSkus(itemSkuQueryVO);
+		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
+		result.buildIsSuccess(true);
+		return result;
 	}
-	
-	private class Scale {
-		private Long id;
-		private String type;
-		private List<ScaleType> scaleList;
-		public Long getId() {
-			return id;
+
+	/**
+	 * 保存一个SKU的多渠道价格
+	 * @param itemSkuQueryVO
+	 * @return
+	 */
+	@PostMapping("/itemSku/saveOneItemSkuMultiPrice")
+	@ResponseBody
+	public Object saveOneItemSkuMultiPrice(ItemSkuQueryVO itemSkuQueryVO) {
+		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+		if(!loginCheck()) {
+			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
-		public void setId(Long id) {
-			this.id = id;
-		}
-		public String getType() {
-			return type;
-		}
-		public void setType(String type) {
-			this.type = type;
-		}
-		public List<ScaleType> getScaleList() {
-			return scaleList;
-		}
-		public void setScaleList(List<ScaleType> scaleList) {
-			this.scaleList = scaleList;
-		}		
+		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
+		result.buildIsSuccess(true);
+		return result;
 	}
 	
 	/**
