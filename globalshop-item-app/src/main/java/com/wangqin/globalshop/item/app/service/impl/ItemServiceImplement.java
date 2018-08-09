@@ -40,6 +40,8 @@ public class ItemServiceImplement implements IItemService {
     private String imgUrl;
 
     @Autowired
+    private CompanyDOMapperExt companyDOMapperExt;
+    @Autowired
     private ItemDOMapperExt itemDOMapperExt;
     @Autowired
     private IItemBrandService brandService;
@@ -165,13 +167,11 @@ public class ItemServiceImplement implements IItemService {
         newItem.setBrandName(item.getBrand());
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
         newItem.setItemName(item.getName());
-        newItem.setIdCard(item.getIdCard().byteValue());
-        String qrCodeUrl = generateQrCode(itemCode);
-        if (IsEmptyUtil.isStringNotEmpty(qrCodeUrl)) {
-            newItem.setQrCodeUrl(qrCodeUrl);
-        }
+        newItem.setIdCard(item.getIdCard().byteValue());       
         newItem.setCountry(item.getCountry());
         newItem.setItemCode(itemCode);
+        //生成二维码
+        generateQrCode(newItem,companyNo);
         newItem.setWxisSale(item.getWxisSale().byteValue());
         newItem.setMainPic(item.getMainPic());
         newItem.setCompanyNo(companyNo);
@@ -1053,10 +1053,16 @@ public class ItemServiceImplement implements IItemService {
      *
      * @return
      */
-    private String generateQrCode(String itemCode) {
-        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
+    private void generateQrCode(ItemDO newItem,String companyNo) {
+    	CompanyDO companyDO = companyDOMapperExt.selectByCompanyNo(companyNo);
+    	if (null !=  companyDO) {
+    		if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
+    			companyNo = companyDO.getCompanyGroup();
+    		}   		
+    	}
+        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
         if (null == appletConfig) {
-            return null;
+            return;
         }
         String appId = appletConfig.getAppid();
         String secret = appletConfig.getSecret();
@@ -1066,14 +1072,16 @@ public class ItemServiceImplement implements IItemService {
         	token = accessToken;
         } else {
         	if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
-                return null;
+                return;
             }
             String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART + appId + ACCESS_TOKEN_MI + secret);
             JSONObject myJson = JSONObject.fromObject(reponse);
             token = (String) myJson.get("access_token");
         }       
-        String picUrl = insertIntoItemDimension(itemCode, "pages/item/detail", token);
-        return picUrl;
+        String picUrl = insertIntoItemDimension(newItem.getItemCode(), "pages/item/detail", token);
+        if (IsEmptyUtil.isStringNotEmpty(picUrl)) {
+        	newItem.setQrCodeUrl(picUrl);
+        }
     }
 
 }

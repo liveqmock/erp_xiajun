@@ -29,6 +29,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -55,6 +56,7 @@ import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import com.wangqin.globalshop.item.app.service.IItemCompanyService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
@@ -89,6 +91,8 @@ public class ItemController {
     private IAppletConfigService appletConfigService;
     @Autowired
     private IItemSubOrderService orderService;
+    @Autowired
+    private IItemCompanyService companyService;
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     //public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
@@ -518,7 +522,7 @@ public class ItemController {
 
 
     /**
-     * 单品生成二维码
+     * 更新二维码
      *
      * @param itemId
      * @return
@@ -532,7 +536,15 @@ public class ItemController {
         if (!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
         }
-        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
+        String companyNo = AppUtil.getLoginUserCompanyNo();
+        CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
+        if (null !=  companyDO) {
+    		if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
+    			companyNo = companyDO.getCompanyGroup();
+    		}   		
+    	}
+        
+        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
         if (null == appletConfig) {
             return result.buildIsSuccess(false).buildMsg("失败，没有本公司的商城小程序的appid记录");
         }
@@ -574,7 +586,7 @@ public class ItemController {
 
     /**
      * 新增商品同时生成二维码
-     * 这个方法没有用到
+     * 
      *
      * @param itemId
      */
@@ -584,7 +596,15 @@ public class ItemController {
         if (IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
             return;
         }
-        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(AppUtil.getLoginUserCompanyNo(), AppletType.MALL_APPLET.getValue());
+        
+        String companyNo = AppUtil.getLoginUserCompanyNo();
+        CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
+        if (null !=  companyDO) {
+    		if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
+    			companyNo = companyDO.getCompanyGroup();
+    		}   		
+    	}
+        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
         if (null == appletConfig) {
             return;
         }
