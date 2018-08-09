@@ -191,17 +191,17 @@ public class ItemServiceImplement implements IItemService {
 
             itemSku.setItemCode(itemCode);
 
-            /**插入ItemSkuScale*/
-            ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
-            ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+            /**插入规格信息*/                 
             if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
+            	ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
             	setInfo(colorObject, itemSku, itemSku.getColor(), "颜色");
+            	scaleList.add(colorObject);
             }
             if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
+            	ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
             	setInfo(scaleObject, itemSku, itemSku.getScale(), "尺寸");
-            }           
-            scaleList.add(colorObject);
-            scaleList.add(scaleObject);
+            	scaleList.add(scaleObject);
+            }                                 
 
             itemSku.setItemName(newItem.getItemName());
             itemSku.setCategoryName(item.getCategoryName());
@@ -223,7 +223,9 @@ public class ItemServiceImplement implements IItemService {
 
         itemSkuService.insertBatch(itemSkuList);
         List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
-        scaleService.insertBatch(scaleList);
+        if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
+        	scaleService.insertBatch(scaleList);
+        }       
         invService.outbound(inventoryList);
         insertItemSelective(newItem);
         return result.buildIsSuccess(true).buildMsg("添加商品成功");

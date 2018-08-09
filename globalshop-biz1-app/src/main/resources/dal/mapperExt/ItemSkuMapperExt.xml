@@ -598,6 +598,9 @@
       <if test="skuRate != null" >
         sku_rate,
       </if>
+      <if test="goodsNo != null" >
+        goods_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="skuCode != null" >
@@ -689,6 +692,9 @@
       </if>
        <if test="skuRate != null" >
         #{skuRate},
+      </if>
+      <if test="goodsNo != null" >
+        #{goodsNo},
       </if>
     </trim>
 </insert>

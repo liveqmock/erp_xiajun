@@ -119,7 +119,6 @@ public class ItemController {
     @ResponseBody
     @Transactional(rollbackFor = BizCommonException.class)
     public Object update(ItemQueryVO item) {
-    	System.out.println("update1...");
         JsonResult<ItemDO> result = new JsonResult<>();
         if (!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
@@ -250,18 +249,21 @@ public class ItemController {
                     addSku.setCategoryCode(itemDTO.getCategoryCode());
                     addSku.setCategoryName(itemDTO.getCategoryName());
                     addSku.setSkuRate(ItemUtil.divideOneHundred(newSku.getSkuRateString()));
-                    //插入item_sku_scale表
-                    ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
-                    ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+                    //插入item_sku_scale表                                       
                     if (IsEmptyUtil.isStringNotEmpty(newSku.getColor())) {
+                    	ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
                     	setInfo(colorObject, addSku, newSku.getColor(), "颜色");
+                    	scaleList.add(colorObject);
                     }
                     if (IsEmptyUtil.isStringNotEmpty(newSku.getScale())) {
+                    	ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+                    	scaleList.add(scaleObject);
                     	setInfo(scaleObject, addSku, newSku.getScale(), "尺寸");
-                    }                                      
-                    scaleList.add(colorObject);
-                    scaleList.add(scaleObject);
-                    scaleService.insertBatch(scaleList);
+                    }                                                        
+                   
+                    if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
+                    	scaleService.insertBatch(scaleList);
+                    }                    
                     //插入库存
                     List<InventoryDO> inventoryList = new ArrayList<InventoryDO>();
                     InventoryDO inventory = new InventoryDO();
@@ -285,24 +287,12 @@ public class ItemController {
         item.setMainPic(imgJson);
 
         ItemDO newItem = new ItemDO();
-        System.out.println("update2...");
-        //对销售时间进行处理
-        Integer shelfMethod = item.getShelfMethod();
-        newItem.setShelfMethod(shelfMethod);
-        if (ItemShelfMethod.SALE_IMMEDIATE.getValue().equals(shelfMethod)) {//立刻上架
-        	newItem.setStartDate(new Date());
-        	newItem.setIsSale(ItemIsSale.SALABLE.getCode().byteValue());
-        } else if (ItemShelfMethod.TEMP_UNSALE.getValue().equals(shelfMethod)) {//暂不售卖
-        	newItem.setIsSale(ItemIsSale.UNSALABLE.getCode().byteValue());
-        } else {//自定义上架时间
-        	try {
-        		Date startDate = DateUtil.transferStringToDate(item.getStartTime());
-        		newItem.setStartDate(startDate);
-        	} catch (Exception e) {
-        		return result.buildIsSuccess(false).buildMsg("上架时间格式错误");
-        	}      	
-        	newItem.setIsSale(ItemIsSale.UNSALABLE.getCode().byteValue());
-        }
+        //上架处理
+        try {
+        	ItemUtil.handleShelf(item, newItem);
+        } catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
+		}
 
         newItem.setIsAbroad(item.getIsAbroad());
         newItem.setDetail(item.getDetail());
@@ -320,7 +310,6 @@ public class ItemController {
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setId(item.getId());//根据id更新
         iItemService.updateByIdSelective(newItem);
-        System.out.println("update3...");
         return result.buildIsSuccess(true);
     }
 
