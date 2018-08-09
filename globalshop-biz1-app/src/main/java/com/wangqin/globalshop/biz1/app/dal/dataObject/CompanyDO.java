@@ -47,6 +47,8 @@ public class CompanyDO extends BaseModel {
 
     private String adminNo;
 
+    private String companyGroup;
+
     private String intro;
 
     public Long getId() {
@@ -231,6 +233,14 @@ public class CompanyDO extends BaseModel {
 
     public void setAdminNo(String adminNo) {
         this.adminNo = adminNo == null ? null : adminNo.trim();
+    }
+
+    public String getCompanyGroup() {
+        return companyGroup;
+    }
+
+    public void setCompanyGroup(String companyGroup) {
+        this.companyGroup = companyGroup == null ? null : companyGroup.trim();
     }
 
     public String getIntro() {

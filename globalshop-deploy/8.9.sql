@@ -7,7 +7,8 @@ ALTER TABLE `company` ADD `country` VARCHAR(20) DEFAULT NULL COMMENT '国家';
 ALTER TABLE `company` ADD `main_category` VARCHAR(20) DEFAULT NULL COMMENT '主要品类';
 ALTER TABLE `company` ADD `offline_annual_sale` DOUBLE(10,2) DEFAULT NULL COMMENT '线下年销售额';
 ALTER TABLE `company` ADD `online_annual_sale` DOUBLE(10,2) DEFAULT NULL COMMENT '线上年销售额';
-
+ALTER TABLE company ADD company_group VARCHAR(64) NULL COMMENT '归属公司   如果与companyNo相同，则表示当前为一个公司
+如果与companyNo不同，表示当前的companyNo对应得到company为companyGroup对应的公司下面的一个商户';
 ALTER TABLE auth_organization MODIFY address VARCHAR(200) COMMENT '地址';
 
 ALTER TABLE auth_organization MODIFY org_id VARCHAR(64);
