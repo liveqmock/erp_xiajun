@@ -113,7 +113,7 @@ CREATE TABLE `applet_config` (
   `appid` varchar(64) NULL COMMENT '小程序appid',
   `applet_type` varchar(5) NOT NULL COMMENT '小程序的类型  1: 采购 2.商城',
   `mch_id` varchar(64) DEFAULT NULL COMMENT '商户号(微信支付用)',
-  `status` varchar(5) NOT NULL DEFAULT '1' COMMENT '微信支付类型。1是平台版，2是商户版',
+  `status` varchar(5) NOT NULL DEFAULT '1' COMMENT '微信支付接入类型 1.服务商版 2.商户版 ',
   `pay_key` varchar(64) DEFAULT NULL COMMENT '商户版的支付秘钥',
   `authorizer_refresh_token` varchar(64) DEFAULT NULL COMMENT '第三方授权平台刷新token',
   `authorizer_access_token` varchar(512) DEFAULT NULL COMMENT '第三方授权平台token',
@@ -797,8 +797,7 @@ CREATE TABLE `mall_sub_order` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `SUBORDERNO` (`sub_order_no`),
-  INDEX `OUTERORDERID` (`channel_order_no`)
+  UNIQUE KEY `SUBORDERNO` (`sub_order_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8 COMMENT='商城子订单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1095,7 +1094,7 @@ CREATE TABLE IF NOT EXISTS `item_sku` (
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
-  `sku_rate` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '代理佣金比例',
+  `sku_rate` double(10,4) NOT NULL DEFAULT '0.00' COMMENT '代理佣金比例',
   `goods_no` varchar(64) DEFAULT NULL COMMENT '货号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `SKUCODE` (`sku_code`),
@@ -1829,7 +1828,7 @@ CREATE TABLE `auth_user_role` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`,`role_id`)
+  UNIQUE KEY `login_name` (`login_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=538 DEFAULT CHARSET=utf8 COMMENT='用户角色';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
