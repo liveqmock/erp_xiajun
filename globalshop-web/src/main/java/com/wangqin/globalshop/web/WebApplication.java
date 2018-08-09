@@ -2,6 +2,7 @@ package com.wangqin.globalshop.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @PropertySource("classpath:props/${BIZ_SYSTEM}-config-${DEPLOY_ENV}.properties")
 @ImportResource("classpath:spring/applicationContext.xml")
 @EnableScheduling
+@ServletComponentScan
 public class WebApplication {
 
     public static void main(String[] args) {
