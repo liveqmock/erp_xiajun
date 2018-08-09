@@ -46,7 +46,7 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 			channelShopDO.setGmtCreate(new Date());
 			channelShopDO.setIsDel(false);
 			channelShopDO.setVersion(0L);
-			channelShopDO.setCreator("-1");
+			channelShopDO.init4NoLogin();
 			channelShopDOMapperExt.insertSelective(channelShopDO);
 		}else {
 			result.setShopName(channelShopDO.getShopName());
