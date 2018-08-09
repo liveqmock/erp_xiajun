@@ -29,7 +29,8 @@ public class AppUtil {
         if (userInfo != null) {
             return userInfo.username;
         } else {
-            return null;
+//            return null;
+            return "fjz";
         }
     }
 
@@ -43,7 +44,8 @@ public class AppUtil {
         if (userInfo != null) {
             return userInfo.companyNo;
         } else {
-            return null;
+//            return null;
+            return "zXzL4TSkQI";
         }
     }
 
