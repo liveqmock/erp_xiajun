@@ -8,8 +8,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO;
 import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelAccountDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelShopDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.common.enums.ChannelSaleType;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.BeanUtils;
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -47,6 +44,9 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 
 	@Autowired
 	private IChannelSalePriceService channelSalePriceService;
+
+	@Autowired
+	private ChannelSalePriceDOMapperExt salePriceDOMapperExt;
 
 	@Autowired
 	private ChannelShopDOMapperExt channelShopDOMapperExt;
@@ -152,8 +152,18 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		List<ChannelSalePriceDO> channelSalePriceList = skuChannelPriceEditVO.getChannelSalePriceList();
 		if (channelSalePriceList != null) {
 			for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
-				channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
+				if(channelSalePrice.getId() != null){
+					channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+					channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
+				}else{
+					channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+					channelSalePrice.init();
+					if(channelSalePrice.getShopCode() == null){
+						channelSalePrice.setShopCode(1L);
+					}
+					salePriceDOMapperExt.insert(channelSalePrice);
+				}
+
 			}
 		}
 	}

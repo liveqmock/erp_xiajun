@@ -2,6 +2,7 @@ package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
 import java.util.List;
 
+import com.wangqin.globalshop.biz1.app.dal.mapper.ChannelSalePriceDOMapper;
 import org.apache.ibatis.annotations.Param;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
@@ -9,7 +10,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
 
 
 
-public interface ChannelSalePriceDOMapperExt {
+public interface ChannelSalePriceDOMapperExt extends ChannelSalePriceDOMapper {
 
 	List<ChannelSalePriceDO> queryPriceListBySkuCode(String skuCode);
 	
