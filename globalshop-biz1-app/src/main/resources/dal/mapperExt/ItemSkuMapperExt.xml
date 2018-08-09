@@ -230,7 +230,7 @@
         T1.weight as weight,T1.sku_pic as skuPic,T1.item_name AS itemName,
         T1.category_name AS categoryName, T1.upc AS upc, T1.item_code AS itemCode,
         T1.sku_code AS skuCode,T1.sale_price AS salePrice,T1.gmt_modify AS gmtModify,
-        csp.channal_no as channelNo,
+        csp.channel_no as channelNo,
         csp.sale_price as channelSalePrice,
         csp.batch_no as batchNo,
         csp.shop_code as shopCode
@@ -319,7 +319,7 @@
         T1.saleable as saleable,
         T2.origin_sale_price as originSalePrice
         FROM
-        item_sku T1, item T2
+        item_sku T1 left join item T2 on T1.item_code =T2.item_code
         where
         T1.status=1
         and T2.is_sale=1
