@@ -1097,5 +1097,6 @@
                 AND T1.status = #{itemQueryVO.status}
             </if>
         </where>
+        GROUP BY T3.item_code
     </select>
 </mapper>
