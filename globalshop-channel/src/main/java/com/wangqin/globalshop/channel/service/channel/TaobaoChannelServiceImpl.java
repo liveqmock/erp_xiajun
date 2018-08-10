@@ -53,9 +53,9 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 	@Autowired
 	private InventoryService inventoryService;
 
-	public TaobaoChannelServiceImpl(ChannelAccountDO channelAccount) {
-		super(channelAccount);
-		auth();
+	public TaobaoChannelServiceImpl(JdShopOauthDO shopOauth) {
+		super(shopOauth);
+		//auth();
 		tbClient = new DefaultTaobaoClient();		
 	}
 	
@@ -66,7 +66,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 		receiverGetRequest.setShopType(Constants.SHOP_TYPE_TAOBAO);		
 		TradeReceiverGetResponse receiverGetResponse = null;
 		try {
-			receiverGetResponse = tbClient.execute(receiverGetRequest, channelAccount.getAppValue2());
+			receiverGetResponse = tbClient.execute(receiverGetRequest, shopOauth.getAccessToken());
 		} catch (Exception e) {
 			String error = receiverGetResponse == null ? "" : receiverGetResponse.getError();
 			logger.error("get trade receiver error:"+error,e);	
@@ -92,7 +92,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
         	tradeListGetRequest.setPageNo(pageNo);
         	TradeListGetResponse response = null;
             try {             	
-     			response = tbClient.execute(tradeListGetRequest, channelAccount.getAppValue2());
+     			response = tbClient.execute(tradeListGetRequest, shopOauth.getAccessToken());
      		} catch (Exception e) {
      			logger.error("get order list error"+response.getError(),e);			
      		}            
@@ -139,11 +139,11 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 			e.printStackTrace();
 		}
 
-		outerOrder.setCompanyNo(channelAccount.getCompanyNo());
-		outerOrder.setChannelNo(channelAccount.getChannelNo());
-		outerOrder.setChannelName(channelAccount.getChannelName());
-		outerOrder.setChannelType(channelAccount.getType().toString());
-		outerOrder.setShopCode(channelAccount.getShopCode());
+		outerOrder.setCompanyNo(shopOauth.getCompanyNo());
+		outerOrder.setChannelNo(shopOauth.getChannelNo());
+		//outerOrder.setChannelName(shopOauth.getChannelName());
+		//outerOrder.setChannelType(shopOauth.getType().toString());
+		outerOrder.setShopCode(shopOauth.getShopCode());
 
 
 		outerOrder.setOrderNo(CodeGenUtil.getOrderNo()); // 系统自动生成
@@ -171,7 +171,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 //			order.getTitle();//商品名称
 									
 			MallSubOrderDO outerOrderDetail = new MallSubOrderDO();
-			outerOrderDetail.setCompanyNo(channelAccount.getCompanyNo());
+			outerOrderDetail.setCompanyNo(shopOauth.getCompanyNo());
 			outerOrderDetail.setChannelOrderNo(outerOrder.getChannelOrderNo()); // 主订单ID
 			outerOrderDetail.setSkuCode(order.getSkuNo()); // sku编码
 			outerOrderDetail.setSalePrice(Double.parseDouble(order.getPrice())); // 商品单价
@@ -190,7 +190,7 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 			outerOrderDetail.setPostcode(receiver.getReceiverZip()); // 邮编
 
 
-			outerOrderDetail.setShopCode(channelAccount.getShopCode());
+			outerOrderDetail.setShopCode(shopOauth.getShopCode());
 			outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
 			outerOrderDetail.setSubOrderNo(CodeGenUtil.getSubOrderNo());
 
@@ -392,5 +392,10 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 //			}
 //		}
 //	}
+
+	@Override
+	public void getOrders(Date startTime, Date endTime){
+		return;
+	}
 
 }

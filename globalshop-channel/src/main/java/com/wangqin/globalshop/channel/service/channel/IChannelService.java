@@ -7,6 +7,7 @@ import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public interface IChannelService {
@@ -40,4 +41,7 @@ public interface IChannelService {
 	public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception;
 
     void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder);
+
+	public void getOrders(Date startTime, Date endTime);
+
 }

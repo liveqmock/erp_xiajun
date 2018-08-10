@@ -38,4 +38,7 @@ public interface IItemService {
     List<ItemDO> queryHaihuByUptime(ItemQueryVO ItemDO);
 
     ItemDO getByItemCode(String itemCode);
+
+
+	public ItemVo getVoByItemCode(String itemCode);
 }

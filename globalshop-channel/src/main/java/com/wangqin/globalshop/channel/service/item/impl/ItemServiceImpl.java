@@ -87,6 +87,40 @@ public class ItemServiceImpl implements IItemService {
     }
 
 
+
+    @Override
+	public ItemVo getVoByItemCode(String itemCode){
+		ItemVo itemVo = new ItemVo();
+		ItemDO itemDo = itemDOMapper.queryItemByItemCode(itemCode);
+		BeanUtils.copies(itemDo, itemVo);
+
+		List<ItemSkuVo> itemSkuVos = new ArrayList<>();
+		ItemSkuDO skuSo = new ItemSkuDO();
+		skuSo.setItemCode(itemDo.getItemCode());
+		List<ItemSkuDO> skuList = itemSkuDOMapper.queryItemSkuList(skuSo);
+		for (ItemSkuDO sku : skuList) {
+			ItemSkuVo itemSkuVo = new ItemSkuVo();
+			BeanUtils.copies(sku, itemSkuVo);
+
+			//库存
+			InventoryDO inventoryDO = inventoryDOMapper.queryBySkuCodeAndCompanyNo(sku.getSkuCode(), itemDo.getCompanyNo());
+			itemSkuVo.setInventoryDO(inventoryDO);
+
+			//规格尺寸
+			List<ItemSkuScaleDO> itemSkuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
+			Map<String, ItemSkuScaleDO> scaleMap = new HashMap<>();
+			for (ItemSkuScaleDO scale : itemSkuScaleDOS) {
+				scaleMap.put(scale.getScaleCode(), scale);
+			}
+			itemSkuVo.setScaleMap(scaleMap);
+
+			itemSkuVos.add(itemSkuVo);
+
+		}
+		itemVo.setItemSkus(itemSkuVos);
+		return itemVo;
+	}
+
     /**
      * @param id
      * @return

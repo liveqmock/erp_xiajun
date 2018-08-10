@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * YouzanPushMessageController
  * 推送后我们再去抓
  * 推送服务消息接收示例
- * 依赖SPRING 3.0或以上版本
+ * 依赖SPRING 3.0或以上版本  这个接口暂时不接
  * @auther ChengZi
  * @data 16/9/10
  */
@@ -39,12 +39,12 @@ public class YouzanPushMessageController extends BaseController {
 		tmEntity.setAppKey(entity.getClient_id());
 		tmEntity.setShopCode(entity.getKdt_id()+"");//店铺ID
 		ChannelAccountDO selectEntity = channelAccountService.queryPo(tmEntity);
-    	JSONObject res;
+    	JSONObject res = new JSONObject();;
 		try {
-			res = (JSONObject) ChannelFactory.getChannel(selectEntity).syncOrder(entity);
+			//res = (JSONObject) ChannelFactory.getChannel(selectEntity).syncOrder(entity);
 		} catch (Exception e) {
 			logger.error("接收有赞推送消息 异常：", e);
-			res = new JSONObject();
+
 	        res.put("code", 0);
 	        res.put("msg", "success");
 		}

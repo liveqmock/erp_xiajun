@@ -1,18 +1,17 @@
 package com.wangqin.globalshop.channel.task;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.channel.service.order.ChannelIMallOrderService;
 import com.wangqin.globalshop.channel.service.order.ChannelIShippingOrderService;
+import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +42,10 @@ public class AutoRepairFeedBackOrderTask {
 	private MallSubOrderMapperExt mallSubOrderDOMapperExt;
 
 	@Autowired
-	private IChannelAccountService channelAccountService;
+	private JdShopOauthService shopOauthService;
+
+	@Autowired
+	private ChannelCommonService channelCommonService;
 
 
 	
@@ -75,20 +77,15 @@ public class AutoRepairFeedBackOrderTask {
 					MallOrderDO outerOrder = outerOrderService.queryPo(so);
 
 					// 渠道
-					ChannelAccountSo caSo = new ChannelAccountSo();
-					so.setChannelNo(outerOrder.getChannelNo());
-					so.setShopCode(outerOrder.getShopCode());
-					ChannelAccountDO channelAccountDO = channelAccountService.queryPo(caSo);
+					ChannelType channelType = ChannelType.getChannelType(Integer.valueOf(outerOrder.getChannelNo()));
 
-
-					ChannelType channelType = ChannelType.getChannelType(channelAccountDO.getType());
 					if (channelType == null) {
 						shippingOrder.setSyncSendStatus(1);
 						shippingOrderService.updateByPrimaryKey(shippingOrder);
 						continue;
 					}
 					// 同步给渠道
-					ChannelFactory.getChannel(channelAccountDO).syncLogisticsOnlineConfirm(erpOrderList, shippingOrder);
+					channelCommonService.syncLogistics2Channel(erpOrderList, shippingOrder);
 					
 					Thread.sleep(1000);
 				} catch (Exception e) {
