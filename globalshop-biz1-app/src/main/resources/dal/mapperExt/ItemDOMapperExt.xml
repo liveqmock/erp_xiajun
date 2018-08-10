@@ -1072,7 +1072,7 @@
     </select>
     <!-- 根据指定条件查询商品数目 -->
     <select id="countItems" resultType="java.lang.Integer">
-        SELECT COUNT(*)
+        SELECT COUNT(DISTINCT T3.item_code)
         FROM
         item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         <where>
@@ -1097,6 +1097,5 @@
                 AND T1.status = #{itemQueryVO.status}
             </if>
         </where>
-        GROUP BY T3.item_code
     </select>
 </mapper>
