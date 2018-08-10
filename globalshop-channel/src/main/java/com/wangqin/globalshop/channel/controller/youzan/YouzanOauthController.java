@@ -113,7 +113,7 @@ public class YouzanOauthController extends BaseController {
 
 		shopOauth.setChannelNo(String.valueOf(ChannelType.YouZan.getValue()));
 		shopOauth.setCompanyNo(state);
-		shopOauth.setShopCode(shopGetResult.getIntro());
+		shopOauth.setShopCode(shopGetResult.getId()+"");
 		shopOauth.setAccessToken(oauthResponse.getAccess_token());
 
 		shopOauth.setGmtModify(new Date());//授权时间
@@ -128,7 +128,7 @@ public class YouzanOauthController extends BaseController {
 
 		//组装channelShop
 		ChannelShopDO channelShop = new ChannelShopDO();
-		channelShop.setChannelNo(String.valueOf(ChannelType.JingDong.getValue()));
+		channelShop.setChannelNo(String.valueOf(ChannelType.YouZan.getValue()));
 		channelShop.setCompanyNo(state);
 		channelShop.setShopCode(shopOauth.getShopCode());
 		channelShop.setShopName(shopGetResult.getName());
