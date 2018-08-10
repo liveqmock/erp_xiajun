@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
@@ -17,7 +18,9 @@ import java.util.List;
  *
  * @author xiajun
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class ItemQueryVO extends PageQueryVO {
 
 	/**

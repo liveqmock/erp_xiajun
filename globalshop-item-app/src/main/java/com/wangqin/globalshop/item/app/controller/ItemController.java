@@ -9,24 +9,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
@@ -35,11 +30,9 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemQrcodeShareDOMapperExt;
-import com.wangqin.globalshop.biz1.app.enums.ItemShelfMethod;
 import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.enums.AppletType;
-import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -71,9 +64,10 @@ import net.sf.json.JSONObject;
  *
  * @author xiajun
  */
-@Controller
-@RequestMapping("/item")
+
 @Authenticated
+@RestController
+@RequestMapping("/item")
 public class ItemController {
 
     @Autowired
@@ -81,7 +75,7 @@ public class ItemController {
     @Autowired
     private IItemCategoryService categoryService;
     @Autowired
-    private IItemService iItemService;
+    private IItemService itemService;
     @Autowired
     private InventoryService inventoryService;
     @Autowired
@@ -109,11 +103,10 @@ public class ItemController {
      * @param
      */
     @RequestMapping("/add")
-    @ResponseBody
     @Transactional(rollbackFor = BizCommonException.class)
     public Object add(ItemQueryVO item) {
         //log.info("---->start to add item---->");
-        return iItemService.addItem(item);
+        return itemService.addItem(item);
     }
 
     /**
@@ -123,7 +116,6 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/update")
-    @ResponseBody
     @Transactional(rollbackFor = BizCommonException.class)
     public Object update(ItemQueryVO item) {
         JsonResult<ItemDO> result = new JsonResult<>();
@@ -147,7 +139,7 @@ public class ItemController {
             List<ItemSkuQueryVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {
             });
             //更新商品的价格区间,同时判断用户传来的upc是否相互之间有重复，同时判断upc和数据库里面已有的upc是否重复
-            String itemCode = iItemService.queryItemCodeById(item.getId());
+            String itemCode = itemService.queryItemCodeById(item.getId());
             List<String> upcList = new ArrayList<>();
             for (ItemSkuQueryVO sku : skus) {
                 Integer duplcatedCountNumber = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(AppUtil.getLoginUserCompanyNo(), sku.getUpc(), itemCode);
@@ -168,7 +160,7 @@ public class ItemController {
             //获取原来绑定该商品的所有sku的skuCode
             ItemSkuQueryVO itemSkuQueryVO = new ItemSkuQueryVO();
             itemSkuQueryVO.setCompanyNo(companyNo);
-            itemSkuQueryVO.setItemCode(iItemService.queryItemCodeById(item.getId()));
+            itemSkuQueryVO.setItemCode(itemService.queryItemCodeById(item.getId()));
             List<ItemSkuDO> itemSkuDOList = itemSkuService.queryItemSkuListSelective(itemSkuQueryVO);
             List<String> oldSkuCodeList = new ArrayList<String>();
             for (ItemSkuDO itemSkuDO : itemSkuDOList) {
@@ -215,34 +207,33 @@ public class ItemController {
                     }
                     //再更新规格，先删除后插入
                     scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
-            		if (IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {            			
-            			ItemSkuScaleDO colorScale = new ItemSkuScaleDO();
-            			String userNo = AppUtil.getLoginUserId();
-            			colorScale.setCompanyNo(companyNo);
-            			colorScale.setCreator(userNo);
-            			colorScale.setModifier(userNo);
-            			colorScale.setItemCode(itemCode);
-            			colorScale.setScaleCode(CodeGenUtil.getScaleCode());
-            			colorScale.setScaleValue(updateSku.getColor());
-            			colorScale.setScaleName("颜色");
-            			colorScale.setSkuCode(skuCode);
-            			scaleService.insertSelective(colorScale);
-            		}
-            		scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
-            		if (IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {            			
-            			ItemSkuScaleDO scale = new ItemSkuScaleDO();
-            			String userNo = AppUtil.getLoginUserId();
-            			scale.setCompanyNo(companyNo);
-            			scale.setCreator(userNo);
-            			scale.setModifier(userNo);
-            			scale.setItemCode(itemCode);
-            			scale.setScaleCode(CodeGenUtil.getScaleCode());
-            			scale.setScaleValue(updateSku.getScale());
-            			scale.setScaleName("尺寸");
-            			scale.setSkuCode(skuCode);
-            			scaleService.insertSelective(scale);
-            		}
-                 
+                    if (IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {
+                        ItemSkuScaleDO colorScale = new ItemSkuScaleDO();
+                        String userNo = AppUtil.getLoginUserId();
+                        colorScale.setCompanyNo(companyNo);
+                        colorScale.setCreator(userNo);
+                        colorScale.setModifier(userNo);
+                        colorScale.setItemCode(itemCode);
+                        colorScale.setScaleCode(CodeGenUtil.getScaleCode());
+                        colorScale.setScaleValue(updateSku.getColor());
+                        colorScale.setScaleName("颜色");
+                        colorScale.setSkuCode(skuCode);
+                        scaleService.insertSelective(colorScale);
+                    }
+                    scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
+                    if (IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {
+                        ItemSkuScaleDO scale = new ItemSkuScaleDO();
+                        String userNo = AppUtil.getLoginUserId();
+                        scale.setCompanyNo(companyNo);
+                        scale.setCreator(userNo);
+                        scale.setModifier(userNo);
+                        scale.setItemCode(itemCode);
+                        scale.setScaleCode(CodeGenUtil.getScaleCode());
+                        scale.setScaleValue(updateSku.getScale());
+                        scale.setScaleName("尺寸");
+                        scale.setSkuCode(skuCode);
+                        scaleService.insertSelective(scale);
+                    }
 
 
                     //最后更新其他的sku项目
@@ -259,7 +250,7 @@ public class ItemController {
                 if (null == newSku.getSkuCode()) {//需要添加的sku
                     ItemSkuDO addSku = new ItemSkuDO();
                     System.out.println("update1.1...");
-                    ItemDTO itemDTO = iItemService.queryItemById(item.getId());
+                    ItemDTO itemDTO = itemService.queryItemById(item.getId());
 
                     addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
                     addSku.setItemCode(itemDTO.getItemCode());
@@ -281,19 +272,19 @@ public class ItemController {
                     addSku.setSkuRate(ItemUtil.divideOneHundred(newSku.getSkuRateString()));
                     //插入item_sku_scale表                                       
                     if (IsEmptyUtil.isStringNotEmpty(newSku.getColor())) {
-                    	ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
-                    	setInfo(colorObject, addSku, newSku.getColor(), "颜色");
-                    	scaleList.add(colorObject);
+                        ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
+                        setInfo(colorObject, addSku, newSku.getColor(), "颜色");
+                        scaleList.add(colorObject);
                     }
                     if (IsEmptyUtil.isStringNotEmpty(newSku.getScale())) {
-                    	ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
-                    	scaleList.add(scaleObject);
-                    	setInfo(scaleObject, addSku, newSku.getScale(), "尺寸");
-                    }                                                        
-                   
+                        ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+                        scaleList.add(scaleObject);
+                        setInfo(scaleObject, addSku, newSku.getScale(), "尺寸");
+                    }
+
                     if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
-                    	scaleService.insertBatch(scaleList);
-                    }                    
+                        scaleService.insertBatch(scaleList);
+                    }
                     //插入库存
                     List<InventoryDO> inventoryList = new ArrayList<InventoryDO>();
                     InventoryDO inventory = new InventoryDO();
@@ -319,10 +310,10 @@ public class ItemController {
         ItemDO newItem = new ItemDO();
         //上架处理
         try {
-        	ItemUtil.handleShelf(item, newItem);
+            ItemUtil.handleShelf(item, newItem);
         } catch (Exception e) {
-			return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
-		}
+            return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
+        }
 
         newItem.setIsAbroad(item.getIsAbroad());
         newItem.setDetail(item.getDetail());
@@ -339,7 +330,7 @@ public class ItemController {
         newItem.setWxisSale(item.getWxisSale().byteValue());
         newItem.setModifier(AppUtil.getLoginUserId());
         newItem.setId(item.getId());//根据id更新
-        iItemService.updateByIdSelective(newItem);
+        itemService.updateByIdSelective(newItem);
         return result.buildIsSuccess(true);
     }
 
@@ -384,7 +375,6 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/query")
-    @ResponseBody
     @Transactional(rollbackFor = BizCommonException.class)
     public Object query(Long id) {
         JsonResult<ItemDTO> result = new JsonResult<>();
@@ -392,8 +382,8 @@ public class ItemController {
         if (!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
         }
-        
-        ItemDTO item = iItemService.queryItemById(id);
+
+        ItemDTO item = itemService.queryItemById(id);
         if (item == null) {
             result.buildIsSuccess(false).buildMsg("没有找到商品，商品可能已删除");
         }
@@ -413,7 +403,6 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/itemsListing")
-    @ResponseBody
     public Object itemsListing(String itemIdStrs) {
         //logger.info("itemsListing start");
         JsonResult<String> result = new JsonResult<>();
@@ -427,7 +416,7 @@ public class ItemController {
                     Long one = Long.valueOf(items[i]);
                     itemIds.add(one);
                 }
-                List<ItemDO> itemList = iItemService.queryItems(itemIds);
+                List<ItemDO> itemList = itemService.queryItems(itemIds);
                 //获取有赞的num_iid;
 
                 //调取有赞批量上架接口
@@ -450,7 +439,6 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/itemsPush")
-    @ResponseBody
     public Object itemsPush(String itemIdStrs) {
         //logger.info("itemsPush start");
         JsonResult<String> result = new JsonResult<>();
@@ -464,7 +452,7 @@ public class ItemController {
                     Long one = Long.valueOf(items[i]);
                     itemIds.add(one);
                 }
-                List<ItemDO> itemList = iItemService.queryItems(itemIds);
+                List<ItemDO> itemList = itemService.queryItems(itemIds);
                 //获取有赞的num_iid;
 
                 //调取有赞批量上架接口
@@ -481,13 +469,37 @@ public class ItemController {
     }
 
     /**
+     * 根据指定条件分页查询商品
+     *
+     * @param itemQueryVO
+     * @param pageQueryParam
+     * @return
+     */
+    @PostMapping("/queryItemList")
+    public Object listItems(ItemQuery2VO itemQueryVO, PageQueryParam pageQueryParam) {
+        EasyuiJsonResult<List<ItemDTO>> result = new EasyuiJsonResult<>();
+        try{
+            List<ItemDTO> itemDTOList = itemService.listItems(itemQueryVO, pageQueryParam);
+            int totalCount = itemService.countItems(itemQueryVO);
+            result.setRows(itemDTOList);
+            result.setTotal(totalCount);
+            result.buildIsSuccess(true);
+        } catch (BizCommonException e) {
+            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.buildMsg("查询异常").buildIsSuccess(false);
+        }
+        return result;
+    }
+
+    /**
      * 商品查询管理主列表
      *
      * @param itemQueryVO
      * @return
      */
-    @RequestMapping("/queryItemList")
-    @ResponseBody
+//    @RequestMapping("/queryItemList")
     public Object queryItemList(ItemQueryVO itemQueryVO) {
         EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
         if (!loginCheck()) {
@@ -496,18 +508,18 @@ public class ItemController {
         String companyNo = AppUtil.getLoginUserCompanyNo();
         itemQueryVO.setCompanyNo(companyNo);
         if (null == itemQueryVO.getStatus()) { //默认查询上架的商品
-        	itemQueryVO.setStatus(ItemStatus.LISTING.getCode());
+            itemQueryVO.setStatus(ItemStatus.LISTING.getCode());
         }
         //对前端传来的字符串类型的时间参数进行转换
         if (IsEmptyUtil.isStringNotEmpty(itemQueryVO.getStartTime()) && IsEmptyUtil.isStringNotEmpty(itemQueryVO.getEndTime())) {
-        	try {
-        		itemQueryVO.setStartDate(DateUtil.transferStringToDay(itemQueryVO.getStartTime()));
-        		itemQueryVO.setEndDate(DateUtil.transferStringToDay(itemQueryVO.getEndTime()));
-        	} catch(Exception e) {
-        		return jsonResult.buildIsSuccess(false).buildMsg("查询条件中的时间格式错误");
-        	}      	
+            try {
+                itemQueryVO.setStartDate(DateUtil.transferStringToDay(itemQueryVO.getStartTime()));
+                itemQueryVO.setEndDate(DateUtil.transferStringToDay(itemQueryVO.getEndTime()));
+            } catch (Exception e) {
+                return jsonResult.buildIsSuccess(false).buildMsg("查询条件中的时间格式错误");
+            }
         }
-        JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
+        JsonPageResult<List<ItemDTO>> result = itemService.queryItems(itemQueryVO);
         //计算销量
 //        List<ItemDTO> itemList = result.getData();
 //        if (IsEmptyUtil.isCollectionNotEmpty(itemList)) {
@@ -528,7 +540,6 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/updateVirtualInvByItemId")
-    @ResponseBody
     @Transactional(rollbackFor = BizCommonException.class)
     public Object updateVirtualInvByItemId(Long id) {
         //logger.info("updateVirtualInvByItemId start");
@@ -536,7 +547,7 @@ public class ItemController {
         if (IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
         }
-        String itemCode = iItemService.queryItemCodeById(id);
+        String itemCode = itemService.queryItemCodeById(id);
         if (IsEmptyUtil.isStringNotEmpty(itemCode)) {
             List<ItemSkuDO> list = itemSkuService.queryByItemCodeAndCompanyNo(itemCode, AppUtil.getLoginUserCompanyNo());
             for (ItemSkuDO itemSkuDO : list) {
@@ -554,7 +565,6 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/getDimensionCodeUtil")
-    @ResponseBody
     @Transactional(rollbackFor = BizCommonException.class)
     public Object getDimensionCodeUtil(Long itemId) {
         //logger.info("getDimensionCodeUtil start");
@@ -564,12 +574,12 @@ public class ItemController {
         }
         String companyNo = AppUtil.getLoginUserCompanyNo();
         CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
-        if (null !=  companyDO) {
-    		if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
-    			companyNo = companyDO.getCompanyGroup();
-    		}   		
-    	}
-        
+        if (null != companyDO) {
+            if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
+                companyNo = companyDO.getCompanyGroup();
+            }
+        }
+
         AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
         if (null == appletConfig) {
             return result.buildIsSuccess(false).buildMsg("失败，没有本公司的商城小程序的appid记录");
@@ -592,21 +602,21 @@ public class ItemController {
 
         }
 
-        String itemCode = iItemService.queryItemCodeById(itemId);
+        String itemCode = itemService.queryItemCodeById(itemId);
         if (IsEmptyUtil.isStringEmpty(itemCode)) {
             return result.buildIsSuccess(false).buildMsg("失败，商品已被删除");
         }
-        String picUrl = iItemService.insertIntoItemDimension(itemCode, "pages/item/detail", token);
+        String picUrl = itemService.insertIntoItemDimension(itemCode, "pages/item/detail", token);
         if (StringUtil.isNotBlank(picUrl)) {
             if (itemId != null) {
                 //System.out.println(picUrl);
                 ItemDO item = new ItemDO();
                 item.setId(itemId);
                 item.setQrCodeUrl(picUrl);
-                iItemService.updateByIdSelective(item);
+                itemService.updateByIdSelective(item);
             }
             //更新item_qrcode_url表
-            mapperExt.updatePicUrlByShareNo("item"+itemCode, picUrl);
+            mapperExt.updatePicUrlByShareNo("item" + itemCode, picUrl);
         }
         return result.buildIsSuccess(true);
     }
@@ -614,7 +624,6 @@ public class ItemController {
 
     /**
      * 新增商品同时生成二维码
-     * 
      *
      * @param itemId
      */
@@ -624,14 +633,14 @@ public class ItemController {
         if (IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
             return;
         }
-        
+
         String companyNo = AppUtil.getLoginUserCompanyNo();
         CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
-        if (null !=  companyDO) {
-    		if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
-    			companyNo = companyDO.getCompanyGroup();
-    		}   		
-    	}
+        if (null != companyDO) {
+            if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
+                companyNo = companyDO.getCompanyGroup();
+            }
+        }
         AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
         if (null == appletConfig) {
             return;
@@ -640,7 +649,7 @@ public class ItemController {
         String secret = appletConfig.getSecret();
         String accessToken = appletConfig.getAuthorizerAccessToken();
         String token;
-        if (StringUtil.isBlank(accessToken)){
+        if (StringUtil.isBlank(accessToken)) {
             if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
                 return;
             }
@@ -651,13 +660,13 @@ public class ItemController {
             token = accessToken;
         }
 
-        String picUrl = iItemService.insertIntoItemDimension(itemId.toString(), "pages/item/detail", token);
+        String picUrl = itemService.insertIntoItemDimension(itemId.toString(), "pages/item/detail", token);
         if (StringUtil.isNotBlank(picUrl)) {
             if (itemId != null) {
                 ItemDO item = new ItemDO();
                 item.setId(itemId);
                 item.setQrCodeUrl(picUrl);
-                iItemService.updateByIdSelective(item);
+                itemService.updateByIdSelective(item);
             }
         }
 
@@ -726,14 +735,13 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/improtItem")
-    @ResponseBody
     public Object improtItem(MultipartFile file) {
         JsonResult<Object> result = new JsonResult<>();
         try {
             if (!file.isEmpty()) {
                 // 文件保存路径
                 List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(), file.getOriginalFilename(), 1, 0, 16);
-                iItemService.importItem(list);
+                itemService.importItem(list);
             }
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");

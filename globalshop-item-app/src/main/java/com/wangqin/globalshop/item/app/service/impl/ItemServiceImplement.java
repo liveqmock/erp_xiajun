@@ -75,7 +75,7 @@ public class ItemServiceImplement implements IItemService {
     private IItemSubOrderService orderService;
 
     @Autowired
-	private ItemQrcodeShareDOMapperExt qrcodeShareDOMapperExt;
+    private ItemQrcodeShareDOMapperExt qrcodeShareDOMapperExt;
 
     @Autowired
     private ICountryService countryServiceImpl;
@@ -116,7 +116,7 @@ public class ItemServiceImplement implements IItemService {
         }
         String companyNo = AppUtil.getLoginUserCompanyNo();
         ItemDO newItem = new ItemDO();
-        
+
         //类目处理
         String categoryCode = item.getCategoryCode();
         item.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
@@ -155,10 +155,10 @@ public class ItemServiceImplement implements IItemService {
 
         //上架处理
         try {
-        	ItemUtil.handleShelf(item, newItem);
+            ItemUtil.handleShelf(item, newItem);
         } catch (Exception e) {
-			return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
-		}
+            return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
+        }
 
         newItem.setIsAbroad(item.getIsAbroad());
         newItem.setDetail(item.getDetail());
@@ -169,11 +169,11 @@ public class ItemServiceImplement implements IItemService {
         newItem.setBrandName(item.getBrand());
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
         newItem.setItemName(item.getName());
-        newItem.setIdCard(item.getIdCard().byteValue());       
+        newItem.setIdCard(item.getIdCard().byteValue());
         newItem.setCountry(item.getCountry());
         newItem.setItemCode(itemCode);
         //生成二维码
-        generateQrCode(newItem,companyNo);
+        generateQrCode(newItem, companyNo);
         newItem.setWxisSale(item.getWxisSale().byteValue());
         newItem.setMainPic(item.getMainPic());
         newItem.setCompanyNo(companyNo);
@@ -193,17 +193,17 @@ public class ItemServiceImplement implements IItemService {
 
             itemSku.setItemCode(itemCode);
 
-            /**插入规格信息*/                 
+            /**插入规格信息*/
             if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
-            	ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
-            	setInfo(colorObject, itemSku, itemSku.getColor(), "颜色");
-            	scaleList.add(colorObject);
+                ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
+                setInfo(colorObject, itemSku, itemSku.getColor(), "颜色");
+                scaleList.add(colorObject);
             }
             if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
-            	ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
-            	setInfo(scaleObject, itemSku, itemSku.getScale(), "尺寸");
-            	scaleList.add(scaleObject);
-            }                                 
+                ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
+                setInfo(scaleObject, itemSku, itemSku.getScale(), "尺寸");
+                scaleList.add(scaleObject);
+            }
 
             itemSku.setItemName(newItem.getItemName());
             itemSku.setCategoryName(item.getCategoryName());
@@ -226,8 +226,8 @@ public class ItemServiceImplement implements IItemService {
         itemSkuService.insertBatch(itemSkuList);
         List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
         if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
-        	scaleService.insertBatch(scaleList);
-        }       
+            scaleService.insertBatch(scaleList);
+        }
         invService.outbound(inventoryList);
         insertItemSelective(newItem);
         return result.buildIsSuccess(true).buildMsg("添加商品成功");
@@ -308,10 +308,10 @@ public class ItemServiceImplement implements IItemService {
         if (totalCount != null && totalCount != 0) {
             List<ItemDTO> items = itemDOMapperExt.queryItems(itemQueryVO);
             if (IsEmptyUtil.isCollectionNotEmpty(items)) {
-            	for (ItemDTO item:items) {
-            		Integer salesVolume = orderService.calItemSalesVolume(item.getItemCode(), AppUtil.getLoginUserCompanyNo());
-            		item.setSalesVolume(salesVolume);
-            	}
+                for (ItemDTO item : items) {
+                    Integer salesVolume = orderService.calItemSalesVolume(item.getItemCode(), AppUtil.getLoginUserCompanyNo());
+                    item.setSalesVolume(salesVolume);
+                }
             }
             totalCount = items.size();
             itemResult.buildPage(totalCount, itemQueryVO);
@@ -338,8 +338,8 @@ public class ItemServiceImplement implements IItemService {
             throw new RuntimeException("商品无sku，无法编辑");
         }
         for (ItemSkuQueryVO sku : itemSkus) {
-        	//处理佣金比率
-        	sku.setSkuRateString(ItemUtil.multiplyOneHundred(sku.getSkuRate()));
+            //处理佣金比率
+            sku.setSkuRateString(ItemUtil.multiplyOneHundred(sku.getSkuRate()));
             String skuCode = sku.getSkuCode();
             List<ItemSkuScaleDO> skuScaleList = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(skuCode);
             if (!EasyUtil.isListEmpty(skuScaleList)) {
@@ -410,7 +410,7 @@ public class ItemServiceImplement implements IItemService {
 
         //String picUrl = (String) shareCache.get(key);
 
-        String picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId,companyNo,itemCode);
+        String picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId, companyNo, itemCode);
 
         if (StringUtils.isBlank(picUrl)) {
             UUID uid = UUID.randomUUID();
@@ -418,15 +418,15 @@ public class ItemServiceImplement implements IItemService {
             //ShareTokenEntity tokenEntity = ShareTokenEntity.buildShareToken(userId, companyNo, itemCode, uuid);
             picUrl = insertIntoItemDimension(uuid, pages, accessToken);
 
-			ItemQrcodeShareDO itemQrcodeShareDO = new ItemQrcodeShareDO();
-			itemQrcodeShareDO.setCompanyNo(companyNo);
-			itemQrcodeShareDO.setShareNo(uuid);
-			itemQrcodeShareDO.setItemCode(itemCode);
-			itemQrcodeShareDO.setUserNo(userId);
-			itemQrcodeShareDO.setPicUrl(picUrl);
-			itemQrcodeShareDO.init4NoLogin();
+            ItemQrcodeShareDO itemQrcodeShareDO = new ItemQrcodeShareDO();
+            itemQrcodeShareDO.setCompanyNo(companyNo);
+            itemQrcodeShareDO.setShareNo(uuid);
+            itemQrcodeShareDO.setItemCode(itemCode);
+            itemQrcodeShareDO.setUserNo(userId);
+            itemQrcodeShareDO.setPicUrl(picUrl);
+            itemQrcodeShareDO.init4NoLogin();
 
-			qrcodeShareDOMapperExt.insert(itemQrcodeShareDO);
+            qrcodeShareDOMapperExt.insert(itemQrcodeShareDO);
         }
         return picUrl;
     }
@@ -1061,13 +1061,13 @@ public class ItemServiceImplement implements IItemService {
      *
      * @return
      */
-    private void generateQrCode(ItemDO newItem,String companyNo) {
-    	CompanyDO companyDO = companyDOMapperExt.selectByCompanyNo(companyNo);
-    	if (null !=  companyDO) {
-    		if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
-    			companyNo = companyDO.getCompanyGroup();
-    		}   		
-    	}
+    private void generateQrCode(ItemDO newItem, String companyNo) {
+        CompanyDO companyDO = companyDOMapperExt.selectByCompanyNo(companyNo);
+        if (null != companyDO) {
+            if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
+                companyNo = companyDO.getCompanyGroup();
+            }
+        }
         AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
         if (null == appletConfig) {
             return;
@@ -1077,33 +1077,50 @@ public class ItemServiceImplement implements IItemService {
         String accessToken = appletConfig.getAuthorizerAccessToken();
         String token = "";
         if (IsEmptyUtil.isStringNotEmpty(accessToken)) {
-        	token = accessToken;
+            token = accessToken;
         } else {
-        	if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
+            if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
                 return;
             }
             String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART + appId + ACCESS_TOKEN_MI + secret);
             JSONObject myJson = JSONObject.fromObject(reponse);
             token = (String) myJson.get("access_token");
-        }       
-        String uuid = "item"+newItem.getItemCode();
+        }
+        String uuid = "item" + newItem.getItemCode();
         String picUrl = insertIntoItemDimension(uuid, "pages/item/detail", token);
         if (IsEmptyUtil.isStringNotEmpty(picUrl)) {
-        	newItem.setQrCodeUrl(picUrl);
-        	//插入item_qrcode_share表
+            newItem.setQrCodeUrl(picUrl);
+            //插入item_qrcode_share表
             ItemQrcodeShareDO shareDO = new ItemQrcodeShareDO();
             String currentUserNo = AppUtil.getLoginUserId();
             shareDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-            
+
             shareDO.setShareNo(uuid);
             shareDO.setCreator(currentUserNo);
             shareDO.setModifier(currentUserNo);
             shareDO.setItemCode(newItem.getItemCode());
-            shareDO.setPicUrl(picUrl);          
+            shareDO.setPicUrl(picUrl);
 //            shareDO.setUserNo(currentUserNo);
             qrcodeShareDOMapperExt.insertSelective(shareDO);
         }
-       
+
     }
 
+    @Override
+    public List<ItemDTO> listItems(ItemQuery2VO itemQueryVO, PageQueryParam pageQueryParam) {
+        pageQueryParam.calculateRowIndex();
+        List<ItemDTO> items = itemDOMapperExt.listItems(itemQueryVO, pageQueryParam);
+        if (IsEmptyUtil.isCollectionNotEmpty(items)) {
+            for (ItemDTO item : items) {
+                Integer salesVolume = orderService.calItemSalesVolume(item.getItemCode(), AppUtil.getLoginUserCompanyNo());
+                item.setSalesVolume(salesVolume);
+            }
+        }
+        return items;
+    }
+
+    @Override
+    public int countItems(ItemQuery2VO itemQueryVO) {
+        return itemDOMapperExt.countItems(itemQueryVO);
+    }
 }

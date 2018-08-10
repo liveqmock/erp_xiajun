@@ -25,20 +25,21 @@
         T1.wxis_sale AS wxisSale       
     </sql>
 
-	<!--定时任务，扫描自定义上架时间的商品-->
-    <select id="queryItemSelfDefineTime" resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap" 
-    parameterType="java.lang.Integer">
- 		SELECT
-		<include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List" />
- 	    FROM
- 	    `item`
- 	    WHERE
- 	    shelf_method=#{shelfMethod}
- 	    AND 
- 	    is_del is false
- 	</select>
- 	
- 	<!--定时任务，更新商品状态为可售，同时上架该商品-->
+    <!--定时任务，扫描自定义上架时间的商品-->
+    <select id="queryItemSelfDefineTime"
+            resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap"
+            parameterType="java.lang.Integer">
+        SELECT
+        <include refid="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.Base_Column_List"/>
+        FROM
+        `item`
+        WHERE
+        shelf_method=#{shelfMethod}
+        AND
+        is_del is false
+    </select>
+
+    <!--定时任务，更新商品状态为可售，同时上架该商品-->
     <select id="updateItemIsSaleAndStatus">
  		UPDATE
  		`item`
@@ -48,8 +49,8 @@
 		WHERE
 		item_code=#{itemCode}
  	</select>
- 	
- 	
+
+
     <!--通过item_code查询item-->
     <select id="queryItemDOByItemCode" parameterType="java.lang.String"
             resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
@@ -165,12 +166,12 @@
             <if test="isSale != null">
                 is_sale,
             </if>
-            <if test="saleOnYouzan != null" >
-        		sale_on_youzan,
-      		</if>
-      		<if test="thirdSale != null" >
-        		third_sale,
-      		</if>
+            <if test="saleOnYouzan != null">
+                sale_on_youzan,
+            </if>
+            <if test="thirdSale != null">
+                third_sale,
+            </if>
             <if test="wxisSale != null">
                 wxis_sale,
             </if>
@@ -293,12 +294,12 @@
             <if test="isSale != null">
                 #{isSale,jdbcType=TINYINT},
             </if>
-            <if test="saleOnYouzan != null" >
-        		#{saleOnYouzan,jdbcType=INTEGER},
-      		</if>
-      		<if test="thirdSale != null" >
-        		#{thirdSale,jdbcType=INTEGER},
-      		</if>
+            <if test="saleOnYouzan != null">
+                #{saleOnYouzan,jdbcType=INTEGER},
+            </if>
+            <if test="thirdSale != null">
+                #{thirdSale,jdbcType=INTEGER},
+            </if>
             <if test="wxisSale != null">
                 #{wxisSale,jdbcType=TINYINT},
             </if>
@@ -464,11 +465,11 @@
                     `remark` = #{remark},
                 </if>
                 <if test="isAbroad != null">
-                	is_abroad = #{isAbroad},
-            	</if>
-            	<if test="shelfMethod != null">
-                	shelf_method = #{shelfMethod},
-            	</if>
+                    is_abroad = #{isAbroad},
+                </if>
+                <if test="shelfMethod != null">
+                    shelf_method = #{shelfMethod},
+                </if>
             </trim>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -493,7 +494,7 @@
             and T1.company_no = #{companyNo}
         </if>
         <if test=" categoryCode != null and categoryCode != '' ">
-          	and  T1.category_code = #{categoryCode}
+            and T1.category_code = #{categoryCode}
         </if>
         <if test=" status != null ">
             and T1.status = #{status}
@@ -518,7 +519,7 @@
         item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         WHERE
         T1.is_del is false
-         <if test=" name != null and name != '' ">
+        <if test=" name != null and name != '' ">
             and T1.item_name LIKE concat('%',#{name},'%')
         </if>
         <if test=" itemCode != null and itemCode != '' ">
@@ -528,7 +529,7 @@
             and T1.company_no = #{companyNo}
         </if>
         <if test=" categoryCode != null and categoryCode != '' ">
-          	and  T1.category_code = #{categoryCode}
+            and T1.category_code = #{categoryCode}
         </if>
         <if test=" status != null ">
             and T1.status = #{status}
@@ -546,7 +547,8 @@
 
 
     <!-- 根据id查询单个商品，修改时使用(fin) -->
-    <select id="queryItemById" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO" parameterType="java.lang.Long">
+    <select id="queryItemById" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO"
+            parameterType="java.lang.Long">
         SELECT
         <include refid="Base_Column_List_2"/>
         FROM
@@ -1032,4 +1034,68 @@
 
     </update>
 
+    <!-- 根据指定条件分页查询商品 -->
+    <select id="listItems" resultType="com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO">
+        SELECT
+        <include refid="Base_Column_List_2"/>,
+        IFNULL(sum(IFNULL(T3.inv,0)),0) AS inventory,
+        IFNULL(sum(IFNULL(T3.virtual_inv,0)),0) AS virtualInv
+        FROM
+        item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
+        <where>
+            T1.company_no = #{itemQueryVO.companyNo}
+            AND T1.is_del = 0
+            <if test="itemQueryVO.itemCode != null">
+                and T1.item_code = #{itemQueryVO.itemCode}
+            </if>
+            <if test="itemQueryVO.name != null">
+                AND T1.item_name LIKE concat('%',#{itemQueryVO.name},'%')
+            </if>
+            <if test="itemQueryVO.categoryCode != null">
+                AND T1.category_code = #{itemQueryVO.categoryCode}
+            </if>
+            <if test="itemQueryVO.startTime != null">
+                AND T1.start_date &gt;= #{itemQueryVO.startTime}
+            </if>
+            <if test="itemQueryVO.endTime != null">
+                AND T1.end_date &lt;= #{itemQueryVO.endTime}
+            </if>
+            <if test="itemQueryVO.status != null ">
+                AND T1.status = #{itemQueryVO.status}
+            </if>
+        </where>
+        GROUP BY T3.item_code
+        ORDER BY T1.gmt_modify DESC
+        <if test="pageQueryParam.rowIndex != null and pageQueryParam.pageSize != null">
+            LIMIT #{pageQueryParam.rowIndex},#{pageQueryParam.pageSize}
+        </if>
+    </select>
+    <!-- 根据指定条件查询商品数目 -->
+    <select id="countItems" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
+        <where>
+            T1.company_no = #{itemQueryVO.companyNo}
+            AND T1.is_del = 0
+            <if test="itemQueryVO.itemCode != null">
+                and T1.item_code = #{itemQueryVO.itemCode}
+            </if>
+            <if test="itemQueryVO.name != null">
+                AND T1.item_name LIKE concat('%',#{itemQueryVO.name},'%')
+            </if>
+            <if test="itemQueryVO.categoryCode != null">
+                AND T1.category_code = #{itemQueryVO.categoryCode}
+            </if>
+            <if test="itemQueryVO.startTime != null">
+                AND T1.start_date &gt;= #{itemQueryVO.startTime}
+            </if>
+            <if test="itemQueryVO.endTime != null">
+                AND T1.end_date &lt;= #{itemQueryVO.endTime}
+            </if>
+            <if test="itemQueryVO.status != null ">
+                AND T1.status = #{itemQueryVO.status}
+            </if>
+        </where>
+    </select>
 </mapper>
