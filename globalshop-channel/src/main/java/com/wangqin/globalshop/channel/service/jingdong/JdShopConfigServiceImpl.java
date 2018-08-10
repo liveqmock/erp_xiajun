@@ -116,6 +116,7 @@ public class JdShopConfigServiceImpl implements JdShopConfigService {
 			existShopConfig.setGmtCreate(new Date());
 			existShopConfig.setVersion(0L);
 			existShopConfig.setIsDel(false);
+			existShopConfig.init4NoLogin();
 			jdShopConfigDOMapperExt.insertSelective(existShopConfig);
 		}
 

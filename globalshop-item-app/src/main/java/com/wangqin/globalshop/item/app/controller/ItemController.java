@@ -213,13 +213,36 @@ public class ItemController {
                             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
                         }
                     }
-                    //再更新规格
-                    if (IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {
-                        scaleService.updateSkuScaleBySkuCodeAndScaleName(skuCode, "颜色", updateSku.getColor());
-                    }
-                    if (IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {
-                        scaleService.updateSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸", updateSku.getScale());
-                    }
+                    //再更新规格，先删除后插入
+                    scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
+            		if (IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {            			
+            			ItemSkuScaleDO colorScale = new ItemSkuScaleDO();
+            			String userNo = AppUtil.getLoginUserId();
+            			colorScale.setCompanyNo(companyNo);
+            			colorScale.setCreator(userNo);
+            			colorScale.setModifier(userNo);
+            			colorScale.setItemCode(itemCode);
+            			colorScale.setScaleCode(CodeGenUtil.getScaleCode());
+            			colorScale.setScaleValue(updateSku.getColor());
+            			colorScale.setScaleName("颜色");
+            			colorScale.setSkuCode(skuCode);
+            			scaleService.insertSelective(colorScale);
+            		}
+            		scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
+            		if (IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {            			
+            			ItemSkuScaleDO scale = new ItemSkuScaleDO();
+            			String userNo = AppUtil.getLoginUserId();
+            			scale.setCompanyNo(companyNo);
+            			scale.setCreator(userNo);
+            			scale.setModifier(userNo);
+            			scale.setItemCode(itemCode);
+            			scale.setScaleCode(CodeGenUtil.getScaleCode());
+            			scale.setScaleValue(updateSku.getScale());
+            			scale.setScaleName("尺寸");
+            			scale.setSkuCode(skuCode);
+            			scaleService.insertSelective(scale);
+            		}
+                 
 
 
                     //最后更新其他的sku项目
@@ -486,13 +509,13 @@ public class ItemController {
         }
         JsonPageResult<List<ItemDTO>> result = iItemService.queryItems(itemQueryVO);
         //计算销量
-        List<ItemDTO> itemList = result.getData();
-        if (IsEmptyUtil.isCollectionNotEmpty(itemList)) {
-        	for (ItemDTO item:itemList) {
-        		Integer salesVolume = orderService.calItemSalesVolume(item.getItemCode(), companyNo);
-        		item.setSalesVolume(salesVolume);
-        	}
-        }
+//        List<ItemDTO> itemList = result.getData();
+//        if (IsEmptyUtil.isCollectionNotEmpty(itemList)) {
+//        	for (ItemDTO item:itemList) {
+//        		Integer salesVolume = orderService.calItemSalesVolume(item.getItemCode(), companyNo);
+//        		item.setSalesVolume(salesVolume);
+//        	}
+//        }
         jsonResult.setTotal(result.getTotalCount());
         jsonResult.setRows(result.getData());
         return jsonResult.buildIsSuccess(true);
@@ -583,7 +606,7 @@ public class ItemController {
                 iItemService.updateByIdSelective(item);
             }
             //更新item_qrcode_url表
-            mapperExt.updatePicUrlByShareNo("item="+itemCode, picUrl);
+            mapperExt.updatePicUrlByShareNo("item"+itemCode, picUrl);
         }
         return result.buildIsSuccess(true);
     }

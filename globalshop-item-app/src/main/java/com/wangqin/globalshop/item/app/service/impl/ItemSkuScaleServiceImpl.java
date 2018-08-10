@@ -49,4 +49,9 @@ public class ItemSkuScaleServiceImpl implements IItemSkuScaleService {
     public void deleteItemSkuScaleBySkuCodeAndScaleName(String skuCode, String scaleName) {
         itemSkuScaleMapperExt.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, scaleName);
     }
+    
+    @Override
+    public void insertSelective(ItemSkuScaleDO scale) {
+    	itemSkuScaleMapperExt.insertSelective(scale);
+    }
 }
