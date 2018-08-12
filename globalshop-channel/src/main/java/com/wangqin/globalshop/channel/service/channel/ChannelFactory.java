@@ -28,7 +28,7 @@ public class ChannelFactory {
             	ChannelType type = channelAnno.type();
             	
             	try {
-            		Constructor<?> constructor = clazz.getConstructor(ChannelAccountDO.class);
+            		Constructor<?> constructor = clazz.getConstructor(JdShopOauthDO.class);
             		constructorMap.put(type.getValue(), constructor);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -99,34 +99,34 @@ public class ChannelFactory {
 	 * @return
 	 * @throws Exception
 	 */
-	@Deprecated
-	synchronized static public IChannelService getChannel(String companyNo, ChannelType channelType) throws Exception {
-		String keyStr = companyNo + "_" + channelType ;
-		IChannelService service = channelMap.get(keyStr);
-		if (service != null) {
-			return service;
-		}
-		Constructor<?> constructor = constructorMap.get(channelType.getValue());
-		if (constructor == null) {
-			throw new Exception("找不到构造函数!! companyNo: " + companyNo + " , channel: " + channelType.getName());
-		}
-		IChannelAccountService channelAccountService = SpringUtils.getBean(IChannelAccountService.class);
-		ChannelAccountSo tmEntity = new ChannelAccountSo();
-		tmEntity.setCompanyNo(companyNo);
-		tmEntity.setType(channelType.getValue());
-		ChannelAccountDO selectEntity = channelAccountService.queryPo(tmEntity);
-		if(selectEntity != null) {
-			service = (IChannelService)constructor.newInstance(selectEntity);
-		}else {
-			throw new Exception("无对应渠道 " + companyNo + " , channel: " + channelType.getName());
-		}
-
-		if (service != null) {
-			channelMap.put(keyStr, service);
-		}
-
-		return service;
-	}
+//	@Deprecated
+//	synchronized static public IChannelService getChannel(String companyNo, ChannelType channelType) throws Exception {
+//		String keyStr = companyNo + "_" + channelType ;
+//		IChannelService service = channelMap.get(keyStr);
+//		if (service != null) {
+//			return service;
+//		}
+//		Constructor<?> constructor = constructorMap.get(channelType.getValue());
+//		if (constructor == null) {
+//			throw new Exception("找不到构造函数!! companyNo: " + companyNo + " , channel: " + channelType.getName());
+//		}
+//		IChannelAccountService channelAccountService = SpringUtils.getBean(IChannelAccountService.class);
+//		ChannelAccountSo tmEntity = new ChannelAccountSo();
+//		tmEntity.setCompanyNo(companyNo);
+//		tmEntity.setType(channelType.getValue());
+//		ChannelAccountDO selectEntity = channelAccountService.queryPo(tmEntity);
+//		if(selectEntity != null) {
+//			service = (IChannelService)constructor.newInstance(selectEntity);
+//		}else {
+//			throw new Exception("无对应渠道 " + companyNo + " , channel: " + channelType.getName());
+//		}
+//
+//		if (service != null) {
+//			channelMap.put(keyStr, service);
+//		}
+//
+//		return service;
+//	}
 
 
 }

@@ -119,7 +119,7 @@ public class YouzanOauthController extends BaseController {
 		shopOauth.setGmtModify(new Date());//授权时间
 		shopOauth.setExpiresTime(new Date(System.currentTimeMillis() + oauthResponse.getExpires_in() * 1000));//测试token时效1天，生产1年
 		shopOauth.setRefreshToken(oauthResponse.getRefresh_token());
-
+        shopOauth.setOpen(true);
 		shopOauth.setServerUrl(youzan_server_url);
 		shopOauth.setAppKey(youzan_client_id);
 		shopOauth.setAppsecretKey(youzan_client_secret);
@@ -134,7 +134,7 @@ public class YouzanOauthController extends BaseController {
 		channelShop.setShopName(shopGetResult.getName());
 		channelShop.setExpiresTime(shopOauth.getExpiresTime());
 		channelShop.setProxyUrl(shopGetResult.getLogo());
-
+		channelShop.setOpen(true);
 		try {
 			transactionTemplate.execute(new TransactionCallback<Boolean>() {
 				@Override

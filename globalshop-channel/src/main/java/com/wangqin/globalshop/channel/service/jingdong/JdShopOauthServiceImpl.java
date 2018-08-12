@@ -91,6 +91,7 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 			jdShopOauthDO.setIsDel(false);
 			jdShopOauthDO.setVersion(0L);
 			jdShopOauthDO.init4NoLogin();
+			jdShopOauthDO.setOpen(true);
 			jdShopOauthDOMapperExt.insert(jdShopOauthDO);
 		}else {
 			existShopOauth.setAccessToken(jdShopOauthDO.getAccessToken());

@@ -18,6 +18,7 @@ import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.youzan.open.sdk.client.auth.Token;
 import com.youzan.open.sdk.client.core.DefaultYZClient;
+import com.youzan.open.sdk.client.core.YZClient;
 import com.youzan.open.sdk.gen.v3_0_0.api.*;
 import com.youzan.open.sdk.gen.v3_0_0.model.*;
 import com.youzan.open.sdk.gen.v3_0_0.model.YouzanItemCreateResult.ItemSkuOpenModel;
@@ -715,6 +716,46 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
     @Override
     public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws Exception {
     }
+
+
+	/**
+	 * 只能查询在售商品
+	 * @param startTime
+	 * @param endTime
+	 */
+	public void getItems(Date startTime, Date endTime){
+
+
+
+
+
+		boolean hasNext = true;
+		Long pageNo = 1L;
+		Long pageSize = 10L;
+
+
+		YouzanItemsOnsaleGetParams youzanItemsOnsaleGetParams = new YouzanItemsOnsaleGetParams();
+
+		youzanItemsOnsaleGetParams.setPageSize(pageSize);
+		YouzanItemsOnsaleGet youzanItemsOnsaleGet = new YouzanItemsOnsaleGet();
+		while(hasNext){
+			youzanItemsOnsaleGetParams.setPageNo(pageNo);
+			youzanItemsOnsaleGet.setAPIParams(youzanItemsOnsaleGetParams);
+			YouzanItemsOnsaleGetResult result = yzClient.invoke(youzanItemsOnsaleGet);
+
+			if(result.getCount() == null || result.getCount() <= pageNo*pageSize){
+				hasNext = false;
+			}else{
+				hasNext = true;
+				pageNo++;
+			}
+
+            // 处理商品转换问题
+
+			// 处理插入item， channel_item 问题
+		}
+
+	}
 
 
     @Override

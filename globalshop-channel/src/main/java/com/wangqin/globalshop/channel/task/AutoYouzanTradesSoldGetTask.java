@@ -9,8 +9,8 @@ import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.DateUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ import java.util.List;
 @Component
 public class AutoYouzanTradesSoldGetTask {
 
-    protected Logger       logger = LogManager.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger("AutoYouzanTradesSoldGetTask");
 
     @Autowired
     ICompanyService        companyService;
@@ -43,10 +43,10 @@ public class AutoYouzanTradesSoldGetTask {
 	private final static int internalTime = 30 * 1000;//延后30秒
 
     // 每隔半小时执行一次
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void run() {
 
-		logger.info("定时任务：自动去京东下载订单===>Start");
+		logger.info("定时任务：自动去有赞下载订单===>Start");
 		Long startTime = System.currentTimeMillis();
 
 		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
@@ -80,22 +80,15 @@ public class AutoYouzanTradesSoldGetTask {
 			Boolean success = true;
 
 			try {
-				try {
-					channelCommonService.getOrders(shopOauth.getShopCode(),beginTime,endTime);
-					shopCount++;
-				} catch (Exception e) {
-					logger.error("get youzan orders error, shopCode: " + shopOauth.getShopCode(), e);
-				}
-
+				channelCommonService.getOrders(shopOauth.getShopCode(),beginTime,endTime);
 				shopCount++;
 			} catch (ErpCommonException e) {
 				success = false;
-				logger.error("JdGetOrdersTask error:",e);
+				logger.error("AutoYouzanTradesSoldGetTask error:",e);
 			} catch (Exception e) {
 				success = false;
-				logger.error("get jingdong orders error, shopCode: " + shopOauth.getShopCode(), e);
+				logger.error("get youzan orders error, shopCode: " + shopOauth.getShopCode(), e);
 			}
-
 			if(success){
 				String endValue = DateUtil.convertDate2Str(endTime,DateUtil.formateStr19);
 				jdShopConfigDO.setConfigValue(endValue);
@@ -103,6 +96,6 @@ public class AutoYouzanTradesSoldGetTask {
 			}
 		}
 		Long endTime = System.currentTimeMillis();
-		logger.info("定时任务：自动去京东下载订单===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
+		logger.info("定时任务：自动去有赞下载订单===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
     }
 }

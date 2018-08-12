@@ -12,6 +12,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
+import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
+import com.wangqin.globalshop.common.utils.EasyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,6 +30,10 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/haihuPushMessage")
 public class HaihuPushMessageController extends BaseController {
+
+	@Autowired
+	private JdShopOauthService shopOauthService;
+
 	/**
 	 *  海狐推送订单
 	 * @param request
@@ -35,16 +43,22 @@ public class HaihuPushMessageController extends BaseController {
 	@RequestMapping(value = "/haihupullOrder*")
 	public void pullOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setChannelNo(ChannelType.HaiHu.getValue()+"");
+		List<JdShopOauthDO> shopOauthDOList = shopOauthService.searchShopOauthList(shopOauthSo);
 
-
-
-
-		try {
-			ChannelFactory.getChannel("1", ChannelType.HaiHu).syncOrder(request, response);
-		} catch (Exception e) {
-			response.getWriter().print("系统异常");
-			logger.error("haihupullOrder* 异常" + request.getRequestURI(), e);
+		if(!EasyUtil.isListEmpty(shopOauthDOList) && shopOauthDOList.size() ==1){
+			try {
+				ChannelFactory.getChannel(shopOauthDOList.get(0)).syncOrder(request, response);
+			} catch (Exception e) {
+				response.getWriter().print("系统异常");
+				logger.error("haihupullOrder* 异常" + request.getRequestURI(), e);
+			}
+			return;
 		}
+		logger.error("channel_shop_error","海狐渠道未配置账号");
+
+
 	}
 	
 	/*
@@ -52,8 +66,14 @@ public class HaihuPushMessageController extends BaseController {
 	 */
 	@RequestMapping(value = "/queryHaiHuItem")
 	public void callback(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setChannelNo(ChannelType.HaiHu.getValue()+"");
+		List<JdShopOauthDO> shopOauthDOList = shopOauthService.searchShopOauthList(shopOauthSo);
+
+
 		try {
-			ChannelFactory.getChannel("1", ChannelType.HaiHu).syncItem(request, response);
+			ChannelFactory.getChannel(shopOauthDOList.get(0)).syncItem(request, response);
 		} catch (Exception e) {
 			response.getWriter().print("系统异常");
 			logger.error("queryHaiHuItem 异常", e);

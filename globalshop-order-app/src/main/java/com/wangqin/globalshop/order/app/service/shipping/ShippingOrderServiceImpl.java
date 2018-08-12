@@ -419,10 +419,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         // 通知渠道发货
         try {
             MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
-            ChannelFactory
-                    .getChannel(ShiroUtil.getShiroUser().getCompanyNo(),
-                            ChannelType.getChannelType(outerOrder.getPayType()))
-                    .syncLogisticsOnlineConfirm(erpOrderList, shippingOrder);
+            channelCommonService.syncLogistics2Channel(erpOrderList, shippingOrder);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
