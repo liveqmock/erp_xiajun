@@ -13,6 +13,7 @@ import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -395,7 +396,12 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 
 	@Override
 	public void getOrders(Date startTime, Date endTime){
-		return;
+		throw new ErpCommonException("method error","暂不支持");
+	}
+
+	@Override
+	public void getItems(Date startTime, Date endTime){
+		throw new ErpCommonException("method error","暂不支持");
 	}
 
 }

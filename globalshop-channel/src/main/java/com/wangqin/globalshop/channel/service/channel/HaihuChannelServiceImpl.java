@@ -9,6 +9,7 @@ import com.wangqin.globalshop.biz1.app.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.dal.youzan.PicModel;
@@ -480,8 +481,15 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 		}
 	}
 
+
+
 	@Override
 	public void getOrders(Date startTime, Date endTime){
-		return;
+		throw new ErpCommonException("method error","暂不支持");
+	}
+
+	@Override
+	public void getItems(Date startTime, Date endTime){
+		throw new ErpCommonException("method error","暂不支持");
 	}
 }

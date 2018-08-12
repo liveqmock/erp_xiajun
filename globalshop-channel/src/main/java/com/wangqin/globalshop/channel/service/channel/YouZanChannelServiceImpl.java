@@ -12,6 +12,7 @@ import com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGet;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
@@ -27,8 +28,11 @@ import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.entity.ContentType;
+import org.apache.xerces.dom.PSVIAttrNSImpl;
 import org.eclipse.jetty.util.StringUtil;
 import org.eclipse.jetty.util.security.Credential.MD5;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,9 +49,13 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
     private DefaultYZClient yzClient = null;
     private static final int mode = 1; // 服务商
 
-    private Map<String, Long> expressMap = null;
+	private static Logger logger = LoggerFactory.getLogger("YouZanChannelServiceImpl");
+
+
+	private Map<String, Long> expressMap = null;
 
     static Map<String, String> localExpressMap = new HashMap<String, String>();
+
 
     // 暂时硬编码
     static {
@@ -719,25 +727,27 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 
 
 	/**
-	 * 只能查询在售商品
+	 * 只能查询在售商品,目前没看到有更新时间这个参数，暂时查全部在售商品,那么30分钟抓一次好了
 	 * @param startTime
 	 * @param endTime
 	 */
+	@Override
 	public void getItems(Date startTime, Date endTime){
 
 
 
-
-
-		boolean hasNext = true;
+		Boolean hasNext = true;
 		Long pageNo = 1L;
 		Long pageSize = 10L;
 
 
 		YouzanItemsOnsaleGetParams youzanItemsOnsaleGetParams = new YouzanItemsOnsaleGetParams();
-
 		youzanItemsOnsaleGetParams.setPageSize(pageSize);
+		//youzanItemsOnsaleGetParams.setUpdateTimeStart(startTime.getTime());
+		//youzanItemsOnsaleGetParams.setUpdateTimeEnd(endTime.getTime());
 		YouzanItemsOnsaleGet youzanItemsOnsaleGet = new YouzanItemsOnsaleGet();
+
+
 		while(hasNext){
 			youzanItemsOnsaleGetParams.setPageNo(pageNo);
 			youzanItemsOnsaleGet.setAPIParams(youzanItemsOnsaleGetParams);
@@ -749,14 +759,148 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 				hasNext = true;
 				pageNo++;
 			}
-
+            logger.info("抓到的商品信息: "+BaseDto.toString(result));
             // 处理商品转换问题
-
+			YouzanItemsOnsaleGetResult.ItemListOpenModel[] items = result.getItems();
+			for (int i = 0; i < items.length; i++) {
+				this.createOrupdateItem(items[i]);
+			}
 			// 处理插入item， channel_item 问题
 		}
 
 	}
+	/**
+	 * 有赞这个神经病，一个item，只有一个sku
+	 * @param youzanItem
+	 */
+	private void createOrupdateItem(YouzanItemsOnsaleGetResult.ItemListOpenModel youzanItem){
 
+		YouzanItemGetResult.ItemDetailOpenModel youzanItemSku = getItemSkus(youzanItem.getItemId());
+
+
+
+		//分别操作4张表，channel_list_item
+
+		ChannelListingItemDO channelItem = new ChannelListingItemDO();
+		channelItem.setChannelNo(shopOauth.getChannelNo());
+		channelItem.setCompanyNo(shopOauth.getCompanyNo());
+		channelItem.setShopCode(shopOauth.getShopCode());
+
+		channelItem.setChannelItemCode(youzanItem.getItemId()+"");
+		channelItem.setItemCode(youzanItem.getItemNo());
+		channelItem.setChannelItemAlias(youzanItem.getTitle());
+		channelItem.setStatus(ListingStatus.LISTING_STATUS.getStatus());
+
+		channelItem.init4NoLogin();
+
+		//item
+		ItemDO itemDO = new ItemDO();
+//		itemCode;
+//		companyNo;
+//		categoryCode;
+//		qrCodeUrl;
+//		video;
+//		subtitle;
+//		itemName;
+//		enName;
+//		itemShort;
+//		categoryName;
+//		saleType;
+//		mainPic;
+//		brandNo;
+//		brandName;
+//		country;
+//		currency;
+//		origin;
+//		freight;
+//		weight;
+//		logisticType;
+//		priceRange;
+//		unit;
+//		source;
+//		promotion;
+//		idCard;
+//		startDate;
+//		endDate;
+//		bookingDate;
+//		isSale;
+//		saleOnYouzan;
+//		thirdSale;
+//		wxisSale;
+//		isFind;
+//		status;
+//		spec;
+//		model;
+//		buyerOpenId;
+//		originSalePrice;
+//		commissionMode;
+//		modifier;
+//		creator;
+//		commissionRate;
+//		isAbroad;
+//		shelfMethod;
+//		remark;
+//		detail;
+
+
+
+		//chanenle_list_item_sku
+
+
+
+		//item_sku
+
+
+	}
+	/**
+	 * 根据tbspuid获取单个sku的信息
+	 * @param channnelItemCode
+	 * @return
+	 */
+	private YouzanItemGetResult.ItemDetailOpenModel getItemSkus(Long channnelItemCode){
+		YouzanItemGetParams youzanItemGetParams = new YouzanItemGetParams();
+
+		youzanItemGetParams.setItemId(channnelItemCode);
+
+		YouzanItemGet youzanItemGet = new YouzanItemGet();
+		youzanItemGet.setAPIParams(youzanItemGetParams);
+		YouzanItemGetResult result = yzClient.invoke(youzanItemGet);
+		logger.info("商品详情："+channnelItemCode+" "+BaseDto.toString(result));
+		return result.getItem();
+	}
+
+
+	public static void main(String[] args) {
+		String token = "18b72d595a023badbb2867d7e4490a73";
+
+		Long start = 1534048291389L;
+
+		Long end = 1533863772000L;
+
+		DefaultYZClient yzClient = new DefaultYZClient(new Token(token));
+
+		Boolean hasNext = true;
+		Long pageNo = 1L;
+		Long pageSize = 10L;
+
+
+		YouzanItemsOnsaleGetParams youzanItemsOnsaleGetParams = new YouzanItemsOnsaleGetParams();
+
+		youzanItemsOnsaleGetParams.setPageSize(pageSize);
+
+
+		//youzanItemsOnsaleGetParams.setUpdateTimeStart(start);
+		//youzanItemsOnsaleGetParams.setUpdateTimeEnd(end);
+
+
+		YouzanItemsOnsaleGet youzanItemsOnsaleGet = new YouzanItemsOnsaleGet();
+
+		youzanItemsOnsaleGetParams.setPageNo(pageNo);
+		youzanItemsOnsaleGet.setAPIParams(youzanItemsOnsaleGetParams);
+		YouzanItemsOnsaleGetResult result = yzClient.invoke(youzanItemsOnsaleGet);
+		System.out.println("success");
+
+	}
 
     @Override
 	public void getOrders(Date startTime, Date endTime){

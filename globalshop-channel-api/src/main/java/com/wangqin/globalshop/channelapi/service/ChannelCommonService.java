@@ -38,6 +38,10 @@ public interface ChannelCommonService {
 	public void getOrders(String shopCode, Date startTime, Date endTime);
 
 
+	public void getItems(String shopCode, Date startTime, Date endTime);
+
+
+
 	//public void syncItem(Long itemId);
 
 	//public void syncItem(HttpServletRequest request, HttpServletResponse respose) throws exception;

@@ -233,4 +233,28 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 		}
 	}
+
+
+	@Override
+	public void getItems(String shopCode, Date startTime, Date endTime){
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setShopCode(shopCode);
+		shopOauthSo.setIsDel(false);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
+
+		if(shopOauth == null){
+			throw new ErpCommonException("shop_error","未找到对应店铺信息shopCode:"+shopCode);
+		}
+		//0正常，1关闭
+		if (!shopOauth.getOpen()) {
+			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+shopCode);
+		}
+
+		try {
+			ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
+		}catch (Exception e){
+			logger.error("",e);
+
+		}
+	}
 }

@@ -4,7 +4,6 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.enums.AccountConfigKey;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.service.company.ICompanyService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopConfigService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
@@ -29,9 +28,6 @@ public class AutoYouzanTradesSoldGetTask {
 	private static Logger logger = LoggerFactory.getLogger("AutoYouzanTradesSoldGetTask");
 
     @Autowired
-    ICompanyService        companyService;
-
-    @Autowired
 	private ChannelCommonService channelCommonService;
 
 	@Autowired
@@ -45,7 +41,7 @@ public class AutoYouzanTradesSoldGetTask {
 	private final static Long startEndMaxInternalDay = 5*24*60*60*1000L;//查询间隔最大5天
 
     // 每隔半小时执行一次
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void run() {
 
 		logger.info("定时任务：自动去有赞下载订单===>Start");

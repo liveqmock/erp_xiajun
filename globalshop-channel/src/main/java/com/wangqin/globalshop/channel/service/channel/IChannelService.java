@@ -44,4 +44,6 @@ public interface IChannelService {
 
 	public void getOrders(Date startTime, Date endTime);
 
+	public void getItems(Date startTime, Date endTime);
+
 }

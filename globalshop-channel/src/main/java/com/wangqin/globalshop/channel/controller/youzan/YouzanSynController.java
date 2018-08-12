@@ -139,7 +139,7 @@ public class YouzanSynController extends BaseController {
 					if(!EasyUtil.isListEmpty(channelShopList)) {
 						for (ChannelShopDO shop : channelShopList){
 							try {
-								channelCommonService.createItem(shop.getShopCode(),item.getId());
+								channelCommonService.syncListingItem(shop.getShopCode(),item.getId());
 							} catch (Exception e) {
 								e.printStackTrace();
 								sb.append("名称:" + item.getItemName() + "商品代码:" + item.getItemCode()  + "店铺【" + shop.getShopCode() + "】未成功上架：" +"未知错误;" + e.toString());
