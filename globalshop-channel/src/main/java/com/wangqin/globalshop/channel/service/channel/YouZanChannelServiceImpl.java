@@ -1011,7 +1011,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
             outerOrderDetails.add(outerOrderDetail);
 
 
-            inventoryService.order(outerOrderDetails);
+            //inventoryService.order(outerOrderDetails);
+
             mallSubOrderService.insertBatch(outerOrderDetails); // 添加子订单
 
             if (outOrderIdList.size() > 0) {

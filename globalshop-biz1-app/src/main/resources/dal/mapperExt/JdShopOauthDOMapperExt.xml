@@ -50,6 +50,10 @@
         and T.expires_time >= #{expiresTime}
     </if>
 
+    <if test="open != null">
+        and T.open = #{open}
+    </if>
+
     <if test="appKey != null">
         and T.app_key = #{appKey}
     </if>

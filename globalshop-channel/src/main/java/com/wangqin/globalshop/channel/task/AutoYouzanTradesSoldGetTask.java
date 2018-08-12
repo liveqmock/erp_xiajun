@@ -42,8 +42,10 @@ public class AutoYouzanTradesSoldGetTask {
 
 	private final static int internalTime = 30 * 1000;//延后30秒
 
+	private final static Long startEndMaxInternalDay = 5*24*60*60*1000L;//查询间隔最大5天
+
     // 每隔半小时执行一次
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void run() {
 
 		logger.info("定时任务：自动去有赞下载订单===>Start");
@@ -51,6 +53,7 @@ public class AutoYouzanTradesSoldGetTask {
 
 		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
 		shopOauthSo.setChannelNo(ChannelType.YouZan.getValue()+"");
+		shopOauthSo.setOpen(true);
 		List<JdShopOauthDO> shopOauthDOList = shopOauthService.searchShopOauthList(shopOauthSo);
 
 		Long shopCount= 0L;
@@ -76,6 +79,14 @@ public class AutoYouzanTradesSoldGetTask {
 			if(beginTime.after(endTime)){
 				break;
 			}
+
+			if(endTime.getTime() - beginTime.getTime() > startEndMaxInternalDay){
+				endTime = new Date(beginTime.getTime()+startEndMaxInternalDay);
+			}
+
+			logger.info("youzan begin time: " + DateUtil.convertDate2Str(beginTime,DateUtil.formateStr19));
+			logger.info("youzan end time: " + DateUtil.convertDate2Str(endTime,DateUtil.formateStr19));
+
 
 			Boolean success = true;
 
