@@ -332,12 +332,17 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
             youzanItemUpdateParams.setSkuStocks(skusWithJson);
         }
         Double minSalePrice = itemSkus.get(0).getSalePrice();
-        for (ItemSkuDO itemSku : itemSkus) {
+        Long totalQuantity= 0L;
+        for (ItemSkuVo itemSku : itemSkus) {
             if (itemSku.getSalePrice() < minSalePrice) {
                 minSalePrice = itemSku.getSalePrice();
             }
+			totalQuantity += itemSku.getTotalAvailableInv();
         }
         youzanItemUpdateParams.setPrice((long) (minSalePrice * 100));
+
+		youzanItemUpdateParams.setQuantity(totalQuantity);
+
         return youzanItemUpdateParams;
     }
 

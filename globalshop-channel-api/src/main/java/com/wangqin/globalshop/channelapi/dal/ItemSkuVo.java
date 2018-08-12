@@ -85,7 +85,9 @@ public class ItemSkuVo extends ItemSkuDO{
 	}
 
 	public Long getTotalAvailableInv(){
-		return  inventoryDO.getInv()-inventoryDO.getLockedInv()+inventoryDO.getTransInv()-inventoryDO.getLockedTransInv();
+		return  inventoryDO.getInv()-inventoryDO.getLockedInv()
+				+inventoryDO.getTransInv()-inventoryDO.getLockedTransInv()
+				+inventoryDO.getVirtualInv()-inventoryDO.getLockedVirtualInv();
 	}
 
 
