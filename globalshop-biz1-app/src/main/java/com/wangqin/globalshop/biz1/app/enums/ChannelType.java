@@ -32,6 +32,15 @@ public enum ChannelType {
 		return null;
 	}
 
+	public static String getChannelName(Integer value){
+		String tmpName = "";
+		ChannelType channelType = getChannelType(value);
+		if(channelType != null){
+			tmpName = channelType.getName();
+		}
+		return tmpName;
+	}
+
 	public int getValue() {
 		return value;
 	}

@@ -141,8 +141,8 @@ public class TaobaoChannelServiceImpl extends AbstractChannelService implements 
 
 		outerOrder.setCompanyNo(shopOauth.getCompanyNo());
 		outerOrder.setChannelNo(shopOauth.getChannelNo());
-		//outerOrder.setChannelName(shopOauth.getChannelName());
-		//outerOrder.setChannelType(shopOauth.getType().toString());
+		outerOrder.setChannelName(ChannelType.getChannelName(Integer.valueOf(shopOauth.getChannelNo())));
+		outerOrder.setChannelType(shopOauth.getChannelNo());
 		outerOrder.setShopCode(shopOauth.getShopCode());
 
 

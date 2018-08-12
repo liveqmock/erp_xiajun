@@ -934,8 +934,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
         MallOrderDO outerOrder = new MallOrderDO();
         outerOrder.setCompanyNo(shopOauth.getCompanyNo());
         outerOrder.setChannelNo(shopOauth.getChannelNo());
-        //outerOrder.setChannelName(shopOauth.getChannelName());
-        //outerOrder.setChannelType(shopOauth.getType().toString());
+        outerOrder.setChannelName(ChannelType.getChannelName(Integer.valueOf(shopOauth.getChannelNo())));
+        outerOrder.setChannelType(shopOauth.getChannelNo());
         outerOrder.setShopCode(shopOauth.getShopCode());
 
         // 有赞平台为01,销售为0000
@@ -953,8 +953,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 
         //邮费
         outerOrder.setFreight(Double.valueOf(TradeDetail.getPostFee()));
-        outerOrder.setTotalAmount(Double.valueOf(TradeDetail.getTotalFee()));
-        outerOrder.setActualAmount(Double.valueOf(TradeDetail.getPayment()));
+        outerOrder.setTotalAmount(TradeDetail.getTotalFee() == null ? 0d : TradeDetail.getTotalFee().doubleValue());
+        outerOrder.setActualAmount(TradeDetail.getPayment() == null ? 0d : TradeDetail.getPayment().doubleValue());
         outerOrder.setMemo(TradeDetail.getBuyerMessage() + TradeDetail.getTradeMemo());
 
         outerOrder.setCreator("有赞推送订单");
@@ -986,6 +986,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
             outerOrderDetail.setQuantity(Integer.parseInt(String.valueOf(tradeOrder.getNum()))); // 购买数量
             outerOrderDetail.setGmtCreate(TradeDetail.getCreated()); // 创建时间
             outerOrderDetail.setGmtModify(TradeDetail.getUpdateTime()); // 修改时间
+
+			outerOrderDetail.setOrderTime(outerOrder.getOrderTime());
 
             outerOrderDetail.setReceiver(TradeDetail.getReceiverName()); // 收货人
             outerOrderDetail.setReceiverState(TradeDetail.getReceiverState()); // 省
