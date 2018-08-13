@@ -147,7 +147,7 @@ public class ItemServiceImpl implements IItemService {
             List<ItemSkuScaleDO> itemSkuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
             Map<String, ItemSkuScaleDO> scaleMap = new HashMap<>();
             for (ItemSkuScaleDO scale : itemSkuScaleDOS) {
-                scaleMap.put(scale.getScaleCode(), scale);
+                scaleMap.put(scale.getScaleName(), scale);
             }
             itemSkuVo.setScaleMap(scaleMap);
 
