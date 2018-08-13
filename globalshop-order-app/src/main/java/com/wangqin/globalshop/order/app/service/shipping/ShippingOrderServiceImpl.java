@@ -17,6 +17,7 @@ import com.wangqin.globalshop.biz1.app.bean.dto.MultiDeliveryFormDTO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.exception.InventoryException;
@@ -60,6 +61,9 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
     private IChannelAccountService iChannelAccountService;
     @Autowired
     private OrderISequenceUtilService sequenceUtilService;
+
+    @Autowired
+	private ChannelCommonService channelCommonService;
 
     @Override
     public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO) {
@@ -250,21 +254,13 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         // 查出outer_order
         MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
         // 通知渠道发货
-        ChannelAccountSo so = new ChannelAccountSo();
-        so.setShopCode(outerOrder.getShopCode());
-        so.setCompanyNo(outerOrder.getCompanyNo());
-        so.setChannelNo(outerOrder.getChannelNo());
 
-        ChannelAccountDO accountDO = iChannelAccountService.queryPo(so);
         try {
-            ChannelFactory
-                    .getChannel(accountDO).syncLogisticsOnlineConfirm(erpOrderList, shippingOrder);
+			channelCommonService.syncLogistics2Channel(erpOrderList, shippingOrder);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-
         return mainIds;
     }
 
@@ -423,10 +419,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         // 通知渠道发货
         try {
             MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
-            ChannelFactory
-                    .getChannel(ShiroUtil.getShiroUser().getCompanyNo(),
-                            ChannelType.getChannelType(outerOrder.getPayType()))
-                    .syncLogisticsOnlineConfirm(erpOrderList, shippingOrder);
+            channelCommonService.syncLogistics2Channel(erpOrderList, shippingOrder);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -2,6 +2,8 @@ package com.wangqin.globalshop.channel.controller.youzan;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
@@ -9,9 +11,13 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
+import com.wangqin.globalshop.channel.service.channel.ChannelShopService;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
+import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
+import com.wangqin.globalshop.channel.service.jingdong.JdShopService;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.common.utils.czh.Util;
@@ -41,7 +47,14 @@ public class YouzanSynController extends BaseController {
 	@Autowired
 	private IItemService itemService;
 
-	@Autowired IChannelAccountService channelAccountService;
+
+	@Autowired
+	private ChannelShopService shopService;
+
+	@Autowired
+	private ChannelCommonService channelCommonService;
+
+
 
 	/**
 	 * 批量同步商品信息到有赞，只能同步新建和上架状态的商品
@@ -55,24 +68,19 @@ public class YouzanSynController extends BaseController {
 		JsonResult<String> result = new JsonResult<>();
 		StringBuilder sb = new StringBuilder();
 		if(!Util.isEmpty(itemIds)){
-			String userNo = AppUtil.getLoginUserId();
-			//String s = itemIds.replace("&quot;", "\"");
-			//List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
-
 			String s = itemIds.replace("&quot;", "\"");
 			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>(){});
+			ChannelShopDO shopSo = new ChannelShopDO();
+			shopSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+			shopSo.setChannelNo(ChannelType.YouZan.getValue()+"");
+			List<ChannelShopDO> channelShopList = shopService.searchShopList(shopSo);
 
-			List<ChannelAccountDO>	channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getLoginUserCompanyNo(),ChannelType.YouZan);
-
-//			if(channelAccountList == null || channelAccountList.size() < 1){
-//				return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
-//			}
-			if(!EasyUtil.isListEmpty(channelAccountList)) {
-			for(ChannelAccountDO channelAccount : channelAccountList){
+			if(!EasyUtil.isListEmpty(channelShopList)) {
+			for(ChannelShopDO shop : channelShopList){
 				for(Long id:idList){
 					try{
 						if(id!=null&&id!=0){
-							ChannelFactory.getChannel(channelAccount).syncItem(id);
+							channelCommonService.createItem(shop.getShopCode(),id);
 						}
 					}catch(ErpCommonException e){
 						sb.append(e.getErrorMsg()+",");
@@ -110,8 +118,10 @@ public class YouzanSynController extends BaseController {
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
 
-				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getLoginUserCompanyNo(),ChannelType.YouZan);
-
+				ChannelShopDO shopSo = new ChannelShopDO();
+				shopSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+				shopSo.setChannelNo(ChannelType.YouZan.getValue()+"");
+				List<ChannelShopDO> channelShopList = shopService.searchShopList(shopSo);
 				
 				for (ItemDO item : items) {
 					//小程序可售则上架
@@ -119,23 +129,20 @@ public class YouzanSynController extends BaseController {
 						item.setStatus(1);						
 					}
 				}
-				
-//				if((channelAccountList == null || channelAccountList.size() < 1)){
-//					return result.buildIsSuccess(false).buildMsg("未找到第三方渠道，不存在或已停用");
-//				}
+
 				for (ItemDO item : items) {					
 					// 更新商品状态
 					item.setStatus(ItemStatus.LISTING.getCode());
 					item.setGmtModify(new Date());
 					ItemVo itemVo = new ItemVo();
 					BeanUtils.copies(item,itemVo);
-					if(!EasyUtil.isListEmpty(channelAccountList)) {
-						for (ChannelAccountDO channelAccount : channelAccountList){
+					if(!EasyUtil.isListEmpty(channelShopList)) {
+						for (ChannelShopDO shop : channelShopList){
 							try {
-								ChannelFactory.getChannel(channelAccount).syncListingItem(itemVo);
+								channelCommonService.syncListingItem(shop.getShopCode(),item.getId());
 							} catch (Exception e) {
 								e.printStackTrace();
-								sb.append("名称:" + item.getItemName() + "商品代码:" + item.getItemCode()  + "店铺【" + channelAccount.getShopCode() + "】未成功上架：" +"未知错误;" + e.toString());
+								sb.append("名称:" + item.getItemName() + "商品代码:" + item.getItemCode()  + "店铺【" + shop.getShopCode() + "】未成功上架：" +"未知错误;" + e.toString());
 							}
 						}
 					}
@@ -170,9 +177,13 @@ public class YouzanSynController extends BaseController {
 			List<Long> idList = HaiJsonUtils.toBean(s, new TypeReference<List<Long>>() {
 			});
 
+			ChannelShopDO shopSo = new ChannelShopDO();
+			shopSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+			shopSo.setChannelNo(ChannelType.YouZan.getValue()+"");
+			List<ChannelShopDO> channelShopList = shopService.searchShopList(shopSo);
+
 			if (CollectionUtils.isNotEmpty(idList)) {
 				List<ItemDO> items = itemService.selectBatchIds(idList);
-				List<ChannelAccountDO> channelAccountList = channelAccountService.searchCAListByComNoChType(AppUtil.getLoginUserCompanyNo(),ChannelType.YouZan);
 
 				for (ItemDO item : items) {
 					//小程序可售则下架
@@ -180,23 +191,20 @@ public class YouzanSynController extends BaseController {
 						item.setStatus(1);						
 					}
 				}
-				
-//                if(channelAccountList == null || channelAccountList.size() < 1){
-//					sb.append("未找到第三方渠道，不存在或已停用");
-//				}
+
 				for (ItemDO item : items) {
 					//更新商品状态
 					item.setStatus(ItemStatus.DELISTING.getCode());
 					item.setGmtModify(new Date());
 					ItemVo itemVo = new ItemVo();
 					BeanUtils.copies(item,itemVo);
-					if(!EasyUtil.isListEmpty(channelAccountList)) {
-						for (ChannelAccountDO channelAccount : channelAccountList){
+					if(!EasyUtil.isListEmpty(channelShopList)) {
+						for (ChannelShopDO shop : channelShopList){
 							try {
 								// 有赞
-								ChannelFactory.getChannel(channelAccount).syncDelistingItem(itemVo);
+								channelCommonService.syncDelistingItem(shop.getShopCode(),item.getId());
 							} catch (Exception e) {
-								sb.append("名称:" + item.getItemName() + "商品代码:" + item.getItemCode() + "在店铺名：" + channelAccount.getShopCode() + "未成功下架："  + ":" + e.toString());
+								sb.append("名称:" + item.getItemName() + "商品代码:" + item.getItemCode() + "在店铺名：" + shop.getShopCode() + "未成功下架："  + ":" + e.toString());
 							}
 						}
 					}					

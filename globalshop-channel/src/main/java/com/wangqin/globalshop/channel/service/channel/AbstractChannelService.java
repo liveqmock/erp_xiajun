@@ -28,7 +28,10 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	protected Logger logger = LogManager.getLogger(getClass());
 	
 	// 平台账号信息
-	protected ChannelAccountDO channelAccount;
+	protected JdShopOauthDO shopOauth;
+
+	// 平台账号信息
+	//protected ChannelAccountDO channelAccount;
 	
 	protected IChannelAccountService channelAccountService = SpringUtils.getBean(IChannelAccountService.class);
 
@@ -50,9 +53,14 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	protected ChannelIShippingOrderService shippingOrderService = SpringUtils.getBean(ChannelIShippingOrderService.class);
 	protected InventoryService inventoryService = SpringUtils.getBean(InventoryService.class);
 
-	public AbstractChannelService(ChannelAccountDO channelAccount) {
-		this.channelAccount = channelAccount;
+//	public AbstractChannelService(ChannelAccountDO channelAccount) {
+//		this.channelAccount = channelAccount;
+//	}
+
+	public AbstractChannelService(JdShopOauthDO shopOauth) {
+		this.shopOauth = shopOauth;
 	}
+
 	protected ISequenceService sequenceUtilService = SpringUtils.getBean(ISequenceService.class);
 
 
@@ -69,8 +77,8 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 	protected void auth() {
 		adapterAuth();
 		// 保存到channel_account中
-		channelAccount.setGmtModify(new Date());
-		channelAccountService.updateByPrimaryKey(channelAccount);
+		//channelAccount.setGmtModify(new Date());
+		//channelAccountService.updateByPrimaryKey(channelAccount);
 	}
 	
 	
@@ -84,7 +92,7 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 		ItemVo item = itemService.queryItem(itemId);
 
 		//0正常，1关闭
-		if (this.channelAccount.getStatus().equals(1)) {
+		if (!this.shopOauth.getOpen()) {
 			return;
 		}
 
@@ -92,7 +100,7 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 		// 查看outerItem是否存在
 		ChannelListingItemDO outerItem = new ChannelListingItemDO();
 		outerItem.setItemCode(item.getItemCode());
-		outerItem.setChannelNo(this.channelAccount.getChannelNo());
+		outerItem.setChannelNo(this.shopOauth.getChannelNo());
 		ChannelListingItemDO selOuterItem = this.outerItemService.queryPo(outerItem);
 		// 未同步过
 		if(selOuterItem == null) {
@@ -104,7 +112,7 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 			for (ChannelListingItemSkuDO sku : adapterData.outerItemSkus) {
 				ChannelListingItemSkuDO outerItemSku = new ChannelListingItemSkuDO();
 				outerItemSku.setSkuCode(sku.getSkuCode());
-				outerItemSku.setPlatformType(this.channelAccount.getType());
+				outerItemSku.setPlatformType(Integer.valueOf(this.shopOauth.getChannelNo()));
 
 				ChannelListingItemSkuDO selOuterItemSku = this.outerItemSkuService.queryPo(outerItemSku);
 				if (selOuterItemSku == null) {
@@ -138,9 +146,9 @@ public abstract class AbstractChannelService implements IChannelService, IChanne
 		}else{
 
 			try {
-				ChannelFactory.getChannel(channelAccount).createItem(item.getId());
+				ChannelFactory.getChannel(shopOauth).createItem(item.getId());
 			}catch (Exception e){
-				logger.error("商品上架时同步到【"+channelAccount.getChannelName()+"】失败,shopCode："+channelAccount.getShopCode(), e);
+				logger.error("商品上架时同步到【"+shopOauth.getChannelNo()+"】失败,shopCode："+shopOauth.getShopCode(), e);
 			}
 
 		}

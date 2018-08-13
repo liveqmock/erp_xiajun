@@ -3,6 +3,7 @@ package com.wangqin.globalshop.channelapi.service;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -17,7 +18,7 @@ import java.util.List;
 public interface ChannelCommonService {
 
 	// 同步商品
-	public void createItem(String companyNo, Long itemId);
+	public void createItem(String shopCode, Long itemId);
 
 	/**
 	 * 发货，支持全部渠道
@@ -27,18 +28,29 @@ public interface ChannelCommonService {
 	void syncLogistics2Channel(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder);
 
 
+	// 上架
+	public void syncListingItem(String shopCode, Long itemId);
+
+	// 下架
+	public void syncDelistingItem(String shopCode, Long itemId);
+
+
+	public void getOrders(String shopCode, Date startTime, Date endTime);
+
+
+	public void getItems(String shopCode, Date startTime, Date endTime);
+
+
 
 	//public void syncItem(Long itemId);
 
 	//public void syncItem(HttpServletRequest request, HttpServletResponse respose) throws exception;
 
-	// 上架
-	//public void syncListingItem(Long itemId);
+
 
 	//public void syncListingItem(ItemVo item);
 
-	// 下架
-	//public void syncDelistingItem(Long itemId);
+
 
 	//public void syncDelistingItem(ItemVo item);
 	// 下架售罄商品
@@ -56,4 +68,7 @@ public interface ChannelCommonService {
 	//public void syncOrder() throws ParseException;
 
 	//public void syncOrder(HttpServletRequest request, HttpServletResponse respose) throws exception;
+
+
+	public void addItem(String shopCode, String itemCode);
 }

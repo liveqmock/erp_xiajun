@@ -9,6 +9,7 @@ import com.wangqin.globalshop.biz1.app.enums.PlatformType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrder;
 import com.wangqin.globalshop.channel.dal.haihu.OuterOrderDetail;
 import com.wangqin.globalshop.channel.dal.youzan.PicModel;
@@ -38,8 +39,8 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 	
 	protected Logger logger = LogManager.getLogger(getClass());
 
-	public HaihuChannelServiceImpl(ChannelAccountDO channelAccount) {
-		super(channelAccount);
+	public HaihuChannelServiceImpl(JdShopOauthDO shopOauth) {
+		super(shopOauth);
 	}
 
 	@Override
@@ -122,7 +123,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 			this.logger.error("海狐签名日期" + timeStamp);
 			this.logger.error("海狐签名标志" + enetr);
 			this.logger.error("海狐签名" + sign);
-			String mysign = Md5Util.getMD5("enteCode=" + channelAccount.getAppValue1() + "&timeStamp=" + timeStamp);
+			String mysign = Md5Util.getMD5("enteCode=" + shopOauth.getAccessToken() + "&timeStamp=" + timeStamp);
 			this.logger.error("我方签名" + mysign);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -187,7 +188,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 						itemSkuMap.put(itemSku.getItemCode(), itemSku);
 					}
 
-					List<ItemSkuVo> itemSkus = itemSkuService.queryItemSkusForItemThirdSale(item.getItemCode(), channelAccount.getShopCode());
+					List<ItemSkuVo> itemSkus = itemSkuService.queryItemSkusForItemThirdSale(item.getItemCode(), shopOauth.getShopCode());
 					if (!itemSkus.isEmpty()) {
 						for (ItemSkuVo itemSku : itemSkus) {
 							itemSkuMap.get(itemSku.getItemCode()).setItemSkuQuantity(itemSku.getItemSkuQuantity());
@@ -348,11 +349,11 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 				outerOrder.setOrderTime(new Date());
 				outerOrder.setStatus(OrderStatus.INIT.getCode());
 
-				outerOrder.setCompanyNo(channelAccount.getCompanyNo());
-				outerOrder.setChannelNo(channelAccount.getChannelNo());
-				outerOrder.setChannelName(channelAccount.getChannelName());
-				outerOrder.setChannelType(channelAccount.getType().toString());
-				outerOrder.setShopCode(channelAccount.getShopCode());
+				outerOrder.setCompanyNo(shopOauth.getCompanyNo());
+				outerOrder.setChannelNo(shopOauth.getChannelNo());
+				outerOrder.setChannelName(ChannelType.getChannelName(Integer.valueOf(shopOauth.getChannelNo())));
+				outerOrder.setChannelType(shopOauth.getChannelNo());
+				outerOrder.setShopCode(shopOauth.getShopCode());
 
 
 				outerOrder.setIdCard(outerOrderHh.getIdCard());					
@@ -362,7 +363,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 				outerOrder.setPayType(2);	//支付方式
 				outerOrder.setCreator("海狐推送订单");
 
-				outerOrder.setCompanyNo(this.channelAccount.getCompanyNo());
+				outerOrder.setCompanyNo(this.shopOauth.getCompanyNo());
 				outerOrder.setGmtCreate(new Date());
 				outerOrder.setGmtModify(new Date());
 
@@ -384,7 +385,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 					outerOrderDetailTemp.setQuantity(outerOrderDetail.getQuantity());
 					outerOrderDetailTemp.setGmtCreate(new Date());
 					outerOrderDetailTemp.setGmtModify(new Date());
-					outerOrderDetailTemp.setCompanyNo(this.channelAccount.getCompanyNo());
+					outerOrderDetailTemp.setCompanyNo(this.shopOauth.getCompanyNo());
 					outerOrderDetailTemp.setReceiver(outerOrderHh.getReceiver());
 					outerOrderDetailTemp.setReceiverState(outerOrderHh.getReceiverState());
 					outerOrderDetailTemp.setReceiverCity(outerOrderHh.getReceiverCity());
@@ -397,34 +398,15 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 					outerOrderDetailTemp.setSubOrderNo(CodeGenUtil.getSubOrderNo());
 
 
-					outerOrderDetailTemp.setShopCode(channelAccount.getShopCode());
+					outerOrderDetailTemp.setShopCode(shopOauth.getShopCode());
 					outerOrderDetailTemp.setCustomerNo("无");
 					outerOrderDetailTemp.setIsDel(false);
 					outerOrderDetailTemp.setCreator("系统");
 					outerOrderDetailTemp.setModifier("系统");
 					outerOrderDetailTemp.setChannelOrderNo(outerOrder.getChannelOrderNo());
 
-
-
 					outerOrderDetailList.add(outerOrderDetailTemp);
 					inventoryService.order(outerOrderDetailList);
-//					//如果有虚拟库存就扣减虚拟库存
-//					ItemSkuDO tjItemSku = new ItemSkuDO();
-//					tjItemSku.setSkuCode(outerOrderDetail.getSkuCode());
-//					ItemSkuDO itemSku = itemSkuService.queryPo(tjItemSku);
-//					if(itemSku != null) {
-//						InventoryDO inventory = inventoryService.queryInventoryByCode(itemSku.getItemCode(), itemSku.getSkuCode());
-//						if(inventory.getVirtualInv()>0) {
-//							Long totalAvailableInv= inventory.getInv()-inventory.getLockedInv()+inventory.getTransInv()-inventory.getLockedTransInv();
-//							Long virtualInv = inventory.getVirtualInv() - outerOrderDetail.getQuantity();
-//							virtualInv = virtualInv>0 ? virtualInv : 0;
-//							//如果虚拟库存小于等于可售库存，虚拟库存清零
-//							virtualInv = virtualInv>totalAvailableInv ? virtualInv : 0;
-//							inventory.setVirtualInv(virtualInv);
-//							inventory.setGmtModify(new Date());
-//							inventoryService.updateByPrimaryKey(inventory);
-//						}
-//					}
 				}
 				mallSubOrderService.insertBatch(outerOrderDetailList);				//添加子订单
 				if(outOrderIdList.size() > 0) {
@@ -497,5 +479,17 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 		} catch (Exception e) {
 			this.logger.error("同步发货给海狐 返回结果异常: " + description.toString());
 		}
+	}
+
+
+
+	@Override
+	public void getOrders(Date startTime, Date endTime){
+		throw new ErpCommonException("method error","暂不支持");
+	}
+
+	@Override
+	public void getItems(Date startTime, Date endTime){
+		throw new ErpCommonException("method error","暂不支持");
 	}
 }
