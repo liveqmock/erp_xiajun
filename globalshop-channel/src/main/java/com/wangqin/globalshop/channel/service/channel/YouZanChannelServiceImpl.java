@@ -1122,6 +1122,7 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
         if (outerOrderMapper.queryPoCount(p) > 0) {
             logger.error("有赞订单已经存在 tid" + TradeDetail.getTid());
             //生产时，直接return，测试时，进行插入
+			//todo 测试代码
             return;
         }
 

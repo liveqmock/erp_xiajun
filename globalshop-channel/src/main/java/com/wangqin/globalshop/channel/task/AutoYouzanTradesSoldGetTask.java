@@ -41,7 +41,8 @@ public class AutoYouzanTradesSoldGetTask {
 	private final static Long startEndMaxInternalDay = 5*24*60*60*1000L;//查询间隔最大5天
 
     // 每隔半小时执行一次
-    @Scheduled(cron = "0/30 * * * * ?")
+    //@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
     public void run() {
 
 		logger.info("定时任务：自动去有赞下载订单===>Start");
