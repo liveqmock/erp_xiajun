@@ -37,7 +37,21 @@ public class SkuChannelPriceDTO implements Serializable {
 
 	private Integer saleMode;
 
+	private String color;
 
+	private String scale;
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public String getScale() {
+		return scale;
+	}
+	public void setScale(String scale) {
+		this.scale = scale;
+	}
 	//多渠道销售价相关
 	private List<ChannelSalePriceDO> channelSalePriceList;
 
