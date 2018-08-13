@@ -475,13 +475,13 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <!-- 根据条件查询商品总数量(商品列表页面)-->
+    <!-- 商品列表：根据条件查询商品总数量-->
     <select id="queryItemsCount" resultType="java.lang.Integer"
             parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO">
         SELECT
-        count(1)
+        COUNT(1)
         FROM
-        item T1
+        item T1 
         where
         T1.is_del is false
         <if test=" name != null and name != '' ">
@@ -540,9 +540,10 @@
             or
             (<![CDATA[  T1.end_date >= #{startDate} ]]> and <![CDATA[  T1.end_date <= #{endDate} ]]>)
             )
-        </if>
+        </if>       
         GROUP BY T3.item_code
-        ORDER BY T1.gmt_modify desc
+        ORDER BY T1.gmt_modify desc  
+        <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>       
     </select>
 
 

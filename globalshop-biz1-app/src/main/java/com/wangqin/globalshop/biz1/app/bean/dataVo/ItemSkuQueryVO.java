@@ -59,6 +59,8 @@ public class ItemSkuQueryVO extends PageQueryVO {
 	 * 商品名称
 	 */
 	private String itemName;
+
+	private String channelPriceKey;
 	
 	
 	/**
@@ -125,7 +127,30 @@ public class ItemSkuQueryVO extends PageQueryVO {
 	private String creator;
 	private String modifier;
 
-	
+	private Integer saleOnYouzan;
+
+	private Integer thirdSale;
+
+	private Byte wxisSale;
+
+	public Integer getSaleOnYouzan() {
+		return saleOnYouzan;
+	}
+	public void setSaleOnYouzan(Integer saleOnYouzan) {
+		this.saleOnYouzan = saleOnYouzan;
+	}
+	public Integer getThirdSale() {
+		return thirdSale;
+	}
+	public void setThirdSale(Integer thirdSale) {
+		this.thirdSale = thirdSale;
+	}
+	public Byte getWxisSale() {
+		return wxisSale;
+	}
+	public void setWxisSale(Byte wxisSale) {
+		this.wxisSale = wxisSale;
+	}
 	public String getGoodsNo() {
 		return goodsNo;
 	}
@@ -423,6 +448,10 @@ public class ItemSkuQueryVO extends PageQueryVO {
 	public Long getVirtualInv() {
 		return virtualInv;
 	}
-	
-	
+	public String getChannelPriceKey() {
+		return channelPriceKey;
+	}
+	public void setChannelPriceKey(String channelPriceKey) {
+		this.channelPriceKey = channelPriceKey;
+	}
 }

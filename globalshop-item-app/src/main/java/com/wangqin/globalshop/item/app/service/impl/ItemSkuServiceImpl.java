@@ -172,12 +172,15 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 
 				SkuChannelPriceDTO skuChannelPriceDTO = new SkuChannelPriceDTO();
 				BeanUtils.copy(itemSku, skuChannelPriceDTO);
-//				skuChannelPriceDTO.setSkuCode(itemSku.getSkuCode());
-//				skuChannelPriceDTO.setItemCode(itemSku.getItemCode());
-//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
-//
-//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
-				skuChannelPriceDTO.setChannelSalePriceList(salePriceDOList);
+
+				List<ChannelSalePriceVO> salePriceVOList = new ArrayList<>();
+				for(ChannelSalePriceDO priceDO : salePriceDOList){
+					ChannelSalePriceVO priceVO = new ChannelSalePriceVO();
+					BeanUtils.copies(priceDO,priceVO);
+					priceVO.setChannelSkuKey(itemSku.getId()+priceVO.getChannelNo());
+					salePriceVOList.add(priceVO);
+				}
+				skuChannelPriceDTO.setChannelSalePriceList(salePriceVOList);
 
 				skuChannelPriceDTOList.add(skuChannelPriceDTO);
 			}
@@ -222,7 +225,59 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 		}
 	}
 
+	public JsonPageResult<List<SkuChannelPriceDTO>> querySkuSalePrice(String channelNo, ItemSkuQueryVO itemSkuQueryVO){
 
+		JsonPageResult<List<SkuChannelPriceDTO>> itemResult = new JsonPageResult<>();
+
+		if(Integer.valueOf(channelNo).equals(ChannelType.YouZan.getValue())){
+			itemSkuQueryVO.setSaleOnYouzan(1);
+		}
+
+		if(Integer.valueOf(channelNo).equals(ChannelType.HaiHu.getValue())){
+			itemSkuQueryVO.setThirdSale(1);
+		}
+
+		if(Integer.valueOf(channelNo).equals(ChannelType.WEIXINXCX.getValue())){
+			itemSkuQueryVO.setWxisSale(Integer.valueOf(1).byteValue());
+		}
+
+
+		//1、查询总的记录数量
+		Integer totalCount =  itemSkuMapperExt.querySalableItemSkuCount(itemSkuQueryVO);
+		//2、查询分页记录
+		if(totalCount!=null&&totalCount!=0L) {
+			itemResult.buildPage(totalCount, itemSkuQueryVO);
+			//List<ItemSkuDO> itemSkus = itemSkuMapperExt.queryItemSkuListOnly(itemSkuQueryVO);
+			//			String companyNo = itemSkuQueryVO.getCompanyNo();
+			itemSkuQueryVO.initFirstStart();
+			List<ItemSkuPriceVO> itemSkuPrices = itemSkuMapperExt.querySalableItemSkuList(itemSkuQueryVO);
+
+
+
+			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
+			for (ItemSkuPriceVO itemSku : itemSkuPrices) {
+				//拷贝
+				SkuChannelPriceDTO skuChannelPriceDTO = new SkuChannelPriceDTO();
+				BeanUtils.copy(itemSku, skuChannelPriceDTO);
+
+				List<ItemSkuScaleDO> skuScaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
+				if(!EasyUtil.isListEmpty(skuScaleList)) {
+					for(ItemSkuScaleDO scale:skuScaleList) {
+						if("颜色".equals(scale.getScaleName())) {
+							skuChannelPriceDTO.setColor(scale.getScaleValue());
+						}
+						if("尺寸".equals(scale.getScaleName())) {
+							skuChannelPriceDTO.setScale(scale.getScaleValue());
+						}
+					}
+				}
+				skuChannelPriceDTOList.add(skuChannelPriceDTO);
+			}
+			itemResult.setData(skuChannelPriceDTOList);
+		}
+
+		return itemResult;
+	}
 
 	/**
 	 * 设置所有SKU的某渠道上价格

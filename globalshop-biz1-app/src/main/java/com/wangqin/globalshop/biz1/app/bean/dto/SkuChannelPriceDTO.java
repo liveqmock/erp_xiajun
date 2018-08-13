@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.biz1.app.bean.dto;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelSalePriceVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.common.utils.Money;
@@ -37,9 +38,23 @@ public class SkuChannelPriceDTO implements Serializable {
 
 	private Integer saleMode;
 
+	private String color;
 
+	private String scale;
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public String getScale() {
+		return scale;
+	}
+	public void setScale(String scale) {
+		this.scale = scale;
+	}
 	//多渠道销售价相关
-	private List<ChannelSalePriceDO> channelSalePriceList;
+	private List<ChannelSalePriceVO> channelSalePriceList;
 
 	public Long getId() {
 		return id;
@@ -113,11 +128,11 @@ public class SkuChannelPriceDTO implements Serializable {
 		this.saleMode = saleMode;
 	}
 
-	public List<ChannelSalePriceDO> getChannelSalePriceList() {
+	public List<ChannelSalePriceVO> getChannelSalePriceList() {
 		return channelSalePriceList;
 	}
 
-	public void setChannelSalePriceList(List<ChannelSalePriceDO> channelSalePriceList) {
+	public void setChannelSalePriceList(List<ChannelSalePriceVO> channelSalePriceList) {
 		this.channelSalePriceList = channelSalePriceList;
 	}
 }
