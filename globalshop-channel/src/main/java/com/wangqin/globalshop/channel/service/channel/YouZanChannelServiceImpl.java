@@ -8,15 +8,13 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.enums.*;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.youzan.*;
+import com.wangqin.globalshop.channel.dal.youzan.PicModel;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGet;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.base.BaseDto;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.DateUtil;
-import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
-import com.wangqin.globalshop.common.utils.HaiJsonUtils;
+import com.wangqin.globalshop.common.utils.*;
 import com.youzan.open.sdk.client.auth.Token;
 import com.youzan.open.sdk.client.core.DefaultYZClient;
 import com.youzan.open.sdk.client.core.YZClient;
@@ -37,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -1137,7 +1136,7 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
         // 有赞平台为01,销售为0000
         outerOrder.setOrderNo(CodeGenUtil.getOrderNo()); // 系统自动生成
         outerOrder.setOrderTime(TradeDetail.getPayTime()); // 付款时间
-        outerOrder.setStatus(OrderStatus.INIT.getCode()); // 状态：新建
+        outerOrder.setStatus(OrderStatus.PAID.getCode()); // 状态：代发货
 
         outerOrder.setChannelOrderNo(TradeDetail.getTid());
 
@@ -1149,8 +1148,11 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 
         //邮费
         outerOrder.setFreight(Double.valueOf(TradeDetail.getPostFee()));
-        outerOrder.setTotalAmount(TradeDetail.getTotalFee() == null ? 0d : TradeDetail.getTotalFee().doubleValue());
-        outerOrder.setActualAmount(TradeDetail.getPayment() == null ? 0d : TradeDetail.getPayment().doubleValue());
+
+        BigDecimal totalPrice = BigDecimal.valueOf(TradeDetail.getTotalFee().doubleValue()).setScale(2,BigDecimal.ROUND_HALF_UP);
+
+        outerOrder.setTotalAmount(TradeDetail.getTotalFee() == null ? 0d : totalPrice.doubleValue());
+        outerOrder.setActualAmount(TradeDetail.getPayment() == null ? 0d : totalPrice.doubleValue());
         outerOrder.setMemo(TradeDetail.getBuyerMessage() + TradeDetail.getTradeMemo());
 
         outerOrder.setCreator("有赞推送订单");
@@ -1166,7 +1168,7 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 
         outerOrderMapper.insertSelective(outerOrder); // 添加主订单
 
-        outOrderIdList.add(outerOrder.getOrderNo()); // 收集主订单ID
+        outOrderIdList.add(outerOrder.getChannelOrderNo()); // 收集主订单ID
 
         com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGetResult.TradeOrderV2[] tradeOrderArr = TradeDetail.getOrders();
         List<MallSubOrderDO> outerOrderDetails = new ArrayList<MallSubOrderDO>();
@@ -1174,10 +1176,31 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
         for (int j = 0; j < tradeOrderArr.length; j++) {
             com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGetResult.TradeOrderV2 tradeOrder = tradeOrderArr[j];
             MallSubOrderDO outerOrderDetail = new MallSubOrderDO();
+
+            //关键是查找到对应的商品信息
+
+			String skuCode = null;
+			if(Long.valueOf(0).equals(tradeOrder.getSkuId()) || EasyUtil.isStringEmpty(tradeOrder.getOuterSkuId())){
+				//代表这个商品是个单品，只有itemId,itemCode
+				String itemCode = tradeOrder.getOuterItemId();//这个就是上传的单品Item
+				ItemSkuDO skuSo = new ItemSkuDO();
+				skuSo.setCompanyNo(shopOauth.getCompanyNo());
+				skuSo.setItemCode(itemCode);
+				List<ItemSkuDO> skuDOS = itemSkuService.queryPoList(skuSo);
+				if(EasyUtil.isListEmpty(skuDOS)){
+					throw new ErpCommonException("item_code error","商品未能找到，itemCode: "+itemCode);
+				}
+				skuCode = skuDOS.get(0).getSkuCode();
+			}else {
+				skuCode = tradeOrder.getOuterSkuId();
+			}
+
+			outerOrderDetail.setSkuCode(skuCode); // sku编码
+
             outerOrderDetail.setCompanyNo(outerOrder.getCompanyNo());
             outerOrderDetail.setOrderNo(outerOrder.getOrderNo()); // 主订单ID
             outerOrderDetail.setShopCode(outerOrder.getShopCode());
-            outerOrderDetail.setSkuCode(tradeOrder.getOuterSkuId()); // sku编码
+
             outerOrderDetail.setSalePrice(Double.parseDouble(String.valueOf(tradeOrder.getPrice()))); // 商品单价
             outerOrderDetail.setQuantity(Integer.parseInt(String.valueOf(tradeOrder.getNum()))); // 购买数量
             outerOrderDetail.setGmtCreate(TradeDetail.getCreated()); // 创建时间
@@ -1203,7 +1226,9 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
             outerOrderDetail.setModifier("系统");
             outerOrderDetail.setChannelOrderNo(outerOrder.getChannelOrderNo());
 
-            //有赞有子订单号
+			outerOrderDetail.setStatus(OrderStatus.PAID.getCode());
+
+			//有赞有子订单号
             outerOrderDetail.setChannelSubOrderNo(String.valueOf(tradeOrder.getOid()));
 
             outerOrderDetails.add(outerOrderDetail);
