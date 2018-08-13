@@ -301,8 +301,11 @@ public class ItemServiceImplement implements IItemService {
     public JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO) {
         JsonPageResult<List<ItemDTO>> itemResult = new JsonPageResult<>();
         // 1、查询总的记录数量
-        // totalCount 与 items 的数量有出入
         Integer totalCount = itemDOMapperExt.queryItemsCount(itemQueryVO);
+        itemResult.setTotalCount(totalCount);
+        Integer totalPage = totalCount/itemQueryVO.getPageSize();
+        itemResult.setTotalPage(totalPage);
+        itemResult.setPageIndex(itemQueryVO.getPageIndex());
 
         // 2、查询分页记录
         if (totalCount != null && totalCount != 0) {
@@ -313,9 +316,7 @@ public class ItemServiceImplement implements IItemService {
                     item.setSalesVolume(salesVolume);
                 }
             }
-            totalCount = items.size();
-            itemResult.buildPage(totalCount, itemQueryVO);
-            itemResult.setData(items);
+            itemResult.setData(items);                      
         } else {
             List<ItemDTO> items = new ArrayList<>();
             itemResult.setData(items);
