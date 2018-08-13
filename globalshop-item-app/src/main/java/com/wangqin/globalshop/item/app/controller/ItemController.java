@@ -604,7 +604,7 @@ public class ItemController {
         if (IsEmptyUtil.isStringEmpty(itemCode)) {
             return result.buildIsSuccess(false).buildMsg("失败，商品已被删除");
         }
-        String picUrl = itemService.insertIntoItemDimension(itemCode, "pages/item/detail", token);
+        String picUrl = itemService.insertIntoItemDimension("item"+itemCode, "pages/item/detail", token);
         if (StringUtil.isNotBlank(picUrl)) {
             if (itemId != null) {
                 //System.out.println(picUrl);
