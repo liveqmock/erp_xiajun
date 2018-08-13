@@ -249,7 +249,6 @@ public class ItemController {
             for (ItemSkuQueryVO newSku : skus) {
                 if (null == newSku.getSkuCode()) {//需要添加的sku
                     ItemSkuDO addSku = new ItemSkuDO();
-                    System.out.println("update1.1...");
                     ItemDTO itemDTO = itemService.queryItemById(item.getId());
 
                     addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
@@ -475,7 +474,7 @@ public class ItemController {
      * @param pageQueryParam
      * @return
      */
-    @PostMapping("/queryItemList")
+    //@PostMapping("/queryItemList")
     public Object listItems(ItemQuery2VO itemQueryVO, PageQueryParam pageQueryParam) {
         EasyuiJsonResult<List<ItemDTO>> result = new EasyuiJsonResult<>();
         try{
@@ -499,8 +498,12 @@ public class ItemController {
      * @param itemQueryVO
      * @return
      */
-//    @RequestMapping("/queryItemList")
+    @RequestMapping("/queryItemList")
     public Object queryItemList(ItemQueryVO itemQueryVO) {
+    	//分页参数的计算
+    	Integer startIndex = (itemQueryVO.getPageIndex() - 1)*itemQueryVO.getPageSize();
+    	itemQueryVO.setFirstStart(startIndex);
+    	
         EasyuiJsonResult<List<ItemDTO>> jsonResult = new EasyuiJsonResult<>();
         if (!loginCheck()) {
             return jsonResult.buildIsSuccess(false).buildMsg("请先登录");
@@ -509,6 +512,9 @@ public class ItemController {
         itemQueryVO.setCompanyNo(companyNo);
         if (null == itemQueryVO.getStatus()) { //默认查询上架的商品
             itemQueryVO.setStatus(ItemStatus.LISTING.getCode());
+        }
+        if (-1 == itemQueryVO.getStatus()) {
+        	itemQueryVO.setStatus(null);
         }
         //对前端传来的字符串类型的时间参数进行转换
         if (IsEmptyUtil.isStringNotEmpty(itemQueryVO.getStartTime()) && IsEmptyUtil.isStringNotEmpty(itemQueryVO.getEndTime())) {
@@ -520,14 +526,6 @@ public class ItemController {
             }
         }
         JsonPageResult<List<ItemDTO>> result = itemService.queryItems(itemQueryVO);
-        //计算销量
-//        List<ItemDTO> itemList = result.getData();
-//        if (IsEmptyUtil.isCollectionNotEmpty(itemList)) {
-//        	for (ItemDTO item:itemList) {
-//        		Integer salesVolume = orderService.calItemSalesVolume(item.getItemCode(), companyNo);
-//        		item.setSalesVolume(salesVolume);
-//        	}
-//        }
         jsonResult.setTotal(result.getTotalCount());
         jsonResult.setRows(result.getData());
         return jsonResult.buildIsSuccess(true);
