@@ -78,6 +78,7 @@ public class ItemSkuPriceController {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		//itemSkuQueryVO.setCompanyNo("KZQA3rqCwV");
 		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
 		result.buildIsSuccess(true);
 		return result;

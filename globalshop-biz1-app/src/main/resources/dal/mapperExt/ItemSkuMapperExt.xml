@@ -369,6 +369,9 @@
         <if test=" upc != null and upc != '' ">
             and T1.upc = #{upc}
         </if>
+        <if test=" channelPriceKey != null and channelPriceKey != '' ">
+            and  (  T2.item_name = #{channelPriceKey} or T1.sku_code = #{channelPriceKey} or T1.upc = #{channelPriceKey} )
+        </if>
         <if test=" saleOnYouzan != null and saleOnYouzan != '' ">
             and T2.sale_on_youzan = #{saleOnYouzan}
         </if>
@@ -408,6 +411,9 @@
         </if>
         <if test=" upc != null and upc != '' ">
             and T1.upc = #{upc}
+        </if>
+        <if test=" channelPriceKey != null and channelPriceKey != '' ">
+            and  (  T2.item_name = #{channelPriceKey} or T1.sku_code = #{channelPriceKey} or T1.upc = #{channelPriceKey} )
         </if>
         <if test=" saleOnYouzan != null and saleOnYouzan != '' ">
             and T2.sale_on_youzan = #{saleOnYouzan}

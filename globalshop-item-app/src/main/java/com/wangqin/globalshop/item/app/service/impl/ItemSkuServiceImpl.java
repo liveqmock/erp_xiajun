@@ -172,12 +172,15 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 
 				SkuChannelPriceDTO skuChannelPriceDTO = new SkuChannelPriceDTO();
 				BeanUtils.copy(itemSku, skuChannelPriceDTO);
-//				skuChannelPriceDTO.setSkuCode(itemSku.getSkuCode());
-//				skuChannelPriceDTO.setItemCode(itemSku.getItemCode());
-//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
-//
-//				skuChannelPriceDTO.setUpc(itemSku.getUpc());
-				skuChannelPriceDTO.setChannelSalePriceList(salePriceDOList);
+
+				List<ChannelSalePriceVO> salePriceVOList = new ArrayList<>();
+				for(ChannelSalePriceDO priceDO : salePriceDOList){
+					ChannelSalePriceVO priceVO = new ChannelSalePriceVO();
+					BeanUtils.copies(priceDO,priceVO);
+					priceVO.setChannelSkuKey(itemSku.getId()+priceVO.getChannelNo());
+					salePriceVOList.add(priceVO);
+				}
+				skuChannelPriceDTO.setChannelSalePriceList(salePriceVOList);
 
 				skuChannelPriceDTOList.add(skuChannelPriceDTO);
 			}
