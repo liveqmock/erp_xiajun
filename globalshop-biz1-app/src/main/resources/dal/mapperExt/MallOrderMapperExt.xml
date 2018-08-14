@@ -100,6 +100,41 @@
         </foreach>
     </select>
 
+	<!-- 首页数据看板：计算今日订单数（已付款订单数） -->
+	<!-- dayIndex为0表示今天，为1表示昨天 -->
+    <select id="sumPaidOrderNumByDate" resultType="java.lang.Integer">
+    	SELECT
+   			IFNULL(COUNT(1),0)
+   		FROM mall_order
+   		WHERE company_no = #{companyNo}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach>
+        AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create)) =#{dayIndex})]]>
+    </select>
+    
+    <!-- 首页数据看板：待发货订单数 -->
+    <select id="sumWaitSendOrderNum" resultType="java.lang.Integer">
+    	SELECT
+   			IFNULL(COUNT(1),0)
+   		FROM mall_order
+   		WHERE company_no = #{companyNo}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach>
+    </select>
+    
+    <!-- 首页数据看板：未完成售后订单数 -->
+    <select id="sumReturningOrderNum" resultType="java.lang.Integer">
+    	SELECT
+   			IFNULL(COUNT(1),0)
+   		FROM mall_order
+   		WHERE company_no = #{companyNo}
+     	AND status = #{returning}
+    </select>
+    
     <select id="queryUnStockUpErpOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
         SELECT
         <include refid="Base_Column_List"/>
