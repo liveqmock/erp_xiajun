@@ -54,7 +54,7 @@
     </select>
     <select id="selectByType" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
-        id, company_no, appid, applet_type,
+        id, company_no, appid, applet_type,gmt_modify,
     creator, modifier, publish_status, templet_id, img_url, audit_id, ext_json, mch_id,
     status, requestdomain, wsrequestdomain, uploaddomain, downloaddomain,webviewdomain
         from applet_config

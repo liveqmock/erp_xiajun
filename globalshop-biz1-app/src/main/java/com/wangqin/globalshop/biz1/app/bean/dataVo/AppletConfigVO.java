@@ -40,11 +40,15 @@ public class AppletConfigVO {
 
     private String payKey;
 
-//    private String requestDomain;
-//
-//    private String wsrequestdomain;
-//
-//    private String uploaddomain;
-//
-//    private String downloaddomain;
+    private String requestdomain;
+
+    private String wsrequestdomain;
+
+    private String uploaddomain;
+
+    private String downloaddomain;
+
+    private String webviewdomain;
+
+    private String companyName;
 }
