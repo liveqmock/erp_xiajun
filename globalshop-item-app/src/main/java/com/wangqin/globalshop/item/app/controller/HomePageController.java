@@ -52,31 +52,31 @@ public class HomePageController extends BaseController {
 		HomePageVO hpVO = new HomePageVO();
 		//今日订单数
 		Integer todayOrderNum = orderService.sumPaidOrderNumByDate(0, companyNo);
-		hpVO.setTodayOrderNum(12);
+		hpVO.setTodayOrderNum(todayOrderNum);
 		//今日gmv
 		Double todayGmv = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
-		hpVO.setTodayGmv(13.00);
+		hpVO.setTodayGmv(todayGmv);
 		//一周订单数
 		Integer weekOrderNum = 0;
 		for (int i = 0;i < 7;i++) {
 			weekOrderNum += orderService.sumPaidOrderNumByDate(i, companyNo);
 		}
-		hpVO.setWeekOrderNum(14);
+		hpVO.setWeekOrderNum(weekOrderNum);
 		//一周gmv
 		Double weekGmv = subOrderService.sumWeekOrderPrice(companyNo);
-		hpVO.setWeekGmv(15.00);
+		hpVO.setWeekGmv(weekGmv);
 		//待发货订单数
 		Integer waitSendOrderNo = orderService.sumWaitSendOrderNum(companyNo);
-		hpVO.setWaitSendOrderNum(16);
+		hpVO.setWaitSendOrderNum(waitSendOrderNo);
 		//今日发货包裹数
 		Integer todyNum = shippingService.sumTodySentNum(companyNo);
-		hpVO.setTodaySendNum(17);
+		hpVO.setTodaySendNum(todyNum);
 		//一周发货包裹数量
 		Integer weekNum = shippingService.sumWeekSentNum(companyNo);
-		hpVO.setWeekSendNum(18);
+		hpVO.setWeekSendNum(weekNum);
 		//未完成售后订单数
 		Integer returningOrderNum = orderService.sumReturningOrderNum(companyNo);
-		hpVO.setReturningOrderNum(19);
+		hpVO.setReturningOrderNum(returningOrderNum);
 		//一周销量统计
 		List<Integer> dateList = pastSevenDay();
 		hpVO.setFirstDay(dateList.get(0));
@@ -87,19 +87,19 @@ public class HomePageController extends BaseController {
 		hpVO.setSixthDay(dateList.get(5));
 		hpVO.setSeventhDay(dateList.get(6));		
 		Double salesVolume0 = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
-		hpVO.setFirstSales(20.01);
+		hpVO.setFirstSales(salesVolume0);
 		Double salesVolume1 = subOrderService.sumPaidOrderPriceByDate(1, companyNo);
-		hpVO.setSecondSales(21.01);
+		hpVO.setSecondSales(salesVolume1);
 		Double salesVolume2 = subOrderService.sumPaidOrderPriceByDate(2, companyNo);
-		hpVO.setThirdSales(22.01);
+		hpVO.setThirdSales(salesVolume2);
 		Double salesVolume3 = subOrderService.sumPaidOrderPriceByDate(3, companyNo);
-		hpVO.setFourthSales(23.01);
+		hpVO.setFourthSales(salesVolume3);
 		Double salesVolume4 = subOrderService.sumPaidOrderPriceByDate(4, companyNo);
-		hpVO.setFifthSales(24.01);
+		hpVO.setFifthSales(salesVolume4);
 		Double salesVolume5 = subOrderService.sumPaidOrderPriceByDate(5, companyNo);
-		hpVO.setSixthSales(25.01);
+		hpVO.setSixthSales(salesVolume5);
 		Double salesVolume6 = subOrderService.sumPaidOrderPriceByDate(6, companyNo);
-		hpVO.setSeventhSales(26.01);
+		hpVO.setSeventhSales(salesVolume6);
 		
 		result.buildData(hpVO);
 		return result.buildIsSuccess(true).buildMsg("查找成功");
