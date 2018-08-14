@@ -23,4 +23,13 @@ public interface IAppletConfigService {
 	AppletConfigDO selectByAppid(String appid);
 
     List<AppletConfigDO> selectByPublishStatus(int code);
+
+	/**
+	 * 不含token等敏感信息
+	 * @param type
+	 * @return
+	 */
+	List<AppletConfigDO> selectByType(String type);
+
+	List<String> publish(String appids, Integer templateId, String userDesc, String userVersion);
 }

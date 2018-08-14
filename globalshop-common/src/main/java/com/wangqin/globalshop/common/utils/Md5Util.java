@@ -82,4 +82,49 @@ public class Md5Util {
 		}
 		return null;
 	}
+
+
+	public static byte[] digest(byte[] bts) {
+		MessageDigest algorithm;
+		try {
+			algorithm = MessageDigest.getInstance("MD5");
+			algorithm.reset();
+			algorithm.update(bts);
+			return algorithm.digest();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("MD5_NOT_SUPPORT", e);
+		}
+	}
+
+	public static String sign(String src) {
+		byte messageDigest[];
+		try {
+			messageDigest = digest(src.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("UTF8_NOT_SUPPORT", e);
+		}
+		String tgt = bytesToHexString(messageDigest);
+		return tgt;
+	}
+
+	public static String bytesToHexString(byte[] bArray) {
+		StringBuffer sb = new StringBuffer();
+		String sTemp;
+		for (int i = 0; i < bArray.length; i++) {
+			sTemp = Integer.toHexString(0xFF & bArray[i]);
+			if (sTemp.length() < 2) {
+				sb.append(0);
+			}
+			sb.append(sTemp.toLowerCase());
+		}
+		return sb.toString();
+	}
+
+	public static boolean verify(String src, String tgt) {
+		String tmp = sign(src);
+		if (tmp != null && tmp.equalsIgnoreCase(tgt)) {
+			return true;
+		}
+		return false;
+	}
 }

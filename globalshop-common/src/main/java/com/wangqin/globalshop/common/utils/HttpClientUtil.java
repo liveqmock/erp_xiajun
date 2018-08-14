@@ -428,7 +428,13 @@ public class HttpClientUtil {
         }
     }
 
-    public static String getRequestBody(HttpServletRequest request) {
+
+    /**
+	 * pad 死循环问题，不建议使用：pad小于0后还是会继续
+	 * @param request
+	 * @return
+	 */
+	public static String getRequestBody(HttpServletRequest request) {
         int size = request.getContentLength();
         byte[] content = new byte[size];
         try {
