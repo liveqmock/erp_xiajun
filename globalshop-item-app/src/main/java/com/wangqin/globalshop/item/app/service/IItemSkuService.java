@@ -136,4 +136,6 @@ public interface IItemSkuService  {
   	Integer queryRecordCountByUpcCompanyNotInSameItem(String companyNo,String upc,String itemCode);
 
     Integer queryCountByUpcAndCompanyNo(String companyNo, String upc);
+
+	JsonPageResult<List<SkuChannelPriceDTO>> querySkuSalePrice(String channelNo, ItemSkuQueryVO itemSkuQueryVO);
 }

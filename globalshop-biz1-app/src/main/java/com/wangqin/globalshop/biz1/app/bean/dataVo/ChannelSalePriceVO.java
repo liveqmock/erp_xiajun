@@ -25,8 +25,15 @@ public class ChannelSalePriceVO  {
     private String creator;
 
     private String modifier;
-    
-    public Integer getSkuIndex() {
+
+    private String channelSkuKey; //skuId+channelNo
+	public String getChannelSkuKey() {
+		return channelSkuKey;
+	}
+	public void setChannelSkuKey(String channelSkuKey) {
+		this.channelSkuKey = channelSkuKey;
+	}
+	public Integer getSkuIndex() {
 		return skuIndex;
 	}
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.IdCardDOMapperExt" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.IdCardDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, modifier, creator, real_name, id_number
+  </sql>
+
+    <select id="queryByNameAndIdNum" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List" />
+        from
+            id_card
+        where
+            real_name = #{name}
+        and id_number = #{idNumber}
+    </select>
+
+
+</mapper>

@@ -5,8 +5,8 @@
 
 <generatorConfiguration>
     <!--<classPathEntry location="../../mysql-connector-java-5.1.44.jar"/>-->
-    <!--<classPathEntry location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
-    <classPathEntry location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+    <classPathEntry location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
+    <!--<classPathEntry location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
 
 
 
@@ -754,6 +754,14 @@
                 <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
                 <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
                 <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
+            <!--</table>-->
+
+            <!--<table tableName="id_card" domainObjectName="IdCardDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+            <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
+            <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
             <!--</table>-->
 
 
