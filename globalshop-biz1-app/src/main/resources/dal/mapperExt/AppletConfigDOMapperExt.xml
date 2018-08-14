@@ -11,6 +11,7 @@
         <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
         <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="VARCHAR" />
         <result column="publish_status" property="publishStatus" jdbcType="INTEGER" />
         <result column="templet_id" property="templetId" jdbcType="INTEGER" />
         <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />

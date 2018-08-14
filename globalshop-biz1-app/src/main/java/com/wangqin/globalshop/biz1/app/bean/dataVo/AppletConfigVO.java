@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Getter@Setter@ToString
 public class AppletConfigVO {
     private Long id;
@@ -39,6 +41,8 @@ public class AppletConfigVO {
     private String status;
 
     private String payKey;
+    private Date gmtCreate;
+    private Date gmtModify;
 
     private String requestdomain;
 

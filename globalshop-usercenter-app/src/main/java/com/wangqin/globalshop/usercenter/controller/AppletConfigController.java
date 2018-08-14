@@ -8,6 +8,8 @@ import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.czh.ParseObj2Obj;
 import com.wangqin.globalshop.usercenter.service.IAppletConfigService;
 import com.wangqin.globalshop.usercenter.service.IUserCompanyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +30,14 @@ public class AppletConfigController {
     @Autowired
     private IUserCompanyService companyService;
 
+    private static Logger log = LoggerFactory.getLogger("AppletConfigController");
+
     @RequestMapping("/list")
     public Object list() {
+        log.info("加载首页");
         JsonResult<List<AppletConfigVO>> result = new JsonResult<>();
         List<AppletConfigVO> list = new ArrayList();
         try {
-
-
             List<AppletConfigDO> applets = appletConfigService.selectByType(AppletType.MALL_APPLET.getValue());
             for (AppletConfigDO applet : applets) {
                 AppletConfigVO appletConfigVO = new AppletConfigVO();
@@ -51,6 +54,11 @@ public class AppletConfigController {
 
     @PostMapping("/publish")
     public Object publish(String appids, Integer templateId, String userDesc, String userVersion) {
+        log.info("批量发布");
+        log.info("appids:"+appids);
+        log.info("templateId"+templateId);
+        log.info("userDesc"+userDesc);
+        log.info("userVersion"+userVersion);
         JsonResult<List<String>> result = new JsonResult<>();
         List<String> list = appletConfigService.publish(appids, templateId, userDesc, userVersion);
         return result.buildData(list).buildMsg("访问成功").buildIsSuccess(true);
@@ -58,6 +66,7 @@ public class AppletConfigController {
 
     @PostMapping("/update")
     public Object update(AppletConfigVO appletConfigVO) {
+        log.info("参数:"+appletConfigVO);
         JsonResult<List<String>> result = new JsonResult<>();
         AppletConfigDO applet = new AppletConfigDO();
         applet.setTempletId(appletConfigVO.getTempletId());
