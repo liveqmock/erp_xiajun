@@ -109,7 +109,7 @@
         </foreach>
     </select>
     
-    <!-- 销量的计算，用在商品管理商品列表，计算已付款的订单和通过erp新建的订单 -->
+    <!-- 商品列表：销量的计算，计算已付款的订单和通过erp新建的订单@author:xiajun -->
     <select id="calItemSalesVolume" resultType="java.lang.Integer">
         SELECT
    			IFNULL(SUM(IFNULL(quantity,0)),0)
@@ -120,6 +120,33 @@
         <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
                 #{item}       
        </foreach>  
+    </select>
+    
+    <!-- 首页数据看板：今日GMV（已付款订单金额） -->
+    <!-- dayIndex为0表示今天，为1表示昨天 -->
+    <select id="sumPaidOrderPriceByDate" resultType="java.lang.Double">
+    	SELECT
+   			IFNULL(SUM(IFNULL(quantity,0)*IFNULL(sale_price,0)),0)
+   		FROM mall_sub_order
+   		WHERE company_no = #{companyNo}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach>
+        AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create)) =#{dayIndex})]]>
+    </select>
+    
+    <!-- 首页数据看板：一周GMV（已付款订单数，不含退款订单） -->
+    <select id="sumWeekOrderPrice" resultType="java.lang.Double">
+    	SELECT
+   			IFNULL(SUM(IFNULL(quantity,0)*IFNULL(sale_price,0)),0)
+   		FROM mall_sub_order
+   		WHERE company_no = #{companyNo}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach>
+        AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create))<7)]]>
     </select>
 
     <update id="updateOuterOrderDetailByItemSku">
