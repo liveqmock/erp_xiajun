@@ -21,4 +21,9 @@ public class TestPayServiceImpl {
         payService.queryPay("f4511ec61ac04dc5b4bc766a39b7f5aa", null);
     }
 
+    @Test
+    public void testRefundPay() {
+        payService.refundPay("2226efd8a932442c868f70da1d391b87","2226efd8a932442c868f70da1d391b87", "3.00", null);
+    }
+
 }

@@ -36,6 +36,9 @@ public interface ShengpayService {
      */
     String CHARSET = "UTF-8";
 
+    /**
+     * 货币类型
+     */
     String CURRENCY = "CNY";
 
     /**
@@ -87,6 +90,8 @@ public interface ShengpayService {
 
     /**
      * 返回 ShengpayService 实例
+     * <br>
+     * 关于 Retrofit 的用法请参考 https://square.github.io/retrofit/
      *
      * @return
      */
@@ -104,7 +109,7 @@ public interface ShengpayService {
      * 创建支付订单
      *
      * @param signType          请求头-加密类型
-     * @param signMsg           请求头-消息摘要
+     * @param signMsg           请求头-消息 MD5 摘要
      * @param orderPayRequestVO 请求体-创建支付订单请求参数对应的 VO
      * @return
      */
@@ -118,7 +123,7 @@ public interface ShengpayService {
      * 单笔查询
      *
      * @param signType          请求头-加密类型
-     * @param signMsg           请求头-消息摘要
+     * @param signMsg           请求头-消息 MD5 摘要
      * @param queryPayRequestVO 请求体-单笔查询请求参数对应的 VO
      * @return
      */
@@ -131,9 +136,9 @@ public interface ShengpayService {
     /**
      * 退款请求
      *
-     * @param signType           请求头 - 加密类型
-     * @param signMsg            请求头-消息摘要
-     * @param refundPayRequestVO 请求体-退款请求请求参数对应的 VO
+     * @param signType           请求头-加密类型
+     * @param signMsg            请求头-消息 MD5 摘要
+     * @param refundPayRequestVO 请求体-退款请求参数对应的 VO
      * @return
      */
     @POST(REFUND_PAY_REQUEST_URL)
@@ -141,4 +146,18 @@ public interface ShengpayService {
     Call<RefundPayResponseVO> refundPay(@Header("signType") String signType,
                                         @Header("signMsg") String signMsg,
                                         @Body RefundPayRequestVO refundPayRequestVO);
+
+    /**
+     * 退款查询
+     *
+     * @param signType           请求头-加密类型
+     * @param signMsg            请求头-消息 MD5 摘要
+     * @param queryRefundRequestVO 请求体-退款查询请求参数对应的 VO
+     * @return
+     */
+    @POST(QUERY_REFUND_REQUEST_URL)
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
+    Call<QueryRefundResponseVO> queryRefund(@Header("signType") String signType,
+                                            @Header("signMsg") String signMsg,
+                                            @Body QueryRefundRequestVO queryRefundRequestVO);
 }

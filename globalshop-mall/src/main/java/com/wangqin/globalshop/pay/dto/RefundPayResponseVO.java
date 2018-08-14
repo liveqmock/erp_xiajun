@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.pay.dto;
 
+import lombok.Data;
 import net.sf.json.JSONString;
 
 /**
@@ -20,6 +21,7 @@ import net.sf.json.JSONString;
  * @author angus
  * @date 2018/8/13
  */
+@Data
 public class RefundPayResponseVO {
     // 基本响应参数
     /**
@@ -82,6 +84,12 @@ public class RefundPayResponseVO {
      * 可空：N
      */
     private String refundTransNo;
+
+    /**
+     * 订单创建时间 <br>
+     * 可空：Y
+     */
+    private String orderCreateTime;
 
     /**
      * 扩展参数 <br>

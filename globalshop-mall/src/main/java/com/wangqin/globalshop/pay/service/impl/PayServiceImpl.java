@@ -2,10 +2,7 @@ package com.wangqin.globalshop.pay.service.impl;
 
 import com.google.gson.Gson;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
-import com.wangqin.globalshop.pay.dto.OrderPayRequestVO;
-import com.wangqin.globalshop.pay.dto.OrderPayResponseVO;
-import com.wangqin.globalshop.pay.dto.QueryPayRequestVO;
-import com.wangqin.globalshop.pay.dto.QueryPayResponseVO;
+import com.wangqin.globalshop.pay.dto.*;
 import com.wangqin.globalshop.pay.service.PayService;
 import com.wangqin.globalshop.pay.service.ShengpayService;
 import net.sf.json.JSONString;
@@ -107,9 +104,35 @@ public class PayServiceImpl implements PayService {
         }
     }
 
-    // 退款
-    public void refundPay() {
+    @Override
+    public void refundPay(String refundOrderNo, String merchantOrderNo, String refundAmount, String exts) {
+        RefundPayRequestVO refundPayRequestVO = RefundPayRequestVO.builder()
+                .merchantNo(MERCHANT_NO)
+                .charset(CHARSET)
+                .requestTime(sdf.format(new Date()))
+                .refundOrderNo(refundOrderNo)
+                .merchantOrderNo(merchantOrderNo)
+                .refundAmount(refundAmount)
+                .notifyURL(REFUND_NOTIFY_URL)
+                .exts(exts)
+                .build();
 
+        // 获取 MD5 加密摘要
+        String signMsg = getSignMsg(refundPayRequestVO);
+        logger.debug("signMsg: {}", signMsg);
+
+        // 封装请求（Http 请求由 Retrofit2 提供支持）
+        Call<RefundPayResponseVO> call = shengpayService.refundPay(SIGN_TYPE, signMsg, refundPayRequestVO);
+        logger.debug("call: {}", call.request());
+
+        try {
+            // 执行请求，接收响应
+            RefundPayResponseVO responseBody = call.execute().body();
+            logger.debug("responseBody: {}", responseBody);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BizCommonException("未知异常！");
+        }
     }
 
 

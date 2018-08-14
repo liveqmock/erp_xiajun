@@ -31,4 +31,13 @@ public interface PayService {
      */
     void queryPay(String merchantOrderNo, String sftOrderNo);
 
+    /**
+     * 退款
+     *
+     * @param refundOrderNo   退款请求流水号(商户系统唯一)
+     * @param merchantOrderNo 原支付订单号
+     * @param refundAmount    退款金额(与支付金额一致)
+     * @param exts            扩展属性,JSON串
+     */
+    void refundPay(String refundOrderNo, String merchantOrderNo, String refundAmount, String exts);
 }
