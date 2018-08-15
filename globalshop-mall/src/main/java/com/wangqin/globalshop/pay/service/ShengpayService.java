@@ -33,7 +33,7 @@ public interface ShengpayService {
     String SIGN_TYPE = "MD5";
 
     /**
-     * MD5 密钥
+     * MD5 密钥（用于获取消息加密摘要）
      */
     String MD5_KEY = "support4test";
 
@@ -55,7 +55,6 @@ public interface ShengpayService {
     /**
      * 盛付通请求 Base url
      */
-
     String SHENGPAY_BASE_URL = "http://mgw.shengpay.com/web-acquire-channel/pay/";
 
     /**

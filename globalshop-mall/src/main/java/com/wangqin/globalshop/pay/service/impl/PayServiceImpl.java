@@ -67,6 +67,7 @@ public class PayServiceImpl implements PayService {
             // 执行请求，接收响应
             OrderPayResponse orderPayResponse = call.execute().body();
             logger.debug("orderPayResponse: {}", orderPayResponse);
+            // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
@@ -119,6 +120,7 @@ public class PayServiceImpl implements PayService {
         try {
             RefundPayResponse refundPayResponse = call.execute().body();
             logger.debug("refundPayResponse: {}", refundPayResponse);
+            // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
@@ -145,11 +147,9 @@ public class PayServiceImpl implements PayService {
         Call<QueryRefundResponse> call = shengpayService.queryRefund(SIGN_TYPE, signMsg, queryPayRequest);
 
         try {
-            Response<QueryRefundResponse> response = call.execute();
-            Headers headers = response.headers();
-            logger.debug("headers:{}", headers);
-            QueryRefundResponse queryRefundResponse = response.body();
+            QueryRefundResponse queryRefundResponse = call.execute().body();
             logger.debug("queryRefundResponse:{}", queryRefundResponse);
+            // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
@@ -178,6 +178,7 @@ public class PayServiceImpl implements PayService {
         try {
             SharingPayResponse sharingPayResponse = call.execute().body();
             logger.debug("sharingPayResponse: {}", sharingPayResponse);
+            // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
@@ -203,6 +204,7 @@ public class PayServiceImpl implements PayService {
         try {
             QuerySharingResponse querySharingResponse = call.execute().body();
             logger.debug("querySharingResponse: {}", querySharingResponse);
+            // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
