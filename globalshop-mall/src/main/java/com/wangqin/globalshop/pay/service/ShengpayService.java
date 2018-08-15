@@ -33,7 +33,7 @@ public interface ShengpayService {
     String SIGN_TYPE = "MD5";
 
     /**
-     * MD5 密钥
+     * MD5 密钥（用于获取消息加密摘要）
      */
     String MD5_KEY = "support4test";
 
@@ -53,30 +53,9 @@ public interface ShengpayService {
     String OPEN_ID = "wxe25c15397f0ec710";
 
     /**
-     * 盛付通 Base url
+     * 盛付通请求 Base url
      */
-
     String SHENGPAY_BASE_URL = "http://mgw.shengpay.com/web-acquire-channel/pay/";
-
-    /**
-     * 创建支付订单请求 URL
-     */
-    String ORDER_PAY_REQUEST_URL = "order.htm";
-
-    /**
-     * 单笔查询请求 URL
-     */
-    String QUERY_PAY_REQUEST_URL = "query.htm";
-
-    /**
-     * 退款请求 URL
-     */
-    String REFUND_PAY_REQUEST_URL = "refund.htm";
-
-    /**
-     * 退款查询请求 URL
-     */
-    String QUERY_REFUND_REQUEST_URL = "refundQuery.htm";
 
     /**
      * 接收服务端的支付成功通知URL，需要是公网可访问的地址
@@ -93,22 +72,26 @@ public interface ShengpayService {
      */
     String REFUND_NOTIFY_URL = "http://45.77.198.100/javademo/notify.jsp";
 
+    /**
+     * 接收服务端的分账成功通知URL，需要是公网可访问的地址
+     */
+    String SHARYING_NOTIFY_URL = "http://45.77.198.100/javademo/notify.jsp";
+
 
     /**
-     * 返回 ShengpayService 实例
+     * 获得 ShengpayService 实例，用于对接盛付通
      * <br>
      * 关于 Retrofit 的用法请参考 https://square.github.io/retrofit/
      *
-     * @return
+     * @return ShengpayService 实例
      */
     static ShengpayService newInstance() {
-        // 为 Retrofit 配置 Http Log 拦截器
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
+        // 为 Retrofit 配置 Http Log 拦截器（借助 OkHttp）
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(logger::debug)
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(logging)
                 .build();
-
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SHENGPAY_BASE_URL)
@@ -119,60 +102,87 @@ public interface ShengpayService {
         return retrofit.create(ShengpayService.class);
     }
 
-
     /**
      * 创建支付订单
      *
-     * @param signType          请求头-加密类型
-     * @param signMsg           请求头-消息 MD5 摘要
-     * @param orderPayRequestVO 请求体-创建支付订单请求参数对应的 VO
-     * @return
+     * @param signType        请求头-加密类型
+     * @param signMsg         请求头-消息 MD5 摘要
+     * @param orderPayRequest 请求体-创建支付订单请求参数
+     * @return Retrofit Http 请求调用对象
      */
-    @POST(ORDER_PAY_REQUEST_URL)
+    @POST("order.htm")
     @Headers({"Content-Type:application/json;charset=UTF-8"})
-    Call<OrderPayResponseVO> orderPay(@Header("signType") String signType,
-                                      @Header("signMsg") String signMsg,
-                                      @Body OrderPayRequestVO orderPayRequestVO);
+    Call<OrderPayResponse> orderPay(@Header("signType") String signType,
+                                    @Header("signMsg") String signMsg,
+                                    @Body OrderPayRequest orderPayRequest);
 
     /**
      * 单笔查询
      *
-     * @param signType          请求头-加密类型
-     * @param signMsg           请求头-消息 MD5 摘要
-     * @param queryPayRequestVO 请求体-单笔查询请求参数对应的 VO
-     * @return
+     * @param signType        请求头-加密类型
+     * @param signMsg         请求头-消息 MD5 摘要
+     * @param queryPayRequest 请求体-单笔查询请求参数
+     * @return Retrofit Http  请求调用对象
      */
-    @POST(QUERY_PAY_REQUEST_URL)
+    @POST("query.htm")
     @Headers({"Content-Type:application/json;charset=UTF-8"})
-    Call<QueryPayResponseVO> queryPay(@Header("signType") String signType,
-                                      @Header("signMsg") String signMsg,
-                                      @Body QueryPayRequestVO queryPayRequestVO);
+    Call<QueryPayResponse> queryPay(@Header("signType") String signType,
+                                    @Header("signMsg") String signMsg,
+                                    @Body QueryPayRequest queryPayRequest);
 
     /**
      * 退款请求
      *
-     * @param signType           请求头-加密类型
-     * @param signMsg            请求头-消息 MD5 摘要
-     * @param refundPayRequestVO 请求体-退款请求参数对应的 VO
-     * @return
+     * @param signType         请求头-加密类型
+     * @param signMsg          请求头-消息 MD5 摘要
+     * @param refundPayRequest 请求体-退款请求参数
+     * @return Retrofit Http 请求调用对象
      */
-    @POST(REFUND_PAY_REQUEST_URL)
+    @POST("refund.htm")
     @Headers({"Content-Type:application/json;charset=UTF-8"})
-    Call<RefundPayResponseVO> refundPay(@Header("signType") String signType,
-                                        @Header("signMsg") String signMsg,
-                                        @Body RefundPayRequestVO refundPayRequestVO);
+    Call<RefundPayResponse> refundPay(@Header("signType") String signType,
+                                      @Header("signMsg") String signMsg,
+                                      @Body RefundPayRequest refundPayRequest);
 
     /**
      * 退款查询
      *
-     * @param signType             请求头-加密类型
-     * @param signMsg              请求头-消息 MD5 摘要
-     * @param queryRefundRequestVO 请求体-退款查询请求参数对应的 VO
-     * @return
+     * @param signType           请求头-加密类型
+     * @param signMsg            请求头-消息 MD5 摘要
+     * @param queryRefundRequest 请求体-退款查询请求参数
+     * @return Retrofit Http 请求调用对象
      */
-    @POST(QUERY_REFUND_REQUEST_URL)
+    @POST("refundQuery.htm")
     @Headers({"Content-Type:application/json;charset=UTF-8"})
-    Call<QueryRefundResponseVO> queryRefund(@Header("signType") String signType,
+    Call<QueryRefundResponse> queryRefund(@Header("signType") String signType,
+                                          @Header("signMsg") String signMsg,
+                                          @Body QueryRefundRequest queryRefundRequest);
+
+    /**
+     * 分账请求
+     *
+     * @param signType          请求头-加密类型
+     * @param signMsg           请求头-消息 MD5 摘要
+     * @param sharingPayRequest 请求体-分账请求参数
+     * @return Retrofit Http 请求调用对象
+     */
+    @POST("sharing.htm")
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
+    Call<SharingPayResponse> sharingPay(@Header("signType") String signType,
+                                        @Header("signMsg") String signMsg,
+                                        @Body SharingPayRequest sharingPayRequest);
+
+    /**
+     * 分账查询
+     *
+     * @param signType            请求头-加密类型
+     * @param signMsg             请求头-消息 MD5 摘要
+     * @param querySharingRequest 请求体-分账查询请求参数
+     * @return Retrofit Http 请求调用对象
+     */
+    @POST("sharingQuery.htm")
+    @Headers({"Content-Type:application/json;charset=UTF-8"})
+    Call<QuerySharingResponse> querySharing(@Header("signType") String signType,
                                             @Header("signMsg") String signMsg,
-                                            @Body QueryRefundRequestVO queryRefundRequestVO);
+                                            @Body QuerySharingRequest querySharingRequest);
 }

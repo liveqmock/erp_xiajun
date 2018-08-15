@@ -1,16 +1,9 @@
 package com.wangqin.globalshop.inventory.app.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.wangqin.globalshop.biz1.app.enums.InoutOperatorType;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseItemVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryOnWarehouseQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryOnWareHouseDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
@@ -18,9 +11,19 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.WarehouseDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryOnWarehouseMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.WarehouseDOMapperExt;
+import com.wangqin.globalshop.biz1.app.enums.InoutOperatorType;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.inventory.app.service.IInventoryOnWarehouseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -74,7 +77,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     }
 
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public InventoryOnWareHouseDO insertInventory(InventoryDO inventory, Long inv, String warehouseNo, String positionNo) {
         inventory.initCompany();
         InventoryOnWareHouseDO warehouse = inventoryOnWarehouseMapper.selectByCompanyNoAndSkuCodeAndWarehouseNo(inventory.getCompanyNo(), inventory.getSkuCode(), warehouseNo);
@@ -108,7 +111,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     }
 
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public Map<InventoryOnWareHouseDO, Long> ship(InventoryDO inventoryDO, Long quantity) {
         //按照升序获得所有和该商品相关  该公司的记录
         List<InventoryOnWareHouseDO> list = inventoryOnWarehouseMapper.selectByCompanyNoAndSkuCode(AppUtil.getLoginUserCompanyNo(), inventoryDO.getSkuCode());
@@ -130,6 +133,7 @@ public class InventoryOnWarehouseServiceImpl implements IInventoryOnWarehouseSer
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void order(InventoryDO inventoryDO, Integer quantity) {
 
         List<InventoryOnWareHouseDO> list = inventoryOnWarehouseMapper.selectByCompanyNoAndSkuCode(AppUtil.getLoginUserCompanyNo(), inventoryDO.getSkuCode());

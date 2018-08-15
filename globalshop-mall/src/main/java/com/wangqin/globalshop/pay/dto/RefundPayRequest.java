@@ -2,21 +2,22 @@ package com.wangqin.globalshop.pay.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import net.sf.json.JSONString;
 
 /**
- * 退款查询请求参数对应的 VO <br>
- * 生产地址：http://mgw.shengpay.com/web-acquire-channel/pay/ refundQuery.htm <br>
+ * 退款请求参数对应实体类 <br>
+ * 生产地址：http://mgw.shengpay.com/web-acquire-channel/pay/refund.htm <br>
  * 请求类型：REST <br>
  * 请求方式：POST <br>
  * 请求参数示例：
  * <pre>
  * {
- *     "requestTime": "20171222160323",
+ *     "requestTime": "20171222111333",
  *     "charset": "UTF-8",
  *     "refundOrderNo": "4c3f4341ee094044bcf77825b5ab4d59",
+ *     "notifyURL": "http://45.77.198.110:4799/javademo/notify.jsp",
  *     "merchantOrderNo": "f2e03275ee25488f99e58630dfb02552",
- *     "merchantNo": "540511"
+ *     "merchantNo": "540511",
+ *     "refundAmount": "3.00"
  * }
  * </pre>
  *
@@ -25,7 +26,7 @@ import net.sf.json.JSONString;
  */
 @Data
 @Builder
-public class QueryRefundRequestVO {
+public class RefundPayRequest {
     // 基本请求参数
     /**
      * 由盛付通提供,默认为:商户号(由盛付通提供的8位正整数),用于盛付通判别请求方的身份 <br>
@@ -75,20 +76,19 @@ public class QueryRefundRequestVO {
     private String merchantOrderNo;
 
     /**
-     * 盛付通退款订单号 <br>
+     * 退款金额(与支付金额一致) <br>
      * 可空：N
      */
-    private String refundTransNo;
+    private String refundAmount;
 
     /**
-     * 盛付通系统内针对此商户订单的唯一订单号 <br>
-     * 如: C20160105105839885474 <br>
-     * 可空：Y
+     * 退款的异步通知地址 <br>
+     * 可空：N
      */
-    private String sftOrderNo;
+    private String notifyURL;
 
     /**
-     * 扩展参数 <br>
+     * 扩展属性,JSON串 <br>
      * 可空：Y
      */
     private String exts;

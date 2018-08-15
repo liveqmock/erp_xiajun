@@ -1,10 +1,9 @@
 package com.wangqin.globalshop.pay.dto;
 
 import lombok.Data;
-import net.sf.json.JSONString;
 
 /**
- * 退款查询响应参数对应的 VO <br>
+ * 退款查询响应参数对应实体类 <br>
  * 响应参数示例：
  * <pre>
  * {
@@ -21,7 +20,7 @@ import net.sf.json.JSONString;
  * @date 2018/8/13
  */
 @Data
-public class QueryRefundResponseVO {
+public class QueryRefundResponse {
     // 基本响应参数
     /**
      * 返回码 <br>
@@ -107,5 +106,5 @@ public class QueryRefundResponseVO {
      * 扩展参数 <br>
      * 可空：Y
      */
-    private JSONString exts;
+    private String exts;
 }
