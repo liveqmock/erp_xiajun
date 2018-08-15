@@ -55,33 +55,39 @@ public class AppletConfigController {
     @PostMapping("/publish")
     public Object publish(String appids, Integer templateId, String userDesc, String userVersion) {
         log.info("批量发布");
-        log.info("appids:"+appids);
-        log.info("templateId"+templateId);
-        log.info("userDesc"+userDesc);
-        log.info("userVersion"+userVersion);
+        log.info("appids:" + appids);
+        log.info("templateId" + templateId);
+        log.info("userDesc" + userDesc);
+        log.info("userVersion" + userVersion);
         JsonResult<List<String>> result = new JsonResult<>();
         List<String> list = appletConfigService.publish(appids, templateId, userDesc, userVersion);
         return result.buildData(list).buildMsg("访问成功").buildIsSuccess(true);
     }
+
     @PostMapping("/query")
     public Object query(String appid) {
         log.info("查询");
-        log.info("appid:"+appid);
+        log.info("appid:" + appid);
         JsonResult<AppletConfigVO> result = new JsonResult<>();
         AppletConfigDO applet = appletConfigService.selectByAppid(appid);
         AppletConfigVO appletVO = new AppletConfigVO();
-        ParseObj2Obj.parseObj2Obj(applet,appletVO);
+        ParseObj2Obj.parseObj2Obj(applet, appletVO);
         return result.buildData(appletVO).buildMsg("访问成功").buildIsSuccess(true);
     }
 
     @PostMapping("/update")
     public Object update(AppletConfigVO appletConfigVO) {
-        log.info("参数:"+appletConfigVO);
         JsonResult<List<String>> result = new JsonResult<>();
-        AppletConfigDO applet = new AppletConfigDO();
-        applet.setTempletId(appletConfigVO.getTempletId());
-        applet.setId(appletConfigVO.getId());
-        appletConfigService.update(applet);
+        try {
+            log.info("参数:" + appletConfigVO);
+
+            AppletConfigDO applet = new AppletConfigDO();
+            applet.setTempletId(appletConfigVO.getTempletId());
+            applet.setId(appletConfigVO.getId());
+            appletConfigService.update(applet);
+        } catch (Exception e) {
+            return result.buildMsg("未知异常").buildIsSuccess(false);
+        }
         return result.buildMsg("访问成功").buildIsSuccess(true);
     }
 
@@ -93,10 +99,17 @@ public class AppletConfigController {
      */
     @RequestMapping("/getUrl")
     public Object getUrl(String appid) {
+        String url=null;
         JsonResult<String> result = new JsonResult<>();
-        AppletConfigDO applet = appletConfigService.selectByAppid(appid);
-        String token = applet.getAuthorizerAccessToken();
-        String url = "https://api.weixin.qq.com/wxa/get_qrcode?access_token=" + token;
+        try {
+
+            AppletConfigDO applet = appletConfigService.selectByAppid(appid);
+            String token = applet.getAuthorizerAccessToken();
+            url = "https://api.weixin.qq.com/wxa/get_qrcode?access_token=" + token;
+        } catch (Exception e) {
+            return result.buildIsSuccess(false).buildMsg("访问失败");
+        }
+
         return result.buildData(url).buildIsSuccess(true).buildMsg("访问成功");
 
     }
