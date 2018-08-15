@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.pay.service;
 
-import net.sf.json.JSONString;
+import com.wangqin.globalshop.pay.dto.SharingReqItem;
+
+import java.util.List;
 
 /**
  * 个人支付相关 service
@@ -53,4 +55,24 @@ public interface PayService {
      */
     void queryRefund(String refundOrderNo, String merchantOrderNo, String refundTransNo,
                      String sftOrderNo, String exts);
+
+    /**
+     * 分账请求
+     *
+     * @param sharingOrderNo     分账请求订单号
+     * @param merchantOrderNo    商户订单号
+     * @param sharingReqItemList 分账信息子项集合
+     * @param exts               扩展属性,JSON串
+     */
+    void sharingPay(String sharingOrderNo, String merchantOrderNo,
+                    List<SharingReqItem> sharingReqItemList, String exts);
+
+    /**
+     * 分账查询
+     *
+     * @param sharingQueryOrderNo 分账查询请求订单号
+     * @param paymentOrderNo 商户订单号
+     * @param sharingType 分账类型（MERCHANT_SHARING：查询分账信息，MERCHANT_SHARING_REFUND：查询分账退款信息）
+     */
+    void querySharing(String sharingQueryOrderNo, String paymentOrderNo, String sharingType);
 }

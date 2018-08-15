@@ -3,7 +3,7 @@ package com.wangqin.globalshop.pay.dto;
 import lombok.Data;
 
 /**
- * 单笔查询响应参数对应的 VO <br>
+ * 单笔查询响应参数对应实体类 <br>
  * 响应参数示例：
  * <pre>
  * {
@@ -22,7 +22,7 @@ import lombok.Data;
  * @date 2018/8/13
  */
 @Data
-public class QueryPayResponseVO {
+public class QueryPayResponse {
     // 基本响应参数
     /**
      * 返回码 <br>
