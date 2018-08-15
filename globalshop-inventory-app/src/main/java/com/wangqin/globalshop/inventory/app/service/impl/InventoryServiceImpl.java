@@ -13,6 +13,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param positionNo  货架号
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void outbound(InventoryDO inventory, String warehouseNo, String positionNo) {
         Long inv = inventory.getInv();
         /**更新具体仓库的库存*/
@@ -96,6 +97,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param orderDO
      */
     @Override
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void returns(MallSubOrderDO orderDO) {
         /**修改库存*/
         InventoryDO inventory = mapper.queryBySkuCodeAndCompanyNo(orderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
@@ -130,7 +132,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param list
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void outbound(List<InventoryDO> list) {
         for (InventoryDO aDo : list) {
             /**1增加库存库存*/
@@ -149,7 +151,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param inventoryDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void outbound(InventoryDO inventoryDO) {
         inventoryDO.init();
          /*这里只允许修改虚拟库存*/
@@ -166,7 +168,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallOrderDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void order(MallOrderDO mallOrderDO) {
         /**判断可售库存是否满足*/
         List<MallSubOrderDO> list = mallSubOrderMapper.selectByOrderNo(mallOrderDO.getOrderNo());
@@ -181,6 +183,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallSubOrderDO
      */
     @Override
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void order(MallSubOrderDO mallSubOrderDO) {
         /**判断可售库存是否满足*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
@@ -204,7 +207,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param outerOrderDetails
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void order(List<MallSubOrderDO> outerOrderDetails) {
         for (MallSubOrderDO detail : outerOrderDetails) {
             order(detail);
@@ -218,6 +221,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallSubOrderDO
      */
     @Override
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void release(MallSubOrderDO mallSubOrderDO) {
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
         if (inventoryDO == null) {
@@ -235,6 +239,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param mallSubOrderDO
      */
     @Override
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void tryRelease(MallSubOrderDO mallSubOrderDO) {
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getCompanyNo());
         if (inventoryDO == null) {
@@ -254,7 +259,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param quantity               盘入数量
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity) {
         /**增加校验*/
         if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(skuCode) || quantity == null) {
@@ -288,7 +293,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param shelfNo                货架号
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void inventoryCheckIn(String inventoryOnWarehouseNo, String skuCode, Long quantity, String shelfNo) {
         // 库存盘入
         inventoryCheckIn(inventoryOnWarehouseNo, skuCode, quantity);
@@ -309,7 +314,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param quantity               盘出数量
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void inventoryCheckOut(String inventoryOnWarehouseNo, String skuCode, Long quantity) {
         if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(skuCode) || quantity == null) {
             throw new ErpCommonException("有空数据");
@@ -355,7 +360,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param remark                  备注
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void inventoryOutConfirm(JSONArray inventoryOutDetailArray, String warehouseNo, String warehouseName, String remark) {
         // 增加校验
         if (inventoryOutDetailArray == null || StringUtils.isBlank(warehouseNo) || StringUtils.isBlank(warehouseName)) {
@@ -410,7 +415,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param shelfNo                货架号
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void updateSelfNo(String inventoryOnWarehouseNo, String shelfNo) {
         if (StringUtils.isBlank(inventoryOnWarehouseNo) || StringUtils.isBlank(shelfNo)) {
             throw new ErpCommonException("有空数据");
@@ -440,7 +445,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param orderDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public Map<InventoryOnWareHouseDO, Long> ship(MallSubOrderDO orderDO) throws ErpCommonException {
         /**修改库存  和  库存占用*/
         InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(orderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
@@ -476,7 +481,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @param outManifestDO
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void outOfStorehouse(InventoryOutManifestDO outManifestDO) {
         List<InventoryOutManifestDetailDO> list = outManifestDetailDOMapper.listByInventoryOutNo(outManifestDO.getInventoryOutNo());
         outOfWarehouse(list);
@@ -486,7 +491,7 @@ public class InventoryServiceImpl implements InventoryService {
      * 提供给sku修改的时候修改虚拟库存
      */
     @Override
-    @Transactional(rollbackFor = ErpCommonException.class)
+    @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void updateVirtualInv(String skuCode, Long virInv, String companyNo) {
         /**如果virInv 为负数  不允许修改*/
         if (virInv < 0) {
