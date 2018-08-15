@@ -9,6 +9,7 @@ import com.wangqin.globalshop.common.utils.PageInfo;
 import com.wangqin.globalshop.usercenter.vo.UserVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -72,6 +73,7 @@ public interface IUserService {// extends ISuperService<AuthUserDO>
 
     AuthUserDO selectByUserNoAndCompanyNo(String userNo, String companyNo);
 
+    Set<String> queryAvailableResources(String loginUserId);
 
 
     /**

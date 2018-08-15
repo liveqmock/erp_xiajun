@@ -482,5 +482,11 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         return userMapper.selectByUserNoAndCompanyNo(userNo, companyNo);
     }
 
+    @Override
+    public Set<String> queryAvailableResources(String loginName) {
+         Set<String> resCodes = userMapper.queryAvailableResourcesByLoginName(loginName);
+
+        return resCodes;
+    }
 }
 
