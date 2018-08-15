@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 异步通知有赞，海狐发货
+ * 异步通知有赞，海狐发货,每小时发货一次
  * @author liuyang
  *
  */
-//@Component
+@Component
 public class AutoRepairFeedBackOrderTask {
 	protected Logger logger = LogManager.getLogger(getClass());
 
@@ -47,8 +47,8 @@ public class AutoRepairFeedBackOrderTask {
 
 	
 	//每小时一次
-	//@Scheduled(cron = "0 0 * * * ?")
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0 0 0/1 * * ? ")
+	//@Scheduled(cron = "0/30 * * * * ?")
 	public void runSyncSendPackage() {
 		logger.info("定时任务：通知渠道，已经发货===>Start");
 		
