@@ -18,6 +18,10 @@ public class ItemSkuVo extends ItemSkuDO{
 
 	private static final String scale_size = "size";
 
+	private static final String scale_color_name = "颜色";
+
+	private static final String scale_size_name = "尺寸";
+
 	//颜色尺寸等规格
 	private Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
 
@@ -52,18 +56,18 @@ public class ItemSkuVo extends ItemSkuDO{
 	 * @return
 	 */
 	public String getColor(){
-		if(scaleMap.get(scale_color) ==null){
+		if(scaleMap.get(scale_color_name) ==null){
             return null;
 		}else {
-			return scaleMap.get(scale_color).getScaleValue();
+			return scaleMap.get(scale_color_name).getScaleValue();
 		}
 	}
 
 	public String getSize(){
-		if(scaleMap.get(scale_size) == null){
+		if(scaleMap.get(scale_size_name) == null){
 			return null;
 		}else {
-			return scaleMap.get(scale_size).getScaleValue();
+			return scaleMap.get(scale_size_name).getScaleValue();
 		}
 	}
 	/**
@@ -73,7 +77,7 @@ public class ItemSkuVo extends ItemSkuDO{
 	public String getOtherScale(){
 		String otherScale = "";
 		for(String scaleKey : scaleMap.keySet()){
-			if(!scale_color.equalsIgnoreCase(scaleKey) && !scale_size.equalsIgnoreCase(scaleKey)){
+			if(!scale_color_name.equalsIgnoreCase(scaleKey) && !scale_size_name.equalsIgnoreCase(scaleKey)){
 				if("".equalsIgnoreCase(otherScale)){
 					otherScale += scaleMap.get(scaleKey).getScaleName()+":"+scaleMap.get(scaleKey).getScaleValue();
 				}else {
@@ -85,9 +89,15 @@ public class ItemSkuVo extends ItemSkuDO{
 	}
 
 	public Long getTotalAvailableInv(){
-		return  inventoryDO.getInv()-inventoryDO.getLockedInv()
-				+inventoryDO.getTransInv()-inventoryDO.getLockedTransInv()
-				+inventoryDO.getVirtualInv()-inventoryDO.getLockedVirtualInv();
+		Long quantity = 0L;
+		if(inventoryDO == null){
+			return quantity;
+		}else {
+			quantity = inventoryDO.getInv()-inventoryDO.getLockedInv()
+					+inventoryDO.getTransInv()-inventoryDO.getLockedTransInv()
+					+inventoryDO.getVirtualInv()-inventoryDO.getLockedVirtualInv();
+		}
+		return quantity;
 	}
 
 

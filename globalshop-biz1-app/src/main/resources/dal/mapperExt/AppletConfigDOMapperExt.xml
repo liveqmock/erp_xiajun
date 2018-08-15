@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.AppletConfigDOMapperExt">
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
-        <result column="secret" property="secret" jdbcType="VARCHAR"/>
-        <result column="appid" property="appid" jdbcType="VARCHAR"/>
-        <result column="applet_type" property="appletType" jdbcType="VARCHAR"/>
-        <result column="creator" property="creator" jdbcType="VARCHAR"/>
-        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
-        <result column="mch_id" property="mchId" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="VARCHAR"/>
-        <result column="pay_key" property="payKey" jdbcType="VARCHAR"/>
-        <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR"/>
-        <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR"/>
-        <result column="publish_status" property="publishStatus" jdbcType="INTEGER"/>
-        <result column="templet_id" property="templetId" jdbcType="INTEGER"/>
-        <result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
-        <result column="audit_id" property="auditId" jdbcType="VARCHAR"/>
-        <result column="ext_json" property="extJson" jdbcType="VARCHAR"/>
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="secret" property="secret" jdbcType="VARCHAR" />
+        <result column="appid" property="appid" jdbcType="VARCHAR" />
+        <result column="applet_type" property="appletType" jdbcType="VARCHAR" />
+        <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR" />
+        <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="gmt_modify" property="gmtModify" jdbcType="VARCHAR" />
+        <result column="publish_status" property="publishStatus" jdbcType="INTEGER" />
+        <result column="templet_id" property="templetId" jdbcType="INTEGER" />
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+        <result column="audit_id" property="auditId" jdbcType="VARCHAR" />
+        <result column="ext_json" property="extJson" jdbcType="VARCHAR" />
+        <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
+        <result column="requestdomain" property="requestdomain" jdbcType="VARCHAR" />
+        <result column="wsrequestdomain" property="wsrequestdomain" jdbcType="VARCHAR" />
+        <result column="uploaddomain" property="uploaddomain" jdbcType="VARCHAR" />
+        <result column="downloaddomain" property="downloaddomain" jdbcType="VARCHAR" />
+        <result column="webviewdomain" property="webviewdomain" jdbcType="VARCHAR" />
     </resultMap>
-    <sql id="Base_Column_List">
-    id, company_no, secret, appid, applet_type, creator, modifier, mch_id, status, pay_key,
-    authorizer_access_token, authorizer_refresh_token, publish_status, templet_id, img_url,
-    audit_id, ext_json
+    <sql id="Base_Column_List" >
+    id, company_no, secret, appid, applet_type, authorizer_refresh_token, authorizer_access_token,
+    creator, modifier, publish_status, templet_id, img_url, audit_id, ext_json, mch_id,
+    status, pay_key, requestdomain, wsrequestdomain, uploaddomain, downloaddomain, webviewdomain
   </sql>
     <!-- 一键分享：查询公司对应的商城小程序的appid和screat -->
     <select id="queryWxMallConfigInfoByCompanyNo" resultMap="BaseResultMap"
@@ -46,6 +52,14 @@
         from applet_config
         where company_no = #{companyNo,jdbcType=VARCHAR}
         AND applet_type =#{type,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByType" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        id, company_no, appid, applet_type,gmt_modify,
+    creator, modifier, publish_status, templet_id, img_url, audit_id, ext_json, mch_id,
+    status, requestdomain, wsrequestdomain, uploaddomain, downloaddomain,webviewdomain
+        from applet_config
+        where applet_type =#{type,jdbcType=VARCHAR}
     </select>
     <select id="selectByAppid" resultMap="BaseResultMap" parameterType="java.lang.String">
         select

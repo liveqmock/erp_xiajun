@@ -369,9 +369,22 @@
         <if test=" upc != null and upc != '' ">
             and T1.upc = #{upc}
         </if>
+        <if test=" channelPriceKey != null and channelPriceKey != '' ">
+            and  (  T2.item_name = #{channelPriceKey} or T1.sku_code = #{channelPriceKey} or T1.upc = #{channelPriceKey} )
+        </if>
+        <if test=" saleOnYouzan != null and saleOnYouzan != '' ">
+            and T2.sale_on_youzan = #{saleOnYouzan}
+        </if>
+        <if test=" thirdSale != null and thirdSale != '' ">
+            and T2.third_sale = #{thirdSale}
+        </if>
+        <if test=" wxisSale != null and wxisSale != '' ">
+            and T2.wxis_sale = #{wxisSale}
+        </if>
         order by T1.id desc
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>
     </select>
+
 
     <!-- 根据条件查询全部itemSkuList-->
     <select id="querySalableItemSkuCount" resultType="java.lang.Integer" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO">
@@ -398,6 +411,18 @@
         </if>
         <if test=" upc != null and upc != '' ">
             and T1.upc = #{upc}
+        </if>
+        <if test=" channelPriceKey != null and channelPriceKey != '' ">
+            and  (  T2.item_name = #{channelPriceKey} or T1.sku_code = #{channelPriceKey} or T1.upc = #{channelPriceKey} )
+        </if>
+        <if test=" saleOnYouzan != null and saleOnYouzan != '' ">
+            and T2.sale_on_youzan = #{saleOnYouzan}
+        </if>
+        <if test=" thirdSale != null and thirdSale != '' ">
+            and T2.third_sale = #{thirdSale}
+        </if>
+        <if test=" wxisSale != null and wxisSale != '' ">
+            and T2.wxis_sale = #{wxisSale}
         </if>
     </select>
 

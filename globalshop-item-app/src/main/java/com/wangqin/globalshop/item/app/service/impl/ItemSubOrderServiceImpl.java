@@ -32,5 +32,17 @@ public class ItemSubOrderServiceImpl implements IItemSubOrderService{
 		statusList.add(OrderStatus.COMFIRM.getCode());
 		return mapperExt.calItemSalesVolume(statusList, itemCode, companyNo);
 	}
+	
+	//首页数据看板：今日GMV（已付款订单金额）
+	@Override
+	public Double sumPaidOrderPriceByDate(Integer dayIndex,String companyNo) {
+		return mapperExt.sumPaidOrderPriceByDate(OrderStatus.paidList(), dayIndex, companyNo);
+	}
+		
+	//首页数据看板：一周GMV（已付款订单数，不含退款订单）
+	@Override
+	public Double sumWeekOrderPrice (String companyNo) {
+		return mapperExt.sumWeekOrderPrice(OrderStatus.paidListNotReturn(), companyNo);
+	}
 		
 }

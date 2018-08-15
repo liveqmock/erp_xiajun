@@ -27,4 +27,6 @@ public interface AppletConfigDOMapperExt extends AppletConfigDOMapper {
      * @return
      */
     int updateByCompanyNo(AppletConfigDO appletConfigDO);
+
+    List<AppletConfigDO> selectByType(String type);
 }

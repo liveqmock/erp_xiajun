@@ -124,7 +124,7 @@ public class YouzanOauthController extends BaseController {
 		shopOauth.setAppKey(youzan_client_id);
 		shopOauth.setAppsecretKey(youzan_client_secret);
 		shopOauth.setTokenUrl(youzan_token_url);
-
+		shopOauth.setShopType(oauthResponse.getScope());
 
 		//组装channelShop
 		ChannelShopDO channelShop = new ChannelShopDO();

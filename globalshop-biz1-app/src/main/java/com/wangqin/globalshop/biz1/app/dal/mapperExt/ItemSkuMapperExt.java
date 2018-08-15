@@ -119,4 +119,6 @@ public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 	List<ItemSkuPriceVO> querySalableItemSkuList(ItemSkuQueryVO itemSkuQueryVO);
 
 	Integer querySalableItemSkuCount(ItemSkuQueryVO itemSkuQueryVO);
+
+
 }

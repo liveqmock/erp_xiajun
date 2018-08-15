@@ -7,26 +7,31 @@
     <result column="secret" property="secret" jdbcType="VARCHAR" />
     <result column="appid" property="appid" jdbcType="VARCHAR" />
     <result column="applet_type" property="appletType" jdbcType="VARCHAR" />
+    <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR" />
+    <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
-    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
-    <result column="authorizer_access_token" property="authorizerAccessToken" jdbcType="VARCHAR" />
-    <result column="authorizer_refresh_token" property="authorizerRefreshToken" jdbcType="VARCHAR" />
     <result column="publish_status" property="publishStatus" jdbcType="INTEGER" />
     <result column="templet_id" property="templetId" jdbcType="INTEGER" />
     <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
     <result column="audit_id" property="auditId" jdbcType="VARCHAR" />
     <result column="ext_json" property="extJson" jdbcType="VARCHAR" />
+    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
+    <result column="requestdomain" property="requestdomain" jdbcType="VARCHAR" />
+    <result column="wsrequestdomain" property="wsrequestdomain" jdbcType="VARCHAR" />
+    <result column="uploaddomain" property="uploaddomain" jdbcType="VARCHAR" />
+    <result column="downloaddomain" property="downloaddomain" jdbcType="VARCHAR" />
+    <result column="webviewdomain" property="webviewdomain" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, company_no, secret, appid, applet_type, creator, modifier, mch_id, status, pay_key,
-    authorizer_access_token, authorizer_refresh_token, publish_status, templet_id, img_url,
-    audit_id, ext_json
+    id, company_no, secret, appid, applet_type, authorizer_refresh_token, authorizer_access_token, 
+    creator, modifier, publish_status, templet_id, img_url, audit_id, ext_json, mch_id, 
+    status, pay_key, requestdomain, wsrequestdomain, uploaddomain, downloaddomain, webviewdomain
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from applet_config
     where id = #{id,jdbcType=BIGINT}
@@ -39,18 +44,22 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into applet_config (company_no, secret, appid,
-    applet_type, creator, modifier,
-    mch_id, status, pay_key,
-    authorizer_access_token, authorizer_refresh_token,
-    publish_status, templet_id, img_url,
-    audit_id, ext_json)
-    values (#{companyNo,jdbcType=VARCHAR}, #{secret,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR},
-    #{appletType,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR},
-    #{mchId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{payKey,jdbcType=VARCHAR},
-    #{authorizerAccessToken,jdbcType=VARCHAR}, #{authorizerRefreshToken,jdbcType=VARCHAR},
-    #{publishStatus,jdbcType=INTEGER}, #{templetId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR},
-    #{auditId,jdbcType=VARCHAR}, #{extJson,jdbcType=VARCHAR})
+    insert into applet_config (company_no, secret, appid, 
+      applet_type, authorizer_refresh_token, authorizer_access_token, 
+      creator, modifier, publish_status, 
+      templet_id, img_url, audit_id, 
+      ext_json, mch_id, status, 
+      pay_key, requestdomain, wsrequestdomain, 
+      uploaddomain, downloaddomain, webviewdomain
+      )
+    values (#{companyNo,jdbcType=VARCHAR}, #{secret,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR}, 
+      #{appletType,jdbcType=VARCHAR}, #{authorizerRefreshToken,jdbcType=VARCHAR}, #{authorizerAccessToken,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{publishStatus,jdbcType=INTEGER}, 
+      #{templetId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{auditId,jdbcType=VARCHAR}, 
+      #{extJson,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{payKey,jdbcType=VARCHAR}, #{requestdomain,jdbcType=VARCHAR}, #{wsrequestdomain,jdbcType=VARCHAR}, 
+      #{uploaddomain,jdbcType=VARCHAR}, #{downloaddomain,jdbcType=VARCHAR}, #{webviewdomain,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -70,26 +79,17 @@
       <if test="appletType != null" >
         applet_type,
       </if>
+      <if test="authorizerRefreshToken != null" >
+        authorizer_refresh_token,
+      </if>
+      <if test="authorizerAccessToken != null" >
+        authorizer_access_token,
+      </if>
       <if test="creator != null" >
         creator,
       </if>
       <if test="modifier != null" >
         modifier,
-      </if>
-      <if test="mchId != null" >
-        mch_id,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="payKey != null" >
-        pay_key,
-      </if>
-      <if test="authorizerAccessToken != null" >
-        authorizer_access_token,
-      </if>
-      <if test="authorizerRefreshToken != null" >
-        authorizer_refresh_token,
       </if>
       <if test="publishStatus != null" >
         publish_status,
@@ -106,6 +106,30 @@
       <if test="extJson != null" >
         ext_json,
       </if>
+      <if test="mchId != null" >
+        mch_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payKey != null" >
+        pay_key,
+      </if>
+      <if test="requestdomain != null" >
+        requestdomain,
+      </if>
+      <if test="wsrequestdomain != null" >
+        wsrequestdomain,
+      </if>
+      <if test="uploaddomain != null" >
+        uploaddomain,
+      </if>
+      <if test="downloaddomain != null" >
+        downloaddomain,
+      </if>
+      <if test="webviewdomain != null" >
+        webviewdomain,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="companyNo != null" >
@@ -120,26 +144,17 @@
       <if test="appletType != null" >
         #{appletType,jdbcType=VARCHAR},
       </if>
+      <if test="authorizerRefreshToken != null" >
+        #{authorizerRefreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizerAccessToken != null" >
+        #{authorizerAccessToken,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="mchId != null" >
-        #{mchId,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="payKey != null" >
-        #{payKey,jdbcType=VARCHAR},
-      </if>
-      <if test="authorizerAccessToken != null" >
-        #{authorizerAccessToken,jdbcType=VARCHAR},
-      </if>
-      <if test="authorizerRefreshToken != null" >
-        #{authorizerRefreshToken,jdbcType=VARCHAR},
       </if>
       <if test="publishStatus != null" >
         #{publishStatus,jdbcType=INTEGER},
@@ -155,6 +170,30 @@
       </if>
       <if test="extJson != null" >
         #{extJson,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="payKey != null" >
+        #{payKey,jdbcType=VARCHAR},
+      </if>
+      <if test="requestdomain != null" >
+        #{requestdomain,jdbcType=VARCHAR},
+      </if>
+      <if test="wsrequestdomain != null" >
+        #{wsrequestdomain,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaddomain != null" >
+        #{uploaddomain,jdbcType=VARCHAR},
+      </if>
+      <if test="downloaddomain != null" >
+        #{downloaddomain,jdbcType=VARCHAR},
+      </if>
+      <if test="webviewdomain != null" >
+        #{webviewdomain,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -173,26 +212,17 @@
       <if test="appletType != null" >
         applet_type = #{appletType,jdbcType=VARCHAR},
       </if>
+      <if test="authorizerRefreshToken != null" >
+        authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizerAccessToken != null" >
+        authorizer_access_token = #{authorizerAccessToken,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="modifier != null" >
         modifier = #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="mchId != null" >
-        mch_id = #{mchId,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="payKey != null" >
-        pay_key = #{payKey,jdbcType=VARCHAR},
-      </if>
-      <if test="authorizerAccessToken != null" >
-        authorizer_access_token = #{authorizerAccessToken,jdbcType=VARCHAR},
-      </if>
-      <if test="authorizerRefreshToken != null" >
-        authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR},
       </if>
       <if test="publishStatus != null" >
         publish_status = #{publishStatus,jdbcType=INTEGER},
@@ -209,27 +239,56 @@
       <if test="extJson != null" >
         ext_json = #{extJson,jdbcType=VARCHAR},
       </if>
+      <if test="mchId != null" >
+        mch_id = #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="payKey != null" >
+        pay_key = #{payKey,jdbcType=VARCHAR},
+      </if>
+      <if test="requestdomain != null" >
+        requestdomain = #{requestdomain,jdbcType=VARCHAR},
+      </if>
+      <if test="wsrequestdomain != null" >
+        wsrequestdomain = #{wsrequestdomain,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaddomain != null" >
+        uploaddomain = #{uploaddomain,jdbcType=VARCHAR},
+      </if>
+      <if test="downloaddomain != null" >
+        downloaddomain = #{downloaddomain,jdbcType=VARCHAR},
+      </if>
+      <if test="webviewdomain != null" >
+        webviewdomain = #{webviewdomain,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO" >
     update applet_config
     set company_no = #{companyNo,jdbcType=VARCHAR},
-    secret = #{secret,jdbcType=VARCHAR},
-    appid = #{appid,jdbcType=VARCHAR},
-    applet_type = #{appletType,jdbcType=VARCHAR},
-    creator = #{creator,jdbcType=VARCHAR},
-    modifier = #{modifier,jdbcType=VARCHAR},
-    mch_id = #{mchId,jdbcType=VARCHAR},
-    status = #{status,jdbcType=VARCHAR},
-    pay_key = #{payKey,jdbcType=VARCHAR},
-    authorizer_access_token = #{authorizerAccessToken,jdbcType=VARCHAR},
-    authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR},
-    publish_status = #{publishStatus,jdbcType=INTEGER},
-    templet_id = #{templetId,jdbcType=INTEGER},
-    img_url = #{imgUrl,jdbcType=VARCHAR},
-    audit_id = #{auditId,jdbcType=VARCHAR},
-    ext_json = #{extJson,jdbcType=VARCHAR}
+      secret = #{secret,jdbcType=VARCHAR},
+      appid = #{appid,jdbcType=VARCHAR},
+      applet_type = #{appletType,jdbcType=VARCHAR},
+      authorizer_refresh_token = #{authorizerRefreshToken,jdbcType=VARCHAR},
+      authorizer_access_token = #{authorizerAccessToken,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      publish_status = #{publishStatus,jdbcType=INTEGER},
+      templet_id = #{templetId,jdbcType=INTEGER},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      audit_id = #{auditId,jdbcType=VARCHAR},
+      ext_json = #{extJson,jdbcType=VARCHAR},
+      mch_id = #{mchId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      pay_key = #{payKey,jdbcType=VARCHAR},
+      requestdomain = #{requestdomain,jdbcType=VARCHAR},
+      wsrequestdomain = #{wsrequestdomain,jdbcType=VARCHAR},
+      uploaddomain = #{uploaddomain,jdbcType=VARCHAR},
+      downloaddomain = #{downloaddomain,jdbcType=VARCHAR},
+      webviewdomain = #{webviewdomain,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

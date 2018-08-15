@@ -78,6 +78,7 @@ public class ItemSkuPriceController {
 			return result.buildIsSuccess(false).buildMsg("请登录");
 		}
 		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		//itemSkuQueryVO.setCompanyNo("KZQA3rqCwV");
 		result = iItemSkuService.queryItemSkuPrices(itemSkuQueryVO);
 		result.buildIsSuccess(true);
 		return result;
@@ -136,11 +137,34 @@ public class ItemSkuPriceController {
         result.buildIsSuccess(true).buildMsg("保存成功");
         return result;
     }
-	
+
+	/**
+	 * 查询某个渠道上所有商品的原始售价
+	 * @param
+	 * @return
+	 */
+	@PostMapping("/itemSku/querySkuSalePrice")
+	@ResponseBody
+	public Object querySkuSalePrice(String channelNo, Integer pageIndex, Integer pageSize) {
+		JsonPageResult<List<SkuChannelPriceDTO>> result = new JsonPageResult<>();
+
+		if(!loginCheck()) {
+			return result.buildIsSuccess(false).buildMsg("请登录");
+		}
+		ItemSkuQueryVO itemSkuQueryVO = new ItemSkuQueryVO();
+		itemSkuQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		itemSkuQueryVO.setPageIndex(pageIndex);
+		itemSkuQueryVO.setPageSize(pageSize);
+		result = iItemSkuService.querySkuSalePrice(channelNo,itemSkuQueryVO);
+		result.buildIsSuccess(true);
+		return result;
+	}
+
+
 	/**
      * 工具类
      * 用户登录判断
-     * @param itemCode
+     * @param
      * @return
      */
     public Boolean loginCheck() {

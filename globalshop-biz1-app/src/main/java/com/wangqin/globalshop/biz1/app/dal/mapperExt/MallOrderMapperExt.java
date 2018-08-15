@@ -15,6 +15,16 @@ import java.util.List;
  * @author liuhui
  */
 public interface MallOrderMapperExt extends MallOrderDOMapper {
+	
+	//首页数据看板：计算今日订单数（已付款订单数）
+	Integer sumPaidOrderNumByDate(@Param("statusList")List<Integer> statusList,
+			@Param("dayIndex")Integer dayIndex,@Param("companyNo")String companyNo); 
+	
+	//首页数据看板：待发货订单数
+	Integer sumWaitSendOrderNum(@Param("statusList")List<Integer> statusList,@Param("companyNo")String companyNo); 
+	
+	//首页数据看板：未完成售后订单数
+	Integer sumReturningOrderNum(@Param("returning")Integer returning,@Param("companyNo")String companyNo); 
 
     List<MallOrderDO> queryByErpOrderId(@Param("erpOrderIdList") List<Long> erpOrderIdList);
 

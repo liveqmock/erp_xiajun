@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
+import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,18 +35,28 @@ public class HaihuPushMessageController extends BaseController {
 	@Autowired
 	private JdShopOauthService shopOauthService;
 
+	@Autowired
+	private ChannelCommonService channelCommonService;
+
 	/**
 	 *  海狐推送订单
 	 * @param request
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/haihupullOrder*")
+	@RequestMapping(value = "/haihupullOrder/*")
 	public void pullOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
 		shopOauthSo.setChannelNo(ChannelType.HaiHu.getValue()+"");
 		List<JdShopOauthDO> shopOauthDOList = shopOauthService.searchShopOauthList(shopOauthSo);
+
+
+		//jdshopAouth只有一个海狐的授权，默认查询不会按照以前的信息进行处理
+		if(EasyUtil.isListEmpty(shopOauthDOList)){
+			response.getWriter().print("系统异常,未找到授权信息");
+		}
+
 
 		if(!EasyUtil.isListEmpty(shopOauthDOList) && shopOauthDOList.size() ==1){
 			try {
@@ -71,6 +82,10 @@ public class HaihuPushMessageController extends BaseController {
 		shopOauthSo.setChannelNo(ChannelType.HaiHu.getValue()+"");
 		List<JdShopOauthDO> shopOauthDOList = shopOauthService.searchShopOauthList(shopOauthSo);
 
+		//jdshopAouth只有一个海狐的授权，默认查询不会按照以前的信息进行处理
+		if(EasyUtil.isListEmpty(shopOauthDOList)){
+			response.getWriter().print("系统异常,未找到授权信息");
+		}
 
 		try {
 			ChannelFactory.getChannel(shopOauthDOList.get(0)).syncItem(request, response);
@@ -92,7 +107,7 @@ public class HaihuPushMessageController extends BaseController {
 		JSONObject json = JSONObject.fromObject(param);
 		System.out.println(json);
 		JSONObject description = HttpClientUtil
-				.post("http://localhost:8080/haierp1/haihuPushMessage/queryHaiHuItem", null, param,"1");
+				.post("http://localhost:8100/haierp1/haihuPushMessage/queryHaiHuItem", null, param,"1");
 		System.err.println(description);
 	}
 

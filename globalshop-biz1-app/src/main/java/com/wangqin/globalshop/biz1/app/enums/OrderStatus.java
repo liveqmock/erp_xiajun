@@ -1,5 +1,10 @@
 package com.wangqin.globalshop.biz1.app.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+
 /**
  * 订单状态枚举
  * @author 朱路
@@ -71,6 +76,41 @@ public enum OrderStatus {
             }
         }
         throw new IllegalArgumentException("invalid status code " + code);
+    }
+    
+    //已付款状态的集合
+    public static List<Integer> paidList() {
+    	List<Integer> paidStatus = new ArrayList<Integer>();
+    	paidStatus.add(NEW.code);
+    	paidStatus.add(PAID.code);
+    	paidStatus.add(PART_SENT.code);
+    	paidStatus.add(SENT.code);
+    	paidStatus.add(RETURNING.code);
+    	paidStatus.add(RETURNDONE.code);
+    	paidStatus.add(SUCCESS.code);
+    	paidStatus.add(COMFIRM.code);
+    	return paidStatus;
+    }
+    
+    //已付款状态(不含确定退款)状态集合
+    public static List<Integer> paidListNotReturn() {
+    	List<Integer> paidStatus = new ArrayList<Integer>();
+    	paidStatus.add(NEW.code);
+    	paidStatus.add(PAID.code);
+    	paidStatus.add(PART_SENT.code);
+    	paidStatus.add(SENT.code);
+    	paidStatus.add(SUCCESS.code);
+    	paidStatus.add(COMFIRM.code);
+    	return paidStatus;
+    }
+    
+    //待发货状态集合
+    public static List<Integer> waitSendList() {
+    	List<Integer> paidStatus = new ArrayList<Integer>();
+    	paidStatus.add(NEW.code);
+    	paidStatus.add(PAID.code);
+    	paidStatus.add(PART_SENT.code);
+    	return paidStatus;
     }
 	
 }
