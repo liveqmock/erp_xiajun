@@ -100,4 +100,17 @@ WHERE
 ORDER BY T.id desc
 </select>
 
+    <select id="searchExpireShopOauthList" resultMap="BaseResultMap">
+        SELECT  <include refid="Base_Column_List" />
+        FROM <include refid="tableSection"/> T
+        WHERE
+           T.expires_time &lt;= #{expiresTime}
+        and T.channel_no = #{channelNo}
+        and is_del is false
+        ORDER BY T.id desc
+    </select>
+
+
+
+
 </mapper>

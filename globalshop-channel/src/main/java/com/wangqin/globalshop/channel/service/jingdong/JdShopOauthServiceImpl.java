@@ -103,6 +103,10 @@ public class JdShopOauthServiceImpl implements JdShopOauthService{
 		}
 	}
 
+	public List<JdShopOauthDO> searchExpireShopOauthList(Date expiresTime, Integer channelNo){
+		return jdShopOauthDOMapperExt.searchExpireShopOauthList(expiresTime,channelNo);
+	}
+
 
 
 
