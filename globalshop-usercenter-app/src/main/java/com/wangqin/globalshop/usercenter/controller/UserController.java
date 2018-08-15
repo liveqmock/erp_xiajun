@@ -1,9 +1,6 @@
 package com.wangqin.globalshop.usercenter.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -439,5 +436,13 @@ public class UserController extends BaseController {
 
 
 
+    @RequestMapping("/resCodes")
+    @ResponseBody
+    public Object resCodes() {
+        JsonResult<Set<String>> result = new JsonResult<>();
+//        AppUtil.getLoginUserId();
+        // 读取用户的url和角色
+        return result.buildData(userService.queryAvailableResources(AppUtil.getLoginUserId())).buildIsSuccess(true);
+    }
 
 }

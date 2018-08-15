@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Set;
 
 public interface AuthUserDOMapperExt extends AuthUserDOMapper {
     //    int deleteByPrimaryKey(Long id);
@@ -88,4 +89,6 @@ public interface AuthUserDOMapperExt extends AuthUserDOMapper {
      * @return
      */
     AuthUserDO getByLoginName(String loginName);
+
+    Set<String> queryAvailableResourcesByLoginName(@Param("loginName") String loginName);
 }
