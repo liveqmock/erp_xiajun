@@ -39,11 +39,11 @@ CREATE PROCEDURE createUser(
        'SYSTEM', 'SYSTEM');
 
     #     创建部门 (待测试)
-    #SELECT max(org_id) + 1
-    #INTO orgid
-    #FROM auth_organization;
-    #INSERT INTO auth_organization (company_no, org_id, code,name, address,seq, creator, modifier)
-    #VALUES (companyno, orgid, orgid,'公司总部', '公司地址',1, 'SYSTEM', 'SYSTEM');
+    SELECT max(org_id) + 1
+    INTO orgid
+    FROM auth_organization;
+    INSERT INTO auth_organization (company_no, org_id, code,name, address,seq, creator, modifier)
+    VALUES (companyno, orgid, orgid,'公司总部', '公司地址',1, 'SYSTEM', 'SYSTEM');
 
 
     #     创建角色
