@@ -25,7 +25,7 @@ public interface ChannelCommonService {
 	 * @param erpOrderList
 	 * @param shippingOrder
 	 */
-	void syncLogistics2Channel(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder);
+	public void syncLogistics2Channel(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder);
 
 
 	// 上架

@@ -1,9 +1,8 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingOrderDOMapperExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingOrderDOMapperExt;
 import com.wangqin.globalshop.item.app.service.IItemShippingOrderService;
 
 @Service

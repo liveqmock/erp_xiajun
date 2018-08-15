@@ -381,6 +381,19 @@
             #{item}
         </foreach>
     </select>
+
+    <select id="queryByOrderNoList" resultMap="BaseResultMap">
+        SELECT
+             <include refid="Base_Column_List"/>
+        FROM
+             mall_sub_order
+        WHERE
+             sub_order_no IN
+                <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                      #{item}
+                </foreach>
+    </select>
+
     <select id="selectPositionNoByOrderId" resultType="java.lang.String" parameterType="java.lang.String">
       SELECT group_concat(CONCAT(position_no, ':', booked_quantity))
             FROM inventory_booking_record

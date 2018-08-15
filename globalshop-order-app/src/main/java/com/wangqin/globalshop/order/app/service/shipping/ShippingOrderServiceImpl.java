@@ -4,18 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Sets;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderQueryVO;
-import com.wangqin.globalshop.biz1.app.enums.ChannelType;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingOrderDOMapperExt;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.enums.TransferStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.IShippingOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.LogisticCompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dto.MultiDeliveryFormDTO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
-import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.enums.StockUpStatus;
@@ -44,7 +41,7 @@ import static com.wangqin.globalshop.order.app.common.Constant.SHIP_INIT;
 @Service
 public class ShippingOrderServiceImpl implements IShippingOrderService {
     @Autowired
-    private IShippingOrderMapperExt shippingOrderMapper;
+    private ShippingOrderDOMapperExt shippingOrderMapper;
     @Autowired
     private MallSubOrderMapperExt mallSubOrderMapper;
     @Autowired
@@ -253,14 +250,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
         // 有赞
         // 查出outer_order
         MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
-        // 通知渠道发货
-
-        try {
-			channelCommonService.syncLogistics2Channel(erpOrderList, shippingOrder);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // 通知渠道发货，全部用异步操作
         return mainIds;
     }
 
@@ -416,14 +406,7 @@ public class ShippingOrderServiceImpl implements IShippingOrderService {
             mainIds.add(erpOrder.getShippingNo());
         }
 
-        // 通知渠道发货
-        try {
-            MallOrderDO outerOrder = mallOrderService.selectByOrderNo(erpOrderList.get(0).getOrderNo());
-            channelCommonService.syncLogistics2Channel(erpOrderList, shippingOrder);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // 通知渠道发货，异步job处理
 
         mallSubOrderService.updateBatchById(erpOrderList);
 
