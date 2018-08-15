@@ -1,18 +1,20 @@
 package com.wangqin.globalshop.pay.dto;
 
 import lombok.Data;
+import net.sf.json.JSONString;
 
 /**
- * 创建支付订单响应参数对应的 VO <br>
+ * 退款响应参数对应实体类 <br>
  * 响应参数示例：
  * <pre>
  * {
- *     "exts": "",
  *     "merchantOrderNo": "f2e03275ee25488f99e58630dfb02552",
- *     "orderCreateTime": "2017-12-22 11:11:21",
- *     "payUrl": "weixin://wxpay/bizpayurl?pr=ildFXeJ",
- *     "returnCode": "00",
- *     "sftOrderNo": "C20171222111120651783"
+ *     "orderCreateTime": "20171222111333",
+ *     "refundAmount": "3.00",
+ *     "refundOrderNo": "4c3f4341ee094044bcf77825b5ab4d59",
+ *     "refundTransNo": "20171222111610212",
+ *     "returnCode": "01",
+ *     "status": "01"
  * }
  * </pre>
  *
@@ -20,7 +22,7 @@ import lombok.Data;
  * @date 2018/8/13
  */
 @Data
-public class OrderPayResponseVO {
+public class RefundPayResponse {
     // 基本响应参数
     /**
      * 返回码 <br>
@@ -54,40 +56,44 @@ public class OrderPayResponseVO {
 
     // 业务参数
     /**
-     * 商户系统内的唯一订单号 <br>
+     * 退款请求流水号(商户系统唯一) <br>
+     * 可空：N
+     */
+    private String refundOrderNo;
+
+    /**
+     * 原支付订单号 <br>
      * 可空：N
      */
     private String merchantOrderNo;
 
     /**
-     * 盛付通系统内针对此商户订单的唯一订单号 <br>
-     * 如: C20160105105839885474 <br>
+     * 退款状态 <br>
      * 可空：N
      */
-    private String sftOrderNo;
+    private String status;
 
     /**
-     * 微信，支付宝 <br>
-     * 可空：Y
-     */
-    private String payUrl;
-
-    /**
-     * 公众号支付信息 <br>
-     * 可空：Y
-     */
-    private String payInfo;
-
-    /**
-     * 扩展信息参数 <br>
-     * 可空：Y
-     */
-    private String exts;
-
-    /**
-     * 订单创建时间，格式：yyyyMMddHHmmss <br>
-     * 如：20160105105839 <br>
+     * 退款金额 <br>
      * 可空：N
+     */
+    private String refundAmount;
+
+    /**
+     * 盛付通退款订单号 <br>
+     * 可空：N
+     */
+    private String refundTransNo;
+
+    /**
+     * 订单创建时间 <br>
+     * 可空：Y
      */
     private String orderCreateTime;
+
+    /**
+     * 扩展参数 <br>
+     * 可空：Y
+     */
+    private JSONString exts;
 }

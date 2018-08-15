@@ -2,32 +2,45 @@ package com.wangqin.globalshop.pay.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import net.sf.json.JSONString;
+
+import java.util.List;
 
 /**
- * 退款请求参数对应的 VO <br>
- * 生产地址：http://mgw.shengpay.com/web-acquire-channel/pay/refund.htm <br>
+ * 分账请求参数对应实体类 <br>
+ * 生产地址：http://mgw.shengpay.com/web-acquire-channel/pay/sharing.htm <br>
  * 请求类型：REST <br>
  * 请求方式：POST <br>
  * 请求参数示例：
  * <pre>
  * {
- *     "requestTime": "20171222111333",
+ *     "requestTime": "20171222132609",
  *     "charset": "UTF-8",
- *     "refundOrderNo": "4c3f4341ee094044bcf77825b5ab4d59",
- *     "notifyURL": "http://45.77.198.110:4799/javademo/notify.jsp",
- *     "merchantOrderNo": "f2e03275ee25488f99e58630dfb02552",
- *     "merchantNo": "540511",
- *     "refundAmount": "3.00"
+ *     "sharingReqItem": [
+ *         {
+ *             "sharingNo": "1",
+ *             "sharingRate": "0.50",
+ *             "payeeId": "107537",
+ *             "payeeIdType": "1"
+ *         },
+ *         {
+ *             "sharingNo": "2",
+ *             "sharingRate": "0.50",
+ *             "payeeId": "107537",
+ *             "payeeIdType": "1"
+ *         }
+ *     ],
+ *     "sharingOrderNo": "10d8823a6a814d03b523a23f1c49c5c7",
+ *     "merchantOrderNo": "b8e8dfc3de4b44c8bcaeadf5e5795eba",
+ *     "merchantNo": "540511"
  * }
  * </pre>
  *
  * @author angus
- * @date 2018/8/13
+ * @date 2018/8/15
  */
 @Data
 @Builder
-public class RefundPayRequestVO {
+public class SharingPayRequest {
     // 基本请求参数
     /**
      * 由盛付通提供,默认为:商户号(由盛付通提供的8位正整数),用于盛付通判别请求方的身份 <br>
@@ -65,28 +78,28 @@ public class RefundPayRequestVO {
 
     // 业务参数
     /**
-     * 退款请求流水号(商户系统唯一) <br>
+     * 分账请求订单号 <br>
      * 可空：N
      */
-    private String refundOrderNo;
+    private String sharingOrderNo;
 
     /**
-     * 原支付订单号 <br>
+     * 商户订单号 <br>
      * 可空：N
      */
     private String merchantOrderNo;
 
     /**
-     * 退款金额(与支付金额一致) <br>
-     * 可空：N
-     */
-    private String refundAmount;
-
-    /**
-     * 退款的异步通知地址 <br>
+     * 分账异步通知地址 <br>
      * 可空：N
      */
     private String notifyURL;
+
+    /**
+     * 分账信息（允许有多个子项请求,集合类型） <br>
+     * 可空：N
+     */
+    private List<SharingReqItem> sharingReqItem;
 
     /**
      * 扩展属性,JSON串 <br>

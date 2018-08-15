@@ -2,10 +2,9 @@ package com.wangqin.globalshop.pay.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import net.sf.json.JSONString;
 
 /**
- * 创建支付订单请求参数对应的 VO <br>
+ * 创建支付订单请求参数对应实体类 <br>
  * 生产地址：http://mgw.shengpay.com/web-acquire-channel/pay/order.htm <br>
  * 请求类型：REST <br>
  * 请求方式：POST <br>
@@ -31,7 +30,7 @@ import net.sf.json.JSONString;
  */
 @Data
 @Builder
-public class OrderPayRequestVO {
+public class OrderPayRequest {
     // 基本请求参数
     /**
      * 由盛付通提供,默认为:商户号(由盛付通提供的8位正整数),用于盛付通判别请求方的身份 <br>
