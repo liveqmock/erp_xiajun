@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.order.app.agent.service.IOrderCommissionSumaryDetailService;
 import com.wangqin.globalshop.order.app.agent.service.IOrderCommissionSumaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class CommissionController {
 	    	agentCommissionVO.setName(agentDO.getAgentName());
 	    	//计算佣金，根据传来的状态计算（可计算，待结算，已结算）
 	    	agentCommissionVO.setCommission(sumaryDetailService.sumSettlementAbleByUserNo(agentNo,qv.getStatus()));
-	    	if(null == agentDO.getParentAgent()) {
+	    	if(EasyUtil.isStringEmpty(agentDO.getParentAgent())) {
 	    		agentCommissionVO.setAgentLevel("一级代理");
 	    	} else {
 	    		agentCommissionVO.setAgentLevel("二级代理");
