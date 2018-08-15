@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.pay.dto;
 
+import lombok.Data;
 import net.sf.json.JSONString;
 
 /**
@@ -19,6 +20,7 @@ import net.sf.json.JSONString;
  * @author angus
  * @date 2018/8/13
  */
+@Data
 public class QueryRefundResponseVO {
     // 基本响应参数
     /**

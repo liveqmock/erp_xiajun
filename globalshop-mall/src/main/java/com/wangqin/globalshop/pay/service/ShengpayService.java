@@ -1,6 +1,10 @@
 package com.wangqin.globalshop.pay.service;
 
 import com.wangqin.globalshop.pay.dto.*;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -16,6 +20,8 @@ import retrofit2.http.POST;
  * @date 2018/8/14
  */
 public interface ShengpayService {
+    Logger logger = LoggerFactory.getLogger(ShengpayService.class);
+
     /**
      * 商户号
      */
@@ -96,8 +102,17 @@ public interface ShengpayService {
      * @return
      */
     static ShengpayService newInstance() {
+        // 为 Retrofit 配置 Http Log 拦截器
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
+                .setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SHENGPAY_BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -150,8 +165,8 @@ public interface ShengpayService {
     /**
      * 退款查询
      *
-     * @param signType           请求头-加密类型
-     * @param signMsg            请求头-消息 MD5 摘要
+     * @param signType             请求头-加密类型
+     * @param signMsg              请求头-消息 MD5 摘要
      * @param queryRefundRequestVO 请求体-退款查询请求参数对应的 VO
      * @return
      */

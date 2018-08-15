@@ -835,6 +835,7 @@
         third_sale,
         spec,
         model,
+        price_range,
         creator,
         modifier
         )
@@ -859,6 +860,7 @@
             #{item.thirdSale},
             #{item.spec},
             #{item.model},
+            #{item.priceRange},
             #{item.creator},
             #{item.modifier}
             )

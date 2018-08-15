@@ -21,15 +21,16 @@ public interface PayService {
      * @param exts            扩展属性,JSON串（微信H5 、微信小程序、微信APP必传，请参考备注）
      */
     void orderPay(String merchantOrderNo, String amount, String productName,
-                  String userIp, String payChannel, JSONString exts);
+                  String userIp, String payChannel, String exts);
 
     /**
      * 单笔查询
      *
      * @param merchantOrderNo 商户系统内的唯一订单号，商户订单号不能重复
      * @param sftOrderNo      盛付通订单号
+     * @param exts            扩展属性,JSON串
      */
-    void queryPay(String merchantOrderNo, String sftOrderNo);
+    void queryPay(String merchantOrderNo, String sftOrderNo, String exts);
 
     /**
      * 退款
@@ -40,4 +41,16 @@ public interface PayService {
      * @param exts            扩展属性,JSON串
      */
     void refundPay(String refundOrderNo, String merchantOrderNo, String refundAmount, String exts);
+
+    /**
+     * 退款查询
+     *
+     * @param refundOrderNo   退款请求流水号(商户系统唯一)
+     * @param merchantOrderNo 原支付订单号
+     * @param refundTransNo   盛付通退款订单号
+     * @param sftOrderNo      盛付通系统内针对此商户订单的唯一订单号，如: C20160105105839885474
+     * @param exts            扩展属性,JSON串
+     */
+    void queryRefund(String refundOrderNo, String merchantOrderNo, String refundTransNo,
+                     String sftOrderNo, String exts);
 }

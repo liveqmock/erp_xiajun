@@ -6,21 +6,25 @@ import lombok.ToString;
 
 import java.util.Date;
 
-@Getter@Setter@ToString
+@Getter
+@Setter
+@ToString
 public class AppletConfigVO {
     private Long id;
 
     private String companyNo;
 
-    private String secret;
 
+    /*
+         显示以下敏感信息
+         private String payKey;
+         private String secret;
+         private String authorizerRefreshToken;
+         private String authorizerAccessToken;
+     */
     private String appid;
 
     private String appletType;
-
-    private String authorizerRefreshToken;
-
-    private String authorizerAccessToken;
 
     private String creator;
 
@@ -40,7 +44,6 @@ public class AppletConfigVO {
 
     private String status;
 
-    private String payKey;
     private Date gmtCreate;
     private Date gmtModify;
 

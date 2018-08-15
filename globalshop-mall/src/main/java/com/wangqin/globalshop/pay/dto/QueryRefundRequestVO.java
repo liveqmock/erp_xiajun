@@ -1,5 +1,7 @@
 package com.wangqin.globalshop.pay.dto;
 
+import lombok.Builder;
+import lombok.Data;
 import net.sf.json.JSONString;
 
 /**
@@ -21,6 +23,8 @@ import net.sf.json.JSONString;
  * @author angus
  * @date 2018/8/13
  */
+@Data
+@Builder
 public class QueryRefundRequestVO {
     // 基本请求参数
     /**
@@ -87,5 +91,5 @@ public class QueryRefundRequestVO {
      * 扩展参数 <br>
      * 可空：Y
      */
-    private JSONString exts;
+    private String exts;
 }

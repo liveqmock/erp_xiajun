@@ -5,12 +5,13 @@ import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.pay.dto.*;
 import com.wangqin.globalshop.pay.service.PayService;
 import com.wangqin.globalshop.pay.service.ShengpayService;
-import net.sf.json.JSONString;
+import okhttp3.Headers;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -34,12 +35,12 @@ public class PayServiceImpl implements PayService {
 
     @Override
     public void orderPay(String merchantOrderNo, String amount, String productName,
-                         String userIp, String payChannel, JSONString exts) {
+                         String userIp, String payChannel, String exts) {
         Date currentTime = new Date();
         // 5 分钟后过期
         Date expireTime = new Date(currentTime.getTime() + 5 * 60 * 1000);
 
-        // 创建支付订单请求参数 VO
+        // 构建支付订单请求参数 VO
         OrderPayRequestVO orderPayRequestVO = OrderPayRequestVO.builder()
                 .merchantNo(MERCHANT_NO)
                 .charset(CHARSET)
@@ -77,13 +78,15 @@ public class PayServiceImpl implements PayService {
 
 
     @Override
-    public void queryPay(String merchantOrderNo, String sftOrderNo) {
+    public void queryPay(String merchantOrderNo, String sftOrderNo, String exts) {
+        // 构建单笔查询参数 VO
         QueryPayRequestVO queryPayRequestVO = QueryPayRequestVO.builder()
                 .merchantNo(MERCHANT_NO)
                 .charset(CHARSET)
                 .requestTime(sdf.format(new Date()))
                 .merchantOrderNo(merchantOrderNo)
                 .sftOrderNo(sftOrderNo)
+                .exts(exts)
                 .build();
 
         // 获取 MD5 加密摘要
@@ -106,6 +109,7 @@ public class PayServiceImpl implements PayService {
 
     @Override
     public void refundPay(String refundOrderNo, String merchantOrderNo, String refundAmount, String exts) {
+        // 构建退款参数 VO
         RefundPayRequestVO refundPayRequestVO = RefundPayRequestVO.builder()
                 .merchantNo(MERCHANT_NO)
                 .charset(CHARSET)
@@ -135,8 +139,42 @@ public class PayServiceImpl implements PayService {
         }
     }
 
+    @Override
+    public void queryRefund(String refundOrderNo, String merchantOrderNo, String refundTransNo,
+                            String sftOrderNo, String exts) {
+        // 构建退款查询参数 VO
+        QueryRefundRequestVO queryPayRequestVO = QueryRefundRequestVO.builder()
+                .merchantNo(MERCHANT_NO)
+                .charset(CHARSET)
+                .requestTime(sdf.format(new Date()))
+                .refundOrderNo(refundOrderNo)
+                .merchantOrderNo(merchantOrderNo)
+                .refundTransNo(refundTransNo)
+                .sftOrderNo(sftOrderNo)
+                .exts(exts)
+                .build();
 
-    // 退款查询
+        // 获取 MD5 加密摘要
+        String signMsg = getSignMsg(queryPayRequestVO);
+        logger.debug("signMsg: {}", signMsg);
+
+        // 封装请求（Http 请求由 Retrofit2 提供支持）
+        Call<QueryRefundResponseVO> call = shengpayService.queryRefund(SIGN_TYPE, signMsg, queryPayRequestVO);
+        logger.debug("call: {}", call.request());
+
+        try {
+            // 执行请求，接收响应
+            Response<QueryRefundResponseVO> response = call.execute();
+            Headers headers = response.headers();
+            logger.debug("headers:{}", headers);
+            QueryRefundResponseVO body = response.body();
+            logger.debug("body:{}", body);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BizCommonException("未知异常！");
+        }
+
+    }
 
     /**
      * 生成加密信息串 signMsg <br>

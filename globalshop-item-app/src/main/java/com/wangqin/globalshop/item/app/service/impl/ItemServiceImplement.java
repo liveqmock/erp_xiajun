@@ -303,7 +303,7 @@ public class ItemServiceImplement implements IItemService {
         // 1、查询总的记录数量
         Integer totalCount = itemDOMapperExt.queryItemsCount(itemQueryVO);
         itemResult.setTotalCount(totalCount);
-        Integer totalPage = totalCount/itemQueryVO.getPageSize();
+        Integer totalPage = totalCount / itemQueryVO.getPageSize();
         itemResult.setTotalPage(totalPage);
         itemResult.setPageIndex(itemQueryVO.getPageIndex());
 
@@ -316,7 +316,7 @@ public class ItemServiceImplement implements IItemService {
                     item.setSalesVolume(salesVolume);
                 }
             }
-            itemResult.setData(items);                      
+            itemResult.setData(items);
         } else {
             List<ItemDTO> items = new ArrayList<>();
             itemResult.setData(items);
@@ -714,7 +714,10 @@ public class ItemServiceImplement implements IItemService {
             List<ItemSkuDO> skuList = new ArrayList<>();
             List<ItemSkuScaleDO> scaleList = new ArrayList<>();
             List<String> upcs = new ArrayList();
-
+            ItemDO item;
+            Map<String, ItemDO> map = new HashMap<>(200);
+            /**图片链接*/
+            String s = ImgUtil.initImg2Json(imgUrl);
             int i = 0;
             if (list.size() > 200) {
                 throw new BizCommonException("最多只能导入两百条");
@@ -724,11 +727,134 @@ public class ItemServiceImplement implements IItemService {
             }
             for (List<Object> obj : list) {
                 i++;
-                ItemDO item = new ItemDO();
                 ItemSkuDO itemSku = new ItemSkuDO();
+                //外部商品代码
+                String sn = obj.get(0).toString().trim();
+                if (!map.containsKey(sn)) {
+                    item = new ItemDO();
+                    /**商品名称*/
+                    String itemName = obj.get(2).toString().trim();
+                    if (StringUtils.isBlank(itemName)) {
+                        errMsg.add("第" + i + "行:商品名不能为空");
+                    } else {
+                        item.setItemName(itemName);
+                    }
 
+
+                    String brandEnName = obj.get(3).toString().trim();
+                    /**品牌(英文)*/
+                    if (StringUtils.isBlank(brandEnName)) {
+                        errMsg.add("第" + i + "行:品牌(英文)不能为空");
+                    } else {
+                        /**品牌(中文)*/
+                        String brandCnName = obj.get(4).toString().trim();
+                        brandCnName = brandCnName == null ? "" : brandCnName;
+                        item.setBrandName(brandEnName + " " + brandCnName);
+                        itemSku.setBrandName(brandEnName + " " + brandCnName);
+                        List<ItemBrandDO> brand = iBrandService.queryByEnName(brandEnName);
+                        if (brand.size() == 0) {
+                            errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
+                        } else if (brand.size() > 1) {
+                            errMsg.add("第" + i + "行:" + brandEnName + " " + brandCnName + "对应的品牌不唯一");
+                        } else {
+                            item.setBrandNo(brand.get(0).getBrandNo());
+                        }
+                    }
+
+                    /**类目1*/
+                    String category1 = obj.get(5).toString().trim();
+                    /**类目2*/
+                    String category2 = obj.get(6).toString().trim();
+                    /**类目3*/
+                    String category3 = obj.get(7).toString().trim();
+                    List<ItemCategoryDO> categoryList = null;
+                    if (EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1)) {
+                        errMsg.add("第" + i + "行:类目为空");
+                    } else {
+                        List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
+                        if (categoryList1.size() != 0) {
+                            List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
+                            if (categoryList2.size() != 0) {
+                                categoryList = categoryService.selectByParentAndName(categoryList2, category3);
+                            }
+
+                        }
+
+                    }
+
+                    if (categoryList == null || categoryList.size() == 0) {
+                        errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
+                    } else if (categoryList.size() > 1) {
+                        errMsg.add("第" + i + "行:" + category1 + "/" + category2 + "/" + category3 + "对应的类目不唯一");
+                    } else {
+                        ItemCategoryDO category = categoryList.get(0);
+                        String categoryCode = category.getCategoryCode();
+                        item.setCategoryCode(categoryCode);
+
+                    }
+
+
+                    item.setMainPic(s);
+                    String itemCode = CodeGenUtil.generateItemCode(item.getCategoryCode());
+                    item.setItemCode(itemCode);
+                    if (categoryList == null || categoryList.size() == 0) {
+                        errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
+                    } else if (categoryList.size() > 1) {
+                        errMsg.add("第" + i + "行:" + category1 + "/" + category2 + "/" + category3 + "对应的类目不唯一");
+                    } else {
+                        ItemCategoryDO category = categoryList.get(0);
+                        item.setCategoryCode(category.getCategoryCode());
+                        item.setCategoryName(category.getName());
+
+                    }
+
+                    /**重量*/
+                    String weight = obj.get(14).toString();
+                    weight = StringUtil.isBlank(weight) ? "0" : weight;
+                    if (isParseToDouble(weight)) {
+                        item.setWeight(Double.valueOf(weight));
+                        itemSku.setWeight(Double.valueOf(weight));
+                    } else {
+                        errMsg.add("存在未知格式的数据:第" + i + "行 第15列的  " + weight);
+                    }
+                    /**采购地*/
+                    String purchaseFrom = obj.get(10).toString().trim();
+                    Long s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
+                    if (s1 != null) {
+                        item.setCountry(s1.toString());
+                    }
+                    /**币种*/
+                    String currency = obj.get(11).toString();
+                    currency = StringUtil.isBlank(currency) ? "0" : currency;
+                    if (isParseToInteger(currency)) {
+                        item.setCurrency(Byte.valueOf(currency));
+                    } else {
+                        errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + currency);
+                    }
+                    map.put(sn, item);
+                    itemList.add(item);
+                } else {
+                    item = map.get(sn);
+                }
+                itemSku.setItemName(item.getItemName());
+                itemSku.setCategoryCode(item.getCategoryCode());
+                itemSku.setCategoryCode(item.getCategoryName());
+
+                /**销售价*/
+                String salePrice = obj.get(12).toString();
+                salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
+                if (isParseToDouble(salePrice)) {
+                    Double salePrice1 = Double.valueOf(salePrice);
+                    itemSku.setSalePrice(salePrice1);
+                    String s1 = updateItemPriceRange(item, salePrice);
+                    if (!EasyUtil.isStringEmpty(s1)) {
+                        errMsg.add("第" + i + "行 第13列 " + s1);
+                    }
+                } else {
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
+                }
                 /**UPC*/
-                String upc = obj.get(0).toString().trim();
+                String upc = obj.get(1).toString().trim();
                 if (StringUtils.isBlank(upc)) {
                     errMsg.add("第" + i + "行:upc不能为空");
                 } else {
@@ -744,119 +870,23 @@ public class ItemServiceImplement implements IItemService {
                     itemSku.setUpc(upc);
                 }
 
-                /**商品名称*/
-                String itemName = obj.get(1).toString().trim();
-                if (StringUtils.isBlank(itemName)) {
-                    errMsg.add("第" + i + "行:商品名不能为空");
-                } else {
-                    item.setItemName(itemName);
-                    itemSku.setItemName(itemName);
-                }
 
-
-                String brandEnName = obj.get(2).toString();
-                /**品牌(英文)*/
-                if (StringUtils.isBlank(brandEnName)) {
-                    errMsg.add("第" + i + "行:品牌(英文)不能为空");
-                } else {
-                    /**品牌(中文)*/
-                    String brandCnName = obj.get(3).toString().trim();
-                    brandCnName = brandCnName == null ? "" : brandCnName;
-                    item.setBrandName(brandEnName + " " + brandCnName);
-                    itemSku.setBrandName(brandEnName + " " + brandCnName);
-                    List<ItemBrandDO> brand = iBrandService.queryByEnName(brandEnName);
-                    if (brand.size() == 0) {
-                        errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
-                    } else if (brand.size() > 1) {
-                        errMsg.add("第" + i + "行:" + brandEnName + " " + brandCnName + "对应的品牌不唯一");
-                    } else {
-                        item.setBrandNo(brand.get(0).getBrandNo());
-                    }
-                }
-                /**类目1*/
-                String category1 = obj.get(4).toString().trim();
-                /**类目2*/
-                String category2 = obj.get(5).toString().trim();
-                /**类目3*/
-                String category3 = obj.get(6).toString().trim();
-                List<ItemCategoryDO> categoryList = null;
-                if (EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1) || EasyUtil.isStringEmpty(category1)) {
-                    errMsg.add("第" + i + "行:类目为空");
-                } else {
-                    List<ItemCategoryDO> categoryList1 = categoryService.selectByName(category1);
-                    if (categoryList1.size() != 0) {
-                        List<ItemCategoryDO> categoryList2 = categoryService.selectByParentAndName(categoryList1, category2);
-                        if (categoryList2.size() != 0) {
-                            categoryList = categoryService.selectByParentAndName(categoryList2, category3);
-                        }
-
-                    }
-
-                }
-                String categoryCode = "";
-                if (categoryList == null || categoryList.size() == 0) {
-                    errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
-                } else if (categoryList.size() > 1) {
-                    errMsg.add("第" + i + "行:" + category1 + "/" + category2 + "/" + category3 + "对应的类目不唯一");
-                } else {
-                    ItemCategoryDO category = categoryList.get(0);
-                    categoryCode = category.getCategoryCode();
-
-                }
-
-
-                String itemCode = CodeGenUtil.generateItemCode(categoryCode);
-                if (categoryList == null || categoryList.size() == 0) {
-                    errMsg.add("第" + i + "行:找不到" + category1 + "/" + category2 + "/" + category3 + "对应的类目");
-                } else if (categoryList.size() > 1) {
-                    errMsg.add("第" + i + "行:" + category1 + "/" + category2 + "/" + category3 + "对应的类目不唯一");
-                } else {
-                    ItemCategoryDO category = categoryList.get(0);
-                    categoryCode = category.getCategoryCode();
-                    item.setCategoryCode(categoryCode);
-                    item.setCategoryName(category.getName());
-                    itemSku.setCategoryCode(categoryCode);
-                    itemSku.setCategoryCode(category.getName());
-                }
                 /**规格(颜色)*/
-                String scala1 = obj.get(7).toString().trim();
+                String scala1 = obj.get(8).toString().trim();
                 /**规格(尺寸)*/
-                String scala2 = obj.get(8).toString().trim();
-                /**采购地*/
-                String purchaseFrom = obj.get(9).toString().trim();
-                Long s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
-                if (s1 != null) {
-                    item.setCountry(s1.toString());
-                }
-                /**币种*/
-                String currency = obj.get(10).toString();
-                currency = StringUtil.isBlank(currency) ? "0" : currency;
-                if (isParseToInteger(currency)) {
-                    item.setCurrency(Byte.valueOf(currency));
-                } else {
-                    errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + currency);
-                }
-                /**销售价*/
-                String salePrice = obj.get(11).toString();
-                salePrice = StringUtil.isBlank(salePrice) ? "0" : salePrice;
-                if (isParseToDouble(salePrice)) {
-                    Double salePrice1 = Double.valueOf(salePrice);
-                    itemSku.setSalePrice(salePrice1);
-                    item.setPriceRange(salePrice1.toString());
-                } else {
-                    errMsg.add("存在未知格式的数据:第" + i + "行 第13列的  " + salePrice);
-                }
+                String scala2 = obj.get(9).toString().trim();
+
                 /**SKU编号*/
-                String skuCode = CodeGenUtil.generateSkuCode(itemCode, i);
+                String skuCode = CodeGenUtil.generateSkuCode(item.getItemCode(), i);
                 itemSku.setSkuCode(skuCode);
                 /**虚拟库存*/
-                String virInv = obj.get(12).toString();
+                String virInv = obj.get(13).toString();
                 virInv = StringUtil.isBlank(virInv) ? "0" : virInv;
                 if (isParseToLong(virInv)) {
 //                    itemSku.setVirtualInv(Integer.valueOf(virInv));
                     InventoryDO inventory = new InventoryDO();
-                    inventory.setItemName(itemName);
-                    inventory.setItemCode(itemCode);
+                    inventory.setItemName(item.getItemName());
+                    inventory.setItemCode(item.getItemCode());
                     inventory.setSkuCode(skuCode);
                     inventory.setUpc(upc);
                     inventory.setVirtualInv(Long.valueOf(virInv));
@@ -864,44 +894,16 @@ public class ItemServiceImplement implements IItemService {
                 } else {
                     errMsg.add("存在未知格式的数据:第" + i + "行 第14列的  " + virInv);
                 }
-                /**重量*/
-                String weight = obj.get(13).toString();
-                weight = StringUtil.isBlank(weight) ? "0" : weight;
-                if (isParseToDouble(weight)) {
-                    item.setWeight(Double.valueOf(weight));
-                    itemSku.setWeight(Double.valueOf(weight));
-                } else {
-                    errMsg.add("存在未知格式的数据:第" + i + "行 第15列的  " + weight);
-                }
-//                /**包装*/
-//                String packName = obj.get(14).toString();
-//                if (StringUtil.isNotBlank(packName)) {
-//                    ShippingPackingPatternDO pack = shippingPackingPatternDOMapper.selectByName(packName);
-//                    if (pack == null) {
-//                        errMsg.add("找不到对应的包装" + packName + ":第" + i + "行 第15列的  ");
-//                    } else {
-//                        itemSku.setPackageCode(pack.getPatternNo());
-//                        itemSku.setPackageLevelId(String.valueOf(pack.getPackageLevel()));
-//                        itemSku.setPackageName(pack.getName());
-//                        itemSku.setPackageEn(pack.getNameEn());
-//                        itemSku.setPackageWeight(pack.getWeight());
-//                    }
-//                }
 
-
-                /**图片链接*/
-                String s = ImgUtil.initImg2Json(imgUrl);
-                item.setMainPic(s);
                 itemSku.setSkuPic(s);
 
-                item.setItemCode(itemCode);
-                itemSku.setItemCode(itemCode);
+
+                itemSku.setItemCode(item.getItemCode());
                 item.init();
                 itemSku.init();
 
-                itemList.add(item);
                 skuList.add(itemSku);
-                addInfo2ScaleList(scala1, scala2, scaleList, itemCode, skuCode);
+                addInfo2ScaleList(scala1, scala2, scaleList, item.getItemCode(), skuCode);
             }
             int size = errMsg.size();
             if (size == 0) {
@@ -919,6 +921,47 @@ public class ItemServiceImplement implements IItemService {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+
+    }
+
+    private String updateItemPriceRange(ItemDO item, String salePrice) {
+        try {
+            String priceRange = item.getPriceRange();
+            Double min, max;
+            if (EasyUtil.isStringEmpty(priceRange)) {
+                item.setPriceRange(salePrice);
+                return null;
+            }
+            Double price = Double.valueOf(salePrice);
+            if (priceRange.contains("-")) {
+                String[] split = priceRange.split("-");
+                min = Double.valueOf(split[0]);
+                max = Double.valueOf(split[1]);
+
+                if (min > price) {
+                    item.setPriceRange(price + "-" + max);
+                    return null;
+                }
+                if (max < price) {
+                    item.setPriceRange(min + "-" + price);
+                    return null;
+                }
+            } else {
+                min = Double.valueOf(priceRange);
+                if (min > price) {
+                    item.setPriceRange(price + "-" + min);
+                    return null;
+                }
+                if (min < price) {
+                    item.setPriceRange(min + "-" + price);
+                    return null;
+
+                }
+            }
+        } catch (Exception e) {
+            return "更新价格区间错误";
+        }
+        return null;
 
     }
 
