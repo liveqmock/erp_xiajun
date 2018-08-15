@@ -63,6 +63,16 @@ public class AppletConfigController {
         List<String> list = appletConfigService.publish(appids, templateId, userDesc, userVersion);
         return result.buildData(list).buildMsg("访问成功").buildIsSuccess(true);
     }
+    @PostMapping("/query")
+    public Object query(String appid) {
+        log.info("查询");
+        log.info("appid:"+appid);
+        JsonResult<AppletConfigVO> result = new JsonResult<>();
+        AppletConfigDO applet = appletConfigService.selectByAppid(appid);
+        AppletConfigVO appletVO = new AppletConfigVO();
+        ParseObj2Obj.parseObj2Obj(applet,appletVO);
+        return result.buildData(appletVO).buildMsg("访问成功").buildIsSuccess(true);
+    }
 
     @PostMapping("/update")
     public Object update(AppletConfigVO appletConfigVO) {
