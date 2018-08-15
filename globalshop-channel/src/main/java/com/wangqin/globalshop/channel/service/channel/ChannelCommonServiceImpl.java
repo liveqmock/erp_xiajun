@@ -69,7 +69,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 	/**
 	 * 发货：同步运单号至各个平台
 	 *
-	 * 一次只发一个订单，但可能是两个不同平台的子订单
+	 * 一次只发一个主订单，可以多个明细，
 	 *
 	 * @param mallSubOrderList
 	 * @param shippingOrder
@@ -79,49 +79,40 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		if(EasyUtil.isListEmpty(mallSubOrderList)){
              throw new ErpCommonException("mallSubOrderList为空");
 		}
-		//按照订单分配
-		Map<String,List<MallSubOrderDO>> shopCodeSubOrderListMap = new HashMap<>();
-		for (MallSubOrderDO mallSubOrderDO : mallSubOrderList) {
-			if(EasyUtil.isStringEmpty(mallSubOrderDO.getShopCode())){
-				throw new ErpCommonException("子订单号，sub_Order_no: "+mallSubOrderDO.getSubOrderNo()+" shopCode不存在");
-			}
-			if(shopCodeSubOrderListMap.get(mallSubOrderDO.getShopCode()) == null){
-				List<MallSubOrderDO> mallSubOrderDOS = new ArrayList<>();
-				mallSubOrderDOS.add(mallSubOrderDO);
-				shopCodeSubOrderListMap.put(mallSubOrderDO.getShopCode(),mallSubOrderDOS);
-			}else {
-				shopCodeSubOrderListMap.get(mallSubOrderDO.getShopCode()).add(mallSubOrderDO);
-			}
-		}
+//		//按照shopCode分配
+//		Map<String,List<MallSubOrderDO>> shopCodeSubOrderListMap = new HashMap<>();
+//		for (MallSubOrderDO mallSubOrderDO : mallSubOrderList) {
+//			if(EasyUtil.isStringEmpty(mallSubOrderDO.getShopCode())){
+//				throw new ErpCommonException("子订单号，sub_Order_no: "+mallSubOrderDO.getSubOrderNo()+" shopCode不存在");
+//			}
+//			if(shopCodeSubOrderListMap.get(mallSubOrderDO.getShopCode()) == null){
+//				List<MallSubOrderDO> mallSubOrderDOS = new ArrayList<>();
+//				mallSubOrderDOS.add(mallSubOrderDO);
+//				shopCodeSubOrderListMap.put(mallSubOrderDO.getShopCode(),mallSubOrderDOS);
+//			}else {
+//				shopCodeSubOrderListMap.get(mallSubOrderDO.getShopCode()).add(mallSubOrderDO);
+//			}
+//		}
 
-
-		List<String> mallSubOrderErrorList = new ArrayList<>();
-
+		String shopCode = mallSubOrderList.get(0).getShopCode();
 		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
 		shopOauthSo.setIsDel(false);
-		for(String shopCode : shopCodeSubOrderListMap.keySet()){
-			shopOauthSo.setShopCode(shopCode);
-			JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
-			if(shopOauth == null){
-				//addErrorSubOrderNo(shopCodeSubOrderListMap.get(shopCode),mallSubOrderErrorList);
-				throw  new ErpCommonException("channel_account,shopCode: "+shopCode+" 不存在");
-			}
-			try {
-				ChannelFactory.getChannel(shopOauth).syncLogisticsOnlineConfirm(shopCodeSubOrderListMap.get(shopCode),shippingOrder);
-			}catch (Exception e){
-				logger.error("",e);
-				//addErrorSubOrderNo(shopCodeSubOrderListMap.get(shopCode),mallSubOrderErrorList);
-			}
+		shopOauthSo.setShopCode(shopCode);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
+		if (shopOauth == null) {
+			//addErrorSubOrderNo(shopCodeSubOrderListMap.get(shopCode),mallSubOrderErrorList);
+			throw new ErpCommonException("channel_account,shopCode: " + shopCode + " 不存在");
+		}
+		try {
+			ChannelFactory.getChannel(shopOauth).syncLogisticsOnlineConfirm(mallSubOrderList, shippingOrder);
+		} catch (Exception e) {
+			logger.error("", e);
+			throw new ErpCommonException("", e.getMessage());
 		}
 
 	}
 
 
-	private void addErrorSubOrderNo(List<MallSubOrderDO> mallSubOrderList, List<String> mallSubOrderErrorList){
-		for(MallSubOrderDO subOrderDO : mallSubOrderList){
-			mallSubOrderErrorList.add(subOrderDO.getSubOrderNo());
-		}
-	}
 
 
 

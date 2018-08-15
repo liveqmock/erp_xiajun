@@ -2,16 +2,12 @@ package com.wangqin.globalshop.channel.task;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
-import com.wangqin.globalshop.channel.service.channel.ChannelFactory;
-import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
-import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
-import com.wangqin.globalshop.channel.service.order.ChannelIMallOrderService;
+import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.order.ChannelIShippingOrderService;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
@@ -20,14 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * 同步发货状态给渠道,查看那些发货失败的订单，进行再次补偿发货到各个平台
+ * 异步通知有赞，海狐发货
  * @author liuyang
  *
  */
-@Component
+//@Component
 public class AutoRepairFeedBackOrderTask {
 	protected Logger logger = LogManager.getLogger(getClass());
 
@@ -35,58 +34,67 @@ public class AutoRepairFeedBackOrderTask {
 	private ChannelIShippingOrderService shippingOrderService;
 
 	@Autowired
-	private ChannelIMallOrderService outerOrderService;
-
-
-	@Autowired
 	private MallSubOrderMapperExt mallSubOrderDOMapperExt;
-
-	@Autowired
-	private JdShopOauthService shopOauthService;
 
 	@Autowired
 	private ChannelCommonService channelCommonService;
 
 
 	
-	// 同步发货状态给渠道
-	@Scheduled(cron = "0 25 0/1 * * ?")
+	//每小时一次
+	//@Scheduled(cron = "0 0 * * * ?")
+	//@Scheduled(cron = "0/30 * * * * ?")
 	public void runSyncSendPackage() {
 		logger.info("定时任务：通知渠道，已经发货===>Start");
 		
 		// 查询“未同步发货信息”的订单
 		ShippingOrderVO shippingOrderVO = new ShippingOrderVO();
 		shippingOrderVO.setSyncSendStatus(0);
-		List<ShippingOrderDO> shippingOrderList = shippingOrderService.queryShippingOrders(shippingOrderVO);
+		List<ShippingOrderDO> shippingOrderList = shippingOrderService.queryNotSyncShippingOrders(shippingOrderVO);
 		if (CollectionUtils.isNotEmpty(shippingOrderList)) {
 			for (ShippingOrderDO shippingOrder : shippingOrderList) {
-				try {					
-					List<Long> malSubOrderIdList = HaiJsonUtils.toBean(shippingOrder.getMallOrders(), new TypeReference<List<Long>>() {
-					});
+				try {
+
+					if(EasyUtil.isStringEmpty(shippingOrder.getMallOrders())){
+						continue;
+					}
+
+					List<String> malSubOrderNoList = new ArrayList<>();
+
+					String[] malSubOrderNoArray  = shippingOrder.getMallOrders().split(",");
+                    for(int i=0; i < malSubOrderNoArray.length; i++ ){
+						malSubOrderNoList.add(malSubOrderNoArray[i]);
+					}
 
 					// 查出 erpOrder
-					List<MallSubOrderDO> erpOrderList = mallSubOrderDOMapperExt.queryByOrderId(malSubOrderIdList);
+					List<MallSubOrderDO> erpOrderList = mallSubOrderDOMapperExt.queryByOrderNoList(malSubOrderNoList);
 					
 					if (CollectionUtils.isEmpty(erpOrderList)) {
 						continue;
 					}
-					
-					// 查出 outer_order
-					MallOrderDO so = new MallOrderDO();
-					so.setOrderNo(erpOrderList.get(0).getOrderNo());
-					MallOrderDO outerOrder = outerOrderService.queryPo(so);
 
-					// 渠道
-					ChannelType channelType = ChannelType.getChannelType(Integer.valueOf(outerOrder.getChannelNo()));
-
-					if (channelType == null) {
-						shippingOrder.setSyncSendStatus(1);
-						shippingOrderService.updateByPrimaryKey(shippingOrder);
-						continue;
+					//按照订单分配
+					Map<String,List<MallSubOrderDO>> channelOrderListMap = new HashMap<>();
+					for (MallSubOrderDO mallSubOrderDO : erpOrderList) {
+						if(EasyUtil.isStringEmpty(mallSubOrderDO.getChannelOrderNo())){
+							throw new ErpCommonException("子订单号，sub_Order_no: "+mallSubOrderDO.getSubOrderNo()+" ChannelOrderNo 不存在，非渠道订单");
+						}
+						if(channelOrderListMap.get(mallSubOrderDO.getChannelOrderNo()) == null){
+							List<MallSubOrderDO> mallSubOrderDOS = new ArrayList<>();
+							mallSubOrderDOS.add(mallSubOrderDO);
+							channelOrderListMap.put(mallSubOrderDO.getChannelOrderNo(),mallSubOrderDOS);
+						}else {
+							channelOrderListMap.get(mallSubOrderDO.getChannelOrderNo()).add(mallSubOrderDO);
+						}
 					}
-					// 同步给渠道
-					channelCommonService.syncLogistics2Channel(erpOrderList, shippingOrder);
-					
+
+                    for(String channelNo : channelOrderListMap.keySet()){
+						// 同步给渠道
+						channelCommonService.syncLogistics2Channel(channelOrderListMap.get(channelNo), shippingOrder);
+
+						//todo,如果同一个运单号，一个是海狐，一个是有赞，一个成功，一个失败，shipping_order不知道是设置成功还是失败
+					}
+
 					Thread.sleep(1000);
 				} catch (Exception e) {
 					logger.error("通知渠道，已经发货 异常", e);

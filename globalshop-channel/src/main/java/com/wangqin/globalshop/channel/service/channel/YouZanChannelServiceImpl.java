@@ -629,6 +629,7 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 
     /**
      * 发货反馈,可以根据子订单进行发货
+	 * 支持多个主订单+多个子订单发货
      *
      * @param orderList
      * @param shippingOrder
@@ -643,7 +644,7 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                 // 获取第三方订单
                 String tid = order.getChannelOrderNo();
                 // 获取物流信息
-                String logisticNo = shippingOrder.getShippingNo();
+                String logisticNo = shippingOrder.getLogisticNo();
                 String logisticCompany = shippingOrder.getLogisticCompany();
 
                 // 调用"商家已发货"
