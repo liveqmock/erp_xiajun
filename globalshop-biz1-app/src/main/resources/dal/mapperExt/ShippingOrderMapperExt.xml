@@ -102,6 +102,51 @@
         <!--&#45;&#45;         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>-->
     </select>
 
+    <select id="queryNotSyncShippingOrders" resultMap="BaseResultMap"
+            parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        `shipping_order`
+        <where>
+            <if test="shippingNo!=null and shippingNo!=''">
+                shipping_no = #{shippingNo}
+            </if>
+            <if test="logisticNo!=null and logisticNo!=''">
+                and logistic_no = #{logisticNo}
+            </if>
+            <if test="logisticCompany!=null and logisticCompany!=''">
+                and logistic_company = #{logisticCompany}
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                and receiver = #{receiver}
+            </if>
+            <if test="telephone!=null and telephone!=''">
+                and telephone = #{telephone}
+            </if>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+            <if test="type!=null">
+                and type = #{type}
+            </if>
+            <if test=" startOrderTime!=null">
+                and   <![CDATA[ gmt_create >= #{startOrderTime} ]]>
+            </if>
+            <if test=" endOrderTime!=null">
+                and    <![CDATA[ gmt_create <= #{endOrderTime} ]]>
+            </if>
+            <if test=" syncSendStatus!=null">
+                and sync_send_status = #{syncSendStatus}
+            </if>
+            <if test=" companyNo!=null">
+                and company_no = #{companyNo}
+            </if>
+        </where>
+        order by id desc
+        <!--&#45;&#45;         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>-->
+    </select>
+
     <!--<if test="salesId!=null">-->
     <!--<if test = "openId == null" >-->
     <!--and   id IN (-->

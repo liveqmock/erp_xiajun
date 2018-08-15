@@ -26,5 +26,7 @@ public interface ChannelIShippingOrderService {
 
 	public List<ShippingOrderDO> queryShippingOrders(ShippingOrderVO shippingOrderVO);
 
+	public List<ShippingOrderDO> queryNotSyncShippingOrders(ShippingOrderVO shippingOrderVO);
+
 
 }

@@ -572,11 +572,16 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 	}
 
 
-
+	/**
+	 * 必须是同一个订单，list其实是单个订单的明细
+	 * @param erpOrderList
+	 * @param shippingOrder
+	 */
 	@Override
 	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("packageNo", shippingOrder.getShippingNo());
+		param.put("packageNo", shippingOrder.getLogisticNo());
 		param.put("logisticsCompany", shippingOrder.getLogisticCompany());
 		param.put("enteCode", "irhua");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

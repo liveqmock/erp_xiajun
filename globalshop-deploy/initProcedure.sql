@@ -35,15 +35,15 @@ CREATE PROCEDURE createUser(
                          force_idcard, tel, im,
                          creator, modifier)
     VALUES
-      (companyno, companyName, 0, 1, '13777828256', '微信', userno,
+      (companyno, companyName, 0, userno, 1, '13777828256', '微信',
        'SYSTEM', 'SYSTEM');
 
     #     创建部门 (待测试)
-    #SELECT max(org_id) + 1
-    #INTO orgid
-    #FROM auth_organization;
-    #INSERT INTO auth_organization (company_no, org_id, code,name, address,seq, creator, modifier)
-    #VALUES (companyno, orgid, orgid,'公司总部', '公司地址',1, 'SYSTEM', 'SYSTEM');
+    SELECT max(org_id) + 1
+    INTO orgid
+    FROM auth_organization;
+    INSERT INTO auth_organization (company_no, org_id, code,name, address,seq, creator, modifier)
+    VALUES (companyno, orgid, orgid,'公司总部', '公司地址',1, 'SYSTEM', 'SYSTEM');
 
 
     #     创建角色
