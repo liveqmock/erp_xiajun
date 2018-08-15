@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
+import com.wangqin.globalshop.channel.service.channel.ChannelShopService;
 import com.wangqin.globalshop.channel.service.order.ChannelIShippingOrderService;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -40,10 +41,14 @@ public class AutoRepairFeedBackOrderTask {
 	private ChannelCommonService channelCommonService;
 
 
+	@Autowired
+	private ChannelShopService channelShopService;
+
+
 	
 	//每小时一次
 	//@Scheduled(cron = "0 0 * * * ?")
-	//@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void runSyncSendPackage() {
 		logger.info("定时任务：通知渠道，已经发货===>Start");
 		
@@ -77,7 +82,8 @@ public class AutoRepairFeedBackOrderTask {
 					Map<String,List<MallSubOrderDO>> channelOrderListMap = new HashMap<>();
 					for (MallSubOrderDO mallSubOrderDO : erpOrderList) {
 						if(EasyUtil.isStringEmpty(mallSubOrderDO.getChannelOrderNo())){
-							throw new ErpCommonException("子订单号，sub_Order_no: "+mallSubOrderDO.getSubOrderNo()+" ChannelOrderNo 不存在，非渠道订单");
+							logger.info("子订单号，sub_Order_no:" +mallSubOrderDO.getSubOrderNo()+"  不存在，非渠道订单,忽略");
+							continue;
 						}
 						if(channelOrderListMap.get(mallSubOrderDO.getChannelOrderNo()) == null){
 							List<MallSubOrderDO> mallSubOrderDOS = new ArrayList<>();
@@ -88,9 +94,19 @@ public class AutoRepairFeedBackOrderTask {
 						}
 					}
 
-                    for(String channelNo : channelOrderListMap.keySet()){
+                    for(String channelOrderNo : channelOrderListMap.keySet()){
+
+						//如果没有这个渠道的shopCode,拦截掉
+						MallSubOrderDO exampleSubOrder = channelOrderListMap.get(channelOrderNo).get(0);
+						ChannelShopDO channelShopSo = new ChannelShopDO();
+						channelShopSo.setShopCode(exampleSubOrder.getShopCode());
+						channelShopSo.setIsDel(false);
+						ChannelShopDO channelShopDO = channelShopService.searchShop(channelShopSo);
+						if(channelShopDO == null){
+							continue;
+						}
 						// 同步给渠道
-						channelCommonService.syncLogistics2Channel(channelOrderListMap.get(channelNo), shippingOrder);
+						channelCommonService.syncLogistics2Channel(channelOrderListMap.get(channelOrderNo), shippingOrder);
 
 						//todo,如果同一个运单号，一个是海狐，一个是有赞，一个成功，一个失败，shipping_order不知道是设置成功还是失败
 					}
@@ -99,6 +115,8 @@ public class AutoRepairFeedBackOrderTask {
 				} catch (Exception e) {
 					logger.error("通知渠道，已经发货 异常", e);
 				}
+				shippingOrder.setSyncSendStatus(1);
+				shippingOrderService.updateByPrimaryKey(shippingOrder);
 			}
 		}
 		
