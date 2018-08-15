@@ -3,6 +3,7 @@ package com.wangqin.globalshop.channel.service.jingdong;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,4 +32,7 @@ public interface JdShopOauthService {
 	public void createOrUpdateShopOauth(ChannelType channelType, JdShopOauthDO jdShopOauthDO);
 
 	public JdShopOauthDO searchShopOauthByCCS(String channelNo, String companyNo, String shopCode);
+
+	public List<JdShopOauthDO> searchExpireShopOauthList(Date expiresTime, Integer channelNo);
+
 }
