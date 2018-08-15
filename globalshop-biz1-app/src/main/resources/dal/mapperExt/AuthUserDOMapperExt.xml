@@ -569,4 +569,18 @@
         FROM auth_user T1
         WHERE T1.login_name = #{loginName}
     </select>
+
+
+    <select id="queryAvailableResourcesByLoginName" resultType="java.lang.String" parameterType="java.lang.String">
+      SELECT
+        re.resource_id AS resCode
+        FROM
+        auth_user u
+        LEFT JOIN auth_user_role ur ON u.id = ur.user_id
+        LEFT JOIN auth_role ro ON ur.role_id = ro.role_id
+        LEFT JOIN auth_role_resource rr ON ro.role_id = rr.role_id
+        LEFT JOIN auth_resource re ON re.id = rr.resource_id
+        WHERE
+        u.login_name = #{loginName}
+    </select>
 </mapper>
