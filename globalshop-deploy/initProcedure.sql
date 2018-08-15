@@ -35,7 +35,7 @@ CREATE PROCEDURE createUser(
                          force_idcard, tel, im,
                          creator, modifier)
     VALUES
-      (companyno, companyName, 0, 1, '13777828256', '微信', userno,
+      (companyno, companyName, 0, userno, 1, '13777828256', '微信',
        'SYSTEM', 'SYSTEM');
 
     #     创建部门 (待测试)
