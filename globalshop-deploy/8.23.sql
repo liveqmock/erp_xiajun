@@ -64,3 +64,39 @@ VALUES
 	'-1',
 	0
 	);
+
+
+INSERT INTO `haidb2new`.`channel_shop` (
+`version`,
+`channel_no`,
+`company_no`,
+`shop_name`,
+`shop_code`,
+`expires_time`,
+`proxy_url`,
+`shop_type`,
+`open`,
+`gmt_modify`,
+`gmt_create`,
+`modifier`,
+`creator`,
+`is_del`
+)
+VALUES
+	(
+
+	0,
+	'2',
+	'',
+	'海狐渠道',
+	'haihu001',
+	'2019-08-22 10:08:06',
+	'',
+	NULL,
+	1,
+	'2018-08-15 10:08:05',
+	'2018-08-12 09:16:12',
+	'-1',
+	'-1',
+	0
+	);
