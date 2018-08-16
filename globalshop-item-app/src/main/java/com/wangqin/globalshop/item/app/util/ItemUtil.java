@@ -26,6 +26,7 @@ public class ItemUtil {
      * 
      * 商品名称公式：品牌英文名+品牌中文名+男女款+商品名
      */
+	@Deprecated
     public static void setItemNewName(ItemQueryVO item) {
     	StringBuffer nameNew = new StringBuffer();
         String[] brandArr = item.getBrand().split("->");
@@ -43,6 +44,7 @@ public class ItemUtil {
      * 工具类
      * 设置商品是否可售
      */
+	@Deprecated
     public static void setIsSale(ItemDO newItem) {
         if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), newItem.getEndDate())) {
         	newItem.setIsSale(ItemIsSale.SALABLE.getCode().byteValue());
@@ -55,6 +57,7 @@ public class ItemUtil {
      * 工具类
      * 处理商品时间相关的字段
      */
+	@Deprecated
     public static void setItemDate(ItemQueryVO item,ItemDO newItem) throws ParseException{    	
     	newItem.setStartDate(item.getStartDate());
     	newItem.setEndDate(item.getEndDate());

@@ -21,6 +21,7 @@ import java.util.Map;
 
 public interface IItemService {
 
+	String queryQrCodeUrlById(Long id);
 
 	ItemDO queryItemDOByItemCode(String itemCode);
 	

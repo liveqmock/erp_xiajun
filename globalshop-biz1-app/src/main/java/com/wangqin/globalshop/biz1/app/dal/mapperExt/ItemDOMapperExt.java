@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
 
 
 /**
@@ -19,6 +20,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
 
+	String queryQrCodeUrlById(Long id);
+	
     //定时任务
     List<ItemDO> queryItemSelfDefineTime(Integer shelfMethod);
 

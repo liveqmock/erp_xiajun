@@ -27,6 +27,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemQrcodeShareDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemQrcodeShareDOMapperExt;
@@ -608,13 +609,31 @@ public class ItemController {
         if (StringUtil.isNotBlank(picUrl)) {
             if (itemId != null) {
                 //System.out.println(picUrl);
-                ItemDO item = new ItemDO();
+            	String url = itemService.queryQrCodeUrlById(itemId);
+            	ItemDO item = new ItemDO();
                 item.setId(itemId);
                 item.setQrCodeUrl(picUrl);
                 itemService.updateByIdSelective(item);
-            }
-            //更新item_qrcode_url表
-            mapperExt.updatePicUrlByShareNo("item" + itemCode, picUrl);
+                if (IsEmptyUtil.isStringEmpty(url)) {//插入Ku
+                	 //插入item_qrcode_share表
+                    ItemQrcodeShareDO shareDO = new ItemQrcodeShareDO();
+                    String currentUserNo = AppUtil.getLoginUserId();
+                    shareDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+
+                    shareDO.setShareNo("item"+itemCode);
+                    shareDO.setCreator(currentUserNo);
+                    shareDO.setModifier(currentUserNo);
+                    shareDO.setItemCode(itemCode);
+                    shareDO.setPicUrl(picUrl);
+//                    shareDO.setUserNo(currentUserNo);
+                    mapperExt.insertSelective(shareDO);
+                } else {
+                	//更新item_qrcode_url表
+                    mapperExt.updatePicUrlByShareNo("item" + itemCode, picUrl);
+                }
+                
+            }          
+            
         }
         return result.buildIsSuccess(true);
     }
