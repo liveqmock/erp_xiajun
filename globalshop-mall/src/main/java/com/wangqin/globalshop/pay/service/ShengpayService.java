@@ -89,6 +89,7 @@ public interface ShengpayService {
         // 为 Retrofit 配置 Http Log 拦截器（借助 OkHttp）
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(logger::debug)
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(logging)
                 .build();
