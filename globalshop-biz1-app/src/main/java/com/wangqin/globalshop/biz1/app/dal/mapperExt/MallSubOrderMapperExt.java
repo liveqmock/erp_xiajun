@@ -18,11 +18,11 @@ import java.util.List;
 public interface MallSubOrderMapperExt extends MallSubOrderDOMapper {
 	
 	//首页数据看板：今日GMV（已付款订单金额）
-	MallSubOrderDO sumPaidOrderPriceByDate(@Param("statusList")List statusList,@Param("dayIndex")Integer dayIndex,
+	List<MallSubOrderDO> sumPaidOrderPriceByDate(@Param("statusList")List statusList,@Param("dayIndex")Integer dayIndex,
 			@Param("companyNo")String companyNo);
 	
 	//首页数据看板：一周GMV（已付款订单数，不含退款订单）
-	MallSubOrderDO sumWeekOrderPrice (@Param("statusList")List statusList,@Param("companyNo")String companyNo);
+	List<MallSubOrderDO> sumWeekOrderPrice (@Param("statusList")List statusList,@Param("companyNo")String companyNo);
 	
 	//销量的计算，用在商品管理商品列表，计算已付款的订单和通过erp新建的订单
 	Integer calItemSalesVolume(@Param("statusList")List statusList,@Param("itemCode")String itemCode,
