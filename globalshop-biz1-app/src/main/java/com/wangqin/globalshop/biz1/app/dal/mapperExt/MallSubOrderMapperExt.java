@@ -28,6 +28,9 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper {
 	Integer calItemSalesVolume(@Param("statusList")List statusList,@Param("itemCode")String itemCode,
 			@Param("companyNo")String companyNo);
 	
+	//首页数据看板：待发货订单数(子订单数)
+	Integer sumWaitSendOrderNum(@Param("statusList")List statusList,@Param("companyNo")String companyNo);
+	
     @Override
     int deleteByPrimaryKey(Long id);
 

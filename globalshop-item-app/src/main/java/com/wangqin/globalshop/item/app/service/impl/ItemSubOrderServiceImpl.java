@@ -45,5 +45,11 @@ public class ItemSubOrderServiceImpl implements IItemSubOrderService{
 	public List<MallSubOrderDO> sumWeekOrderPrice (String companyNo) {
 		return mapperExt.sumWeekOrderPrice(OrderStatus.paidListNotReturn(), companyNo);
 	}
+	
+	//首页数据看板：待发货订单数(子订单数)
+	@Override
+	public Integer sumWaitSendOrderNum(String companyNo) {
+		return mapperExt.sumWaitSendOrderNum(OrderStatus.waitSendList(), companyNo);
+	}
 		
 }
