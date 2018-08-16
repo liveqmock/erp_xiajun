@@ -9,6 +9,7 @@ import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +25,8 @@ import java.util.List;
 @Authenticated
 public class ChannelShopController extends BaseController {
 
-
+	@Value("#{sys.youzan_redirect_uri}")
+	public String youzan_redirect_uri;
 
 	@Autowired
 	private ChannelShopService channelShopService;
@@ -66,7 +68,7 @@ public class ChannelShopController extends BaseController {
 		JsonResult<String> result = new JsonResult<>();
 		String companyNo = AppUtil.getLoginUserCompanyNo();
 
-		String url ="https://open.youzan.com/oauth/authorize?client_id=29f22f7d615e50079f&response_type=code&redirect_uri=http://47.98.230.111:8100/youzan/oauth/&state=";
+		String url ="https://open.youzan.com/oauth/authorize?client_id=29f22f7d615e50079f&response_type=code&redirect_uri="+youzan_redirect_uri+"&state=";
 
 		result.buildData(url+companyNo);
 		return result.buildIsSuccess(true);

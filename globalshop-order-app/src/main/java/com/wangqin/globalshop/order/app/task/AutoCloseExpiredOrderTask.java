@@ -41,7 +41,7 @@ public class AutoCloseExpiredOrderTask {
 
     //先5分钟检查一次，后续缩小间隔到1分钟
     @Scheduled(cron = "0 0/1 * * * ?")
-    @Transactional(rollbackFor = com.wangqin.globalshop.biz1.app.Exception.BizCommonException.class)
+    @Transactional(rollbackFor = com.wangqin.globalshop.biz1.app.exception.BizCommonException.class)
     public void autoCloseExpiredOrder() {
         log.info("轮询关闭订单开始");
 //        List<String> errMsg = new ArrayList();

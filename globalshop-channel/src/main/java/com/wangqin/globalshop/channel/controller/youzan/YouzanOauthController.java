@@ -17,6 +17,7 @@ import com.wangqin.globalshop.common.utils.HttpPostUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.youzan.open.sdk.gen.v3_0_0.model.YouzanShopGetResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -39,11 +40,15 @@ public class YouzanOauthController extends BaseController {
 
 	public static final String youzan_client_secret = "efb0091fe76678322000af822c705c0a";
 
-	public static final String youzan_redirect_uri = "http://47.98.230.111:8100/youzan/oauth/";
+	//public static final String youzan_redirect_uri = "http://47.98.230.111:8100/youzan/oauth/";
 
 	public static final String youzan_token_url = "https://open.youzan.com/oauth/token";
 
 	public static final String youzan_server_url = "";//现在用sdk，不用URL
+
+
+	@Value("#{sys.youzan_redirect_uri}")
+	public String youzan_redirect_uri;
 
 
 	@Autowired
@@ -124,7 +129,8 @@ public class YouzanOauthController extends BaseController {
 		shopOauth.setAppKey(youzan_client_id);
 		shopOauth.setAppsecretKey(youzan_client_secret);
 		shopOauth.setTokenUrl(youzan_token_url);
-		shopOauth.setShopType(oauthResponse.getScope());
+		//shopOauth.setShopType(oauthResponse.getScope());
+		logger.info("oauthResponse.getScope(): "+oauthResponse.getScope());
 
 		//组装channelShop
 		ChannelShopDO channelShop = new ChannelShopDO();
