@@ -279,14 +279,27 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
             String skusWithJson = HaiJsonUtils.toJson(youZanSkuList);
             youzanItemCreateParams.setSkuStocks(skusWithJson);
         }
-        Double minSalePrice = itemSkus.get(0).getSalePrice();
-        Long totalQuantity = 0L;
-        for (ItemSkuVo itemSku : itemSkus) {
-            if (itemSku.getSalePrice() < minSalePrice) {
-                minSalePrice = itemSku.getSalePrice();
-            }
+
+
+//        Double minSalePrice = itemSkus.get(0).getSalePrice();
+//        Long totalQuantity = 0L;
+//        for (ItemSkuVo itemSku : itemSkus) {
+//            if (itemSku.getSalePrice() < minSalePrice) {
+//                minSalePrice = itemSku.getSalePrice();
+//            }
+//			totalQuantity += itemSku.getTotalAvailableInv();
+//        }
+
+
+		Double minSalePrice = itemSkus.get(0).getChannelSalePrice(shopOauth.getChannelNo());
+		Long totalQuantity = 0L;
+		for (ItemSkuVo itemSku : itemSkus) {
+			if (itemSku.getChannelSalePrice(shopOauth.getChannelNo()) < minSalePrice) {
+				minSalePrice = itemSku.getChannelSalePrice(shopOauth.getChannelNo());
+			}
 			totalQuantity += itemSku.getTotalAvailableInv();
-        }
+		}
+
         youzanItemCreateParams.setPrice((long) (minSalePrice * 100));
 		youzanItemCreateParams.setQuantity(totalQuantity);
         return youzanItemCreateParams;
@@ -342,14 +355,25 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
             String skusWithJson = HaiJsonUtils.toJson(youZanSkuList);
             youzanItemUpdateParams.setSkuStocks(skusWithJson);
         }
-        Double minSalePrice = itemSkus.get(0).getSalePrice();
-        Long totalQuantity= 0L;
-        for (ItemSkuVo itemSku : itemSkus) {
-            if (itemSku.getSalePrice() < minSalePrice) {
-                minSalePrice = itemSku.getSalePrice();
-            }
+
+//        Double minSalePrice = itemSkus.get(0).getSalePrice();
+//        Long totalQuantity= 0L;
+//        for (ItemSkuVo itemSku : itemSkus) {
+//            if (itemSku.getSalePrice() < minSalePrice) {
+//                minSalePrice = itemSku.getSalePrice();
+//            }
+//			totalQuantity += itemSku.getTotalAvailableInv();
+//        }
+
+		Double minSalePrice = itemSkus.get(0).getChannelSalePrice(shopOauth.getChannelNo());
+		Long totalQuantity= 0L;
+		for (ItemSkuVo itemSku : itemSkus) {
+			if (itemSku.getChannelSalePrice(shopOauth.getChannelNo()) < minSalePrice) {
+				minSalePrice = itemSku.getChannelSalePrice(shopOauth.getChannelNo());
+			}
 			totalQuantity += itemSku.getTotalAvailableInv();
-        }
+		}
+
         youzanItemUpdateParams.setPrice((long) (minSalePrice * 100));
 
 		youzanItemUpdateParams.setQuantity(totalQuantity);
@@ -379,7 +403,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                 for (String color : colorSet) {
                     Map<String, Object> skuStocksMap = new HashMap<String, Object>();
                     ItemSkuVo itemSku = itemSkuMap.get(color);
-                    skuStocksMap.put("price", itemSku.getSalePrice() * 100);
+//                    skuStocksMap.put("price", itemSku.getSalePrice() * 100);
+					skuStocksMap.put("price", itemSku.getChannelSalePrice(shopOauth.getChannelNo()) * 100);
                     Long skuQuantity = 0L;
                     Long lockedVirtualInv = itemSku.getInventoryDO().getLockedVirtualInv();
                     if (itemSku.getInventoryDO().getVirtualInv() > 0) {
@@ -405,7 +430,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                 for (String scale : scaleSet) {
                     Map<String, Object> skuStocksMap = new HashMap<String, Object>();
                     ItemSkuVo itemSku = itemSkuMap.get(scale);
-                    skuStocksMap.put("price", itemSku.getSalePrice() * 100);
+                    //skuStocksMap.put("price", itemSku.getSalePrice() * 100);
+					skuStocksMap.put("price", itemSku.getChannelSalePrice(shopOauth.getChannelNo()) * 100);
                     Long skuQuantity = 0L;
                     Long lockedVirtualInv = itemSku.getInventoryDO().getLockedVirtualInv();
                     if (itemSku.getInventoryDO().getVirtualInv() > 0) {
@@ -449,7 +475,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                             skuStocksMap.put("skus", skusList);
                             youZanSkuList.add(skuStocksMap);
                         } else {
-                            skuStocksMap.put("price", itemSku.getSalePrice() * 100);
+                            //skuStocksMap.put("price", itemSku.getSalePrice() * 100);
+							skuStocksMap.put("price", itemSku.getChannelSalePrice(shopOauth.getChannelNo()) * 100);
                             Long skuQuantity = 0L;
                             Long lockedVirtualInv = itemSku.getInventoryDO().getLockedVirtualInv();
                             if (itemSku.getInventoryDO().getVirtualInv() > 0) {
@@ -636,8 +663,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
      */
     @Override
     public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> orderList, ShippingOrderDO shippingOrder) {
-        logger.error("有赞发货");
 
+        logger.info("有赞发货");
         boolean hasFailed = false;
         for (MallSubOrderDO order : orderList) {
             try {
@@ -668,10 +695,12 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                 if (!hasFailed && !result.getIsSuccess()) {
                     hasFailed = true;
                     this.logger.error("同步发货给 有赞 返回结果异常：" + result.toString());
+					throw new ErpCommonException("youzan syncLogisticsOnlineConfirm error",result.toString());
                 }
             } catch (Exception e) {
                 hasFailed = true;
                 logger.error("有赞发货异常: ", e);
+                throw new ErpCommonException("youzan syncLogisticsOnlineConfirm error",e.getMessage());
             }
         }
 
@@ -680,7 +709,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                 shippingOrder.setSyncSendStatus(1);
                 shippingOrderService.updateByPrimaryKey(shippingOrder);
             } catch (Exception e) {
-                this.logger.error("同步发货给 有赞 返回结果异常");
+                this.logger.error("同步发货给 有赞,更新发货单状态异常");
+				throw new ErpCommonException("youzan syncLogisticsOnlineConfirm error",e.getMessage());
             }
         }
     }

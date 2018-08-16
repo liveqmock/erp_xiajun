@@ -79,28 +79,12 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		if(EasyUtil.isListEmpty(mallSubOrderList)){
              throw new ErpCommonException("mallSubOrderList为空");
 		}
-//		//按照shopCode分配
-//		Map<String,List<MallSubOrderDO>> shopCodeSubOrderListMap = new HashMap<>();
-//		for (MallSubOrderDO mallSubOrderDO : mallSubOrderList) {
-//			if(EasyUtil.isStringEmpty(mallSubOrderDO.getShopCode())){
-//				throw new ErpCommonException("子订单号，sub_Order_no: "+mallSubOrderDO.getSubOrderNo()+" shopCode不存在");
-//			}
-//			if(shopCodeSubOrderListMap.get(mallSubOrderDO.getShopCode()) == null){
-//				List<MallSubOrderDO> mallSubOrderDOS = new ArrayList<>();
-//				mallSubOrderDOS.add(mallSubOrderDO);
-//				shopCodeSubOrderListMap.put(mallSubOrderDO.getShopCode(),mallSubOrderDOS);
-//			}else {
-//				shopCodeSubOrderListMap.get(mallSubOrderDO.getShopCode()).add(mallSubOrderDO);
-//			}
-//		}
-
 		String shopCode = mallSubOrderList.get(0).getShopCode();
 		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
 		shopOauthSo.setIsDel(false);
 		shopOauthSo.setShopCode(shopCode);
 		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
 		if (shopOauth == null) {
-			//addErrorSubOrderNo(shopCodeSubOrderListMap.get(shopCode),mallSubOrderErrorList);
 			throw new ErpCommonException("channel_account,shopCode: " + shopCode + " 不存在");
 		}
 		try {

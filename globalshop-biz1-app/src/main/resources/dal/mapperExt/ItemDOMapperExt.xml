@@ -625,6 +625,9 @@
         <if test=" itemCode != null and itemCode != '' ">
             and T1.item_code = #{itemCode}
         </if>
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
         <if test=" gmtModify!= null ">
             and <![CDATA[  T1.gmt_modify >= #{gmtModify} ]]>
         </if>

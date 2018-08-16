@@ -150,6 +150,18 @@
         </foreach>
         AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create))<7)]]>
     </select>
+    
+    <!-- 首页数据看板：待发货订单数(子订单数) -->
+    <select id="sumWaitSendOrderNum" resultType="java.lang.Integer">
+    	SELECT
+   			IFNULL(COUNT(1),0)
+   		FROM mall_sub_order
+   		WHERE company_no = #{companyNo}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach>
+    </select>
 
     <update id="updateOuterOrderDetailByItemSku">
         UPDATE mall_sub_order a
