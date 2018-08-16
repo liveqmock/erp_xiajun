@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface MallReturnOrderDOMapperExt extends MallReturnOrderDOMapper {
 
+	//首页数据看板：未完成售后订单数
+	Integer sumReturningOrderNum(@Param("companyNo")String companyNo,@Param("statusList")List<Integer> statusList);
+	
     List<MallReturnOrderDO> selectByCondition(@Param("orderNo") String orderNo,
                                               @Param("startGmtCreateDate") String startGmtCreateDate,
                                               @Param("endGmtCreateDate") String endGmtCreateDate,

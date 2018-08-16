@@ -32,6 +32,19 @@
     receive_time, return_pay_time, remark, return_refer, proof_img, return_type, modifier,
     creator, mall_return_order_no, company_no
     </sql>
+    
+    <!-- 首页数据看板：未完成售后订单数 -->
+    <select id="sumReturningOrderNum" resultType="java.lang.Integer">
+    	SELECT
+   			IFNULL(COUNT(1),0)
+   		FROM mall_return_order
+   		WHERE company_no = #{companyNo}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach>
+    </select>
+    
     <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map">
         select
         <include refid="Base_Column_List"/>

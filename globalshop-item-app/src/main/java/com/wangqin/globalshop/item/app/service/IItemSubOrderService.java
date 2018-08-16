@@ -2,6 +2,10 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+
 
 
 public interface IItemSubOrderService {
@@ -10,8 +14,11 @@ public interface IItemSubOrderService {
 	Integer calItemSalesVolume(String itemCode,String companyNo);
 	
 	//首页数据看板：今日GMV（已付款订单金额）
-	Double sumPaidOrderPriceByDate(Integer dayIndex,String companyNo);
+	List<MallSubOrderDO> sumPaidOrderPriceByDate(Integer dayIndex,String companyNo);
 		
 	//首页数据看板：一周GMV（已付款订单数，不含退款订单）
-	Double sumWeekOrderPrice (String companyNo);
+	List<MallSubOrderDO> sumWeekOrderPrice (String companyNo);
+	
+	//首页数据看板：待发货订单数(子订单数)
+	Integer sumWaitSendOrderNum(String companyNo);
 }

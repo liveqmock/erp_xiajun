@@ -1,5 +1,8 @@
 package com.wangqin.globalshop.biz1.app.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum OrderReturnStatus {
 	INIT(0, "售后待审核"),
 	RECEIVE(1, "审核通过"),
@@ -27,5 +30,15 @@ public enum OrderReturnStatus {
             }
         }
         throw new IllegalArgumentException("invalid status code " + code);
+    }
+    
+    //首页数据看板：未完成售后的订单
+    public static List<Integer> returningOrderStatus() {
+    	List<Integer> statusList = new ArrayList<Integer>();
+    	statusList.add(INIT.code);
+    	statusList.add(RECEIVE.code);    	
+    	statusList.add(PAY.code);
+    	statusList.add(RETURN_COMPLETED.code);
+    	return statusList;
     }
 }

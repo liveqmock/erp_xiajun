@@ -20,6 +20,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ddf.EscherSerializationListener;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -306,6 +307,11 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
+				}
+				if(EasyUtil.isStringEmpty(shopOauth.getCompanyNo())){
+					vo.setCompanyNo("YiJianFenXiang");
+				}else{
+					vo.setCompanyNo(shopOauth.getCompanyNo());
 				}
 				List<ItemDO> items = itemService.queryHaihuByUptime(vo);
 				if (CollectionUtils.isEmpty(items)) {
@@ -623,7 +629,15 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 	 */
 	@Override
 	public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder) {
+		try {
+			doSyncLogisticsOnlineConfirm(erpOrderList,shippingOrder);
+		} catch (Exception e) {
+			logger.error("",e);
+			throw new ErpCommonException("",e.getMessage());
+		}
+	}
 
+	private void doSyncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder){
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("packageNo", shippingOrder.getLogisticNo());
 		param.put("logisticsCompany", shippingOrder.getLogisticCompany());
@@ -634,9 +648,6 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 		param.put("timeStamp", timeStamp);
 		param.put("sign", sign);
 		String targetNo = "";
-//		List<Long> erpOrderIdList = HaiJsonUtils.toBean(shippingOrder.getErpOrderId(), new TypeReference<List<Long>>() {
-//		});
-//		List<ErpOrder> erpOrderList = erpOrderService.selectBatchIds(erpOrderIdList);
 		List<Map<String, Object>> itemSkusList = new ArrayList<>();
 		for (int j = 0; j < erpOrderList.size(); j++) {
 			MallSubOrderDO erpOrder = erpOrderList.get(j);
@@ -662,6 +673,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 			}
 		} catch (Exception e) {
 			this.logger.error("同步发货给海狐 返回结果异常: " + description.toString());
+			throw new ErpCommonException("","同步发货给海狐 返回结果异常"+description.toString());
 		}
 	}
 

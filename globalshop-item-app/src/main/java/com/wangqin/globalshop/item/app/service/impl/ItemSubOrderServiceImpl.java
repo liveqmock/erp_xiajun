@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.item.app.service.IItemSubOrderService;
@@ -35,14 +36,20 @@ public class ItemSubOrderServiceImpl implements IItemSubOrderService{
 	
 	//首页数据看板：今日GMV（已付款订单金额）
 	@Override
-	public Double sumPaidOrderPriceByDate(Integer dayIndex,String companyNo) {
+	public List<MallSubOrderDO> sumPaidOrderPriceByDate(Integer dayIndex,String companyNo) {
 		return mapperExt.sumPaidOrderPriceByDate(OrderStatus.paidList(), dayIndex, companyNo);
 	}
 		
 	//首页数据看板：一周GMV（已付款订单数，不含退款订单）
 	@Override
-	public Double sumWeekOrderPrice (String companyNo) {
+	public List<MallSubOrderDO> sumWeekOrderPrice (String companyNo) {
 		return mapperExt.sumWeekOrderPrice(OrderStatus.paidListNotReturn(), companyNo);
+	}
+	
+	//首页数据看板：待发货订单数(子订单数)
+	@Override
+	public Integer sumWaitSendOrderNum(String companyNo) {
+		return mapperExt.sumWaitSendOrderNum(OrderStatus.waitSendList(), companyNo);
 	}
 		
 }

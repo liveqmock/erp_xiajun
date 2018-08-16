@@ -42,7 +42,7 @@ public class AutoYouzanTradesSoldGetTask {
 
     // 每隔半小时执行一次
     //@Scheduled(cron = "0/30 * * * * ?")
-	@Scheduled(cron = "0 0/30 * * * ?")
+	@Scheduled(cron = "0 3/10 * * * ?")
     public void run() {
 
 		logger.info("定时任务：自动去有赞下载订单===>Start");
