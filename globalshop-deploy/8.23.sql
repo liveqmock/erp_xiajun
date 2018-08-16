@@ -18,7 +18,11 @@ CREATE TABLE `id_card`  (
   UNIQUE INDEX `name_card_union_index`(`id_number`, `real_name`) USING BTREE COMMENT '姓名和身份证唯一性索引'
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-###初始化海狐授权信息
+
+ALTER TABLE `haidb2new`.`shipping_order`
+MODIFY COLUMN `memo` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '备注';
+
+###初始化海狐授权信息，授权给一键分享
 INSERT INTO `haidb2new`.`jd_shop_oauth` (
 `channel_no`,
 `company_no`,
@@ -44,7 +48,7 @@ INSERT INTO `haidb2new`.`jd_shop_oauth` (
 VALUES
 	(
 	'2',
-	'',
+	'YiJianFenXiang',
 	'haihu001',
 	'haihuhaitao',
 	'2019-08-21 13:56:15',
@@ -65,6 +69,7 @@ VALUES
 	0
 	);
 
+####给生产环境一键分享账号添加海狐渠道
 
 INSERT INTO `haidb2new`.`channel_shop` (
 `version`,
@@ -84,10 +89,9 @@ INSERT INTO `haidb2new`.`channel_shop` (
 )
 VALUES
 	(
-
 	0,
 	'2',
-	'',
+	'YiJianFenXiang',
 	'海狐渠道',
 	'haihu001',
 	'2019-08-22 10:08:06',
@@ -100,3 +104,5 @@ VALUES
 	'-1',
 	0
 	);
+
+
