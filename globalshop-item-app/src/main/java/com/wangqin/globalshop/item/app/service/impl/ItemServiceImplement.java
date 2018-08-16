@@ -715,12 +715,12 @@ public class ItemServiceImplement implements IItemService {
             List<ItemSkuScaleDO> scaleList = new ArrayList<>();
             List<String> upcs = new ArrayList();
             ItemDO item;
-            Map<String, ItemDO> map = new HashMap<>(200);
+            Map<String, ItemDO> map = new HashMap<>(1000);
             /**图片链接*/
             String s = ImgUtil.initImg2Json(imgUrl);
             int i = 0;
-            if (list.size() > 200) {
-                throw new BizCommonException("最多只能导入两百条");
+            if (list.size() > 1000) {
+                throw new BizCommonException("最多只能导入一千条");
             }
             if (list.size() == 0) {
                 throw new BizCommonException("当前导入为空");

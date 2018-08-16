@@ -66,7 +66,7 @@ public class ChannelShopController extends BaseController {
 		JsonResult<String> result = new JsonResult<>();
 		String companyNo = AppUtil.getLoginUserCompanyNo();
 
-		String url ="https://open.youzan.com/oauth/authorize?client_id=29f22f7d615e50079f&response_type=code&redirect_uri=http://47.98.164.133:8100/youzan/oauth/&state=";
+		String url ="https://open.youzan.com/oauth/authorize?client_id=29f22f7d615e50079f&response_type=code&redirect_uri=http://47.98.230.111:8100/youzan/oauth/&state=";
 
 		result.buildData(url+companyNo);
 		return result.buildIsSuccess(true);
