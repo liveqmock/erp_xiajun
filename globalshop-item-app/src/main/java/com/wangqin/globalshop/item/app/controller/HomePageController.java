@@ -1,9 +1,9 @@
 package com.wangqin.globalshop.item.app.controller;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-
 import com.wangqin.globalshop.biz1.app.bean.dataVo.HomePageVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
-
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.item.app.service.IItemMallOrderService;
+import com.wangqin.globalshop.item.app.service.IItemReturnOrderService;
 import com.wangqin.globalshop.item.app.service.IItemShippingOrderService;
 import com.wangqin.globalshop.item.app.service.IItemSubOrderService;
 
@@ -39,6 +40,8 @@ public class HomePageController extends BaseController {
 	private IItemSubOrderService subOrderService;
 	@Autowired
 	private IItemShippingOrderService shippingService;
+	@Autowired
+	private IItemReturnOrderService returnService;
 
 	
 	/**
@@ -54,17 +57,14 @@ public class HomePageController extends BaseController {
 		Integer todayOrderNum = orderService.sumPaidOrderNumByDate(0, companyNo);
 		hpVO.setTodayOrderNum(todayOrderNum);
 		//今日gmv
-		Double todayGmv = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
-		hpVO.setTodayGmv(todayGmv);
+		List<MallSubOrderDO> subOrderDO = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
+		hpVO.setTodayGmv(calDaySalesVolume(subOrderDO));
 		//一周订单数
-		Integer weekOrderNum = 0;
-		for (int i = 0;i < 7;i++) {
-			weekOrderNum += orderService.sumPaidOrderNumByDate(i, companyNo);
-		}
+		Integer weekOrderNum = orderService.sumWeekPaidOrder(companyNo);
 		hpVO.setWeekOrderNum(weekOrderNum);
 		//一周gmv
-		Double weekGmv = subOrderService.sumWeekOrderPrice(companyNo);
-		hpVO.setWeekGmv(weekGmv);
+		List<MallSubOrderDO> subOrderWeekDO = subOrderService.sumWeekOrderPrice(companyNo);
+		hpVO.setWeekGmv(calDaySalesVolume(subOrderWeekDO));
 		//待发货订单数
 		Integer waitSendOrderNo = orderService.sumWaitSendOrderNum(companyNo);
 		hpVO.setWaitSendOrderNum(waitSendOrderNo);
@@ -75,7 +75,7 @@ public class HomePageController extends BaseController {
 		Integer weekNum = shippingService.sumWeekSentNum(companyNo);
 		hpVO.setWeekSendNum(weekNum);
 		//未完成售后订单数
-		Integer returningOrderNum = orderService.sumReturningOrderNum(companyNo);
+		Integer returningOrderNum = returnService.sumReturningOrderNum(companyNo);
 		hpVO.setReturningOrderNum(returningOrderNum);
 		//一周销量统计
 		List<Integer> dateList = pastSevenDay();
@@ -86,20 +86,20 @@ public class HomePageController extends BaseController {
 		hpVO.setFifthDay(dateList.get(4));
 		hpVO.setSixthDay(dateList.get(5));
 		hpVO.setSeventhDay(dateList.get(6));		
-		Double salesVolume0 = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
-		hpVO.setFirstSales(salesVolume0);
-		Double salesVolume1 = subOrderService.sumPaidOrderPriceByDate(1, companyNo);
-		hpVO.setSecondSales(salesVolume1);
-		Double salesVolume2 = subOrderService.sumPaidOrderPriceByDate(2, companyNo);
-		hpVO.setThirdSales(salesVolume2);
-		Double salesVolume3 = subOrderService.sumPaidOrderPriceByDate(3, companyNo);
-		hpVO.setFourthSales(salesVolume3);
-		Double salesVolume4 = subOrderService.sumPaidOrderPriceByDate(4, companyNo);
-		hpVO.setFifthSales(salesVolume4);
-		Double salesVolume5 = subOrderService.sumPaidOrderPriceByDate(5, companyNo);
-		hpVO.setSixthSales(salesVolume5);
-		Double salesVolume6 = subOrderService.sumPaidOrderPriceByDate(6, companyNo);
-		hpVO.setSeventhSales(salesVolume6);
+		List<MallSubOrderDO> subOrderDO0 = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
+		hpVO.setFirstSales(calDaySalesVolume(subOrderDO0));
+		List<MallSubOrderDO> subOrderDO1 = subOrderService.sumPaidOrderPriceByDate(1, companyNo);
+		hpVO.setSecondSales(calDaySalesVolume(subOrderDO1));
+		List<MallSubOrderDO> subOrderDO2 = subOrderService.sumPaidOrderPriceByDate(2, companyNo);
+		hpVO.setThirdSales(calDaySalesVolume(subOrderDO2));
+		List<MallSubOrderDO> subOrderDO3 = subOrderService.sumPaidOrderPriceByDate(3, companyNo);
+		hpVO.setFourthSales(calDaySalesVolume(subOrderDO3));
+		List<MallSubOrderDO> subOrderDO4 = subOrderService.sumPaidOrderPriceByDate(4, companyNo);
+		hpVO.setFifthSales(calDaySalesVolume(subOrderDO4));
+		List<MallSubOrderDO> subOrderDO5 = subOrderService.sumPaidOrderPriceByDate(5, companyNo);
+		hpVO.setSixthSales(calDaySalesVolume(subOrderDO5));
+		List<MallSubOrderDO> subOrderDO6 = subOrderService.sumPaidOrderPriceByDate(6, companyNo);
+		hpVO.setSeventhSales(calDaySalesVolume(subOrderDO6));
 		
 		result.buildData(hpVO);
 		return result.buildIsSuccess(true).buildMsg("查找成功");
@@ -129,6 +129,24 @@ public class HomePageController extends BaseController {
 		return dateList;
 	}
 	
+	//计算Gmv
+	public static Double calDaySalesVolume(List<MallSubOrderDO> subOrderDOList) {
+		if (IsEmptyUtil.isCollectionEmpty(subOrderDOList)) {
+			return 0.0;
+		}
+		BigDecimal result = new BigDecimal(0.0);
+		for (MallSubOrderDO subOrderDO:subOrderDOList) {
+			Integer quantity = subOrderDO.getQuantity();
+			Double salePrice = subOrderDO.getSalePrice();			
+			if (null != quantity && null != salePrice) {
+				BigDecimal qua = new BigDecimal(quantity);
+				BigDecimal price = new BigDecimal(salePrice);
+				BigDecimal curResult = qua.multiply(price);
+				result = result.add(curResult);
+			} 
+		}
+		return result.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();		
+	}
 
 	
 }

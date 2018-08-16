@@ -124,9 +124,10 @@
     
     <!-- 首页数据看板：今日GMV（已付款订单金额） -->
     <!-- dayIndex为0表示今天，为1表示昨天 -->
-    <select id="sumPaidOrderPriceByDate" resultType="java.lang.Double">
+    <select id="sumPaidOrderPriceByDate" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
     	SELECT
-   			IFNULL(SUM(IFNULL(quantity,0)*IFNULL(sale_price,0)),0)
+   			quantity,
+   			sale_price AS salePrice
    		FROM mall_sub_order
    		WHERE company_no = #{companyNo}
      	AND status IN
@@ -137,9 +138,10 @@
     </select>
     
     <!-- 首页数据看板：一周GMV（已付款订单数，不含退款订单） -->
-    <select id="sumWeekOrderPrice" resultType="java.lang.Double">
+    <select id="sumWeekOrderPrice" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
     	SELECT
-   			IFNULL(SUM(IFNULL(quantity,0)*IFNULL(sale_price,0)),0)
+   			quantity,
+   			sale_price AS salePrice
    		FROM mall_sub_order
    		WHERE company_no = #{companyNo}
      	AND status IN

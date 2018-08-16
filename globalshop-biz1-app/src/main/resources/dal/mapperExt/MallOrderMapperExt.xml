@@ -114,6 +114,19 @@
         AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create)) =#{dayIndex})]]>
     </select>
     
+    <!-- 首页数据看板：计算一周订单数（已付款订单数，减去已退款订单） -->
+    <select id="sumWeekPaidOrder" resultType="java.lang.Integer">
+    	SELECT
+   			IFNULL(COUNT(1),0)
+   		FROM mall_order
+   		WHERE company_no = #{companyNo}
+     	AND status IN
+        <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach>
+        AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create)) < 7)]]>
+    </select>
+    
     <!-- 首页数据看板：待发货订单数 -->
     <select id="sumWaitSendOrderNum" resultType="java.lang.Integer">
     	SELECT
