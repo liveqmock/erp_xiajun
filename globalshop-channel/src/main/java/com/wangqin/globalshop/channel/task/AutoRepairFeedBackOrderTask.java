@@ -30,7 +30,7 @@ import java.util.Map;
  */
 @Component
 public class AutoRepairFeedBackOrderTask {
-	protected Logger logger = LogManager.getLogger(getClass());
+	protected Logger logger = LogManager.getLogger("AutoRepairFeedBackOrderTask");
 
 	@Autowired
 	private ChannelIShippingOrderService shippingOrderService;

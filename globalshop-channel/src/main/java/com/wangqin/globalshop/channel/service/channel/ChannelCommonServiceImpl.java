@@ -24,7 +24,7 @@ import java.util.*;
 @Service
 public class ChannelCommonServiceImpl implements ChannelCommonService {
 
-	protected Logger logger = LogManager.getLogger(getClass());
+	protected Logger logger = LogManager.getLogger("ChannelCommonServiceImpl");
 
 	@Autowired
 	private IChannelAccountService channelAccountService;
