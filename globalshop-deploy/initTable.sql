@@ -17,6 +17,74 @@ USE `haidb2new`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+CREATE TABLE `commission_sumary_detail`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
+  `status` int(4) DEFAULT NULL COMMENT '1待结算2可结算3已结算',
+  `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
+  `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `settlement_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '结算单号',
+  `is_del` tinyint(1) NOT NULL DEFAULT 0,
+  `share_user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `settlement` decimal(16, 2) DEFAULT NULL,
+  `sub_order_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '绑定订单信息',
+  `sale_price` decimal(16, 2) DEFAULT NULL COMMENT '销售额',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+CREATE TABLE `commission_sumary_settlement`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
+  `status` int(4) DEFAULT NULL,
+  `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
+  `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT 0,
+  `settlement_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '结算单号',
+  `share_user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `share_user_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '代理名字',
+  `total_price` decimal(16, 2) DEFAULT NULL COMMENT '实付总计',
+  `settlement` decimal(16, 2) DEFAULT NULL COMMENT '实际结算',
+  `detail_count` int(10) DEFAULT NULL COMMENT '结算订单数',
+  `settlement_time` datetime(0) DEFAULT NULL COMMENT '结算时间',
+  `remark` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '结算备注',
+  `pay_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '支付方式',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+CREATE TABLE `commission_sumary`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
+  `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
+  `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT 0,
+  `order_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `sub_order_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `item_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `item_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `sku_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `sku_pic` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `upc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `scale` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `sale_price` decimal(16, 2) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL COMMENT '商品数量',
+  `total_settlement` decimal(16, 2) DEFAULT NULL,
+  `receiver_info` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '收件信息',
+  `order_time` datetime(0) DEFAULT NULL COMMENT '销售时间，下单时间',
+  `order_status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `order_desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `status` int(4) DEFAULT NULL COMMENT '0待结算1可结算2已结算',
+  `receive_date` datetime(0) DEFAULT NULL COMMENT '签收时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
 CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) DEFAULT NULL,
@@ -113,7 +181,7 @@ CREATE TABLE `applet_config` (
   `appid` varchar(64) NULL COMMENT '小程序appid',
   `applet_type` varchar(5) NOT NULL COMMENT '小程序的类型  1: 采购 2.商城',
   `mch_id` varchar(64) DEFAULT NULL COMMENT '商户号(微信支付用)',
-  `status` varchar(5) NOT NULL DEFAULT '1' COMMENT '微信支付接入类型 1.服务商版 2.商户版 ',
+  `status` varchar(5) NULL DEFAULT '1' COMMENT '微信支付接入类型 1.服务商版 2.商户版 ',
   `pay_key` varchar(64) DEFAULT NULL COMMENT '商户版的支付秘钥',
   `authorizer_refresh_token` varchar(64) DEFAULT NULL COMMENT '第三方授权平台刷新token',
   `authorizer_access_token` varchar(512) DEFAULT NULL COMMENT '第三方授权平台token',
@@ -1372,7 +1440,7 @@ CREATE TABLE `mall_customer` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `OPENID` (`customer_no`) USING BTREE
+  UNIQUE KEY `CUSTOMER_NO` (`customer_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='商城的顾客（包括微信小程序和第三方销售平台）';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
