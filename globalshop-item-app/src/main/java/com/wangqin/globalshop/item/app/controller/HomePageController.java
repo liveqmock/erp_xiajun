@@ -66,7 +66,7 @@ public class HomePageController extends BaseController {
 		List<MallSubOrderDO> subOrderWeekDO = subOrderService.sumWeekOrderPrice(companyNo);
 		hpVO.setWeekGmv(calDaySalesVolume(subOrderWeekDO));
 		//待发货订单数
-		Integer waitSendOrderNo = orderService.sumWaitSendOrderNum(companyNo);
+		Integer waitSendOrderNo = subOrderService.sumWaitSendOrderNum(companyNo);
 		hpVO.setWaitSendOrderNum(waitSendOrderNo);
 		//今日发货包裹数
 		Integer todyNum = shippingService.sumTodySentNum(companyNo);
