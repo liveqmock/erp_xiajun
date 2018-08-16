@@ -205,7 +205,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 			ChannelFactory.getChannel(shopOauth).getOrders(startTime, endTime);
 		}catch (Exception e){
 			logger.error("",e);
-
+            throw new ErpCommonException("",e.getMessage());
 		}
 	}
 
