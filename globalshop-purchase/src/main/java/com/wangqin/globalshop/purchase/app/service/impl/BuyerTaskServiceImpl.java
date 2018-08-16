@@ -198,8 +198,8 @@ public class BuyerTaskServiceImpl implements IBuyerTaskService {
             List<BuyerTaskDO> taskList = new ArrayList<>();
             List<BuyerTaskDetailDO> detailList = new ArrayList<>();
             int i = 0;
-            if (list.size() > 200) {
-                throw new BizCommonException("最多只能导入两百条");
+            if (list.size() > 1000) {
+                throw new BizCommonException("最多只能导入一千条");
             }
             if (list.size() == 0) {
                 throw new BizCommonException("当前导入为空");
