@@ -18,8 +18,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.item.app.service.IItemMallOrderService;
+import com.wangqin.globalshop.item.app.service.IItemReturnOrderService;
 import com.wangqin.globalshop.item.app.service.IItemShippingOrderService;
 import com.wangqin.globalshop.item.app.service.IItemSubOrderService;
 
@@ -40,6 +40,8 @@ public class HomePageController extends BaseController {
 	private IItemSubOrderService subOrderService;
 	@Autowired
 	private IItemShippingOrderService shippingService;
+	@Autowired
+	private IItemReturnOrderService returnService;
 
 	
 	/**
@@ -58,10 +60,7 @@ public class HomePageController extends BaseController {
 		List<MallSubOrderDO> subOrderDO = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
 		hpVO.setTodayGmv(calDaySalesVolume(subOrderDO));
 		//一周订单数
-		Integer weekOrderNum = 0;
-		for (int i = 0;i < 7;i++) {
-			weekOrderNum += orderService.sumPaidOrderNumByDate(i, companyNo);
-		}
+		Integer weekOrderNum = orderService.sumWeekPaidOrder(companyNo);
 		hpVO.setWeekOrderNum(weekOrderNum);
 		//一周gmv
 		List<MallSubOrderDO> subOrderWeekDO = subOrderService.sumWeekOrderPrice(companyNo);
@@ -76,7 +75,7 @@ public class HomePageController extends BaseController {
 		Integer weekNum = shippingService.sumWeekSentNum(companyNo);
 		hpVO.setWeekSendNum(weekNum);
 		//未完成售后订单数
-		Integer returningOrderNum = orderService.sumReturningOrderNum(companyNo);
+		Integer returningOrderNum = returnService.sumReturningOrderNum(companyNo);
 		hpVO.setReturningOrderNum(returningOrderNum);
 		//一周销量统计
 		List<Integer> dateList = pastSevenDay();
@@ -131,22 +130,22 @@ public class HomePageController extends BaseController {
 	}
 	
 	//计算Gmv
-	public static String calDaySalesVolume(List<MallSubOrderDO> subOrderDOList) {
+	public static Double calDaySalesVolume(List<MallSubOrderDO> subOrderDOList) {
 		if (IsEmptyUtil.isCollectionEmpty(subOrderDOList)) {
-			return "0";
+			return 0.0;
 		}
-		BigDecimal result = new BigDecimal(0);
+		BigDecimal result = new BigDecimal(0.0);
 		for (MallSubOrderDO subOrderDO:subOrderDOList) {
 			Integer quantity = subOrderDO.getQuantity();
-			Double salePrice = subOrderDO.getSalePrice();
-			if (null != quantity || null != salePrice) {
+			Double salePrice = subOrderDO.getSalePrice();			
+			if (null != quantity && null != salePrice) {
 				BigDecimal qua = new BigDecimal(quantity);
 				BigDecimal price = new BigDecimal(salePrice);
 				BigDecimal curResult = qua.multiply(price);
-				result.add(curResult);
+				result = result.add(curResult);
 			} 
 		}
-		return PriceUtil.formatPrice(result.toPlainString());			
+		return result.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();		
 	}
 
 	

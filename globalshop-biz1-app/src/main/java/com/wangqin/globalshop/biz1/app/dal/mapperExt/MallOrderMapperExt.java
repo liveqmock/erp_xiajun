@@ -20,6 +20,9 @@ public interface MallOrderMapperExt extends MallOrderDOMapper {
 	Integer sumPaidOrderNumByDate(@Param("statusList")List<Integer> statusList,
 			@Param("dayIndex")Integer dayIndex,@Param("companyNo")String companyNo); 
 	
+	//首页数据看板：计算一周订单数（已付款订单数，减去已退款订单）
+	Integer sumWeekPaidOrder(@Param("statusList")List<Integer> statusList,@Param("companyNo")String companyNo); 
+	
 	//首页数据看板：待发货订单数
 	Integer sumWaitSendOrderNum(@Param("statusList")List<Integer> statusList,@Param("companyNo")String companyNo); 
 	

@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class HomePageVO {
 	private Integer todayOrderNum;//今日订单数
-	private String todayGmv;//今日gmv
+	private Double todayGmv;//今日gmv
 	private Integer weekOrderNum;//一周订单数
-	private String weekGmv;//一周gmv
+	private Double weekGmv;//一周gmv
 	
 	private Integer waitSendOrderNum;//待发货订单数
 	private Integer todaySendNum;//今日发货包裹数
@@ -22,19 +22,19 @@ public class HomePageVO {
 	
 	//一周的日期和销量，这样写是为了前端处理起来方便
 	private Integer firstDay;
-	private String firstSales;
+	private Double firstSales;
 	private Integer secondDay;
-	private String secondSales;
+	private Double secondSales;
 	private Integer thirdDay;
-	private String thirdSales;
+	private Double thirdSales;
 	private Integer fourthDay;
-	private String fourthSales;
+	private Double fourthSales;
 	private Integer fifthDay;
-	private String fifthSales;
+	private Double fifthSales;
 	private Integer sixthDay;
-	private String sixthSales;
+	private Double sixthSales;
 	private Integer seventhDay;
-	private String seventhSales;
+	private Double seventhSales;
 			
 	public Integer getTodayOrderNum() {
 		return todayOrderNum;
@@ -44,11 +44,11 @@ public class HomePageVO {
 		this.todayOrderNum = todayOrderNum;
 	}
 
-	public String getTodayGmv() {
+	public Double getTodayGmv() {
 		return todayGmv;
 	}
 
-	public void setTodayGmv(String todayGmv) {
+	public void setTodayGmv(Double todayGmv) {
 		this.todayGmv = todayGmv;
 	}
 
@@ -60,11 +60,11 @@ public class HomePageVO {
 		this.weekOrderNum = weekOrderNum;
 	}
 
-	public String getWeekGmv() {
+	public Double getWeekGmv() {
 		return weekGmv;
 	}
 
-	public void setWeekGmv(String weekGmv) {
+	public void setWeekGmv(Double weekGmv) {
 		this.weekGmv = weekGmv;
 	}
 
@@ -108,11 +108,11 @@ public class HomePageVO {
 		this.firstDay = firstDay;
 	}
 
-	public String getFirstSales() {
+	public Double getFirstSales() {
 		return firstSales;
 	}
 
-	public void setFirstSales(String firstSales) {
+	public void setFirstSales(Double firstSales) {
 		this.firstSales = firstSales;
 	}
 
@@ -124,11 +124,11 @@ public class HomePageVO {
 		this.secondDay = secondDay;
 	}
 
-	public String getSecondSales() {
+	public Double getSecondSales() {
 		return secondSales;
 	}
 
-	public void setSecondSales(String secondSales) {
+	public void setSecondSales(Double secondSales) {
 		this.secondSales = secondSales;
 	}
 
@@ -140,11 +140,11 @@ public class HomePageVO {
 		this.thirdDay = thirdDay;
 	}
 
-	public String getThirdSales() {
+	public Double getThirdSales() {
 		return thirdSales;
 	}
 
-	public void setThirdSales(String thirdSales) {
+	public void setThirdSales(Double thirdSales) {
 		this.thirdSales = thirdSales;
 	}
 
@@ -156,11 +156,11 @@ public class HomePageVO {
 		this.fourthDay = fourthDay;
 	}
 
-	public String getFourthSales() {
+	public Double getFourthSales() {
 		return fourthSales;
 	}
 
-	public void setFourthSales(String fourthSales) {
+	public void setFourthSales(Double fourthSales) {
 		this.fourthSales = fourthSales;
 	}
 
@@ -172,11 +172,11 @@ public class HomePageVO {
 		this.fifthDay = fifthDay;
 	}
 
-	public String getFifthSales() {
+	public Double getFifthSales() {
 		return fifthSales;
 	}
 
-	public void setFifthSales(String fifthSales) {
+	public void setFifthSales(Double fifthSales) {
 		this.fifthSales = fifthSales;
 	}
 
@@ -188,11 +188,11 @@ public class HomePageVO {
 		this.sixthDay = sixthDay;
 	}
 
-	public String getSixthSales() {
+	public Double getSixthSales() {
 		return sixthSales;
 	}
 
-	public void setSixthSales(String sixthSales) {
+	public void setSixthSales(Double sixthSales) {
 		this.sixthSales = sixthSales;
 	}
 
@@ -204,11 +204,11 @@ public class HomePageVO {
 		this.seventhDay = seventhDay;
 	}
 
-	public String getSeventhSales() {
+	public Double getSeventhSales() {
 		return seventhSales;
 	}
 
-	public void setSeventhSales(String seventhSales) {
+	public void setSeventhSales(Double seventhSales) {
 		this.seventhSales = seventhSales;
 	}
 	
