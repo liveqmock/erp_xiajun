@@ -73,6 +73,7 @@ public class YouzanSynController extends BaseController {
 			ChannelShopDO shopSo = new ChannelShopDO();
 			shopSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 			shopSo.setChannelNo(ChannelType.YouZan.getValue()+"");
+			shopSo.setOpen(true);
 			List<ChannelShopDO> channelShopList = shopService.searchShopList(shopSo);
 
 			if(!EasyUtil.isListEmpty(channelShopList)) {
