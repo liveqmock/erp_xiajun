@@ -85,7 +85,7 @@ public class ItemServiceImplement implements IItemService {
 
     @Override
     public String queryQrCodeUrlById(Long id) {
-    	return itemDOMapperExt.queryItemCodeById(id);
+    	return itemDOMapperExt.queryQrCodeUrlById(id);
     }
     
     @Override

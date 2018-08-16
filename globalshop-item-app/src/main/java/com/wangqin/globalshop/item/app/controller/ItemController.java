@@ -606,15 +606,20 @@ public class ItemController {
             return result.buildIsSuccess(false).buildMsg("失败，商品已被删除");
         }
         String picUrl = itemService.insertIntoItemDimension("item"+itemCode, "pages/item/detail", token);
+        System.out.println("String...");
         if (StringUtil.isNotBlank(picUrl)) {
+        	System.out.println("picUrl...");
             if (itemId != null) {
-                //System.out.println(picUrl);
+            	 System.out.println("itemId...");
+               // System.out.println(picUrl);
             	String url = itemService.queryQrCodeUrlById(itemId);
+            	 System.out.println("url..."+url);
             	ItemDO item = new ItemDO();
                 item.setId(itemId);
                 item.setQrCodeUrl(picUrl);
                 itemService.updateByIdSelective(item);
                 if (IsEmptyUtil.isStringEmpty(url)) {//插入Ku
+                	System.out.println("he...");
                 	 //插入item_qrcode_share表
                     ItemQrcodeShareDO shareDO = new ItemQrcodeShareDO();
                     String currentUserNo = AppUtil.getLoginUserId();
