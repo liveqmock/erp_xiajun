@@ -84,6 +84,11 @@ public class ItemServiceImplement implements IItemService {
     public static final String ACCESS_TOKEN_MI = "&secret=";
 
     @Override
+    public String queryQrCodeUrlById(Long id) {
+    	return itemDOMapperExt.queryItemCodeById(id);
+    }
+    
+    @Override
     public ItemDO queryItemDOByItemCode(String itemCode) {
         return itemDOMapperExt.queryItemDOByItemCode(itemCode);
     }
