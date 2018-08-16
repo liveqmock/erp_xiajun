@@ -755,7 +755,6 @@ public class ItemServiceImplement implements IItemService {
                         String brandCnName = obj.get(4).toString().trim();
                         brandCnName = brandCnName == null ? "" : brandCnName;
                         item.setBrandName(brandEnName + " " + brandCnName);
-                        itemSku.setBrandName(brandEnName + " " + brandCnName);
                         List<ItemBrandDO> brand = iBrandService.queryByEnName(brandEnName);
                         if (brand.size() == 0) {
                             errMsg.add("第" + i + "行:找不到" + brandEnName + " " + brandCnName + "对应的品牌");
@@ -819,8 +818,6 @@ public class ItemServiceImplement implements IItemService {
                     if (isParseToDouble(weight)) {
                         item.setWeight(Double.valueOf(weight));
                         itemSku.setWeight(Double.valueOf(weight));
-                    } else {
-                        errMsg.add("存在未知格式的数据:第" + i + "行 第15列的  " + weight);
                     }
                     /**采购地*/
                     String purchaseFrom = obj.get(10).toString().trim();
@@ -841,6 +838,16 @@ public class ItemServiceImplement implements IItemService {
                 } else {
                     item = map.get(sn);
                 }
+
+                /**重量*/
+                String weight = obj.get(14).toString();
+                weight = StringUtil.isBlank(weight) ? "0" : weight;
+                if (isParseToDouble(weight)) {
+                    itemSku.setWeight(Double.valueOf(weight));
+                } else {
+                    errMsg.add("存在未知格式的数据:第" + i + "行 第15列的  " + weight);
+                }
+                itemSku.setBrandName(item.getBrandName());
                 itemSku.setItemName(item.getItemName());
                 itemSku.setCategoryCode(item.getCategoryCode());
                 itemSku.setCategoryCode(item.getCategoryName());
