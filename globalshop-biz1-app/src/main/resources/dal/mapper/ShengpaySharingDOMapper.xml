@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.ShengpaySharingDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpaySharingDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+    <result column="merchant_order_no" property="merchantOrderNo" jdbcType="VARCHAR" />
+    <result column="sharing_order_no" property="sharingOrderNo" jdbcType="VARCHAR" />
+    <result column="sharing_query_order_no" property="sharingQueryOrderNo" jdbcType="VARCHAR" />
+    <result column="sharing_req_no" property="sharingReqNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, company_no, merchant_order_no, sharing_order_no, sharing_query_order_no, sharing_req_no, 
+    status, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from shengpay_sharing
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from shengpay_sharing
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpaySharingDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shengpay_sharing (company_no, merchant_order_no, sharing_order_no, 
+      sharing_query_order_no, sharing_req_no, status, 
+      creator, modifier)
+    values (#{companyNo,jdbcType=VARCHAR}, #{merchantOrderNo,jdbcType=VARCHAR}, #{sharingOrderNo,jdbcType=VARCHAR}, 
+      #{sharingQueryOrderNo,jdbcType=VARCHAR}, #{sharingReqNo,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpaySharingDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shengpay_sharing
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        company_no,
+      </if>
+      <if test="merchantOrderNo != null" >
+        merchant_order_no,
+      </if>
+      <if test="sharingOrderNo != null" >
+        sharing_order_no,
+      </if>
+      <if test="sharingQueryOrderNo != null" >
+        sharing_query_order_no,
+      </if>
+      <if test="sharingReqNo != null" >
+        sharing_req_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyNo != null" >
+        #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderNo != null" >
+        #{merchantOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sharingOrderNo != null" >
+        #{sharingOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sharingQueryOrderNo != null" >
+        #{sharingQueryOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sharingReqNo != null" >
+        #{sharingReqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpaySharingDO" >
+    update shengpay_sharing
+    <set >
+      <if test="companyNo != null" >
+        company_no = #{companyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderNo != null" >
+        merchant_order_no = #{merchantOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sharingOrderNo != null" >
+        sharing_order_no = #{sharingOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sharingQueryOrderNo != null" >
+        sharing_query_order_no = #{sharingQueryOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sharingReqNo != null" >
+        sharing_req_no = #{sharingReqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpaySharingDO" >
+    update shengpay_sharing
+    set company_no = #{companyNo,jdbcType=VARCHAR},
+      merchant_order_no = #{merchantOrderNo,jdbcType=VARCHAR},
+      sharing_order_no = #{sharingOrderNo,jdbcType=VARCHAR},
+      sharing_query_order_no = #{sharingQueryOrderNo,jdbcType=VARCHAR},
+      sharing_req_no = #{sharingReqNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
