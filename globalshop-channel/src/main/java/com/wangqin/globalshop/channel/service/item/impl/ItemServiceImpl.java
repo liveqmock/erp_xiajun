@@ -1,13 +1,7 @@
 package com.wangqin.globalshop.channel.service.item.impl;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
@@ -39,6 +33,9 @@ public class ItemServiceImpl implements IItemService {
 
     @Autowired
     private ItemSkuScaleMapperExt itemSkuScaleDOMapper;
+
+    @Autowired
+	private ChannelSalePriceDOMapperExt priceDOMapperExt;
 
     @Override
     public int deleteByPrimaryKey(Long id) {
@@ -150,6 +147,13 @@ public class ItemServiceImpl implements IItemService {
                 scaleMap.put(scale.getScaleName(), scale);
             }
             itemSkuVo.setScaleMap(scaleMap);
+
+            Map<String,Float> channelSalePriceMap = new HashMap<>();
+            List<ChannelSalePriceDO> channelSalePriceDOS = priceDOMapperExt.queryPriceListBySkuCode(sku.getSkuCode());
+            for(ChannelSalePriceDO channelSalePriceDO : channelSalePriceDOS){
+				channelSalePriceMap.put(channelSalePriceDO.getChannelNo()+"",channelSalePriceDO.getSalePrice());
+			}
+			itemSkuVo.setChannelSalePriceMap(channelSalePriceMap);
 
             itemSkuVos.add(itemSkuVo);
 

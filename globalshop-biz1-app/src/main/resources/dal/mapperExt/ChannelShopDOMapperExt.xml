@@ -36,6 +36,10 @@
             and T.shop_code = #{shopCode}
         </if>
 
+        <if test="open != null">
+            and T.open = #{open}
+        </if>
+
         <if test="expiresTime != null">
             and T.expires_time >= #{expiresTime}
         </if>

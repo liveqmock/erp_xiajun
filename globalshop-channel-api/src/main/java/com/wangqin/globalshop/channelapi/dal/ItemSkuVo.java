@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,9 +31,15 @@ public class ItemSkuVo extends ItemSkuDO{
 	private InventoryDO inventoryDO;
 
 	//queryItemSkusForItemThirdSale
-	private Integer itemSkuQuantity;
+	private Integer itemSkuQuantity;//这个是海狐查询已经售卖的订单里面的商品数量
 
-
+	private Map<String,Float> channelSalePriceMap = new HashMap<>();//shopcode全局唯一
+	public Map<String, Float> getChannelSalePriceMap() {
+		return channelSalePriceMap;
+	}
+	public void setChannelSalePriceMap(Map<String, Float> channelSalePriceMap) {
+		this.channelSalePriceMap = channelSalePriceMap;
+	}
 	public Integer getItemSkuQuantity() {
 		return itemSkuQuantity;
 	}
@@ -98,6 +105,15 @@ public class ItemSkuVo extends ItemSkuDO{
 					+inventoryDO.getVirtualInv()-inventoryDO.getLockedVirtualInv();
 		}
 		return quantity;
+	}
+
+	public Double getChannelSalePrice(String channelNo){
+           Double salePrice = getSalePrice() == null ? 0d : getSalePrice();
+           if(channelSalePriceMap.get(channelNo) != null && channelSalePriceMap.get(channelNo) > 0.001){
+			   salePrice = BigDecimal.valueOf(channelSalePriceMap.get(channelNo)).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+		   }
+		   return salePrice;
+
 	}
 
 
