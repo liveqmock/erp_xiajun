@@ -39,7 +39,7 @@ public class YouzanOauthController extends BaseController {
 
 	public static final String youzan_client_secret = "efb0091fe76678322000af822c705c0a";
 
-	public static final String youzan_redirect_uri = "http://47.98.164.133:8100/youzan/oauth/";
+	public static final String youzan_redirect_uri = "http://47.98.230.111:8100/youzan/oauth/";
 
 	public static final String youzan_token_url = "https://open.youzan.com/oauth/token";
 
