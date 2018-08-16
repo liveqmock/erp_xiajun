@@ -37,42 +37,42 @@ public interface PayService {
     /**
      * 退款
      *
-     * @param refundOrderNo   退款请求流水号(商户系统唯一)
      * @param merchantOrderNo 原支付订单号
+     * @param refundOrderNo   退款请求流水号(商户系统唯一)
      * @param refundAmount    退款金额(与支付金额一致)
      * @param exts            扩展属性,JSON串
      */
-    void refundPay(String refundOrderNo, String merchantOrderNo, String refundAmount, String exts);
+    void refundPay(String merchantOrderNo, String refundOrderNo, String refundAmount, String exts);
 
     /**
      * 退款查询
      *
-     * @param refundOrderNo   退款请求流水号(商户系统唯一)
      * @param merchantOrderNo 原支付订单号
+     * @param refundOrderNo   退款请求流水号(商户系统唯一)
      * @param refundTransNo   盛付通退款订单号
      * @param sftOrderNo      盛付通系统内针对此商户订单的唯一订单号，如: C20160105105839885474
      * @param exts            扩展属性,JSON串
      */
-    void queryRefund(String refundOrderNo, String merchantOrderNo, String refundTransNo,
+    void queryRefund(String merchantOrderNo, String refundOrderNo, String refundTransNo,
                      String sftOrderNo, String exts);
 
     /**
      * 分账请求
      *
-     * @param sharingOrderNo     分账请求订单号
      * @param merchantOrderNo    商户订单号
+     * @param sharingOrderNo     分账请求订单号
      * @param sharingReqItemList 分账信息子项集合
      * @param exts               扩展属性,JSON串
      */
-    void sharingPay(String sharingOrderNo, String merchantOrderNo,
+    void sharingPay(String merchantOrderNo, String sharingOrderNo,
                     List<SharingReqItem> sharingReqItemList, String exts);
 
     /**
      * 分账查询
      *
+     * @param merchantOrderNo     商户订单号
      * @param sharingQueryOrderNo 分账查询请求订单号
-     * @param paymentOrderNo 商户订单号
-     * @param sharingType 分账类型（MERCHANT_SHARING：查询分账信息，MERCHANT_SHARING_REFUND：查询分账退款信息）
+     * @param sharingType         分账类型（MERCHANT_SHARING：查询分账信息，MERCHANT_SHARING_REFUND：查询分账退款信息）
      */
-    void querySharing(String sharingQueryOrderNo, String paymentOrderNo, String sharingType);
+    void querySharing(String merchantOrderNo, String sharingQueryOrderNo, String sharingType);
 }
