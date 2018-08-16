@@ -636,8 +636,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
      */
     @Override
     public void syncLogisticsOnlineConfirm(List<MallSubOrderDO> orderList, ShippingOrderDO shippingOrder) {
-        logger.error("有赞发货");
 
+        logger.info("有赞发货");
         boolean hasFailed = false;
         for (MallSubOrderDO order : orderList) {
             try {
@@ -668,10 +668,12 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                 if (!hasFailed && !result.getIsSuccess()) {
                     hasFailed = true;
                     this.logger.error("同步发货给 有赞 返回结果异常：" + result.toString());
+					throw new ErpCommonException("youzan syncLogisticsOnlineConfirm error",result.toString());
                 }
             } catch (Exception e) {
                 hasFailed = true;
                 logger.error("有赞发货异常: ", e);
+                throw new ErpCommonException("youzan syncLogisticsOnlineConfirm error",e.getMessage());
             }
         }
 
@@ -680,7 +682,8 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
                 shippingOrder.setSyncSendStatus(1);
                 shippingOrderService.updateByPrimaryKey(shippingOrder);
             } catch (Exception e) {
-                this.logger.error("同步发货给 有赞 返回结果异常");
+                this.logger.error("同步发货给 有赞,更新发货单状态异常");
+				throw new ErpCommonException("youzan syncLogisticsOnlineConfirm error",e.getMessage());
             }
         }
     }

@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShippingOrderDOMapperExt">
-    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR"/>
-        <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR"/>
-        <result column="logistic_company" property="logisticCompany" jdbcType="VARCHAR"/>
-        <result column="type" property="type" jdbcType="TINYINT"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="transfer_status" property="transferStatus" jdbcType="TINYINT"/>
-        <result column="sync_send_status" property="syncSendStatus" jdbcType="TINYINT"/>
-        <result column="tpl_pkg_status" property="tplPkgStatus" jdbcType="VARCHAR"/>
-        <result column="freight" property="freight" jdbcType="DOUBLE"/>
-        <result column="sku_weight" property="skuWeight" jdbcType="DOUBLE"/>
-        <result column="mall_orders" property="mallOrders" jdbcType="VARCHAR"/>
-        <result column="shipping_printer" property="shippingPrinter" jdbcType="VARCHAR"/>
-        <result column="gls_return_back" property="glsReturnBack" jdbcType="VARCHAR"/>
-        <result column="receiver" property="receiver" jdbcType="VARCHAR"/>
-        <result column="receiver_state" property="receiverState" jdbcType="VARCHAR"/>
-        <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR"/>
-        <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR"/>
-        <result column="address" property="address" jdbcType="VARCHAR"/>
-        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
-        <result column="postcode" property="postcode" jdbcType="VARCHAR"/>
-        <result column="memo" property="memo" jdbcType="VARCHAR"/>
-        <result column="id_card" property="idCard" jdbcType="VARCHAR"/>
-        <result column="id_card_back" property="idCardBack" jdbcType="VARCHAR"/>
-        <result column="id_card_front" property="idCardFront" jdbcType="VARCHAR"/>
-        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
-        <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP"/>
-        <result column="is_del" property="isDel" jdbcType="BIT"/>
-        <result column="creator" property="creator" jdbcType="VARCHAR"/>
-        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="shipping_no" property="shippingNo" jdbcType="VARCHAR" />
+        <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
+        <result column="logistic_company" property="logisticCompany" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="transfer_status" property="transferStatus" jdbcType="INTEGER" />
+        <result column="sync_send_status" property="syncSendStatus" jdbcType="INTEGER" />
+        <result column="tpl_pkg_status" property="tplPkgStatus" jdbcType="VARCHAR" />
+        <result column="freight" property="freight" jdbcType="DOUBLE" />
+        <result column="sku_weight" property="skuWeight" jdbcType="DOUBLE" />
+        <result column="mall_orders" property="mallOrders" jdbcType="VARCHAR" />
+        <result column="shipping_printer" property="shippingPrinter" jdbcType="VARCHAR" />
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR" />
+        <result column="gls_return_back" property="glsReturnBack" jdbcType="VARCHAR" />
+        <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+        <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+        <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+        <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+        <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+        <result column="memo" property="memo" jdbcType="VARCHAR" />
+        <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+        <result column="id_card_back" property="idCardBack" jdbcType="VARCHAR" />
+        <result column="id_card_front" property="idCardFront" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="logistic_type" property="logisticType" jdbcType="VARCHAR" />
     </resultMap>
-    <sql id="Base_Column_List">
+    <sql id="Base_Column_List" >
     id, shipping_no, logistic_no, logistic_company, type, status, transfer_status, sync_send_status,
-    tpl_pkg_status, freight, sku_weight, mall_orders, shipping_printer, gls_return_back,
+    tpl_pkg_status, freight, sku_weight, mall_orders, shipping_printer, company_no, gls_return_back,
     receiver, receiver_state, receiver_city, receiver_district, address, telephone, postcode,
-    memo, id_card, id_card_back, id_card_front, gmt_create, gmt_modify, is_del, creator,
-    modifier
+    memo, id_card, id_card_back, id_card_front, creator, modifier, logistic_type
   </sql>
 
 	<!-- 首页数据看板：今日已发货包裹数 -->
