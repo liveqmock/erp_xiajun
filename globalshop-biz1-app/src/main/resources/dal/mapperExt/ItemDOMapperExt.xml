@@ -50,7 +50,16 @@
 		item_code=#{itemCode}
  	</select>
 
-
+	<select id="queryQrCodeUrlById" resultType="java.lang.String">
+		SELECT 
+		qr_code_url
+		FROM
+		item 
+		WHERE 
+		id=#{id}
+		LIMIT 0,1
+	</select>
+	
     <!--通过item_code查询item-->
     <select id="queryItemDOByItemCode" parameterType="java.lang.String"
             resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
