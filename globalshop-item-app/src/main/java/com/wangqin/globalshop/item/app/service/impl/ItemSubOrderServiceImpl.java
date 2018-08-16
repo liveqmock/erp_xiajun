@@ -36,13 +36,13 @@ public class ItemSubOrderServiceImpl implements IItemSubOrderService{
 	
 	//首页数据看板：今日GMV（已付款订单金额）
 	@Override
-	public MallSubOrderDO sumPaidOrderPriceByDate(Integer dayIndex,String companyNo) {
+	public List<MallSubOrderDO> sumPaidOrderPriceByDate(Integer dayIndex,String companyNo) {
 		return mapperExt.sumPaidOrderPriceByDate(OrderStatus.paidList(), dayIndex, companyNo);
 	}
 		
 	//首页数据看板：一周GMV（已付款订单数，不含退款订单）
 	@Override
-	public MallSubOrderDO sumWeekOrderPrice (String companyNo) {
+	public List<MallSubOrderDO> sumWeekOrderPrice (String companyNo) {
 		return mapperExt.sumWeekOrderPrice(OrderStatus.paidListNotReturn(), companyNo);
 	}
 		

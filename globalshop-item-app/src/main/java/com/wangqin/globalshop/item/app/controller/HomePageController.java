@@ -17,6 +17,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.item.app.service.IItemMallOrderService;
 import com.wangqin.globalshop.item.app.service.IItemShippingOrderService;
@@ -54,7 +55,7 @@ public class HomePageController extends BaseController {
 		Integer todayOrderNum = orderService.sumPaidOrderNumByDate(0, companyNo);
 		hpVO.setTodayOrderNum(todayOrderNum);
 		//今日gmv
-		MallSubOrderDO subOrderDO = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
+		List<MallSubOrderDO> subOrderDO = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
 		hpVO.setTodayGmv(calDaySalesVolume(subOrderDO));
 		//一周订单数
 		Integer weekOrderNum = 0;
@@ -63,7 +64,7 @@ public class HomePageController extends BaseController {
 		}
 		hpVO.setWeekOrderNum(weekOrderNum);
 		//一周gmv
-		MallSubOrderDO subOrderWeekDO = subOrderService.sumWeekOrderPrice(companyNo);
+		List<MallSubOrderDO> subOrderWeekDO = subOrderService.sumWeekOrderPrice(companyNo);
 		hpVO.setWeekGmv(calDaySalesVolume(subOrderWeekDO));
 		//待发货订单数
 		Integer waitSendOrderNo = orderService.sumWaitSendOrderNum(companyNo);
@@ -86,19 +87,19 @@ public class HomePageController extends BaseController {
 		hpVO.setFifthDay(dateList.get(4));
 		hpVO.setSixthDay(dateList.get(5));
 		hpVO.setSeventhDay(dateList.get(6));		
-		MallSubOrderDO subOrderDO0 = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
+		List<MallSubOrderDO> subOrderDO0 = subOrderService.sumPaidOrderPriceByDate(0, companyNo);
 		hpVO.setFirstSales(calDaySalesVolume(subOrderDO0));
-		MallSubOrderDO subOrderDO1 = subOrderService.sumPaidOrderPriceByDate(1, companyNo);
+		List<MallSubOrderDO> subOrderDO1 = subOrderService.sumPaidOrderPriceByDate(1, companyNo);
 		hpVO.setSecondSales(calDaySalesVolume(subOrderDO1));
-		MallSubOrderDO subOrderDO2 = subOrderService.sumPaidOrderPriceByDate(2, companyNo);
+		List<MallSubOrderDO> subOrderDO2 = subOrderService.sumPaidOrderPriceByDate(2, companyNo);
 		hpVO.setThirdSales(calDaySalesVolume(subOrderDO2));
-		MallSubOrderDO subOrderDO3 = subOrderService.sumPaidOrderPriceByDate(3, companyNo);
+		List<MallSubOrderDO> subOrderDO3 = subOrderService.sumPaidOrderPriceByDate(3, companyNo);
 		hpVO.setFourthSales(calDaySalesVolume(subOrderDO3));
-		MallSubOrderDO subOrderDO4 = subOrderService.sumPaidOrderPriceByDate(4, companyNo);
+		List<MallSubOrderDO> subOrderDO4 = subOrderService.sumPaidOrderPriceByDate(4, companyNo);
 		hpVO.setFifthSales(calDaySalesVolume(subOrderDO4));
-		MallSubOrderDO subOrderDO5 = subOrderService.sumPaidOrderPriceByDate(5, companyNo);
+		List<MallSubOrderDO> subOrderDO5 = subOrderService.sumPaidOrderPriceByDate(5, companyNo);
 		hpVO.setSixthSales(calDaySalesVolume(subOrderDO5));
-		MallSubOrderDO subOrderDO6 = subOrderService.sumPaidOrderPriceByDate(6, companyNo);
+		List<MallSubOrderDO> subOrderDO6 = subOrderService.sumPaidOrderPriceByDate(6, companyNo);
 		hpVO.setSeventhSales(calDaySalesVolume(subOrderDO6));
 		
 		result.buildData(hpVO);
@@ -130,17 +131,22 @@ public class HomePageController extends BaseController {
 	}
 	
 	//计算Gmv
-	public static String calDaySalesVolume(MallSubOrderDO subOrderDO) {
-		Integer quantity = subOrderDO.getQuantity();
-		Double salePrice = subOrderDO.getSalePrice();
-		if (null == quantity || null == salePrice) {
+	public static String calDaySalesVolume(List<MallSubOrderDO> subOrderDOList) {
+		if (IsEmptyUtil.isCollectionEmpty(subOrderDOList)) {
 			return "0";
-		} else {
-			BigDecimal qua = new BigDecimal(quantity);
-			BigDecimal price = new BigDecimal(salePrice);
-			BigDecimal result = qua.multiply(price);
-			return PriceUtil.formatPrice(result.toPlainString());
 		}
+		BigDecimal result = new BigDecimal(0);
+		for (MallSubOrderDO subOrderDO:subOrderDOList) {
+			Integer quantity = subOrderDO.getQuantity();
+			Double salePrice = subOrderDO.getSalePrice();
+			if (null != quantity || null != salePrice) {
+				BigDecimal qua = new BigDecimal(quantity);
+				BigDecimal price = new BigDecimal(salePrice);
+				BigDecimal curResult = qua.multiply(price);
+				result.add(curResult);
+			} 
+		}
+		return PriceUtil.formatPrice(result.toPlainString());			
 	}
 
 	
