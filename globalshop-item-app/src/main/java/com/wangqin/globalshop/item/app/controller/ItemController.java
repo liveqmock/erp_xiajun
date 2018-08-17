@@ -85,7 +85,7 @@ public class ItemController {
     @Autowired
     private IItemCompanyService companyService;
     @Autowired
-    private ItemQrcodeShareDOMapperExt mapperExt;
+    private ItemQrcodeShareDOMapperExt shareMapperExt;
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
@@ -566,26 +566,27 @@ public class ItemController {
             return result.buildIsSuccess(false).buildMsg("失败，商品已被删除");
         }
         String picUrl = itemService.insertIntoItemDimension("item"+itemCode, "pages/item/detail", token);
-        if (StringUtil.isNotBlank(picUrl)) {
-        	String url = itemService.queryQrCodeUrlById(itemId);
+        if (IsEmptyUtil.isStringNotEmpty(picUrl)) {
+        	//更新item表
         	ItemDO item = new ItemDO();
         	item.setId(itemId);
         	item.setQrCodeUrl(picUrl);
         	itemService.updateByIdSelective(item);
-        	if (IsEmptyUtil.isStringEmpty(url)) {
-        		//插入item_qrcode_share表
+        	//更新或者插入item_qrcode_share表
+        	String uuid = "item" + itemCode;
+        	ItemQrcodeShareDO qrcodeShareDO = shareMapperExt.queryRecordByShareNoAndCompanyNo(uuid, companyNo);
+        	if (null == qrcodeShareDO) {
         		ItemQrcodeShareDO shareDO = new ItemQrcodeShareDO();
         		String currentUserNo = AppUtil.getLoginUserId();
-        		shareDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-        		shareDO.setShareNo("item" + itemCode);
+        		shareDO.setCompanyNo(companyNo);
+        		shareDO.setShareNo(uuid);
         		shareDO.setCreator(currentUserNo);
         		shareDO.setModifier(currentUserNo);
         		shareDO.setItemCode(itemCode);
         		shareDO.setPicUrl(picUrl);
-        		mapperExt.insertSelective(shareDO);
+        		shareMapperExt.insertSelective(shareDO);
         	} else {
-        		//更新item_qrcode_url表
-        		mapperExt.updatePicUrlByShareNo("item" + itemCode, picUrl);
+        		shareMapperExt.updatePicUrlByShareNo(uuid, picUrl);
         	}  
         }
         return result.buildIsSuccess(true);
