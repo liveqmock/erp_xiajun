@@ -63,13 +63,13 @@ public class TestPayServiceImpl {
                     .build();
             sharingReqItemList.add(amountItem);
 
-//            SharingReqItem rateItem = SharingReqItem.builder()
-//                    .sharingNo(String.valueOf(i + 5))
-//                    .sharingRate("0.5")
-//                    .payeeId("107537")
-//                    .payeeIdType("1")
-//                    .build();
-//            sharingReqItemList.add(rateItem);
+            SharingReqItem rateItem = SharingReqItem.builder()
+                    .sharingNo(String.valueOf(i + 5))
+                    .sharingRate("0.5")
+                    .payeeId("107537")
+                    .payeeIdType("1")
+                    .build();
+            sharingReqItemList.add(rateItem);
         }
 
         payService.sharingPay(

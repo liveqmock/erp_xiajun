@@ -2,6 +2,7 @@ package com.wangqin.globalshop.pay.service.impl;
 
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.pay.constant.PayChannelEnum;
+import com.wangqin.globalshop.pay.constant.ReturnCodeEnum;
 import com.wangqin.globalshop.pay.dto.*;
 import com.wangqin.globalshop.pay.service.PayService;
 import com.wangqin.globalshop.pay.service.ShengpayService;
@@ -49,6 +50,7 @@ public class PayServiceImpl implements PayService {
                 .productName(productName)
                 .currency(ShengpayService.CURRENCY)
                 .userIp(userIp)
+                // 同步跳转URL
                 .pageUrl(ShengpayService.PAY_PAGE_URL)
                 // 默认微信渠道
                 .payChannel(PayChannelEnum.WP.getCode())
@@ -65,6 +67,12 @@ public class PayServiceImpl implements PayService {
             OrderPayResponse orderPayResponse = call.execute().body();
             logger.debug("orderPayResponse: {}", orderPayResponse);
             // TODO: 根据响应信息进行下一步的逻辑
+            String returnCode = orderPayResponse.getReturnCode();
+            if (ReturnCodeEnum.SUCCESS.getCode().equals(returnCode)) {
+                // 下单成功
+            } else {
+                // 下单失败
+            }
         } catch (IOException e) {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
@@ -123,6 +131,14 @@ public class PayServiceImpl implements PayService {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
         }
+    }
+
+    @Override
+    public void refundPay(String merchantOrderNo, String exts) {
+        // 退款单号暂时与订单号定位一致
+        String refundOrderNo = merchantOrderNo;
+        String refundAmount = "";
+        refundPay(merchantOrderNo, refundOrderNo, refundAmount, exts);
     }
 
     @Override

@@ -46,6 +46,14 @@ public interface PayService {
     void refundPay(String merchantOrderNo, String refundOrderNo, String refundAmount, String exts);
 
     /**
+     * 退款
+     *
+     * @param merchantOrderNo 原支付订单号
+     * @param exts 扩展属性,JSON串
+     */
+    void refundPay(String merchantOrderNo, String exts);
+
+    /**
      * 退款查询
      *
      * @param merchantOrderNo 原支付订单号

@@ -48,6 +48,11 @@
             <artifactId>globalshop-item-app</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.wangqin.globalshop</groupId>
+            <artifactId>globalshop-order-app</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- retrofit2 用于进行 HTTP 请求 -->
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
