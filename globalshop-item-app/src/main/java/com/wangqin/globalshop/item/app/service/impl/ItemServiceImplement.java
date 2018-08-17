@@ -83,10 +83,6 @@ public class ItemServiceImplement implements IItemService {
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
     public static final String ACCESS_TOKEN_MI = "&secret=";
 
-    @Override
-    public String queryQrCodeUrlById(Long id) {
-    	return itemDOMapperExt.queryQrCodeUrlById(id);
-    }
     
     @Override
     public ItemDO queryItemDOByItemCode(String itemCode) {
@@ -1125,6 +1121,7 @@ public class ItemServiceImplement implements IItemService {
 
     /**
      * 工具类
+     * 商品列表->商品发布->自动生成二维码
      * 二维码生成
      *
      * @return

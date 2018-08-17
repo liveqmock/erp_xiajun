@@ -13,5 +13,8 @@ public interface ItemQrcodeShareDOMapperExt extends ItemQrcodeShareDOMapper {
 
 	ItemQrcodeShareDO selectByShareNo(@Param("shareNo") String shareNo);
 	
+	//查找指定商品的二维码记录,从ERP系统过来的share_no在整个系统里面唯一
+	ItemQrcodeShareDO queryRecordByShareNoAndCompanyNo(@Param("shareNo") String shareNo,@Param("companyNo") String companyNo);
+	
 	void updatePicUrlByShareNo(@Param("shareNo") String shareNo,@Param("picUrl") String picUrl);
 }
