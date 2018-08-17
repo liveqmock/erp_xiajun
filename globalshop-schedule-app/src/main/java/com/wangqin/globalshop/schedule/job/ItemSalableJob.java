@@ -58,7 +58,7 @@ public class ItemSalableJob {
 	  */
 	 @Scheduled(cron = "* 0/10 * * * ? ")
 	 public void updateItemSalable() {
-		 System.out.println("scheduled job-->start to scan item sale state");
+		 //System.out.println("scheduled job-->start to scan item sale state");
 		 List<ItemDO> itemList = scheduleItemService.queryItemSelfDefineTime();
 		 if (IsEmptyUtil.isCollectionNotEmpty(itemList)) {
 			 for (ItemDO item:itemList) {
@@ -76,6 +76,6 @@ public class ItemSalableJob {
 				 }
 			 }
 		 }
-		System.out.println("scheduled job-->end to scan item sale state");
+		//System.out.println("scheduled job-->end to scan item sale state");
 	 }
 }
