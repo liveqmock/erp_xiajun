@@ -1113,6 +1113,7 @@ public class ItemServiceImplement implements IItemService {
 
     /**
      * 工具类
+     * 商品列表->商品发布->自动生成二维码
      * 二维码生成
      *
      * @return
