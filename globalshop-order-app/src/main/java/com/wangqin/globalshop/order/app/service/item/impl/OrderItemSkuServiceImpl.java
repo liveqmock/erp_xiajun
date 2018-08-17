@@ -21,7 +21,7 @@ public class OrderItemSkuServiceImpl implements OrderItemSkuService {
     
     
     @Override
-    public ItemSkuDO queryItemSkuDOBySkuCodeAndCompanyNo(String skuCode,String companyNo) {
-    	return itemSkuMapperExt.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
+    public ItemSkuDO queryItemSkuDOBySkuCode(String skuCode) {
+    	return itemSkuMapperExt.queryItemSkuDOBySkuCode(skuCode);
     }
 }
