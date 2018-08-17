@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.channel.task;
+package com.wangqin.globalshop.channel.task.youzantask;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;

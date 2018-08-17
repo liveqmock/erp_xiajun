@@ -1,7 +1,6 @@
-package com.wangqin.globalshop.channel.task;
+package com.wangqin.globalshop.channel.task.youzantask;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopConfigDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.enums.AccountConfigKey;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
@@ -19,15 +18,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Create by 777 on 2018/8/12
+ * 自动去有赞下载订单
+ * 
+ * @author 777
  */
+@Component
+public class AutoYouzanTradesSoldGetTask {
 
+	private static Logger logger = LoggerFactory.getLogger("AutoYouzanTradesSoldGetTask");
 
-//@Component
-public class AutoYouzanItemsGetTask {
-
-	private static Logger logger = LoggerFactory.getLogger("AutoYouzanItemsGetTask");
-	@Autowired
+    @Autowired
 	private ChannelCommonService channelCommonService;
 
 	@Autowired
@@ -40,11 +40,12 @@ public class AutoYouzanItemsGetTask {
 
 	private final static Long startEndMaxInternalDay = 5*24*60*60*1000L;//查询间隔最大5天
 
-	// 每隔半小时执行一次
-	@Scheduled(cron = "0/30 * * * * ?")
-	public void run() {
+    // 每隔半小时执行一次
+    //@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0 3/10 * * * ?")
+    public void run() {
 
-		logger.info("定时任务：自动去有赞下载商品===>Start");
+		logger.info("定时任务：自动去有赞下载订单===>Start");
 		Long startTime = System.currentTimeMillis();
 
 		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
@@ -54,7 +55,7 @@ public class AutoYouzanItemsGetTask {
 
 		Long shopCount= 0L;
 		JdShopConfigDO configso = new JdShopConfigDO();
-		configso.setConfigKey(AccountConfigKey.LAST_ITEM_GET_TIME.getDescription());
+		configso.setConfigKey(AccountConfigKey.LAST_TRADES_GET_TIME.getDescription());
 
 		for (JdShopOauthDO shopOauth : shopOauthDOList) {
 
@@ -80,14 +81,14 @@ public class AutoYouzanItemsGetTask {
 				endTime = new Date(beginTime.getTime()+startEndMaxInternalDay);
 			}
 
-			logger.info("youzan item begin time: " + DateUtil.convertDate2Str(beginTime,DateUtil.formateStr19));
-			logger.info("youzan item end time: " + DateUtil.convertDate2Str(endTime,DateUtil.formateStr19));
+			logger.info("youzan begin time: " + DateUtil.convertDate2Str(beginTime,DateUtil.formateStr19));
+			logger.info("youzan end time: " + DateUtil.convertDate2Str(endTime,DateUtil.formateStr19));
 
 
 			Boolean success = true;
 
 			try {
-				channelCommonService.getItems(shopOauth.getShopCode(),beginTime,endTime);
+				channelCommonService.getOrders(shopOauth.getShopCode(),beginTime,endTime);
 				shopCount++;
 			} catch (ErpCommonException e) {
 				success = false;
@@ -103,6 +104,6 @@ public class AutoYouzanItemsGetTask {
 			}
 		}
 		Long endTime = System.currentTimeMillis();
-		logger.info("定时任务：自动去有赞下载商品===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
-	}
+		logger.info("定时任务：自动去有赞下载订单===>End, use time:" + (endTime - startTime) +" ms. shopCount: " + shopCount);
+    }
 }

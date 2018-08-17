@@ -83,11 +83,7 @@ public class ItemServiceImplement implements IItemService {
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
     public static final String ACCESS_TOKEN_MI = "&secret=";
 
-    @Override
-    public String queryQrCodeUrlById(Long id) {
-    	return itemDOMapperExt.queryQrCodeUrlById(id);
-    }
-    
+
     @Override
     public ItemDO queryItemDOByItemCode(String itemCode) {
         return itemDOMapperExt.queryItemDOByItemCode(itemCode);
@@ -746,7 +742,19 @@ public class ItemServiceImplement implements IItemService {
                     }
 
 
-                    String brandEnName = obj.get(3).toString().trim();
+                    String brandEnName = obj.get(3).toString();
+                    /*让英文品牌中间只隔一个空格*/
+                    String[] names = brandEnName.split(" ");
+                    StringBuilder sb = new StringBuilder();
+                    for (String name : names) {
+                        if ("".equals(name.trim())) {
+                            continue;
+                        }
+                        sb.append(" ").append(s);
+                    }
+                    brandEnName = sb.toString().substring(1);
+
+
                     /**品牌(英文)*/
                     if (StringUtils.isBlank(brandEnName)) {
                         errMsg.add("第" + i + "行:品牌(英文)不能为空");
@@ -927,7 +935,13 @@ public class ItemServiceImplement implements IItemService {
             } else if (size < 10) {
                 throw new BizCommonException(errMsg.toString());
             } else {
-                throw new BizCommonException("上传文件错误过多,请验证后再次上传");
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < 10; j++) {
+                    String s1 = errMsg.get(j);
+                    sb.append(s1).append("\n");
+                }
+                sb.append("....");
+                throw new BizCommonException(sb.toString());
             }
 
         } catch (Exception e) {
@@ -935,6 +949,7 @@ public class ItemServiceImplement implements IItemService {
         }
 
     }
+
 
     private String updateItemPriceRange(ItemDO item, String salePrice) {
         try {
@@ -1113,6 +1128,7 @@ public class ItemServiceImplement implements IItemService {
 
     /**
      * 工具类
+     * 商品列表->商品发布->自动生成二维码
      * 二维码生成
      *
      * @return
