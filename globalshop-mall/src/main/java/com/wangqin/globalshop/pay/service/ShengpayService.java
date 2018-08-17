@@ -14,7 +14,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
- * 用于对接盛付通接口的 service
+ * 用于对接盛付通接口，进行 Http 请求/响应的 service
  *
  * @author angus
  * @date 2018/8/14
@@ -86,7 +86,7 @@ public interface ShengpayService {
      * @return ShengpayService 实例
      */
     static ShengpayService newInstance() {
-        // 为 Retrofit 配置 Http Log 拦截器（借助 OkHttp）
+        // 为 Retrofit 配置 Http Log 拦截器（借助 OkHttpClient）
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(logger::debug)
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
 

@@ -76,13 +76,13 @@ public class OrderPayResponse {
      * 公众号支付信息 <br>
      * 可空：Y
      */
-    private String payInfo;
+    private PayInfo payInfo;
 
     /**
      * 扩展信息参数 <br>
      * 可空：Y
      */
-    private String exts;
+    private Exts exts;
 
     /**
      * 订单创建时间，格式：yyyyMMddHHmmss <br>

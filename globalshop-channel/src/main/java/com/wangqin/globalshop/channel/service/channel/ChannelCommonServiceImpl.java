@@ -27,9 +27,6 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 	protected Logger logger = LogManager.getLogger("ChannelCommonServiceImpl");
 
 	@Autowired
-	private IChannelAccountService channelAccountService;
-
-	@Autowired
 	private JdShopOauthService shopOauthService;
 
 	@Autowired
@@ -229,7 +226,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 			ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
 		}catch (Exception e){
 			logger.error("",e);
-
+			throw new ErpCommonException("",e.getMessage());
 		}
 	}
 }
