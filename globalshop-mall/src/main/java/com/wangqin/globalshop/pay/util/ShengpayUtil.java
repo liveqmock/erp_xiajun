@@ -23,12 +23,19 @@ public class ShengpayUtil {
      * @param requestBodyObj 待放入请求体的对象
      * @return signMsg
      */
-    public static String getSignMsg(Object requestBodyObj) {
+    public static String getSignMsgFromReq(Object requestBodyObj) {
 
         String requestBody = new Gson().toJson(requestBodyObj);
         logger.debug("requestBody: {}", requestBody);
 
         String signMsg = DigestUtils.md5Hex(requestBody + MD5_KEY).toUpperCase();
+        logger.debug("signMsg: {}", signMsg);
+
+        return signMsg;
+    }
+
+    public static String getSignMsgFromRes(String responseStr) {
+        String signMsg = DigestUtils.md5Hex(responseStr + MD5_KEY).toUpperCase();
         logger.debug("signMsg: {}", signMsg);
 
         return signMsg;

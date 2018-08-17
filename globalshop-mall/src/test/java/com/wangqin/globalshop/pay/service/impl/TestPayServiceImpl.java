@@ -18,11 +18,10 @@ public class TestPayServiceImpl {
     @Test
     public void testOrderPay() {
         payService.orderPay(
-                "12",
+                "f4511ec61ac04dc5b4bc766a39b7f5aa",
                 "2",
                 "测试商品名字",
-                "1.1.1.12313",
-                "wp",
+                "1.1.1.123",
                 null);
     }
 
