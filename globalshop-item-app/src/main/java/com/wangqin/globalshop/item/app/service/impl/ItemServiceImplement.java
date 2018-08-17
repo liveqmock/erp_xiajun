@@ -746,7 +746,19 @@ public class ItemServiceImplement implements IItemService {
                     }
 
 
-                    String brandEnName = obj.get(3).toString().trim();
+                    String brandEnName = obj.get(3).toString();
+                    /*让英文品牌中间只隔一个空格*/
+                    String[] names = brandEnName.split(" ");
+                    StringBuilder sb = new StringBuilder();
+                    for (String name : names) {
+                        if ("".equals(name.trim())){
+                            continue;
+                        }
+                        sb.append(" ").append(s);
+                    }
+                    brandEnName = sb.toString().substring(1);
+
+
                     /**品牌(英文)*/
                     if (StringUtils.isBlank(brandEnName)) {
                         errMsg.add("第" + i + "行:品牌(英文)不能为空");
