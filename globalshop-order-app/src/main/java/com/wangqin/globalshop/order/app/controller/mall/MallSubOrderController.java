@@ -102,10 +102,10 @@ public class MallSubOrderController {
      * @return
      */
     @PostMapping("/return")
-    public Object returnOrder(String subOrderNo) {
+    public Object returnOrder(@RequestParam("subOrderNo")String subOrderNo) {
         JsonResult<MallSubOrderDO> result = new JsonResult<>();
         try {
-
+            System.out.println("subOrderNo---"+subOrderNo);
             mallSubOrderService.returns(subOrderNo);
 
         } catch (ErpCommonException e) {

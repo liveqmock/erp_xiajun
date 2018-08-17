@@ -2,6 +2,7 @@ package com.wangqin.globalshop.common.utils;
 
 import org.apache.commons.lang.math.RandomUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -32,7 +33,7 @@ public class CodeGenUtil {
 
     public static String getBuyerTaskNo(Long buyerId, Long nextTaskNum) {
 
-        String taskOrderNo = "T" + TimeUtil.getDate(TimeUtil.DEFAULT_DATE_NO_SEPRATORS_FORMAT, new Date())
+        String taskOrderNo = "T" + getDate(TimeUtil.DEFAULT_DATE_NO_SEPRATORS_FORMAT, new Date())
                 + "U" + com.wangqin.globalshop.common.utils.RandomUtils.getTimeRandom() + RandomUtils.nextInt(10000) + nextTaskNum;
         return taskOrderNo;
     }
@@ -108,5 +109,10 @@ public class CodeGenUtil {
 
     public static String getWareHouseNo() {
         return "WARE"+System.currentTimeMillis()+RandomUtils.nextInt(10000);
+    }
+
+    public static String getDate(String dateformat, Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateformat);
+        return dateFormat.format(date);
     }
 }
