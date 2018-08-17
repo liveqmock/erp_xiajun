@@ -13,12 +13,12 @@ public class PriceUtil {
     public static String calNewPriceRange(List<Double> newSkuPrice) {
     	BigDecimal minPrice = new BigDecimal(newSkuPrice.get(0).toString());
 		BigDecimal maxPrice = new BigDecimal(newSkuPrice.get(0).toString());		
-		for(Double newPirce:newSkuPrice) {		
+		for (Double newPirce:newSkuPrice) {		
 			BigDecimal curSkuPrice = new BigDecimal(newPirce.toString());
 			maxPrice = maxPrice.compareTo(curSkuPrice) < 0 ? curSkuPrice : maxPrice;
 			minPrice = minPrice.compareTo(curSkuPrice) > 0 ? curSkuPrice : minPrice;
 		}   		 
-		if(0 == maxPrice.compareTo(minPrice)) {
+		if (0 == maxPrice.compareTo(minPrice)) {
 			return formatPrice(maxPrice.toPlainString());
 		} else {
 			return formatPrice(minPrice.toPlainString())+"-"+formatPrice(maxPrice.toPlainString());

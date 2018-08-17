@@ -440,7 +440,7 @@ public class MallSubOrderController {
                 String skuCode = erpOrder.getSkuCode();
                 //从item_sku表读取重量
                 if (IsEmptyUtil.isStringNotEmpty(skuCode)) {
-                    ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
+                    ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCode(skuCode);
                     if (null != itemSkuDoWeight) {
                         Double grossWeight = itemSkuDoWeight.getWeight();
                         list.add(calPureWeight(grossWeight));
@@ -457,7 +457,7 @@ public class MallSubOrderController {
                 list.add(erpOrder.getSalePrice());
                 //从item_sku表读取upc
                 if (IsEmptyUtil.isStringNotEmpty(skuCode)) {
-                    ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
+                    ItemSkuDO itemSkuDoWeight = orderItemSkuService.queryItemSkuDOBySkuCode(skuCode);
                     if (null != itemSkuDoWeight) {
                         list.add(itemSkuDoWeight.getUpc());
                     } else {
@@ -469,7 +469,7 @@ public class MallSubOrderController {
                 list.add(erpOrder.getItemName());
                 //求出品牌
                 if (IsEmptyUtil.isStringNotEmpty(skuCode)) {
-                    ItemSkuDO itemSkuDO = orderItemSkuService.queryItemSkuDOBySkuCodeAndCompanyNo(skuCode, companyNo);
+                    ItemSkuDO itemSkuDO = orderItemSkuService.queryItemSkuDOBySkuCode(skuCode);
                     if (null != itemSkuDO) {
                         String brandName = itemSkuDO.getBrandName();
                         if (IsEmptyUtil.isStringNotEmpty(brandName)) {

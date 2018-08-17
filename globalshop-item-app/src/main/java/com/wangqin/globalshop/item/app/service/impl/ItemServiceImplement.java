@@ -183,15 +183,12 @@ public class ItemServiceImplement implements IItemService {
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
         List<ItemSkuScaleDO> scaleList = new ArrayList<>();
-        List<String> upcList = new ArrayList<>();
         for (ItemSkuAddVO itemSku : itemSkuList) {
             //检测upc是否和数据库里面已有的upc重复,按公司划分
             List<String> codeList = itemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
             if (IsEmptyUtil.isCollectionNotEmpty(codeList)) {
                 return result.buildIsSuccess(false).buildMsg("新增失败，添加的upc和已有的upc重复");
             }
-            upcList.add(itemSku.getUpc());
-
             itemSku.setItemCode(itemCode);
 
             /**插入规格信息*/
@@ -215,13 +212,6 @@ public class ItemServiceImplement implements IItemService {
             itemSku.setCompanyNo(companyNo);
             itemSku.setSalePrice(itemSku.getSalePrice());
             itemSku.setSkuRate(ItemUtil.divideOneHundred(itemSku.getSkuRateString()));
-        }
-        //判断用户添加的几个upc之间是否重复
-        HashSet<String> upcSet = new HashSet<String>(upcList);
-        if (upcList.size() > upcSet.size()) {
-            result.buildIsSuccess(false);
-            result.buildMsg("输入的upc有重复，请再次输入");
-            return result;
         }
 
         itemSkuService.insertBatch(itemSkuList);

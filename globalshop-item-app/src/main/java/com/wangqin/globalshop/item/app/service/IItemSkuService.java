@@ -2,6 +2,8 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
 import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
@@ -14,6 +16,9 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 
 public interface IItemSkuService  {
 
+	//商品编辑：查找哪些sku被前端删除了
+	List<String> queryToDeleteSkuCodeList(List<String> codeList,String itemCode);
+	
 	//查询和本sku同属一个商品的所有sku的sale_price
 	List<Double> querySalePriceListBySkuCode(String skuCode);
 		
