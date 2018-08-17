@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.company.controller;
 
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author angus
  * @date 2018/8/6
  */
+@Authenticated
 @RestController
 @RequestMapping("/company")
 public class CompanyController {
