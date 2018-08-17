@@ -83,7 +83,7 @@ public class ItemServiceImplement implements IItemService {
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
     public static final String ACCESS_TOKEN_MI = "&secret=";
 
-    
+
     @Override
     public ItemDO queryItemDOByItemCode(String itemCode) {
         return itemDOMapperExt.queryItemDOByItemCode(itemCode);
@@ -747,7 +747,7 @@ public class ItemServiceImplement implements IItemService {
                     String[] names = brandEnName.split(" ");
                     StringBuilder sb = new StringBuilder();
                     for (String name : names) {
-                        if ("".equals(name.trim())){
+                        if ("".equals(name.trim())) {
                             continue;
                         }
                         sb.append(" ").append(s);
@@ -935,7 +935,13 @@ public class ItemServiceImplement implements IItemService {
             } else if (size < 10) {
                 throw new BizCommonException(errMsg.toString());
             } else {
-                throw new BizCommonException("上传文件错误过多,请验证后再次上传");
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < 10; j++) {
+                    String s1 = errMsg.get(j);
+                    sb.append(s1).append("\n");
+                }
+                sb.append("....");
+                throw new BizCommonException(sb.toString());
             }
 
         } catch (Exception e) {
@@ -943,6 +949,7 @@ public class ItemServiceImplement implements IItemService {
         }
 
     }
+
 
     private String updateItemPriceRange(ItemDO item, String salePrice) {
         try {
