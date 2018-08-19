@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.channel.service.channelItem;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
+import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
 
 /**
  *
@@ -23,5 +24,5 @@ public interface IChannelListingItemService  {
 
 	public ChannelListingItemDO queryPo(ChannelListingItemDO so);
 
-
+	public void dealChannelListtingItem(ChannelListingItemVo channelListingItemVo);
 }

@@ -6,6 +6,7 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.YouzanService;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
+import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
@@ -33,6 +34,9 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 	@Autowired
 	private  IItemService itemService;
+
+	@Autowired
+	private IChannelListingItemService channelListingItemService;
 
 
 	@Autowired
@@ -314,7 +318,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		if(globalShopItemVo == null){
 			return;
 		}
-
-
+		channelListingItemService.dealChannelListtingItem(globalShopItemVo.getChannelListingItemVo());
+		itemService.addChannelItem(globalShopItemVo.getItemVo());
 	}
 }

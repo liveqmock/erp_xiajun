@@ -123,7 +123,7 @@ public class AutoYouzanItemsTask {
 
 
 	//抓商品：在售商品，抓一次，抓全部
-	@Scheduled(cron = "0/30 * * * * ?")
+	//@Scheduled(cron = "0/30 * * * * ?")
 	public void getAllItems() {
 
 		logger.info("youzan get all items start");
