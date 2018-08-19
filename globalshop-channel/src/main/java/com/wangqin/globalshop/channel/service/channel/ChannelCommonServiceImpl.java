@@ -18,6 +18,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.*;
 
@@ -41,6 +44,9 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 	@Autowired
 	private YouzanService youzanService;
+
+	@Autowired
+	private TransactionTemplate transactionTemplate;
 
 	/**
 	 * 上新接口
@@ -299,10 +305,21 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 			}else{
 				throw new ErpCommonException("","暂不支持该方法");
 			}
+			GlobalShopItemVo finalGlobalShopItemVo = globalShopItemVo;
+			transactionTemplate.execute(new TransactionCallback<Boolean>() {
+				@Override
+				public Boolean doInTransaction(TransactionStatus transactionStatus) {
+					doSendItem(finalGlobalShopItemVo);
+					return Boolean.TRUE;
+				}
+			});
 
-			doSendItem(globalShopItemVo);
+
 
 			//ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
+		}catch (ErpCommonException e){
+			logger.error("",e);
+			throw e;
 		}catch (Exception e){
 			logger.error("",e);
 			throw new ErpCommonException("",e.getMessage());

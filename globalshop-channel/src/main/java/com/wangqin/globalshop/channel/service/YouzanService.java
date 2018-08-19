@@ -185,7 +185,7 @@ public class YouzanService {
 		itemVo.setItemCode(youzanItem.getItemNo());
 		itemVo.setItemName(youzanItem.getTitle());
 		itemVo.setCompanyNo(shopOauth.getCompanyNo());
-		String mainPic = getMainPicStr(youzanItem.getItemImgs());
+		String mainPic = getMainPicStr(youzanItemSkus.getPicUrl());
 		itemVo.setMainPic(mainPic);
 		itemVo.setDetail(youzanItemSkus.getDesc());
 		itemVo.setSaleOnYouzan(1);
@@ -265,28 +265,41 @@ public class YouzanService {
 	}
 
 
-	private String getMainPicStr(YouzanItemsOnsaleGetResult.ItemImageOpenModel[] youzanImageList){
-		String mainPicStr = "";
-		if(youzanImageList == null || youzanImageList.length < 1){
-            return mainPicStr;
-		}
+	private String getMainPicStr(String mainPicStrUrl){
 		List<PicModel.PicList> picLists = new ArrayList<>();
 		PicModel mainPicModel = new PicModel();
-		mainPicModel.setMainPicNum(1+"");//默认全部存第一个为主图
-		for(YouzanItemsOnsaleGetResult.ItemImageOpenModel itemImageOpenModel : youzanImageList){
-			PicModel.PicList picModel = new PicModel.PicList();
-			picModel.setType("image/jpeg");
-			//picModel.setUid("i_" + i);
-			picModel.setUrl(itemImageOpenModel.getUrl());
-			picLists.add(picModel);
-		}
+		mainPicModel.setMainPicNum(1 + "");//默认全部存第一个为主图
+		PicModel.PicList picModel = new PicModel.PicList();
+		picModel.setType("image/jpeg");
+		//picModel.setUid("i_" + i);
+		picModel.setUrl(mainPicStrUrl);
+		picLists.add(picModel);
 		mainPicModel.setPicList(picLists);
 		return BaseDto.toString(mainPicModel);
 	}
 
+//	private String getMainPicStr(YouzanItemsOnsaleGetResult.ItemImageOpenModel[] youzanImageList){
+//		String mainPicStr = "";
+//		if(youzanImageList == null || youzanImageList.length < 1){
+//            return mainPicStr;
+//		}
+//		List<PicModel.PicList> picLists = new ArrayList<>();
+//		PicModel mainPicModel = new PicModel();
+//		mainPicModel.setMainPicNum(1+"");//默认全部存第一个为主图
+//		for(YouzanItemsOnsaleGetResult.ItemImageOpenModel itemImageOpenModel : youzanImageList){
+//			PicModel.PicList picModel = new PicModel.PicList();
+//			picModel.setType("image/jpeg");
+//			//picModel.setUid("i_" + i);
+//			picModel.setUrl(itemImageOpenModel.getUrl());
+//			picLists.add(picModel);
+//		}
+//		mainPicModel.setPicList(picLists);
+//		return BaseDto.toString(mainPicModel);
+//	}
+
 	//参数带着所有的sku的图片，先暂时把所有的sku放第一个sku
 	private String getSkuPicStr(YouzanItemGetResult.SkuImageOpenModel[] youzanSkusImageList){
-//		String skuPicStr = "";
+		String skuPicStr = "";
 //		if(youzanSkusImageList == null || youzanSkusImageList.length < 1){
 //			return skuPicStr;
 //		}
@@ -298,7 +311,11 @@ public class YouzanService {
 //			//picModel.setUid("i_" + i);
 //		picModelList.setUrl();
 //		picModel.setPicList(picModelList);
-		return BaseDto.toString(youzanSkusImageList[0].getImgUrl());
+		if(youzanSkusImageList == null || youzanSkusImageList.length < 1){
+			return skuPicStr;
+		}
+		skuPicStr = youzanSkusImageList[0].getImgUrl();
+		return BaseDto.toString(skuPicStr);
 	}
 
 

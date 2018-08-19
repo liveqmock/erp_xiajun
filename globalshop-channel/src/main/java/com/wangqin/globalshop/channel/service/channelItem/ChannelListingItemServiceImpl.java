@@ -108,6 +108,7 @@ public class ChannelListingItemServiceImpl implements IChannelListingItemService
 			ChannelListingItemSkuDO oldSku = skuDOMapperExt.queryPo(channelListingItemSkuSo);
 
 			if(oldSku == null){
+				oldSku = new ChannelListingItemSkuDO();
 				BeanUtils.copyProperties(channelListingItemSkuVo,oldSku);
 				//补充必填信息
 				oldSku.setIsDel(false);
