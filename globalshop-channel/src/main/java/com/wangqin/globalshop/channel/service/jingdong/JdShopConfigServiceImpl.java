@@ -96,6 +96,11 @@ public class JdShopConfigServiceImpl implements JdShopConfigService {
 		initShopCondig4SingleKey(String.valueOf(channelType.getValue()),
 				jdShopOauthDO.getShopCode(),AccountConfigKey.NEED_GET_CATEGORY.getDescription(),
 				"true");
+
+		//是否需要全部获取商品
+		initShopCondig4SingleKey(String.valueOf(channelType.getValue()),
+				jdShopOauthDO.getShopCode(),AccountConfigKey.NEED_GET_ALL_ITEMS.getDescription(),
+				"true");
 	}
 
 	private void initShopCondig4SingleKey(String channelNo, String shopConde, String key, String value){

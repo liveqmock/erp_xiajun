@@ -857,25 +857,6 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 	}
 
 
-
-	private void saveYouzanItemJson(YouzanItemsOnsaleGetResult.ItemListOpenModel youzanItem){
-
-		JdItemDO jdItemDO = new JdItemDO();
-		jdItemDO.setVersion(0L);
-		jdItemDO.setCreator("-1");
-		jdItemDO.setModifier("-1");
-
-		jdItemDO.setChannelNo(shopOauth.getChannelNo());
-		jdItemDO.setCompanyNo(shopOauth.getCompanyNo());
-		jdItemDO.setShopCode(shopOauth.getShopCode());
-		jdItemDO.setSendStatus(SendStatus.REQUEST);
-		jdItemDO.setChannelItemCode(youzanItem.getItemId()+"");
-		jdItemDO.setItemJson(BaseDto.toString(youzanItem));
-		jdItemDO.setItemModifyTime(new Date());
-
-
-	}
-
 	/**
 	 * 有赞这个神经病，一个item，只有一个sku
 	 * @param youzanItem

@@ -4,9 +4,11 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
+import com.wangqin.globalshop.channel.service.YouzanService;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
+import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -31,6 +33,10 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 	@Autowired
 	private  IItemService itemService;
+
+
+	@Autowired
+	private YouzanService youzanService;
 
 	/**
 	 * 上新接口
@@ -223,10 +229,92 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		}
 
 		try {
-			ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
+
+			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				youzanService.getItems(shopOauth,startTime, endTime);
+			}else{
+				throw new ErpCommonException("","暂不支持该方法");
+			}
+
+			//ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
 		}catch (Exception e){
 			logger.error("",e);
 			throw new ErpCommonException("",e.getMessage());
 		}
+	}
+
+	@Override
+	public void getAllItems(String shopCode){
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setShopCode(shopCode);
+		shopOauthSo.setIsDel(false);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
+
+		if(shopOauth == null){
+			throw new ErpCommonException("shop_error","未找到对应店铺信息shopCode:"+shopCode);
+		}
+		//0正常，1关闭
+		if (!shopOauth.getOpen()) {
+			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+shopCode);
+		}
+
+		try {
+
+			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				youzanService.getAllItems(shopOauth);
+			}else{
+				throw new ErpCommonException("","暂不支持该方法");
+			}
+
+			//ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
+		}catch (Exception e){
+			logger.error("",e);
+			throw new ErpCommonException("",e.getMessage());
+		}
+	}
+
+	@Override
+	public void sendItem(String shopCode, JdItemDO jdItem){
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setShopCode(shopCode);
+		shopOauthSo.setIsDel(false);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
+
+		if(shopOauth == null){
+			throw new ErpCommonException("shop_error","未找到对应店铺信息shopCode:"+shopCode);
+		}
+		//0正常，1关闭
+		if (!shopOauth.getOpen()) {
+			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+shopCode);
+		}
+
+		try {
+			GlobalShopItemVo globalShopItemVo = null;
+			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				 globalShopItemVo = youzanService.convertYZItem(shopOauth,jdItem);
+			}else{
+				throw new ErpCommonException("","暂不支持该方法");
+			}
+
+			doSendItem(globalShopItemVo);
+
+			//ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
+		}catch (Exception e){
+			logger.error("",e);
+			throw new ErpCommonException("",e.getMessage());
+		}
+	}
+
+
+	/**
+	 * 下发商品的逻辑
+	 * @param globalShopItemVo
+	 */
+	private void doSendItem(GlobalShopItemVo globalShopItemVo){
+		if(globalShopItemVo == null){
+			return;
+		}
+
+
 	}
 }

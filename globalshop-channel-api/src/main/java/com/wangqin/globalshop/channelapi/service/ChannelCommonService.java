@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.channelapi.service;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingOrderDO;
 
@@ -71,4 +72,17 @@ public interface ChannelCommonService {
 
 
 	public void addItem(String shopCode, String itemCode);
+
+	/**
+	 * 下发商品至globalshop
+	 * @param shopCode
+	 * @param jdItem
+	 */
+	public void sendItem(String shopCode, JdItemDO jdItem);
+
+	/**
+	 * 一次抓全部的商品
+	 * @param shopCode
+	 */
+	public void getAllItems(String shopCode);
 }
