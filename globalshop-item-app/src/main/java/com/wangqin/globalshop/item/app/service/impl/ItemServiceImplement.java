@@ -83,7 +83,7 @@ public class ItemServiceImplement implements IItemService {
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
     public static final String ACCESS_TOKEN_MI = "&secret=";
 
-    
+
     @Override
     public ItemDO queryItemDOByItemCode(String itemCode) {
         return itemDOMapperExt.queryItemDOByItemCode(itemCode);
@@ -183,15 +183,12 @@ public class ItemServiceImplement implements IItemService {
         /**插入itemsku和库存**/
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
         List<ItemSkuScaleDO> scaleList = new ArrayList<>();
-        List<String> upcList = new ArrayList<>();
         for (ItemSkuAddVO itemSku : itemSkuList) {
             //检测upc是否和数据库里面已有的upc重复,按公司划分
             List<String> codeList = itemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
             if (IsEmptyUtil.isCollectionNotEmpty(codeList)) {
                 return result.buildIsSuccess(false).buildMsg("新增失败，添加的upc和已有的upc重复");
             }
-            upcList.add(itemSku.getUpc());
-
             itemSku.setItemCode(itemCode);
 
             /**插入规格信息*/
@@ -215,13 +212,6 @@ public class ItemServiceImplement implements IItemService {
             itemSku.setCompanyNo(companyNo);
             itemSku.setSalePrice(itemSku.getSalePrice());
             itemSku.setSkuRate(ItemUtil.divideOneHundred(itemSku.getSkuRateString()));
-        }
-        //判断用户添加的几个upc之间是否重复
-        HashSet<String> upcSet = new HashSet<String>(upcList);
-        if (upcList.size() > upcSet.size()) {
-            result.buildIsSuccess(false);
-            result.buildMsg("输入的upc有重复，请再次输入");
-            return result;
         }
 
         itemSkuService.insertBatch(itemSkuList);
@@ -747,7 +737,7 @@ public class ItemServiceImplement implements IItemService {
                     String[] names = brandEnName.split(" ");
                     StringBuilder sb = new StringBuilder();
                     for (String name : names) {
-                        if ("".equals(name.trim())){
+                        if ("".equals(name.trim())) {
                             continue;
                         }
                         sb.append(" ").append(s);
@@ -935,7 +925,13 @@ public class ItemServiceImplement implements IItemService {
             } else if (size < 10) {
                 throw new BizCommonException(errMsg.toString());
             } else {
-                throw new BizCommonException("上传文件错误过多,请验证后再次上传");
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < 10; j++) {
+                    String s1 = errMsg.get(j);
+                    sb.append(s1).append("\n");
+                }
+                sb.append("....");
+                throw new BizCommonException(sb.toString());
             }
 
         } catch (Exception e) {
@@ -943,6 +939,7 @@ public class ItemServiceImplement implements IItemService {
         }
 
     }
+
 
     private String updateItemPriceRange(ItemDO item, String salePrice) {
         try {

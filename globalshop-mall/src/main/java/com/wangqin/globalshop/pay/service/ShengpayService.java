@@ -14,7 +14,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
- * 用于对接盛付通接口的 service
+ * 用于对接盛付通接口，进行 Http 请求/响应的 service
  *
  * @author angus
  * @date 2018/8/14
@@ -60,7 +60,7 @@ public interface ShengpayService {
     /**
      * 接收服务端的支付成功通知URL，需要是公网可访问的地址
      */
-    String PAY_NOTIFY_URL = "http://45.77.198.100/javademo/notify.jsp";
+    String PAY_NOTIFY_URL = "http://erp.buyer007.com/pay/payNotify";
 
     /**
      * 同步跳转URL（微信H5，支付宝H5，公众号，服务窗必传,同时这个地址的一级域名必须和报备的授权域名一致）
@@ -86,7 +86,7 @@ public interface ShengpayService {
      * @return ShengpayService 实例
      */
     static ShengpayService newInstance() {
-        // 为 Retrofit 配置 Http Log 拦截器（借助 OkHttp）
+        // 为 Retrofit 配置 Http Log 拦截器（借助 OkHttpClient）
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(logger::debug)
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
 

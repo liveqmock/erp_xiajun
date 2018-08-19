@@ -1,7 +1,9 @@
 package com.wangqin.globalshop.pay.service;
 
+import com.wangqin.globalshop.pay.dto.Exts;
 import com.wangqin.globalshop.pay.dto.SharingReqItem;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,11 +21,10 @@ public interface PayService {
      * @param amount          该笔订单的交易金额，单位默认为RMB-元，精确到小数点后两位，如：23.42
      * @param productName     商品名称(不超过32个字符)
      * @param userIp          用户IP（用户下单时的IP-公网IP,银联交易必填）
-     * @param payChannel      支付渠道
      * @param exts            扩展属性,JSON串（微信H5 、微信小程序、微信APP必传，请参考备注）
      */
     void orderPay(String merchantOrderNo, String amount, String productName,
-                  String userIp, String payChannel, String exts);
+                  String userIp, Exts exts);
 
     /**
      * 单笔查询
@@ -43,6 +44,14 @@ public interface PayService {
      * @param exts            扩展属性,JSON串
      */
     void refundPay(String merchantOrderNo, String refundOrderNo, String refundAmount, String exts);
+
+    /**
+     * 退款
+     *
+     * @param merchantOrderNo 原支付订单号
+     * @param exts 扩展属性,JSON串
+     */
+    void refundPay(String merchantOrderNo, String exts);
 
     /**
      * 退款查询
@@ -75,4 +84,18 @@ public interface PayService {
      * @param sharingType         分账类型（MERCHANT_SHARING：查询分账信息，MERCHANT_SHARING_REFUND：查询分账退款信息）
      */
     void querySharing(String merchantOrderNo, String sharingQueryOrderNo, String sharingType);
+
+    /**
+     * 处理支付通知
+     *
+     * @param request
+     */
+    void payNotify(HttpServletRequest request);
+
+    /**
+     * 处理退款通知
+     *
+     * @param request
+     */
+    void refundNotify(HttpServletRequest request);
 }

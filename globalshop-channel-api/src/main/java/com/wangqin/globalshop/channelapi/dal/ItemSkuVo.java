@@ -23,6 +23,9 @@ public class ItemSkuVo extends ItemSkuDO{
 
 	private static final String scale_size_name = "尺寸";
 
+	//虚拟库存，插入到库存表的虚拟库存字段(inventory.virtual_inv)
+	private Long virtualInv;
+	
 	//颜色尺寸等规格
 	private Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
 
@@ -32,6 +35,26 @@ public class ItemSkuVo extends ItemSkuDO{
 
 	//queryItemSkusForItemThirdSale
 	private Integer itemSkuQuantity;//这个是海狐查询已经售卖的订单里面的商品数量
+
+	
+	public Long getVirtualInv() {
+		return virtualInv;
+	}
+	public void setVirtualInv(Long virtualInv) {
+		this.virtualInv = virtualInv;
+	}
+	public static String getScaleColor() {
+		return scale_color;
+	}
+	public static String getScaleSize() {
+		return scale_size;
+	}
+	public static String getScaleColorName() {
+		return scale_color_name;
+	}
+	public static String getScaleSizeName() {
+		return scale_size_name;
+	}
 
 	private Map<String,Float> channelSalePriceMap = new HashMap<>();//shopcode全局唯一
 	public Map<String, Float> getChannelSalePriceMap() {
