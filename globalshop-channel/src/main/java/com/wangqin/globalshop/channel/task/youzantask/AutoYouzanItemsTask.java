@@ -30,7 +30,7 @@ import java.util.List;
  */
 
 
-//@Component
+@Component
 public class AutoYouzanItemsTask {
 
 	private static Logger logger = LoggerFactory.getLogger("AutoYouzanItemsTask");
@@ -55,8 +55,8 @@ public class AutoYouzanItemsTask {
 	private final static Long startEndMaxInternalDay = 5*24*60*60*1000L;//查询间隔最大5天
 
 	// 抓商品：在售商品，按照更新时间，暂时没接通
-	// 每隔半小时执行一次
-	//@Scheduled(cron = "0/30 * * * * ?")
+	// 每隔半小时执行一次:该方法存在jar包冲突，暂时不解决
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void getItemsByTime() {
 
 		logger.info("youzan get all items start");
@@ -102,7 +102,7 @@ public class AutoYouzanItemsTask {
 			Boolean success = true;
 
 			try {
-				channelCommonService.getItems(shopOauth.getShopCode(),beginTime,endTime);
+				channelCommonService.getItemsByTime(shopOauth.getShopCode(),beginTime,endTime);
 				shopCount++;
 			} catch (ErpCommonException e) {
 				success = false;
@@ -123,7 +123,7 @@ public class AutoYouzanItemsTask {
 
 
 	//抓商品：在售商品，抓一次，抓全部
-	@Scheduled(cron = "0/30 * * * * ?")
+	//@Scheduled(cron = "0/30 * * * * ?")
 	public void getAllItems() {
 
 		logger.info("youzan get all items start");
@@ -180,7 +180,7 @@ public class AutoYouzanItemsTask {
 	/**
 	 * 下发抓到的REQUEST商品至globalshop
 	 */
-	//@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void sendRequestItem2erp() {
 
 		logger.info("youzan send request items start");
