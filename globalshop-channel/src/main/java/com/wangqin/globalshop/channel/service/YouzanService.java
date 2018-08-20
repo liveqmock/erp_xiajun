@@ -154,11 +154,11 @@ public class YouzanService {
 
 	public GlobalShopItemVo convertYZItem(JdShopOauthDO shopOauth, JdItemDO jdItem) {
 
-		YouzanItemGetResult.ItemDetailOpenModel youzanItemSkus = getItemSkus(shopOauth,Long.valueOf(jdItem.getChannelItemCode()));
+		YouzanItemGetResult.ItemDetailOpenModel youzanItemDetail = getItemSkus(shopOauth,Long.valueOf(jdItem.getChannelItemCode()));
 
 		YouzanItemsOnsaleGetResult.ItemListOpenModel youzanItem = BaseDto.fromJson(jdItem.getItemJson(),YouzanItemsOnsaleGetResult.ItemListOpenModel.class);
 
-		if(youzanItemSkus == null || youzanItem == null ){
+		if(youzanItemDetail == null || youzanItem == null ){
 			throw new ErpCommonException("sendItem youzanItemSku or youzanItem empty","tbspuid: "+jdItem.getChannelItemCode());
 		}
 
@@ -167,10 +167,10 @@ public class YouzanService {
 		outerItemVo.setChannelNo(String.valueOf(ChannelType.YouZan.getValue()));
 		outerItemVo.setCompanyNo(shopOauth.getCompanyNo());
 		outerItemVo.setShopCode(shopOauth.getShopCode());
-		String alias = youzanItem.getAlias();// 有赞别名
+		String alias = youzanItem.getAlias();// 有赞别名,商品就是这些
 		outerItemVo.setChannelItemAlias(alias);
 		outerItemVo.setChannelItemCode(String.valueOf(youzanItem.getItemId()));
-		outerItemVo.setItemCode(youzanItem.getItemNo());
+		outerItemVo.setItemCode(youzanItem.getItemNo());//youzanItemDetail这个数据无item——no
 		outerItemVo.setStatus(ItemStatus.LISTING.getCode());
 
 		//补充必填信息
@@ -185,28 +185,28 @@ public class YouzanService {
 		itemVo.setItemCode(youzanItem.getItemNo());
 		itemVo.setItemName(youzanItem.getTitle());
 		itemVo.setCompanyNo(shopOauth.getCompanyNo());
-		String mainPic = getMainPicStr(youzanItemSkus.getPicUrl());
+		String mainPic = getMainPicStr(youzanItemDetail.getPicUrl());
 		itemVo.setMainPic(mainPic);
-		itemVo.setDetail(youzanItemSkus.getDesc());
+		itemVo.setDetail(youzanItemDetail.getDesc());
 		itemVo.setSaleOnYouzan(1);
-		itemVo.setStatus(youzanItemSkus.getIsListing() ? ItemStatus.LISTING.getCode() : ItemStatus.DELISTING.getCode());
+		itemVo.setStatus(youzanItemDetail.getIsListing() ? ItemStatus.LISTING.getCode() : ItemStatus.DELISTING.getCode());
 
 		List<ChannelListingItemSkuVo> outSkuList = new ArrayList<>();
 		List<ItemSkuVo> itemSkuVoList = new ArrayList<>();
 
-		YouzanItemGetResult.ItemSkuOpenModel[] skus = youzanItemSkus.getSkus();
-		for(YouzanItemGetResult.ItemSkuOpenModel sku : skus){
+		YouzanItemGetResult.ItemSkuOpenModel[] skus = youzanItemDetail.getSkus();
 
+		if(skus == null || skus.length < 1){
+			//单品规格，item无规格时，skus.length==0
 			//第三步：外部SKU
 			ChannelListingItemSkuVo outerItemSku = new ChannelListingItemSkuVo();
 			outerItemSku.setPlatformType(PlatformType.YOUZAN.getCode());
 			//外部信息
 			outerItemSku.setChannelItemCode(outerItemVo.getChannelItemCode());
-			outerItemSku.setChannelItemSkuCode(String.valueOf(sku.getSkuId()));
+			outerItemSku.setChannelItemSkuCode(String.valueOf(youzanItem.getItemId()));
 			//内部信息
 			outerItemSku.setItemCode(outerItemVo.getItemCode());
-			outerItemSku.setSkuCode(sku.getItemNo());
-
+			outerItemSku.setSkuCode(youzanItem.getItemNo());
 			//补充必填信息
 			outerItemSku.setIsDel(false);
 			outerItemSku.setGmtCreate(new Date());
@@ -214,45 +214,74 @@ public class YouzanService {
 			outerItemSku.setCreator("-1");
 			outerItemSku.setModifier("-1");
 			outSkuList.add(outerItemSku);
-
 			//第四步：内部SKU
 			ItemSkuVo itemSkuVo = new ItemSkuVo();
 			itemSkuVo.setItemCode(youzanItem.getItemNo());
-			itemSkuVo.setSkuCode(sku.getItemNo());
-			itemSkuVo.setSalePrice(BigDecimal.valueOf(sku.getPrice() == null ? 0 : sku.getPrice()/100).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
-
-			if(EasyUtil.isStringEmpty(sku.getItemNo())){
-				itemSkuVo.setUpc(sku.getSkuUniqueCode());//唯一编码，店铺Id和商品Id组合
-			}else{
-				itemSkuVo.setUpc(sku.getItemNo());//item_no,这里最好是上传的时候用UPC代替
+			itemSkuVo.setSkuCode(youzanItem.getItemNo());
+			itemSkuVo.setSalePrice(BigDecimal.valueOf(youzanItem.getPrice() == null ? 0 : youzanItem.getPrice() / 100)
+					.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+			if (EasyUtil.isStringEmpty(youzanItem.getItemNo())) {
+				itemSkuVo.setUpc(youzanItem.getItemId()+"");//唯一编码，店铺Id和商品Id组合
+			} else {
+				itemSkuVo.setUpc(youzanItem.getItemNo());//item_no,这里最好是上传的时候用UPC代替
 			}
 
-			Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
-
-			List<YzProperties> youzanSkuProperties = BaseDto.fromJson(sku.getPropertiesNameJson(), new TypeReference<List<YzProperties>>() {});
-			for(YzProperties propertie  : youzanSkuProperties){
-				ItemSkuScaleDO itemSkuScale = new ItemSkuScaleDO();
-				//itemSkuScale.setItemCode();
-				//itemSkuScale.setSkuCode();
-				itemSkuScale.setScaleCode(propertie.getKid());
-				itemSkuScale.setScaleName(propertie.getK());
-				itemSkuScale.setScaleValue(propertie.getV());
-				scaleMap.put(propertie.getK(),itemSkuScale);
-			}
-
-			//todo
-			//商品UPC
-
-			//商品库存
-
-			//商品图片
-            //itemSkuVo.(sku.getQuantity());//库存
-
-			itemSkuVo.setSkuPic(getSkuPicStr(youzanItemSkus.getSkuImages()));
-
+			itemSkuVo.setVirtualInv(youzanItem.getQuantity());//库存
+			itemSkuVo.setSkuPic(getSkuPicStr(youzanItemDetail.getSkuImages()));
 			itemSkuVoList.add(itemSkuVo);
+		}else {
+			//多规格：含一个及一个以上sku
+			for(YouzanItemGetResult.ItemSkuOpenModel sku : skus){
 
+				//第三步：外部SKU
+				ChannelListingItemSkuVo outerItemSku = new ChannelListingItemSkuVo();
+				outerItemSku.setPlatformType(PlatformType.YOUZAN.getCode());
+				//外部信息
+				outerItemSku.setChannelItemCode(outerItemVo.getChannelItemCode());
+				outerItemSku.setChannelItemSkuCode(String.valueOf(sku.getSkuId()));
+				//内部信息
+				outerItemSku.setItemCode(outerItemVo.getItemCode());
+				outerItemSku.setSkuCode(sku.getItemNo());
 
+				//补充必填信息
+				outerItemSku.setIsDel(false);
+				outerItemSku.setGmtCreate(new Date());
+				outerItemSku.setGmtModify(new Date());
+				outerItemSku.setCreator("-1");
+				outerItemSku.setModifier("-1");
+				outSkuList.add(outerItemSku);
+
+				//第四步：内部SKU
+				ItemSkuVo itemSkuVo = new ItemSkuVo();
+				itemSkuVo.setItemCode(youzanItem.getItemNo());
+				itemSkuVo.setSkuCode(sku.getItemNo());
+				itemSkuVo.setSalePrice(BigDecimal.valueOf(sku.getPrice() == null ? 0 : sku.getPrice()/100).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
+
+				if(EasyUtil.isStringEmpty(sku.getItemNo())){
+					itemSkuVo.setUpc(sku.getSkuUniqueCode());//唯一编码，店铺Id和商品Id组合
+				}else{
+					itemSkuVo.setUpc(sku.getItemNo());//item_no,这里最好是上传的时候用UPC代替
+				}
+
+				Map<String,ItemSkuScaleDO> scaleMap = new HashMap<>();
+
+				List<YzProperties> youzanSkuProperties = BaseDto.fromJson(sku.getPropertiesNameJson(), new TypeReference<List<YzProperties>>() {});
+				for(YzProperties propertie  : youzanSkuProperties){
+					ItemSkuScaleDO itemSkuScale = new ItemSkuScaleDO();
+					//itemSkuScale.setItemCode();
+					//itemSkuScale.setSkuCode();
+					itemSkuScale.setScaleCode(propertie.getKid());
+					itemSkuScale.setScaleName(propertie.getK());
+					itemSkuScale.setScaleValue(propertie.getV());
+					scaleMap.put(propertie.getK(),itemSkuScale);
+				}
+
+				itemSkuVo.setVirtualInv(sku.getQuantity());//库存
+
+				itemSkuVo.setSkuPic(getSkuPicStr(youzanItemDetail.getSkuImages()));
+
+				itemSkuVoList.add(itemSkuVo);
+			}
 		}
 		outerItemVo.setChannelListingItemSkuVos(outSkuList);
 		itemVo.setItemSkus(itemSkuVoList);
@@ -335,7 +364,7 @@ public class YouzanService {
 		YouzanItemGet youzanItemGet = new YouzanItemGet();
 		youzanItemGet.setAPIParams(youzanItemGetParams);
 		YouzanItemGetResult result = client.invoke(youzanItemGet);
-		logger.info("商品详情："+channnelItemCode+" "+BaseDto.toString(result));
+		logger.info("商品详情 channnelItemCode："+channnelItemCode+" "+BaseDto.toString(result));
 		return result.getItem();
 	}
 
