@@ -30,7 +30,7 @@ import java.util.List;
  */
 
 
-@Component
+//@Component
 public class AutoYouzanItemsTask {
 
 	private static Logger logger = LoggerFactory.getLogger("AutoYouzanItemsTask");
