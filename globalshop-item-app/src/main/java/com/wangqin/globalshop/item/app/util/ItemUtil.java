@@ -2,17 +2,17 @@ package com.wangqin.globalshop.item.app.util;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.impl.PublicImpl;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
-
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.enums.ItemShelfMethod;
 import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -165,6 +165,111 @@ public class ItemUtil {
     	scaleDO.setCreator(userNo);
     	scaleDO.setModifier(userNo);
     	return scaleDO;
+    }
+    
+    /**
+     * item_sku初始化
+     */
+    public static void genItemSku(ItemSkuAddVO itemSku, ItemDO newItem, String companyNo, String userNo) {
+    	itemSku.setItemName(newItem.getItemName());
+        itemSku.setCategoryName(newItem.getCategoryName());
+        itemSku.setCategoryCode(newItem.getCategoryCode());
+        itemSku.setBrand(newItem.getBrandName());
+        itemSku.setModifier(userNo);
+        itemSku.setCreator(userNo);
+        itemSku.setCompanyNo(companyNo);
+        itemSku.setSkuRate(ItemUtil.divideOneHundred(itemSku.getSkuRateString()));
+    }
+    
+    /**
+     * item_sku初始化
+     */
+    public static void setSkuInfo(ItemSkuQueryVO updateSku, ItemQueryVO item, String categoryName) {
+    	updateSku.setBrand(item.getBrand());
+        updateSku.setItemName(item.getName());
+        updateSku.setCategoryCode(item.getCategoryCode());
+        updateSku.setCategoryName(categoryName);
+        updateSku.setSkuRate(ItemUtil.divideOneHundred(updateSku.getSkuRateString()));
+    }
+    
+    /**
+     * item的PageBean转换为DO
+     * 商品发布
+     * @param item
+     * @param newItem
+     */
+    public static void transItemVoToDO(ItemQueryVO item, ItemDO newItem, String companyNo, String userNo) {
+    	newItem.setIsAbroad(item.getIsAbroad());
+    	newItem.setBrandName(item.getBrand());
+    	newItem.setItemName(item.getName());
+        newItem.setIdCard(item.getIdCard().byteValue());
+        newItem.setCountry(item.getCountry());
+        newItem.setWxisSale(item.getWxisSale().byteValue());
+        newItem.setMainPic(item.getMainPic());
+        newItem.setCompanyNo(companyNo);
+        newItem.setModifier(userNo);
+        newItem.setCreator(userNo);
+        newItem.setDetail(item.getDetail());
+    }
+    
+    /**
+     * item的PageBean转换为DO
+     * 商品更新
+     * @param item
+     * @param newItem
+     */
+    public static void transItemVoToDOUpdate(ItemQueryVO item, ItemDO newItem, String userNo,
+    		String categoryCode, String categoryName) {
+    	newItem.setIsAbroad(item.getIsAbroad());
+    	newItem.setBrandName(item.getBrand());
+    	newItem.setItemName(item.getName());
+        newItem.setIdCard(item.getIdCard().byteValue());
+        newItem.setCountry(item.getCountry());
+        newItem.setWxisSale(item.getWxisSale().byteValue());
+        newItem.setModifier(userNo);
+        newItem.setDetail(item.getDetail());
+        newItem.setCategoryCode(categoryCode);
+        newItem.setCategoryName(categoryName);
+        newItem.setId(item.getId());//根据id更新
+    }
+        
+    /**
+     * item的PageBean转换为DO
+     * 商品发布
+     * @param item
+     * @param newItem
+     */
+    public static void transItemSkuVoToDO(ItemSkuDO addSku, ItemSkuQueryVO newSku, String companyNo, 
+    		String userNo, ItemQueryVO item, String categoryName) {
+    	addSku.setCompanyNo(companyNo);
+    	addSku.setScale(newSku.getScale());
+        addSku.setSalePrice((double) newSku.getSalePrice());
+        addSku.setWeight(newSku.getWeight());
+        addSku.setUpc(newSku.getUpc());
+        addSku.setSkuPic(newSku.getSkuPic());
+        addSku.setPackageLevelId(newSku.getPackageLevelId());
+        addSku.setCreator(userNo);
+        addSku.setModifier(userNo);
+        addSku.setSkuRate(ItemUtil.divideOneHundred(newSku.getSkuRateString()));
+        addSku.setItemName(item.getName());
+        addSku.setCategoryCode(item.getCategoryCode());
+        addSku.setCategoryName(categoryName);
+        addSku.setGoodsNo(newSku.getGoodsNo());
+    }
+    
+    
+    /**
+     * 库存字段初始化
+     * 商品发布
+     */
+    public static InventoryDO genInvDO(String itemCode, String itemName, String skuCode, ItemSkuQueryVO newSku) {
+    	InventoryDO inventory = new InventoryDO();
+    	inventory.setItemName(itemName);
+    	inventory.setItemCode(itemCode);
+    	inventory.setSkuCode(skuCode);
+        inventory.setUpc(newSku.getUpc());
+        inventory.setVirtualInv(Long.valueOf(newSku.getVirtualInv()));
+    	return inventory;
     }
 
 }

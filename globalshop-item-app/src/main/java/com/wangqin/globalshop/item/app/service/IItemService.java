@@ -1,7 +1,5 @@
 package com.wangqin.globalshop.item.app.service;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQuery2VO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
@@ -61,12 +59,6 @@ public interface IItemService {
 	
     ItemDTO queryItemById(Long id);
 	
-	/**
-	 * 通过ID查询多个商品
-	 * @param ids
-	 * @return
-	 */
-	List<ItemDO> queryItems(List<Long> ids);
 
 	/**
 	 * 2017-04-04,jc
@@ -132,20 +124,5 @@ public interface IItemService {
 	 */
     void importItem(List<List<Object>> list) throws Exception;
 
-	/**
-	 * 根据指定条件分页查询商品
-	 *
-	 * @param itemQueryVO
-	 * @param pageQueryParam
-	 * @return
-	 */
-    List<ItemDTO> listItems(ItemQuery2VO itemQueryVO, PageQueryParam pageQueryParam);
 
-	/**
-	 * 根据指定条件查询商品数目
-	 *
-	 * @param itemQueryVO
-	 * @return
-	 */
-	int countItems(ItemQuery2VO itemQueryVO);
 }
