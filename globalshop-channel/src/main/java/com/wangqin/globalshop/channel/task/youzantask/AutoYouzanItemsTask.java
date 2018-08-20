@@ -30,7 +30,7 @@ import java.util.List;
  */
 
 
-@Component
+//@Component
 public class AutoYouzanItemsTask {
 
 	private static Logger logger = LoggerFactory.getLogger("AutoYouzanItemsTask");
@@ -56,7 +56,7 @@ public class AutoYouzanItemsTask {
 
 	// 抓商品：在售商品，按照更新时间，暂时没接通
 	// 每隔半小时执行一次:该方法存在jar包冲突，暂时不解决
-	@Scheduled(cron = "0/30 * * * * ?")
+	//@Scheduled(cron = "0/30 * * * * ?")
 	public void getItemsByTime() {
 
 		logger.info("youzan get all items start");
@@ -123,7 +123,7 @@ public class AutoYouzanItemsTask {
 
 
 	//抓商品：在售商品，抓一次，抓全部
-	//@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void getAllItems() {
 
 		logger.info("youzan get all items start");
@@ -212,7 +212,11 @@ public class AutoYouzanItemsTask {
 				} catch (ErpCommonException e) {
 					success = false;
 					errorMsg += e.getErrorMsg();
-					logger.error("youzan send request items error:",e);
+					if(errorMsg.indexOf("重复的itemCode") >= 0){
+                        //重复的商品，不打印日志
+					}else {
+						logger.error("youzan send request items error:",e);
+					}
 				} catch (Exception e) {
 					success = false;
 					errorMsg += e.getMessage();

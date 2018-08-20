@@ -4,22 +4,22 @@ package com.wangqin.globalshop.channel.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdItemDOMapperExt;
-import com.wangqin.globalshop.biz1.app.enums.ChannelType;
-import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
-import com.wangqin.globalshop.biz1.app.enums.PlatformType;
+import com.wangqin.globalshop.biz1.app.enums.*;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
-import com.wangqin.globalshop.channel.dal.youzan.PicModel;
-import com.wangqin.globalshop.channel.dal.youzan.YouzanOauthResponse;
-import com.wangqin.globalshop.channel.dal.youzan.YzProperties;
+import com.wangqin.globalshop.channel.dal.youzan.*;
+import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
+import com.wangqin.globalshop.channel.service.item.IItemSkuService;
 import com.wangqin.globalshop.channel.service.jingdong.SendStatus;
 import com.wangqin.globalshop.channelapi.dal.*;
 import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.youzan.open.sdk.client.auth.Token;
 import com.youzan.open.sdk.client.core.DefaultYZClient;
 import com.youzan.open.sdk.client.core.YZClient;
 import com.youzan.open.sdk.gen.v3_0_0.api.*;
 import com.youzan.open.sdk.gen.v3_0_0.model.*;
+import org.eclipse.jetty.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,9 @@ public class YouzanService {
 
 	@Autowired
 	private JdItemDOMapperExt jdItemDOMapperExt;
+
+	@Autowired
+	private IItemSkuService itemSkuService;
 
 	public volatile  YZClient client = new DefaultYZClient();
 
@@ -377,6 +380,227 @@ public class YouzanService {
 	}
 
 
+	/**
+	 * 根据时间抓取订单信息
+	 * @param shopOauth
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<JdOrderDO> getOrders(JdShopOauthDO shopOauth, Date startTime, Date endTime) {
+
+		List<JdOrderDO> jdOrderDOList = new ArrayList<>();
+
+		client = new DefaultYZClient(new Token(shopOauth.getAccessToken()));
+
+		// 方法
+		com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet youzanTradesSoldGet = new YouzanTradesSoldGet();
+		// 参数
+		YouzanTradesSoldGetParams youzanTradesSoldGetParams = new YouzanTradesSoldGetParams();
+		youzanTradesSoldGetParams.setType("ALL");
+		// 买家已付款，等待发货
+		youzanTradesSoldGetParams.setStatus("WAIT_SELLER_SEND_GOODS");
+		youzanTradesSoldGetParams.setStartUpdate(startTime);
+		youzanTradesSoldGetParams.setEndUpdate(endTime);
+		youzanTradesSoldGetParams.setPageSize(100L);
+		youzanTradesSoldGetParams.setUseHasNext(true);
+		boolean hasNext = true;
+		long pageNo = 1L;
+		while (hasNext) {
+			youzanTradesSoldGetParams.setPageNo(pageNo);
+			youzanTradesSoldGet.setAPIParams(youzanTradesSoldGetParams);
+			com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGetResult result = client.invoke(youzanTradesSoldGet);
+			// 设置循环
+			pageNo++;
+			hasNext = result.getHasNext();
+			com.wangqin.globalshop.channel.dal.youzan.TradeDetailV2[] tradeList = result.getTrades();
+			for (int i = tradeList.length - 1; i >= 0; i--) {
+				JdOrderDO jdOrder = new JdOrderDO();
+				jdOrder.setCreator("-1");
+				jdOrder.setModifier("-1");
+				jdOrder.setChannelNo(shopOauth.getChannelNo());
+				jdOrder.setCompanyNo(shopOauth.getCompanyNo());
+				jdOrder.setShopCode(shopOauth.getShopCode());
+				jdOrder.setSendStatus(SendStatus.REQUEST);
+				jdOrder.setChannelOrderNo(tradeList[i].getTid()+"");
+				jdOrder.setOrderJson(BaseDto.toString(tradeList[i]));
+				jdOrder.setOrderModifyTime(new Date());
+				jdOrder.setIsDel(false);
+				jdOrderDOList.add(jdOrder);
+			}
+		}
+		return jdOrderDOList;
+	}
+
+
+	public GlobalshopOrderVo convertYZOrder(JdShopOauthDO shopOauth, JdOrderDO requestJdOrder) {
+
+		GlobalshopOrderVo globalshopOrderVo = new GlobalshopOrderVo();
+
+
+		TradeDetailV2 TradeDetail = BaseDto.fromJson(requestJdOrder.getOrderJson(),TradeDetailV2.class);
+		// 如果有赞订单还不存在，继续
+		MallOrderDO outerOrder = new MallOrderDO();
+		outerOrder.setCompanyNo(shopOauth.getCompanyNo());
+		outerOrder.setChannelNo(shopOauth.getChannelNo());
+		outerOrder.setChannelName(ChannelType.getChannelName(Integer.valueOf(shopOauth.getChannelNo())));
+		outerOrder.setChannelType(shopOauth.getChannelNo());
+		outerOrder.setShopCode(shopOauth.getShopCode());
+
+		outerOrder.setOrderNo(CodeGenUtil.getOrderNo()); // 系统自动生成
+		outerOrder.setOrderTime(TradeDetail.getPayTime()); // 付款时间
+		outerOrder.setStatus(OrderStatus.PAID.getCode()); // 状态：代发货
+
+		outerOrder.setChannelOrderNo(TradeDetail.getTid());
+
+		outerOrder.setIdCard(TradeDetail.getIdCardNumber()); // 身份证
+
+		if (StringUtil.isNotBlank(TradeDetail.getPayType())) {
+			outerOrder.setPayType(PayType.valueOf(TradeDetail.getPayType()).getCode()); // 支付方式
+		}
+
+		//邮费
+		outerOrder.setFreight(Double.valueOf(TradeDetail.getPostFee()));
+
+		BigDecimal totalPrice = BigDecimal.valueOf(TradeDetail.getTotalFee().doubleValue()).setScale(2,BigDecimal.ROUND_HALF_UP);
+
+		outerOrder.setTotalAmount(TradeDetail.getTotalFee() == null ? 0d : totalPrice.doubleValue());
+		outerOrder.setActualAmount(TradeDetail.getPayment() == null ? 0d : totalPrice.doubleValue());
+		outerOrder.setMemo(TradeDetail.getBuyerMessage() + TradeDetail.getTradeMemo());
+
+		outerOrder.setCreator("有赞推送订单");
+		outerOrder.setGmtCreate(TradeDetail.getCreated()); // 创建时间
+		outerOrder.setGmtModify(TradeDetail.getUpdateTime()); // 修改时间
+
+
+		//补充必填信息
+		outerOrder.setChannelCustomerNo("自定义类型，无买家昵称");
+		outerOrder.setIsDel(false);
+		outerOrder.setModifier("-1");
+
+
+		globalshopOrderVo.setMallOrderDO(outerOrder);
+
+		com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGetResult.TradeOrderV2[] tradeOrderArr = TradeDetail.getOrders();
+		List<MallSubOrderDO> outerOrderDetails = new ArrayList<MallSubOrderDO>();
+
+		for (int j = 0; j < tradeOrderArr.length; j++) {
+			com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGetResult.TradeOrderV2 tradeOrder = tradeOrderArr[j];
+			MallSubOrderDO outerOrderDetail = new MallSubOrderDO();
+
+			//关键是查找到对应的商品信息
+			String skuCode = null;
+			if(Long.valueOf(0).equals(tradeOrder.getSkuId()) || EasyUtil.isStringEmpty(tradeOrder.getOuterSkuId())){
+				//代表这个商品是个单品，只有itemId,itemCode
+				String itemCode = tradeOrder.getOuterItemId();//这个就是上传的Item
+				ItemSkuDO skuSo = new ItemSkuDO();
+				skuSo.setCompanyNo(shopOauth.getCompanyNo());
+				skuSo.setItemCode(itemCode);
+				List<ItemSkuDO> skuDOS = itemSkuService.queryPoList(skuSo);
+				if(EasyUtil.isListEmpty(skuDOS)){
+
+					//商品未下来，先把商品抓下来
+					getItems4Order(shopOauth,tradeOrder.getTitle());
+
+					throw new ErpCommonException("item_code error","商品未能找到，itemCode: "+itemCode);
+				}
+				skuCode = skuDOS.get(0).getSkuCode();
+			}else {
+				skuCode = tradeOrder.getOuterSkuId();
+				//即使有，也应该判断下商品是否存在
+				ItemSkuDO skuSo = new ItemSkuDO();
+				skuSo.setIsDel(false);
+				skuSo.setCompanyNo(shopOauth.getCompanyNo());
+				skuSo.setSkuCode(skuCode);
+				Integer count =  itemSkuService.queryPoCount(skuSo);
+				if(count < 1){
+					//商品未下来，先把商品抓下来
+					getItems4Order(shopOauth,tradeOrder.getTitle());
+					throw new ErpCommonException("item_code error","商品未能找到，itemCode: "+tradeOrder.getOuterItemId());
+				}
+			}
+
+			outerOrderDetail.setSkuCode(skuCode); // sku编码
+
+			outerOrderDetail.setCompanyNo(outerOrder.getCompanyNo());
+			outerOrderDetail.setOrderNo(outerOrder.getOrderNo()); // 主订单ID
+			outerOrderDetail.setShopCode(outerOrder.getShopCode());
+
+			outerOrderDetail.setSalePrice(Double.parseDouble(String.valueOf(tradeOrder.getPrice()))); // 商品单价
+			outerOrderDetail.setQuantity(Integer.parseInt(String.valueOf(tradeOrder.getNum()))); // 购买数量
+			outerOrderDetail.setGmtCreate(TradeDetail.getCreated()); // 创建时间
+			outerOrderDetail.setGmtModify(TradeDetail.getUpdateTime()); // 修改时间
+
+			outerOrderDetail.setOrderTime(outerOrder.getOrderTime());
+
+			outerOrderDetail.setReceiver(TradeDetail.getReceiverName()); // 收货人
+			outerOrderDetail.setReceiverState(TradeDetail.getReceiverState()); // 省
+			outerOrderDetail.setReceiverCity(TradeDetail.getReceiverCity()); // 市
+			outerOrderDetail.setReceiverDistrict(TradeDetail.getReceiverDistrict()); // 区
+			outerOrderDetail.setReceiverAddress(TradeDetail.getReceiverAddress()); // 详细地址
+			outerOrderDetail.setTelephone(TradeDetail.getReceiverMobile()); // 联系电话
+			outerOrderDetail.setPostcode(TradeDetail.getReceiverZip()); // 邮编
+
+			outerOrderDetail.setShopCode(shopOauth.getShopCode());
+			outerOrderDetail.setOrderNo(outerOrder.getOrderNo());
+			outerOrderDetail.setSubOrderNo(CodeGenUtil.getSubOrderNo());
+
+			outerOrderDetail.setCustomerNo("无");
+			outerOrderDetail.setIsDel(false);
+			outerOrderDetail.setCreator("系统");
+			outerOrderDetail.setModifier("系统");
+			outerOrderDetail.setChannelOrderNo(outerOrder.getChannelOrderNo());
+
+			outerOrderDetail.setStatus(OrderStatus.PAID.getCode());
+
+			//有赞有子订单号
+			outerOrderDetail.setChannelSubOrderNo(String.valueOf(tradeOrder.getOid()));
+
+			outerOrderDetails.add(outerOrderDetail);
+		}
+		globalshopOrderVo.setMallSubOrderDOS(outerOrderDetails);
+
+		return globalshopOrderVo;
+	}
+
+	/**
+	 * 当有订单找不到商品时，用商品名称进行搜索订单，放进待下发商品表，等待下发至erp
+	 * @param shopOauth
+	 * @param title
+	 */
+	public void getItems4Order(JdShopOauthDO shopOauth, String title) {
+		client = new DefaultYZClient(new Token(shopOauth.getAccessToken()));
+
+		Boolean hasNext = true;
+		Long pageNo = 1L;
+		Long pageSize = 10L;
+
+		YouzanItemsOnsaleGetParams youzanItemsOnsaleGetParams = new YouzanItemsOnsaleGetParams();
+		youzanItemsOnsaleGetParams.setPageSize(pageSize);
+		YouzanItemsOnsaleGet youzanItemsOnsaleGet = new YouzanItemsOnsaleGet();
+		youzanItemsOnsaleGetParams.setQ(title);
+
+		while(hasNext){
+			youzanItemsOnsaleGetParams.setPageNo(pageNo);
+			youzanItemsOnsaleGet.setAPIParams(youzanItemsOnsaleGetParams);
+
+			YouzanItemsOnsaleGetResult result = client.invoke(youzanItemsOnsaleGet);
+
+			if(result.getCount() == null || result.getCount() <= pageNo*pageSize){
+				hasNext = false;
+			}else{
+				hasNext = true;
+				pageNo++;
+			}
+			logger.info("为订单抓单的商品详情: "+BaseDto.toString(result));
+			// 处理商品转换问题
+			YouzanItemsOnsaleGetResult.ItemListOpenModel[] items = result.getItems();
+			for (int i = 0; i < items.length; i++) {
+				saveYouzanItemJson(shopOauth,items[i]);
+			}
+
+		}
+	}
 
 
 }

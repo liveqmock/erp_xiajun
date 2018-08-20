@@ -22,7 +22,7 @@ import java.util.List;
 public class JdSendOrders2GlobalshopTask {
 
 
-	protected Logger logger = LogManager.getLogger(getClass());
+	protected Logger logger = LogManager.getLogger("JdSendOrders2GlobalshopTask");
 
 
 	@Autowired

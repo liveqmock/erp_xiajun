@@ -164,12 +164,15 @@ public class YouzanOauthController extends BaseController {
 	}
 
 	private void doOauth(JdShopOauthDO shopOauth, ChannelShopDO channelShop){
+		//校验该店铺全局唯一性
+		channelShopService.checkUnique(channelShop);
+		//下发创建或更新  channel_shop
+		channelShopService.createOrUpdate(channelShop);
 		//创建或更新jd_shop_oauth
 		jdShopOauthService.createOrUpdateShopOauth(ChannelType.YouZan,shopOauth);
 		//创建或更新jd_shop_config
 		jdShopConfigService.initShopConfig(ChannelType.YouZan,shopOauth);
-		//下发创建或更新  channel_shop
-		channelShopService.createOrUpdate(channelShop);
+
 	}
 
 
