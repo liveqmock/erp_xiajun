@@ -17,5 +17,5 @@ public interface ChannelShopService {
 
 	public void createOrUpdate(ChannelShopDO channelShopDO);
 
-
+	public void checkUnique(ChannelShopDO channelShop);
 }
