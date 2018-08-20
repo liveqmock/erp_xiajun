@@ -8,8 +8,12 @@ import com.wangqin.globalshop.channel.service.YouzanService;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
 import com.wangqin.globalshop.channel.service.item.IItemService;
+import com.wangqin.globalshop.channel.service.jingdong.JdOrderService;
 import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
+import com.wangqin.globalshop.channel.service.order.ChannelIMallOrderService;
+import com.wangqin.globalshop.channel.service.order.ChannelIMallSubOrderService;
 import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
+import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -39,11 +43,20 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 	private  IItemService itemService;
 
 	@Autowired
+	private ChannelIMallOrderService mallOrderService;
+
+	@Autowired
+	private ChannelIMallSubOrderService subOrderService;
+
+	@Autowired
 	private IChannelListingItemService channelListingItemService;
 
 
 	@Autowired
 	private YouzanService youzanService;
+
+	@Autowired
+	private JdOrderService jdOrderService;
 
 	@Autowired
 	private TransactionTemplate transactionTemplate;
@@ -213,14 +226,99 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		if (!shopOauth.getOpen()) {
 			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+shopCode);
 		}
-
 		try {
-			ChannelFactory.getChannel(shopOauth).getOrders(startTime, endTime);
+			List<JdOrderDO> jdOrderDOList = new ArrayList<>();
+			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				jdOrderDOList = youzanService.getOrders(shopOauth,startTime, endTime);
+			}
+			jdOrderService.saveOrders4Task(jdOrderDOList);
 		}catch (Exception e){
 			logger.error("",e);
             throw new ErpCommonException("",e.getMessage());
 		}
 	}
+	/**
+	 * 这个方法不应该被事务控制，转换的时候既会跑错又会保存未找到的商品信息
+	 * 订单插入已经用事务控制了，安全的
+	 * @param shopCode
+	 * @param requestJdOrder
+	 */
+	@Override
+	public void sendOrder(String shopCode, JdOrderDO requestJdOrder){
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setShopCode(shopCode);
+		shopOauthSo.setIsDel(false);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
+
+		if(shopOauth == null){
+			throw new ErpCommonException("shop_error","未找到对应店铺信息shopCode:"+shopCode);
+		}
+		//0正常，1关闭
+		if (!shopOauth.getOpen()) {
+			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+shopCode);
+		}
+
+		try {
+			GlobalshopOrderVo  globalshopOrderVo = null;
+			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				globalshopOrderVo = youzanService.convertYZOrder(shopOauth,requestJdOrder);
+			}else{
+				throw new ErpCommonException("","暂不支持该方法");
+			}
+			GlobalshopOrderVo finalGlobalshopOrderVo = globalshopOrderVo;
+			transactionTemplate.execute(new TransactionCallback<Boolean>() {
+				@Override
+				public Boolean doInTransaction(TransactionStatus transactionStatus) {
+					doSendOrder(finalGlobalshopOrderVo);
+					return Boolean.TRUE;
+				}
+			});
+		}catch (ErpCommonException e){
+			logger.error("",e);
+			throw e;
+		}catch (Exception e){
+			logger.error("",e);
+			throw new ErpCommonException("",e.getMessage());
+		}
+	}
+
+
+	/**
+	 * 下发订单的逻辑
+	 * @param
+	 */
+	private void doSendOrder(GlobalshopOrderVo globalshopOrderVo){
+		if(globalshopOrderVo == null){
+			return;
+		}
+		MallOrderDO outerOrder = globalshopOrderVo.getMallOrderDO();
+		List<MallSubOrderDO> outerOrderDetails = globalshopOrderVo.getMallSubOrderDOS();
+		//todo 如果有赞订单已存在，略过,暂时这样处理
+		MallOrderDO p = new MallOrderDO();
+		p.setChannelOrderNo(outerOrder.getChannelOrderNo());
+		p.setCompanyNo(outerOrder.getCompanyNo());
+		if (mallOrderService.queryPoCount(p) > 0) {
+			throw new ErpCommonException("order has exist,orderNo: " + outerOrder.getChannelOrderNo(),"订单已下发过");
+		}
+
+		// 如果有赞订单已存在，略过
+        List<String> outOrderIdList = new ArrayList<>();
+		//List<String> outOrderIdList = new ArrayList<>();
+
+		mallOrderService.insertSelective(outerOrder); // 添加主订单
+
+		outOrderIdList.add(outerOrder.getChannelOrderNo()); // 收集主订单ID
+
+		subOrderService.insertBatch(outerOrderDetails); // 添加子订单
+
+		if (outOrderIdList.size() > 0) {
+			// 把商品详情更新到主订单明细里面
+			subOrderService.updateOuterOrderDetailByItemSku(outOrderIdList);
+		}
+	}
+
+
+
 
 
 	@Override

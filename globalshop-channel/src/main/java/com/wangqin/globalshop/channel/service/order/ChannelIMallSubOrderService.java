@@ -31,5 +31,5 @@ public interface ChannelIMallSubOrderService {
 
 	void insertBatch(List<MallSubOrderDO> outerOrderDetails);
 
-
+	void updateOuterOrderDetailByItemSku(List<String> outOrderIdList);
 }

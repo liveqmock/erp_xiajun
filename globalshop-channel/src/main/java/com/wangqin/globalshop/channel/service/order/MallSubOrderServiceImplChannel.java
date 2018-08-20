@@ -120,6 +120,13 @@ public class MallSubOrderServiceImplChannel implements ChannelIMallSubOrderServi
 			mallSubOrderDOMapperExt.insert(mallSubOrderDO);
 		}
 	}
+
+	@Override
+	public void updateOuterOrderDetailByItemSku(List<String> outOrderIdList){
+		mallSubOrderDOMapperExt.updateOuterOrderDetailByItemSku(outOrderIdList);
+	}
+
+
 	/**
 	 * 海狐拆单流程：查出一个未关闭旧子订单，原来数量-新订单数量=新的子订单
 	 *             新订单数量，维护成旧订单的数量，如果未备货状态，成为第二个子订单
