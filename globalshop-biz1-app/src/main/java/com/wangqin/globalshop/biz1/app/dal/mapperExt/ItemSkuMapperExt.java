@@ -22,6 +22,9 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
  */
 public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
+	//渠道商品：根据sku_code更新sku
+	void updateSkuBySkuCode(ItemSkuDO sku);
+	
 	//商品编辑：查找哪些sku被前端删除了
 	List<String> queryToDeleteSkuCodeList(@Param("codeList")List<String> codeList,@Param("itemCode")String itemCode);
 	

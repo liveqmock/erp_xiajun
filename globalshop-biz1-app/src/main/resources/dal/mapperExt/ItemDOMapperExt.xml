@@ -25,6 +25,89 @@
         T1.wxis_sale AS wxisSale       
     </sql>
 
+	<!-- 渠道商品：根据item_code更新商品 -->
+	<!-- 渠道商品的更新只涉及部分字段 -->
+    <update id="updateItemByItemCode" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO">
+        update item
+        <set>
+            <trim suffixOverrides=",">
+                <if test="categoryCode != null">
+                    category_code = #{categoryCode,jdbcType=VARCHAR},
+                </if>
+                <if test="itemName != null">
+                    item_name = #{itemName,jdbcType=VARCHAR},
+                </if>
+                <if test="enName != null">
+                    en_name = #{enName,jdbcType=VARCHAR},
+                </if>
+                <if test="itemShort != null">
+                    item_short = #{itemShort,jdbcType=VARCHAR},
+                </if>
+                <if test="categoryName != null">
+                    category_name = #{categoryName,jdbcType=VARCHAR},
+                </if>
+                <if test="saleType != null">
+                    sale_type = #{saleType,jdbcType=TINYINT},
+                </if>
+                <if test="mainPic != null">
+                    main_pic = #{mainPic,jdbcType=VARCHAR},
+                </if>
+                <if test="brandNo != null">
+                    brand_no = #{brandNo,jdbcType=VARCHAR},
+                </if>
+                <if test="brandName != null">
+                    brand_name = #{brandName,jdbcType=VARCHAR},
+                </if>
+                <if test="country != null">
+                    country = #{country,jdbcType=TINYINT},
+                </if>
+                <if test="weight != null">
+                    weight = #{weight,jdbcType=DOUBLE},
+                </if>
+                <if test="priceRange != null">
+                    price_range = #{priceRange,jdbcType=VARCHAR},
+                </if>
+                <if test="idCard != null">
+                    id_card = #{idCard,jdbcType=TINYINT},
+                </if>
+                <if test="startDate != null">
+                    start_date = #{startDate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="endDate != null">
+                    end_date = #{endDate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="bookingDate != null">
+                    booking_date = #{bookingDate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="isSale != null">
+                    is_sale = #{isSale,jdbcType=TINYINT},
+                </if>
+                <if test="wxisSale != null">
+                    wxis_sale = #{wxisSale,jdbcType=TINYINT},
+                </if>
+                <if test="status != null">
+                    status = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="modifier != null">
+                    modifier = #{modifier,jdbcType=VARCHAR},
+                </if>
+                <if test="detail != null">
+                    `detail` = #{detail},
+                </if>
+                <if test="remark != null">
+                    `remark` = #{remark},
+                </if>
+                <if test="isAbroad != null">
+                    is_abroad = #{isAbroad},
+                </if>
+                <if test="shelfMethod != null">
+                    shelf_method = #{shelfMethod},
+                </if>
+            </trim>
+        </set>
+        where item_code = #{itemCode}
+    </update>
+	
     <!--定时任务，扫描自定义上架时间的商品-->
     <select id="queryItemSelfDefineTime"
             resultMap="com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper.BaseResultMap"
