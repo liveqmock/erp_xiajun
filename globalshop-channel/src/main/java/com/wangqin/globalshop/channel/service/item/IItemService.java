@@ -11,8 +11,11 @@ import java.util.List;
  */
 public interface IItemService {
 
+	//渠道商品专用：根据item_code更新商品
+	void updateItemByItemCode(ItemDO itemDO);
+	
 	//渠道商品添加的公共接口	
-	void addChannelItem(ItemVo item);
+	void addChannelItem(ItemVo item, Boolean needUpdate);
 	
     //公共部分
     public int deleteByPrimaryKey(Long id);

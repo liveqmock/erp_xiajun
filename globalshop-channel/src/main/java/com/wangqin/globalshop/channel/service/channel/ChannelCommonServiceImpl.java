@@ -434,6 +434,6 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 			return;
 		}
 		channelListingItemService.dealChannelListtingItem(globalShopItemVo.getChannelListingItemVo());
-		itemService.addChannelItem(globalShopItemVo.getItemVo());
+		itemService.addChannelItem(globalShopItemVo.getItemVo(),true);
 	}
 }
