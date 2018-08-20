@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+
+import org.jboss.netty.util.EstimatableObjectWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,7 +102,6 @@ public class ItemController {
     @RequestMapping("/add")
     @Transactional(rollbackFor = BizCommonException.class)
     public Object add(ItemQueryVO item) {
-        //log.info("---->start to add item---->");
         return itemService.addItem(item);
     }
 
@@ -121,162 +122,147 @@ public class ItemController {
         String companyNo = AppUtil.getLoginUserCompanyNo();
         String userNo = AppUtil.getLoginUserId();
         String itemCode = itemService.queryItemCodeById(item.getId());
+        String categoryCode = item.getCategoryCode();
+        String categoryName = categoryService.queryByCategoryCode(categoryCode).getName();
+        List<Double> skuSalePriceList = new ArrayList<Double>();
 
         //商品图片不能为空，TODO：在前端处理
         if (!ItemUtil.picCheck(item.getMainPic())) {
             return result.buildIsSuccess(false).buildMsg("商品必须有主图");
         }
-
-        String skuList = item.getSkuList();
-        List<Double> skuSalePriceList = new ArrayList<Double>();
-
+        
+        //解析sku
+        List<ItemSkuQueryVO> skus = new ArrayList<ItemSkuQueryVO>();
         try {
-            String s = skuList.replace("&quot;", "\"");
-            List<ItemSkuQueryVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {});
-            //更新商品的价格区间,同时判断upc和数据库里面已有的upc是否重复         
-            for (ItemSkuQueryVO sku : skus) {
-                Integer dupNum = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(companyNo, sku.getUpc(), itemCode);
-                if (0 < dupNum) {
-                    return result.buildIsSuccess(false).buildMsg("更新失败，添加的upc和已有的upc重复");
-                }
-                skuSalePriceList.add(sku.getSalePrice());
-            }  	
-            int startIndex = 0;
-            //获取现在该商品的所有skuCode
-            List<String> newSkuCodeList = new ArrayList<String>();
-            for (ItemSkuQueryVO skuQueryVO : skus) {
-                if (null != skuQueryVO.getSkuCode()) {
-                    newSkuCodeList.add(skuQueryVO.getSkuCode());
-                }
-            }
-            //两个集合求差值，判断哪些sku被删除了
-            List<String> deleteCodeList = itemSkuService.queryToDeleteSkuCodeList(newSkuCodeList, itemCode);
-            //step1:删除需要删除的sku
-            for (String skuCode : deleteCodeList) {
-                itemSkuService.deleteItemSkuBySkuCode(skuCode);
-                //删除虚拟库存TODO,暂时用更新虚拟库存为0代替
-                try {
-                    inventoryService.updateVirtualInv(skuCode, 0L, AppUtil.getLoginUserCompanyNo());
-                } catch (Exception e) {
-                    return result.buildIsSuccess(false).buildMsg("您试图删除不能删除的sku，这样的操作导致了库存异常");
-                }
-                //删除规格
-                scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
-                scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
-            }
-
-            //step2:更新需要更新的sku
-            for (ItemSkuQueryVO updateSku : skus) {
-                if (null != updateSku.getSkuCode()) {//需要更新的sku
-                    //先更新虚拟库存
-                    String skuCode = updateSku.getSkuCode();
-                    if (null != updateSku.getVirtualInv()) {
-                        try {
-                            inventoryService.updateVirtualInv(skuCode, updateSku.getVirtualInv(), AppUtil.getLoginUserCompanyNo());
-                        } catch (BizCommonException e) {
-                            return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
-                        }
-                    }
-                    //再更新规格，先删除后插入
-                    scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
-                    if (IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {
-                    	ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",updateSku.getColor(),skuCode,itemCode); 
-                        scaleService.insertSelective(color);
-                    }
-                    scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
-                    if (IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {
-                        ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",updateSku.getScale(),skuCode,itemCode);                      
-                        scaleService.insertSelective(scale);
-                    }
-
-                    //最后更新其他的sku项目
-                    updateSku.setBrand(item.getBrand());
-                    updateSku.setItemName(item.getName());
-                    updateSku.setCategoryCode(item.getCategoryCode());
-                    updateSku.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
-                    updateSku.setSkuRate(ItemUtil.divideOneHundred(updateSku.getSkuRateString()));
-                    itemSkuService.updateById(updateSku);
-                }
-            }
-            //step3:插入新增的sku
-            for (ItemSkuQueryVO newSku : skus) {
-                if (null == newSku.getSkuCode()) {//需要添加的sku
-                    ItemSkuDO addSku = new ItemSkuDO();
-                    ItemDTO itemDTO = itemService.queryItemById(item.getId());
-                    addSku.setCompanyNo(companyNo);
-                    addSku.setItemCode(itemCode);
-                    //todo skuCode
-                    String skuCode = "S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandomMillSeconds() + "Q" + String.format("%0" + 2 + "d", (startIndex++));
-                    addSku.setSkuCode(skuCode);
-                    addSku.setSkuRate(newSku.getSkuRate());
-                    addSku.setScale(newSku.getScale());
-                    addSku.setSalePrice((double) newSku.getSalePrice());
-                    addSku.setWeight(newSku.getWeight());
-                    addSku.setUpc(newSku.getUpc());
-                    addSku.setSkuPic(newSku.getSkuPic());
-                    addSku.setPackageLevelId(newSku.getPackageLevelId());
-                    addSku.setCreator(userNo);
-                    addSku.setModifier(userNo);
-                    addSku.setItemName(itemDTO.getName());
-                    addSku.setCategoryCode(itemDTO.getCategoryCode());
-                    addSku.setCategoryName(itemDTO.getCategoryName());
-                    addSku.setSkuRate(ItemUtil.divideOneHundred(newSku.getSkuRateString()));
-                    //插入item_sku_scale表                                       
-                    if (IsEmptyUtil.isStringNotEmpty(newSku.getColor())) {
-                        ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",newSku.getColor(),skuCode,itemCode);
-                        scaleService.insertSelective(color);
-                    }
-                    if (IsEmptyUtil.isStringNotEmpty(newSku.getScale())) {
-                    	ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",newSku.getScale(),skuCode,itemCode);
-                        scaleService.insertSelective(scale);
-                    }
-                    //插入库存
-                    List<InventoryDO> inventoryList = new ArrayList<InventoryDO>();
-                    InventoryDO inventory = new InventoryDO();
-                    inventory.setItemName(item.getName());
-                    inventory.setItemCode(itemDTO.getItemCode());
-                    inventory.setSkuCode(addSku.getSkuCode());
-                    inventory.setUpc(newSku.getUpc());
-                    inventory.setVirtualInv(Long.valueOf(newSku.getVirtualInv()));
-                    inventoryList.add(inventory);
-                    inventoryService.outbound(inventoryList);
-                    //插入sku
-                    itemSkuService.insertItemSkuSelective(addSku);
-                }
-            }
+            String s = item.getSkuList().replace("&quot;", "\"");
+            skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {});
         } catch (Exception e) {
             e.printStackTrace();
             return result.buildMsg("解析SKU错误").buildIsSuccess(false);
         }
-
-        String imgJson = ImageUtil.getImageUrl(item.getMainPic());
-        item.setMainPic(imgJson);
-
+        //判断upc和数据库里面已有的upc是否重复         
+        for (ItemSkuQueryVO sku : skus) {
+        	Integer dupNum = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(companyNo, sku.getUpc(), itemCode);
+        	if (0 < dupNum) {
+        		return result.buildIsSuccess(false).buildMsg("更新失败，添加的upc和已有的upc重复");
+        	}
+        	skuSalePriceList.add(sku.getSalePrice());
+        }  		        
+        //获取现在该商品的所有skuCode
+        List<String> newSkuCodeList = new ArrayList<String>();
+        for (ItemSkuQueryVO skuQueryVO : skus) {
+        	if (IsEmptyUtil.isStringNotEmpty(skuQueryVO.getSkuCode())) {
+        		newSkuCodeList.add(skuQueryVO.getSkuCode());
+        	}
+        }
+        newSkuCodeList.add("-1");//这个是为了防止下面的查询出错
+        //判断哪些sku被删除了
+        List<String> deleteCodeList = itemSkuService.queryToDeleteSkuCodeList(newSkuCodeList, itemCode);
+        //step1:删除需要删除的sku
+        for (String skuCode : deleteCodeList) {
+        	try {
+        		deleteSku(skuCode, companyNo);
+        	} catch (BizCommonException e) { //捕获库存添加时的异常并告知用户
+				return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+			}
+        }                   
+        for (ItemSkuQueryVO skuVO : skus) {
+        	if (null != skuVO.getSkuCode()) { //step2:更新需要更新的sku
+        		try {
+        			updateSku(skuVO, companyNo, userNo, itemCode, item, categoryName);
+        		} catch (BizCommonException e) { //捕获库存更细时的异常并告知用户
+					return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
+				}
+        	} else { //step3:插入新增的sku
+        		int startIndex = 0;
+        		addSku(skuVO, companyNo, userNo, itemCode, item, categoryName, startIndex++);
+        	}
+        }
+        
         ItemDO newItem = new ItemDO();
+        String imgJson = ImageUtil.getImageUrl(item.getMainPic());
+        newItem.setMainPic(imgJson);       
         //上架处理
         try {
             ItemUtil.handleShelf(item, newItem);
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
         }
-
-        newItem.setIsAbroad(item.getIsAbroad());
-        newItem.setDetail(item.getDetail());
+        ItemUtil.transItemVoToDOUpdate(item, newItem, userNo, categoryCode, categoryName);
         detailDecoder(newItem);
-        newItem.setCategoryCode(item.getCategoryCode());
-        newItem.setCategoryName(categoryService.queryByCategoryCode(item.getCategoryCode()).getName());
-        newItem.setBrandName(item.getBrand());
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
-        newItem.setItemName(item.getName());
-        newItem.setIdCard(item.getIdCard().byteValue());
-        newItem.setPriceRange(PriceUtil.calNewPriceRange(skuSalePriceList));
-        newItem.setCountry(item.getCountry());
-        newItem.setMainPic(item.getMainPic());
-        newItem.setWxisSale(item.getWxisSale().byteValue());
-        newItem.setModifier(AppUtil.getLoginUserId());
-        newItem.setId(item.getId());//根据id更新
+        newItem.setPriceRange(PriceUtil.calNewPriceRange(skuSalePriceList));       
         itemService.updateByIdSelective(newItem);
         return result.buildIsSuccess(true);
+    }
+    
+    
+    /**
+     * 商品编辑->删除sku
+     */
+    @Transactional(rollbackFor = BizCommonException.class)
+    private void deleteSku(String skuCode,  String companyNo) throws BizCommonException {
+    	itemSkuService.deleteItemSkuBySkuCode(skuCode);
+    	//删除虚拟库存TODO,暂时用更新虚拟库存为0代替
+    	inventoryService.updateVirtualInv(skuCode, 0L, companyNo);
+    	//删除规格
+    	scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
+    	scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
+    }
+    
+    /**
+     * 商品编辑->更新sku
+     */
+    @Transactional(rollbackFor = BizCommonException.class)
+    private void updateSku(ItemSkuQueryVO updateSku, String companyNo, String userNo,
+    		String itemCode, ItemQueryVO item, String categoryName) throws BizCommonException {
+    	String skuCode = updateSku.getSkuCode();
+		//先更新虚拟库存                    
+		inventoryService.updateVirtualInv(skuCode, updateSku.getVirtualInv(), companyNo);
+		//再更新规格，先删除后插入
+		scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
+		if (IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {
+			ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",updateSku.getColor(),skuCode,itemCode); 
+			scaleService.insertSelective(color);
+		}
+		scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
+		if (IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {
+			ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",updateSku.getScale(),skuCode,itemCode);                      
+			scaleService.insertSelective(scale);
+		}
+		//最后更新其他的sku项目
+		ItemUtil.setSkuInfo(updateSku, item, categoryName);
+		itemSkuService.updateById(updateSku);
+    }
+    
+    /**
+     * 商品编辑->插入新的skus
+     */
+    @Transactional(rollbackFor = BizCommonException.class)
+    private void addSku(ItemSkuQueryVO newSku, String companyNo, String userNo,
+    		String itemCode, ItemQueryVO item, String categoryName,int startIndex) throws BizCommonException {
+    	ItemSkuDO addSku = new ItemSkuDO();                   
+		addSku.setItemCode(itemCode);
+		String skuCode = "S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandomMillSeconds() + "Q" + String.format("%0" + 2 + "d", (startIndex++));
+		addSku.setSkuCode(skuCode); 
+		ItemUtil.transItemSkuVoToDO(addSku, newSku, companyNo, userNo, item, categoryName);
+		
+		//插入item_sku_scale表                                       
+		if (IsEmptyUtil.isStringNotEmpty(newSku.getColor())) {
+			ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",newSku.getColor(),skuCode,itemCode);
+			scaleService.insertSelective(color);
+		}
+		if (IsEmptyUtil.isStringNotEmpty(newSku.getScale())) {
+			ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",newSku.getScale(),skuCode,itemCode);
+			scaleService.insertSelective(scale);
+		}
+		//插入库存
+		List<InventoryDO> inventoryList = new ArrayList<InventoryDO>();
+		InventoryDO inventory = ItemUtil.genInvDO(itemCode, item.getName(), skuCode, newSku);
+		inventoryList.add(inventory);
+		inventoryService.outbound(inventoryList);
+		//插入sku
+		itemSkuService.insertItemSkuSelective(addSku);
     }
 
     
@@ -341,76 +327,8 @@ public class ItemController {
         return result.buildIsSuccess(true);
     }
 
-    /**
-     * 商品批量上架
-     *
-     * @param itemIdStrs 要上架的商品ID集合 ，分隔符   123,222,132
-     * @return
-     */
-    @RequestMapping("/itemsListing")
-    public Object itemsListing(String itemIdStrs) {
-        //logger.info("itemsListing start");
-        JsonResult<String> result = new JsonResult<>();
-        //查询出商品，查看商品状态，新档或者下架的商品可以上架
-        if (itemIdStrs != null) {
-            String[] items = itemIdStrs.split(",");
-            List<Long> itemIds = new ArrayList<>();
-            if (items != null && items.length > 0) {
+    
 
-                for (int i = 0; i < items.length; i++) {
-                    Long one = Long.valueOf(items[i]);
-                    itemIds.add(one);
-                }
-                List<ItemDO> itemList = itemService.queryItems(itemIds);
-                //获取有赞的num_iid;
-
-                //调取有赞批量上架接口
-
-
-            } else {
-                return result.buildIsSuccess(false);
-            }
-        } else {
-            return result.buildIsSuccess(false);
-        }
-//		return result.buildIsSuccess(true);
-        return result;
-    }
-
-    /**
-     * 商品批量发布到有赞
-     *
-     * @return
-     */
-    @RequestMapping("/itemsPush")
-    public Object itemsPush(String itemIdStrs) {
-        //logger.info("itemsPush start");
-        JsonResult<String> result = new JsonResult<>();
-        //查询出商品，查看商品状态，新档或者下架的商品可以上架
-        if (itemIdStrs != null) {
-            String[] items = itemIdStrs.split(",");
-            List<Long> itemIds = new ArrayList<>();
-            if (items != null && items.length > 0) {
-
-                for (int i = 0; i < items.length; i++) {
-                    Long one = Long.valueOf(items[i]);
-                    itemIds.add(one);
-                }
-                List<ItemDO> itemList = itemService.queryItems(itemIds);
-                //获取有赞的num_iid;
-
-                //调取有赞批量上架接口
-
-
-            } else {
-                return result.buildIsSuccess(false);
-            }
-        } else {
-            return result.buildIsSuccess(false);
-        }
-//		return result.buildIsSuccess(true);
-        return result;
-    }
 
     /**
      * 商品管理->商品列表
