@@ -30,7 +30,7 @@ import java.util.List;
  */
 
 
-@Component
+//@Component
 public class AutoYouzanItemsTask {
 
 	private static Logger logger = LoggerFactory.getLogger("AutoYouzanItemsTask");
@@ -123,7 +123,7 @@ public class AutoYouzanItemsTask {
 
 
 	//抓商品：在售商品，抓一次，抓全部
-	//@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void getAllItems() {
 
 		logger.info("youzan get all items start");
@@ -180,7 +180,7 @@ public class AutoYouzanItemsTask {
 	/**
 	 * 下发抓到的REQUEST商品至globalshop
 	 */
-	@Scheduled(cron = "0/30 * * * * ?")
+	//@Scheduled(cron = "0/30 * * * * ?")
 	public void sendRequestItem2erp() {
 
 		logger.info("youzan send request items start");
@@ -191,7 +191,7 @@ public class AutoYouzanItemsTask {
 		shopOauthSo.setOpen(true);
 		List<JdShopOauthDO> shopOauthDOList = shopOauthService.searchShopOauthList(shopOauthSo);
 
-		Long shopCount= 0L;
+		Long shopCount = 0L;
 
 		for (JdShopOauthDO shopOauth : shopOauthDOList) {
 
