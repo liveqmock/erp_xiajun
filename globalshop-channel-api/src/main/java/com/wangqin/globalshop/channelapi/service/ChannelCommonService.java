@@ -39,7 +39,7 @@ public interface ChannelCommonService {
 	public void getOrders(String shopCode, Date startTime, Date endTime);
 
 
-	public void getItems(String shopCode, Date startTime, Date endTime);
+	public void getItemsByTime(String shopCode, Date startTime, Date endTime);
 
 
 

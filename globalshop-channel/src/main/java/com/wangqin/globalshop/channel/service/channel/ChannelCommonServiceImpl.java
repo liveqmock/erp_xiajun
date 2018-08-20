@@ -224,7 +224,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 
 	@Override
-	public void getItems(String shopCode, Date startTime, Date endTime){
+	public void getItemsByTime(String shopCode, Date startTime, Date endTime){
 		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
 		shopOauthSo.setShopCode(shopCode);
 		shopOauthSo.setIsDel(false);
@@ -241,7 +241,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		try {
 
 			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
-				youzanService.getItems(shopOauth,startTime, endTime);
+				youzanService.getItemsByTime(shopOauth,startTime, endTime);
 			}else{
 				throw new ErpCommonException("","暂不支持该方法");
 			}

@@ -52,7 +52,7 @@ public class YouzanService {
 	}
 
 
-	public void getItems(JdShopOauthDO shopOauth, Date startTime, Date endTime) {
+	public void getItemsByTime(JdShopOauthDO shopOauth, Date startTime, Date endTime) {
 		client = new DefaultYZClient(new Token(shopOauth.getAccessToken()));
 
 		Boolean hasNext = true;
@@ -69,7 +69,15 @@ public class YouzanService {
 		while(hasNext){
 			youzanItemsOnsaleGetParams.setPageNo(pageNo);
 			youzanItemsOnsaleGet.setAPIParams(youzanItemsOnsaleGetParams);
+
+
 			YouzanItemsOnsaleGetResult result = client.invoke(youzanItemsOnsaleGet);
+
+//			String result = client.execute(youzanItemsOnsaleGet);
+//            logger.info("商品数据："+result);
+//			hasNext = false;
+
+
 
 			if(result.getCount() == null || result.getCount() <= pageNo*pageSize){
 				hasNext = false;
