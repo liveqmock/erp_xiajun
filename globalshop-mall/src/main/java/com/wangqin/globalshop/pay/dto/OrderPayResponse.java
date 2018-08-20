@@ -82,7 +82,7 @@ public class OrderPayResponse {
      * 扩展信息参数 <br>
      * 可空：Y
      */
-    private Exts exts;
+    private String exts;
 
     /**
      * 订单创建时间，格式：yyyyMMddHHmmss <br>

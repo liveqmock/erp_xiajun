@@ -51,12 +51,13 @@ public class PayController {
         try {
             // 获取订单金额和商品信息
             MallOrderDO mallOrderDO = mallOrderService.selectByOrderNo(merchantOrderNo);
+            String companyNo = mallOrderDO.getCompanyNo();
             Double totalAmount = mallOrderDO.getTotalAmount();
             String amount = String.valueOf(totalAmount);
             // 暂时用店名充当商品名
             String productName = mallOrderDO.getDealerName();
             // 创建支付订单
-            payService.orderPay(merchantOrderNo, amount, productName, userIp, exts);
+            payService.orderPay(companyNo, merchantOrderNo, amount, productName, userIp, exts);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg())
@@ -77,12 +78,10 @@ public class PayController {
      * @return
      */
     @PostMapping("/queryPay")
-    public Object queryPay(String merchantOrderNo, String exts) {
+    public Object queryPay(String merchantOrderNo, Exts exts) {
         JsonResult result = new JsonResult();
         try {
-            // TODO: 需从后台获取
-            String sftOrderNo = "";
-            payService.queryPay(merchantOrderNo, sftOrderNo, exts);
+            payService.queryPay(merchantOrderNo, exts);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg())

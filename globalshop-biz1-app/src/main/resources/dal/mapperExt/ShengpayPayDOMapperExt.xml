@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.ShengpayPayDOMapperExt">
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpayPayDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="company_no" property="companyNo" jdbcType="VARCHAR"/>
+        <result column="merchant_order_no" property="merchantOrderNo" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="DOUBLE"/>
+        <result column="currency" property="currency" jdbcType="VARCHAR"/>
+        <result column="pay_channel" property="payChannel" jdbcType="VARCHAR"/>
+        <result column="sft_order_no" property="sftOrderNo" jdbcType="VARCHAR"/>
+        <result column="order_create_time" property="orderCreateTime" jdbcType="TIMESTAMP"/>
+        <result column="trace_no" property="traceNo" jdbcType="VARCHAR"/>
+        <result column="trans_no" property="transNo" jdbcType="VARCHAR"/>
+        <result column="trans_status" property="transStatus" jdbcType="VARCHAR"/>
+        <result column="trans_amount" property="transAmount" jdbcType="DOUBLE"/>
+        <result column="trans_type" property="transType" jdbcType="VARCHAR"/>
+        <result column="trans_time" property="transTime" jdbcType="TIMESTAMP"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, company_no, merchant_order_no, amount, currency, pay_channel, sft_order_no, order_create_time,
+        trace_no, trans_no, trans_status, trans_amount, trans_type, trans_time, creator,
+        modifier
+    </sql>
+
+    <!-- 根据商户订单号从 shengpay_pay 表中获取对应的盛付通订单号 -->
+    <select id="getSftOrderNo" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+            sft_order_no
+        from
+            shengpay_pay
+        where
+            merchant_order_no = #{merchantOrderNo}
+    </select>
+
+    <!-- 根据商户订单号更新支付订单信息 -->
+    <update id="updateByMerchantOrderNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpayPayDO" >
+        update shengpay_pay
+        <set >
+            <if test="companyNo != null" >
+                company_no = #{companyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null" >
+                amount = #{amount,jdbcType=DOUBLE},
+            </if>
+            <if test="currency != null" >
+                currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="payChannel != null" >
+                pay_channel = #{payChannel,jdbcType=VARCHAR},
+            </if>
+            <if test="sftOrderNo != null" >
+                sft_order_no = #{sftOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderCreateTime != null" >
+                order_create_time = #{orderCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="traceNo != null" >
+                trace_no = #{traceNo,jdbcType=VARCHAR},
+            </if>
+            <if test="transNo != null" >
+                trans_no = #{transNo,jdbcType=VARCHAR},
+            </if>
+            <if test="transStatus != null" >
+                trans_status = #{transStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="transAmount != null" >
+                trans_amount = #{transAmount,jdbcType=DOUBLE},
+            </if>
+            <if test="transType != null" >
+                trans_type = #{transType,jdbcType=VARCHAR},
+            </if>
+            <if test="transTime != null" >
+                trans_time = #{transTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null" >
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="modifier != null" >
+                modifier = #{modifier,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where merchant_order_no = #{merchantOrderNo,jdbcType=VARCHAR}
+    </update>
+</mapper>
