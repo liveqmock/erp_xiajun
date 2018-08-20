@@ -167,7 +167,6 @@ INSERT INTO `auth_role_resource`(company_no,role_id, resource_id,creator, modifi
 
 ('-1', 1000, 259,'SYSTEM','SYSTEM'),
 ('-1', 1000, 260,'SYSTEM','SYSTEM'),
-('-1', 1000, 284,'SYSTEM','SYSTEM'),
 ('-1', 1000, 261,'SYSTEM','SYSTEM'),
 ('-1', 1000, 262,'SYSTEM','SYSTEM'),
 ('-1', 1000, 263,'SYSTEM','SYSTEM'),
@@ -185,6 +184,7 @@ INSERT INTO `auth_role_resource`(company_no,role_id, resource_id,creator, modifi
 ('-1', 1000, 275,'SYSTEM','SYSTEM'),
 ('-1', 1000, 276,'SYSTEM','SYSTEM'),
 ('-1', 1000, 277,'SYSTEM','SYSTEM'),
+('-1', 1000, 284,'SYSTEM','SYSTEM'),
 ('-1', 1000, 285,'SYSTEM','SYSTEM'),
 ('-1', 1000, 289,'SYSTEM','SYSTEM'),
 ('-1', 1000, 290,'SYSTEM','SYSTEM'),

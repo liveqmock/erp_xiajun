@@ -102,9 +102,9 @@ public class WechatLoginController {
                     sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
                 }
 
-                loginCache.putEx(sessionId, user.getName(), TIMEOUT);
+                loginCache.putEx(sessionId, user.getLoginName(), TIMEOUT);
                 loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
-                AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
+                AppUtil.setLoginUser(user.getLoginName(), user.getCompanyNo());
                 response.sendRedirect(sysurl);
                 return result.buildIsSuccess(true).buildMsg("登陆成功");
             }
@@ -387,9 +387,9 @@ public class WechatLoginController {
         if (StringUtils.isBlank(sessionId)) {
             sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
         }
-        loginCache.putEx(sessionId, user.getName(), TIMEOUT);
+        loginCache.putEx(sessionId, user.getLoginName(), TIMEOUT);
         loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
-        AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
+        AppUtil.setLoginUser(user.getLoginName(), user.getCompanyNo());
         Map<String, String> map = new HashMap<>();
         map.put("userName", user.getName());
         return result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
