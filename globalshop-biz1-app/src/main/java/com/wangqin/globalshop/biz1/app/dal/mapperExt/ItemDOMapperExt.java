@@ -20,6 +20,9 @@ import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
 	
+	//渠道商品专用：根据item_code更新商品
+	void updateItemByItemCode(ItemDO itemDO);
+	
     //定时任务
     List<ItemDO> queryItemSelfDefineTime(Integer shelfMethod);
 

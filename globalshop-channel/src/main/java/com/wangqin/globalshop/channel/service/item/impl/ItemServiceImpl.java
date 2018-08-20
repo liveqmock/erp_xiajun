@@ -2,6 +2,7 @@ package com.wangqin.globalshop.channel.service.item.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
@@ -35,6 +37,14 @@ import com.wangqin.globalshop.common.utils.PriceUtil;
 @Service
 public class ItemServiceImpl implements IItemService {
 
+	//品牌和类目的默认值
+	private static final String DEFAULT_CATE_CODE = "0101009";
+	private static final String DEFAULT_CATE_NAME = "其他";
+	private static final String BRAND_NO = "b11";
+	private static final String BRAND_NAME = "channel->其他";
+	private static final String USER_NO = "-1";
+	private static final String COUNTRY = "408";
+	private static final String PRICE_RANGE = "0.00";
 
     @Autowired
     private ItemDOMapperExt itemDOMapper;
@@ -51,6 +61,12 @@ public class ItemServiceImpl implements IItemService {
     @Autowired
 	private ChannelSalePriceDOMapperExt priceDOMapperExt;
 
+    //渠道商品专用：根据item_code更新商品
+    @Override
+    public void updateItemByItemCode(ItemDO itemDO) {
+    	itemDOMapper.updateItemByItemCode(itemDO);
+    }
+    
     @Override
     public int deleteByPrimaryKey(Long id) {
         return itemDOMapper.deleteByPrimaryKey(id);
@@ -112,30 +128,29 @@ public class ItemServiceImpl implements IItemService {
      */
     @Override
     @Transactional
-	public void addChannelItem(ItemVo item) throws ErpCommonException{
+	public void addChannelItem(ItemVo item, Boolean needUpdate) throws ErpCommonException{
     	String itemCode = item.getItemCode();
     	String companyNo = item.getCompanyNo();
     	String itemName = item.getItemName();
-    	
-    	//检测item_code和sku_code是否和数据库已有的重复，重复则抛出异常
-    	if (null != itemDOMapper.queryItemDOByItemCode(itemCode)) {
-    		throw new ErpCommonException("重复的itemCode");
-    	}
     	List<ItemSkuVo> skuList = item.getItemSkus();
-    	for (ItemSkuVo sku:skuList) {
-    		if (null != itemSkuDOMapper.queryItemSkuDOBySkuCode(sku.getSkuCode())) {
-    			throw new ErpCommonException("重复的skuCode");
-    		}
+    	//检测item_code和sku_code是否和数据库已有的重复，重复则抛出异常
+    	if (!needUpdate) { //如果不需要更新
+    		if (null != itemDOMapper.queryItemDOByItemCode(itemCode)) {
+        		throw new ErpCommonException("重复的itemCode");
+        	}       	
+        	for (ItemSkuVo sku:skuList) {
+        		if (null != itemSkuDOMapper.queryItemSkuDOBySkuCode(sku.getSkuCode())) {
+        			throw new ErpCommonException("重复的skuCode");
+        		}
+        	}
+    	} else { //需要更新
+    		if (null != itemDOMapper.queryItemDOByItemCode(itemCode)) {
+        		//更新商品
+    			updateItem(item);
+    			//更新sku
+    			updateItemSku(skuList, item);	
+        	}
     	}
-    	
-    	//品牌和类目的默认值
-    	final String DEFAULT_CATE_CODE = "0101009";
-    	final String DEFAULT_CATE_NAME = "其他";
-    	final String BRAND_NO = "b11";
-    	final String BRAND_NAME = "channel->其他";
-    	final String USER_NO = "-1";
-    	final String COUNTRY = "408";
-    	final String PRICE_RANGE = "0.00";
     	
     	//计算价格区间
     	ItemDO itemDO = new ItemDO();
@@ -228,6 +243,86 @@ public class ItemServiceImpl implements IItemService {
     			itemSkuScaleDOMapper.insertSelective(scale);
     		}   		
     	}//end of sku loop   	    	
+    }
+    
+    //更新商品
+    @Transactional
+    private void updateItem(ItemVo item) {
+    	List<ItemSkuVo> skuList = item.getItemSkus();
+    	//计算价格区间
+    	ItemDO itemDO = new ItemDO();
+    	List<Double> salePriceList = new ArrayList<Double>();
+    	for (ItemSkuVo sku:skuList) {
+    		Double salePrice = sku.getSalePrice();
+    		if (null != salePrice) {
+    			salePriceList.add(salePrice);
+    		}
+    	}
+    	if (IsEmptyUtil.isCollectionNotEmpty(salePriceList)) {
+    		itemDO.setPriceRange(PriceUtil.calNewPriceRange(salePriceList));
+    	} else {
+    		itemDO.setPriceRange(PRICE_RANGE);
+    	}
+    	
+    	//更新其他信息
+    	itemDO.setItemCode(item.getItemCode());
+    	itemDO.setItemName(item.getItemName());
+    	itemDO.setMainPic(item.getMainPic());
+    	itemDO.setStatus(item.getStatus());
+    	itemDOMapper.updateItemByItemCode(itemDO);
+    }
+    
+    //更新sku
+    @Transactional
+    private void updateItemSku(List<ItemSkuVo> skuList, ItemVo item) throws BizCommonException {
+    	String itemCode = item.getItemCode();
+    	//判断传来的upc是否有重复,重复则抛出错误  
+    	List<String> upcList = new ArrayList<String>();
+    	for (ItemSkuVo sku:skuList) {
+    		if (IsEmptyUtil.isStringNotEmpty(sku.getUpc())) {
+    			upcList.add(sku.getUpc());
+    		}   		
+    	}
+    	if (IsEmptyUtil.isCollectionNotEmpty(upcList)) {
+    		HashSet<String> upcSet = new HashSet<String>(upcList);
+            if (upcList.size() > upcSet.size()) {
+                throw new BizCommonException("sku的upc属性有重复，禁止更新");
+            }
+    	}
+    	//计算原有的sku
+    	List<ItemSkuDO> oldSkuList = itemSkuDOMapper.querySkuListByItemCode(itemCode);
+    	List<String> oldSkuCodeList = new ArrayList<String>();
+    	for (ItemSkuDO oldSku:oldSkuList) {
+    		oldSkuCodeList.add(oldSku.getSkuCode());
+    	}
+    	//更新已经存在的sku
+    	for (ItemSkuVo sku:skuList) {
+    		if (oldSkuCodeList.contains(sku.getSkuCode())) { //更新
+    			ItemSkuDO updateSku = new ItemSkuDO();
+    			updateSku.setSkuCode(sku.getSkuCode());
+    			updateSku.setGoodsNo(sku.getGoodsNo());
+    			updateSku.setSalePrice(sku.getSalePrice());
+    			updateSku.setUpc(sku.getUpc());
+    			updateSku.setWeight(sku.getWeight());
+    			updateSku.setSkuPic(sku.getSkuPic());
+    			updateSku.setItemName(item.getItemName());
+    			itemSkuDOMapper.updateSkuBySkuCode(updateSku);
+    		} else { //新增
+    			ItemSkuDO addSku = new ItemSkuDO();
+    			addSku.setSkuCode(sku.getSkuCode());
+    			addSku.setItemCode(itemCode);
+    			addSku.setItemName(item.getItemName());
+    			addSku.setCompanyNo(item.getCompanyNo());
+    			addSku.setGoodsNo(sku.getGoodsNo());
+    			addSku.setSalePrice(sku.getSalePrice());
+    			addSku.setUpc(sku.getUpc());
+    			addSku.setWeight(sku.getWeight());
+    			addSku.setSkuPic(sku.getSkuPic());
+    			addSku.setCreator(USER_NO);
+    			addSku.setModifier(USER_NO);
+    			itemSkuDOMapper.insertSelective(addSku);
+    		}
+    	}	
     }
     
     @Override
