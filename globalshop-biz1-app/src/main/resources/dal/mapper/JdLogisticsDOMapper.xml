@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdLogisticDOMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdLogisticsDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="version" property="version" jdbcType="BIGINT" />
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
@@ -29,7 +29,7 @@
     delete from jd_logistics
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -42,7 +42,7 @@
       #{logisticCode,jdbcType=VARCHAR}, #{logisticName,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -118,7 +118,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     update jd_logistics
     <set >
       <if test="version != null" >
@@ -157,7 +157,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     update jd_logistics
     set version = #{version,jdbcType=BIGINT},
       channel_no = #{channelNo,jdbcType=VARCHAR},

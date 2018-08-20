@@ -637,6 +637,11 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 		}
 	}
 
+	/**
+	 * 海狐一个主订单只能发货一次，就是说不支持子订单发货
+	 * @param erpOrderList
+	 * @param shippingOrder
+	 */
 	private void doSyncLogisticsOnlineConfirm(List<MallSubOrderDO> erpOrderList, ShippingOrderDO shippingOrder){
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("packageNo", shippingOrder.getLogisticNo());

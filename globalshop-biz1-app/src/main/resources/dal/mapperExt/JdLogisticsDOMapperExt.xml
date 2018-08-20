@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.JdLogisticsDOMapperExt" >
+    <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+        <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
+        <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
+        <result column="channel_sub_order_no" property="channelSubOrderNo" jdbcType="VARCHAR" />
+        <result column="send_status" property="sendStatus" jdbcType="VARCHAR" />
+        <result column="logistic_code" property="logisticCode" jdbcType="VARCHAR" />
+        <result column="logistic_name" property="logisticName" jdbcType="VARCHAR" />
+        <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
+        <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, version, channel_no, shop_code, channel_order_no, channel_sub_order_no, send_status,
+    logistic_code, logistic_name, logistic_no, modifier, creator
+  </sql>
+
+
+    <sql id="tableSection">jd_logistics</sql>
+
+    <sql id="commonSelectSection">
+        1 = 1
+        <if test="channelNo != null">
+            and T.channel_no = #{channelNo}
+        </if>
+
+        <if test="shopCode != null">
+            and T.shop_code = #{shopCode}
+        </if>
+
+        <if test="sendStatus != null">
+            and T.send_status = #{sendStatus}
+        </if>
+        <if test="channelOrderNo != null">
+            and T.channel_order_no = #{channelOrderNo}
+        </if>
+        <if test="channelSubOrderNo != null">
+            and T.channel_sub_order_no = #{channelSubOrderNo}
+        </if>
+        <if test=" isDel == true">
+            and T.is_del is true
+        </if>
+        <if test=" isDel == false">
+            and T.is_del is false
+        </if>
+        <if test=" isDel == null">
+            and T.is_del is false
+        </if>
+
+    </sql>
+
+
+    <!--查询总条数 -->
+    <select id="searchPo" resultMap="BaseResultMap"
+    >
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="tableSection"/> T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!--查询总条数 -->
+    <select id="searchPoCount" resultType="java.lang.Long"
+    >
+        SELECT COUNT(*)
+        FROM <include refid="tableSection"/> T
+        WHERE
+        <include refid="commonSelectSection"/>
+    </select>
+
+    <!-- -->
+    <select id="searchPoList" resultMap="BaseResultMap">
+        SELECT  <include refid="Base_Column_List" />
+        FROM <include refid="tableSection"/> T
+        WHERE
+        <include refid="commonSelectSection"/>
+        ORDER BY T.id desc
+    </select>
+
+
+</mapper>
