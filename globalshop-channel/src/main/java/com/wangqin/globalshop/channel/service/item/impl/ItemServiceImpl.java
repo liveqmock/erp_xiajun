@@ -1,19 +1,33 @@
 package com.wangqin.globalshop.channel.service.item.impl;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.channel.service.item.IItemService;
-import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
-import com.wangqin.globalshop.channelapi.dal.ItemVo;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelSalePriceDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.channel.Exception.ErpCommonException;
+import com.wangqin.globalshop.channel.service.item.IItemService;
+import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.PriceUtil;
 
 /**
  * Item 表数据服务层接口实现类
@@ -84,7 +98,138 @@ public class ItemServiceImpl implements IItemService {
     }
 
 
-
+    /**
+     * 给渠道模块提供的商品添加接口
+     * 商品必填字段：
+     * 1:companyNo
+     * 4:itemName
+     * 6:mainPic
+     * sku必填字段：
+     * 18:virtualInv
+     * 19:weight
+     * 20:upc
+     * 21:salePrice
+     */
+    @Override
+    @Transactional
+	public void addChannelItem(ItemVo item) throws ErpCommonException{
+    	String itemCode = item.getItemCode();
+    	String companyNo = item.getCompanyNo();
+    	String itemName = item.getItemName();
+    	
+    	//检测item_code和sku_code是否和数据库已有的重复，重复则抛出异常
+    	if (null != itemDOMapper.queryItemDOByItemCode(itemCode)) {
+    		throw new ErpCommonException("重复的itemCode");
+    	}
+    	List<ItemSkuVo> skuList = item.getItemSkus();
+    	for (ItemSkuVo sku:skuList) {
+    		if (null != itemSkuDOMapper.queryItemSkuDOBySkuCode(sku.getSkuCode())) {
+    			throw new ErpCommonException("重复的skuCode");
+    		}
+    	}
+    	
+    	//品牌和类目的默认值
+    	final String DEFAULT_CATE_CODE = "0101009";
+    	final String DEFAULT_CATE_NAME = "其他";
+    	final String BRAND_NO = "b11";
+    	final String BRAND_NAME = "channel->其他";
+    	final String USER_NO = "-1";
+    	final String COUNTRY = "408";
+    	final String PRICE_RANGE = "0.00";
+    	
+    	//计算价格区间
+    	ItemDO itemDO = new ItemDO();
+    	List<Double> salePriceList = new ArrayList<Double>();
+    	for (ItemSkuVo sku:skuList) {
+    		Double salePrice = sku.getSalePrice();
+    		if (null != salePrice) {
+    			salePriceList.add(salePrice);
+    		}
+    	}
+    	if (IsEmptyUtil.isCollectionNotEmpty(salePriceList)) {
+    		itemDO.setPriceRange(PriceUtil.calNewPriceRange(salePriceList));
+    	} else {
+    		itemDO.setPriceRange(PRICE_RANGE);
+    	}
+    	
+    	//插入其他信息
+    	itemDO.setItemCode(itemCode);
+    	itemDO.setCompanyNo(companyNo);
+    	itemDO.setCategoryCode(DEFAULT_CATE_CODE);
+    	itemDO.setItemName(itemName);
+    	itemDO.setCategoryName(DEFAULT_CATE_NAME);
+    	itemDO.setMainPic(item.getMainPic());
+    	itemDO.setBrandName(BRAND_NAME);
+    	itemDO.setBrandNo(BRAND_NO);
+    	itemDO.setCountry(COUNTRY);
+    	itemDO.setCreator(USER_NO);
+    	itemDO.setModifier(USER_NO);
+    	itemDO.setStatus(item.getStatus());
+    	
+    	//插入商品表
+    	itemDOMapper.insertItemSelective(itemDO);
+    	
+    	//item_sku字段的计算
+    	for (ItemSkuVo sku:skuList) {
+    		String skuCode = sku.getSkuCode();
+    		ItemSkuDO skuDO = new ItemSkuDO();
+    		skuDO.setSkuCode(skuCode);
+    		skuDO.setItemCode(itemCode);
+    		skuDO.setItemName(itemName);
+    		skuDO.setCompanyNo(companyNo);
+    		skuDO.setCategoryCode(DEFAULT_CATE_CODE);
+    		skuDO.setCategoryName(DEFAULT_CATE_NAME);
+    		skuDO.setUpc(sku.getUpc());
+    		skuDO.setBrandName(BRAND_NAME);
+    		skuDO.setWeight(sku.getWeight());
+    		skuDO.setSkuPic(item.getMainPic());
+    		skuDO.setSalePrice(sku.getSalePrice());
+    		skuDO.setCreator(USER_NO);
+    		skuDO.setModifier(USER_NO);
+    		//插入sku
+    		itemSkuDOMapper.insertSelective(skuDO);
+    		
+    		//库存的计算
+    		InventoryDO invDO = new InventoryDO();
+    		invDO.setCompanyNo(companyNo);
+    		invDO.setItemName(itemName);
+    		invDO.setItemCode(itemCode);
+    		invDO.setUpc(sku.getUpc());
+    		invDO.setSkuCode(skuCode);
+    		invDO.setVirtualInv(sku.getVirtualInv());
+    		invDO.setCreator(USER_NO);
+    		invDO.setModifier(USER_NO);
+    		//插入库存
+    		inventoryDOMapper.insertSelective(invDO);
+    		
+    		//计算规格
+    		if (IsEmptyUtil.isStringNotEmpty(sku.getColor())) {
+    			ItemSkuScaleDO color = new ItemSkuScaleDO();
+    			color.setItemCode(itemCode);
+    			color.setSkuCode(skuCode);
+    			color.setScaleCode(CodeGenUtil.getScaleCode());
+    			color.setScaleName("颜色");
+    			color.setScaleValue(sku.getColor());
+    			color.setCreator(USER_NO);
+    			color.setModifier(USER_NO);
+    			//插入规格表
+    			itemSkuScaleDOMapper.insertSelective(color);
+    		}
+    		if (IsEmptyUtil.isStringNotEmpty(sku.getScale())) {
+    			ItemSkuScaleDO scale = new ItemSkuScaleDO();
+    			scale.setItemCode(itemCode);
+    			scale.setSkuCode(skuCode);
+    			scale.setScaleCode(CodeGenUtil.getScaleCode());
+    			scale.setScaleName("尺寸");
+    			scale.setScaleValue(sku.getScale());
+    			scale.setCreator(USER_NO);
+    			scale.setModifier(USER_NO);
+    			//插入规格表
+    			itemSkuScaleDOMapper.insertSelective(scale);
+    		}   		
+    	}//end of sku loop   	    	
+    }
+    
     @Override
 	public ItemVo getVoByItemCode(String itemCode){
 		ItemVo itemVo = new ItemVo();

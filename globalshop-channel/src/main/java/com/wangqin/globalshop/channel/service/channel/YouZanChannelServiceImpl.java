@@ -11,6 +11,7 @@ import com.wangqin.globalshop.channel.dal.youzan.*;
 import com.wangqin.globalshop.channel.dal.youzan.PicModel;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradeGet;
 import com.wangqin.globalshop.channel.dal.youzan.YouzanTradesSoldGet;
+import com.wangqin.globalshop.channel.service.jingdong.SendStatus;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.base.BaseDto;
@@ -844,12 +845,18 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
             // 处理商品转换问题
 			YouzanItemsOnsaleGetResult.ItemListOpenModel[] items = result.getItems();
 			for (int i = 0; i < items.length; i++) {
-				this.createOrupdateItem(items[i]);
+				//this.createOrupdateItem(items[i]);
+
+
+
+
 			}
 			// 处理插入item， channel_item 问题
 		}
 
 	}
+
+
 	/**
 	 * 有赞这个神经病，一个item，只有一个sku
 	 * @param youzanItem
@@ -857,9 +864,6 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 	private void createOrupdateItem(YouzanItemsOnsaleGetResult.ItemListOpenModel youzanItem){
 
 		YouzanItemGetResult.ItemDetailOpenModel youzanItemSku = getItemSkus(youzanItem.getItemId());
-
-
-
 		//分别操作4张表，channel_list_item
 
 		ChannelListingItemDO channelItem = new ChannelListingItemDO();
@@ -873,64 +877,6 @@ public class YouZanChannelServiceImpl extends AbstractChannelService implements 
 		channelItem.setStatus(ListingStatus.LISTING_STATUS.getStatus());
 
 		channelItem.init4NoLogin();
-
-		//item
-		ItemDO itemDO = new ItemDO();
-//		itemCode;
-//		companyNo;
-//		categoryCode;
-//		qrCodeUrl;
-//		video;
-//		subtitle;
-//		itemName;
-//		enName;
-//		itemShort;
-//		categoryName;
-//		saleType;
-//		mainPic;
-//		brandNo;
-//		brandName;
-//		country;
-//		currency;
-//		origin;
-//		freight;
-//		weight;
-//		logisticType;
-//		priceRange;
-//		unit;
-//		source;
-//		promotion;
-//		idCard;
-//		startDate;
-//		endDate;
-//		bookingDate;
-//		isSale;
-//		saleOnYouzan;
-//		thirdSale;
-//		wxisSale;
-//		isFind;
-//		status;
-//		spec;
-//		model;
-//		buyerOpenId;
-//		originSalePrice;
-//		commissionMode;
-//		modifier;
-//		creator;
-//		commissionRate;
-//		isAbroad;
-//		shelfMethod;
-//		remark;
-//		detail;
-
-
-
-		//chanenle_list_item_sku
-
-
-
-		//item_sku
-
 
 	}
 	/**

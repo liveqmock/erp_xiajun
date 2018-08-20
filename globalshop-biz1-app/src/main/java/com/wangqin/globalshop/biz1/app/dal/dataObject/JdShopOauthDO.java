@@ -7,10 +7,6 @@ public class JdShopOauthDO extends BaseModel {
 
     private Long version;
 
-    private String creator;
-
-    private String modifier;
-
     private String channelNo;
 
     private String companyNo;
@@ -41,6 +37,10 @@ public class JdShopOauthDO extends BaseModel {
 
     private Boolean open;
 
+    private String modifier;
+
+    private String creator;
+
     public Long getId() {
         return id;
     }
@@ -57,24 +57,6 @@ public class JdShopOauthDO extends BaseModel {
         this.version = version;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    @Override
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
-    }
-
     public String getChannelNo() {
         return channelNo;
     }
@@ -87,7 +69,6 @@ public class JdShopOauthDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -194,5 +175,21 @@ public class JdShopOauthDO extends BaseModel {
 
     public void setOpen(Boolean open) {
         this.open = open;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 }

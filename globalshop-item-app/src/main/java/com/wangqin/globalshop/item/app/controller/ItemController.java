@@ -1,12 +1,10 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
+
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +13,6 @@ import java.util.List;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +52,7 @@ import com.wangqin.globalshop.item.app.service.IItemCompanyService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.IItemSubOrderService;
+
 import com.wangqin.globalshop.item.app.util.ItemUtil;
 
 import net.sf.json.JSONObject;
@@ -86,20 +83,17 @@ public class ItemController {
     @Autowired
     private IAppletConfigService appletConfigService;
     @Autowired
-    private IItemSubOrderService orderService;
-    @Autowired
     private IItemCompanyService companyService;
     @Autowired
-    private ItemQrcodeShareDOMapperExt mapperExt;
+    private ItemQrcodeShareDOMapperExt shareMapperExt;
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
-    //public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wxdef3e972a4a93e91&secret=fef11f402f8e8f3c1442163155aeb65a";
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
     public static final String ACCESS_TOKEN_MI = "&secret=";
-//    public static final String getaccess_tokenparam = "grant_type=client_credential&appid=wx56e36d38aff90280&secret=9269561bae6e1b59c8107c35a669016c";
+
 
     /**
-     * 添加商品(fin)
+     * 商品管理->商品列表->商品发布
      *
      * @param
      */
@@ -111,7 +105,7 @@ public class ItemController {
     }
 
     /**
-     * 更新商品(fin)
+     * 商品管理->商品列表->操作->编辑->确定
      *
      * @param
      * @return
@@ -125,6 +119,8 @@ public class ItemController {
         }
 
         String companyNo = AppUtil.getLoginUserCompanyNo();
+        String userNo = AppUtil.getLoginUserId();
+        String itemCode = itemService.queryItemCodeById(item.getId());
 
         //商品图片不能为空，TODO：在前端处理
         if (!ItemUtil.picCheck(item.getMainPic())) {
@@ -132,41 +128,20 @@ public class ItemController {
         }
 
         String skuList = item.getSkuList();
-        List<ItemSkuScaleDO> scaleList = new ArrayList<>();
         List<Double> skuSalePriceList = new ArrayList<Double>();
 
         try {
             String s = skuList.replace("&quot;", "\"");
-            List<ItemSkuQueryVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {
-            });
-            //更新商品的价格区间,同时判断用户传来的upc是否相互之间有重复，同时判断upc和数据库里面已有的upc是否重复
-            String itemCode = itemService.queryItemCodeById(item.getId());
-            List<String> upcList = new ArrayList<>();
+            List<ItemSkuQueryVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {});
+            //更新商品的价格区间,同时判断upc和数据库里面已有的upc是否重复         
             for (ItemSkuQueryVO sku : skus) {
-                Integer duplcatedCountNumber = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(AppUtil.getLoginUserCompanyNo(), sku.getUpc(), itemCode);
-                if (0 < duplcatedCountNumber) {
+                Integer dupNum = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(companyNo, sku.getUpc(), itemCode);
+                if (0 < dupNum) {
                     return result.buildIsSuccess(false).buildMsg("更新失败，添加的upc和已有的upc重复");
                 }
-                upcList.add(sku.getUpc());
                 skuSalePriceList.add(sku.getSalePrice());
-            }
-            HashSet<String> upcSet = new HashSet<String>(upcList);
-            if (upcList.size() > upcSet.size()) {
-                result.buildIsSuccess(false);
-                result.buildMsg("输入的upc有重复，请再次输入");
-                return result;
-            }
-            //检查更新的这些upc是否和数据库里面(除了正在更新的这个商品的sku)的重复        	
+            }  	
             int startIndex = 0;
-            //获取原来绑定该商品的所有sku的skuCode
-            ItemSkuQueryVO itemSkuQueryVO = new ItemSkuQueryVO();
-            itemSkuQueryVO.setCompanyNo(companyNo);
-            itemSkuQueryVO.setItemCode(itemService.queryItemCodeById(item.getId()));
-            List<ItemSkuDO> itemSkuDOList = itemSkuService.queryItemSkuListSelective(itemSkuQueryVO);
-            List<String> oldSkuCodeList = new ArrayList<String>();
-            for (ItemSkuDO itemSkuDO : itemSkuDOList) {
-                oldSkuCodeList.add(itemSkuDO.getSkuCode());
-            }
             //获取现在该商品的所有skuCode
             List<String> newSkuCodeList = new ArrayList<String>();
             for (ItemSkuQueryVO skuQueryVO : skus) {
@@ -175,14 +150,11 @@ public class ItemController {
                 }
             }
             //两个集合求差值，判断哪些sku被删除了
-            List<String> diffList = new ArrayList<String>();
-            diffList.addAll(oldSkuCodeList);
-            diffList.removeAll(newSkuCodeList);
-            //删除sku
-            for (String skuCode : diffList) {
+            List<String> deleteCodeList = itemSkuService.queryToDeleteSkuCodeList(newSkuCodeList, itemCode);
+            //step1:删除需要删除的sku
+            for (String skuCode : deleteCodeList) {
                 itemSkuService.deleteItemSkuBySkuCode(skuCode);
-                //删除虚拟库存TODO
-                //暂时用更新虚拟库存为0代替
+                //删除虚拟库存TODO,暂时用更新虚拟库存为0代替
                 try {
                     inventoryService.updateVirtualInv(skuCode, 0L, AppUtil.getLoginUserCompanyNo());
                 } catch (Exception e) {
@@ -193,8 +165,7 @@ public class ItemController {
                 scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
             }
 
-
-            //更新需要更新的sku
+            //step2:更新需要更新的sku
             for (ItemSkuQueryVO updateSku : skus) {
                 if (null != updateSku.getSkuCode()) {//需要更新的sku
                     //先更新虚拟库存
@@ -209,33 +180,14 @@ public class ItemController {
                     //再更新规格，先删除后插入
                     scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
                     if (IsEmptyUtil.isStringNotEmpty(updateSku.getColor())) {
-                        ItemSkuScaleDO colorScale = new ItemSkuScaleDO();
-                        String userNo = AppUtil.getLoginUserId();
-                        colorScale.setCompanyNo(companyNo);
-                        colorScale.setCreator(userNo);
-                        colorScale.setModifier(userNo);
-                        colorScale.setItemCode(itemCode);
-                        colorScale.setScaleCode(CodeGenUtil.getScaleCode());
-                        colorScale.setScaleValue(updateSku.getColor());
-                        colorScale.setScaleName("颜色");
-                        colorScale.setSkuCode(skuCode);
-                        scaleService.insertSelective(colorScale);
+                    	ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",updateSku.getColor(),skuCode,itemCode); 
+                        scaleService.insertSelective(color);
                     }
                     scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
                     if (IsEmptyUtil.isStringNotEmpty(updateSku.getScale())) {
-                        ItemSkuScaleDO scale = new ItemSkuScaleDO();
-                        String userNo = AppUtil.getLoginUserId();
-                        scale.setCompanyNo(companyNo);
-                        scale.setCreator(userNo);
-                        scale.setModifier(userNo);
-                        scale.setItemCode(itemCode);
-                        scale.setScaleCode(CodeGenUtil.getScaleCode());
-                        scale.setScaleValue(updateSku.getScale());
-                        scale.setScaleName("尺寸");
-                        scale.setSkuCode(skuCode);
+                        ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",updateSku.getScale(),skuCode,itemCode);                      
                         scaleService.insertSelective(scale);
                     }
-
 
                     //最后更新其他的sku项目
                     updateSku.setBrand(item.getBrand());
@@ -246,14 +198,13 @@ public class ItemController {
                     itemSkuService.updateById(updateSku);
                 }
             }
-            //插入新增的sku
+            //step3:插入新增的sku
             for (ItemSkuQueryVO newSku : skus) {
                 if (null == newSku.getSkuCode()) {//需要添加的sku
                     ItemSkuDO addSku = new ItemSkuDO();
                     ItemDTO itemDTO = itemService.queryItemById(item.getId());
-
-                    addSku.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-                    addSku.setItemCode(itemDTO.getItemCode());
+                    addSku.setCompanyNo(companyNo);
+                    addSku.setItemCode(itemCode);
                     //todo skuCode
                     String skuCode = "S" + item.getCategoryCode() + "T" + RandomUtils.getTimeRandomMillSeconds() + "Q" + String.format("%0" + 2 + "d", (startIndex++));
                     addSku.setSkuCode(skuCode);
@@ -264,26 +215,20 @@ public class ItemController {
                     addSku.setUpc(newSku.getUpc());
                     addSku.setSkuPic(newSku.getSkuPic());
                     addSku.setPackageLevelId(newSku.getPackageLevelId());
-                    addSku.setCreator(AppUtil.getLoginUserId());
-                    addSku.setModifier(AppUtil.getLoginUserId());
+                    addSku.setCreator(userNo);
+                    addSku.setModifier(userNo);
                     addSku.setItemName(itemDTO.getName());
                     addSku.setCategoryCode(itemDTO.getCategoryCode());
                     addSku.setCategoryName(itemDTO.getCategoryName());
                     addSku.setSkuRate(ItemUtil.divideOneHundred(newSku.getSkuRateString()));
                     //插入item_sku_scale表                                       
                     if (IsEmptyUtil.isStringNotEmpty(newSku.getColor())) {
-                        ItemSkuScaleDO colorObject = new ItemSkuScaleDO();
-                        setInfo(colorObject, addSku, newSku.getColor(), "颜色");
-                        scaleList.add(colorObject);
+                        ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",newSku.getColor(),skuCode,itemCode);
+                        scaleService.insertSelective(color);
                     }
                     if (IsEmptyUtil.isStringNotEmpty(newSku.getScale())) {
-                        ItemSkuScaleDO scaleObject = new ItemSkuScaleDO();
-                        scaleList.add(scaleObject);
-                        setInfo(scaleObject, addSku, newSku.getScale(), "尺寸");
-                    }
-
-                    if (IsEmptyUtil.isCollectionNotEmpty(scaleList)) {
-                        scaleService.insertBatch(scaleList);
+                    	ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",newSku.getScale(),skuCode,itemCode);
+                        scaleService.insertSelective(scale);
                     }
                     //插入库存
                     List<InventoryDO> inventoryList = new ArrayList<InventoryDO>();
@@ -334,6 +279,7 @@ public class ItemController {
         return result.buildIsSuccess(true);
     }
 
+    
     /**
      * 封装ItemSkuScala对象信息
      *
@@ -369,7 +315,7 @@ public class ItemController {
     }
 
     /**
-     * 通过id查找商品（在修改商品的时候使用，fin）
+     * 商品管理->商品列表->操作->编辑
      *
      * @param id
      * @return
@@ -387,7 +333,6 @@ public class ItemController {
         if (item == null) {
             result.buildIsSuccess(false).buildMsg("没有找到商品，商品可能已删除");
         }
-        String itemName = item.getName();
         //获取商品类目的Id
         Long categoryId = categoryService.queryCategoryByCategoryCode(item.getCategoryCode()).getId();
         item.setCategoryId(categoryId);
@@ -432,7 +377,6 @@ public class ItemController {
         return result;
     }
 
-
     /**
      * 商品批量发布到有赞
      *
@@ -469,32 +413,7 @@ public class ItemController {
     }
 
     /**
-     * 根据指定条件分页查询商品
-     *
-     * @param itemQueryVO
-     * @param pageQueryParam
-     * @return
-     */
-    //@PostMapping("/queryItemList")
-    public Object listItems(ItemQuery2VO itemQueryVO, PageQueryParam pageQueryParam) {
-        EasyuiJsonResult<List<ItemDTO>> result = new EasyuiJsonResult<>();
-        try{
-            List<ItemDTO> itemDTOList = itemService.listItems(itemQueryVO, pageQueryParam);
-            int totalCount = itemService.countItems(itemQueryVO);
-            result.setRows(itemDTOList);
-            result.setTotal(totalCount);
-            result.buildIsSuccess(true);
-        } catch (BizCommonException e) {
-            result.buildMsg(e.getErrorMsg()).buildIsSuccess(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.buildMsg("查询异常").buildIsSuccess(false);
-        }
-        return result;
-    }
-
-    /**
-     * 商品查询管理主列表
+     * 商品管理->商品列表
      *
      * @param itemQueryVO
      * @return
@@ -533,7 +452,7 @@ public class ItemController {
     }
 
     /**
-     * 清除虚拟库存
+     * 商品管理->商品列表->操作->清除虚拟库存
      *
      * @param itemCode
      * @return
@@ -558,7 +477,7 @@ public class ItemController {
 
 
     /**
-     * 更新二维码
+     * 商品管理->商品列表->操作->生成二维码
      *
      * @param itemId
      * @return
@@ -566,7 +485,6 @@ public class ItemController {
     @RequestMapping("/getDimensionCodeUtil")
     @Transactional(rollbackFor = BizCommonException.class)
     public Object getDimensionCodeUtil(Long itemId) {
-        //logger.info("getDimensionCodeUtil start");
         JsonResult<Object> result = new JsonResult<>();
         if (!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
@@ -578,7 +496,6 @@ public class ItemController {
                 companyNo = companyDO.getCompanyGroup();
             }
         }
-
         AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
         if (null == appletConfig) {
             return result.buildIsSuccess(false).buildMsg("失败，没有本公司的商城小程序的appid记录");
@@ -592,13 +509,10 @@ public class ItemController {
                 return result.buildIsSuccess(false).buildMsg("失败，没有本公司的商城小程序的appid记录");
             }
             String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART + appId + ACCESS_TOKEN_MI + secret);
-            //System.out.println("part:"+ACCESS_TOKEN_PART+appId+ACCESS_TOKEN_MI+secret);
             JSONObject myJson = JSONObject.fromObject(reponse);
             token = (String) myJson.get("access_token");
-
         } else {
             token = accessToken;
-
         }
 
         String itemCode = itemService.queryItemCodeById(itemId);
@@ -606,152 +520,34 @@ public class ItemController {
             return result.buildIsSuccess(false).buildMsg("失败，商品已被删除");
         }
         String picUrl = itemService.insertIntoItemDimension("item"+itemCode, "pages/item/detail", token);
-        System.out.println("String...");
-        if (StringUtil.isNotBlank(picUrl)) {
-        	System.out.println("picUrl...");
-            if (itemId != null) {
-            	 System.out.println("itemId...");
-               // System.out.println(picUrl);
-            	String url = itemService.queryQrCodeUrlById(itemId);
-            	 System.out.println("url..."+url);
-            	ItemDO item = new ItemDO();
-                item.setId(itemId);
-                item.setQrCodeUrl(picUrl);
-                itemService.updateByIdSelective(item);
-                if (IsEmptyUtil.isStringEmpty(url)) {//插入Ku
-                	System.out.println("he...");
-                	 //插入item_qrcode_share表
-                    ItemQrcodeShareDO shareDO = new ItemQrcodeShareDO();
-                    String currentUserNo = AppUtil.getLoginUserId();
-                    shareDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-
-                    shareDO.setShareNo("item"+itemCode);
-                    shareDO.setCreator(currentUserNo);
-                    shareDO.setModifier(currentUserNo);
-                    shareDO.setItemCode(itemCode);
-                    shareDO.setPicUrl(picUrl);
-//                    shareDO.setUserNo(currentUserNo);
-                    mapperExt.insertSelective(shareDO);
-                } else {
-                	//更新item_qrcode_url表
-                    mapperExt.updatePicUrlByShareNo("item" + itemCode, picUrl);
-                }
-                
-            }          
-            
+        if (IsEmptyUtil.isStringNotEmpty(picUrl)) {
+        	//更新item表
+        	ItemDO item = new ItemDO();
+        	item.setId(itemId);
+        	item.setQrCodeUrl(picUrl);
+        	itemService.updateByIdSelective(item);
+        	//更新或者插入item_qrcode_share表
+        	String uuid = "item" + itemCode;
+        	ItemQrcodeShareDO qrcodeShareDO = shareMapperExt.queryRecordByShareNoAndCompanyNo(uuid, companyNo);
+        	if (null == qrcodeShareDO) {
+        		ItemQrcodeShareDO shareDO = new ItemQrcodeShareDO();
+        		String currentUserNo = AppUtil.getLoginUserId();
+        		shareDO.setCompanyNo(companyNo);
+        		shareDO.setShareNo(uuid);
+        		shareDO.setCreator(currentUserNo);
+        		shareDO.setModifier(currentUserNo);
+        		shareDO.setItemCode(itemCode);
+        		shareDO.setPicUrl(picUrl);
+        		shareMapperExt.insertSelective(shareDO);
+        	} else {
+        		shareMapperExt.updatePicUrlByShareNo(uuid, picUrl);
+        	}  
         }
         return result.buildIsSuccess(true);
     }
 
-
     /**
-     * 新增商品同时生成二维码
-     *
-     * @param itemId
-     */
-    @Transactional(rollbackFor = BizCommonException.class)
-    public void voidDimensionCodeUtil(Long itemId) {
-//		/logger.info("voidDimensionCodeUtil start");
-        if (IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
-            return;
-        }
-
-        String companyNo = AppUtil.getLoginUserCompanyNo();
-        CompanyDO companyDO = companyService.selectByCompanyNo(companyNo);
-        if (null != companyDO) {
-            if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {
-                companyNo = companyDO.getCompanyGroup();
-            }
-        }
-        AppletConfigDO appletConfig = appletConfigService.queryWxMallConfigInfoByCompanyNo(companyNo, AppletType.MALL_APPLET.getValue());
-        if (null == appletConfig) {
-            return;
-        }
-        String appId = appletConfig.getAppid();
-        String secret = appletConfig.getSecret();
-        String accessToken = appletConfig.getAuthorizerAccessToken();
-        String token;
-        if (StringUtil.isBlank(accessToken)) {
-            if (IsEmptyUtil.isStringEmpty(appId) || IsEmptyUtil.isStringEmpty(secret)) {
-                return;
-            }
-            String reponse = DimensionCodeUtil.sendGet(TOKEN_URL, ACCESS_TOKEN_PART + appId + ACCESS_TOKEN_MI + secret);
-            JSONObject myJson = JSONObject.fromObject(reponse);
-            token = (String) myJson.get("access_token");
-        } else {
-            token = accessToken;
-        }
-
-        String picUrl = itemService.insertIntoItemDimension(itemId.toString(), "pages/item/detail", token);
-        if (StringUtil.isNotBlank(picUrl)) {
-            if (itemId != null) {
-                ItemDO item = new ItemDO();
-                item.setId(itemId);
-                item.setQrCodeUrl(picUrl);
-                itemService.updateByIdSelective(item);
-            }
-        }
-
-    }
-
-
-    /**
-     * 向指定 URL 发送POST方法的请求
-     *
-     * @param url   发送请求的 URL
-     * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @return 所代表远程资源的响应结果
-     */
-    public static String sendPost(String url, String param) {
-        PrintWriter out = null;
-        BufferedReader in = null;
-        String result = "";
-        try {
-            URL realUrl = new URL(url);
-            // 打开和URL之间的连接
-            URLConnection conn = realUrl.openConnection();
-            // 设置通用的请求属性
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            // 发送POST请求必须设置如下两行
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            // 获取URLConnection对象对应的输出流
-            out = new PrintWriter(conn.getOutputStream());
-            // 发送请求参数
-            out.print(param);
-            // flush输出流的缓冲
-            out.flush();
-            // 定义BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }
-        } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！" + e);
-            e.printStackTrace();
-        }
-        //使用finally块来关闭输出流、输入流
-        finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        System.out.println("返回值：" + result);
-        return result;
-    }
-
-    /**
-     * 导入商品
+     * 商品管理->商品列表->导入商品
      *
      * @param file
      * @return

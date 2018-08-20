@@ -374,7 +374,6 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 			for(com.jd.open.api.sdk.domain.ware.WareReadService.Ware ware : response.getPage().getData()){
 				JdItemDO jdItemDO = new JdItemDO();
 				jdItemDO.setIsDel(false);
-				jdItemDO.setVersion(0L);
 				jdItemDO.setCreator("-1");
 				jdItemDO.setGmtCreate(new Date());
 				jdItemDO.setItemModifyTime(new Date());
@@ -450,7 +449,6 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 				JdItemDO jdItemDO = new JdItemDO();
 				jdItemDO.setIsDel(false);
-				jdItemDO.setVersion(0L);
 				jdItemDO.setCreator("-1");
 				jdItemDO.setGmtCreate(new Date());
 				jdItemDO.setItemModifyTime(new Date());
@@ -511,7 +509,6 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 
 		JdItemDO jdItemDO = new JdItemDO();
 		jdItemDO.setIsDel(false);
-		jdItemDO.setVersion(0L);
 		jdItemDO.setCreator("-1");
 		jdItemDO.setGmtCreate(new Date());
 		jdItemDO.setItemModifyTime(new Date());
@@ -569,7 +566,6 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
                 jdOrderDO.setCreator("-1");
                 jdOrderDO.setGmtCreate(new Date());
                 jdOrderDO.setModifier("-1");
-                jdOrderDO.setVersion(0L);
 
 
                 jdOrderDO.setShopCode(shopOauth.getShopCode());
@@ -618,7 +614,6 @@ public class JdShopServiceImpl extends JdAbstractShopService implements JdShopSe
 		jdOrderDO.setCreator("-1");
 		jdOrderDO.setGmtCreate(new Date());
 		jdOrderDO.setModifier("-1");
-		jdOrderDO.setVersion(0L);
 
 
 		jdOrderDO.setShopCode(shopOauth.getShopCode());

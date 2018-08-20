@@ -76,7 +76,7 @@ public class OrderPayResponse {
      * 公众号支付信息 <br>
      * 可空：Y
      */
-    private String payInfo;
+    private PayInfo payInfo;
 
     /**
      * 扩展信息参数 <br>

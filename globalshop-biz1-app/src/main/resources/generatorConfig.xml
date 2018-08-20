@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="../../mysql-connector-java-5.1.44.jar"/>
-    <!--<classPathEntry location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
+    <!--<classPathEntry location="../../mysql-connector-java-5.1.44.jar"/>-->
+    <classPathEntry location="C:\Users\admin\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>
     <!--<classPathEntry location="C:\Users\EDZ\.m2\repository\mysql\mysql-connector-java\5.1.44\mysql-connector-java-5.1.44.jar"/>-->
 
 
@@ -660,15 +660,15 @@
         <!--</table>-->
 
 
-        <!--<table tableName="jd_item_oprerate" domainObjectName="JdItemOperateDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
-               <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
+        <!--<table tableName="jd_item_operate" domainObjectName="JdItemOperateDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+                       <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
             <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="gmt_create" delimitedColumnName=""/>-->
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="jd_logistic" domainObjectName="JdLogisticDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--<table tableName="jd_logistics" domainObjectName="JdLogisticDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
             <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->

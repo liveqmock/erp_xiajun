@@ -6,7 +6,9 @@ public enum AccountConfigKey {
 
 	LAST_ITEM_GET_TIME(2,"LAST_ITEM_GET_TIME"),//上一次订单同步时间
 
-	NEED_GET_CATEGORY(3,"NEED_GET_CATEGORY");//是否需要获取过类目
+	NEED_GET_CATEGORY(3,"NEED_GET_CATEGORY"),//是否需要获取过类目
+
+	NEED_GET_ALL_ITEMS(4,"NEED_GET_ALL_ITEMS");//是否需要获取所有商品,true,false
 	
 	 private int code;
 	 private String description;

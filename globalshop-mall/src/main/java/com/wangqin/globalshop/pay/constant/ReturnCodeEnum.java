@@ -16,7 +16,9 @@ public enum ReturnCodeEnum {
     /**
      * 分账查询成功
      */
-    SHARE_SUCCESS("01", "分账查询成功"),
+//    SHARE_SUCCESS("01", "分账查询成功"),
+
+    QUERY_SUCCESS("01", "查询成功"),
 
     /**
      * 超时

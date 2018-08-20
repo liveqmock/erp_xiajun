@@ -19,8 +19,6 @@ import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
  * Create by 777 on 2018/5/25
  */
 public interface ItemDOMapperExt extends ItemDOMapper {
-
-	String queryQrCodeUrlById(Long id);
 	
     //定时任务
     List<ItemDO> queryItemSelfDefineTime(Integer shelfMethod);
