@@ -50,6 +50,19 @@
         WHERE
         	share_no=#{shareNo}
     </update>
+    
+    <!-- 查找指定商品的二维码记录  -->
+    <!-- 从ERP系统过来的share_no在整个系统里面唯一  -->
+     <select id="queryRecordByShareNoAndCompanyNo" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List" />
+        from
+            item_qrcode_share
+        where
+            share_no = #{shareNo}
+            and company_no = #{companyNo}
+        	and is_del is false
+    </select>
 
 
 </mapper>

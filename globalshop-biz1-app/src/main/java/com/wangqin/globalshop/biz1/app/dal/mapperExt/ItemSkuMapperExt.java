@@ -16,15 +16,17 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
 
 
 /**
- * SKU 数据控制层，item_module use
+ * SKU 数据控制层，item_sku表的所有mapper层请放在这里
  * @author xiajun
  *
  */
 public interface ItemSkuMapperExt extends ItemSkuDOMapper{
 
+	//商品编辑：查找哪些sku被前端删除了
+	List<String> queryToDeleteSkuCodeList(@Param("codeList")List<String> codeList,@Param("itemCode")String itemCode);
+	
 	//根据sku_code查询一条item_sku表里面的记录，不关联其他的表，不做分页，只查一条记录
-	ItemSkuDO queryItemSkuDOBySkuCodeAndCompanyNo(@Param("skuCode") String skuCode,
-			@Param("companyNo") String companyNo);
+	ItemSkuDO queryItemSkuDOBySkuCode(String skuCode);
 	
 	//查询和本sku同属一个商品的所有sku的sale_price
 	List<Double> querySalePriceListBySkuCode(String skuCode);

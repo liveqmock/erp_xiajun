@@ -77,5 +77,5 @@ public class QueryPayRequest {
      * 扩展属性,JSON串 <br>
      * 可空：Y
      */
-    private String exts;
+    private Exts exts;
 }

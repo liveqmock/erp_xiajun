@@ -29,7 +29,7 @@ import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 
 
 @Service
-public class ItemSkuServiceImpl   implements IItemSkuService {
+public class ItemSkuServiceImpl implements IItemSkuService {
 	
 	@Autowired
 	private ItemIInventoryService inventoryService;
@@ -41,18 +41,18 @@ public class ItemSkuServiceImpl   implements IItemSkuService {
 	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
 
 	@Autowired
-	private ChannelAccountDOMapperExt channelAccountDOMapperExt;
-
-	@Autowired
 	private IChannelSalePriceService channelSalePriceService;
 
 	@Autowired
 	private ChannelSalePriceDOMapperExt salePriceDOMapperExt;
 
-	@Autowired
-	private ChannelShopDOMapperExt channelShopDOMapperExt;
 
-
+	//商品编辑：查找哪些sku被前端删除了
+	@Override
+	public List<String> queryToDeleteSkuCodeList(List<String> codeList,String itemCode) {
+		return itemSkuMapperExt.queryToDeleteSkuCodeList(codeList, itemCode);
+	}
+	
 	//查询和本sku同属一个商品的所有sku的sale_price
 	@Override
 	public List<Double> querySalePriceListBySkuCode(String skuCode) {

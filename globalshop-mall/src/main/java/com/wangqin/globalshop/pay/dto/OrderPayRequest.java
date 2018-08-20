@@ -135,5 +135,5 @@ public class OrderPayRequest {
      * 扩展属性,JSON串（微信H5 、微信小程序、微信APP必传，请参考备注）<br>
      * 可空：Y
      */
-    private String exts;
+    private Exts exts;
 }

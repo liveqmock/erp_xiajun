@@ -9,10 +9,12 @@ import org.apache.xmlbeans.impl.xb.xsdschema.impl.PublicImpl;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
 import com.wangqin.globalshop.biz1.app.enums.ItemShelfMethod;
 import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.common.enums.ItemIsSale;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 
@@ -146,5 +148,23 @@ public class ItemUtil {
         }
     }
     
+    
+    /**
+     * 封装一个ItemSkuScaleDO对象
+     * @author xiajun
+     *
+     */
+    public static ItemSkuScaleDO genScaleDO(String comNo,String userNo,String scaleName,String scaleVal,String skuCode,String itemCode) {
+    	ItemSkuScaleDO scaleDO = new ItemSkuScaleDO();    	
+    	scaleDO.setSkuCode(skuCode);
+    	scaleDO.setItemCode(itemCode);
+    	scaleDO.setScaleCode(CodeGenUtil.getScaleCode());
+    	scaleDO.setScaleName(scaleName);
+    	scaleDO.setScaleValue(scaleVal);
+    	scaleDO.setCompanyNo(comNo);
+    	scaleDO.setCreator(userNo);
+    	scaleDO.setModifier(userNo);
+    	return scaleDO;
+    }
 
 }

@@ -5,10 +5,6 @@ public class JdShopConfigDO extends BaseModel {
 
     private Long version;
 
-    private String creator;
-
-    private String modifier;
-
     private String channelNo;
 
     private String shopCode;
@@ -16,6 +12,10 @@ public class JdShopConfigDO extends BaseModel {
     private String configKey;
 
     private String configValue;
+
+    private String modifier;
+
+    private String creator;
 
     public Long getId() {
         return id;
@@ -31,24 +31,6 @@ public class JdShopConfigDO extends BaseModel {
 
     public void setVersion(Long version) {
         this.version = version;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    @Override
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
     }
 
     public String getChannelNo() {
@@ -81,5 +63,21 @@ public class JdShopConfigDO extends BaseModel {
 
     public void setConfigValue(String configValue) {
         this.configValue = configValue == null ? null : configValue.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 }

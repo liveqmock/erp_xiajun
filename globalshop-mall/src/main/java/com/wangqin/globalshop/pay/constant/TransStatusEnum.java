@@ -6,7 +6,7 @@ package com.wangqin.globalshop.pay.constant;
  * @author angus
  * @date 2018/8/13
  */
-public enum PayStatusEnum {
+public enum TransStatusEnum {
 
     /**
      * 等待付款中
@@ -58,15 +58,15 @@ public enum PayStatusEnum {
      */
     private String msg;
 
-    PayStatusEnum(String code, String msg) {
+    TransStatusEnum(String code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public static PayStatusEnum of(String code) {
-        for (PayStatusEnum payStatusEnum : PayStatusEnum.values()) {
-            if (payStatusEnum.code.equals(code)) {
-                return payStatusEnum;
+    public static TransStatusEnum of(String code) {
+        for (TransStatusEnum transStatusEnum : TransStatusEnum.values()) {
+            if (transStatusEnum.code.equals(code)) {
+                return transStatusEnum;
             }
         }
         return null;

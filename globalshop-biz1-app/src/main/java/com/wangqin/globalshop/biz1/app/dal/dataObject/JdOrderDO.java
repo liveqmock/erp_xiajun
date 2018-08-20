@@ -5,12 +5,6 @@ import java.util.Date;
 public class JdOrderDO extends BaseModel {
     private Long id;
 
-    private Long version;
-
-    private String creator;
-
-    private String modifier;
-
     private String channelNo;
 
     private String shopCode;
@@ -23,6 +17,10 @@ public class JdOrderDO extends BaseModel {
 
     private String channelOrderNo;
 
+    private String modifier;
+
+    private String creator;
+
     private String orderJson;
 
     public Long getId() {
@@ -31,32 +29,6 @@ public class JdOrderDO extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    @Override
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
     }
 
     public String getChannelNo() {
@@ -105,6 +77,22 @@ public class JdOrderDO extends BaseModel {
 
     public void setChannelOrderNo(String channelOrderNo) {
         this.channelOrderNo = channelOrderNo == null ? null : channelOrderNo.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 
     public String getOrderJson() {

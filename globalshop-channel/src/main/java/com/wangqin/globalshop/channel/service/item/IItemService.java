@@ -11,6 +11,9 @@ import java.util.List;
  */
 public interface IItemService {
 
+	//渠道商品添加的公共接口	
+	void addChannelItem(ItemVo item);
+	
     //公共部分
     public int deleteByPrimaryKey(Long id);
 

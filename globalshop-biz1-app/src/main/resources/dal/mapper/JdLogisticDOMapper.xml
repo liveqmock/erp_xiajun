@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdLogisticsDOMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.JdLogisticDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="version" property="version" jdbcType="BIGINT" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
     <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
     <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
@@ -14,10 +12,12 @@
     <result column="logistic_code" property="logisticCode" jdbcType="VARCHAR" />
     <result column="logistic_name" property="logisticName" jdbcType="VARCHAR" />
     <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, version, creator, modifier, channel_no, shop_code, channel_order_no, channel_sub_order_no, 
-    send_status, logistic_code, logistic_name, logistic_no
+    id, version, channel_no, shop_code, channel_order_no, channel_sub_order_no, send_status, 
+    logistic_code, logistic_name, logistic_no, modifier, creator
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,20 +29,20 @@
     delete from jd_logistics
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into jd_logistics (version, creator, modifier, 
-      channel_no, shop_code, channel_order_no, 
-      channel_sub_order_no, send_status, logistic_code, 
-      logistic_name, logistic_no)
-    values (#{version,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
-      #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, 
-      #{channelSubOrderNo,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, #{logisticCode,jdbcType=VARCHAR}, 
-      #{logisticName,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR})
+    insert into jd_logistics (version, channel_no, shop_code, 
+      channel_order_no, channel_sub_order_no, send_status, 
+      logistic_code, logistic_name, logistic_no, 
+      modifier, creator)
+    values (#{version,jdbcType=BIGINT}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
+      #{channelOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, 
+      #{logisticCode,jdbcType=VARCHAR}, #{logisticName,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -50,12 +50,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="version != null" >
         version,
-      </if>
-      <if test="creator != null" >
-        creator,
-      </if>
-      <if test="modifier != null" >
-        modifier,
       </if>
       <if test="channelNo != null" >
         channel_no,
@@ -81,16 +75,16 @@
       <if test="logisticNo != null" >
         logistic_no,
       </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="version != null" >
         #{version,jdbcType=BIGINT},
-      </if>
-      <if test="creator != null" >
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
       </if>
       <if test="channelNo != null" >
         #{channelNo,jdbcType=VARCHAR},
@@ -116,19 +110,19 @@
       <if test="logisticNo != null" >
         #{logisticNo,jdbcType=VARCHAR},
       </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
     update jd_logistics
     <set >
       <if test="version != null" >
         version = #{version,jdbcType=BIGINT},
-      </if>
-      <if test="creator != null" >
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="modifier != null" >
-        modifier = #{modifier,jdbcType=VARCHAR},
       </if>
       <if test="channelNo != null" >
         channel_no = #{channelNo,jdbcType=VARCHAR},
@@ -154,14 +148,18 @@
       <if test="logisticNo != null" >
         logistic_no = #{logisticNo,jdbcType=VARCHAR},
       </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticDO" >
     update jd_logistics
     set version = #{version,jdbcType=BIGINT},
-      creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
       channel_no = #{channelNo,jdbcType=VARCHAR},
       shop_code = #{shopCode,jdbcType=VARCHAR},
       channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
@@ -169,7 +167,9 @@
       send_status = #{sendStatus,jdbcType=VARCHAR},
       logistic_code = #{logisticCode,jdbcType=VARCHAR},
       logistic_name = #{logisticName,jdbcType=VARCHAR},
-      logistic_no = #{logisticNo,jdbcType=VARCHAR}
+      logistic_no = #{logisticNo,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
