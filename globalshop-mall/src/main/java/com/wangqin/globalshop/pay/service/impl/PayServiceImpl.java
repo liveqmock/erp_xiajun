@@ -1,18 +1,27 @@
 package com.wangqin.globalshop.pay.service.impl;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ShengpayPayDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShengpayPayDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShengpayRefundDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShengpaySharingDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ShengpaySharingItemDOMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.pay.constant.PayChannelEnum;
+import com.wangqin.globalshop.pay.constant.ReturnCodeEnum;
+import com.wangqin.globalshop.pay.constant.TransStatusEnum;
 import com.wangqin.globalshop.pay.dto.*;
 import com.wangqin.globalshop.pay.service.PayService;
 import com.wangqin.globalshop.pay.service.ShengpayService;
 import com.wangqin.globalshop.pay.util.ShengpayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,12 +35,21 @@ public class PayServiceImpl implements PayService {
     private Logger logger = LoggerFactory.getLogger(PayServiceImpl.class);
 
     private static ShengpayService shengpayService = ShengpayService.newInstance();
-
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    @Autowired
+    private ShengpayPayDOMapperExt shengpayPayDOMapper;
+    @Autowired
+    private ShengpayRefundDOMapperExt shengpayRefundDOMapper;
+    @Autowired
+    private ShengpaySharingDOMapperExt shengpaySharingDOMapper;
+    @Autowired
+    private ShengpaySharingItemDOMapperExt shengpaySharingItemDOMapper;
+
 
 
     @Override
-    public void orderPay(String merchantOrderNo, String amount, String productName,
+    public void orderPay(String companyNo, String merchantOrderNo, String amount, String productName,
                          String userIp, Exts exts) {
         // 创建支付订单时间
         Date currentTime = new Date();
@@ -49,30 +67,60 @@ public class PayServiceImpl implements PayService {
                 .productName(productName)
                 .currency(ShengpayService.CURRENCY)
                 .userIp(userIp)
+                // 同步跳转URL
                 .pageUrl(ShengpayService.PAY_PAGE_URL)
                 // 默认微信渠道
                 .payChannel(PayChannelEnum.WP.getCode())
                 .openid(ShengpayService.OPEN_ID)
                 .exts(exts)
                 .build();
+
         // 获取 MD5 加密摘要
         String signMsg = ShengpayUtil.getSignMsgFromReq(orderPayRequest);
         // 封装请求（Http 请求由 Retrofit2 提供支持）
         Call<OrderPayResponse> call =
                 shengpayService.orderPay(ShengpayService.SIGN_TYPE, signMsg, orderPayRequest);
+
         try {
             // 执行请求，接收响应
             OrderPayResponse orderPayResponse = call.execute().body();
-            logger.debug("orderPayResponse: {}", orderPayResponse);
-            // TODO: 根据响应信息进行下一步的逻辑
-        } catch (IOException e) {
+            logger.info("orderPayResponse: {}", orderPayResponse);
+
+            String returnCode = orderPayResponse.getReturnCode();
+            if (ReturnCodeEnum.SUCCESS.getCode().equals(returnCode)) {
+                // 下单成功
+                System.out.println("下单成功");
+                // 微信、支付宝扫码
+                // 商户自行生成payUrl对应的二维码图像展示在网页、POS终端、显示屏等设备上
+                String payUrl = orderPayResponse.getPayUrl();
+
+                // 根据响应结果更新数据库
+                ShengpayPayDO shengpayPayDO = new ShengpayPayDO();
+                shengpayPayDO.setMerchantOrderNo(orderPayResponse.getMerchantOrderNo());
+                shengpayPayDO.setAmount(Double.valueOf(amount));
+                shengpayPayDO.setCurrency(ShengpayService.CURRENCY);
+                shengpayPayDO.setPayChannel(PayChannelEnum.WP.getCode());
+                shengpayPayDO.setSftOrderNo(orderPayResponse.getSftOrderNo());
+                shengpayPayDO.setOrderCreateTime(sdf.parse(orderPayResponse.getOrderCreateTime()));
+                shengpayPayDOMapper.insertSelective(shengpayPayDO);
+            } else {
+                // 下单失败
+                System.out.println("下单失败");
+                System.out.println(orderPayResponse.getReturnMessage());
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BizCommonException("未知异常！");
         }
     }
 
     @Override
-    public void queryPay(String merchantOrderNo, String sftOrderNo, String exts) {
+    public void queryPay(String merchantOrderNo, Exts exts) {
+        if (merchantOrderNo == null) {
+            throw new BizCommonException("商户订单号不能为空");
+        }
+        // 根据商户订单号 merchantOrderNo 从 shengpay_pay 表中获取对应的盛付通订单号 sftOrderNo
+        String sftOrderNo = shengpayPayDOMapper.getSftOrderNo(merchantOrderNo);
         // 构建单笔查询参数
         QueryPayRequest queryPayRequest = QueryPayRequest.builder()
                 .merchantNo(ShengpayService.MERCHANT_NO)
@@ -82,18 +130,41 @@ public class PayServiceImpl implements PayService {
                 .sftOrderNo(sftOrderNo)
                 .exts(exts)
                 .build();
-
+        // 获取 MD5 加密摘要
         String signMsg = ShengpayUtil.getSignMsgFromReq(queryPayRequest);
+        // 封装请求（Http 请求由 Retrofit2 提供支持）
         Call<QueryPayResponse> call =
                 shengpayService.queryPay(ShengpayService.SIGN_TYPE, signMsg, queryPayRequest);
-
+        // 执行请求，接收响应
+        QueryPayResponse queryPayResponse = null;
         try {
-            QueryPayResponse queryPayResponse = call.execute().body();
-            logger.debug("queryPayResponse: {}", queryPayResponse);
-            // TODO: 根据响应信息进行下一步的逻辑
+            queryPayResponse = call.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BizCommonException("未知异常！");
+        }
+        if (queryPayResponse == null) {
+            throw new BizCommonException("系统中不存在该支付订单记录");
+        }
+        if (ReturnCodeEnum.QUERY_SUCCESS.getCode()
+                .equals(queryPayResponse.getReturnCode())) {
+            // 查询成功
+            System.out.println("查询成功");
+            System.out.println(TransStatusEnum.of(queryPayResponse.getTransStatus()).getMsg());
+            // 根据查询结果更新数据库
+            ShengpayPayDO shengpayPayDO = new ShengpayPayDO();
+            shengpayPayDO.setMerchantOrderNo(queryPayResponse.getMerchantOrderNo());
+            shengpayPayDO.setSftOrderNo(queryPayRequest.getSftOrderNo());
+            shengpayPayDO.setTransStatus(queryPayResponse.getTransStatus());
+            shengpayPayDO.setTransAmount(Double.valueOf(queryPayResponse.getTransAmount()));
+            try {
+                shengpayPayDO.setTransTime(sdf.parse(queryPayResponse.getTransTime()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            shengpayPayDOMapper.updateByMerchantOrderNo(shengpayPayDO);
+        } else {
+            System.out.println(queryPayResponse.getReturnMessage());
+            throw new BizCommonException("系统中不存在该支付订单记录");
         }
     }
 
@@ -126,6 +197,14 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
+    public void refundPay(String merchantOrderNo, String exts) {
+        // 退款单号暂时与订单号定位一致
+        String refundOrderNo = merchantOrderNo;
+        String refundAmount = "";
+        refundPay(merchantOrderNo, refundOrderNo, refundAmount, exts);
+    }
+
+    @Override
     public void queryRefund(String merchantOrderNo, String refundOrderNo, String refundTransNo,
                             String sftOrderNo, String exts) {
         // 构建退款查询参数
@@ -146,7 +225,7 @@ public class PayServiceImpl implements PayService {
 
         try {
             QueryRefundResponse queryRefundResponse = call.execute().body();
-            logger.debug("queryRefundResponse:{}", queryRefundResponse);
+            logger.info("queryRefundResponse:{}", queryRefundResponse);
             // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();
@@ -175,7 +254,7 @@ public class PayServiceImpl implements PayService {
 
         try {
             SharingPayResponse sharingPayResponse = call.execute().body();
-            logger.debug("sharingPayResponse: {}", sharingPayResponse);
+            logger.info("sharingPayResponse: {}", sharingPayResponse);
             // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();
@@ -201,7 +280,7 @@ public class PayServiceImpl implements PayService {
 
         try {
             QuerySharingResponse querySharingResponse = call.execute().body();
-            logger.debug("querySharingResponse: {}", querySharingResponse);
+            logger.info("querySharingResponse: {}", querySharingResponse);
             // TODO: 根据响应信息进行下一步的逻辑
         } catch (IOException e) {
             e.printStackTrace();

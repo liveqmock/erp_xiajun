@@ -60,7 +60,7 @@ public interface ShengpayService {
     /**
      * 接收服务端的支付成功通知URL，需要是公网可访问的地址
      */
-    String PAY_NOTIFY_URL = "http://45.77.198.100/javademo/notify.jsp";
+    String PAY_NOTIFY_URL = "http://erp.buyer007.com/pay/payNotify";
 
     /**
      * 同步跳转URL（微信H5，支付宝H5，公众号，服务窗必传,同时这个地址的一级域名必须和报备的授权域名一致）
@@ -87,7 +87,7 @@ public interface ShengpayService {
      */
     static ShengpayService newInstance() {
         // 为 Retrofit 配置 Http Log 拦截器（借助 OkHttpClient）
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(logger::debug)
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(logger::info)
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()

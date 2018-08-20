@@ -133,7 +133,7 @@ public class ItemServiceImpl implements IItemService {
     	final String DEFAULT_CATE_NAME = "其他";
     	final String BRAND_NO = "b11";
     	final String BRAND_NAME = "channel->其他";
-    	final String USER_NO = "yjfx";
+    	final String USER_NO = "-1";
     	final String COUNTRY = "408";
     	final String PRICE_RANGE = "0.00";
     	
@@ -164,6 +164,7 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setCountry(COUNTRY);
     	itemDO.setCreator(USER_NO);
     	itemDO.setModifier(USER_NO);
+    	itemDO.setStatus(item.getStatus());
     	
     	//插入商品表
     	itemDOMapper.insertItemSelective(itemDO);

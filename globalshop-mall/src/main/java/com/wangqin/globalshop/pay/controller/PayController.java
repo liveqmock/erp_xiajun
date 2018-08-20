@@ -1,7 +1,9 @@
 package com.wangqin.globalshop.pay.controller;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
+import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.pay.constant.ReturnCodeEnum;
 import com.wangqin.globalshop.pay.dto.Exts;
 import com.wangqin.globalshop.pay.dto.PayNotifyParam;
@@ -32,22 +34,30 @@ public class PayController {
     @Autowired
     private PayService payService;
 
+    @Autowired
+    private IMallOrderService mallOrderService;
+
     /**
      * 创建支付订单
      *
      * @param merchantOrderNo 商户系统内的唯一订单号，商户订单号不能重复
      * @param userIp          用户IP（用户下单时的IP-公网IP,银联交易必填）
-     * @param exts            扩展属性,JSON串（微信H5 、微信小程序、微信APP必传，请参考备注）
+     * @param exts            扩展属性,JSON串（微信H5 、微信小程序、微信APP必传）
      * @return
      */
     @PostMapping("/orderPay")
     private Object orderPay(String merchantOrderNo, String userIp, Exts exts) {
         JsonResult result = new JsonResult();
         try {
-            // TODO: 需从后台获取
-            String amount = "";
-            String productName = "";
-            payService.orderPay(merchantOrderNo, amount, productName, userIp, exts);
+            // 获取订单金额和商品信息
+            MallOrderDO mallOrderDO = mallOrderService.selectByOrderNo(merchantOrderNo);
+            String companyNo = mallOrderDO.getCompanyNo();
+            Double totalAmount = mallOrderDO.getTotalAmount();
+            String amount = String.valueOf(totalAmount);
+            // 暂时用店名充当商品名
+            String productName = mallOrderDO.getDealerName();
+            // 创建支付订单
+            payService.orderPay(companyNo, merchantOrderNo, amount, productName, userIp, exts);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg())
@@ -63,15 +73,15 @@ public class PayController {
     /**
      * 单笔查询
      *
+     * @param merchantOrderNo
+     * @param exts
      * @return
      */
     @PostMapping("/queryPay")
-    public Object queryPay(String merchantOrderNo, String exts) {
+    public Object queryPay(String merchantOrderNo, Exts exts) {
         JsonResult result = new JsonResult();
         try {
-            // TODO: 需从后台获取
-            String sftOrderNo = "";
-            payService.queryPay(merchantOrderNo, sftOrderNo, exts);
+            payService.queryPay(merchantOrderNo, exts);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg())
@@ -87,16 +97,15 @@ public class PayController {
     /**
      * 退款
      *
+     * @param merchantOrderNo
+     * @param exts
      * @return
      */
     @PostMapping("/refundPay")
     public Object refundPay(String merchantOrderNo, String exts) {
         JsonResult result = new JsonResult();
         try {
-            // TODO: 需从后台获取
-            String refundOrderNo = "";
-            String refundAmount = "";
-            payService.refundPay(merchantOrderNo, refundOrderNo, refundAmount, exts);
+            payService.refundPay(merchantOrderNo, exts);
             result.buildIsSuccess(true);
         } catch (BizCommonException e) {
             result.buildMsg(e.getErrorMsg())
@@ -112,6 +121,8 @@ public class PayController {
     /**
      * 退款查询
      *
+     * @param merchantOrderNo
+     * @param exts
      * @return
      */
     @PostMapping("/queryRefund")
@@ -138,6 +149,8 @@ public class PayController {
     /**
      * 分账
      *
+     * @param merchantOrderNo
+     * @param exts
      * @return
      */
     @PostMapping("/sharingPay")
@@ -163,6 +176,7 @@ public class PayController {
     /**
      * 分账查询
      *
+     * @param merchantOrderNo
      * @return
      */
     @PostMapping("/querySharing")

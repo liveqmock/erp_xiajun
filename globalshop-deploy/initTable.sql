@@ -1,4 +1,4 @@
-﻿CREATE DATABASE  IF NOT EXISTS `haidb2new` /*!40100 DEFAULT CHARACTER SET utf8 */;
+﻿CREATE DATABASE  IF NOT EXISTS `haidb2new` default character set utf8mb4 collate utf8mb4_unicode_ci;
 USE `haidb2new`;
 -- MySQL dump 10.13  Distrib 5.6.17, for osx10.6 (i386)
 --
@@ -16,6 +16,110 @@ USE `haidb2new`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+
+# 对接盛付通需要的四张表
+# 支付单表
+DROP TABLE IF EXISTS `shengpay_pay`;
+CREATE TABLE `shengpay_pay` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司编号',
+  `merchant_order_no` varchar(64) NOT NULL COMMENT '商户系统内的唯一订单号',
+  `amount` double NOT NULL COMMENT '该笔订单的交易金额，单位默认为RMB-元，精确到小数点后两位，如：23.42',
+  `currency` varchar(10) DEFAULT NULL COMMENT '货币类型',
+  `pay_channel` varchar(10) DEFAULT NULL COMMENT '支付渠道',
+  `sft_order_no` varchar(64) DEFAULT NULL COMMENT '盛付通系统内针对此商户订单的唯一订单号，如: C20160105105839885474',
+  `order_create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '订单创建时间',
+  `trace_no` varchar(64) DEFAULT NULL COMMENT '商户生成的报文唯一消息标识',
+  `trans_no` varchar(64) DEFAULT NULL COMMENT '商户调用收单接口成功后盛付通返回的交易订单号',
+  `trans_status` varchar(10) DEFAULT NULL COMMENT '支付状态',
+  `trans_amount` double DEFAULT NULL COMMENT '实际交易金额',
+  `trans_type` varchar(10) DEFAULT NULL COMMENT '交易类型',
+  `trans_time` datetime DEFAULT NULL COMMENT '交易时间',
+  `creator` varchar(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` varchar(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+# 退款单表
+DROP TABLE IF EXISTS `shengpay_refund`;
+CREATE TABLE `shengpay_refund` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司编号',
+  `merchant_order_no` varchar(64) NOT NULL COMMENT '商户系统内的唯一订单号',
+  `refund_order_no` varchar(64) NOT NULL COMMENT '退款请求流水号(商户系统唯一)',
+  `refund_amount` double DEFAULT NULL COMMENT '退款金额(与支付金额一致)',
+  `status` varchar(10) DEFAULT NULL COMMENT '退款状态',
+  `refund_trans_no` varchar(64) DEFAULT NULL COMMENT '盛付通退款订单号',
+  `sft_order_no` varchar(64) DEFAULT NULL COMMENT '盛付通系统内针对此商户订单的唯一订单号，如: C20160105105839885474',
+  `order_amount` double DEFAULT NULL COMMENT '订单金额',
+  `refund_time` datetime DEFAULT NULL COMMENT '退款时间',
+  `trace_no` varchar(64) DEFAULT NULL COMMENT '商户生成的报文唯一消息标识',
+  `creator` varchar(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` varchar(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+# 分账单表
+DROP TABLE IF EXISTS `shengpay_sharing`;
+CREATE TABLE `shengpay_sharing` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司编号',
+  `merchant_order_no` varchar(64) DEFAULT NULL COMMENT '商户系统内的唯一订单号',
+  `sharing_order_no` varchar(64) DEFAULT NULL COMMENT '分账请求订单号',
+  `sharing_query_order_no` varchar(64) DEFAULT NULL COMMENT '分账查询请求订单号',
+  `sharing_req_no` varchar(64) DEFAULT NULL COMMENT '分账请求号',
+  `status` varchar(10) DEFAULT NULL COMMENT '分账状态 C:创建 P:处理中 S:成功 F:失败 R:被风控',
+  `creator` varchar(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` varchar(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+# 分账单子项表
+DROP TABLE IF EXISTS `shengpay_sharing_item`;
+CREATE TABLE `shengpay_sharing_item` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司编号',
+  `sharing_req_no` varchar(64) NOT NULL COMMENT '盛付通分账流水号',
+  `sharing_no` varchar(64)  DEFAULT NULL COMMENT '分帐子项请求序号',
+  `sd_sharing_no` varchar(64) DEFAULT NULL COMMENT '盛付通子分账流水号',
+  `status` varchar(10) DEFAULT NULL COMMENT '分账状态：0处理中，1成功',
+  `sharing_amount` double DEFAULT NULL COMMENT '分帐金额，如10.00表示10元',
+  `sharing_rate` double DEFAULT NULL COMMENT '分帐比例 如0.50表示50%',
+  `payee_id` varchar(64) DEFAULT NULL COMMENT '会员标识',
+  `payee_id_type` varchar(10) DEFAULT NULL COMMENT '会员类型1：商户号，4：memberid',
+  `creator` varchar(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` varchar(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+
+CREATE TABLE `id_card`  (
+  `id` bigint(19) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
+  `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT 0,
+  `real_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '姓名',
+  `id_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '身份证',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `name_card_union_index`(`id_number`, `real_name`) USING BTREE COMMENT '姓名和身份证唯一性索引'
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 
 DROP TABLE IF EXISTS `shengpay_pay`;
 CREATE TABLE `shengpay_pay` (
@@ -209,6 +313,26 @@ CREATE TABLE IF NOT EXISTS `mall_sub_order_snapshot` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `item_qrcode_share`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
+  `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT 0,
+  `share_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
+  `item_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `user_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `pic_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '二维码地址',
+  `ext` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique_index`(`share_no`) USING BTREE COMMENT '唯一性性索引',
+  UNIQUE INDEX `search_index`(`item_code`, `user_no`, `company_no`) USING BTREE COMMENT '加快查询'
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+
 
 CREATE TABLE `mall_sale_agent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -271,6 +395,11 @@ CREATE TABLE `applet_config` (
   `img_url` varchar(64) DEFAULT NULL COMMENT '体验版二维码',
   `audit_id` varchar(64) DEFAULT NULL COMMENT ' 微信审核的id   用于查询审核状态等api',
   `ext_json` varchar(1024) DEFAULT NULL COMMENT '小程序的ext.json文件',
+  `requestdomain` VARCHAR(256) NULL COMMENT 'request合法域名',
+  `wsrequestdomain` VARCHAR(256) NULL COMMENT 'socket合法域名',
+  `uploaddomain` VARCHAR(256) NULL COMMENT 'uploadFile合法域名',
+  `downloaddomain` VARCHAR(256) NULL COMMENT 'downloadFile合法域名',
+  `webviewdomain` VARCHAR(256) NULL COMMENT '业务域名',
   `is_del` tinyint(1) DEFAULT '0',
   `creator` varchar(32) DEFAULT 'system',
   `modifier` varchar(32) DEFAULT 'system',
@@ -633,7 +762,7 @@ DROP TABLE IF EXISTS `channel_sale_price`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `channel_sale_price` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT,
-  `channel_no` varchar(64) NOT NULL,
+  `channel_no` varchar(64) NOT NULL DEFAULT '',
   `company_no` varchar(64) NOT NULL,
   `shop_code` bigint(20) NOT NULL,
   `sale_price` float(20,2) NOT NULL,
@@ -802,6 +931,7 @@ DROP TABLE IF EXISTS `company`;
 CREATE TABLE `company` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) NOT NULL COMMENT '索引唯一',
+  `company_group` VARCHAR(64) NULL COMMENT '归属公司。如与companyNo相同，则表示当前为一个公司，如不同，表示当前的companyNo对应company为companyGroup下面的一个商户',
   `company_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '公司名称',
   `admin_no` varchar(64) NOT NULL COMMENT '管理员ID',
   `status` int(4) DEFAULT '0' COMMENT '状态 0:正常，1:关闭',
@@ -813,20 +943,20 @@ CREATE TABLE `company` (
   `im` varchar(45) NOT NULL COMMENT '及时通讯工具，如微信',
   `service_time` varchar(128) DEFAULT NULL COMMENT '服务时间',
   `force_idcard_upload` int(2) NOT NULL DEFAULT '0' COMMENT '身份证图片，默认不需要',
-  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` varchar(32) NOT NULL,
-  `creator` varchar(32) NOT NULL,
-  `is_del` tinyint(1) NOT NULL DEFAULT '0',
   `state` varchar(20) DEFAULT NULL COMMENT '省',
   `city` varchar(20) DEFAULT NULL COMMENT '市',
   `district` varchar(20) DEFAULT NULL COMMENT '区',
   `full_address` varchar(100) DEFAULT NULL COMMENT '详细地址',
   `oversea_address` varchar(100) DEFAULT NULL COMMENT '海外地址',
-  `country` int(2) DEFAULT NULL COMMENT '国家代码',
+  `country` int(2) COMMENT '国家代码',
   `main_category` varchar(20) DEFAULT NULL COMMENT '主要品类',
   `offline_annual_sale` double(10,2) DEFAULT NULL COMMENT '线下年销售额',
   `online_annual_sale` double(10,2) DEFAULT NULL COMMENT '线上年销售额',
+  `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
+  `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `company_no` (`company_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='买手公司';
@@ -1067,7 +1197,7 @@ CREATE TABLE `shipping_order` (
   `address` varchar(500) DEFAULT NULL COMMENT '详细地址',
   `telephone` varchar(32) DEFAULT NULL COMMENT '联系电话',
   `postcode` varchar(18) DEFAULT NULL COMMENT '邮编',
-  `memo` varchar(256) DEFAULT NULL COMMENT '备注',
+  `memo` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
   `id_card` varchar(32) DEFAULT NULL COMMENT '身份证号码',
   `id_card_back` varchar(256) DEFAULT NULL COMMENT '身份证背面url',
   `id_card_front` varchar(256) DEFAULT NULL COMMENT '身份证正面url',
@@ -1238,13 +1368,13 @@ CREATE TABLE IF NOT EXISTS `item_sku` (
   `status` int(4) NOT NULL DEFAULT '1' COMMENT '0:未审核,1:审核通过',
   `sale_type` tinyint(1) DEFAULT NULL COMMENT '销售类型:现货,代购',
   `sale_price` double(10,2) DEFAULT NULL COMMENT '销售价',
+  `sku_rate` double(10,4) NOT NULL DEFAULT '0.00' COMMENT '代理佣金比例',
+  `goods_no` varchar(64) DEFAULT NULL COMMENT '货号',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
-  `sku_rate` double(10,4) NOT NULL DEFAULT '0.00' COMMENT '代理佣金比例',
-  `goods_no` varchar(64) DEFAULT NULL COMMENT '货号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `SKUCODE` (`sku_code`),
   KEY `ITEMCODE` (`item_code`),
@@ -1367,15 +1497,15 @@ CREATE TABLE IF NOT EXISTS `item` (
   `detail` text COMMENT '商品详情',
   `buyer_open_id` varchar(128) DEFAULT NULL COMMENT '买手open_id，可以有多个',
   `origin_sale_price` varchar(64) DEFAULT NULL COMMENT '原始销售价格',
-  `commission_mode` varchar(64) DEFAULT NULL COMMENT '佣金比率',
+  `commission_mode` varchar(64) DEFAULT NULL COMMENT '佣金模式',
+  `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率',
+  `is_abroad` int(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外',
+  `shelf_method` int(4) NOT NULL DEFAULT '0' COMMENT '0:立即售卖,1:暂不售卖;2:自定义',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
-  `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率',
-  `is_abroad` int(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外',
-  `shelf_method` int(4) NOT NULL DEFAULT '0' COMMENT '0:立即售卖,1:暂不售卖;2:自定义',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ITEMCODE` (`item_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10311 DEFAULT CHARSET=utf8 COMMENT='商品';
@@ -1390,6 +1520,7 @@ DROP TABLE IF EXISTS `jd_shop_config`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jd_shop_config` (
   `id` bigint(19) unsigned NOT NULL AUTO_INCREMENT,
+  `version` bigint(19),
   `channel_no` varchar(64) DEFAULT NULL,
   `shop_code` varchar(64) NOT NULL,
   `config_key` varchar(64) DEFAULT NULL,
@@ -1977,7 +2108,7 @@ CREATE TABLE `auth_user_role` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `login_name` (`login_name`)
+  UNIQUE KEY `com_user_role` (`company_no`,`user_id`,`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=538 DEFAULT CHARSET=utf8 COMMENT='用户角色';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2019,7 +2150,7 @@ DROP TABLE IF EXISTS `auth_organization`;
 CREATE TABLE `auth_organization` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `company_no` varchar(64) NOT NULL DEFAULT '0',
-  `org_id` varchar(64) NOT NULL,
+  `org_id` varchar(64) ,
   `name` varchar(64) NOT NULL COMMENT '组织名',
   `address` varchar(200) DEFAULT NULL COMMENT '地址',
   `code` varchar(64) NOT NULL COMMENT '编号',

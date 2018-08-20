@@ -17,7 +17,7 @@ public class TestPayServiceImpl {
 
     @Test
     public void testOrderPay() {
-        payService.orderPay(
+        payService.orderPay("-1",
                 "f4511ec61ac04dc5b4bc766a39b7f5aa",
                 "2",
                 "测试商品名字",
@@ -27,9 +27,11 @@ public class TestPayServiceImpl {
 
     @Test
     public void testQueryPay() {
-        payService.queryPay("f4511ec61ac04dc5b4bc766a39b7f5aa",
-                null,
-                null);
+//        payService.queryPay("f4511ec61ac04dc5b4bc766a39b7f5aa",
+//                null,
+//                null);
+
+        payService.queryPay("f4511ec61ac04dc5b4bc766a39b7f5aa", null);
     }
 
     @Test
@@ -63,13 +65,13 @@ public class TestPayServiceImpl {
                     .build();
             sharingReqItemList.add(amountItem);
 
-//            SharingReqItem rateItem = SharingReqItem.builder()
-//                    .sharingNo(String.valueOf(i + 5))
-//                    .sharingRate("0.5")
-//                    .payeeId("107537")
-//                    .payeeIdType("1")
-//                    .build();
-//            sharingReqItemList.add(rateItem);
+            SharingReqItem rateItem = SharingReqItem.builder()
+                    .sharingNo(String.valueOf(i + 5))
+                    .sharingRate("0.5")
+                    .payeeId("107537")
+                    .payeeIdType("1")
+                    .build();
+            sharingReqItemList.add(rateItem);
         }
 
         payService.sharingPay(

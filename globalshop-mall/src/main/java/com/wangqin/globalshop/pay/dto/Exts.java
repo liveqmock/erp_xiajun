@@ -19,7 +19,6 @@ import lombok.Data;
  * @date 2018/8/16
  */
 @Data
-@Builder
 public class Exts {
     /**
      * 微信APP支付 appid
