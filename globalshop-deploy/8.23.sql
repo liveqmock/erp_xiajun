@@ -1,5 +1,5 @@
-
-###初始化海狐授权信息，授权给一键分享
+ALTER TABLE mall_order ADD is_show TINYINT(1) DEFAULT 1 NULL COMMENT '是否显示';
+-- ###初始化海狐授权信息，授权给一键分享
 INSERT INTO `haidb2new`.`jd_shop_oauth` (
 `channel_no`,
 `company_no`,
