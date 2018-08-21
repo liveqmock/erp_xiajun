@@ -1,7 +1,8 @@
 package com.wangqin.globalshop.logistic.app;
 
 import com.thoughtworks.xstream.XStream;
-import com.wangqin.globalshop.logistic.app.bean.base.*;
+import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
+import com.wangqin.globalshop.logistic.app.bean.order.*;
 import com.wangqin.globalshop.logistic.app.bean.xml.Body;
 import com.wangqin.globalshop.logistic.app.bean.xml.Head;
 import com.wangqin.globalshop.logistic.app.bean.xml.Mo;
@@ -64,7 +65,6 @@ public class TestXStream {
                 .userProcotol("本人承诺所购买商品系个人合理自用，现委托商家代理申报、代缴税款等通关事宜，本人保证遵守《海关法》和国家相关法律法规，保证所提供的身份信息和收货信息真实完整，无侵犯他人权益的行为，以上委托关系系如实填写，本人愿意接受海关、检验检疫机构及其他监管部门的监管，并承担相应法律责任。")
                 .build();
 
-        List<JkfOrderDetail> jkfOrderDetailList = new ArrayList<>();
         JkfOrderDetail jkfOrderDetail1 = JkfOrderDetail.builder()
                 .goodsOrder(1)
                 .goodsName("物品名称1")
@@ -93,6 +93,7 @@ public class TestXStream {
                 .currency("币制2")
                 .note("备注2")
                 .build();
+        List<JkfOrderDetail> jkfOrderDetailList = new ArrayList<>();
         jkfOrderDetailList.add(jkfOrderDetail1);
         jkfOrderDetailList.add(jkfOrderDetail2);
 
@@ -115,8 +116,6 @@ public class TestXStream {
 
         List<OrderInfo> orderInfoList = new ArrayList<>();
         orderInfoList.add(orderInfo);
-
-
 
         Head head = Head.builder()
                 .businessType("IMPORTORDER")
