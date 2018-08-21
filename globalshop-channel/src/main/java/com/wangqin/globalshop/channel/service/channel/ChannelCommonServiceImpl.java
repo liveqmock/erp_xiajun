@@ -378,10 +378,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 				throw new ErpCommonException("","暂不支持该方法");
 			}
 
-			//ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
 		}catch (Exception e){
-			logger.error("",e);
-			throw new ErpCommonException("",e.getMessage());
+			throw e;
 		}
 	}
 
@@ -415,16 +413,10 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 					return Boolean.TRUE;
 				}
 			});
-
-
-
-			//ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
 		}catch (ErpCommonException e){
-			logger.error("",e);
 			throw e;
 		}catch (Exception e){
-			logger.error("",e);
-			throw new ErpCommonException("",e.getMessage());
+			throw e;
 		}
 	}
 
@@ -459,7 +451,6 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		}
 
 		try {
-
 			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
 				youzanService.feedback(shopOauth,requestLogistic);
 			}else if(Integer.valueOf(ChannelType.HaiHu.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
@@ -470,7 +461,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		}catch (ErpCommonException e){
 			throw e;
 		}catch (Exception e){
-			throw new ErpCommonException("",e.getMessage());
+			throw e;
 		}
 
 	}

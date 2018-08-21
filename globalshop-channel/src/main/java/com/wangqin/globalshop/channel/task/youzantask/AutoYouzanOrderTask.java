@@ -10,6 +10,7 @@ import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.channel.service.jingdong.SendStatus;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,7 +164,7 @@ public class AutoYouzanOrderTask {
 					jdOrderService.updateByPrimaryKey(requestJdOrder);
 				}else {
 					requestJdOrder.setSendStatus(SendStatus.FAILURE);
-					requestJdOrder.setErrorMassge(errorMsg);
+					requestJdOrder.setErrorMassge(EasyUtil.truncateLEFitSize(errorMsg,1000));
 					jdOrderService.updateByPrimaryKey(requestJdOrder);
 				}
 			}
@@ -219,7 +220,7 @@ public class AutoYouzanOrderTask {
 					jdOrderService.updateByPrimaryKey(failureJdOrder);
 				}else {
 					failureJdOrder.setSendStatus(SendStatus.STOP);
-					failureJdOrder.setErrorMassge(errorMsg);
+					failureJdOrder.setErrorMassge(EasyUtil.truncateLEFitSize(errorMsg,1000));
 					jdOrderService.updateByPrimaryKey(failureJdOrder);
 				}
 			}

@@ -12,6 +12,7 @@ import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
 import com.wangqin.globalshop.channel.service.jingdong.SendStatus;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.DateUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.common.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,6 +181,7 @@ public class AutoYouzanItemsTask {
 	/**
 	 * 下发抓到的REQUEST商品至globalshop
 	 */
+	//@Scheduled(cron = "0/30 * * * * ?")
 	@Scheduled(cron = "6 6/4 * * * ?")
 	public void sendRequestItem2erp() {
 
@@ -228,7 +230,7 @@ public class AutoYouzanItemsTask {
 					jdItemService.updateByPrimaryKey(requestJdItem);
 				}else {
 					requestJdItem.setSendStatus(SendStatus.FAILURE);
-					requestJdItem.setErrorMassge(errorMsg);
+					requestJdItem.setErrorMassge(EasyUtil.truncateLEFitSize(errorMsg,1000));
 					jdItemService.updateByPrimaryKey(requestJdItem);
 				}
 			}
@@ -284,7 +286,7 @@ public class AutoYouzanItemsTask {
 					jdItemService.updateByPrimaryKey(failureJdItem);
 				}else {
 					failureJdItem.setSendStatus(SendStatus.STOP);
-					failureJdItem.setErrorMassge(errorMsg);
+					failureJdItem.setErrorMassge(EasyUtil.truncateLEFitSize(errorMsg,1000));
 					jdItemService.updateByPrimaryKey(failureJdItem);
 				}
 			}

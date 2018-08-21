@@ -20,4 +20,6 @@ public interface ChannelShopService {
 	public void checkUnique(ChannelShopDO channelShop);
 
 	public ChannelShopDO addhaihu();
+
+	public void changeOpen(String shopCode, Boolean open);
 }

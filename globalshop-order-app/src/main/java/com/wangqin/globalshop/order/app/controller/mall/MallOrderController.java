@@ -399,4 +399,35 @@ public class MallOrderController {
         }
         return JsonResult.buildSuccess(null);
     }
+
+
+	/**
+	 * 根据条件分页查询订单列表
+	 *
+	 * @param mallOrderQueryVO
+	 * @param pageQueryParam
+	 * @return
+	 */
+	@RequestMapping("/searchPageList")
+	public Object searchPageList(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam) {
+		JsonPageResult<List<MallOrderItemVO>> result = new JsonPageResult<>();
+		mallOrderQueryVO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		try {
+			List<MallOrderItemVO> mallOrderItemVOList = mallOrderService.searchPageList(mallOrderQueryVO, pageQueryParam);
+			int totalCount = mallOrderService.countMallOrders(mallOrderQueryVO);
+			result.buildData(mallOrderItemVOList)
+					.buildTotalCount(totalCount)
+					.buildIsSuccess(true);
+		} catch (BizCommonException e) {
+			result.buildMsg(e.getErrorMsg())
+					.buildIsSuccess(false);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			result.buildMsg("查询异常！")
+					.buildIsSuccess(false);
+		}
+
+		return result;
+	}
+
 }

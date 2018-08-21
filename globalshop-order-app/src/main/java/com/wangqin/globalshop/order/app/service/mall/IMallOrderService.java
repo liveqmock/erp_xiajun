@@ -71,4 +71,6 @@ public interface IMallOrderService  {
      * @return
      */
     int countMallOrders(MallOrderQueryVO mallOrderQueryVO);
+
+	List<MallOrderItemVO> searchPageList(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam);
 }
