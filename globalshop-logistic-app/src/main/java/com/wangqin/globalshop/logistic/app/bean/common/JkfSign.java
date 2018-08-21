@@ -14,7 +14,7 @@ import lombok.Data;
 public class JkfSign {
 
     /**
-     * 发送方备案编号
+     * 发送方/接收方备案编号
      * 必填：Y <br>
      * 发送方备案编号,不可随意填写
      */
@@ -38,7 +38,7 @@ public class JkfSign {
      * 必填：Y <br>
      * 企业报送类型。1-新增 2-变更 3-删除。默认为1。
      */
-    private String declareType;
+    private Character declareType;
 
     /**
      * 必填：Y <br>
