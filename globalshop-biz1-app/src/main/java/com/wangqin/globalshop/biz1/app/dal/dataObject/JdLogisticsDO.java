@@ -5,10 +5,6 @@ public class JdLogisticsDO extends BaseModel {
 
     private Long version;
 
-    private String creator;
-
-    private String modifier;
-
     private String channelNo;
 
     private String shopCode;
@@ -25,6 +21,10 @@ public class JdLogisticsDO extends BaseModel {
 
     private String logisticNo;
 
+    private String modifier;
+
+    private String creator;
+
     public Long getId() {
         return id;
     }
@@ -39,24 +39,6 @@ public class JdLogisticsDO extends BaseModel {
 
     public void setVersion(Long version) {
         this.version = version;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    @Override
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
     }
 
     public String getChannelNo() {
@@ -121,5 +103,21 @@ public class JdLogisticsDO extends BaseModel {
 
     public void setLogisticNo(String logisticNo) {
         this.logisticNo = logisticNo == null ? null : logisticNo.trim();
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
     }
 }

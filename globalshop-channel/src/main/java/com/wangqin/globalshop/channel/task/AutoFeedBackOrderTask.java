@@ -2,10 +2,12 @@ package com.wangqin.globalshop.channel.task;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapper.JdLogisticsDOMapper;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.channel.ChannelShopService;
+import com.wangqin.globalshop.channel.service.jingdong.JdLogisticsService;
 import com.wangqin.globalshop.channel.service.order.ChannelIShippingOrderService;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -28,9 +30,9 @@ import java.util.Map;
  * @author liuyang
  *
  */
-@Component
-public class AutoRepairFeedBackOrderTask {
-	protected Logger logger = LogManager.getLogger("AutoRepairFeedBackOrderTask");
+//@Component
+public class AutoFeedBackOrderTask {
+	protected Logger logger = LogManager.getLogger("AutoFeedBackOrderTask");
 
 	@Autowired
 	private ChannelIShippingOrderService shippingOrderService;
@@ -45,11 +47,14 @@ public class AutoRepairFeedBackOrderTask {
 	@Autowired
 	private ChannelShopService channelShopService;
 
+	@Autowired
+	private JdLogisticsService logisticsService;
+
 
 	
 	//每小时一次
-	@Scheduled(cron = "0 2/10 * * * ? ")
-	//@Scheduled(cron = "0/30 * * * * ?")
+	//@Scheduled(cron = "0 2/10 * * * ? ")
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void runSyncSendPackage() {
 		logger.info("定时任务：通知渠道，已经发货===>Start");
 		
@@ -105,17 +110,22 @@ public class AutoRepairFeedBackOrderTask {
 						ChannelShopDO channelShopSo = new ChannelShopDO();
 						channelShopSo.setShopCode(exampleSubOrder.getShopCode());
 						channelShopSo.setIsDel(false);
+						channelShopSo.setOpen(true);
 						ChannelShopDO channelShopDO = channelShopService.searchShop(channelShopSo);
 						if(channelShopDO == null){
 							continue;
 						}
 						// 同步给渠道
-						channelCommonService.syncLogistics2Channel(channelOrderListMap.get(channelOrderNo), shippingOrder);
-
-						//todo,如果同一个运单号，一个是海狐，一个是有赞，一个成功，一个失败，shipping_order不知道是设置成功还是失败
+						//channelCommonService.syncLogistics2Channel(channelOrderListMap.get(channelOrderNo), shippingOrder);
+						//todo,未处理修改运单号，二次发货，多次发货问题
+						logisticsService.dealLogistics(channelShopDO, channelOrderListMap.get(channelOrderNo), shippingOrder);
 					}
 
-				} catch (Exception e) {
+				} catch (ErpCommonException e){
+					success = false;
+					shippingOrder.setMemo(EasyUtil.truncateLEFitSize(shippingOrder.getMemo()+"-"+e.getErrorMsg(),1000));
+					logger.error("通知渠道，已经发货 异常", e);
+				}catch (Exception e) {
 					success = false;
 					shippingOrder.setMemo(EasyUtil.truncateLEFitSize(shippingOrder.getMemo()+"-"+e.getMessage(),1000));
 					logger.error("通知渠道，已经发货 异常", e);
@@ -128,7 +138,6 @@ public class AutoRepairFeedBackOrderTask {
 				}
 			}
 		}
-		
    		logger.info("定时任务：通知渠道，已经发货===>End");
 	}
 	

@@ -668,7 +668,7 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="jd_logistics" domainObjectName="JdLogisticDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
+        <!--<table tableName="jd_logistics" domainObjectName="JdLogisticsDO"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false" >-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
             <!--<ignoreColumn column="gmt_modify" delimitedColumnName=""/>-->
