@@ -133,22 +133,31 @@ public class ItemServiceImpl implements IItemService {
     	String companyNo = item.getCompanyNo();
     	String itemName = item.getItemName();
     	List<ItemSkuVo> skuList = item.getItemSkus();
+    	//检测sku_code是否存在且是否重复
+    	if (!skuCodeCheck(skuList)) {
+    		throw new ErpCommonException("重复的skuCode或者空的skuCode");
+    	}
     	//检测item_code和sku_code是否和数据库已有的重复，重复则抛出异常
+    	Boolean dup = false;
+		if (null != itemDOMapper.queryItemDOByItemCode(itemCode)) {
+			dup = true;
+		}
+		for (ItemSkuVo sku:skuList) {
+    		if (null != itemSkuDOMapper.queryItemSkuDOBySkuCode(sku.getSkuCode())) {
+    			dup = true;
+    		}
+    	}
     	if (!needUpdate) { //如果不需要更新
-    		if (null != itemDOMapper.queryItemDOByItemCode(itemCode)) {
-        		throw new ErpCommonException("重复的itemCode");
-        	}       	
-        	for (ItemSkuVo sku:skuList) {
-        		if (null != itemSkuDOMapper.queryItemSkuDOBySkuCode(sku.getSkuCode())) {
-        			throw new ErpCommonException("重复的skuCode");
-        		}
-        	}
-    	} else { //需要更新
-    		if (null != itemDOMapper.queryItemDOByItemCode(itemCode)) {
+    		if (dup) {
+    			throw new ErpCommonException("重复的itemCode或者skuCode");
+    		}
+    	} else { //需要更新   		
+    		if (dup) { //有重复的商品或者sku
         		//更新商品
     			updateItem(item);
     			//更新sku
     			updateItemSku(skuList, item);	
+    			return;
         	}
     	}
     	
@@ -243,6 +252,25 @@ public class ItemServiceImpl implements IItemService {
     			itemSkuScaleDOMapper.insertSelective(scale);
     		}   		
     	}//end of sku loop   	    	
+    }
+  
+    //检测是否有空的skuCode或者重复的skuCode
+    public Boolean skuCodeCheck(List<ItemSkuVo> skuList) {
+    	Boolean result = true;
+    	List<String> codeList = new ArrayList<String>();
+    	for (ItemSkuVo sku:skuList) {
+    		if (IsEmptyUtil.isStringEmpty(sku.getSkuCode())) { //有为''的skuCode值
+    			result = false;
+    		} else {
+    			codeList.add(sku.getSkuCode());
+    		}
+    	}
+    	//检测是否有重复的skuCode
+    	HashSet<String> codeSet = new HashSet<String>(codeList);
+    	if (codeSet.size() < codeList.size()) {
+    		result = false;
+    	}
+    	return result;
     }
     
     //更新商品
