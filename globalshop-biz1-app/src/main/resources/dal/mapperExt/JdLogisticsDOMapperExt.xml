@@ -14,12 +14,12 @@
         <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
         <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="errorMsg" property="errormsg" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
     id, version, channel_no, shop_code, channel_order_no, channel_sub_order_no, send_status,
-    logistic_code, logistic_name, logistic_no, modifier, creator
+    logistic_code, logistic_name, logistic_no, modifier, creator, errorMsg
   </sql>
-
 
     <sql id="tableSection">jd_logistics</sql>
 
@@ -56,7 +56,7 @@
 
 
     <!--查询总条数 -->
-    <select id="searchPo" resultMap="BaseResultMap"
+    <select id="queryPo" resultMap="BaseResultMap"
     >
         SELECT <include refid="Base_Column_List" />
         FROM <include refid="tableSection"/> T
@@ -65,7 +65,7 @@
     </select>
 
     <!--查询总条数 -->
-    <select id="searchPoCount" resultType="java.lang.Long"
+    <select id="queryPoCount" resultType="java.lang.Long"
     >
         SELECT COUNT(*)
         FROM <include refid="tableSection"/> T
@@ -74,7 +74,7 @@
     </select>
 
     <!-- -->
-    <select id="searchPoList" resultMap="BaseResultMap">
+    <select id="queryPoList" resultMap="BaseResultMap">
         SELECT  <include refid="Base_Column_List" />
         FROM <include refid="tableSection"/> T
         WHERE

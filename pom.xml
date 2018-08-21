@@ -225,6 +225,7 @@
         <module>globalshop-inventory-app</module>
         <module>globalshop-channel-api</module>
         <module>globalshop-schedule-app</module>
+        <module>globalshop-logistic-app</module>
     </modules>
 
 

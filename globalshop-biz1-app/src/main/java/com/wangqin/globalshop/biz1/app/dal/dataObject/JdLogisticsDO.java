@@ -25,6 +25,8 @@ public class JdLogisticsDO extends BaseModel {
 
     private String creator;
 
+    private String errormsg;
+
     public Long getId() {
         return id;
     }
@@ -119,5 +121,13 @@ public class JdLogisticsDO extends BaseModel {
 
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getErrormsg() {
+        return errormsg;
+    }
+
+    public void setErrormsg(String errormsg) {
+        this.errormsg = errormsg == null ? null : errormsg.trim();
     }
 }

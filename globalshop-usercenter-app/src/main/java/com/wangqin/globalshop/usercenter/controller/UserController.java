@@ -154,6 +154,9 @@ public class UserController extends BaseController {
         BaseResp resp = BaseResp.createSuccess("");
     	String userNo=CodeGenUtil.genUserNo();
         userVo.setUserNo(userNo);
+        if(StringUtils.isBlank(userVo.getPassword())){
+            userVo.setPassword("123456");
+        }
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.insertByVo(userVo);
         //添加角色
@@ -187,8 +190,9 @@ public class UserController extends BaseController {
         }
 
         BaseResp resp = BaseResp.createSuccess("");
-    	String userNo=CodeGenUtil.genUserNo();
-        userVo.setUserNo(userNo);
+    	//？这里似乎不该再新生成userNo了
+//    	String userNo=CodeGenUtil.genUserNo();
+//        userVo.setUserNo(userNo);
 
         AuthUserDO authUserLoginName = userService.selectByLoginName(userVo.getLoginName());
         userService.updateByVo(userVo);

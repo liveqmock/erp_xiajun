@@ -8,6 +8,8 @@ import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingOrderVO;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.channel.ChannelShopService;
 import com.wangqin.globalshop.channel.service.jingdong.JdLogisticsService;
+import com.wangqin.globalshop.channel.service.jingdong.JdShopOauthService;
+import com.wangqin.globalshop.channel.service.jingdong.SendStatus;
 import com.wangqin.globalshop.channel.service.order.ChannelIShippingOrderService;
 import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.utils.EasyUtil;
@@ -30,7 +32,7 @@ import java.util.Map;
  * @author liuyang
  *
  */
-//@Component
+@Component
 public class AutoFeedBackOrderTask {
 	protected Logger logger = LogManager.getLogger("AutoFeedBackOrderTask");
 
@@ -43,20 +45,16 @@ public class AutoFeedBackOrderTask {
 	@Autowired
 	private ChannelCommonService channelCommonService;
 
-
 	@Autowired
 	private ChannelShopService channelShopService;
 
 	@Autowired
 	private JdLogisticsService logisticsService;
 
-
-	
-	//每小时一次
 	//@Scheduled(cron = "0 2/10 * * * ? ")
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "10 1/10 * * * ?")
 	public void runSyncSendPackage() {
-		logger.info("定时任务：通知渠道，已经发货===>Start");
+		logger.info("shipping order task start");
 		
 		// 查询“未同步发货信息”的订单
 		ShippingOrderVO shippingOrderVO = new ShippingOrderVO();
@@ -124,11 +122,11 @@ public class AutoFeedBackOrderTask {
 				} catch (ErpCommonException e){
 					success = false;
 					shippingOrder.setMemo(EasyUtil.truncateLEFitSize(shippingOrder.getMemo()+"-"+e.getErrorMsg(),1000));
-					logger.error("通知渠道，已经发货 异常", e);
+					logger.error("shipping order task error", e);
 				}catch (Exception e) {
 					success = false;
 					shippingOrder.setMemo(EasyUtil.truncateLEFitSize(shippingOrder.getMemo()+"-"+e.getMessage(),1000));
-					logger.error("通知渠道，已经发货 异常", e);
+					logger.error("shipping order task error", e);
 				}
 				if(success){
 					shippingOrder.setSyncSendStatus(1);
@@ -138,7 +136,92 @@ public class AutoFeedBackOrderTask {
 				}
 			}
 		}
-   		logger.info("定时任务：通知渠道，已经发货===>End");
+   		logger.info("shipping order task end");
+	}
+
+
+	@Scheduled(cron = "20 2/5 * * * ?")
+	public void feedBackOrder() {
+		logger.info("feed back order task start");
+		JdLogisticsDO logisticsSo = new JdLogisticsDO();
+		logisticsSo.setSendStatus(SendStatus.REQUEST);
+		logisticsSo.setIsDel(false);
+		List<JdLogisticsDO> logisticsDOList = logisticsService.queryPoList(logisticsSo);
+		for (JdLogisticsDO requestLogistic : logisticsDOList) {
+			Boolean success = true;
+			String errorMsg = "";
+			try {
+				if (EasyUtil.isStringEmpty(requestLogistic.getChannelOrderNo()) || EasyUtil
+						.isStringEmpty(requestLogistic.getShopCode())) {
+					errorMsg += "channelOrderNo or shopcode emptity";
+					success = false;
+				}
+				if (success) {
+					channelCommonService.feedbackOrder(requestLogistic);
+				}
+			} catch (ErpCommonException e) {
+				success = false;
+				errorMsg += e.getErrorCode() + ":" + e.getErrorMsg();
+				requestLogistic.setErrormsg(EasyUtil.truncateLEFitSize(errorMsg, 1000));
+				logger.error("feed back order task error", e);
+			} catch (Exception e) {
+				success = false;
+				errorMsg += e.getMessage();
+				requestLogistic.setErrormsg(EasyUtil.truncateLEFitSize(errorMsg, 1000));
+				logger.error("feed back order task error", e);
+			}
+			if (success) {
+				requestLogistic.setSendStatus(SendStatus.SUCCESS);
+				logisticsService.updateByPrimaryKey(requestLogistic);
+			} else {
+				requestLogistic.setSendStatus(SendStatus.FAILURE);
+				logisticsService.updateByPrimaryKey(requestLogistic);
+			}
+		}
+		logger.info("feed back order task end");
+	}
+
+
+	@Scheduled(cron = "30 3/10 * * * ?")
+	public void feedBackOrderFailure() {
+		logger.info("feed back order failure task start");
+		JdLogisticsDO logisticsSo = new JdLogisticsDO();
+		logisticsSo.setSendStatus(SendStatus.FAILURE);
+		logisticsSo.setIsDel(false);
+		List<JdLogisticsDO> logisticsDOList = logisticsService.queryPoList(logisticsSo);
+		if (CollectionUtils.isNotEmpty(logisticsDOList)) {
+			for (JdLogisticsDO requestLogistic : logisticsDOList) {
+				Boolean success = true;
+				String errorMsg = "";
+				try {
+					if(EasyUtil.isStringEmpty(requestLogistic.getChannelOrderNo()) || EasyUtil.isStringEmpty(requestLogistic.getShopCode())){
+						errorMsg += "channelOrderNo or shopcode emptity";
+						success = false;
+					}
+					if(success){
+						channelCommonService.feedbackOrder(requestLogistic);
+					}
+				} catch (ErpCommonException e){
+					success = false;
+					errorMsg += e.getErrorCode()+":"+e.getErrorMsg();
+					requestLogistic.setErrormsg(EasyUtil.truncateLEFitSize(errorMsg,1000));
+					logger.error("feed back order failure task error", e);
+				}catch (Exception e) {
+					success = false;
+					errorMsg += e.getMessage();
+					requestLogistic.setErrormsg(EasyUtil.truncateLEFitSize(errorMsg,1000));
+					logger.error("feed back order failure task error", e);
+				}
+				if(success){
+					requestLogistic.setSendStatus(SendStatus.SUCCESS);
+					logisticsService.updateByPrimaryKey(requestLogistic);
+				}else {
+					requestLogistic.setSendStatus(SendStatus.STOP);
+					logisticsService.updateByPrimaryKey(requestLogistic);
+				}
+			}
+		}
+		logger.info("feed back order task end");
 	}
 	
 	

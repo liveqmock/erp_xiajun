@@ -30,4 +30,13 @@
     SELECT <include refid="Base_Column_List"/>
     FROM logistic_company
   </select>
+
+    <select id="selectByName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM logistic_company
+        where name = #{logisticName}
+    </select>
+
+
+
 </mapper>
