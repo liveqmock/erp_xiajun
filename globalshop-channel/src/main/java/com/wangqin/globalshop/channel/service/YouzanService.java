@@ -4,6 +4,7 @@ package com.wangqin.globalshop.channel.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.LogisticCompanyDOMapperExt;
 import com.wangqin.globalshop.biz1.app.enums.*;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.dal.youzan.*;
@@ -42,6 +43,9 @@ public class YouzanService {
 
 	@Autowired
 	private IItemSkuService itemSkuService;
+
+	@Autowired
+	private LogisticCompanyDOMapperExt expressCompanyExt;
 
 	public volatile  YZClient client = new DefaultYZClient();
 
@@ -602,8 +606,57 @@ public class YouzanService {
 		}
 	}
 
+	/**
+	 * 发货反馈
+	 * @param shopOauth
+	 * @param requestLogistic
+	 */
+	public void feedback(JdShopOauthDO shopOauth, JdLogisticsDO requestLogistic) {
+		client = new DefaultYZClient(new Token(shopOauth.getAccessToken()));
+
+		//获取快递公司编码
+		LogisticCompanyDO logisticCompany = expressCompanyExt.selectByName(requestLogistic.getLogisticName());
+
+		if(logisticCompany == null || EasyUtil.isStringEmpty(logisticCompany.getCodeInYouzan())){
+			throw new ErpCommonException("youzan feedback error: ", "有赞不支持快递公司[ "+requestLogistic.getLogisticName()+" ]发货，请手工发货");
+		}
+
+		String expressCompanyCode= logisticCompany.getCodeInYouzan();
+		try {
+			YouzanLogisticsOnlineConfirmParams youzanLogisticsOnlineConfirmParams = new YouzanLogisticsOnlineConfirmParams();
+			youzanLogisticsOnlineConfirmParams.setTid(requestLogistic.getChannelOrderNo());
+			youzanLogisticsOnlineConfirmParams.setOutStype(expressCompanyCode);
+			youzanLogisticsOnlineConfirmParams.setOutSid(requestLogistic.getLogisticNo());
+			youzanLogisticsOnlineConfirmParams.setOids(requestLogistic.getChannelSubOrderNo());//多个子订单的处理
+			YouzanLogisticsOnlineConfirm youzanLogisticsOnlineConfirm = new YouzanLogisticsOnlineConfirm();
+			youzanLogisticsOnlineConfirm.setAPIParams(youzanLogisticsOnlineConfirmParams);
+			YouzanLogisticsOnlineConfirmResult result = client.invoke(youzanLogisticsOnlineConfirm);
+			if(result.getIsSuccess()){
+				return;
+			}else {
+				throw new ErpCommonException("youzan feedback error: ", result.toString());
+			}
+		} catch (Exception e) {
+			throw new ErpCommonException("youzan feedback error", e.getMessage());
+		}
+	}
 
 
-
+//	static Map<String, String> localExpressMap = new HashMap<String, String>();
+//	// 暂时硬编码
+//	static {
+//		localExpressMap.put("海淘一号仓", "167");
+//		// localExpressMap.put("顺帮快递", "167");
+//		localExpressMap.put("运通快递", "102");
+//		localExpressMap.put("顺丰", "42");
+//		localExpressMap.put("韵达", "4");
+//		localExpressMap.put("转运中国", "224");
+//		localExpressMap.put("邮客", "208");
+//		// localExpressMap.put("海狐", "167");
+//		localExpressMap.put("联邦转运", "27");
+//		localExpressMap.put("4PX", "51");
+//		// localExpressMap.put("海狐联邦转运", "167");
+//		// localExpressMap.put("GLS", "167");
+//	}
 
 }

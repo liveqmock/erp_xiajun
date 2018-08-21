@@ -24,7 +24,7 @@ import java.util.List;
  * 
  * @author 777
  */
-//@Component
+@Component
 public class AutoYouzanOrderTask {
 
 	private static Logger logger = LoggerFactory.getLogger("AutoYouzanOrderTask");
@@ -48,8 +48,8 @@ public class AutoYouzanOrderTask {
 	private final static Long startEndMaxInternalDay = 5*24*60*60*1000L;//查询间隔最大5天
 
     // 每隔半小时执行一次
-    @Scheduled(cron = "0/30 * * * * ?")
-	//@Scheduled(cron = "0 3/10 * * * ?")
+    //@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "40 0/4 * * * ?")
     public void run() {
 
 		logger.info("youzan get orders Start");
@@ -119,7 +119,7 @@ public class AutoYouzanOrderTask {
 	/**
 	 * 下发抓到的REQUEST订单至globalshop
 	 */
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "50 5/4 * * * ?")
 	public void sendRequestOrder2erp() {
 
 		logger.info("youzan send request orders start");
@@ -177,7 +177,7 @@ public class AutoYouzanOrderTask {
 	/**
 	 * 下发抓到的FAILURE商品至globalshop
 	 */
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "45 6/10 * * * ?")
 	public void sendFailureOrder2erp() {
 
 		logger.info("youzan send failure Orders start");

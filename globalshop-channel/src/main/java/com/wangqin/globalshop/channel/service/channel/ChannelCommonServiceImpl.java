@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
 import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
+import com.wangqin.globalshop.channel.service.HaihuService;
 import com.wangqin.globalshop.channel.service.YouzanService;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
@@ -54,6 +55,9 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 	@Autowired
 	private YouzanService youzanService;
+
+	@Autowired
+	private HaihuService haihuService;
 
 	@Autowired
 	private JdOrderService jdOrderService;
@@ -436,4 +440,41 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		channelListingItemService.dealChannelListtingItem(globalShopItemVo.getChannelListingItemVo());
 		itemService.addChannelItem(globalShopItemVo.getItemVo(),true);
 	}
+
+
+	@Override
+	public void feedbackOrder(JdLogisticsDO requestLogistic){
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setShopCode(requestLogistic.getShopCode());
+		shopOauthSo.setIsDel(false);
+		shopOauthSo.setOpen(true);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
+
+		if(shopOauth == null){
+			throw new ErpCommonException("shop_error","未找到对应店铺信息shopCode:"+requestLogistic.getShopCode());
+		}
+		//0正常，1关闭
+		if (!shopOauth.getOpen()) {
+			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+requestLogistic.getShopCode());
+		}
+
+		try {
+
+			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				youzanService.feedback(shopOauth,requestLogistic);
+			}else if(Integer.valueOf(ChannelType.HaiHu.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				haihuService.feedback(shopOauth,requestLogistic);
+			}else{
+				throw new ErpCommonException("","暂不支持该方法");
+			}
+		}catch (ErpCommonException e){
+			throw e;
+		}catch (Exception e){
+			throw new ErpCommonException("",e.getMessage());
+		}
+
+	}
+
+
+
 }

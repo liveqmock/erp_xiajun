@@ -14,10 +14,11 @@
     <result column="logistic_no" property="logisticNo" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="errorMsg" property="errormsg" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, version, channel_no, shop_code, channel_order_no, channel_sub_order_no, send_status, 
-    logistic_code, logistic_name, logistic_no, modifier, creator
+    logistic_code, logistic_name, logistic_no, modifier, creator, errorMsg
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -36,11 +37,13 @@
     insert into jd_logistics (version, channel_no, shop_code, 
       channel_order_no, channel_sub_order_no, send_status, 
       logistic_code, logistic_name, logistic_no, 
-      modifier, creator)
+      modifier, creator, errorMsg
+      )
     values (#{version,jdbcType=BIGINT}, #{channelNo,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
       #{channelOrderNo,jdbcType=VARCHAR}, #{channelSubOrderNo,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, 
       #{logisticCode,jdbcType=VARCHAR}, #{logisticName,jdbcType=VARCHAR}, #{logisticNo,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR})
+      #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{errormsg,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.JdLogisticsDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -81,6 +84,9 @@
       <if test="creator != null" >
         creator,
       </if>
+      <if test="errormsg != null" >
+        errorMsg,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="version != null" >
@@ -115,6 +121,9 @@
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="errormsg != null" >
+        #{errormsg,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -154,6 +163,9 @@
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
+      <if test="errormsg != null" >
+        errorMsg = #{errormsg,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -169,7 +181,8 @@
       logistic_name = #{logisticName,jdbcType=VARCHAR},
       logistic_no = #{logisticNo,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR}
+      creator = #{creator,jdbcType=VARCHAR},
+      errorMsg = #{errormsg,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -91,7 +91,7 @@ public class JdLogisticsServiceImpl implements JdLogisticsService {
 		logisticsDO.setSendStatus(SendStatus.REQUEST);
 
 		if(channelShop.getChannelNo().equalsIgnoreCase(""+ChannelType.YouZan.getValue())){
-             //有赞
+             //有赞,写子订单号
 			String channelSubOrderNos = "";
 			for(MallSubOrderDO mallSubOrder : mallSubOrderDOS){
                  if(EasyUtil.isStringEmpty(channelSubOrderNos)){
@@ -103,8 +103,16 @@ public class JdLogisticsServiceImpl implements JdLogisticsService {
 			logisticsDO.setChannelSubOrderNo(channelSubOrderNos);
 
 		}else if(channelShop.getChannelNo().equalsIgnoreCase(""+ChannelType.HaiHu.getValue())){
-			//海狐 不写子订单
-
+			//海狐 写skuCodes
+			String skuCodes = "";
+			for(MallSubOrderDO mallSubOrder : mallSubOrderDOS){
+				if(EasyUtil.isStringEmpty(skuCodes)){
+					skuCodes += mallSubOrder.getSkuCode();
+				}else {
+					skuCodes += "," + mallSubOrder.getSkuCode();
+				}
+			}
+			logisticsDO.setChannelSubOrderNo(skuCodes);
 		}else {
 			throw new ErpCommonException("channelno not suppourt","当前渠道不支持渠道自动发货");
 		}

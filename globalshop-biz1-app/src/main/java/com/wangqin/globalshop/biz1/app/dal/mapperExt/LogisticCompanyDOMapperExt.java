@@ -10,4 +10,6 @@ public interface LogisticCompanyDOMapperExt extends LogisticCompanyDOMapper {
     List<LogisticCompanyDO> selectList();
 
     LogisticCompanyDO selectByCode(String code);
+
+	public LogisticCompanyDO selectByName(String logisticName);
 }

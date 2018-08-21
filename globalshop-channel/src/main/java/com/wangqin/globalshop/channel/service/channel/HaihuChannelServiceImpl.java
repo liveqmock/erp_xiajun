@@ -563,6 +563,7 @@ public class HaihuChannelServiceImpl extends AbstractChannelService implements I
 					outerOrderDetailTemp.setOrderNo(outerOrder.getOrderNo());
 					outerOrderDetailTemp.setSubOrderNo(CodeGenUtil.getSubOrderNo());
 
+					outerOrderDetailTemp.setStatus(OrderStatus.PAID.getCode());
 
 					outerOrderDetailTemp.setShopCode(shopOauth.getShopCode());
 					outerOrderDetailTemp.setCustomerNo("无");
