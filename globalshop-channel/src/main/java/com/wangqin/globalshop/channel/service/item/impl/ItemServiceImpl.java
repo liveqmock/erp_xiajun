@@ -135,7 +135,7 @@ public class ItemServiceImpl implements IItemService {
     	List<ItemSkuVo> skuList = item.getItemSkus();
     	//检测sku_code是否存在且是否重复
     	if (!skuCodeCheck(skuList)) {
-    		throw new ErpCommonException("重复的skuCode或者空的skuCode");
+    		throw new ErpCommonException("sku的skuCode相互之间重复或者空的skuCode");
     	}
     	//检测item_code和sku_code是否和数据库已有的重复，重复则抛出异常
     	Boolean dup = false;
@@ -149,7 +149,7 @@ public class ItemServiceImpl implements IItemService {
     	}
     	if (!needUpdate) { //如果不需要更新
     		if (dup) {
-    			throw new ErpCommonException("重复的itemCode或者skuCode");
+    			return;
     		}
     	} else { //需要更新   		
     		if (dup) { //有重复的商品或者sku
