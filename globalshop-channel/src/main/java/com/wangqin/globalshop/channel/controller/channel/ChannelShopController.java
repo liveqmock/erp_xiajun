@@ -32,6 +32,10 @@ public class ChannelShopController extends BaseController {
 	private ChannelShopService channelShopService;
 
 
+	@Autowired
+	private IdCardService idCardService;
+
+
 	@RequestMapping("/addOrupdate")
 	@ResponseBody
 	public Object addOrUpdateShop(String channelShop){
@@ -75,9 +79,6 @@ public class ChannelShopController extends BaseController {
 	}
 
 
-	@Autowired
-	private IdCardService idCardService;
-
 
 	@RequestMapping("/testidcard")
 	@ResponseBody
@@ -85,6 +86,21 @@ public class ChannelShopController extends BaseController {
 		JsonResult<String> result = new JsonResult<>();
 		Boolean isTrue = idCardService.idcardTwoItem(name,idNumber);
 		result.buildData(isTrue+"");
+		return result.buildIsSuccess(true);
+	}
+
+
+	@RequestMapping("/addhaihu")
+	@ResponseBody
+	public Object addhaihu(){
+		JsonResult<ChannelShopDO> result = null;
+		try {
+			result = new JsonResult<>();
+			ChannelShopDO channelShop = channelShopService.addhaihu();
+			result.buildData(channelShop);
+		} catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg(""+e.getMessage());
+		}
 		return result.buildIsSuccess(true);
 	}
 
