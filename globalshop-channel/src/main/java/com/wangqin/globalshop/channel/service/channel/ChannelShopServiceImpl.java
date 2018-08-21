@@ -4,6 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelShopDOMapperExt;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdShopOauthDOMapperExt;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
@@ -103,6 +104,7 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 		String numStr  = String.format("%0" + 4 + "d", channelShopDOMapperExt.gainShopCodeSequence());
 		channelShop.setShopCode("haihu"+numStr);
 		channelShop.setExpiresTime(DateUtil.getSelfDefyDate(Calendar.YEAR,1));
+		channelShop.setChannelNo(ChannelType.HaiHu.getValue()+"");
 		return channelShop;
 	}
 
