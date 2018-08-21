@@ -154,6 +154,9 @@ public class UserController extends BaseController {
         BaseResp resp = BaseResp.createSuccess("");
     	String userNo=CodeGenUtil.genUserNo();
         userVo.setUserNo(userNo);
+        if(StringUtils.isBlank(userVo.getPassword())){
+            userVo.setPassword("123456");
+        }
         userVo.setPassword(DigestUtils.md5Hex(userVo.getPassword()));
         userService.insertByVo(userVo);
         //添加角色
