@@ -349,12 +349,12 @@
     t.gmt_create,
     phone,
     s.`name` AS organizationName,
-    o.id AS roleId,
+    o.role_id AS roleId,
     o.`name` AS roleName
     FROM
     auth_user t
     LEFT JOIN auth_user_role r ON t.id = r.user_id
-    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_role o ON r.role_id = o.role_id
     LEFT JOIN auth_organization s ON s.id = t.organization_id
     WHERE
       t.id = #{id}
