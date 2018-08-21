@@ -160,29 +160,31 @@ public class UserServiceImpl implements IUserService { //extends SuperServiceImp
         Long id = userVo.getId();
         /*查询得到该公司的买手角色*/
         AuthRoleDO buyer = authRoleDOMapper.selectByNameAndCompanyNo("买手", AppUtil.getLoginUserCompanyNo());
-        Long buyerId = buyer.getId();
-        /*判断买手是不是在changeMap中*/
-        if (changeMap.containsKey(buyerId)) {
-            String wxUnionId = authUser.getWxUnionId();
-            if (StringUtil.isBlank(wxUnionId)) {
-                throw new ErpCommonException("该用户不是扫码新增的用户,不能够设置买手角色");
+        if(buyer!=null){
+            Long buyerId = buyer.getId();
+            /*判断买手是不是在changeMap中*/
+            if (changeMap.containsKey(buyerId)) {
+                String wxUnionId = authUser.getWxUnionId();
+                if (StringUtil.isBlank(wxUnionId)) {
+                    throw new ErpCommonException("该用户不是扫码新增的用户,不能够设置买手角色");
+                }
+                /*如果是true就新增买手*/
+                if (changeMap.get(buyerId)) {
+                    addAuthRoleByRoleNameAndUserId(buyerId, id);
+                    BuyerDO buyerQueryDO = new BuyerDO();
+                    buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+                    buyerQueryDO.setUnionId(wxUnionId);
+                    buyerQueryDO.setNickName(authUser.getName());
+                    buyerQueryDO.init();
+                    buyerDOMapperExt.insertSelective(buyerQueryDO);
+                } else {
+                     /*如果是false就删除买手*/
+                    buyerDOMapperExt.deleteByUnionId(wxUnionId);
+                    userRoleMapper.deleteByUserIdAndRoleId(authUser.getId(), buyerId);
+                }
+                /*处理完买手，在changeMap中删除相关的记录*/
+                changeMap.remove(buyerId);
             }
-            /*如果是true就新增买手*/
-            if (changeMap.get(buyerId)) {
-                addAuthRoleByRoleNameAndUserId(buyerId, id);
-                BuyerDO buyerQueryDO = new BuyerDO();
-                buyerQueryDO.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-                buyerQueryDO.setUnionId(wxUnionId);
-                buyerQueryDO.setNickName(authUser.getName());
-                buyerQueryDO.init();
-                buyerDOMapperExt.insertSelective(buyerQueryDO);
-            } else {
-                 /*如果是false就删除买手*/
-                buyerDOMapperExt.deleteByUnionId(wxUnionId);
-                userRoleMapper.deleteByUserIdAndRoleId(authUser.getId(), buyerId);
-            }
-            /*处理完买手，在changeMap中删除相关的记录*/
-            changeMap.remove(buyerId);
         }
 
         for (Long roleId : changeMap.keySet()) {
