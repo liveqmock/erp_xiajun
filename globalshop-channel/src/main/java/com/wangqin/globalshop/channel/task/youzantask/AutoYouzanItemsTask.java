@@ -181,6 +181,7 @@ public class AutoYouzanItemsTask {
 	/**
 	 * 下发抓到的REQUEST商品至globalshop
 	 */
+	//@Scheduled(cron = "0/30 * * * * ?")
 	@Scheduled(cron = "6 6/4 * * * ?")
 	public void sendRequestItem2erp() {
 

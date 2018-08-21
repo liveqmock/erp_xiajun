@@ -177,6 +177,9 @@ public class YouzanService {
 			throw new ErpCommonException("sendItem youzanItemSku or youzanItem empty","tbspuid: "+jdItem.getChannelItemCode());
 		}
 
+		String itemCode = EasyUtil.isStringEmpty(youzanItem.getItemNo()) ? youzanItem.getItemId()+"" : youzanItem.getItemNo();
+
+
 		//第一步：channelItem处理
 		ChannelListingItemVo outerItemVo = new ChannelListingItemVo();
 		outerItemVo.setChannelNo(String.valueOf(ChannelType.YouZan.getValue()));
@@ -185,7 +188,7 @@ public class YouzanService {
 		String alias = youzanItem.getAlias();// 有赞别名,商品就是这些
 		outerItemVo.setChannelItemAlias(alias);
 		outerItemVo.setChannelItemCode(String.valueOf(youzanItem.getItemId()));
-		outerItemVo.setItemCode(youzanItem.getItemNo());//youzanItemDetail这个数据无item——no
+		outerItemVo.setItemCode(itemCode);//youzanItemDetail这个数据无item——no
 		outerItemVo.setStatus(ItemStatus.LISTING.getCode());
 
 		//补充必填信息
@@ -197,7 +200,7 @@ public class YouzanService {
 
 		//第二步：item处理
 		ItemVo itemVo = new ItemVo();
-		itemVo.setItemCode(youzanItem.getItemNo());
+		itemVo.setItemCode(itemCode);
 		itemVo.setItemName(youzanItem.getTitle());
 		itemVo.setCompanyNo(shopOauth.getCompanyNo());
 		String mainPic = getMainPicStr(youzanItemDetail.getPicUrl());
@@ -212,6 +215,9 @@ public class YouzanService {
 		YouzanItemGetResult.ItemSkuOpenModel[] skus = youzanItemDetail.getSkus();
 
 		if(skus == null || skus.length < 1){
+
+			String skuCode = itemCode;
+
 			//单品规格，item无规格时，skus.length==0
 			//第三步：外部SKU
 			ChannelListingItemSkuVo outerItemSku = new ChannelListingItemSkuVo();
@@ -221,7 +227,7 @@ public class YouzanService {
 			outerItemSku.setChannelItemSkuCode(String.valueOf(youzanItem.getItemId()));
 			//内部信息
 			outerItemSku.setItemCode(outerItemVo.getItemCode());
-			outerItemSku.setSkuCode(youzanItem.getItemNo());
+			outerItemSku.setSkuCode(skuCode);
 			//补充必填信息
 			outerItemSku.setIsDel(false);
 			outerItemSku.setGmtCreate(new Date());
@@ -231,8 +237,8 @@ public class YouzanService {
 			outSkuList.add(outerItemSku);
 			//第四步：内部SKU
 			ItemSkuVo itemSkuVo = new ItemSkuVo();
-			itemSkuVo.setItemCode(youzanItem.getItemNo());
-			itemSkuVo.setSkuCode(youzanItem.getItemNo());
+			itemSkuVo.setItemCode(itemCode);
+			itemSkuVo.setSkuCode(skuCode);
 			itemSkuVo.setSalePrice(BigDecimal.valueOf(youzanItem.getPrice() == null ? 0 : youzanItem.getPrice() / 100)
 					.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 			if (EasyUtil.isStringEmpty(youzanItem.getItemNo())) {
@@ -248,6 +254,8 @@ public class YouzanService {
 			//多规格：含一个及一个以上sku
 			for(YouzanItemGetResult.ItemSkuOpenModel sku : skus){
 
+				String skuCode = EasyUtil.isStringEmpty(sku.getItemNo()) ? sku.getSkuId()+"" : sku.getItemNo();
+
 				//第三步：外部SKU
 				ChannelListingItemSkuVo outerItemSku = new ChannelListingItemSkuVo();
 				outerItemSku.setPlatformType(PlatformType.YOUZAN.getCode());
@@ -256,7 +264,7 @@ public class YouzanService {
 				outerItemSku.setChannelItemSkuCode(String.valueOf(sku.getSkuId()));
 				//内部信息
 				outerItemSku.setItemCode(outerItemVo.getItemCode());
-				outerItemSku.setSkuCode(sku.getItemNo());
+				outerItemSku.setSkuCode(skuCode);
 
 				//补充必填信息
 				outerItemSku.setIsDel(false);
@@ -268,8 +276,8 @@ public class YouzanService {
 
 				//第四步：内部SKU
 				ItemSkuVo itemSkuVo = new ItemSkuVo();
-				itemSkuVo.setItemCode(youzanItem.getItemNo());
-				itemSkuVo.setSkuCode(sku.getItemNo());
+				itemSkuVo.setItemCode(itemCode);
+				itemSkuVo.setSkuCode(skuCode);
 				itemSkuVo.setSalePrice(BigDecimal.valueOf(sku.getPrice() == null ? 0 : sku.getPrice()/100).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
 
 				if(EasyUtil.isStringEmpty(sku.getItemNo())){

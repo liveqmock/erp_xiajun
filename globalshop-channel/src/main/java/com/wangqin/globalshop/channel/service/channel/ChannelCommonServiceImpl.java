@@ -378,10 +378,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 				throw new ErpCommonException("","暂不支持该方法");
 			}
 
-			//ChannelFactory.getChannel(shopOauth).getItems(startTime, endTime);
 		}catch (Exception e){
-			logger.error("",e);
-			throw new ErpCommonException("",e.getMessage());
+			throw e;
 		}
 	}
 
@@ -418,7 +416,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		}catch (ErpCommonException e){
 			throw e;
 		}catch (Exception e){
-			throw new ErpCommonException("",e.getMessage());
+			throw e;
 		}
 	}
 
@@ -463,7 +461,7 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		}catch (ErpCommonException e){
 			throw e;
 		}catch (Exception e){
-			throw new ErpCommonException("",e.getMessage());
+			throw e;
 		}
 
 	}

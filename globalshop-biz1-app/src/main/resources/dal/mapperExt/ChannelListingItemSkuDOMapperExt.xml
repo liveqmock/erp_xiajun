@@ -21,6 +21,10 @@
             and T.channel_item_code = #{channelItemCode}
         </if>
 
+        <if test="channelItemSkuCode != null">
+            and T.channel_item_sku_code = #{channelItemSkuCode}
+        </if>
+
         <if test=" isDel == true">
             and T.is_del is true
         </if>
