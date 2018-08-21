@@ -23,12 +23,10 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 	//渠道商品专用：根据item_code更新商品
 	void updateItemByItemCode(ItemDO itemDO);
 	
-    //定时任务
-    List<ItemDO> queryItemSelfDefineTime(Integer shelfMethod);
-
-    //定时任务
-    void updateItemIsSaleAndStatus(@Param("isSale") Byte isSale, @Param("status") Integer status, @Param("itemCode") String itemCode);
-
+    //定时任务:上架自定义上架时间的商品
+    void putOnItemSelfDefineTime(@Param("putOnStatus")Integer putOnStatus, @Param("selfDefineStatus")Integer selfDefineStatus,
+    		@Param("newBuildStatus")Integer newBuildStatus);
+    
     ItemDO queryItemDOByItemCode(String itemCode);
 
     String queryItemCodeById(Long id);

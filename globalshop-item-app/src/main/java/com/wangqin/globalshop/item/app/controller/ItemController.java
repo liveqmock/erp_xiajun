@@ -189,7 +189,7 @@ public class ItemController {
             return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
         }
         ItemUtil.transItemVoToDOUpdate(item, newItem, userNo, categoryCode, categoryName);
-        detailDecoder(newItem);
+        ItemUtil.detailDecoder(newItem);
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
         newItem.setPriceRange(PriceUtil.calNewPriceRange(skuSalePriceList));       
         itemService.updateByIdSelective(newItem);
@@ -265,40 +265,6 @@ public class ItemController {
 		itemSkuService.insertItemSkuSelective(addSku);
     }
 
-    
-    /**
-     * 封装ItemSkuScala对象信息
-     *
-     * @param obj     封装的对象
-     * @param itemSku
-     * @param value   scalaValue
-     * @param name    scalaName
-     * @author ChenZiHao
-     */
-    private void setInfo(ItemSkuScaleDO obj, ItemSkuDO itemSku, String value, String name) {
-        obj.setSkuCode(itemSku.getSkuCode());
-        obj.setItemCode(itemSku.getItemCode());
-        obj.setScaleCode(CodeGenUtil.getScaleCode());
-        obj.setScaleName(name);
-        obj.setScaleValue(value);
-        obj.init();
-
-    }
-
-    /*
-     *商品详情处理
-     */
-    private void detailDecoder(ItemDO item) {
-        if (StringUtils.isNotBlank(item.getDetail())) {
-            String detail = item.getDetail();
-            try {
-                String deStr = URLDecoder.decode(detail, "UTF-8");
-                item.setDetail(deStr);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * 商品管理->商品列表->操作->编辑
@@ -378,9 +344,8 @@ public class ItemController {
     @RequestMapping("/updateVirtualInvByItemId")
     @Transactional(rollbackFor = BizCommonException.class)
     public Object updateVirtualInvByItemId(Long id) {
-        //logger.info("updateVirtualInvByItemId start");
         JsonResult<ItemDO> result = new JsonResult<>();
-        if (IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserCompanyNo()) || IsEmptyUtil.isStringEmpty(AppUtil.getLoginUserId())) {
+        if (!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
         }
         String itemCode = itemService.queryItemCodeById(id);
