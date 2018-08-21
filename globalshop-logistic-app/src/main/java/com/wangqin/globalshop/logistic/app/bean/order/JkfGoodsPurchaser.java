@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.logistic.app.bean.base;
+package com.wangqin.globalshop.logistic.app.bean.order;
 
 import lombok.Builder;
 import lombok.Data;
