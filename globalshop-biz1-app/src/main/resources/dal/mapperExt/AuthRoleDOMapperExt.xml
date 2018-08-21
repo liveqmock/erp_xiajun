@@ -143,7 +143,8 @@
 
   <select id="queryRoleQueryList" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO" parameterType="com.wangqin.globalshop.biz1.app.bean.dataVo.RoleQueryVO">
     SELECT
-    <include refid="Base_Column_List2" />
+    id, role_id as roleId, company_no as companyNo, name, seq, description, status, is_del as isDel, gmt_create as gmtCreate, gmt_modify as gmtModify,
+    creator, modifier
     FROM
     `auth_role` T1
     where
@@ -260,5 +261,5 @@
   	id=#{roleId}
   	)
   </select>
-  
+
 </mapper>
