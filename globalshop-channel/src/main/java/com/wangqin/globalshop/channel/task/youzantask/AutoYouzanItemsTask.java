@@ -30,7 +30,7 @@ import java.util.List;
  */
 
 
-//@Component
+@Component
 public class AutoYouzanItemsTask {
 
 	private static Logger logger = LoggerFactory.getLogger("AutoYouzanItemsTask");
@@ -123,7 +123,7 @@ public class AutoYouzanItemsTask {
 
 
 	//抓商品：在售商品，抓一次，抓全部
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "5 5/4 * * * ?")
 	public void getAllItems() {
 
 		logger.info("youzan get all items start");
@@ -180,7 +180,7 @@ public class AutoYouzanItemsTask {
 	/**
 	 * 下发抓到的REQUEST商品至globalshop
 	 */
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "6 6/4 * * * ?")
 	public void sendRequestItem2erp() {
 
 		logger.info("youzan send request items start");
@@ -242,7 +242,7 @@ public class AutoYouzanItemsTask {
 	/**
 	 * 下发抓到的FAILURE商品至globalshop
 	 */
-	//@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "7 7/10 * * * ?")
 	public void sendFailureItem2erp() {
 
 		logger.info("youzan send failure items start");
