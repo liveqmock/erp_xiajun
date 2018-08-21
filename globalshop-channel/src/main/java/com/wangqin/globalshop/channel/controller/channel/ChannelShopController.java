@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.service.IdCardService;
+import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.channel.ChannelShopService;
 import com.wangqin.globalshop.common.base.BaseController;
 import com.wangqin.globalshop.common.utils.AppUtil;
@@ -104,4 +105,25 @@ public class ChannelShopController extends BaseController {
 		return result.buildIsSuccess(true);
 	}
 
+
+	/**
+	 * 编辑，或确认开通店铺
+	 * @param channelShop
+	 * @return
+	 */
+	@RequestMapping("/save")
+	@ResponseBody
+	public Object addOrUpdateShop(ChannelShopDO channelShop){
+		JsonResult<String> result = null;
+		try {
+			result = new JsonResult<>();
+			channelShopService.checkUnique(channelShop);
+			channelShopService.createOrUpdate(channelShop);
+		} catch (ErpCommonException e){
+			return result.buildIsSuccess(false).buildMsg(""+e.getErrorMsg());
+		}catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg(""+e.getMessage());
+		}
+		return result.buildIsSuccess(true);
+	}
 }
