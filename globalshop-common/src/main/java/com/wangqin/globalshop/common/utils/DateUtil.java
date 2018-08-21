@@ -358,4 +358,27 @@ public class DateUtil {
 
         return date.after(after);
     }
+
+
+	/**
+	 * 自定义时间
+	 * @param type 年，月，日
+	 * @param internal 推前或推后时间间隔，一年，一个月，一个星期，一天等，推前用负数
+	 * @return
+	 */
+	public static Date getSelfDefyDate(int type, Integer internal){
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		if(Calendar.YEAR == type){
+			calendar.add(calendar.YEAR, internal);
+		}else if(Calendar.DAY_OF_MONTH == type){
+			calendar.add(calendar.DAY_OF_MONTH, internal);
+		}else if(Calendar.MONTH == type){
+			calendar.add(calendar.MONTH, internal);
+		}
+		date = calendar.getTime();
+		return date;
+	}
+
 }

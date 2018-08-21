@@ -3,10 +3,13 @@ package com.wangqin.globalshop.channel.service.channel;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelShopDOMapperExt;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -78,6 +81,23 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 		if(!unique){
 			throw  new ErpCommonException("shopCode error","当前店铺[ "+channelShop.getShopCode()+" ]已存在其他账户，请先停用.");
 		}
+	}
+
+	/**
+	 * 海狐新增店铺，自动生成必要信息
+	 * @return
+	 */
+	@Override
+	public ChannelShopDO addhaihu(){
+		ChannelShopDO channelShop = new ChannelShopDO();
+		channelShop.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		channelShop.setOpen(true);
+		channelShop.setIsDel(false);
+		channelShop.setShopName("海狐海淘");
+		String numStr  = String.format("%0" + 4 + "d", channelShopDOMapperExt.gainShopCodeSequence());
+		channelShop.setShopCode("haihu"+numStr);
+		channelShop.setExpiresTime(DateUtil.getSelfDefyDate(Calendar.YEAR,1));
+		return channelShop;
 	}
 
 

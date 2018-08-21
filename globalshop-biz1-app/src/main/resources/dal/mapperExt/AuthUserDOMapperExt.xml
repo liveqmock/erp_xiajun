@@ -56,7 +56,7 @@
         <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
 
         <collection property="rolesList" ofType="com.wangqin.globalshop.biz1.app.dal.dataObject.AuthRoleDO">
-            <id column="roleId" property="id"/>
+            <result column="roleId" property="roleId"/>
             <result column="roleName" property="name"/>
         </collection>
     </resultMap>
@@ -299,12 +299,12 @@
         t.create_time,
         phone,
         s.`name` AS organizationName,
-        o.id AS roleId,
+        o.role_id AS roleId,
         o.`name` AS roleName
         FROM
         auth_user t
         LEFT JOIN auth_user_role r ON t.id = r.user_id
-        LEFT JOIN auth_role o ON r.role_id = o.id
+        LEFT JOIN auth_role o ON r.role_id = o.role_id
         LEFT JOIN auth_organization s ON s.id = t.organization_id
         <where>
             t.id = #{id}
@@ -349,12 +349,12 @@
     t.gmt_create,
     phone,
     s.`name` AS organizationName,
-    o.id AS roleId,
+    o.role_id AS roleId,
     o.`name` AS roleName
     FROM
     auth_user t
     LEFT JOIN auth_user_role r ON t.id = r.user_id
-    LEFT JOIN auth_role o ON r.role_id = o.id
+    LEFT JOIN auth_role o ON r.role_id = o.role_id
     LEFT JOIN auth_organization s ON s.id = t.organization_id
     WHERE
       t.id = #{id}
@@ -375,12 +375,12 @@
         t.gmt_create,
         phone,
         s.`name` AS organizationName,
-        o.id AS roleId,
+        o.role_id AS roleId,
         o.`name` AS roleName
         FROM
         auth_user t
         LEFT JOIN auth_user_role r ON t.id = r.user_id
-        LEFT JOIN auth_role o ON r.role_id = o.id
+        LEFT JOIN auth_role o ON r.role_id = o.role_id
         LEFT JOIN auth_organization s ON s.id = t.organization_id
         <where>
             1=1

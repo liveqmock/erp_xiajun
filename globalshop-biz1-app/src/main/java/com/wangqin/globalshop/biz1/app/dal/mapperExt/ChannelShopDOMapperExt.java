@@ -16,4 +16,5 @@ public interface ChannelShopDOMapperExt extends ChannelShopDOMapper {
 
 	public List<ChannelShopDO> searchShopList(ChannelShopDO channelShopDO);
 
+	public Long gainShopCodeSequence();
 }

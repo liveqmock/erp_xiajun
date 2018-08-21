@@ -104,3 +104,28 @@ INSERT INTO `auth_resource` VALUES
  (258,'channelAuth','渠道授权','',NULL,NULL,'',235,2,0,0,'2017-06-05 19:14:21','2018-06-12 14:14:37','SYS','SYS',0)
 ;
 
+
+###增加字段发货反馈字段
+ALTER TABLE `haidb2new`.`jd_logistics`
+ADD COLUMN `errorMsg` varchar(1024) COMMENT '错误信息';
+
+
+UPDATE logistic_company set code_in_youzan='1', name_in_youzan='申通快递' where code='001' and name='申通';
+UPDATE logistic_company set code_in_youzan='3', name_in_youzan='中通快递' where code='002' and name='中通';
+UPDATE logistic_company set code_in_youzan='2', name_in_youzan='圆通速递' where code='003' and name='圆通';
+UPDATE logistic_company set code_in_youzan='7', name_in_youzan='顺丰速运' where code='004' and name='顺丰';
+UPDATE logistic_company set code_in_youzan='4', name_in_youzan='韵达快递' where code='005' and name='韵达';
+
+
+UPDATE logistic_company set code_in_youzan='5', name_in_youzan='天天快递' where code='006' and name='天天';
+UPDATE logistic_company set code_in_youzan='', name_in_youzan='' where code='007' and name='4PX';
+UPDATE logistic_company set code_in_youzan='6', name_in_youzan='百世快递' where code='008' and name='百世快递';
+UPDATE logistic_company set code_in_youzan='8', name_in_youzan='邮政快递包裹' where code='009' and name='邮政（国内）';
+UPDATE logistic_company set code_in_youzan='12', name_in_youzan='邮政平邮' where code='010' and name='邮政（国际）';
+UPDATE logistic_company set code_in_youzan='11', name_in_youzan='EMS' where code='011' and name='EMS';
+
+
+### 增加shopcode自增序列号
+INSERT INTO `haidb2new`.`sequence` ( `name`, `current_value`, `increment`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del` )
+VALUES
+	( 'SHOPCODE', 0001, 1, '2018-08-01 13:22:52', '2018-08-01 13:22:52', 'SYSTEM', 'SYSTEM', 0 );
