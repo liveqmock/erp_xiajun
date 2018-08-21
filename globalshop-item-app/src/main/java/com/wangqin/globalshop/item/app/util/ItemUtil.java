@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.item.app.util;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -17,6 +19,7 @@ import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -270,6 +273,21 @@ public class ItemUtil {
         inventory.setUpc(newSku.getUpc());
         inventory.setVirtualInv(Long.valueOf(newSku.getVirtualInv()));
     	return inventory;
+    }
+    
+    /*
+     *商品详情处理
+     */
+    public static void detailDecoder(ItemDO item) {
+        if (IsEmptyUtil.isStringNotEmpty(item.getDetail())) {
+            String detail = item.getDetail();
+            try {
+                String deStr = URLDecoder.decode(detail, "UTF-8");
+                item.setDetail(deStr);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
