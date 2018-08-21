@@ -123,3 +123,9 @@ UPDATE logistic_company set code_in_youzan='6', name_in_youzan='百世快递' wh
 UPDATE logistic_company set code_in_youzan='8', name_in_youzan='邮政快递包裹' where code='009' and name='邮政（国内）';
 UPDATE logistic_company set code_in_youzan='12', name_in_youzan='邮政平邮' where code='010' and name='邮政（国际）';
 UPDATE logistic_company set code_in_youzan='11', name_in_youzan='EMS' where code='011' and name='EMS';
+
+
+### 增加shopcode自增序列号
+INSERT INTO `haidb2new`.`sequence` ( `name`, `current_value`, `increment`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del` )
+VALUES
+	( 'SHOPCODE', 0001, 1, '2018-08-01 13:22:52', '2018-08-01 13:22:52', 'SYSTEM', 'SYSTEM', 0 );

@@ -443,11 +443,12 @@ public class WechatLoginController {
                 sessionId = CookieUtil.getCookieValue(request, SESSION_ID);
             }
 
-            loginCache.putEx(sessionId, user.getName(), TIMEOUT);
+            loginCache.putEx(sessionId, user.getLoginName(), TIMEOUT);
             loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
             AppUtil.setLoginUser(user.getLoginName(), user.getCompanyNo());
             map.put("status", "1");
             map.put("userName", user.getName());
+            map.put("loginName", user.getLoginName());
             result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
             log.info("响应++++" + result);
             return result;

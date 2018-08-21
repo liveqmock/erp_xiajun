@@ -82,4 +82,9 @@
         ORDER BY T.id desc
     </select>
 
+
+    <select id="gainShopCodeSequence" resultType="java.lang.Long">
+  		  SELECT NEXTVAL('SHOPCODE');
+    </select>
+
 </mapper>
