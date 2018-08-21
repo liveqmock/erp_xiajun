@@ -1,13 +1,16 @@
 package com.wangqin.globalshop.channel.service.channel;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelShopDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.JdShopOauthDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelShopDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.JdShopOauthDOMapperExt;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +24,9 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 
 	@Autowired
 	private ChannelShopDOMapperExt channelShopDOMapperExt;
+
+	@Autowired
+	private JdShopOauthDOMapperExt shopOauthDOMapperExt;
 
 
 	@Override
@@ -98,6 +104,34 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 		channelShop.setShopCode("haihu"+numStr);
 		channelShop.setExpiresTime(DateUtil.getSelfDefyDate(Calendar.YEAR,1));
 		return channelShop;
+	}
+
+	@Override
+	@Transactional   //不考虑删除的店铺
+	public void changeOpen(String shopCode, Boolean open){
+		ChannelShopDO so = new ChannelShopDO();
+		so.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		so.setShopCode(shopCode);
+		ChannelShopDO result = channelShopDOMapperExt.searchShop(so);
+
+		if(result == null){
+			throw new ErpCommonException("shopCode not find","店铺未找到"+shopCode);
+		}else {
+			result.setOpen(open);
+		}
+		channelShopDOMapperExt.updateByPrimaryKey(result);
+
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+		shopOauthSo.setShopCode(shopCode);
+
+		JdShopOauthDO shopOauth = shopOauthDOMapperExt.searchShopOauth(shopOauthSo);
+		if(shopOauth == null){
+			throw new ErpCommonException("shopCode not find","店铺未找到"+shopCode);
+		}else {
+			shopOauth.setOpen(open);
+		}
+		shopOauthDOMapperExt.updateByPrimaryKey(shopOauth);
 	}
 
 

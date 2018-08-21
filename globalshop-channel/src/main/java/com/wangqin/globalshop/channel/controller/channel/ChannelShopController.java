@@ -126,4 +126,25 @@ public class ChannelShopController extends BaseController {
 		}
 		return result.buildIsSuccess(true);
 	}
+
+	/**
+	 * 启用，停用店铺
+	 * @param
+	 * @return
+	 */
+	@RequestMapping("/changeOpen")
+	@ResponseBody
+	public Object addOrUpdateShop(String shopCode, Boolean open){
+		JsonResult<String> result = null;
+		try {
+			result = new JsonResult<>();
+			channelShopService.changeOpen(shopCode, open);
+		} catch (ErpCommonException e){
+			return result.buildIsSuccess(false).buildMsg(""+e.getErrorMsg());
+		}catch (Exception e) {
+			return result.buildIsSuccess(false).buildMsg(""+e.getMessage());
+		}
+		return result.buildIsSuccess(true);
+	}
+
 }
