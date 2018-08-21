@@ -445,7 +445,7 @@ public class WechatLoginController {
 
             loginCache.putEx(sessionId, user.getName(), TIMEOUT);
             loginCache.putEx(COMPANY_NO + sessionId, user.getCompanyNo(), TIMEOUT);
-            AppUtil.setLoginUser(user.getName(), user.getCompanyNo());
+            AppUtil.setLoginUser(user.getLoginName(), user.getCompanyNo());
             map.put("status", "1");
             map.put("userName", user.getName());
             result.buildIsSuccess(true).buildMsg("登陆成功").buildData(map);
