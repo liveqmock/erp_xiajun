@@ -139,6 +139,17 @@ public class MallOrderItemVO {
 	 */
 	private Double actualAmount;
 
+	/**
+	 * 创建时间
+	 */
+	private Date gmtCreate;
+
+
+	/**
+	 * 修改时间
+	 */
+	private Date gmtModify;
+
     /**
 	 * 子订单列表
 	 */

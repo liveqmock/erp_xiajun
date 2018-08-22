@@ -223,13 +223,16 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(propagation= Propagation.REQUIRED,rollbackFor = ErpCommonException.class)
     public void release(MallSubOrderDO mallSubOrderDO) {
-        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), AppUtil.getLoginUserCompanyNo());
+        InventoryDO inventoryDO = mapper.queryBySkuCodeAndCompanyNo(mallSubOrderDO.getSkuCode(), mallSubOrderDO.getCompanyNo());
         if (inventoryDO == null) {
             throw new ErpCommonException("找不到对应的库存");
         }
         /**修改库存占用*/
-        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
-        mapper.updateByPrimaryKeySelective(inventoryDO);
+//        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
+        int release = mapper.release(inventoryDO, mallSubOrderDO.getQuantity());
+        if (release != 1){
+            throw new ErpCommonException("库存更新失败");
+        }
 
     }
 

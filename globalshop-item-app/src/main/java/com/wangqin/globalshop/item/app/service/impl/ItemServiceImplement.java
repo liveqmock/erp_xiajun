@@ -167,7 +167,9 @@ public class ItemServiceImplement implements IItemService {
         newItem.setCategoryCode(categoryCode);       
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));        
         newItem.setItemCode(itemCode);
-        generateQrCode(newItem, companyNo);      
+        generateQrCode(newItem, companyNo);  
+        //渠道处理
+        ItemUtil.handleThirdSale(newItem, item);
         
         //插入itemsku和库存
         List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
@@ -302,6 +304,7 @@ public class ItemServiceImplement implements IItemService {
                 }
             }
         }
+        //处理第三方销售平台
 
         item.setItemSkus(itemSkus);
         return item;

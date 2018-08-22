@@ -1,7 +1,6 @@
 package com.wangqin.globalshop.order.app.task;
 
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,12 +44,16 @@ public class AutoCloseExpiredOrderTask {
         timeOut = timeOut == null ? DEFAULT_TIME_OUT_IN_MINUTE : timeOut;
         List<MallOrderDO> mallOrderlist = mallOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode(), timeOut);
         for (MallOrderDO mallOrder : mallOrderlist) {
-            mallOrderService.closeOrder(mallOrder);
+            try {
+                mallOrderService.closeOrder(mallOrder);
+            } catch (ErpCommonException e) {
+                e.printStackTrace();
+            }
+
         }
         log.info("轮询关闭订单结束");
 
     }
-
 
 
 }
