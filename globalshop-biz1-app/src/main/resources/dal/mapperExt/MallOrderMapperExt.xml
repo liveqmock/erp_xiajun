@@ -454,6 +454,8 @@
         T1.order_time         AS orderTime,
         T1.status             AS status,
         T1.memo               AS remark,
+        T1.total_amount       AS totalAmount,
+        T1.actual_amount      AS actualAmount,
         T1.pay_type           AS payType,
         T2.receiver           AS receiver,
         T2.receiver_country   AS receiverCountry,
