@@ -1,10 +1,13 @@
 package com.wangqin.globalshop.logistic.app.bean.xml;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.wangqin.globalshop.logistic.app.bean.bill.BillResult;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.declare.GoodsDeclareModule;
 import com.wangqin.globalshop.logistic.app.bean.declare.JkfGoodsDeclar;
 import com.wangqin.globalshop.logistic.app.bean.order.OrderInfo;
+import com.wangqin.globalshop.logistic.app.bean.result.JkfResult;
+import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturnModule;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,6 +20,11 @@ import java.util.List;
 @Data
 @Builder
 public class Body {
+    /**
+     * 通用表体
+     */
+    @XStreamAlias("jkfSign")
+    private JkfSign jkfSign;
 
     /**
      * 订单报文表体
@@ -33,8 +41,24 @@ public class Body {
     /**
      * 清单审批回执报文表体
      */
-    @XStreamAlias("jkfSign")
-    private JkfSign jkfSign;
     @XStreamAlias("jkfGoodsDeclar")
     private JkfGoodsDeclar jkfGoodsDeclar;
+
+    /**
+     * 回执报文表体
+     */
+    @XStreamAlias("list")
+    private List<JkfResult> list;
+
+    /**
+     * 进口运单出区回执报文表体
+     */
+    @XStreamAlias("billResultList")
+    private List<BillResult> billResultList;
+
+    /**
+     * 退单对象集
+     */
+    @XStreamAlias("goodsReturnModuleList")
+    private List<GoodsReturnModule> goodsReturnModuleList;
 }

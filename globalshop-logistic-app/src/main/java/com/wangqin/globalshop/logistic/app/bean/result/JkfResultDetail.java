@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.logistic.app.bean.result;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +12,8 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class JkfResultListDetail {
+@XStreamAlias("jkfResultDetail")
+public class JkfResultDetail {
     /**
      * 5位数据校验状态码 + 冒号 + 处理结果文字信息
      * 必填：Y <br>

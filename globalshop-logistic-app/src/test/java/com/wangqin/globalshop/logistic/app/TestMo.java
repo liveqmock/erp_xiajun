@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.logistic.app;
 
 import com.thoughtworks.xstream.XStream;
+import com.wangqin.globalshop.logistic.app.bean.bill.BillResult;
 import com.wangqin.globalshop.logistic.app.bean.common.BusinessType;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.declare.GoodsDeclare;
@@ -10,6 +11,11 @@ import com.wangqin.globalshop.logistic.app.bean.order.JkfGoodsPurchaser;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfOrderDetail;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfOrderImportHead;
 import com.wangqin.globalshop.logistic.app.bean.order.OrderInfo;
+import com.wangqin.globalshop.logistic.app.bean.result.JkfResult;
+import com.wangqin.globalshop.logistic.app.bean.result.JkfResultDetail;
+import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturn;
+import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturnDetail;
+import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturnModule;
 import com.wangqin.globalshop.logistic.app.bean.xml.Body;
 import com.wangqin.globalshop.logistic.app.bean.xml.Head;
 import com.wangqin.globalshop.logistic.app.bean.xml.Mo;
@@ -25,10 +31,10 @@ import java.util.List;
 public class TestMo {
 
     /**
-     * 订单报文样例
+     * 订单样例
      */
     @Test
-    public void testOrderInfoDemo() {
+    public void testOrderInfo() {
         JkfSign jkfSign = JkfSign.builder()
                 .companyCode("3301968800")
                 .businessNo("order001")
@@ -157,10 +163,10 @@ public class TestMo {
     }
 
     /**
-     * 清单报文样例
+     * 清单样例
      */
     @Test
-    public void testGoodsDeclareDemo() {
+    public void testGoodsDeclare() {
         Head head = Head.builder()
                 .businessType(BusinessType.PERSONAL_GOODS_DECLAR)
                 .build();
@@ -321,5 +327,168 @@ public class TestMo {
 
         String moXml = xstream.toXML(mo);
         System.out.println(moXml);
+    }
+
+    /**
+     * 回执样例
+     */
+    @Test
+    public void testJkfResult() {
+        Head head = Head.builder()
+                .businessType(BusinessType.RESULT)
+                .build();
+
+        JkfResultDetail jkfResultDetail1 = JkfResultDetail.builder()
+                .resultInfo("22001:测试1")
+                .build();
+        JkfResultDetail jkfResultDetail2 = JkfResultDetail.builder()
+                .resultInfo("22002:测试2")
+                .build();
+        List<JkfResultDetail> resultList = new ArrayList<>();
+        resultList.add(jkfResultDetail1);
+        resultList.add(jkfResultDetail2);
+
+        JkfResult jkfResult = JkfResult.builder()
+                .companyCode("3301961Q43")
+                .businessNo("1")
+                .businessType("1")
+                .declareType('1')
+                .chkMark('1')
+                .noticeDate("2012-09-03")
+                .noticeTime("09:22")
+                .note("123")
+                .resultList(resultList)
+                .build();
+        List<JkfResult> jkfResultList = new ArrayList<>();
+        jkfResultList.add(jkfResult);
+
+        Body body = Body.builder()
+                .list(jkfResultList)
+                .build();
+
+        Mo mo = Mo.builder()
+                .version("1.0.0")
+                .head(head)
+                .body(body)
+                .build();
+
+        XStream xstream = new XStream();
+        xstream.autodetectAnnotations(true);
+
+        String xml = xstream.toXML(mo);
+        System.out.println(xml);
+    }
+
+    /**
+     * 运单回执样例
+     */
+    @Test
+    public void testBillResult() {
+        Head head = Head.builder()
+                .businessType("IMPORTBILLRESULT")
+                .build();
+
+        JkfSign jkfSign = JkfSign.builder()
+                .companyCode("企业编码")
+                .businessNo("业务编码")
+                .build();
+
+        BillResult billResult = BillResult.builder()
+                .wayBillNos("分运单号")
+                .outState("1")
+                .outTime("2014-05-20 22:00:00")
+                .build();
+        List<BillResult> billResultList = new ArrayList<>();
+        billResultList.add(billResult);
+
+        Body body = Body.builder()
+                .jkfSign(jkfSign)
+                .billResultList(billResultList)
+                .build();
+
+        Mo mo = Mo.builder()
+                .version("1.0.0")
+                .head(head)
+                .body(body)
+                .build();
+
+        printXmlFromMo(mo);
+    }
+
+    /**
+     * 退单样例
+     */
+    @Test
+    public void testGoodsReturn() {
+        Head head = Head.builder()
+                .businessType(BusinessType.IMPORT_ORDER_RETURN)
+                .build();
+
+        JkfSign jkfSign = JkfSign.builder()
+                .companyCode("发送方企业备案编号")
+                .businessNo("业务编码")
+                .businessType("业务类型")
+                .declareType('I')
+                .note("备注")
+                .build();
+
+        GoodsReturn goodsReturn = GoodsReturn.builder()
+                .appCode("退货申报编号")
+                .orderNo("原订单编号")
+                .wayBillNo("原运单号")
+                .eCommerceCode("电商企业编码")
+                .eCompanyCode("电商平台编码")
+                .internalAreaCompanyNo("仓储企业代码")
+                .declareCompanyCode("申报企业编码")
+                .returnWayBillNo("退货运单号")
+                .declareTimeStr("申报时间")
+                .customsField("场地代码")
+                .declPort("申报关区")
+                .packNo(99D)
+                .reason("退货原因")
+                .build();
+
+        GoodsReturnDetail goodsReturnDetail = GoodsReturnDetail.builder()
+                .goodsOrder(88)
+                .codeTs("行邮税号")
+                .goodsItemNo("商品货号")
+                .goodsName("物品名称")
+                .declareCount(77D)
+                .build();
+        List<GoodsReturnDetail> goodsReturnDetails = new ArrayList<>();
+        goodsReturnDetails.add(goodsReturnDetail);
+
+        GoodsReturnModule goodsReturnModule = GoodsReturnModule.builder()
+                .jkfSign(jkfSign)
+                .goodsReturn(goodsReturn)
+                .goodsReturnDetails(goodsReturnDetails)
+                .build();
+        List<GoodsReturnModule> goodsReturnModuleList = new ArrayList<>();
+        goodsReturnModuleList.add(goodsReturnModule);
+
+        Body body = Body.builder()
+                .goodsReturnModuleList(goodsReturnModuleList)
+                .build();
+
+        Mo mo = Mo.builder()
+                .version("1.0.0")
+                .head(head)
+                .body(body)
+                .build();
+
+        printXmlFromMo(mo);
+    }
+
+    /**
+     * 将 MO 对象转换为为 XML 并打印
+     *
+     * @param mo
+     */
+    private void printXmlFromMo(Mo mo){
+        XStream xstream = new XStream();
+        xstream.autodetectAnnotations(true);
+
+        String xml = xstream.toXML(mo);
+        System.out.println(xml);
     }
 }

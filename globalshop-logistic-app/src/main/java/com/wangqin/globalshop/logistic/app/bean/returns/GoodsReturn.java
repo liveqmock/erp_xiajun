@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 退货表头信息
+ * 退单表头对象
  *
  * @author angus
  * @date 2018/8/21

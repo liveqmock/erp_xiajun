@@ -101,12 +101,19 @@ public class TestWsClient {
 
         call.setReturnType(org.apache.axis.encoding.XMLType.XSD_STRING);
 
-        // 接收报文
+        // 接收回执报文
+        System.out.println("\n======================================\n");
         String result = (String)call.invoke(new Object[]{content,msgType,dataDigest,sendCode});
+        System.out.println("接收回执报文：");
+        System.out.println(result);
 
         System.out.println("\n======================================\n");
-        System.out.println("接收报文：");
-        System.out.println(result);
+        System.out.println("进行转换：");
+        XStream xstream = new XStream();
+        xstream.processAnnotations(Mo.class);
+        Mo mo = (Mo) xstream.fromXML(result);
+        System.out.println(mo);
+        System.out.println(xstream.toXML(mo));
     }
 
     /**

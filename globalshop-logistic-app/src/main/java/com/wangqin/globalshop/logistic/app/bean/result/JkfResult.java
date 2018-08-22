@@ -1,7 +1,10 @@
 package com.wangqin.globalshop.logistic.app.bean.result;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 处理结果
@@ -11,6 +14,7 @@ import lombok.Data;
  */
 @Data
 @Builder
+@XStreamAlias("jkfResult")
 public class JkfResult {
     /**
      * 企业备案编码
@@ -66,4 +70,7 @@ public class JkfResult {
      * ZJPORTRESULT 表示浙江电子口岸反馈处理结果
      */
     private String note;
+
+    @XStreamAlias("resultList")
+    private List<JkfResultDetail> resultList;
 }

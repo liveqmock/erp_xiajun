@@ -1,16 +1,18 @@
 package com.wangqin.globalshop.logistic.app.bean.returns;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Builder;
 import lombok.Data;
 
 /**
- * 退货表体信息
+ * 退单表体对象
  *
  * @author angus
  * @date 2018/8/21
  */
 @Data
 @Builder
+@XStreamAlias("goodReturnDetail")
 public class GoodsReturnDetail {
 
     /**
