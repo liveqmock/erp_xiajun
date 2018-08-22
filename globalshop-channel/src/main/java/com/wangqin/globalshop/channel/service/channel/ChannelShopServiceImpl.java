@@ -55,6 +55,13 @@ public class ChannelShopServiceImpl implements ChannelShopService {
 
 		ChannelShopDO result = channelShopDOMapperExt.searchShop(so);
 		if(result == null){
+			//如果是海狐，只允许添加一个店铺
+			if (ChannelType.HaiHu.getValue() == Integer.parseInt(channelShopDO.getChannelNo())) {
+				String haihuChannelNo = new Integer(ChannelType.HaiHu.getValue()).toString();
+				if (1 <= channelShopDOMapperExt.queryHaihuRecordNumByCompanyNo(channelShopDO.getCompanyNo(), haihuChannelNo)) {
+					throw new ErpCommonException("失败，只允许添加一个海狐的店铺");
+				}
+			}
 			channelShopDO.setGmtCreate(new Date());
 			channelShopDO.setIsDel(false);
 			channelShopDO.setVersion(0L);

@@ -4,15 +4,21 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.thoughtworks.xstream.mapper.Mapper.Null;
+import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.enums.ItemShelfMethod;
 import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.common.enums.ItemIsSale;
@@ -288,6 +294,43 @@ public class ItemUtil {
                 e.printStackTrace();
             }
         }
+    }
+    
+    /*
+     * 第三方销售渠道的处理
+     */
+    public static void handleThirdSale(ItemDO newItem, ItemQueryVO item) {
+    	newItem.setSaleOnYouzan(ItemIsSale.UNSALABLE.getCode());
+		newItem.setThirdSale(ItemIsSale.UNSALABLE.getCode());
+    	if(IsEmptyUtil.isStringNotEmpty(item.getSaleOnChannels())) {
+    		String chanNoArray[] = item.getSaleOnChannels().split(",");
+    		for (String chanNo:chanNoArray) {
+    			if (ChannelType.YouZan.getValue() == Integer.parseInt(chanNo)) {
+    				newItem.setSaleOnYouzan(ItemIsSale.SALABLE.getCode());
+    			}
+    			if (ChannelType.HaiHu.getValue() == Integer.parseInt(chanNo)) {
+    				newItem.setThirdSale(ItemIsSale.SALABLE.getCode());
+    			}
+    		}
+    	} 
+    }
+    
+    /**
+     * 查询的时候第三方销售平台的处理
+     */
+    public static void queryThirdSale(ItemDTO item) {
+    	List<String> noList = new ArrayList<String>();
+    	Integer haihu = item.getThirdSale();
+    	Integer youzan = item.getSaleOnYouzan();
+    	if (null != youzan && ItemIsSale.SALABLE.getCode().equals(youzan)) {
+    		noList.add("1");
+    	}
+    	if (null != haihu && ItemIsSale.SALABLE.getCode().equals(haihu)) {
+    		noList.add("2");
+    	}
+    	if (IsEmptyUtil.isCollectionNotEmpty(noList)) {
+    		item.setSaleOnChannels(noList);
+    	} 	
     }
 
 }

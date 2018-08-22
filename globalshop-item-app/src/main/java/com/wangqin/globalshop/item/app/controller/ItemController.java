@@ -188,6 +188,7 @@ public class ItemController {
         } catch (Exception e) {
             return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
         }
+        ItemUtil.handleThirdSale(newItem, item);
         ItemUtil.transItemVoToDOUpdate(item, newItem, userNo, categoryCode, categoryName);
         ItemUtil.detailDecoder(newItem);
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));
@@ -282,13 +283,15 @@ public class ItemController {
         }
 
         ItemDTO item = itemService.queryItemById(id);
+        
         if (item == null) {
             result.buildIsSuccess(false).buildMsg("没有找到商品，商品可能已删除");
         }
         //获取商品类目的Id
         Long categoryId = categoryService.queryCategoryByCategoryCode(item.getCategoryCode()).getId();
         item.setCategoryId(categoryId);
-
+        //第三方销售渠道的处理
+        ItemUtil.queryThirdSale(item);
         result.setData(item);
         return result.buildIsSuccess(true);
     }

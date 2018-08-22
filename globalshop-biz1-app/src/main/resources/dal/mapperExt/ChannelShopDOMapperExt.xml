@@ -56,7 +56,26 @@
 
     </sql>
 
-
+	<!-- 商品发布：查询该公司可用的渠道 -->
+	<select id="queryChannelNoByCompanyNo" resultType="java.lang.String">
+		SELECT DISTINCT(channel_no)
+		FROM channel_shop
+		WHERE
+			company_no=#{companyNo}
+			AND is_del is false
+			AND open is true
+	</select>
+	
+	<!-- 查询当前公司旗下海狐渠道记录的数量，限制添加一条海狐的渠道 -->
+	<select id="queryHaihuRecordNumByCompanyNo" resultType="java.lang.Integer">
+		SELECT IFNULL(COUNT(1),0)
+		FROM channel_shop
+		WHERE
+			company_no=#{companyNo}
+			AND is_del is false
+			AND channel_no=#{haihuNo}
+	</select>
+	
     <!--查询总条数 -->
     <select id="searchShop" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
