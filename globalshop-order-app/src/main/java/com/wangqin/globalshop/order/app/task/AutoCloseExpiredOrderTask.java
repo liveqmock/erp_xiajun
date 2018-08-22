@@ -41,8 +41,7 @@ public class AutoCloseExpiredOrderTask {
     public void autoCloseExpiredOrder() {
         log.info("轮询关闭订单开始");
         /**十分钟*/
-//        timeOut = timeOut == null ? DEFAULT_TIME_OUT_IN_MINUTE : timeOut;
-        timeOut = 1L;
+        timeOut = timeOut == null ? DEFAULT_TIME_OUT_IN_MINUTE : timeOut;
         List<MallOrderDO> mallOrderlist = mallOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode(), timeOut);
         for (MallOrderDO mallOrder : mallOrderlist) {
             try {
