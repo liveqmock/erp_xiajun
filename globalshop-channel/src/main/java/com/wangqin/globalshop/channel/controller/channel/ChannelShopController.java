@@ -36,6 +36,7 @@ public class ChannelShopController extends BaseController {
 	@Autowired
 	private IdCardService idCardService;
 
+	
 
 	@RequestMapping("/addOrupdate")
 	@ResponseBody
@@ -115,6 +116,8 @@ public class ChannelShopController extends BaseController {
 	@ResponseBody
 	public Object addOrUpdateShop(ChannelShopDO channelShop){
 		JsonResult<String> result = null;
+		String companyNo = AppUtil.getLoginUserCompanyNo();
+		channelShop.setCompanyNo(companyNo);
 		try {
 			result = new JsonResult<>();
 			channelShopService.checkUnique(channelShop);

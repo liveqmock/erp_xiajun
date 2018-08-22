@@ -22,7 +22,9 @@
         T1.price_range as priceRange,T1.id_card AS idCard,
         T1.start_date AS startDate,T1.shelf_method AS shelfMethod,
         T1.is_sale AS isSale,T1.is_abroad AS isAbroad,
-        T1.wxis_sale AS wxisSale       
+        T1.wxis_sale AS wxisSale,
+        T1.sale_on_youzan AS saleOnYouzan,
+        T1.third_sale AS thirdSale   
     </sql>
 
 	<!-- 渠道商品：根据item_code更新商品 -->
@@ -504,6 +506,12 @@
                 <if test="isSale != null">
                     is_sale = #{isSale,jdbcType=TINYINT},
                 </if>
+                <if test="saleOnYouzan != null" >
+        			sale_on_youzan = #{saleOnYouzan,jdbcType=INTEGER},
+      			</if>
+      			<if test="thirdSale != null" >
+        			third_sale = #{thirdSale,jdbcType=INTEGER},
+      			</if>
                 <if test="wxisSale != null">
                     wxis_sale = #{wxisSale,jdbcType=TINYINT},
                 </if>
