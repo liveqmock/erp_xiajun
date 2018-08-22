@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
+ * 报文头
+ *
  * @author angus
  * @date 2018/8/21
  */

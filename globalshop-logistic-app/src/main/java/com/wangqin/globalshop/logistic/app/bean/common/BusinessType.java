@@ -32,6 +32,8 @@ public interface BusinessType {
      */
     String CHECKRESULT = "CHECKRESULT";
 
+    String CHECK_RESULT = "checkResult";
+
     /**
      * 进口运单出区回执
      */
@@ -46,4 +48,9 @@ public interface BusinessType {
      * 退单
      */
     String IMPORT_ORDER_RETURN = "IMPORT_ORDER_RETURN";
+
+    /**
+     * 删单
+     */
+    String MODIFY_CANCEL = "MODIFY_CANCEL";
 }

@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.logistic.app.bean.cancel;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 @Data
 @Builder
+@XStreamAlias("modifyCancel")
 public class ModifyCancel {
     /**
      * 电商企业编码

@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 删单信息回执
+ * 删单回执信息
  *
  * @author angus
  * @date 2018/8/21

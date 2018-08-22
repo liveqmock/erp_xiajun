@@ -8,6 +8,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 订单对象
+ *
  * @author angus
  * @date 2018/8/21
  */

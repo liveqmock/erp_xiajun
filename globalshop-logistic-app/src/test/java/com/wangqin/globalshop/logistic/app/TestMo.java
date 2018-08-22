@@ -2,6 +2,8 @@ package com.wangqin.globalshop.logistic.app;
 
 import com.thoughtworks.xstream.XStream;
 import com.wangqin.globalshop.logistic.app.bean.bill.BillResult;
+import com.wangqin.globalshop.logistic.app.bean.cancel.ModifyCancel;
+import com.wangqin.globalshop.logistic.app.bean.cancel.ModifyCancelResult;
 import com.wangqin.globalshop.logistic.app.bean.common.BusinessType;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.declare.GoodsDeclare;
@@ -13,6 +15,7 @@ import com.wangqin.globalshop.logistic.app.bean.order.JkfOrderImportHead;
 import com.wangqin.globalshop.logistic.app.bean.order.OrderInfo;
 import com.wangqin.globalshop.logistic.app.bean.result.JkfResult;
 import com.wangqin.globalshop.logistic.app.bean.result.JkfResultDetail;
+import com.wangqin.globalshop.logistic.app.bean.returns.CustomCheckResult;
 import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturn;
 import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturnDetail;
 import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturnModule;
@@ -29,6 +32,19 @@ import java.util.List;
  * @date 2018/8/21
  */
 public class TestMo {
+
+    /**
+     * 将 MO 对象转换为为 XML 并打印
+     *
+     * @param mo
+     */
+    private void printXmlFromMo(Mo mo) {
+        XStream xstream = new XStream();
+        xstream.autodetectAnnotations(true);
+
+        String xml = xstream.toXML(mo);
+        System.out.println(xml);
+    }
 
     /**
      * 订单样例
@@ -480,15 +496,102 @@ public class TestMo {
     }
 
     /**
-     * 将 MO 对象转换为为 XML 并打印
-     *
-     * @param mo
+     * 审核回执样例
      */
-    private void printXmlFromMo(Mo mo){
-        XStream xstream = new XStream();
-        xstream.autodetectAnnotations(true);
+    @Test
+    public void testCustomCheck() {
+        Head head = Head.builder()
+                .businessType(BusinessType.CHECK_RESULT)
+                .build();
 
-        String xml = xstream.toXML(mo);
-        System.out.println(xml);
+        CustomCheckResult customCheckResult = CustomCheckResult.builder()
+                .businessNo("业务编号")
+                .businessType(BusinessType.IMPORT_ORDER_RETURN)
+                .companyCode("发送方企业备案编号")
+                .approveResult("审批结果")
+                .approveComment("审批意见")
+                .processTime("审核时间")
+                .build();
+
+        Body body = Body.builder()
+                .customCheckResult(customCheckResult)
+                .build();
+
+        Mo mo = Mo.builder()
+                .version("1.0.0")
+                .head(head)
+                .body(body)
+                .build();
+
+        printXmlFromMo(mo);
+    }
+
+    /**
+     * 删单样例
+     */
+    @Test
+    public void testModifyCance() {
+        Head head = Head.builder()
+                .businessType(BusinessType.MODIFY_CANCEL)
+                .build();
+
+        JkfSign jkfSign = JkfSign.builder()
+                .companyCode("接收方企业 备案编号")
+                .businessType(BusinessType.MODIFY_CANCEL)
+                .declareType('1')
+                .businessNo("业务编号")
+                .build();
+
+        ModifyCancel modifyCancel = ModifyCancel.builder()
+                .eCommerceCode("电商企业备案编号")
+                .eCompanyCode("电商平台备案编号")
+                .subCarriageNo("分运单号")
+                .reason("删单原因")
+                .build();
+        List<ModifyCancel> modifyCancelList = new ArrayList<>();
+        modifyCancelList.add(modifyCancel);
+
+        Body body = Body.builder()
+                .jkfSign(jkfSign)
+                .modifyCancelList(modifyCancelList)
+                .build();
+
+        Mo mo = Mo.builder()
+                .version("1.0.0")
+                .head(head)
+                .body(body)
+                .build();
+
+        printXmlFromMo(mo);
+    }
+
+    /**
+     * 删单回执信息样例
+     */
+    @Test
+    public void testModifyCancelResult() {
+        Head head = Head.builder()
+                .businessType(BusinessType.MODIFY_CANCEL)
+                .build();
+
+        ModifyCancelResult modifyCancelResult = ModifyCancelResult.builder()
+                .businessNo("业务编号")
+                .companyCode("发送方企业备案编号")
+                .approveResult("审批结果")
+                .approveComment("审批意见")
+                .processTime("处理时间")
+                .build();
+
+        Body body = Body.builder()
+                .modifyCancelResult(modifyCancelResult)
+                .build();
+
+        Mo mo = Mo.builder()
+                .version("1.0.0")
+                .head(head)
+                .body(body)
+                .build();
+
+        printXmlFromMo(mo);
     }
 }
