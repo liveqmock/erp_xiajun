@@ -396,4 +396,15 @@ public class MallOrderServiceImpl implements IMallOrderService {
         return mallOrderDOMapper.countMallOrders(mallOrderQueryVO);
     }
 
+	@Override
+	public List<MallOrderItemVO> searchPageList(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam) {
+		pageQueryParam.calculateRowIndex();
+		List<MallOrderItemVO> mallOrderItemVOList =  mallOrderDOMapper.listMallOrders(mallOrderQueryVO, pageQueryParam);
+		for(MallOrderItemVO mallOrderItemVO : mallOrderItemVOList){
+			List<MallSubOrderDO> subOrderDOList = mallSubOrderDOMapper.selectByOrderNo(mallOrderItemVO.getOrderNo());
+			mallOrderItemVO.setSubOrderDOList(subOrderDOList);
+		}
+		return mallOrderItemVOList;
+	}
+
 }

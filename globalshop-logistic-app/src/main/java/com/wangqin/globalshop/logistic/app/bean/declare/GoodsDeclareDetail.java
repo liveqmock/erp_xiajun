@@ -1,5 +1,6 @@
 package com.wangqin.globalshop.logistic.app.bean.declare;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 @Data
 @Builder
+@XStreamAlias("goodsDeclareDetail")
 public class GoodsDeclareDetail {
 
     /**

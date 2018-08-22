@@ -1,8 +1,10 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 订单管理展示列表项对应的 VO
@@ -126,4 +128,19 @@ public class MallOrderItemVO {
      * 对应 mall_sub_order 表的 sku_code 字段
      */
     private String skuCode;
+
+	/**
+	 * 总价
+	 */
+	private Double totalAmount;
+
+	/**
+	 * 实付价
+	 */
+	private Double actualAmount;
+
+    /**
+	 * 子订单列表
+	 */
+	private List<MallSubOrderDO> subOrderDOList;
 }
