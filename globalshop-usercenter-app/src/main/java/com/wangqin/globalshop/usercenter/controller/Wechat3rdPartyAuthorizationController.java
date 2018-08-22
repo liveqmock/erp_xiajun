@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -46,8 +47,9 @@ import static com.wangqin.globalshop.usercenter.constant.SysConstants.PAY_STATUS
  * @data 2018/07/10
  * 第三方平台授权controller
  */
-@RestController
+@Controller
 @RequestMapping("/account")
+@ResponseBody
 public class Wechat3rdPartyAuthorizationController {
     @Resource
     private Cache loginCache;
@@ -155,7 +157,7 @@ public class Wechat3rdPartyAuthorizationController {
 
 
     @RequestMapping("/getAuthUrl")
-//    @Authenticated
+    @Authenticated
     public Object getAuthUrl() {
         JsonResult<Object> result = new JsonResult<>();
         String re_url;
@@ -228,7 +230,7 @@ public class Wechat3rdPartyAuthorizationController {
                 applet.setPublishStatus(PublishStatus.AUTHORIZED.getCode());
                 applet.update();
                 appletConfigServiceImplement.update(applet);
-                return result.buildMsg("授权成功").buildIsSuccess(false);
+                return result.buildMsg("授权成功").buildIsSuccess(true);
             }
             String token = info.getString("authorizer_access_token");
               /*设置小程序相关的 服务器域名、业务域名*/
@@ -240,7 +242,7 @@ public class Wechat3rdPartyAuthorizationController {
 //            auditApplet(applet);
             log.info("最终小程序信息=======" + applet);
             appletConfigServiceImplement.insert(applet);
-            return result.buildMsg("授权成功").buildIsSuccess(false);
+            return result.buildMsg("授权成功").buildIsSuccess(true);
         } catch (BizCommonException e) {
             return result.buildMsg("授权失败" + e.getErrorMsg()).buildIsSuccess(false);
         } catch (Exception e) {

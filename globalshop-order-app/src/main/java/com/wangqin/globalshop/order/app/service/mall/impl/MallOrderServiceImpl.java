@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.sun.tools.javac.api.ClientCodeWrapper;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
@@ -47,8 +48,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
     private IDealerService iDealerService;
     @Autowired
     private MallSubOrderMapperExt mallSubOrderDOMapper;
-    @Autowired
-    private IMallOrderService mallSubOrderService;
     @Autowired
     private CompanyDOMapperExt companyDOMapper;
 
@@ -406,5 +405,26 @@ public class MallOrderServiceImpl implements IMallOrderService {
 		}
 		return mallOrderItemVOList;
 	}
+
+    /**
+     * 关闭订单
+     * @param mallOrder
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void closeOrder(MallOrderDO mallOrder) {
+        /*1.修改主订单状态*/
+        mallOrderDOMapper.changeStatus(mallOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+        /*2.查出对应的子订单*/
+        List<MallSubOrderDO> list = mallSubOrderDOMapper.selectByOrderNo(mallOrder.getOrderNo());
+        for (MallSubOrderDO mallSubOrder : list) {
+            /*3.修改子订单状态*/
+            mallSubOrderDOMapper.changeStatus(mallSubOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+            /*4.释放子订单对应的库存*/
+            inventoryService.release(mallSubOrder);
+
+        }
+
+    }
 
 }
