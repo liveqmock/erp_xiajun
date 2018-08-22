@@ -4,9 +4,7 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
-import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +30,6 @@ public class AutoCloseExpiredOrderTask {
 
     @Autowired
     private IMallOrderService mallOrderService;
-    @Autowired
-    private IMallSubOrderService mallSubOrderService;
-    @Autowired
-    private InventoryService inventoryService;
 
     @Scheduled(cron = "0 0/1 * * * ?")
     public void autoCloseExpiredOrder() {

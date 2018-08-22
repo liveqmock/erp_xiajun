@@ -69,7 +69,7 @@ public interface MallOrderMapperExt extends MallOrderDOMapper {
 
     List<MallOrderDO> queryExpiredSubOrders(@Param("status") int status, @Param("timeOut") Long timeOut);
 
-    Integer changeStatus(@Param("id") Long id, @Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus);
+    int changeStatus(@Param("id") Long id, @Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus);
 
     /**
      * 根据指定条件分页查询订单列表

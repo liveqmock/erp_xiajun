@@ -626,7 +626,7 @@
             )
         </if>       
         GROUP BY T3.item_code
-        ORDER BY T1.gmt_modify desc  
+        ORDER BY T1.gmt_modify desc,T1.id
         <![CDATA[ LIMIT #{firstStart},#{pageSize} ]]>       
     </select>
 

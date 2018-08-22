@@ -228,7 +228,6 @@ public class InventoryServiceImpl implements InventoryService {
             throw new ErpCommonException("找不到对应的库存");
         }
         /**修改库存占用*/
-//        inventoryDO.setLockedInv(inventoryDO.getLockedInv() - mallSubOrderDO.getQuantity());
         int release = mapper.release(inventoryDO, mallSubOrderDO.getQuantity());
         if (release != 1){
             throw new ErpCommonException("库存更新失败");

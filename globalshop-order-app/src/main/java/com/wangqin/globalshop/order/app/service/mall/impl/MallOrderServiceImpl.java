@@ -76,7 +76,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     public void addOuterOrder(MallOrderVO outerOrder) {
         outerOrder.setOrderNo(CodeGenUtil.getOrderNo());
         CompanyDO companyDO = companyDOMapper.selectByCompanyNo(AppUtil.getLoginUserCompanyNo());
-        if (companyDO == null){
+        if (companyDO == null) {
             throw new ErpCommonException("找不到对应的公司");
         }
         List<MallSubOrderDO> os = outerOrder.getOuterOrderDetails();
@@ -92,7 +92,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
             /**商品相关Star*/
             initSkuInfo2SubOrder(o);
             /**商品相关End*/
-            initAddressInfo2SubOrder(o,outerOrder);
+            initAddressInfo2SubOrder(o, outerOrder);
             o.setFreight(0D);
             o.setFreightReal(0D);
             o.setMemo(outerOrder.getMemo());
@@ -281,7 +281,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     @Override
     public void changeOrderStatus(Integer oldStatus, Integer newStatus, Long timeOut) {
-        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus, newStatus,timeOut);
+        mallOrderDOMapper.updateExpiredTaskStatus(oldStatus, newStatus, timeOut);
 
     }
 
@@ -290,7 +290,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
     public void update(MallOrderVO vo) {
         List<MallSubOrderDO> list = JSON.parseArray(vo.getOuterOrderDetailList(), MallSubOrderDO.class);
         String orderNo = vo.getOrderNo();
-        if (StringUtils.isBlank(orderNo)){
+        if (StringUtils.isBlank(orderNo)) {
             throw new ErpCommonException("数据丢失,请联系管理员");
         }
         MallOrderDO mallOrder = mallOrderDOMapper.selectByOrderNo(orderNo);
@@ -331,12 +331,12 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     @Override
     public List<MallOrderDO> queryExpiredSubOrders(int status, Long timeOut) {
-        return mallOrderDOMapper.queryExpiredSubOrders(status,timeOut);
+        return mallOrderDOMapper.queryExpiredSubOrders(status, timeOut);
     }
 
     @Override
-    public Integer changeStatus(Long id,Integer oldStatus, Integer newStatus) {
-        return mallOrderDOMapper.changeStatus(id,oldStatus,newStatus);
+    public Integer changeStatus(Long id, Integer oldStatus, Integer newStatus) {
+        return mallOrderDOMapper.changeStatus(id, oldStatus, newStatus);
     }
 
 
@@ -392,19 +392,20 @@ public class MallOrderServiceImpl implements IMallOrderService {
         return mallOrderDOMapper.countMallOrders(mallOrderQueryVO);
     }
 
-	@Override
-	public List<MallOrderItemVO> searchPageList(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam) {
-		pageQueryParam.calculateRowIndex();
-		List<MallOrderItemVO> mallOrderItemVOList =  mallOrderDOMapper.listMallOrders(mallOrderQueryVO, pageQueryParam);
-		for(MallOrderItemVO mallOrderItemVO : mallOrderItemVOList){
-			List<MallSubOrderDO> subOrderDOList = mallSubOrderDOMapper.selectByOrderNo(mallOrderItemVO.getOrderNo());
-			mallOrderItemVO.setSubOrderDOList(subOrderDOList);
-		}
-		return mallOrderItemVOList;
-	}
+    @Override
+    public List<MallOrderItemVO> searchPageList(MallOrderQueryVO mallOrderQueryVO, PageQueryParam pageQueryParam) {
+        pageQueryParam.calculateRowIndex();
+        List<MallOrderItemVO> mallOrderItemVOList = mallOrderDOMapper.listMallOrders(mallOrderQueryVO, pageQueryParam);
+        for (MallOrderItemVO mallOrderItemVO : mallOrderItemVOList) {
+            List<MallSubOrderDO> subOrderDOList = mallSubOrderDOMapper.selectByOrderNo(mallOrderItemVO.getOrderNo());
+            mallOrderItemVO.setSubOrderDOList(subOrderDOList);
+        }
+        return mallOrderItemVOList;
+    }
 
     /**
      * 关闭订单
+     *
      * @param mallOrder
      */
     @Override
@@ -412,15 +413,21 @@ public class MallOrderServiceImpl implements IMallOrderService {
     public void closeOrder(MallOrderDO mallOrder) {
         String orderNo = mallOrder.getOrderNo();
         /*1.修改主订单状态*/
-        mallOrderDOMapper.changeStatus(mallOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+        int i = mallOrderDOMapper.changeStatus(mallOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+        if (i == 1) {
+            throw new ErpCommonException("更新订单状态失败");
+        }
         /*2.查出对应的子订单*/
-        if (StringUtil.isBlank(orderNo)){
+        if (StringUtil.isBlank(orderNo)) {
             throw new ErpCommonException("找不到对应的订单");
         }
         List<MallSubOrderDO> list = mallSubOrderDOMapper.selectByOrderNo(orderNo);
         for (MallSubOrderDO mallSubOrder : list) {
             /*3.修改子订单状态*/
-            mallSubOrderDOMapper.changeStatus(mallSubOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+            int j = mallSubOrderDOMapper.changeStatus(mallSubOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+            if (j == 1) {
+                throw new ErpCommonException("更新订单状态失败");
+            }
             /*4.释放子订单对应的库存*/
             inventoryService.release(mallSubOrder);
 

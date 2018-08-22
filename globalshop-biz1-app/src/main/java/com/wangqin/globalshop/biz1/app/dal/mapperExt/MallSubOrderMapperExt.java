@@ -143,7 +143,7 @@ public interface MallSubOrderMapperExt extends MallSubOrderDOMapper {
 
     List<MallSubOrderDO> queryByMallSubOrderNos(List<String> noList);
 
-    Integer changeStatus(@Param("id") Long id, @Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus);
+    int changeStatus(@Param("id") Long id, @Param("oldStatus") Integer oldStatus, @Param("newStatus") Integer newStatus);
 
     /**
      * 根据指定条件分页查询子订单
