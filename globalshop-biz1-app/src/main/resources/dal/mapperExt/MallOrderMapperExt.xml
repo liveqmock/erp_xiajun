@@ -456,6 +456,8 @@
         T1.memo               AS remark,
         T1.total_amount       AS totalAmount,
         T1.actual_amount      AS actualAmount,
+        T1.gmt_create         AS gmtCreate,
+        T1.gmt_modify         AS gmtModify,
         T1.pay_type           AS payType,
         T2.receiver           AS receiver,
         T2.receiver_country   AS receiverCountry,
