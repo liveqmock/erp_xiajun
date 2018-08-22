@@ -1,6 +1,7 @@
 package com.wangqin.globalshop.order.app.service.mall.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.sun.tools.javac.api.ClientCodeWrapper;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
@@ -14,10 +15,7 @@ import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
 import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.ImgUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
@@ -47,8 +45,6 @@ public class MallOrderServiceImpl implements IMallOrderService {
     private IDealerService iDealerService;
     @Autowired
     private MallSubOrderMapperExt mallSubOrderDOMapper;
-    @Autowired
-    private IMallOrderService mallSubOrderService;
     @Autowired
     private CompanyDOMapperExt companyDOMapper;
 
@@ -406,5 +402,30 @@ public class MallOrderServiceImpl implements IMallOrderService {
 		}
 		return mallOrderItemVOList;
 	}
+
+    /**
+     * 关闭订单
+     * @param mallOrder
+     */
+    @Override
+    @Transactional(rollbackFor = ErpCommonException.class)
+    public void closeOrder(MallOrderDO mallOrder) {
+        String orderNo = mallOrder.getOrderNo();
+        /*1.修改主订单状态*/
+        mallOrderDOMapper.changeStatus(mallOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+        /*2.查出对应的子订单*/
+        if (StringUtil.isBlank(orderNo)){
+            throw new ErpCommonException("找不到对应的订单");
+        }
+        List<MallSubOrderDO> list = mallSubOrderDOMapper.selectByOrderNo(orderNo);
+        for (MallSubOrderDO mallSubOrder : list) {
+            /*3.修改子订单状态*/
+            mallSubOrderDOMapper.changeStatus(mallSubOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
+            /*4.释放子订单对应的库存*/
+            inventoryService.release(mallSubOrder);
+
+        }
+
+    }
 
 }

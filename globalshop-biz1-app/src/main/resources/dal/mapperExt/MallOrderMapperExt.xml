@@ -109,11 +109,11 @@
    		WHERE company_no = #{companyNo}
      	AND status IN
         <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
-                #{item}       
+                #{item}
         </foreach>
         AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create)) =#{dayIndex})]]>
     </select>
-    
+
     <!-- 首页数据看板：计算一周订单数（已付款订单数，减去已退款订单） -->
     <select id="sumWeekPaidOrder" resultType="java.lang.Integer">
     	SELECT
@@ -122,11 +122,11 @@
    		WHERE company_no = #{companyNo}
      	AND status IN
         <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
-                #{item}       
+                #{item}
         </foreach>
         AND <![CDATA[((TO_DAYS(NOW())-TO_DAYS(gmt_create)) < 7)]]>
     </select>
-    
+
     <!-- 首页数据看板：待发货订单数 -->
     <select id="sumWaitSendOrderNum" resultType="java.lang.Integer">
     	SELECT
@@ -135,10 +135,10 @@
    		WHERE company_no = #{companyNo}
      	AND status IN
         <foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
-                #{item}       
+                #{item}
         </foreach>
     </select>
-    
+
     <!-- 首页数据看板：未完成售后订单数 -->
     <select id="sumReturningOrderNum" resultType="java.lang.Integer">
     	SELECT
@@ -147,8 +147,8 @@
    		WHERE company_no = #{companyNo}
      	AND status = #{returning}
     </select>
-    
-    <select id="queryUnStockUpErpOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+
+    <select id="queryUnStockUpErpOrders" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -161,7 +161,7 @@
         ORDER BY T1.id
     </select>
 
-    <select id="queryTransStockUpErpOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+    <select id="queryTransStockUpErpOrders" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -174,7 +174,7 @@
         ORDER BY T1.id
     </select>
 
-    <select id="queryByShippingOrderTime" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+    <select id="queryByShippingOrderTime" resultMap="BaseResultMap">
         SELECT T1.sku_code as skuCode,T1.item_name as itemName,T3.sku_pic as skuPic,T1.color,T1.scale,T1.sale_price AS
         salePrice,T3.brand,T3.upc,T1.quantity,T2.gmt_create as gmtCreate,T1.sales_name as salesName,T1.erp_no as
         erpNo,T1.receiver,T1.telephone,
@@ -200,7 +200,7 @@
         ORDER BY T2.gmt_create asc
     </select>
 
-    <select id="queryExpiredSubOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+    <select id="queryExpiredSubOrders" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -270,7 +270,7 @@
     <select id="selectPositionNoByErpOrderId" resultType="java.lang.String" parameterType="java.lang.Long">
 		select group_concat(CONCAT(position_no, ':', booked)) from inventory_record t where t.erp_order_id=#{erpOrderId}
     </select>
-    <select id="queryHaihuErpOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO"
+    <select id="queryHaihuErpOrders" resultMap="BaseResultMap"
             parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO">
         SELECT
         <include refid="Base_Column_List"/>
@@ -287,7 +287,7 @@
         LIMIT 0,1
     </select>
 
-    <select id="queryHaihuShippingNO" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+    <select id="queryHaihuShippingNO" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -355,7 +355,7 @@
         order_no = #{orderNo}
     </select>
     <!-- 今日发货订单表(我也不知道这句话什么意思),XiaJun -->
-    <select id="todaySendOrders" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO">
+    <select id="todaySendOrders" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM `mall_order` T1
@@ -456,6 +456,8 @@
         T1.memo               AS remark,
         T1.total_amount       AS totalAmount,
         T1.actual_amount      AS actualAmount,
+        T1.gmt_create         AS gmtCreate,
+        T1.gmt_modify         AS gmtModify,
         T1.pay_type           AS payType,
         T2.receiver           AS receiver,
         T2.receiver_country   AS receiverCountry,
