@@ -129,6 +129,16 @@ public class MallOrderItemVO {
      */
     private String skuCode;
 
+	/**
+	 * 总价
+	 */
+	private Double totalAmount;
+
+	/**
+	 * 实付价
+	 */
+	private Double actualAmount;
+
     /**
 	 * 子订单列表
 	 */
