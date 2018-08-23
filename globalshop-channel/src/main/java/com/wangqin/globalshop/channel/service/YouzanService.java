@@ -318,16 +318,9 @@ public class YouzanService {
 
 
 	private String getMainPicStr(String mainPicStrUrl){
-		List<PicModel.PicList> picLists = new ArrayList<>();
-		PicModel mainPicModel = new PicModel();
-		mainPicModel.setMainPicNum(1 + "");//默认全部存第一个为主图
-		PicModel.PicList picModel = new PicModel.PicList();
-		picModel.setType("image/jpeg");
-		//picModel.setUid("i_" + i);
-		picModel.setUrl(mainPicStrUrl);
-		picLists.add(picModel);
-		mainPicModel.setPicList(picLists);
-		return BaseDto.toString(mainPicModel);
+		List<String> mainPicUrl = new ArrayList<>();
+		mainPicUrl.add(mainPicStrUrl);
+		return BaseDto.toString(mainPicUrl);
 	}
 
 //	private String getMainPicStr(YouzanItemsOnsaleGetResult.ItemImageOpenModel[] youzanImageList){
@@ -351,23 +344,14 @@ public class YouzanService {
 
 	//参数带着所有的sku的图片，先暂时把所有的sku放第一个sku
 	private String getSkuPicStr(YouzanItemGetResult.SkuImageOpenModel[] youzanSkusImageList){
+		List<String> skuPicList = new ArrayList<>();
 		String skuPicStr = "";
-//		if(youzanSkusImageList == null || youzanSkusImageList.length < 1){
-//			return skuPicStr;
-//		}
-//
-//		PicModel picModel = new PicModel();
-//
-//			PicModel.PicList picModelList = new PicModel.PicList();
-//		picModelList.setType("image/jpeg");
-//			//picModel.setUid("i_" + i);
-//		picModelList.setUrl();
-//		picModel.setPicList(picModelList);
 		if(youzanSkusImageList == null || youzanSkusImageList.length < 1){
-			return skuPicStr;
+			return BaseDto.toString(skuPicList);
 		}
 		skuPicStr = youzanSkusImageList[0].getImgUrl();
-		return BaseDto.toString(skuPicStr);
+		skuPicList.add(skuPicStr);
+		return BaseDto.toString(skuPicList);
 	}
 
 
