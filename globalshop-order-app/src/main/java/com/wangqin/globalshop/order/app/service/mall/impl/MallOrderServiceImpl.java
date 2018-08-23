@@ -414,7 +414,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         String orderNo = mallOrder.getOrderNo();
         /*1.修改主订单状态*/
         int i = mallOrderDOMapper.changeStatus(mallOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
-        if (i == 1) {
+        if (i != 1) {
             throw new ErpCommonException("更新订单状态失败");
         }
         /*2.查出对应的子订单*/
@@ -425,7 +425,7 @@ public class MallOrderServiceImpl implements IMallOrderService {
         for (MallSubOrderDO mallSubOrder : list) {
             /*3.修改子订单状态*/
             int j = mallSubOrderDOMapper.changeStatus(mallSubOrder.getId(), OrderStatus.INIT.getCode(), OrderStatus.CLOSE.getCode());
-            if (j == 1) {
+            if (j != 1) {
                 throw new ErpCommonException("更新订单状态失败");
             }
             /*4.释放子订单对应的库存*/
