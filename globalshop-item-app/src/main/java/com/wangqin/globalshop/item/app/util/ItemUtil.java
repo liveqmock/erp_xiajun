@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+
 import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
@@ -179,7 +181,8 @@ public class ItemUtil {
     /**
      * item_sku初始化
      */
-    public static void genItemSku(ItemSkuAddVO itemSku, ItemDO newItem, String companyNo, String userNo) {
+    public static void genItemSku(ItemSkuAddVO itemSku, ItemDO newItem, String companyNo, 
+    		String userNo, String itemCode) {
     	itemSku.setItemName(newItem.getItemName());
         itemSku.setCategoryName(newItem.getCategoryName());
         itemSku.setCategoryCode(newItem.getCategoryCode());
@@ -188,6 +191,7 @@ public class ItemUtil {
         itemSku.setCreator(userNo);
         itemSku.setCompanyNo(companyNo);
         itemSku.setSkuRate(ItemUtil.divideOneHundred(itemSku.getSkuRateString()));
+        itemSku.setItemCode(itemCode);
     }
     
     /**
@@ -207,7 +211,8 @@ public class ItemUtil {
      * @param item
      * @param newItem
      */
-    public static void transItemVoToDO(ItemQueryVO item, ItemDO newItem, String companyNo, String userNo) {
+    public static void transItemVoToDO(ItemQueryVO item, ItemDO newItem, String companyNo, String userNo,
+    		String categoryCode, String itemCode) {
     	newItem.setIsAbroad(item.getIsAbroad());
     	newItem.setBrandName(item.getBrand());
     	newItem.setItemName(item.getName());
@@ -219,6 +224,8 @@ public class ItemUtil {
         newItem.setModifier(userNo);
         newItem.setCreator(userNo);
         newItem.setDetail(item.getDetail());
+        newItem.setCategoryCode(categoryCode);
+        newItem.setItemCode(itemCode);
     }
     
     /**
@@ -323,10 +330,10 @@ public class ItemUtil {
     	Integer haihu = item.getThirdSale();
     	Integer youzan = item.getSaleOnYouzan();
     	if (null != youzan && ItemIsSale.SALABLE.getCode().equals(youzan)) {
-    		noList.add("1");
+    		noList.add("有赞");
     	}
     	if (null != haihu && ItemIsSale.SALABLE.getCode().equals(haihu)) {
-    		noList.add("2");
+    		noList.add("海狐海淘");
     	}
     	if (IsEmptyUtil.isCollectionNotEmpty(noList)) {
     		item.setSaleOnChannels(noList);
