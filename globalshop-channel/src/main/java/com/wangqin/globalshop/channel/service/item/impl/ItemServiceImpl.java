@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -264,14 +265,11 @@ public class ItemServiceImpl implements IItemService {
      * @return
      */
     private String handlePic(String mainPic) {
-    	//List<String> mainPicUrlList = BaseDto.fromJson(mainPic, new TypeReference(List<String>()){});
-    	List<String> mainPicUrlList = new ArrayList<>();
-    	
-    	
-    	if (IsEmptyUtil.isCollectionEmpty(mainPicUrlList)) {
+    	List<String> picUrlList = BaseDto.fromJson(mainPic, new TypeReference<List<String>>(){});
+    	if (IsEmptyUtil.isCollectionEmpty(picUrlList)) {
     		throw new ErpCommonException("商品或者的sku的图片为空");
     	}
-    	return ImageUtil.assempleMainPic(mainPicUrlList);
+    	return ImageUtil.assempleMainPic(picUrlList);
     } 
     
     
@@ -296,7 +294,7 @@ public class ItemServiceImpl implements IItemService {
     
     //更新商品
     @Transactional
-    private void updateItem(ItemVo item) {
+    public void updateItem(ItemVo item) {
     	List<ItemSkuVo> skuList = item.getItemSkus();
     	//计算价格区间
     	ItemDO itemDO = new ItemDO();
@@ -323,7 +321,7 @@ public class ItemServiceImpl implements IItemService {
     
     //更新sku
     @Transactional
-    private void updateItemSku(List<ItemSkuVo> skuList, ItemVo item) throws BizCommonException {
+    public void updateItemSku(List<ItemSkuVo> skuList, ItemVo item) throws BizCommonException {
     	String itemCode = item.getItemCode();
     	//判断传来的upc是否有重复,重复则抛出错误  
     	List<String> upcList = new ArrayList<String>();
