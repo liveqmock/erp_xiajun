@@ -152,8 +152,10 @@ public class WechatLoginController {
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         } catch (IOException e) {
-
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("未知错误");
         }
         return result.buildIsSuccess(true).buildMsg("授权成功");
     }
@@ -203,8 +205,10 @@ public class WechatLoginController {
         } catch (ErpCommonException e) {
             return result.buildIsSuccess(false).buildMsg(e.getErrorMsg());
         } catch (IOException e) {
-
             return result.buildIsSuccess(false).buildMsg(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("未知错误");
         }
         return result.buildIsSuccess(true).buildMsg("新增代理成功");
     }
@@ -258,34 +262,12 @@ public class WechatLoginController {
             return result.buildData("https://open.weixin.qq.com" + img).buildIsSuccess(true);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("获取失败");
         } catch (IOException e) {
             e.printStackTrace();
+            return result.buildIsSuccess(false).buildMsg("获取失败");
         }
-        return result.buildIsSuccess(false).buildMsg("获取失败");
-
     }
-//
-//    /**
-//     * 获取微信授权二维码的链接
-//     *
-//     * @return
-//     */
-//    @RequestMapping("/getAuthorizedUrl")
-//    public Object getAuthorizedUrl() {
-//        JsonResult<Object> result = new JsonResult<>();
-//        try {
-//            String baseUrl = sysurl + "/wechatLogin/authorized";
-//            baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
-//            String url = "https://open.weixin.qq.com/connect/qrconnect?appid=wxfcdeefc831b3e8c4&redirect_uri=" + baseUrl + "&response_type=code&scope=snsapi_login";
-//            String state = AppUtil.getLoginUserCompanyNo();
-//            url = url + "&state=" + state;
-//            return result.buildData(url).buildIsSuccess(true).buildMsg("获取成功");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//            return result.buildIsSuccess(false).buildMsg("获取失败");
-//        }
-//
-//    }
 
     /**
      * 获取微信授权二维码的网页
@@ -296,6 +278,7 @@ public class WechatLoginController {
     @Authenticated
     public void getImgHtml(HttpServletResponse response) {
         String baseUrl = sysurl + auth_redirect;
+        log.info("回调地址：" + baseUrl);
         try {
             String companyNo = AppUtil.getLoginUserCompanyNo();
             if (StringUtils.isBlank(companyNo)) {
@@ -304,7 +287,7 @@ public class WechatLoginController {
             }
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
 
-            String str = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "  <meta charset=\"UTF-8\">\n" + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" + "  <title></title>\n" + "</head>\n" + "<body>\n" + "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" + "    <div id=\"login_container\"></div>\n" + "    <script>\n" + "      var obj = new WxLogin\n" + "      ({\n" + "          id:\"login_container\",//div的id\n" + "          appid: \"" + appid + "\",\n" + "          scope: \"snsapi_login\",//写死\n" + "          redirect_uri: '" + baseUrl + "',\n" + "          state: \"" + companyNo + "\",\n" + "          style: \"black\",\n" + "      });\n" + "    </script>\n" + "</body>\n" + "</html>\n";
+            String str = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "  <meta charset=\"UTF-8\">\n" + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" + "  <title></title>\n" + "</head>\n" + "<body>\n" + "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" + "    <div id=\"login_container\"></div>\n" + "    <script>\n" + "      var obj = new WxLogin\n" + "      ({\n" + "          id:\"login_container\",//div的id\n" + "          appid: \"" + appid + "\",\n" + "          scope: \"snsapi_login\",//写死\n" + "          redirect_uri: '" + baseUrl + "',\n" + "state: \"" + companyNo + "\",\n" + "style: \"black\",\n" + "});\n" + "</script>\n" + "</body>\n" + "</html>\n";
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             PrintWriter writer = response.getWriter();
@@ -353,15 +336,15 @@ public class WechatLoginController {
     public void getProxyHtml(HttpServletResponse response, String parentAgent) {
         log.info("获取代理二维码");
         String baseUrl = sysurl + proxy_redirect;
-        log.info("baseUrl"+baseUrl);
-        parentAgent = StringUtil.isBlank(parentAgent)?"":parentAgent;
-        log.info("parentAgent"+parentAgent);
+        log.info("baseUrl" + baseUrl);
+        parentAgent = StringUtil.isBlank(parentAgent) ? "" : parentAgent;
+        log.info("parentAgent" + parentAgent);
         try {
             baseUrl = URLEncoder.encode(baseUrl, "UTF-8");
             String str = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "  <meta charset=\"UTF-8\">\n" + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" + "  <title></title>\n" + "</head>\n" + "<body>\n" + "    <script src=\"https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js\"></script>\n" + "    <div id=\"login_container\"></div>\n" + "    <script>\n" + "      var obj = new WxLogin\n" + "      ({\n" + "          id:\"login_container\",//div的id\n" + "          appid: \"" + appid + "\",\n" + "          scope: \"snsapi_login\",//写死\n" + "          redirect_uri: '" + baseUrl + "',\n" + "          state: \"" + parentAgent + "\",\n" + "          style: \"black\",\n" + "          href: \"data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZXsKICB3aWR0aDogMTgwcHghaW1wb3J0YW50Owp9Ci5pbXBvd2VyQm94IC5pbmZvIHsKICB3aWR0aDogMjgwcHg7CiAgbWFyZ2luOiAwIGF1dG87CiAgbWFyZ2luLWxlZnQ6IC0zMHB4IWltcG9ydGFudDsKICBwYWRkaW5nLWxlZnQ6IDEwcHg7Cn0KLndycF9jb2RlIHsKICBtYXJnaW4tbGVmdDogLTYwcHg7Cn0KLmltcG93ZXJCb3ggLnRpdGxlewogIG1hcmdpbi1sZWZ0OiAtNjBweDsKfQ==\",\n" + "      });\n" + "    </script>\n" + "</body>\n" + "</html>\n";
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
-            log.info("html"+str);
+            log.info("html" + str);
             PrintWriter writer = response.getWriter();
             writer.print(str);
             writer.flush();
