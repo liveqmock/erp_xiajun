@@ -1499,7 +1499,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `origin_sale_price` varchar(64) DEFAULT NULL COMMENT '原始销售价格',
   `commission_mode` varchar(64) DEFAULT NULL COMMENT '佣金模式',
   `commission_rate` varchar(64) DEFAULT NULL COMMENT '佣金比率',
-  `is_abroad` int(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外',
+  `is_abroad` int(4) NOT NULL DEFAULT '1' COMMENT '0:国内,1:海外，2：保税仓',
   `shelf_method` int(4) NOT NULL DEFAULT '0' COMMENT '0:立即售卖,1:暂不售卖;2:自定义',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
