@@ -3,8 +3,7 @@ package com.wangqin.globalshop.common.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+import com.wangqin.globalshop.common.base.BaseDto;
 import net.sf.json.JSONObject;
 
 
@@ -31,20 +30,22 @@ public class ImageUtil {
 	 * 拼装商品的主图JSON
 	 */
 	public static String assempleMainPic(List<String> urlList) {
-		MainPic mPic = new MainPic();
+		PicModel mPic = new PicModel();
+		if(EasyUtil.isListEmpty(urlList)){
+			return BaseDto.toString(mPic);
+		}
 		mPic.setMainPicNum("1");
-		List<MainPic.PicList> picList = new ArrayList<MainPic.PicList>();
+		List<PicModel.PicList> picList = new ArrayList<PicModel.PicList>();
 		int index = 0;
 		for (String url:urlList) {
-			MainPic.PicList pList = mPic.new PicList();
+			PicModel.PicList pList = new PicModel.PicList();
 			pList.setType("image/jpeg");
 			pList.setUrl(url);
 			pList.setUid("i_" + index++);
 			picList.add(pList);
 		}
 		mPic.setPicList(picList);
-		JSONObject jObject = JSONObject.fromObject(mPic);
-		return jObject.toString();
+		return BaseDto.toString(mPic);
 	}
 	
 	

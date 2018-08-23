@@ -138,6 +138,7 @@ public class ItemServiceImpl implements IItemService {
     	String companyNo = item.getCompanyNo();
     	String itemName = item.getItemName();
     	List<ItemSkuVo> skuList = item.getItemSkus();
+
     	//检测sku_code是否存在且是否重复
     	if (!skuCodeCheck(skuList)) {
     		throw new ErpCommonException("sku的skuCode相互之间重复或者空的skuCode");
@@ -180,7 +181,7 @@ public class ItemServiceImpl implements IItemService {
     	} else {
     		itemDO.setPriceRange(PRICE_RANGE);
     	}
-    	
+
     	//插入其他信息
     	itemDO.setItemCode(itemCode);
     	itemDO.setCompanyNo(companyNo);
@@ -211,7 +212,7 @@ public class ItemServiceImpl implements IItemService {
     		skuDO.setUpc(sku.getUpc());
     		skuDO.setBrandName(BRAND_NAME);
     		skuDO.setWeight(sku.getWeight());
-    		skuDO.setSkuPic(handlePic(item.getMainPic()));
+    		skuDO.setSkuPic(handlePic(sku.getSkuPic()));
     		skuDO.setSalePrice(sku.getSalePrice());
     		skuDO.setCreator(USER_NO);
     		skuDO.setModifier(USER_NO);
@@ -314,7 +315,7 @@ public class ItemServiceImpl implements IItemService {
     	//更新其他信息
     	itemDO.setItemCode(item.getItemCode());
     	itemDO.setItemName(item.getItemName());
-    	itemDO.setMainPic(item.getMainPic());
+    	itemDO.setMainPic(handlePic(item.getMainPic()));
     	itemDO.setStatus(item.getStatus());
     	itemDOMapper.updateItemByItemCode(itemDO);
     }
@@ -351,7 +352,7 @@ public class ItemServiceImpl implements IItemService {
     			updateSku.setSalePrice(sku.getSalePrice());
     			updateSku.setUpc(sku.getUpc());
     			updateSku.setWeight(sku.getWeight());
-    			updateSku.setSkuPic(sku.getSkuPic());
+    			updateSku.setSkuPic(handlePic(sku.getSkuPic()));
     			updateSku.setItemName(item.getItemName());
     			itemSkuDOMapper.updateSkuBySkuCode(updateSku);
     		} else { //新增
