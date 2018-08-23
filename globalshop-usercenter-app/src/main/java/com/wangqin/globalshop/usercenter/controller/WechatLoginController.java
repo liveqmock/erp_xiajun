@@ -416,7 +416,8 @@ public class WechatLoginController {
             map.put("code", code);
             map.put("loginToken", "123");
             log.info("响应=====" + map);
-            result.buildIsSuccess(true).buildData(map);
+            //result.buildIsSuccess(true).buildData(map);
+            result.buildIsSuccess(true).buildData(map).buildMsg("扫码成功，请选择商家");
             log.info("响应=====" + result);
             return result;
         }
