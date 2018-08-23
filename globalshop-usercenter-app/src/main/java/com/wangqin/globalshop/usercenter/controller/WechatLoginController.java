@@ -389,7 +389,8 @@ public class WechatLoginController {
         log.info("获取openId和token的结果" + o.toString());
         /**如果相应包含errcode  表示请求失败*/
         if (o.containsKey("errcode")) {
-            return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+           // return result.buildIsSuccess(false).buildMsg(o.getString("errmsg"));
+        	return result.buildIsSuccess(false).buildMsg("请勿刷新，否则需要重新扫码");
         }
         String unionid = o.getString("unionid");
         List<AuthUserDO> list = userService.selectByUnionid(unionid);
