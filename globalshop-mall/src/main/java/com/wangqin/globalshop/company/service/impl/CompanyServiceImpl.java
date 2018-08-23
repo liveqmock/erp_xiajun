@@ -374,10 +374,14 @@ public class CompanyServiceImpl implements CompanyService {
         authRoleResourceDO.setCreator(creator);
         authRoleResourceDO.setModifier(modifier);
         authRoleResourceDO.setRoleId(roleId);
-        Long[] resourceIds = new Long[]{1L, 11L, 111L, 112L, 113L, 114L, 12L, 121L, 122L, 123L, 124L, 125L, 13L, 131L,
-                132L, 133L, 134L, 14L, 141L, 142L, 143L, 144L, 289L, 290L, 293L, 303L, 299L, 300L, 231L, 259L, 260L,
-                284L, 261L, 262L, 294L, 263L, 264L, 265L, 266L, 277L, 304L, 267L, 268L, 269L, 297L, 298L, 270L, 271L,
-                272L, 302L, 273L, 274L, 275L, 276L, 285L, 295L, 221L, 227L, 228L, 229L};
+        //TODO 这里应该从auth_resource表里取全量，不是在这里写死。
+        Long[] resourceIds = new Long[]{1L, 11L, 12L, 13L, 14L, 111L, 112L, 113L, 114L, 121L, 122L, 123L, 124L, 125L, 131L,
+                132L, 133L, 134L, 141L, 142L, 143L, 144L,
+                221L, 226L, 227L, 228L, 229L, 231L,232L,233L,234L,235L,
+                248L, 250L, 251L, 253L, 254L, 255L, 257L, 258L,
+                259L, 260L,261L, 262L, 263L, 264L, 265L, 266L, 267L, 268L, 269L, 270L, 271L, 272L, 273L, 274L, 275L, 276L, 277L,
+                284L, 285L, 289L, 290L, 293L, 294L,295L,297L, 298L, 299L, 300L, 302L, 303L,  304L
+                 };
         for (Long resourceId : resourceIds) {
             authRoleResourceDO.setResourceId(resourceId);
             authRoleResourceService.addAuthRoleResource(authRoleResourceDO);
