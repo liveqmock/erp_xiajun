@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
@@ -26,8 +27,11 @@ import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.common.base.BaseDto;
 import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.ImageUtil;
+import com.wangqin.globalshop.common.utils.ImgUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 
@@ -182,7 +186,7 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setCategoryCode(DEFAULT_CATE_CODE);
     	itemDO.setItemName(itemName);
     	itemDO.setCategoryName(DEFAULT_CATE_NAME);
-    	itemDO.setMainPic(item.getMainPic());
+    	itemDO.setMainPic(handlePic(item.getMainPic()));
     	itemDO.setBrandName(BRAND_NAME);
     	itemDO.setBrandNo(BRAND_NO);
     	itemDO.setCountry(COUNTRY);
@@ -206,7 +210,7 @@ public class ItemServiceImpl implements IItemService {
     		skuDO.setUpc(sku.getUpc());
     		skuDO.setBrandName(BRAND_NAME);
     		skuDO.setWeight(sku.getWeight());
-    		skuDO.setSkuPic(item.getMainPic());
+    		skuDO.setSkuPic(handlePic(item.getMainPic()));
     		skuDO.setSalePrice(sku.getSalePrice());
     		skuDO.setCreator(USER_NO);
     		skuDO.setModifier(USER_NO);
@@ -254,6 +258,23 @@ public class ItemServiceImpl implements IItemService {
     	}//end of sku loop   	    	
     }
   
+    /**
+     * 获得商品的主图
+     * @param mainPic
+     * @return
+     */
+    private String handlePic(String mainPic) {
+    	//List<String> mainPicUrlList = BaseDto.fromJson(mainPic, new TypeReference(List<String>()){});
+    	List<String> mainPicUrlList = new ArrayList<>();
+    	
+    	
+    	if (IsEmptyUtil.isCollectionEmpty(mainPicUrlList)) {
+    		throw new ErpCommonException("商品或者的sku的图片为空");
+    	}
+    	return ImageUtil.assempleMainPic(mainPicUrlList);
+    } 
+    
+    
     //检测是否有空的skuCode或者重复的skuCode
     public Boolean skuCodeCheck(List<ItemSkuVo> skuList) {
     	Boolean result = true;

@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-
-import com.thoughtworks.xstream.mapper.Mapper.Null;
-import com.thoughtworks.xstream.mapper.Mapper.Null;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
@@ -27,7 +23,7 @@ import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
+
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
