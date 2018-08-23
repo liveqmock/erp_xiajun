@@ -669,7 +669,7 @@ public class ItemServiceImplement implements IItemService {
                         if ("".equals(name.trim())) {
                             continue;
                         }
-                        sb.append(" ").append(s);
+                        sb.append(" ").append(name);
                     }
                     brandEnName = sb.toString().substring(1);
 
@@ -748,6 +748,7 @@ public class ItemServiceImplement implements IItemService {
                     }
                     /**采购地*/
                     String purchaseFrom = obj.get(10).toString().trim();
+                    //todo
                     Long s1 = countryServiceImpl.queryCodeByName(purchaseFrom);
                     if (s1 != null) {
                         item.setCountry(s1.toString());
@@ -798,6 +799,7 @@ public class ItemServiceImplement implements IItemService {
                     errMsg.add("第" + i + "行:upc不能为空");
                 } else {
                     //检测upc是否和数据库里面已有的upc重复,按公司划分
+                    //todo
                     Integer duplcatedCountNumber = itemSkuService.queryCountByUpcAndCompanyNo(AppUtil.getLoginUserCompanyNo(), upc);
                     if (0 < duplcatedCountNumber) {
                         errMsg.add("第" + i + "行:商品库中已存在对应的upc" + upc);
