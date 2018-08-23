@@ -326,10 +326,10 @@ public class ItemUtil {
     	Integer haihu = item.getThirdSale();
     	Integer youzan = item.getSaleOnYouzan();
     	if (null != youzan && ItemIsSale.SALABLE.getCode().equals(youzan)) {
-    		noList.add("有赞");
+    		noList.add("1");
     	}
     	if (null != haihu && ItemIsSale.SALABLE.getCode().equals(haihu)) {
-    		noList.add("海狐海淘");
+    		noList.add("2");
     	}
     	if (IsEmptyUtil.isCollectionNotEmpty(noList)) {
     		item.setSaleOnChannels(noList);
