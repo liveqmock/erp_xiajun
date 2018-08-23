@@ -248,7 +248,7 @@ public class YouzanService {
 			}
 
 			itemSkuVo.setVirtualInv(youzanItem.getQuantity());//库存
-			itemSkuVo.setSkuPic(getSkuPicStr(youzanItemDetail.getSkuImages()));
+			itemSkuVo.setSkuPic(getSkuPicStr(youzanItemDetail.getSkuImages(), youzanItemDetail.getPicUrl()));
 			itemSkuVoList.add(itemSkuVo);
 		}else {
 			//多规格：含一个及一个以上sku
@@ -301,7 +301,7 @@ public class YouzanService {
 
 				itemSkuVo.setVirtualInv(sku.getQuantity());//库存
 
-				itemSkuVo.setSkuPic(getSkuPicStr(youzanItemDetail.getSkuImages()));
+				itemSkuVo.setSkuPic(getSkuPicStr(youzanItemDetail.getSkuImages(),youzanItemDetail.getPicUrl()));
 
 				itemSkuVoList.add(itemSkuVo);
 			}
@@ -343,10 +343,11 @@ public class YouzanService {
 //	}
 
 	//参数带着所有的sku的图片，先暂时把所有的sku放第一个sku
-	private String getSkuPicStr(YouzanItemGetResult.SkuImageOpenModel[] youzanSkusImageList){
+	private String getSkuPicStr(YouzanItemGetResult.SkuImageOpenModel[] youzanSkusImageList, String mainPicUrl){
 		List<String> skuPicList = new ArrayList<>();
 		String skuPicStr = "";
 		if(youzanSkusImageList == null || youzanSkusImageList.length < 1){
+			skuPicList.add(mainPicUrl);
 			return BaseDto.toString(skuPicList);
 		}
 		skuPicStr = youzanSkusImageList[0].getImgUrl();
