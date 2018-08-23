@@ -131,27 +131,27 @@ public class ItemServiceImplement implements IItemService {
         // 解析skuList 数组对象
         String skuList = item.getSkuList();
         List<Double> itemSkuPriceList = new ArrayList<Double>();
+        List<ItemSkuAddVO> skus = new ArrayList<ItemSkuAddVO>();
         try {
             String s = skuList.replace("&quot;", "\"");
-            List<ItemSkuAddVO> skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>() {
-            });
-            int i = 0;
-            for (ItemSkuAddVO itemSku : skus) {
-                itemSkuPriceList.add(itemSku.getSalePrice());
-                itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i++));
-                //sku没有图片就用商品的图片
-                String skuMainPic = itemSku.getSkuPic();
-                if (!ItemUtil.picCheck(skuMainPic)) {//没图
-                    itemSku.setSkuPic(item.getMainPic());
-                } else {
-                    itemSku.setSkuPic(skuMainPic);
-                }
-                item.setItemSkus(skus);
-            }
+            skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>() { });
         } catch (Exception e) {
             return result.buildMsg("解析SKU错误").buildIsSuccess(false);
         }
-
+        int i = 0;
+        for (ItemSkuAddVO itemSku : skus) {
+        	itemSkuPriceList.add(itemSku.getSalePrice());
+        	itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i++));
+        	//sku没有图片就用商品的图片
+        	if (!ItemUtil.picCheck(itemSku.getSkuPic())) {//没图
+        		itemSku.setSkuPic(item.getMainPic());
+        	}
+        	//检测upc是否和数据库里面已有的upc重复,按公司划分
+            List<String> codeList = itemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
+            if (IsEmptyUtil.isCollectionNotEmpty(codeList)) {
+                return result.buildIsSuccess(false).buildMsg("新增失败，添加的upc和已有的upc重复");
+            }   
+        }
         //上架处理
         try {
             ItemUtil.handleShelf(item, newItem);
@@ -160,46 +160,42 @@ public class ItemServiceImplement implements IItemService {
         }
        
         //可以直接从PageBean存在数据库的字段
-        ItemUtil.transItemVoToDO(item, newItem, companyNo, userNo);
+        ItemUtil.transItemVoToDO(item, newItem, companyNo, userNo, categoryCode, itemCode);
         //对不能直接转换的字段做处理
         detailDecoder(newItem);
-        newItem.setPriceRange(PriceUtil.calNewPriceRange(itemSkuPriceList));
-        newItem.setCategoryCode(categoryCode);       
+        newItem.setPriceRange(PriceUtil.calNewPriceRange(itemSkuPriceList));     
         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));        
-        newItem.setItemCode(itemCode);
         generateQrCode(newItem, companyNo);  
         //渠道处理
-        ItemUtil.handleThirdSale(newItem, item);
-        
+        ItemUtil.handleThirdSale(newItem, item);        
         //插入itemsku和库存
-        List<ItemSkuAddVO> itemSkuList = item.getItemSkus();
-        for (ItemSkuAddVO itemSku : itemSkuList) {
-            //检测upc是否和数据库里面已有的upc重复,按公司划分
-            List<String> codeList = itemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
-            if (IsEmptyUtil.isCollectionNotEmpty(codeList)) {
-                return result.buildIsSuccess(false).buildMsg("新增失败，添加的upc和已有的upc重复");
-            }
-            itemSku.setItemCode(itemCode);
+        for (ItemSkuAddVO itemSku : skus) {                    
             //插入规格信息
-            if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
-                ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",itemSku.getColor(),itemSku.getSkuCode(),itemCode);
-                scaleService.insertSelective(color);
-            }
-            if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
-            	ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",itemSku.getScale(),itemSku.getSkuCode(),itemCode);
-                scaleService.insertSelective(scale);
-            }
+            insertItemScaleInfo(itemSku, companyNo, userNo, itemCode);
             //item_sku所需的其他信息
-            ItemUtil.genItemSku(itemSku, newItem, companyNo, userNo);            
+            ItemUtil.genItemSku(itemSku, newItem, companyNo, userNo, itemCode);            
         }
-
-        itemSkuService.insertBatch(itemSkuList);
-        List<InventoryDO> inventoryList = itemSkuService.initInventory(itemSkuList);
+        itemSkuService.insertBatch(skus);
+        List<InventoryDO> inventoryList = itemSkuService.initInventory(skus);
         invService.outbound(inventoryList);
         insertItemSelective(newItem);
         return result.buildIsSuccess(true).buildMsg("添加商品成功");
     }
 
+    /**
+     * 商品发布->插入规格信息
+     */
+    @Transactional
+    private void insertItemScaleInfo(ItemSkuAddVO itemSku, String companyNo, String userNo, String itemCode) {    	
+        if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
+            ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",itemSku.getColor(),itemSku.getSkuCode(),itemCode);
+            scaleService.insertSelective(color);
+        }
+        if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
+        	ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",itemSku.getScale(),itemSku.getSkuCode(),itemCode);
+            scaleService.insertSelective(scale);
+        }
+    }
 
     /**
      * 封装ItemSkuScala对象信息
@@ -218,26 +214,6 @@ public class ItemServiceImplement implements IItemService {
         obj.setScaleValue(value);
         obj.init();
 
-    }
-
-
-
-    @Override
-    @Transactional(rollbackFor = BizCommonException.class)
-    public ItemDO queryIte(Long id) {
-        if (id == null) {
-            throw new RuntimeException("the item id is null");
-        }
-        ItemDO item = itemDOMapperExt.selectByPrimaryKey(id);
-        if (item != null) {
-            // Map<String,Object> clumnMap = new HashMap<>();
-            // clumnMap.put("item_id", id);
-            List<ItemSkuDO> itemSkus = itemSkuService.queryItemSkusByItemId(id);
-            if (itemSkus != null) {
-                // item.setItemSkus(itemSkus);
-            }
-        }
-        return item;
     }
 
     /**
@@ -304,8 +280,6 @@ public class ItemServiceImplement implements IItemService {
                 }
             }
         }
-        //处理第三方销售平台
-
         item.setItemSkus(itemSkus);
         return item;
     }

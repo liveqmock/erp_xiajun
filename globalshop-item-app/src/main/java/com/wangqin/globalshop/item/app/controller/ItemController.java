@@ -137,24 +137,20 @@ public class ItemController {
             String s = item.getSkuList().replace("&quot;", "\"");
             skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuQueryVO>>() {});
         } catch (Exception e) {
-            e.printStackTrace();
             return result.buildMsg("解析SKU错误").buildIsSuccess(false);
         }
-        //判断upc和数据库里面已有的upc是否重复         
+        //判断upc和数据库里面已有的upc是否重复,获取现在该商品的所有skuCode  
+        List<String> newSkuCodeList = new ArrayList<String>();
         for (ItemSkuQueryVO sku : skus) {
         	Integer dupNum = itemSkuService.queryRecordCountByUpcCompanyNotInSameItem(companyNo, sku.getUpc(), itemCode);
         	if (0 < dupNum) {
         		return result.buildIsSuccess(false).buildMsg("更新失败，添加的upc和已有的upc重复");
         	}
         	skuSalePriceList.add(sku.getSalePrice());
-        }  		        
-        //获取现在该商品的所有skuCode
-        List<String> newSkuCodeList = new ArrayList<String>();
-        for (ItemSkuQueryVO skuQueryVO : skus) {
-        	if (IsEmptyUtil.isStringNotEmpty(skuQueryVO.getSkuCode())) {
-        		newSkuCodeList.add(skuQueryVO.getSkuCode());
+        	if (IsEmptyUtil.isStringNotEmpty(sku.getSkuCode())) {
+        		newSkuCodeList.add(sku.getSkuCode());
         	}
-        }
+        }  		             
         newSkuCodeList.add("-1");//这个是为了防止下面的查询出错
         //判断哪些sku被删除了
         List<String> deleteCodeList = itemSkuService.queryToDeleteSkuCodeList(newSkuCodeList, itemCode);
@@ -167,7 +163,7 @@ public class ItemController {
 			}
         }                   
         for (ItemSkuQueryVO skuVO : skus) {
-        	if (null != skuVO.getSkuCode()) { //step2:更新需要更新的sku
+        	if (IsEmptyUtil.isStringNotEmpty(skuVO.getSkuCode())) { //step2:更新需要更新的sku
         		try {
         			updateSku(skuVO, companyNo, userNo, itemCode, item, categoryName);
         		} catch (BizCommonException e) { //捕获库存更细时的异常并告知用户

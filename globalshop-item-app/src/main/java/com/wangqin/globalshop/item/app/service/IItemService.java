@@ -39,16 +39,6 @@ public interface IItemService {
 	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
 
 	public ShareTokenEntity getTokenFromCache(String uuid);
-
-	
-	
-	
-	/**
-	 * query item 
-	 * @param item
-	 * @param itemSkuList
-	 */
-	ItemDO queryIte(Long id);
 	
 	/**
 	 * 按照条件分页查询商品
