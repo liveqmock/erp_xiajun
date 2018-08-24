@@ -44,7 +44,6 @@ public class ItemBrandController {
 	@Autowired
 	private IItemBrandService itemBrandService;
 
-
 	//@Autowired ItemApiFeignClient itemApiFeignClient; //第一种方案
 
 
@@ -68,46 +67,8 @@ public class ItemBrandController {
 //	}
 
 
-	@GetMapping("/health")
-	public String home(){
-		System.out.println(new Date());
-		return "hello world";
-	}
-
 	/**
-	 *第二种方案：直接访问地址
-	 * @return
-	 */
-	@GetMapping("/itemApi")
-	@ResponseBody
-	public Object itemApi(){
-		JsonResult<String> result = new JsonResult<>();
-		String demoApi =  restTemplate.getForObject("http://itemApi/health", String.class);
-		result.setData(demoApi);
-		return result.buildIsSuccess(true);
-	}
-
-
-	/**
-	 *第二种方案：直接访问地址，参数传递不过去
-	 * @return
-	 */
-	@GetMapping("/itemApiname")
-	@ResponseBody
-	public Object itemApiname(){
-		JsonResult<BaseResponseDto> result = new JsonResult<>();
-		Map<String,String> param = new HashMap<>();
-		param.put("name","迪奥");
-		String name = "迪奥";
-		String resultStr =  restTemplate.getForObject("http://itemApi/api/brand", String.class,name);
-		BaseResponseDto<List<ItemBrandDto>> data = BaseDto.fromJson(resultStr,new TypeReference<BaseResponseDto<List<ItemBrandDto>>>(){});
-		result.setData(data);
-		return result.buildIsSuccess(true);
-	}
-
-
-	/**
-	 *第二种方案：直接访问地址，搞定
+	 *第二种方案：直接访问地址，String类型
 	 * @return
 	 */
 	@GetMapping("/postbrand")
@@ -126,6 +87,25 @@ public class ItemBrandController {
 		String resultStr =  restTemplate.postForObject("http://itemApi/api/brand",r,String.class);
 		BaseResponseDto<List<ItemBrandDto>> data = BaseDto.fromJson(resultStr,new TypeReference<BaseResponseDto<List<ItemBrandDto>>>(){});
 		result.setData(data);
+		return result.buildIsSuccess(true);
+	}
+
+
+	/**
+	 *第二种方案：直接访问地址，自定义类型
+	 * @return
+	 */
+	@GetMapping("/postbrandEntity")
+	@ResponseBody
+	public Object postbrandEntity(){
+		JsonResult<BaseResponseDto> result = new JsonResult<>();
+		MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
+		postParameters.add("name", "迪奥");
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/x-www-form-urlencoded");
+		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(postParameters, headers);
+		ResponseEntity<BaseResponseDto> data =  restTemplate.postForEntity("http://itemApi/api/brandEntity",httpEntity,BaseResponseDto.class);
+		result.setData(data.getBody());
 		return result.buildIsSuccess(true);
 	}
 
