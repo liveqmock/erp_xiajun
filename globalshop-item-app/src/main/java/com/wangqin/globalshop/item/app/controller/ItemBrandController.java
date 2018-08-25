@@ -44,7 +44,7 @@ public class ItemBrandController {
 	@Autowired
 	private IItemBrandService itemBrandService;
 
-	//@Autowired ItemApiFeignClient itemApiFeignClient; //第一种方案
+	@Autowired ItemApiFeignClient itemApiFeignClient; //第一种方案
 
 
 	@Autowired RestTemplate restTemplate;  //第二种方案
@@ -56,15 +56,15 @@ public class ItemBrandController {
 	 * @param
 	 * @return
 	 */
-//	@RequestMapping("/queryByName")
-//	@ResponseBody
-//	public Object query(String name) {
-//		JsonResult<List<ItemBrandDto>> result = new JsonResult<>();
-//		BaseResponseDto<List<ItemBrandDto>> itemApiResult = itemApiFeignClient.brandName(name);
-//		List<ItemBrandDto> dataList = itemApiResult.getData();
-//		result.setData(dataList);
-//		return result.buildIsSuccess(true);
-//	}
+	@RequestMapping("/queryByName")
+	@ResponseBody
+	public Object query(String name) {
+		JsonResult<List<ItemBrandDto>> result = new JsonResult<>();
+		BaseResponseDto<List<ItemBrandDto>> itemApiResult = itemApiFeignClient.brandName(name);
+		List<ItemBrandDto> dataList = itemApiResult.getData();
+		result.setData(dataList);
+		return result.buildIsSuccess(true);
+	}
 
 
 	/**
@@ -121,13 +121,16 @@ public class ItemBrandController {
 	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object add(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
-		brand.setCreator(AppUtil.getLoginUserId());
-		brand.setModifier(AppUtil.getLoginUserId());
-		 if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
-			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
-		 }
-		itemBrandService.insertBrandSelective(brand);
+//		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
+//		brand.setCreator(AppUtil.getLoginUserId());
+//		brand.setModifier(AppUtil.getLoginUserId());
+//		 if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
+//			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+//		 }
+//		itemBrandService.insertBrandSelective(brand);
+
+		BaseResponseDto<String> itemApiResult = itemApiFeignClient.add(brand);
+
 		return result.buildIsSuccess(true);
 	}
 
@@ -149,7 +152,7 @@ public class ItemBrandController {
 	/**
 	 * 修改品牌(fin)
 	 * 
-	 * @param category
+	 * @param
 	 * @return
 	 */
 	@RequestMapping("/update")

@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 @ImportResource("classpath:spring/applicationContext.xml")
 @EnableScheduling
 @ServletComponentScan
-//@EnableFeignClients(basePackages = {"com.wangqin.globalshop.item.app.feign"})
+@EnableFeignClients(basePackages = {"com.wangqin.globalshop.item.app.feign"})
 //@EnableDiscoveryClient
 public class WebApplication {
 
