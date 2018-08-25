@@ -1,9 +1,12 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * json分页结果封装
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JsonPageResult<T> extends JsonResult<T> {
 
 	private int pageIndex = 1;
@@ -13,7 +16,27 @@ public class JsonPageResult<T> extends JsonResult<T> {
 	private int totalCount;
 	
 	private int totalPage;
-	
+
+
+	private boolean agentRoler = false;
+
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public boolean isAgentRoler() {
+		return agentRoler;
+	}
+
+	public void setAgentRoler(boolean agentRoler) {
+		this.agentRoler = agentRoler;
+	}
+
 	public int getPageIndex() {
 		return pageIndex;
 	}
