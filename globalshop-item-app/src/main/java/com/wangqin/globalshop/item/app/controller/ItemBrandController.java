@@ -1,17 +1,20 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.BuyerStorageDetailVo;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.feign.BaseResponseDto;
 import com.wangqin.globalshop.item.app.feign.ItemApiFeignClient;
 import com.wangqin.globalshop.item.app.feign.ItemBrandDto;
-import org.apache.poi.hssf.record.formula.functions.T;
+import com.wangqin.globalshop.item.app.feign.ItemBrandFeignService;
+import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -24,17 +27,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/item/brand")
@@ -45,6 +42,10 @@ public class ItemBrandController {
 	private IItemBrandService itemBrandService;
 
 	@Autowired ItemApiFeignClient itemApiFeignClient; //第一种方案
+
+
+	@Autowired
+	private ItemBrandFeignService itemBrandFeignService;//feign声明式服务的高级版
 
 
 	@Autowired RestTemplate restTemplate;  //第二种方案
@@ -121,15 +122,23 @@ public class ItemBrandController {
 	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object add(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-//		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
-//		brand.setCreator(AppUtil.getLoginUserId());
-//		brand.setModifier(AppUtil.getLoginUserId());
-//		 if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
+		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
+		brand.setCreator(AppUtil.getLoginUserId());
+		brand.setModifier(AppUtil.getLoginUserId());
+
+
+//		if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
 //			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
 //		 }
-//		itemBrandService.insertBrandSelective(brand);
+		if(itemBrandFeignService.selectBrandNoByName(brand.getName()) != null) {
+			return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+		}
 
-		BaseResponseDto<String> itemApiResult = itemApiFeignClient.add(brand);
+		 //itemBrandService.insertBrandSelective(brand);
+
+		itemBrandFeignService.insertBrandSelective(brand);
+
+//		BaseResponseDto<String> itemApiResult = itemApiFeignClient.add(brand);
 
 		return result.buildIsSuccess(true);
 	}
@@ -144,7 +153,11 @@ public class ItemBrandController {
 	@ResponseBody
 	public Object query(Long id) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		ItemBrandDO brand = itemBrandService.selectByPrimaryKey(id);
+		//ItemBrandDO brand = itemBrandService.selectByPrimaryKey(id);
+
+		//高级写法
+		ItemBrandDO brand = itemBrandFeignService.selectByPrimaryKey(id);
+
 		result.setData(brand);
 		return result.buildIsSuccess(true);
 	}
@@ -167,14 +180,16 @@ public class ItemBrandController {
 //		if(itemBrandService.selectBrandNoByName(brand.getName()) != null || !"".equals(itemBrandService.selectBrandNoByName(brand.getName()))) {
 //			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
 //		 }
-		List<Long> idList = itemBrandService.queryIdListByBrandName(brand.getName());
+//		List<Long> idList = itemBrandService.queryIdListByBrandName(brand.getName());
+		List<Long> idList = itemBrandFeignService.queryIdListByBrandName(brand.getName());
 		for(Long id:idList) {
 			if(!id.equals(brand.getId())) {
 				return result.buildIsSuccess(false).buildMsg("品牌英文名不能和已有的品牌重合");
 			}
 		}
 		brand.setModifier(AppUtil.getLoginUserId());
-		itemBrandService.updateBrand(brand);
+		//itemBrandService.updateBrand(brand);
+		itemBrandFeignService.updateBrand(brand);
 		return result.buildIsSuccess(true);
 	}
 
@@ -189,7 +204,8 @@ public class ItemBrandController {
 	@ResponseBody
 	public Object delete(Long id) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		itemBrandService.deleteItemBrandById(id);
+		//itemBrandService.deleteItemBrandById(id);
+		itemBrandFeignService.deleteItemBrandById(id);
 		return result.buildIsSuccess(true);
 	}
 
@@ -200,7 +216,11 @@ public class ItemBrandController {
 	@ResponseBody
 	public Object queryItemBrandDOs(ItemBrandQueryVO brandQueryVO) {
 		JsonPageResult<List<ItemBrandDO>> result = new JsonPageResult<>();
-		result = itemBrandService.queryBrands(brandQueryVO);
+//		result = itemBrandService.queryBrands(brandQueryVO);
+
+		//测试高级写法
+		result = itemBrandFeignService.queryBrands(brandQueryVO);
+
 		return result.buildIsSuccess(true);
 	}
 
@@ -211,7 +231,12 @@ public class ItemBrandController {
 	@RequestMapping("/queryAllBrand")
 	@ResponseBody
 	public Object queryItemBrandDOpage(ItemBrandDO brand) {
-		JsonResult<List<ItemBrandDO>> result = itemBrandService.queryAllBrand();
+		//JsonResult<List<ItemBrandDO>> result = itemBrandService.queryAllBrand();
+
+
+		//测试高级写法
+		JsonPageResult<List<ItemBrandDO>> result = itemBrandFeignService.queryAllBrand();
+
 		return result.buildIsSuccess(true);
 	}
 	
