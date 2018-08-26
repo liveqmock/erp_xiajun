@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.item.app.feign;
+package com.wangqin.globalshop.biz1.api.dto.response;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;

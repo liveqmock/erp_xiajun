@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.item.app.feign;
+package com.wangqin.globalshop.item.api.itembrand;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 

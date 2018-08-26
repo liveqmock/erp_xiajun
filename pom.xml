@@ -267,6 +267,7 @@
         <module>globalshop-channel-api</module>
         <module>globalshop-schedule-app</module>
         <module>globalshop-logistic-app</module>
+        <module>globalshop-item-api</module>
     </modules>
 
 

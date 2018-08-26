@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.item.app.feign;
+package com.wangqin.globalshop.item.api.itembrand;
 
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
@@ -33,8 +33,7 @@ public interface ItemBrandApi {
 	JsonPageResult<List<ItemBrandDO>> queryBrands(@RequestBody ItemBrandQueryVO brandQueryVO);
 
 	//总查询
-	@RequestMapping(value = "/queryAllBrand", method = RequestMethod.POST)
-	JsonPageResult<List<ItemBrandDO>> queryAllBrand();
+	@RequestMapping(value = "/queryAllBrand", method = RequestMethod.POST) JsonPageResult<List<ItemBrandDO>> queryAllBrand();
 
 	/**
 	 * 根据品牌英文名查找品牌，防止重复
