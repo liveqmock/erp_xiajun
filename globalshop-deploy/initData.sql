@@ -14,7 +14,8 @@ INSERT INTO `sequence`(name,current_value,increment,creator,modifier) VALUES
 ('PO',10000,1,'SYSTEM','SYSTEM'),
 ('RECO',10000,1,'SYSTEM','SYSTEM'),
 ('SKU',10000,1,'SYSTEM','SYSTEM'),
-('TASK',10000,1,'SYSTEM','SYSTEM');
+('TASK',10000,1,'SYSTEM','SYSTEM'),
+('SHOPCODE',0001,1,'SYSTEM','SYSTEM');
 --
 -- init data for `auth_role`
 --
@@ -204,15 +205,19 @@ INSERT INTO `auth_role_resource`(company_no,role_id, resource_id,creator, modifi
 -- init data for `logistic_company`
 --
 
+-- 物流公司
 
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('申通', '001', null, null, null, null, null, 'shentong', null, null, null, null, 0, '2018-06-14 15:21:06', '2018-06-14 15:21:06', 'SYSTEM', 'SYSTEM');
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('中通', '002', null, null, null, null, null, 'zhongtong', null, null, null, null, 0, '2018-06-14 15:21:06', '2018-06-14 15:21:06', 'SYSTEM', 'SYSTEM');
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('圆通', '003', null, null, null, null, null, 'yuantong', null, null, null, null, 0, '2018-06-14 15:21:06', '2018-06-14 15:21:06', 'SYSTEM', 'SYSTEM');
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('顺丰', '004', null, null, null, null, null, 'shunfeng', null, null, null, null, 0, '2018-06-14 15:21:06', '2018-06-14 15:21:06', 'SYSTEM', 'SYSTEM');
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('韵达', '005', null, null, null, null, null, 'yunda', null, null, null, null, 0, '2018-06-14 15:21:06', '2018-06-14 15:21:06', 'SYSTEM', 'SYSTEM');
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('天天', '006', null, null, null, null, null, 'tiantian', null, null, null, null, 0, '2018-06-14 15:21:06', '2018-06-14 15:21:06', 'SYSTEM', 'SYSTEM');
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('4PX', '007', null, null, null, null, null, 'zhuanyunsifang', null, null, null, null, 0, '2018-06-14 15:21:07', '2018-06-14 15:21:07', 'SYSTEM', 'SYSTEM');
-INSERT INTO logistic_company (name, code, name_in_jd, code_in_jd, name_in_youzan, code_in_youzan, name_in_kuaidi100, code_in_kuaidi100, name_in_pdd, code_in_pdd, name_in_taobao, code_in_taobao, is_del, gmt_create, gmt_modify, creator, modifier) VALUES ('百世快递', '008', null, null, null, null, null, 'baishiwuliu', null, null, null, null, 0, '2018-06-14 15:21:07', '2018-06-14 15:21:07', 'SYSTEM', 'SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('申通','001', '1', '申通快递', NULL,'shentong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('中通','002', '3', '中通快递', NULL,'zhongtong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('圆通','003', '2', '圆通速递', NULL,'yuantong','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('顺丰','004', '7', '顺丰速运', NULL,'shunfeng','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('韵达','005', '4', '韵达快递', NULL,'yunda','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('天天','006', '5', '天天快递', NULL,'tiantian','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('4PX','007', '', '', NULL,'zhuanyunsifang','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('百世快递','008', '6', '百世快递', NULL,'baishiwuliu','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('邮政（国内）','009', '8', '邮政快递包裹', NULL,'youzhengguonei','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('邮政（国际）','010', '12', '邮政平邮', NULL,'youzhengguoji','SYSTEM','SYSTEM');
+insert into `logistic_company` (`name`, `code`, `name_in_youzan`, `code_in_youzan`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('EMS','011', '11', 'EMS', NULL,'ems','SYSTEM','SYSTEM');
 
 
 
@@ -1041,16 +1046,3 @@ INSERT INTO `item_category`(`id`,`category_code`,`name`,`p_code`,`root_code`,`se
 INSERT INTO `item_category`(`id`,`category_code`,`name`,`p_code`,`root_code`,`seq`,`level`,`status`,`all_path`,`gmt_create`,`gmt_modify`,`creator`,`modifier`,`is_del`) VALUES (308,'1005004','电脑','1005000','1000000',0,3,0,'数码家电/办公用品/电脑','2018-06-15 17:34:55','2018-06-15 17:37:16','SYSTEM', 'SYSTEM', 0);
 INSERT INTO `item_category`(`id`,`category_code`,`name`,`p_code`,`root_code`,`seq`,`level`,`status`,`all_path`,`gmt_create`,`gmt_modify`,`creator`,`modifier`,`is_del`) VALUES (309,'1005005','键盘/鼠标','1005000','1000000',0,3,0,'数码家电/办公用品/键盘/鼠标','2018-06-15 17:34:55','2018-06-15 17:37:16','SYSTEM', 'SYSTEM', 0);
 INSERT INTO `item_category`(`id`,`category_code`,`name`,`p_code`,`root_code`,`seq`,`level`,`status`,`all_path`,`gmt_create`,`gmt_modify`,`creator`,`modifier`,`is_del`) VALUES (310,'1005006','其他','1005000','1000000',0,3,0,'数码家电/办公用品/其他','2018-06-15 17:34:55','2018-06-15 17:37:16','SYSTEM', 'SYSTEM', 0);
-
--- 物流公司
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('申通','001',NULL,'shentong','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('中通','002',NULL,'zhongtong','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('圆通','003',NULL,'yuantong','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('顺丰','004',NULL,'shunfeng','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('韵达','005',NULL,'yunda','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('天天','006',NULL,'tiantian','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('4PX','007',NULL,'zhuanyunsifang','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('百世快递','008',NULL,'baishiwuliu','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('邮政（国内）','009',NULL,'youzhengguonei','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('邮政（国际）','010',NULL,'youzhengguoji','SYSTEM','SYSTEM');
-insert into `logistic_company` (`name`, `code`, `name_in_kuaidi100`, `code_in_kuaidi100`, `modifier`, `creator`) values('EMS','011',NULL,'ems','SYSTEM','SYSTEM');
