@@ -1,4 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `haidb2new` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `haidb2new`;
 
 --
