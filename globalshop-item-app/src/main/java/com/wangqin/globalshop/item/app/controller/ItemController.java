@@ -47,6 +47,7 @@ import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.api.itembrand.ItemBrandFeignService;
 import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
@@ -70,12 +71,13 @@ import net.sf.json.JSONObject;
 @RequestMapping("/item")
 public class ItemController {
 
+	/******旧方法******/
     @Autowired
     private IItemBrandService brandService;
     @Autowired
     private IItemCategoryService categoryService;
-    @Autowired
-    private IItemService itemService;
+//    @Autowired
+//    private IItemService itemService;
     @Autowired
     private InventoryService inventoryService;
     @Autowired
@@ -88,6 +90,11 @@ public class ItemController {
     private IItemCompanyService companyService;
     @Autowired
     private ItemQrcodeShareDOMapperExt shareMapperExt;
+    /******旧方法******/
+    
+    //新方法
+  	@Autowired
+  	private ItemFeignService itemService;//feign声明式服务的高级版
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
