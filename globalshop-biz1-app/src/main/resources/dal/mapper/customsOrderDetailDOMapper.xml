@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.customsOrderDetailDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDetailDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="goods_order" property="goodsOrder" jdbcType="INTEGER" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="code_ts" property="codeTs" jdbcType="VARCHAR" />
+    <result column="goods_model" property="goodsModel" jdbcType="VARCHAR" />
+    <result column="origin_country" property="originCountry" jdbcType="VARCHAR" />
+    <result column="unit_price" property="unitPrice" jdbcType="DOUBLE" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="goods_count" property="goodsCount" jdbcType="DOUBLE" />
+    <result column="goods_unit" property="goodsUnit" jdbcType="VARCHAR" />
+    <result column="gross_weight" property="grossWeight" jdbcType="DOUBLE" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_no, goods_order, goods_name, code_ts, goods_model, origin_country, unit_price, 
+    currency, goods_count, goods_unit, gross_weight, bar_code, note, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from customs_order_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from customs_order_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDetailDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into customs_order_detail (business_no, goods_order, goods_name, 
+      code_ts, goods_model, origin_country, 
+      unit_price, currency, goods_count, 
+      goods_unit, gross_weight, bar_code, 
+      note, creator, modifier
+      )
+    values (#{businessNo,jdbcType=VARCHAR}, #{goodsOrder,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, 
+      #{codeTs,jdbcType=VARCHAR}, #{goodsModel,jdbcType=VARCHAR}, #{originCountry,jdbcType=VARCHAR}, 
+      #{unitPrice,jdbcType=DOUBLE}, #{currency,jdbcType=VARCHAR}, #{goodsCount,jdbcType=DOUBLE}, 
+      #{goodsUnit,jdbcType=VARCHAR}, #{grossWeight,jdbcType=DOUBLE}, #{barCode,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDetailDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into customs_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="goodsOrder != null" >
+        goods_order,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="codeTs != null" >
+        code_ts,
+      </if>
+      <if test="goodsModel != null" >
+        goods_model,
+      </if>
+      <if test="originCountry != null" >
+        origin_country,
+      </if>
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="goodsCount != null" >
+        goods_count,
+      </if>
+      <if test="goodsUnit != null" >
+        goods_unit,
+      </if>
+      <if test="grossWeight != null" >
+        gross_weight,
+      </if>
+      <if test="barCode != null" >
+        bar_code,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsOrder != null" >
+        #{goodsOrder,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="codeTs != null" >
+        #{codeTs,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsModel != null" >
+        #{goodsModel,jdbcType=VARCHAR},
+      </if>
+      <if test="originCountry != null" >
+        #{originCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCount != null" >
+        #{goodsCount,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsUnit != null" >
+        #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="grossWeight != null" >
+        #{grossWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="barCode != null" >
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDetailDO" >
+    update customs_order_detail
+    <set >
+      <if test="businessNo != null" >
+        business_no = #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsOrder != null" >
+        goods_order = #{goodsOrder,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="codeTs != null" >
+        code_ts = #{codeTs,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsModel != null" >
+        goods_model = #{goodsModel,jdbcType=VARCHAR},
+      </if>
+      <if test="originCountry != null" >
+        origin_country = #{originCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        unit_price = #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCount != null" >
+        goods_count = #{goodsCount,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsUnit != null" >
+        goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="grossWeight != null" >
+        gross_weight = #{grossWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="barCode != null" >
+        bar_code = #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDetailDO" >
+    update customs_order_detail
+    set business_no = #{businessNo,jdbcType=VARCHAR},
+      goods_order = #{goodsOrder,jdbcType=INTEGER},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      code_ts = #{codeTs,jdbcType=VARCHAR},
+      goods_model = #{goodsModel,jdbcType=VARCHAR},
+      origin_country = #{originCountry,jdbcType=VARCHAR},
+      unit_price = #{unitPrice,jdbcType=DOUBLE},
+      currency = #{currency,jdbcType=VARCHAR},
+      goods_count = #{goodsCount,jdbcType=DOUBLE},
+      goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      gross_weight = #{grossWeight,jdbcType=DOUBLE},
+      bar_code = #{barCode,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

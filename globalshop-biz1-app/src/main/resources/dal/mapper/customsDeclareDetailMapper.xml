@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.customsDeclareDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclareDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="goods_order" property="goodsOrder" jdbcType="INTEGER" />
+    <result column="code_ts" property="codeTs" jdbcType="VARCHAR" />
+    <result column="goods_item_no" property="goodsItemNo" jdbcType="VARCHAR" />
+    <result column="item_record_no" property="itemRecordNo" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_model" property="goodsModel" jdbcType="VARCHAR" />
+    <result column="origin_country" property="originCountry" jdbcType="VARCHAR" />
+    <result column="trade_curr" property="tradeCurr" jdbcType="VARCHAR" />
+    <result column="trade_total" property="tradeTotal" jdbcType="DOUBLE" />
+    <result column="decl_price" property="declPrice" jdbcType="DOUBLE" />
+    <result column="decl_total_price" property="declTotalPrice" jdbcType="DOUBLE" />
+    <result column="use_to" property="useTo" jdbcType="VARCHAR" />
+    <result column="declare_count" property="declareCount" jdbcType="DOUBLE" />
+    <result column="goods_unit" property="goodsUnit" jdbcType="VARCHAR" />
+    <result column="goods_gross_weight" property="goodsGrossWeight" jdbcType="DOUBLE" />
+    <result column="first_unit" property="firstUnit" jdbcType="VARCHAR" />
+    <result column="first_count" property="firstCount" jdbcType="DOUBLE" />
+    <result column="second_unit" property="secondUnit" jdbcType="VARCHAR" />
+    <result column="second_count" property="secondCount" jdbcType="DOUBLE" />
+    <result column="product_record_no" property="productRecordNo" jdbcType="VARCHAR" />
+    <result column="web_site" property="webSite" jdbcType="VARCHAR" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_no, goods_order, code_ts, goods_item_no, item_record_no, item_name, 
+    goods_name, goods_model, origin_country, trade_curr, trade_total, decl_price, decl_total_price, 
+    use_to, declare_count, goods_unit, goods_gross_weight, first_unit, first_count, second_unit, 
+    second_count, product_record_no, web_site, bar_code, note, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from customs_declare_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from customs_declare_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclareDetail" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into customs_declare_detail (business_no, goods_order, code_ts, 
+      goods_item_no, item_record_no, item_name, 
+      goods_name, goods_model, origin_country, 
+      trade_curr, trade_total, decl_price, 
+      decl_total_price, use_to, declare_count, 
+      goods_unit, goods_gross_weight, first_unit, 
+      first_count, second_unit, second_count, 
+      product_record_no, web_site, bar_code, 
+      note, creator, modifier
+      )
+    values (#{businessNo,jdbcType=VARCHAR}, #{goodsOrder,jdbcType=INTEGER}, #{codeTs,jdbcType=VARCHAR}, 
+      #{goodsItemNo,jdbcType=VARCHAR}, #{itemRecordNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{goodsName,jdbcType=VARCHAR}, #{goodsModel,jdbcType=VARCHAR}, #{originCountry,jdbcType=VARCHAR}, 
+      #{tradeCurr,jdbcType=VARCHAR}, #{tradeTotal,jdbcType=DOUBLE}, #{declPrice,jdbcType=DOUBLE}, 
+      #{declTotalPrice,jdbcType=DOUBLE}, #{useTo,jdbcType=VARCHAR}, #{declareCount,jdbcType=DOUBLE}, 
+      #{goodsUnit,jdbcType=VARCHAR}, #{goodsGrossWeight,jdbcType=DOUBLE}, #{firstUnit,jdbcType=VARCHAR}, 
+      #{firstCount,jdbcType=DOUBLE}, #{secondUnit,jdbcType=VARCHAR}, #{secondCount,jdbcType=DOUBLE}, 
+      #{productRecordNo,jdbcType=VARCHAR}, #{webSite,jdbcType=VARCHAR}, #{barCode,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclareDetail" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into customs_declare_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="goodsOrder != null" >
+        goods_order,
+      </if>
+      <if test="codeTs != null" >
+        code_ts,
+      </if>
+      <if test="goodsItemNo != null" >
+        goods_item_no,
+      </if>
+      <if test="itemRecordNo != null" >
+        item_record_no,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsModel != null" >
+        goods_model,
+      </if>
+      <if test="originCountry != null" >
+        origin_country,
+      </if>
+      <if test="tradeCurr != null" >
+        trade_curr,
+      </if>
+      <if test="tradeTotal != null" >
+        trade_total,
+      </if>
+      <if test="declPrice != null" >
+        decl_price,
+      </if>
+      <if test="declTotalPrice != null" >
+        decl_total_price,
+      </if>
+      <if test="useTo != null" >
+        use_to,
+      </if>
+      <if test="declareCount != null" >
+        declare_count,
+      </if>
+      <if test="goodsUnit != null" >
+        goods_unit,
+      </if>
+      <if test="goodsGrossWeight != null" >
+        goods_gross_weight,
+      </if>
+      <if test="firstUnit != null" >
+        first_unit,
+      </if>
+      <if test="firstCount != null" >
+        first_count,
+      </if>
+      <if test="secondUnit != null" >
+        second_unit,
+      </if>
+      <if test="secondCount != null" >
+        second_count,
+      </if>
+      <if test="productRecordNo != null" >
+        product_record_no,
+      </if>
+      <if test="webSite != null" >
+        web_site,
+      </if>
+      <if test="barCode != null" >
+        bar_code,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsOrder != null" >
+        #{goodsOrder,jdbcType=INTEGER},
+      </if>
+      <if test="codeTs != null" >
+        #{codeTs,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsItemNo != null" >
+        #{goodsItemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemRecordNo != null" >
+        #{itemRecordNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsModel != null" >
+        #{goodsModel,jdbcType=VARCHAR},
+      </if>
+      <if test="originCountry != null" >
+        #{originCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeCurr != null" >
+        #{tradeCurr,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTotal != null" >
+        #{tradeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="declPrice != null" >
+        #{declPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="declTotalPrice != null" >
+        #{declTotalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="useTo != null" >
+        #{useTo,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCount != null" >
+        #{declareCount,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsUnit != null" >
+        #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsGrossWeight != null" >
+        #{goodsGrossWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="firstUnit != null" >
+        #{firstUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="firstCount != null" >
+        #{firstCount,jdbcType=DOUBLE},
+      </if>
+      <if test="secondUnit != null" >
+        #{secondUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="secondCount != null" >
+        #{secondCount,jdbcType=DOUBLE},
+      </if>
+      <if test="productRecordNo != null" >
+        #{productRecordNo,jdbcType=VARCHAR},
+      </if>
+      <if test="webSite != null" >
+        #{webSite,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclareDetail" >
+    update customs_declare_detail
+    <set >
+      <if test="businessNo != null" >
+        business_no = #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsOrder != null" >
+        goods_order = #{goodsOrder,jdbcType=INTEGER},
+      </if>
+      <if test="codeTs != null" >
+        code_ts = #{codeTs,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsItemNo != null" >
+        goods_item_no = #{goodsItemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemRecordNo != null" >
+        item_record_no = #{itemRecordNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsModel != null" >
+        goods_model = #{goodsModel,jdbcType=VARCHAR},
+      </if>
+      <if test="originCountry != null" >
+        origin_country = #{originCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeCurr != null" >
+        trade_curr = #{tradeCurr,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTotal != null" >
+        trade_total = #{tradeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="declPrice != null" >
+        decl_price = #{declPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="declTotalPrice != null" >
+        decl_total_price = #{declTotalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="useTo != null" >
+        use_to = #{useTo,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCount != null" >
+        declare_count = #{declareCount,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsUnit != null" >
+        goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsGrossWeight != null" >
+        goods_gross_weight = #{goodsGrossWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="firstUnit != null" >
+        first_unit = #{firstUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="firstCount != null" >
+        first_count = #{firstCount,jdbcType=DOUBLE},
+      </if>
+      <if test="secondUnit != null" >
+        second_unit = #{secondUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="secondCount != null" >
+        second_count = #{secondCount,jdbcType=DOUBLE},
+      </if>
+      <if test="productRecordNo != null" >
+        product_record_no = #{productRecordNo,jdbcType=VARCHAR},
+      </if>
+      <if test="webSite != null" >
+        web_site = #{webSite,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        bar_code = #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclareDetail" >
+    update customs_declare_detail
+    set business_no = #{businessNo,jdbcType=VARCHAR},
+      goods_order = #{goodsOrder,jdbcType=INTEGER},
+      code_ts = #{codeTs,jdbcType=VARCHAR},
+      goods_item_no = #{goodsItemNo,jdbcType=VARCHAR},
+      item_record_no = #{itemRecordNo,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_model = #{goodsModel,jdbcType=VARCHAR},
+      origin_country = #{originCountry,jdbcType=VARCHAR},
+      trade_curr = #{tradeCurr,jdbcType=VARCHAR},
+      trade_total = #{tradeTotal,jdbcType=DOUBLE},
+      decl_price = #{declPrice,jdbcType=DOUBLE},
+      decl_total_price = #{declTotalPrice,jdbcType=DOUBLE},
+      use_to = #{useTo,jdbcType=VARCHAR},
+      declare_count = #{declareCount,jdbcType=DOUBLE},
+      goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      goods_gross_weight = #{goodsGrossWeight,jdbcType=DOUBLE},
+      first_unit = #{firstUnit,jdbcType=VARCHAR},
+      first_count = #{firstCount,jdbcType=DOUBLE},
+      second_unit = #{secondUnit,jdbcType=VARCHAR},
+      second_count = #{secondCount,jdbcType=DOUBLE},
+      product_record_no = #{productRecordNo,jdbcType=VARCHAR},
+      web_site = #{webSite,jdbcType=VARCHAR},
+      bar_code = #{barCode,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
