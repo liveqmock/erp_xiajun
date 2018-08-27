@@ -321,6 +321,44 @@ public class HttpClientUtil {
         return null;
     }
 
+
+	public static String get(String url, Map<String,String> param) {
+
+    	String path ="";
+    	for(String key : param.keySet()){
+    		if(EasyUtil.isStringEmpty(path)){
+				path += key + "=" + param.get(key);
+			}else {
+				path += "&" + key + "=" + param.get(key);
+			}
+		}
+
+		url += "?" + path;
+		System.out.println("get url: " + url);
+
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpget = new HttpGet(url);
+		CloseableHttpResponse response;
+		try {
+			response = httpclient.execute(httpget);
+			try {
+				HttpEntity entity = response.getEntity();
+				// 显示结果
+				return EntityUtils.toString(entity, "utf-8");
+			} finally {
+				response.close();
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
     public static String post(String url, String content) {
         return post(url, content, null);
     }

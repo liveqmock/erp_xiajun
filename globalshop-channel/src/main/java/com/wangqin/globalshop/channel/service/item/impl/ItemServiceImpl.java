@@ -245,13 +245,13 @@ public class ItemServiceImpl implements IItemService {
     			//插入规格表
     			itemSkuScaleDOMapper.insertSelective(color);
     		}
-    		if (IsEmptyUtil.isStringNotEmpty(sku.getScale())) {
+    		if (IsEmptyUtil.isStringNotEmpty(sku.getSize())) {
     			ItemSkuScaleDO scale = new ItemSkuScaleDO();
     			scale.setItemCode(itemCode);
     			scale.setSkuCode(skuCode);
     			scale.setScaleCode(CodeGenUtil.getScaleCode());
     			scale.setScaleName("尺寸");
-    			scale.setScaleValue(sku.getScale());
+    			scale.setScaleValue(sku.getSize());
     			scale.setCreator(USER_NO);
     			scale.setModifier(USER_NO);
     			//插入规格表
@@ -370,7 +370,40 @@ public class ItemServiceImpl implements IItemService {
     			addSku.setModifier(USER_NO);
     			itemSkuDOMapper.insertSelective(addSku);
     		}
-    	}	
+
+    		//规格处理,先删除，再更新
+			List<ItemSkuScaleDO> skuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
+    		for(ItemSkuScaleDO skuScaleDO : skuScaleDOS){
+				itemSkuScaleDOMapper.deleteByPrimaryKey(skuScaleDO.getId());
+			}
+
+
+			//计算规格
+			if (IsEmptyUtil.isStringNotEmpty(sku.getColor())) {
+				ItemSkuScaleDO color = new ItemSkuScaleDO();
+				color.setItemCode(itemCode);
+				color.setSkuCode(sku.getSkuCode());
+				color.setScaleCode(CodeGenUtil.getScaleCode());
+				color.setScaleName("颜色");
+				color.setScaleValue(sku.getColor());
+				color.setCreator(USER_NO);
+				color.setModifier(USER_NO);
+				//插入规格表
+				itemSkuScaleDOMapper.insertSelective(color);
+			}
+			if (IsEmptyUtil.isStringNotEmpty(sku.getSize())) {
+				ItemSkuScaleDO scale = new ItemSkuScaleDO();
+				scale.setItemCode(itemCode);
+				scale.setSkuCode(sku.getSkuCode());
+				scale.setScaleCode(CodeGenUtil.getScaleCode());
+				scale.setScaleName("尺寸");
+				scale.setScaleValue(sku.getSize());
+				scale.setCreator(USER_NO);
+				scale.setModifier(USER_NO);
+				//插入规格表
+				itemSkuScaleDOMapper.insertSelective(scale);
+			}
+		}
     }
     
     @Override
