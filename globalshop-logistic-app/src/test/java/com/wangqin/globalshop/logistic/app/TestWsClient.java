@@ -1,6 +1,8 @@
 package com.wangqin.globalshop.logistic.app;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.QNameMap;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.wangqin.globalshop.logistic.app.bean.common.BusinessType;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfGoodsPurchaser;
@@ -27,7 +29,7 @@ import java.util.List;
  */
 public class TestWsClient {
 
-    /**
+    /*
      * 1. 流程:
      * 1) 点击【生成key】按钮 生成aes密钥、企业rsa私钥、 rsa公钥 ；
      * 2) 把发送方代码 aes密钥 rsa公钥提供给浙江电子口岸技术，供电子口岸解密验签；
@@ -68,6 +70,12 @@ public class TestWsClient {
      * call.addParameter("sendCode", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);//发送方代码
      * call.setReturnType(org.apache.axis.encoding.XMLType.XSD_STRING);
      * return (String)call.invoke(new Object[]{content,msgType,dataDigest,sendCode});
+     */
+
+    /**
+     * 测试申报数据加密
+     *
+     * @throws Exception
      */
     @Test
     public void testReceiveEncryptDeclareService() throws Exception {
@@ -114,6 +122,17 @@ public class TestWsClient {
         Mo mo = (Mo) xstream.fromXML(result);
         System.out.println(mo);
         System.out.println(xstream.toXML(mo));
+    }
+
+    /**
+     * 测试申报总署版报文
+     */
+    @Test
+    public void testReceiveCebDeclare() {
+        QNameMap qmaps = new QNameMap();
+        qmaps.setDefaultNamespace("http://www.chinaport.gov.cn/ceb");
+        qmaps.setDefaultPrefix("ceb");
+        XStream xstream = new XStream(new StaxDriver(qmaps));
     }
 
     /**

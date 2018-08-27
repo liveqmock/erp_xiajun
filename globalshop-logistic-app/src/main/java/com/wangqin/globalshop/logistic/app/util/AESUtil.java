@@ -9,12 +9,11 @@
   *****************************************************************************/
 package com.wangqin.globalshop.logistic.app.util;
 
-import java.security.Key;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 
 /**
  * AES加密工具类

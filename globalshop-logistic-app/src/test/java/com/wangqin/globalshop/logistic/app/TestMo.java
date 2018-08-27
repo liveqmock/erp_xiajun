@@ -22,8 +22,13 @@ import com.wangqin.globalshop.logistic.app.bean.returns.GoodsReturnModule;
 import com.wangqin.globalshop.logistic.app.bean.xml.Body;
 import com.wangqin.globalshop.logistic.app.bean.xml.Head;
 import com.wangqin.globalshop.logistic.app.bean.xml.Mo;
+import com.wangqin.globalshop.logistic.app.util.XStreamUtil;
 import org.junit.Test;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,19 +37,6 @@ import java.util.List;
  * @date 2018/8/21
  */
 public class TestMo {
-
-    /**
-     * 将 MO 对象转换为为 XML 并打印
-     *
-     * @param mo
-     */
-    private void printXmlFromMo(Mo mo) {
-        XStream xstream = new XStream();
-        xstream.autodetectAnnotations(true);
-
-        String xml = xstream.toXML(mo);
-        System.out.println(xml);
-    }
 
     /**
      * 订单样例
@@ -428,7 +420,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMo(mo);
+        printXmlFromMoXStream(mo);
     }
 
     /**
@@ -492,7 +484,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMo(mo);
+        printXmlFromMoXStream(mo);
     }
 
     /**
@@ -523,7 +515,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMo(mo);
+        printXmlFromMoXStream(mo);
     }
 
     /**
@@ -562,7 +554,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMo(mo);
+        printXmlFromMoXStream(mo);
     }
 
     /**
@@ -592,6 +584,142 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMo(mo);
+        printXmlFromMoXStream(mo);
+    }
+
+    @Test
+    public void testXmlToBean() {
+        String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                "<mo version=\"1.0.0\">" +
+                "  <head>" +
+                "    <businessType>IMPORTORDER</businessType>" +
+                "  </head>" +
+                "  <body>" +
+                "    <orderInfoList>" +
+                "      <orderInfo>" +
+                "        <jkfSign>" +
+                "          <companyCode>3301961Q43</companyCode>" +
+                "          <businessNo>order001</businessNo>" +
+                "          <businessType>IMPORTORDER</businessType>" +
+                "          <declareType>1</declareType>" +
+                "          <cebFlag>01</cebFlag>" +
+                "          <note>进口订单备注</note>" +
+                "        </jkfSign>" +
+                "        <jkfOrderImportHead>" +
+                "          <companyName>天猫国际</companyName>" +
+                "          <companyCode>3301968833</companyCode>" +
+                "         <ieFlag>I</ieFlag>" +
+                "          <payType>支付类型</payType>" +
+                "          <payCompanyCode>3301968pay</payCompanyCode>" +
+                "          <payNumber>zhifu001</payNumber>" +
+                "          <orderTotalAmount>100.0</orderTotalAmount>" +
+                "          <orderGoodsAmount>90.0</orderGoodsAmount>" +
+                "          <discount>0.0</discount>" +
+                "          <orderNo>order00001</orderNo>" +
+                "          <orderTaxAmount>10.0</orderTaxAmount>" +
+                "          <feeAmount>5345.0</feeAmount>" +
+                "          <insureAmount>1.5</insureAmount>" +
+                "          <eCommerceCode>33019688oo</eCommerceCode>" +
+                "          <eCommerceName>亚马逊</eCommerceName>" +
+                "          <tradeTime>2014-02-17 15:23:13</tradeTime>" +
+                "          <currCode>502</currCode>" +
+                "          <totalAmount>100.0</totalAmount>" +
+                "          <consigneeEmail>loujh@sina.com</consigneeEmail>" +
+                "          <consigneeTel>13242345433</consigneeTel>" +
+                "          <consignee>loujianhua</consignee>" +
+                "          <consigneeAddress>浙江杭州聚龙大厦</consigneeAddress>" +
+                "          <totalCount>5.0</totalCount>" +
+                "          <batchNumbers>3434-343434</batchNumbers>" +
+                "          <consigneeDitrict>632043</consigneeDitrict>" +
+                "          <postMode>1</postMode>" +
+                "          <senderCountry>34233</senderCountry>" +
+                "          <senderName>yangtest</senderName>" +
+                "          <purchaserId>中国买家a</purchaserId>" +
+                "          <logisCompanyName>邮政速递</logisCompanyName>" +
+                "          <logisCompanyCode>3301980101</logisCompanyCode>" +
+                "          <zipCode>322001</zipCode>" +
+                "          <note>备注信息</note>" +
+                "          <wayBills>001;002;003</wayBills>" +
+                "          <rate>6.34</rate>" +
+                "          <userProcotol>本人承诺所购买商品系个人合理自用，现委托商家代理申报、代缴税款等通关事宜，本人保证遵守《海关法》和国家相关法律法规，保证所提供的身份信息和收货信息真实完整，无侵犯他人权益的行为，以上委托关系系如实填写，本人愿意接受海关、检验检疫机构及其他监管部门的监管，并承担相应法律责任。</userProcotol>" +
+                "        </jkfOrderImportHead>" +
+                "        <jkfOrderDetailList>" +
+                "          <jkfOrderDetail>" +
+                "            <goodsOrder>1</goodsOrder>" +
+                "            <goodsName>物品名称1</goodsName>" +
+                "            <codeTs>0100000001</codeTs>" +
+                "            <goodsModel>规格型号1</goodsModel>" +
+                "            <originCountry>00342</originCountry>" +
+                "            <unitPrice>3.3</unitPrice>" +
+                "            <currency>142</currency>" +
+                "            <goodsCount>343.0</goodsCount>" +
+                "            <goodsUnit>035</goodsUnit>" +
+                "            <grossWeight>34.94</grossWeight>" +
+                "            <barCode>66655554433</barCode>" +
+                "            <note>备注</note>" +
+                "          </jkfOrderDetail>" +
+                "          <jkfOrderDetail>" +
+                "            <goodsOrder>2</goodsOrder>" +
+                "            <goodsName>物品名称2</goodsName>" +
+                "            <codeTs>0100000002</codeTs>" +
+                "            <goodsModel>规格型号2</goodsModel>" +
+                "            <originCountry>00342</originCountry>" +
+                "            <unitPrice>3.3</unitPrice>" +
+                "            <currency>142</currency>" +
+                "            <goodsCount>343.0</goodsCount>" +
+                "            <goodsUnit>035</goodsUnit>" +
+                "            <grossWeight>54.94</grossWeight>" +
+                "            <barCode>66655554433</barCode>" +
+                "            <note>备注</note>" +
+                "          </jkfOrderDetail>" +
+                "        </jkfOrderDetailList>" +
+                "        <jkfGoodsPurchaser>" +
+                "          <id>中国买家a</id>" +
+                "          <name>tetsname</name>" +
+                "          <email>tetsname@sina.com</email>" +
+                "          <telNumber>24233322323</telNumber>" +
+                "          <paperType>01</paperType>" +
+                "          <paperNumber>23458-9503285382434</paperNumber>" +
+                "          <address>浙江杭州杭大路9999号</address>" +
+                "        </jkfGoodsPurchaser>" +
+                "      </orderInfo>" +
+                "    </orderInfoList>" +
+                "  </body>" +
+                "</mo>";
+        Mo mo = XStreamUtil.toBean(xml, Mo.class);
+        System.out.println(mo);
+    }
+
+    @Test
+    public void testCeb() {
+
+    }
+
+
+
+    /**
+     * 将 MO 对象转换为为 XML 并打印（XStream 方式）
+     *
+     * @param mo
+     */
+    private void printXmlFromMoXStream(Mo mo) {
+        XStream xstream = new XStream();
+        xstream.autodetectAnnotations(true);
+
+        String xml = xstream.toXML(mo);
+        System.out.println(xml);
+    }
+
+    /**
+     * 将 MO 对象转换为为 XML 并打印（JAXB 方式）
+     *
+     * @param mo
+     */
+    public void  printXmlFromMoByJAXB(Mo mo) throws JAXBException {
+        StringWriter writer = new StringWriter();
+        JAXBContext jaxbContext = JAXBContext.newInstance(Mo.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.marshal(mo, writer);
+        System.out.println(writer.toString());
     }
 }

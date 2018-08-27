@@ -222,7 +222,7 @@ public class Wechat3rdPartyAuthorizationController {
                 String accessToken = info.getString("authorizer_access_token");
                 String refreshToken = info.getString("authorizer_refresh_token");
                 String appid = info.getString("authorizer_appid");
-                if (StringUtils.isBlank(appid) || !appid.equals(applet.getAppid())) {
+                if (StringUtils.isBlank(appid) ||( !appid.equals(applet.getAppid())&& StringUtils.isNotBlank(applet.getAppid()))) {
                     return result.buildMsg("授权失败:当前公司已经绑定了其它小程序,请在微信公众平台解除授权").buildIsSuccess(false);
                 }
                 applet.setAuthorizerAccessToken(accessToken);
@@ -244,6 +244,7 @@ public class Wechat3rdPartyAuthorizationController {
             appletConfigServiceImplement.insert(applet);
             return result.buildMsg("授权成功").buildIsSuccess(true);
         } catch (BizCommonException e) {
+            e.printStackTrace();
             return result.buildMsg("授权失败" + e.getErrorMsg()).buildIsSuccess(false);
         } catch (Exception e) {
             e.printStackTrace();

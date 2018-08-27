@@ -9,65 +9,40 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.wangqin.globalshop</groupId>
-  <artifactId>globalshop-item-app</artifactId>
-  <version>1.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.wangqin.globalshop</groupId>
+    <artifactId>globalshop-item-api</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-  <name>globalshop-item-app</name>
+    <name>globalshop-item-api</name>
 
-  <packaging>jar</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-         <dependency>
+        <dependency>
             <groupId>com.wangqin.globalshop</groupId>
             <artifactId>globalshop-biz1-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>com.wangqin.globalshop</groupId>
             <artifactId>globalshop-biz1-app</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.wangqin.globalshop</groupId>
-            <artifactId>globalshop-inventory-app</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.wangqin.globalshop</groupId>
-            <artifactId>globalshop-channel-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.wangqin.globalshop</groupId>-->
-            <!--<artifactId>globalshop-item-api</artifactId>-->
-            <!--<version>1.0-SNAPSHOT</version>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>com.wangqin.globalshop</groupId>
             <artifactId>globalshop-common</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>log4j-api</artifactId>
-                    <groupId>org.apache.logging.log4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>com.wangqin.globalshop</groupId>
-            <artifactId>globalshop-item-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+
+
     </dependencies>
     <build>
-        <finalName>globalshop-item-app</finalName>
+        <finalName>globalshop-item-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mybatis.generator</groupId>

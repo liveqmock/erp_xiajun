@@ -1,32 +1,41 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import java.util.List;
-
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
+import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.RandomUtils;
+import com.wangqin.globalshop.item.api.itembrand.ItemBrandFeignService;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import java.util.List;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.item.app.service.IItemBrandService;
 
 @Controller
 @RequestMapping(value = "/item/brand")
 @Authenticated
 public class ItemBrandController {
 
-	@Autowired
-	private IItemBrandService itemBrandService;
 
+
+	// 旧方法
+//	@Autowired
+//	private IItemBrandService itemBrandService;  记住用，最小该变量ItemBrandFeignService代替即可
+
+	//新方法
+	@Autowired
+	private ItemBrandFeignService itemBrandService;//feign声明式服务的高级版
+
+
+	@Autowired RestTemplate restTemplate;  //第二种方案
 
 
 	/**
@@ -40,12 +49,12 @@ public class ItemBrandController {
 	@Transactional(rollbackFor = ErpCommonException.class)
 	public Object add(ItemBrandDO brand) {
 		JsonResult<ItemBrandDO> result = new JsonResult<>();
-		brand.setBrandNo("b"+RandomUtils.getTimeRandom());
+		brand.setBrandNo("b" + RandomUtils.getTimeRandom());
 		brand.setCreator(AppUtil.getLoginUserId());
 		brand.setModifier(AppUtil.getLoginUserId());
-		 if(itemBrandService.selectBrandNoByName(brand.getName()) != null) {
-			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
-		 }
+		if (itemBrandService.selectBrandNoByName(brand.getName()) != null) {
+			return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
+		}
 		itemBrandService.insertBrandSelective(brand);
 		return result.buildIsSuccess(true);
 	}
@@ -68,7 +77,7 @@ public class ItemBrandController {
 	/**
 	 * 修改品牌(fin)
 	 * 
-	 * @param category
+	 * @param
 	 * @return
 	 */
 	@RequestMapping("/update")
@@ -79,10 +88,7 @@ public class ItemBrandController {
 		if (StringUtil.isBlank(brand.getName())) {
 			return result.buildMsg("皮牌英文名不能为空").buildIsSuccess(false);
 		}
-//		/**zhangziyang**/
-//		if(itemBrandService.selectBrandNoByName(brand.getName()) != null || !"".equals(itemBrandService.selectBrandNoByName(brand.getName()))) {
-//			 return result.buildMsg("添加失败，品牌已存在").buildIsSuccess(false);
-//		 }
+
 		List<Long> idList = itemBrandService.queryIdListByBrandName(brand.getName());
 		for(Long id:idList) {
 			if(!id.equals(brand.getId())) {
