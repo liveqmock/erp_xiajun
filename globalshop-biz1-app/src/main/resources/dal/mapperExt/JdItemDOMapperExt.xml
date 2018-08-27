@@ -82,6 +82,7 @@
         WHERE
         <include refid="commonSelectSection"/>
         ORDER BY T.id desc
+        limit 0,500
     </select>
 
 </mapper>

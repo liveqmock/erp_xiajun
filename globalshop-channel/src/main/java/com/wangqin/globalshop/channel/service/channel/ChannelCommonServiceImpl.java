@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.HaihuService;
+import com.wangqin.globalshop.channel.service.IntraMirrorService;
 import com.wangqin.globalshop.channel.service.YouzanService;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
@@ -58,6 +59,10 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 	@Autowired
 	private HaihuService haihuService;
+
+
+	@Autowired
+	private IntraMirrorService imService;
 
 	@Autowired
 	private JdOrderService jdOrderService;
@@ -374,6 +379,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
 				youzanService.getAllItems(shopOauth);
+			}else if(Integer.valueOf(ChannelType.IntraMirror.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				imService.getAllItems(shopOauth);
 			}else{
 				throw new ErpCommonException("","暂不支持该方法");
 			}
@@ -402,6 +409,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 			GlobalShopItemVo globalShopItemVo = null;
 			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
 				 globalShopItemVo = youzanService.convertYZItem(shopOauth,jdItem);
+			}else if(Integer.valueOf(ChannelType.IntraMirror.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				globalShopItemVo = imService.convertYZItem(shopOauth,jdItem);
 			}else{
 				throw new ErpCommonException("","暂不支持该方法");
 			}
