@@ -7,3 +7,12 @@ VALUES ( 0, '5', 'yJlyUZ1gt5', 'IntraMirror', 'IM001', '2019-08-27 15:59:51', 'h
 ####初始化intraMirror授权,请确认商户companyNo:  yJlyUZ1gt5  E群大叔奢侈品直购平台
 INSERT INTO `haidb2new`.`jd_shop_oauth`( `version`, `channel_no`, `company_no`, `shop_code`, `access_token`, `expires_time`, `refresh_token`, `refresh_exprires_time`, `app_key`, `appsecret_key`, `access_key`, `access_value`, `server_url`, `token_url`, `shop_type`, `open`, `gmt_modify`, `gmt_create`, `modifier`, `creator`, `is_del`)
 VALUES ( 0, '5', 'yJlyUZ1gt5', 'IM001', 'vdjguewjdi2ngksalw323et5ingsdlw12', '2019-08-27 15:59:51', NULL, NULL, 'EQunDaShu20180813', '324j89fgkljynbxe12', NULL, NULL, '', 'http://channel.intramirror.com/auth/token', NULL, 1, NOW(),  NOW(), '-1', '-1', 0);
+
+
+###外部item类目记录
+ALTER TABLE `haidb2new`.`channel_listing_item`
+ADD COLUMN `category_json` varchar(1024) COMMENT '类目json字符串';
+
+###新增字段，用来下单
+ALTER TABLE `haidb2new`.`channel_listing_item_sku`
+ADD COLUMN `shop_product_sku_id` int(0) COMMENT 'itraMirror用来下单';
