@@ -50,7 +50,7 @@
             <!--<property name="rootInterface" value="com.wangqin.globalshop.biz1.app.dal.mapper.BaseMapper"/>-->
         </javaClientGenerator>
 
-        <!--<table tableName="customs_order" domainObjectName="customsOrderDO" enableCountByExample="false"-->
+        <!--<table tableName="customs_order" domainObjectName="CustomsOrderDO" enableCountByExample="false"-->
                <!--enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
@@ -59,7 +59,7 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="customs_order_detail" domainObjectName="customsOrderDetailDO" enableCountByExample="false"-->
+        <!--<table tableName="customs_order_detail" domainObjectName="CustomsOrderDetailDO" enableCountByExample="false"-->
                <!--enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
@@ -68,7 +68,7 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="customs_declare" domainObjectName="customsDeclare" enableCountByExample="false"-->
+        <!--<table tableName="customs_declare" domainObjectName="CustomsDeclare" enableCountByExample="false"-->
                <!--enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
@@ -77,7 +77,7 @@
             <!--<ignoreColumn column="is_del" delimitedColumnName=""/>-->
         <!--</table>-->
 
-        <!--<table tableName="customs_declare_detail" domainObjectName="customsDeclareDetail" enableCountByExample="false"-->
+        <!--<table tableName="customs_declare_detail" domainObjectName="CustomsDeclareDetail" enableCountByExample="false"-->
                <!--enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->

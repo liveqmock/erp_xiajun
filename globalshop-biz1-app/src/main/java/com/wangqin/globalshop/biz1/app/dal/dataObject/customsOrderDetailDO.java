@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-public class customsOrderDetailDO extends BaseModel {
+public class CustomsOrderDetailDO extends BaseModel {
     private Long id;
 
     private String businessNo;

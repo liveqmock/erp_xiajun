@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.customsDeclareMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclare" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.CustomsDeclareMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclare" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
     <result column="account_book_no" property="accountBookNo" jdbcType="VARCHAR" />
@@ -64,6 +64,9 @@
     <result column="approve_result" property="approveResult" jdbcType="VARCHAR" />
     <result column="approve_comment" property="approveComment" jdbcType="VARCHAR" />
     <result column="process_time" property="processTime" jdbcType="VARCHAR" />
+    <result column="chk_mark" property="chkMark" jdbcType="CHAR" />
+    <result column="notice_date" property="noticeDate" jdbcType="VARCHAR" />
+    <result column="result_info" property="resultInfo" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
@@ -78,7 +81,7 @@
     buyer_id_number, buyer_name, worth, fee_amount, insure_amount, curr_code, main_g_name, 
     internal_area_company_no, internal_area_company_name, assure_code, application_form_no, 
     is_authorize, license_no, personal_goods_form_no, approve_result, approve_comment, 
-    process_time, creator, modifier
+    process_time, chk_mark, notice_date, result_info, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -90,7 +93,7 @@
     delete from customs_declare
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclare" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclare" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -114,7 +117,8 @@
       main_g_name, internal_area_company_no, internal_area_company_name, 
       assure_code, application_form_no, is_authorize, 
       license_no, personal_goods_form_no, approve_result, 
-      approve_comment, process_time, creator, 
+      approve_comment, process_time, chk_mark, 
+      notice_date, result_info, creator, 
       modifier)
     values (#{businessNo,jdbcType=VARCHAR}, #{accountBookNo,jdbcType=VARCHAR}, #{ieFlag,jdbcType=CHAR}, 
       #{preEntryNumber,jdbcType=CHAR}, #{importType,jdbcType=CHAR}, #{inOutDateStr,jdbcType=VARCHAR}, 
@@ -136,10 +140,11 @@
       #{mainGName,jdbcType=VARCHAR}, #{internalAreaCompanyNo,jdbcType=VARCHAR}, #{internalAreaCompanyName,jdbcType=VARCHAR}, 
       #{assureCode,jdbcType=VARCHAR}, #{applicationFormNo,jdbcType=VARCHAR}, #{isAuthorize,jdbcType=CHAR}, 
       #{licenseNo,jdbcType=VARCHAR}, #{personalGoodsFormNo,jdbcType=VARCHAR}, #{approveResult,jdbcType=VARCHAR}, 
-      #{approveComment,jdbcType=VARCHAR}, #{processTime,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{approveComment,jdbcType=VARCHAR}, #{processTime,jdbcType=VARCHAR}, #{chkMark,jdbcType=CHAR}, 
+      #{noticeDate,jdbcType=VARCHAR}, #{resultInfo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclare" >
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclare" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -327,6 +332,15 @@
       </if>
       <if test="processTime != null" >
         process_time,
+      </if>
+      <if test="chkMark != null" >
+        chk_mark,
+      </if>
+      <if test="noticeDate != null" >
+        notice_date,
+      </if>
+      <if test="resultInfo != null" >
+        result_info,
       </if>
       <if test="creator != null" >
         creator,
@@ -519,6 +533,15 @@
       <if test="processTime != null" >
         #{processTime,jdbcType=VARCHAR},
       </if>
+      <if test="chkMark != null" >
+        #{chkMark,jdbcType=CHAR},
+      </if>
+      <if test="noticeDate != null" >
+        #{noticeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="resultInfo != null" >
+        #{resultInfo,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -527,7 +550,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclare" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclare" >
     update customs_declare
     <set >
       <if test="businessNo != null" >
@@ -713,6 +736,15 @@
       <if test="processTime != null" >
         process_time = #{processTime,jdbcType=VARCHAR},
       </if>
+      <if test="chkMark != null" >
+        chk_mark = #{chkMark,jdbcType=CHAR},
+      </if>
+      <if test="noticeDate != null" >
+        notice_date = #{noticeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="resultInfo != null" >
+        result_info = #{resultInfo,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -722,7 +754,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsDeclare" >
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclare" >
     update customs_declare
     set business_no = #{businessNo,jdbcType=VARCHAR},
       account_book_no = #{accountBookNo,jdbcType=VARCHAR},
@@ -785,6 +817,9 @@
       approve_result = #{approveResult,jdbcType=VARCHAR},
       approve_comment = #{approveComment,jdbcType=VARCHAR},
       process_time = #{processTime,jdbcType=VARCHAR},
+      chk_mark = #{chkMark,jdbcType=CHAR},
+      notice_date = #{noticeDate,jdbcType=VARCHAR},
+      result_info = #{resultInfo,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

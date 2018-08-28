@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-public class customsDeclare extends BaseModel {
+public class CustomsDeclare extends BaseModel {
     private Long id;
 
     private String businessNo;
@@ -124,6 +124,12 @@ public class customsDeclare extends BaseModel {
     private String approveComment;
 
     private String processTime;
+
+    private String chkMark;
+
+    private String noticeDate;
+
+    private String resultInfo;
 
     private String creator;
 
@@ -623,6 +629,30 @@ public class customsDeclare extends BaseModel {
 
     public void setProcessTime(String processTime) {
         this.processTime = processTime == null ? null : processTime.trim();
+    }
+
+    public String getChkMark() {
+        return chkMark;
+    }
+
+    public void setChkMark(String chkMark) {
+        this.chkMark = chkMark == null ? null : chkMark.trim();
+    }
+
+    public String getNoticeDate() {
+        return noticeDate;
+    }
+
+    public void setNoticeDate(String noticeDate) {
+        this.noticeDate = noticeDate == null ? null : noticeDate.trim();
+    }
+
+    public String getResultInfo() {
+        return resultInfo;
+    }
+
+    public void setResultInfo(String resultInfo) {
+        this.resultInfo = resultInfo == null ? null : resultInfo.trim();
     }
 
     public String getCreator() {

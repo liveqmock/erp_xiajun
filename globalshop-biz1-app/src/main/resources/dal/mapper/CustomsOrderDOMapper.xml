@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.customsOrderDOMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDO" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.CustomsOrderDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsOrderDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
     <result column="company_name" property="companyName" jdbcType="VARCHAR" />
@@ -47,6 +47,9 @@
     <result column="paper_type" property="paperType" jdbcType="VARCHAR" />
     <result column="paper_number" property="paperNumber" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="chk_mark" property="chkMark" jdbcType="CHAR" />
+    <result column="notice_date" property="noticeDate" jdbcType="VARCHAR" />
+    <result column="result_info" property="resultInfo" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
   </resultMap>
@@ -57,8 +60,8 @@
     curr_code, total_amount, consignee_email, consignee_tel, consignee, consignee_address, 
     total_count, batch_numbers, consignee_ditrict, post_mode, sender_country, sender_name, 
     logis_company_name, logis_company_code, zip_code, note, way_bills, rate, user_procotol, 
-    purchaser_id, name, email, tel_number, paper_type, paper_number, address, creator, 
-    modifier
+    purchaser_id, name, email, tel_number, paper_type, paper_number, address, chk_mark, 
+    notice_date, result_info, creator, modifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -70,7 +73,7 @@
     delete from customs_order
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDO" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsOrderDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -88,7 +91,8 @@
       note, way_bills, rate, 
       user_procotol, purchaser_id, name, 
       email, tel_number, paper_type, 
-      paper_number, address, creator, 
+      paper_number, address, chk_mark, 
+      notice_date, result_info, creator, 
       modifier)
     values (#{businessNo,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, 
       #{ieFlag,jdbcType=CHAR}, #{payType,jdbcType=VARCHAR}, #{payCompanyCode,jdbcType=VARCHAR}, 
@@ -104,10 +108,11 @@
       #{note,jdbcType=VARCHAR}, #{wayBills,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, 
       #{userProcotol,jdbcType=VARCHAR}, #{purchaserId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{telNumber,jdbcType=VARCHAR}, #{paperType,jdbcType=VARCHAR}, 
-      #{paperNumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{paperNumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{chkMark,jdbcType=CHAR}, 
+      #{noticeDate,jdbcType=VARCHAR}, #{resultInfo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{modifier,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDO" >
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsOrderDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -244,6 +249,15 @@
       </if>
       <if test="address != null" >
         address,
+      </if>
+      <if test="chkMark != null" >
+        chk_mark,
+      </if>
+      <if test="noticeDate != null" >
+        notice_date,
+      </if>
+      <if test="resultInfo != null" >
+        result_info,
       </if>
       <if test="creator != null" >
         creator,
@@ -385,6 +399,15 @@
       <if test="address != null" >
         #{address,jdbcType=VARCHAR},
       </if>
+      <if test="chkMark != null" >
+        #{chkMark,jdbcType=CHAR},
+      </if>
+      <if test="noticeDate != null" >
+        #{noticeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="resultInfo != null" >
+        #{resultInfo,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
@@ -393,7 +416,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsOrderDO" >
     update customs_order
     <set >
       <if test="businessNo != null" >
@@ -528,6 +551,15 @@
       <if test="address != null" >
         address = #{address,jdbcType=VARCHAR},
       </if>
+      <if test="chkMark != null" >
+        chk_mark = #{chkMark,jdbcType=CHAR},
+      </if>
+      <if test="noticeDate != null" >
+        notice_date = #{noticeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="resultInfo != null" >
+        result_info = #{resultInfo,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -537,7 +569,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.customsOrderDO" >
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsOrderDO" >
     update customs_order
     set business_no = #{businessNo,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
@@ -583,6 +615,9 @@
       paper_type = #{paperType,jdbcType=VARCHAR},
       paper_number = #{paperNumber,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
+      chk_mark = #{chkMark,jdbcType=CHAR},
+      notice_date = #{noticeDate,jdbcType=VARCHAR},
+      result_info = #{resultInfo,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       modifier = #{modifier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

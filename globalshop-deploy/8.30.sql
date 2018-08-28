@@ -59,6 +59,10 @@ CREATE TABLE `customs_order` (
   `paper_number` VARCHAR(100) DEFAULT NULL COMMENT '证件号码',
   `address` VARCHAR(200) DEFAULT NULL COMMENT '地址',
 
+  `chk_mark` CHAR(1) DEFAULT NULL COMMENT '处理结果：1-成功 2-处理失败',
+  `notice_date` VARCHAR(25) DEFAULT NULL COMMENT '通知日期及时间：YYYY-MM-DD HH:MM',
+  `result_info` VARCHAR(400) DEFAULT NULL COMMENT '5位校验状态码+冒号+处理结果文字信息，格式类似：22001:企业编号未备',
+
   `creator` VARCHAR(32) DEFAULT 'system' COMMENT '创建者',
   `modifier` VARCHAR(32) DEFAULT 'system' COMMENT '修改者',
   `gmt_modify` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -159,6 +163,10 @@ CREATE TABLE `customs_declare`(
   `approve_result` VARCHAR(2) DEFAULT NULL COMMENT '清单状态：见参数表',
   `approve_comment` VARCHAR(70) DEFAULT NULL COMMENT '四位审单状态码+冒号+海关审批意见，格式类似：3201:支付类型不存在.四位审单状态码定义见参数文档。',
   `process_time` VARCHAR(30) DEFAULT NULL COMMENT '海关处理时间 格式要求：20140623101024',
+
+  `chk_mark` CHAR(1) DEFAULT NULL COMMENT '处理结果：1-成功 2-处理失败',
+  `notice_date` VARCHAR(25) DEFAULT NULL COMMENT '通知日期及时间：YYYY-MM-DD HH:MM',
+  `result_info` VARCHAR(400) DEFAULT NULL COMMENT '5位校验状态码+冒号+处理结果文字信息，格式类似：22001:企业编号未备',
 
   `creator` VARCHAR(32) DEFAULT 'system' COMMENT '创建者',
   `modifier` VARCHAR(32) DEFAULT 'system' COMMENT '修改者',

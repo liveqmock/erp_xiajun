@@ -1,6 +1,6 @@
 package com.wangqin.globalshop.biz1.app.dal.dataObject;
 
-public class customsOrderDO extends BaseModel {
+public class CustomsOrderDO extends BaseModel {
     private Long id;
 
     private String businessNo;
@@ -90,6 +90,12 @@ public class customsOrderDO extends BaseModel {
     private String paperNumber;
 
     private String address;
+
+    private String chkMark;
+
+    private String noticeDate;
+
+    private String resultInfo;
 
     private String creator;
 
@@ -453,6 +459,30 @@ public class customsOrderDO extends BaseModel {
 
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
+    }
+
+    public String getChkMark() {
+        return chkMark;
+    }
+
+    public void setChkMark(String chkMark) {
+        this.chkMark = chkMark == null ? null : chkMark.trim();
+    }
+
+    public String getNoticeDate() {
+        return noticeDate;
+    }
+
+    public void setNoticeDate(String noticeDate) {
+        this.noticeDate = noticeDate == null ? null : noticeDate.trim();
+    }
+
+    public String getResultInfo() {
+        return resultInfo;
+    }
+
+    public void setResultInfo(String resultInfo) {
+        this.resultInfo = resultInfo == null ? null : resultInfo.trim();
     }
 
     public String getCreator() {
