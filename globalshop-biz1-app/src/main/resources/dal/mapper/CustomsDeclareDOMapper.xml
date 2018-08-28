@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.CustomsDeclareDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="account_book_no" property="accountBookNo" jdbcType="VARCHAR" />
+    <result column="ie_flag" property="ieFlag" jdbcType="CHAR" />
+    <result column="pre_entry_number" property="preEntryNumber" jdbcType="CHAR" />
+    <result column="import_type" property="importType" jdbcType="CHAR" />
+    <result column="in_out_date_str" property="inOutDateStr" jdbcType="VARCHAR" />
+    <result column="ie_port" property="iePort" jdbcType="VARCHAR" />
+    <result column="destination_port" property="destinationPort" jdbcType="VARCHAR" />
+    <result column="traf_name" property="trafName" jdbcType="VARCHAR" />
+    <result column="voyage_no" property="voyageNo" jdbcType="VARCHAR" />
+    <result column="traf_no" property="trafNo" jdbcType="VARCHAR" />
+    <result column="traf_mode" property="trafMode" jdbcType="VARCHAR" />
+    <result column="declare_company_type" property="declareCompanyType" jdbcType="VARCHAR" />
+    <result column="declare_company_code" property="declareCompanyCode" jdbcType="VARCHAR" />
+    <result column="declare_company_name" property="declareCompanyName" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="e_commerce_code" property="eCommerceCode" jdbcType="VARCHAR" />
+    <result column="e_commerce_name" property="eCommerceName" jdbcType="VARCHAR" />
+    <result column="logis_company_name" property="logisCompanyName" jdbcType="VARCHAR" />
+    <result column="logis_company_code" property="logisCompanyCode" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="way_bill" property="wayBill" jdbcType="VARCHAR" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+    <result column="trade_country" property="tradeCountry" jdbcType="VARCHAR" />
+    <result column="pack_no" property="packNo" jdbcType="DOUBLE" />
+    <result column="gross_weight" property="grossWeight" jdbcType="DOUBLE" />
+    <result column="net_weight" property="netWeight" jdbcType="DOUBLE" />
+    <result column="warp_type" property="warpType" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="decl_port" property="declPort" jdbcType="VARCHAR" />
+    <result column="entering_person" property="enteringPerson" jdbcType="VARCHAR" />
+    <result column="entering_company_name" property="enteringCompanyName" jdbcType="VARCHAR" />
+    <result column="declarant_no" property="declarantNo" jdbcType="VARCHAR" />
+    <result column="customs_field" property="customsField" jdbcType="VARCHAR" />
+    <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="sender_country" property="senderCountry" jdbcType="VARCHAR" />
+    <result column="sender_city" property="senderCity" jdbcType="VARCHAR" />
+    <result column="paper_type" property="paperType" jdbcType="CHAR" />
+    <result column="paper_number" property="paperNumber" jdbcType="VARCHAR" />
+    <result column="consignee_address" property="consigneeAddress" jdbcType="VARCHAR" />
+    <result column="purchaser_tel_number" property="purchaserTelNumber" jdbcType="VARCHAR" />
+    <result column="buyer_id_type" property="buyerIdType" jdbcType="VARCHAR" />
+    <result column="buyer_id_number" property="buyerIdNumber" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="worth" property="worth" jdbcType="DOUBLE" />
+    <result column="fee_amount" property="feeAmount" jdbcType="DOUBLE" />
+    <result column="insure_amount" property="insureAmount" jdbcType="DOUBLE" />
+    <result column="curr_code" property="currCode" jdbcType="VARCHAR" />
+    <result column="main_g_name" property="mainGName" jdbcType="VARCHAR" />
+    <result column="internal_area_company_no" property="internalAreaCompanyNo" jdbcType="VARCHAR" />
+    <result column="internal_area_company_name" property="internalAreaCompanyName" jdbcType="VARCHAR" />
+    <result column="assure_code" property="assureCode" jdbcType="VARCHAR" />
+    <result column="application_form_no" property="applicationFormNo" jdbcType="VARCHAR" />
+    <result column="is_authorize" property="isAuthorize" jdbcType="CHAR" />
+    <result column="license_no" property="licenseNo" jdbcType="VARCHAR" />
+    <result column="personal_goods_form_no" property="personalGoodsFormNo" jdbcType="VARCHAR" />
+    <result column="approve_result" property="approveResult" jdbcType="VARCHAR" />
+    <result column="approve_comment" property="approveComment" jdbcType="VARCHAR" />
+    <result column="process_time" property="processTime" jdbcType="VARCHAR" />
+    <result column="chk_mark" property="chkMark" jdbcType="CHAR" />
+    <result column="notice_date" property="noticeDate" jdbcType="VARCHAR" />
+    <result column="result_info" property="resultInfo" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_no, account_book_no, ie_flag, pre_entry_number, import_type, in_out_date_str, 
+    ie_port, destination_port, traf_name, voyage_no, traf_no, traf_mode, declare_company_type, 
+    declare_company_code, declare_company_name, company_name, company_code, e_commerce_code, 
+    e_commerce_name, logis_company_name, logis_company_code, order_no, way_bill, bill_no, 
+    trade_country, pack_no, gross_weight, net_weight, warp_type, remark, decl_port, entering_person, 
+    entering_company_name, declarant_no, customs_field, sender_name, consignee, sender_country, 
+    sender_city, paper_type, paper_number, consignee_address, purchaser_tel_number, buyer_id_type, 
+    buyer_id_number, buyer_name, worth, fee_amount, insure_amount, curr_code, main_g_name, 
+    internal_area_company_no, internal_area_company_name, assure_code, application_form_no, 
+    is_authorize, license_no, personal_goods_form_no, approve_result, approve_comment, 
+    process_time, chk_mark, notice_date, result_info, creator, modifier
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from customs_declare
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from customs_declare
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into customs_declare (business_no, account_book_no, ie_flag, 
+      pre_entry_number, import_type, in_out_date_str, 
+      ie_port, destination_port, traf_name, 
+      voyage_no, traf_no, traf_mode, 
+      declare_company_type, declare_company_code, 
+      declare_company_name, company_name, company_code, 
+      e_commerce_code, e_commerce_name, logis_company_name, 
+      logis_company_code, order_no, way_bill, 
+      bill_no, trade_country, pack_no, 
+      gross_weight, net_weight, warp_type, 
+      remark, decl_port, entering_person, 
+      entering_company_name, declarant_no, customs_field, 
+      sender_name, consignee, sender_country, 
+      sender_city, paper_type, paper_number, 
+      consignee_address, purchaser_tel_number, buyer_id_type, 
+      buyer_id_number, buyer_name, worth, 
+      fee_amount, insure_amount, curr_code, 
+      main_g_name, internal_area_company_no, internal_area_company_name, 
+      assure_code, application_form_no, is_authorize, 
+      license_no, personal_goods_form_no, approve_result, 
+      approve_comment, process_time, chk_mark, 
+      notice_date, result_info, creator, 
+      modifier)
+    values (#{businessNo,jdbcType=VARCHAR}, #{accountBookNo,jdbcType=VARCHAR}, #{ieFlag,jdbcType=CHAR}, 
+      #{preEntryNumber,jdbcType=CHAR}, #{importType,jdbcType=CHAR}, #{inOutDateStr,jdbcType=VARCHAR}, 
+      #{iePort,jdbcType=VARCHAR}, #{destinationPort,jdbcType=VARCHAR}, #{trafName,jdbcType=VARCHAR}, 
+      #{voyageNo,jdbcType=VARCHAR}, #{trafNo,jdbcType=VARCHAR}, #{trafMode,jdbcType=VARCHAR}, 
+      #{declareCompanyType,jdbcType=VARCHAR}, #{declareCompanyCode,jdbcType=VARCHAR}, 
+      #{declareCompanyName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, 
+      #{eCommerceCode,jdbcType=VARCHAR}, #{eCommerceName,jdbcType=VARCHAR}, #{logisCompanyName,jdbcType=VARCHAR}, 
+      #{logisCompanyCode,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{wayBill,jdbcType=VARCHAR}, 
+      #{billNo,jdbcType=VARCHAR}, #{tradeCountry,jdbcType=VARCHAR}, #{packNo,jdbcType=DOUBLE}, 
+      #{grossWeight,jdbcType=DOUBLE}, #{netWeight,jdbcType=DOUBLE}, #{warpType,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{declPort,jdbcType=VARCHAR}, #{enteringPerson,jdbcType=VARCHAR}, 
+      #{enteringCompanyName,jdbcType=VARCHAR}, #{declarantNo,jdbcType=VARCHAR}, #{customsField,jdbcType=VARCHAR}, 
+      #{senderName,jdbcType=VARCHAR}, #{consignee,jdbcType=VARCHAR}, #{senderCountry,jdbcType=VARCHAR}, 
+      #{senderCity,jdbcType=VARCHAR}, #{paperType,jdbcType=CHAR}, #{paperNumber,jdbcType=VARCHAR}, 
+      #{consigneeAddress,jdbcType=VARCHAR}, #{purchaserTelNumber,jdbcType=VARCHAR}, #{buyerIdType,jdbcType=VARCHAR}, 
+      #{buyerIdNumber,jdbcType=VARCHAR}, #{buyerName,jdbcType=VARCHAR}, #{worth,jdbcType=DOUBLE}, 
+      #{feeAmount,jdbcType=DOUBLE}, #{insureAmount,jdbcType=DOUBLE}, #{currCode,jdbcType=VARCHAR}, 
+      #{mainGName,jdbcType=VARCHAR}, #{internalAreaCompanyNo,jdbcType=VARCHAR}, #{internalAreaCompanyName,jdbcType=VARCHAR}, 
+      #{assureCode,jdbcType=VARCHAR}, #{applicationFormNo,jdbcType=VARCHAR}, #{isAuthorize,jdbcType=CHAR}, 
+      #{licenseNo,jdbcType=VARCHAR}, #{personalGoodsFormNo,jdbcType=VARCHAR}, #{approveResult,jdbcType=VARCHAR}, 
+      #{approveComment,jdbcType=VARCHAR}, #{processTime,jdbcType=VARCHAR}, #{chkMark,jdbcType=CHAR}, 
+      #{noticeDate,jdbcType=VARCHAR}, #{resultInfo,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{modifier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDO" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into customs_declare
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="accountBookNo != null" >
+        account_book_no,
+      </if>
+      <if test="ieFlag != null" >
+        ie_flag,
+      </if>
+      <if test="preEntryNumber != null" >
+        pre_entry_number,
+      </if>
+      <if test="importType != null" >
+        import_type,
+      </if>
+      <if test="inOutDateStr != null" >
+        in_out_date_str,
+      </if>
+      <if test="iePort != null" >
+        ie_port,
+      </if>
+      <if test="destinationPort != null" >
+        destination_port,
+      </if>
+      <if test="trafName != null" >
+        traf_name,
+      </if>
+      <if test="voyageNo != null" >
+        voyage_no,
+      </if>
+      <if test="trafNo != null" >
+        traf_no,
+      </if>
+      <if test="trafMode != null" >
+        traf_mode,
+      </if>
+      <if test="declareCompanyType != null" >
+        declare_company_type,
+      </if>
+      <if test="declareCompanyCode != null" >
+        declare_company_code,
+      </if>
+      <if test="declareCompanyName != null" >
+        declare_company_name,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="companyCode != null" >
+        company_code,
+      </if>
+      <if test="eCommerceCode != null" >
+        e_commerce_code,
+      </if>
+      <if test="eCommerceName != null" >
+        e_commerce_name,
+      </if>
+      <if test="logisCompanyName != null" >
+        logis_company_name,
+      </if>
+      <if test="logisCompanyCode != null" >
+        logis_company_code,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="wayBill != null" >
+        way_bill,
+      </if>
+      <if test="billNo != null" >
+        bill_no,
+      </if>
+      <if test="tradeCountry != null" >
+        trade_country,
+      </if>
+      <if test="packNo != null" >
+        pack_no,
+      </if>
+      <if test="grossWeight != null" >
+        gross_weight,
+      </if>
+      <if test="netWeight != null" >
+        net_weight,
+      </if>
+      <if test="warpType != null" >
+        warp_type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="declPort != null" >
+        decl_port,
+      </if>
+      <if test="enteringPerson != null" >
+        entering_person,
+      </if>
+      <if test="enteringCompanyName != null" >
+        entering_company_name,
+      </if>
+      <if test="declarantNo != null" >
+        declarant_no,
+      </if>
+      <if test="customsField != null" >
+        customs_field,
+      </if>
+      <if test="senderName != null" >
+        sender_name,
+      </if>
+      <if test="consignee != null" >
+        consignee,
+      </if>
+      <if test="senderCountry != null" >
+        sender_country,
+      </if>
+      <if test="senderCity != null" >
+        sender_city,
+      </if>
+      <if test="paperType != null" >
+        paper_type,
+      </if>
+      <if test="paperNumber != null" >
+        paper_number,
+      </if>
+      <if test="consigneeAddress != null" >
+        consignee_address,
+      </if>
+      <if test="purchaserTelNumber != null" >
+        purchaser_tel_number,
+      </if>
+      <if test="buyerIdType != null" >
+        buyer_id_type,
+      </if>
+      <if test="buyerIdNumber != null" >
+        buyer_id_number,
+      </if>
+      <if test="buyerName != null" >
+        buyer_name,
+      </if>
+      <if test="worth != null" >
+        worth,
+      </if>
+      <if test="feeAmount != null" >
+        fee_amount,
+      </if>
+      <if test="insureAmount != null" >
+        insure_amount,
+      </if>
+      <if test="currCode != null" >
+        curr_code,
+      </if>
+      <if test="mainGName != null" >
+        main_g_name,
+      </if>
+      <if test="internalAreaCompanyNo != null" >
+        internal_area_company_no,
+      </if>
+      <if test="internalAreaCompanyName != null" >
+        internal_area_company_name,
+      </if>
+      <if test="assureCode != null" >
+        assure_code,
+      </if>
+      <if test="applicationFormNo != null" >
+        application_form_no,
+      </if>
+      <if test="isAuthorize != null" >
+        is_authorize,
+      </if>
+      <if test="licenseNo != null" >
+        license_no,
+      </if>
+      <if test="personalGoodsFormNo != null" >
+        personal_goods_form_no,
+      </if>
+      <if test="approveResult != null" >
+        approve_result,
+      </if>
+      <if test="approveComment != null" >
+        approve_comment,
+      </if>
+      <if test="processTime != null" >
+        process_time,
+      </if>
+      <if test="chkMark != null" >
+        chk_mark,
+      </if>
+      <if test="noticeDate != null" >
+        notice_date,
+      </if>
+      <if test="resultInfo != null" >
+        result_info,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountBookNo != null" >
+        #{accountBookNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ieFlag != null" >
+        #{ieFlag,jdbcType=CHAR},
+      </if>
+      <if test="preEntryNumber != null" >
+        #{preEntryNumber,jdbcType=CHAR},
+      </if>
+      <if test="importType != null" >
+        #{importType,jdbcType=CHAR},
+      </if>
+      <if test="inOutDateStr != null" >
+        #{inOutDateStr,jdbcType=VARCHAR},
+      </if>
+      <if test="iePort != null" >
+        #{iePort,jdbcType=VARCHAR},
+      </if>
+      <if test="destinationPort != null" >
+        #{destinationPort,jdbcType=VARCHAR},
+      </if>
+      <if test="trafName != null" >
+        #{trafName,jdbcType=VARCHAR},
+      </if>
+      <if test="voyageNo != null" >
+        #{voyageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trafNo != null" >
+        #{trafNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trafMode != null" >
+        #{trafMode,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCompanyType != null" >
+        #{declareCompanyType,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCompanyCode != null" >
+        #{declareCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCompanyName != null" >
+        #{declareCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="eCommerceCode != null" >
+        #{eCommerceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="eCommerceName != null" >
+        #{eCommerceName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisCompanyName != null" >
+        #{logisCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisCompanyCode != null" >
+        #{logisCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wayBill != null" >
+        #{wayBill,jdbcType=VARCHAR},
+      </if>
+      <if test="billNo != null" >
+        #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeCountry != null" >
+        #{tradeCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="packNo != null" >
+        #{packNo,jdbcType=DOUBLE},
+      </if>
+      <if test="grossWeight != null" >
+        #{grossWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="netWeight != null" >
+        #{netWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="warpType != null" >
+        #{warpType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="declPort != null" >
+        #{declPort,jdbcType=VARCHAR},
+      </if>
+      <if test="enteringPerson != null" >
+        #{enteringPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="enteringCompanyName != null" >
+        #{enteringCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="declarantNo != null" >
+        #{declarantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customsField != null" >
+        #{customsField,jdbcType=VARCHAR},
+      </if>
+      <if test="senderName != null" >
+        #{senderName,jdbcType=VARCHAR},
+      </if>
+      <if test="consignee != null" >
+        #{consignee,jdbcType=VARCHAR},
+      </if>
+      <if test="senderCountry != null" >
+        #{senderCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="senderCity != null" >
+        #{senderCity,jdbcType=VARCHAR},
+      </if>
+      <if test="paperType != null" >
+        #{paperType,jdbcType=CHAR},
+      </if>
+      <if test="paperNumber != null" >
+        #{paperNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeAddress != null" >
+        #{consigneeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaserTelNumber != null" >
+        #{purchaserTelNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerIdType != null" >
+        #{buyerIdType,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerIdNumber != null" >
+        #{buyerIdNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null" >
+        #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="worth != null" >
+        #{worth,jdbcType=DOUBLE},
+      </if>
+      <if test="feeAmount != null" >
+        #{feeAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="insureAmount != null" >
+        #{insureAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="currCode != null" >
+        #{currCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mainGName != null" >
+        #{mainGName,jdbcType=VARCHAR},
+      </if>
+      <if test="internalAreaCompanyNo != null" >
+        #{internalAreaCompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="internalAreaCompanyName != null" >
+        #{internalAreaCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="assureCode != null" >
+        #{assureCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationFormNo != null" >
+        #{applicationFormNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isAuthorize != null" >
+        #{isAuthorize,jdbcType=CHAR},
+      </if>
+      <if test="licenseNo != null" >
+        #{licenseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="personalGoodsFormNo != null" >
+        #{personalGoodsFormNo,jdbcType=VARCHAR},
+      </if>
+      <if test="approveResult != null" >
+        #{approveResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approveComment != null" >
+        #{approveComment,jdbcType=VARCHAR},
+      </if>
+      <if test="processTime != null" >
+        #{processTime,jdbcType=VARCHAR},
+      </if>
+      <if test="chkMark != null" >
+        #{chkMark,jdbcType=CHAR},
+      </if>
+      <if test="noticeDate != null" >
+        #{noticeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="resultInfo != null" >
+        #{resultInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDO" >
+    update customs_declare
+    <set >
+      <if test="businessNo != null" >
+        business_no = #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountBookNo != null" >
+        account_book_no = #{accountBookNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ieFlag != null" >
+        ie_flag = #{ieFlag,jdbcType=CHAR},
+      </if>
+      <if test="preEntryNumber != null" >
+        pre_entry_number = #{preEntryNumber,jdbcType=CHAR},
+      </if>
+      <if test="importType != null" >
+        import_type = #{importType,jdbcType=CHAR},
+      </if>
+      <if test="inOutDateStr != null" >
+        in_out_date_str = #{inOutDateStr,jdbcType=VARCHAR},
+      </if>
+      <if test="iePort != null" >
+        ie_port = #{iePort,jdbcType=VARCHAR},
+      </if>
+      <if test="destinationPort != null" >
+        destination_port = #{destinationPort,jdbcType=VARCHAR},
+      </if>
+      <if test="trafName != null" >
+        traf_name = #{trafName,jdbcType=VARCHAR},
+      </if>
+      <if test="voyageNo != null" >
+        voyage_no = #{voyageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trafNo != null" >
+        traf_no = #{trafNo,jdbcType=VARCHAR},
+      </if>
+      <if test="trafMode != null" >
+        traf_mode = #{trafMode,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCompanyType != null" >
+        declare_company_type = #{declareCompanyType,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCompanyCode != null" >
+        declare_company_code = #{declareCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="declareCompanyName != null" >
+        declare_company_name = #{declareCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="eCommerceCode != null" >
+        e_commerce_code = #{eCommerceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="eCommerceName != null" >
+        e_commerce_name = #{eCommerceName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisCompanyName != null" >
+        logis_company_name = #{logisCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisCompanyCode != null" >
+        logis_company_code = #{logisCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wayBill != null" >
+        way_bill = #{wayBill,jdbcType=VARCHAR},
+      </if>
+      <if test="billNo != null" >
+        bill_no = #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeCountry != null" >
+        trade_country = #{tradeCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="packNo != null" >
+        pack_no = #{packNo,jdbcType=DOUBLE},
+      </if>
+      <if test="grossWeight != null" >
+        gross_weight = #{grossWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="netWeight != null" >
+        net_weight = #{netWeight,jdbcType=DOUBLE},
+      </if>
+      <if test="warpType != null" >
+        warp_type = #{warpType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="declPort != null" >
+        decl_port = #{declPort,jdbcType=VARCHAR},
+      </if>
+      <if test="enteringPerson != null" >
+        entering_person = #{enteringPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="enteringCompanyName != null" >
+        entering_company_name = #{enteringCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="declarantNo != null" >
+        declarant_no = #{declarantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customsField != null" >
+        customs_field = #{customsField,jdbcType=VARCHAR},
+      </if>
+      <if test="senderName != null" >
+        sender_name = #{senderName,jdbcType=VARCHAR},
+      </if>
+      <if test="consignee != null" >
+        consignee = #{consignee,jdbcType=VARCHAR},
+      </if>
+      <if test="senderCountry != null" >
+        sender_country = #{senderCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="senderCity != null" >
+        sender_city = #{senderCity,jdbcType=VARCHAR},
+      </if>
+      <if test="paperType != null" >
+        paper_type = #{paperType,jdbcType=CHAR},
+      </if>
+      <if test="paperNumber != null" >
+        paper_number = #{paperNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeAddress != null" >
+        consignee_address = #{consigneeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaserTelNumber != null" >
+        purchaser_tel_number = #{purchaserTelNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerIdType != null" >
+        buyer_id_type = #{buyerIdType,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerIdNumber != null" >
+        buyer_id_number = #{buyerIdNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerName != null" >
+        buyer_name = #{buyerName,jdbcType=VARCHAR},
+      </if>
+      <if test="worth != null" >
+        worth = #{worth,jdbcType=DOUBLE},
+      </if>
+      <if test="feeAmount != null" >
+        fee_amount = #{feeAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="insureAmount != null" >
+        insure_amount = #{insureAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="currCode != null" >
+        curr_code = #{currCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mainGName != null" >
+        main_g_name = #{mainGName,jdbcType=VARCHAR},
+      </if>
+      <if test="internalAreaCompanyNo != null" >
+        internal_area_company_no = #{internalAreaCompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="internalAreaCompanyName != null" >
+        internal_area_company_name = #{internalAreaCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="assureCode != null" >
+        assure_code = #{assureCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationFormNo != null" >
+        application_form_no = #{applicationFormNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isAuthorize != null" >
+        is_authorize = #{isAuthorize,jdbcType=CHAR},
+      </if>
+      <if test="licenseNo != null" >
+        license_no = #{licenseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="personalGoodsFormNo != null" >
+        personal_goods_form_no = #{personalGoodsFormNo,jdbcType=VARCHAR},
+      </if>
+      <if test="approveResult != null" >
+        approve_result = #{approveResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approveComment != null" >
+        approve_comment = #{approveComment,jdbcType=VARCHAR},
+      </if>
+      <if test="processTime != null" >
+        process_time = #{processTime,jdbcType=VARCHAR},
+      </if>
+      <if test="chkMark != null" >
+        chk_mark = #{chkMark,jdbcType=CHAR},
+      </if>
+      <if test="noticeDate != null" >
+        notice_date = #{noticeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="resultInfo != null" >
+        result_info = #{resultInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDO" >
+    update customs_declare
+    set business_no = #{businessNo,jdbcType=VARCHAR},
+      account_book_no = #{accountBookNo,jdbcType=VARCHAR},
+      ie_flag = #{ieFlag,jdbcType=CHAR},
+      pre_entry_number = #{preEntryNumber,jdbcType=CHAR},
+      import_type = #{importType,jdbcType=CHAR},
+      in_out_date_str = #{inOutDateStr,jdbcType=VARCHAR},
+      ie_port = #{iePort,jdbcType=VARCHAR},
+      destination_port = #{destinationPort,jdbcType=VARCHAR},
+      traf_name = #{trafName,jdbcType=VARCHAR},
+      voyage_no = #{voyageNo,jdbcType=VARCHAR},
+      traf_no = #{trafNo,jdbcType=VARCHAR},
+      traf_mode = #{trafMode,jdbcType=VARCHAR},
+      declare_company_type = #{declareCompanyType,jdbcType=VARCHAR},
+      declare_company_code = #{declareCompanyCode,jdbcType=VARCHAR},
+      declare_company_name = #{declareCompanyName,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      e_commerce_code = #{eCommerceCode,jdbcType=VARCHAR},
+      e_commerce_name = #{eCommerceName,jdbcType=VARCHAR},
+      logis_company_name = #{logisCompanyName,jdbcType=VARCHAR},
+      logis_company_code = #{logisCompanyCode,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      way_bill = #{wayBill,jdbcType=VARCHAR},
+      bill_no = #{billNo,jdbcType=VARCHAR},
+      trade_country = #{tradeCountry,jdbcType=VARCHAR},
+      pack_no = #{packNo,jdbcType=DOUBLE},
+      gross_weight = #{grossWeight,jdbcType=DOUBLE},
+      net_weight = #{netWeight,jdbcType=DOUBLE},
+      warp_type = #{warpType,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      decl_port = #{declPort,jdbcType=VARCHAR},
+      entering_person = #{enteringPerson,jdbcType=VARCHAR},
+      entering_company_name = #{enteringCompanyName,jdbcType=VARCHAR},
+      declarant_no = #{declarantNo,jdbcType=VARCHAR},
+      customs_field = #{customsField,jdbcType=VARCHAR},
+      sender_name = #{senderName,jdbcType=VARCHAR},
+      consignee = #{consignee,jdbcType=VARCHAR},
+      sender_country = #{senderCountry,jdbcType=VARCHAR},
+      sender_city = #{senderCity,jdbcType=VARCHAR},
+      paper_type = #{paperType,jdbcType=CHAR},
+      paper_number = #{paperNumber,jdbcType=VARCHAR},
+      consignee_address = #{consigneeAddress,jdbcType=VARCHAR},
+      purchaser_tel_number = #{purchaserTelNumber,jdbcType=VARCHAR},
+      buyer_id_type = #{buyerIdType,jdbcType=VARCHAR},
+      buyer_id_number = #{buyerIdNumber,jdbcType=VARCHAR},
+      buyer_name = #{buyerName,jdbcType=VARCHAR},
+      worth = #{worth,jdbcType=DOUBLE},
+      fee_amount = #{feeAmount,jdbcType=DOUBLE},
+      insure_amount = #{insureAmount,jdbcType=DOUBLE},
+      curr_code = #{currCode,jdbcType=VARCHAR},
+      main_g_name = #{mainGName,jdbcType=VARCHAR},
+      internal_area_company_no = #{internalAreaCompanyNo,jdbcType=VARCHAR},
+      internal_area_company_name = #{internalAreaCompanyName,jdbcType=VARCHAR},
+      assure_code = #{assureCode,jdbcType=VARCHAR},
+      application_form_no = #{applicationFormNo,jdbcType=VARCHAR},
+      is_authorize = #{isAuthorize,jdbcType=CHAR},
+      license_no = #{licenseNo,jdbcType=VARCHAR},
+      personal_goods_form_no = #{personalGoodsFormNo,jdbcType=VARCHAR},
+      approve_result = #{approveResult,jdbcType=VARCHAR},
+      approve_comment = #{approveComment,jdbcType=VARCHAR},
+      process_time = #{processTime,jdbcType=VARCHAR},
+      chk_mark = #{chkMark,jdbcType=CHAR},
+      notice_date = #{noticeDate,jdbcType=VARCHAR},
+      result_info = #{resultInfo,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

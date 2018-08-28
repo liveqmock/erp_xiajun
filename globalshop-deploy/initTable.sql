@@ -1,10 +1,6 @@
 ﻿CREATE DATABASE  IF NOT EXISTS `haidb2new` default character set utf8mb4 collate utf8mb4_unicode_ci;
 USE `haidb2new`;
--- MySQL dump 10.13  Distrib 5.6.17, for osx10.6 (i386)
---
--- Host: 47.98.164.133    Database: haidb2new
--- ------------------------------------------------------
--- Server version	5.7.21-0ubuntu0.16.04.1
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,6 +12,211 @@ USE `haidb2new`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+# 海关订单表
+DROP TABLE IF EXISTS `customs_order`;
+CREATE TABLE `customs_order` (
+  `id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `business_no` VARCHAR(20) DEFAULT NULL COMMENT '业务编码：可以是清单预录入号，字段作用是回执给到企业的时候通过这个编号企业能认出对应之前发送的哪个单子',
+
+  `company_name` VARCHAR(200) DEFAULT NULL COMMENT '企业备案名称：电商平台在跨境电商通关服务平台的备案名',
+  `company_code` VARCHAR(20) DEFAULT NULL COMMENT '企业备案编号：电商平台在跨境电商通关服务的备案编号',
+  `ie_flag` CHAR(1) DEFAULT NULL COMMENT '进出口标志：I:进口E:出口',
+  `pay_type` VARCHAR(60) DEFAULT NULL COMMENT '支付类型：01:银行卡支付 02:余额支付 03:其他',
+  `pay_company_code` VARCHAR(50) DEFAULT NULL COMMENT '支付公司编码：支付平台在跨境平台备案编号',
+  `pay_company_name` VARCHAR(50) DEFAULT NULL COMMENT '支付公司名称：对接总署版必填；支付平台在跨境平台备案名称',
+  `pay_number` VARCHAR(60) DEFAULT NULL COMMENT '支付单号：支付成功后，支付平台反馈给电商平台的支付单号',
+  `order_total_amount` DOUBLE(12,4) DEFAULT NULL COMMENT '订单总金额：货款+订单税款+运费+保费',
+  `order_goods_amount` DOUBLE(12,4) DEFAULT NULL COMMENT '订单货款：与成交总价一致，按以电子订单的实际销售价格作为完税价格',
+  `discount` DOUBLE(12,4) DEFAULT NULL COMMENT '非现金抵扣金额：使用积分、虚拟货币、代金券等非现金支付金额，无则填写"0"',
+  `order_no` VARCHAR(60) DEFAULT NULL COMMENT '订单编号：电商平台订单号，注意：一个订单只能对应一个运单(包裹)',
+  `order_tax_amount` DOUBLE(12,4) DEFAULT NULL COMMENT '订单税款：交易过程中商家向用户征收的税款，按缴税新政计算填写',
+  `fee_amount` DOUBLE(12,4) DEFAULT NULL COMMENT '运费：交易过程中商家向用户征收的运费，免邮模式填写0',
+  `insure_amount` DOUBLE(12,4) DEFAULT NULL COMMENT '保费：商家向用户征收的保价费用，无保费可填写0',
+  `e_commerce_code` VARCHAR(60) DEFAULT NULL COMMENT '电商企业编码：电商平台下的商家备案编号',
+  `e_commerce_name` VARCHAR(200) DEFAULT NULL COMMENT '电商企业名称：电商平台下的商家备案名称',
+  `trade_time` VARCHAR(25) DEFAULT NULL COMMENT '成交时间：格式 2014-02-18 15:58:11',
+  `curr_code` VARCHAR(3) DEFAULT NULL COMMENT '成交币制',
+  `total_amount` DOUBLE(14,4) DEFAULT NULL COMMENT '成交总价：与订单货款一致',
+  `consignee_email` VARCHAR(60) DEFAULT NULL COMMENT '收件人Email',
+  `consignee_tel` VARCHAR(60) DEFAULT NULL COMMENT '收件人联系方式',
+  `consignee` VARCHAR(60) DEFAULT NULL COMMENT '收件人姓名',
+  `consignee_address` VARCHAR(255) DEFAULT NULL COMMENT '收件人地址',
+  `total_count` INT DEFAULT NULL COMMENT '总件数：包裹中独立包装的物品总数，不考虑物品计量单位',
+  `batch_numbers` VARCHAR(100) DEFAULT NULL COMMENT '商品批次号',
+  `consignee_ditrict` VARCHAR(6) DEFAULT NULL COMMENT '收货地址行政区划代码：参照国家统计局公布的国家行政区划标准填制',
+  `post_mode` VARCHAR(20) DEFAULT NULL COMMENT '发货方式（物流方式）',
+  `sender_country` VARCHAR(3) DEFAULT NULL COMMENT '发件人国别',
+  `sender_name` VARCHAR(200) DEFAULT NULL COMMENT '发件人姓名',
+  `logis_company_name` VARCHAR(200) DEFAULT NULL COMMENT '物流企业名称',
+  `logis_company_code` VARCHAR(20) DEFAULT NULL COMMENT '物流企业编号',
+  `zip_code` VARCHAR(20) DEFAULT NULL COMMENT '邮编',
+  `note` VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  `way_bills` VARCHAR(255) DEFAULT NULL COMMENT '运单号列表：运单之间以分号隔开',
+  `rate` VARCHAR(10) DEFAULT NULL COMMENT '汇率：如果是人民币，统一填写1',
+  `user_procotol` VARCHAR(255) DEFAULT '本人承诺所购买商品系个人合理自用，现委托商家代理申报、代缴税款等通关事宜，本人保证遵守《海关法》和国家相关法律法规，保证所提供的身份信息和收货信息真实完整，无侵犯他人权益的行为，以上委托关系系如实填写，本人愿意接受海关、检验检疫机构及其他监管部门的监管，并承担相应法律责任.' COMMENT '个人委托申报协议',
+
+  `purchaser_id` VARCHAR(100) DEFAULT NULL COMMENT '购买人ID：购买人在电商平台的注册ID',
+  `name` VARCHAR(100) DEFAULT NULL COMMENT '姓名',
+  `email` VARCHAR(140) DEFAULT NULL COMMENT '注册邮箱',
+  `tel_number` VARCHAR(30) DEFAULT NULL COMMENT '联系电话',
+  `paper_type` VARCHAR(20) DEFAULT NULL COMMENT '证件类型代码：01-身份证（试点期间只能是身份证），02-护照，03-其他',
+  `paper_number` VARCHAR(100) DEFAULT NULL COMMENT '证件号码',
+  `address` VARCHAR(200) DEFAULT NULL COMMENT '地址',
+
+  `chk_mark` CHAR(1) DEFAULT NULL COMMENT '处理结果：1-成功 2-处理失败',
+  `notice_date` VARCHAR(25) DEFAULT NULL COMMENT '通知日期及时间：YYYY-MM-DD HH:MM',
+  `result_info` VARCHAR(400) DEFAULT NULL COMMENT '5位校验状态码+冒号+处理结果文字信息，格式类似：22001:企业编号未备',
+
+  `creator` VARCHAR(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` VARCHAR(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+# 海关订单详情表
+DROP TABLE IF EXISTS `customs_order_detail`;
+CREATE TABLE `customs_order_detail`(
+  `id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `business_no` VARCHAR(20) DEFAULT NULL COMMENT '业务编码：可以是清单预录入号，字段作用是回执给到企业的时候通过这个编号企业能认出对应之前发送的哪个单子',
+  `goods_order` INT DEFAULT NULL COMMENT '商品序号：商品序号,序号不大于50',
+  `goods_name` VARCHAR(255) DEFAULT NULL COMMENT '物品名称',
+  `code_ts` VARCHAR(10) DEFAULT NULL COMMENT '商品HS编码',
+  `goods_model` VARCHAR(255) DEFAULT NULL COMMENT '商品规格、型号',
+  `origin_country` VARCHAR(5) DEFAULT NULL COMMENT '产销国',
+  `unit_price` DOUBLE(15,4) DEFAULT NULL COMMENT '成交单价：各商品成交单价*成交数量总和应等于表头的货款、成交总价',
+  `currency` VARCHAR(3) DEFAULT '142' COMMENT '币制：限定为人民币，填写“142”',
+  `goods_count` DOUBLE(15,4) DEFAULT NULL COMMENT '成交数量',
+  `goods_unit` VARCHAR(3) DEFAULT NULL COMMENT '成交计量单位',
+  `gross_weight` DOUBLE(15,4) DEFAULT NULL COMMENT '商品毛重',
+  `bar_code` VARCHAR(50) DEFAULT NULL COMMENT '条形码：国际通用的商品条形码，一般由前缀部分、制造厂商代码、商品代码和校验码组成。',
+  `note` VARCHAR(1000) DEFAULT NULL COMMENT '备注：促销活动，商品单价偏离市场价格的，可以在此说明。',
+  `creator` VARCHAR(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` VARCHAR(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+# 海关清单表
+DROP TABLE IF EXISTS `customs_declare`;
+CREATE TABLE `customs_declare`(
+  `id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `business_no` VARCHAR(20) DEFAULT NULL COMMENT '业务编码：可以是清单预录入号，字段作用是回执给到企业的时候通过这个编号企业能认出对应之前发送的哪个单子',
+
+  `account_book_no` VARCHAR(50) DEFAULT NULL COMMENT '账册编号：一线转入的对应账册编号，保税模式必填，直邮模式不填',
+  `ie_flag` CHAR(1) DEFAULT 'I' COMMENT '进出口标记：必须为I',
+  `pre_entry_number` CHAR(18) DEFAULT NULL COMMENT '预录入编号：4位电商编号+14位企业流水，电商平台/物流企业生成后发送服务平台，与运单号一一对应，同个运单重新申报时，保持不变',
+  `import_type` CHAR(1) DEFAULT NULL COMMENT '监管方式：填写0-对应9610直邮进口，填写1-对应1210保税进口，填写2-对应1239保税进口',
+  `in_out_date_str` VARCHAR(25) DEFAULT NULL COMMENT '进口日期：格式 2014-02-18 20:33:33',
+  `ie_port` VARCHAR(5) DEFAULT NULL COMMENT '进口口岸代码：口岸代码表',
+  `destination_port` VARCHAR(5) DEFAULT NULL COMMENT '指运港(抵运港)：对应参数表',
+  `traf_name` VARCHAR(100) DEFAULT NULL COMMENT '运输工具名称：包括字母和数字，可以填写中文；转关时填写@+16位转关单号',
+  `voyage_no` VARCHAR(32) DEFAULT NULL COMMENT '航班航次号：直邮必填,包括字母和数字，可以有中文',
+  `traf_no` VARCHAR(100) DEFAULT NULL COMMENT '运输工具编号：直邮必填',
+  `traf_mode` VARCHAR(30) DEFAULT NULL COMMENT '运输方式：参照运输方式代码表(TRANSF)',
+  `declare_company_type` VARCHAR(30) DEFAULT NULL COMMENT '申报单位类别：个人委托电商企业申报、个人委托物流企业申报、个人委托第三方申报',
+  `declare_company_code` VARCHAR(20) DEFAULT NULL COMMENT '申报企业代码：指委托申报单位代码，需在海关注册，具有报关资质',
+  `declare_company_name` VARCHAR(200) DEFAULT NULL COMMENT '申报企业名称：指委托申报单位名称，需在海关注册，具有报关资质',
+  `company_name` VARCHAR(200) DEFAULT NULL COMMENT '电商平台名称：电商平台在跨境电商通关服务平台的备案名称',
+  `company_code` VARCHAR(20) DEFAULT NULL COMMENT '电商平台代码：电商平台在跨境电商通关服务的备案编号',
+  `e_commerce_code` VARCHAR(60) DEFAULT NULL COMMENT '电商企业编码：电商平台下的商家备案编号',
+  `e_commerce_name` VARCHAR(200) DEFAULT NULL COMMENT '电商企业名称：电商平台下的商家备案名称',
+  `logis_company_name` VARCHAR(200) DEFAULT NULL COMMENT '物流企业名称：物流企业在跨境平台备案的企业名称',
+  `logis_company_code` VARCHAR(20) DEFAULT NULL COMMENT '物流企业编号：物流企业在跨境平台备案编码',
+  `order_no` VARCHAR(60) DEFAULT NULL COMMENT '订单编号',
+  `way_bill` VARCHAR(50) DEFAULT NULL COMMENT '物流运单编号',
+  `bill_no` VARCHAR(37) DEFAULT NULL COMMENT '提运单号：直邮必填',
+  `trade_country` VARCHAR(20) DEFAULT NULL COMMENT '启运国（地区）：参照国别代码表(COUNTRY)',
+  `pack_no` DOUBLE(14,4) DEFAULT NULL COMMENT '件数：表体独立包装的物品总数，不考虑物品计量单位，大于0',
+  `gross_weight` DOUBLE(14,4) DEFAULT NULL COMMENT '毛重（公斤）：大于0',
+  `net_weight` DOUBLE(14,4) DEFAULT NULL COMMENT '净重（公斤）：大于0',
+  `warp_type` VARCHAR(20) DEFAULT NULL COMMENT '包装种类代码：参照包装种类代码表',
+  `remark` VARCHAR(200) DEFAULT NULL COMMENT '备注',
+  `decl_port` VARCHAR(5) DEFAULT NULL COMMENT '申报地海关代码：对应参数表',
+  `entering_person` VARCHAR(20) DEFAULT '9999' COMMENT '录入人：默认9999',
+  `entering_company_name` VARCHAR(30) DEFAULT '9999' COMMENT '录入单位名称：默认9999',
+  `declarant_no` VARCHAR(20) DEFAULT NULL COMMENT '报关员代码',
+  `customs_field` VARCHAR(20) DEFAULT NULL COMMENT '监管场所代码：对应参数表 292801-下城园区、299102-下沙园区、299201-萧山园区',
+  `sender_name` VARCHAR(20) DEFAULT NULL COMMENT '发件人：可以数字和字母，可以有中文和英文',
+  `consignee` VARCHAR(20) DEFAULT NULL COMMENT '收件人：可以数字和字母，可以有中文和英文',
+  `sender_country` VARCHAR(20) DEFAULT NULL COMMENT '发件人国别：参数表',
+  `sender_city` VARCHAR(20) DEFAULT NULL COMMENT '发件人城市：可以数字和字母，可以有中文和英文',
+  `paper_type` CHAR(1) DEFAULT NULL COMMENT '收件人证件类型：1-身份证（试点期间只能是身份证）、2-护照、3-其他',
+  `paper_number` VARCHAR(50) DEFAULT NULL COMMENT '收件人证件号：可以有数字和字母',
+  `consignee_address` VARCHAR(255) DEFAULT NULL COMMENT '收件人地址：对应订单中的收件人地址',
+  `purchaser_tel_number` VARCHAR(30) DEFAULT NULL COMMENT '购买人电话：海关监管对象的电话,对应订单中的购买人联系电话',
+  `buyer_id_type` VARCHAR(1) DEFAULT NULL COMMENT '订购人证件类型：1-身份证；2-其它',
+  `buyer_id_number` VARCHAR(60) DEFAULT NULL COMMENT '订购人证件号码：海关监控对象的身份证号,对应订单购买人证件号码',
+  `buyer_name` VARCHAR(60) DEFAULT NULL COMMENT '订购人姓名：海关监控对象的姓名,对应订单购买人人姓名',
+  `worth` DOUBLE(14,4) DEFAULT NULL COMMENT '价值：表体所有商品总价的和+运费+保费',
+  `fee_amount` DOUBLE(12,4) DEFAULT NULL COMMENT '运费：交易过程中商家向用户征收的运费，免邮模式填写0',
+  `insure_amount` DOUBLE(12,4) DEFAULT NULL COMMENT '商家向用户征收的保价费用，无保费可填写0',
+  `curr_code` VARCHAR(18) DEFAULT NULL COMMENT '币制：对应参数表',
+  `main_g_name` VARCHAR(255) DEFAULT NULL COMMENT '主要货物名称：可以数字和字母或者中文',
+  `internal_area_company_no` VARCHAR(50) DEFAULT NULL COMMENT '区内企业代码：保税进口必填，填报仓储企业编码',
+  `internal_area_company_name` VARCHAR(200) DEFAULT NULL COMMENT '区内企业名称：保税进口必填，填报仓储企业名称',
+  `assure_code` VARCHAR(50) DEFAULT NULL COMMENT '担保企业编号',
+  `application_form_no` VARCHAR(30) DEFAULT NULL COMMENT '申请单编号：保税进口必填，指仓储企业事先在辅助系统申请的分送集报申请单编号',
+  `is_authorize` CHAR(1) DEFAULT NULL COMMENT '是否授权：代表是否个人买家授权电商申报数据，0代表否，1代表是',
+  `license_no` VARCHAR(50) DEFAULT NULL COMMENT '许可证号',
+
+  `personal_goods_form_no` VARCHAR(18) DEFAULT NULL COMMENT '清单编号：关区号（4位）+年份（4位）+进出口标志（1位）+流水号（9位），服务平台生成后，反馈管理平台及电商平台',
+  `approve_result` VARCHAR(2) DEFAULT NULL COMMENT '清单状态：见参数表',
+  `approve_comment` VARCHAR(70) DEFAULT NULL COMMENT '四位审单状态码+冒号+海关审批意见，格式类似：3201:支付类型不存在.四位审单状态码定义见参数文档。',
+  `process_time` VARCHAR(30) DEFAULT NULL COMMENT '海关处理时间 格式要求：20140623101024',
+
+  `chk_mark` CHAR(1) DEFAULT NULL COMMENT '处理结果：1-成功 2-处理失败',
+  `notice_date` VARCHAR(25) DEFAULT NULL COMMENT '通知日期及时间：YYYY-MM-DD HH:MM',
+  `result_info` VARCHAR(400) DEFAULT NULL COMMENT '5位校验状态码+冒号+处理结果文字信息，格式类似：22001:企业编号未备',
+
+  `creator` VARCHAR(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` VARCHAR(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+# 海关清单详情表
+DROP TABLE IF EXISTS `customs_declare_detail`;
+CREATE TABLE `customs_declare_detail`(
+  `id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `business_no` VARCHAR(20) DEFAULT NULL COMMENT '业务编码：可以是清单预录入号，字段作用是回执给到企业的时候通过这个编号企业能认出对应之前发送的哪个单子',
+  `goods_order` INT DEFAULT NULL COMMENT '序号：只能有数字，外网自动生成大于0小于50',
+  `code_ts` VARCHAR(50) DEFAULT NULL COMMENT '商品编码：填写商品对应的HS编码',
+  `goods_item_no` VARCHAR(30) DEFAULT NULL COMMENT '企业商品货号',
+  `item_record_no` VARCHAR(30) DEFAULT NULL COMMENT '账册备案料号：保税必填，与仓储企业备案的电子账册中料号数据一致',
+  `item_name` VARCHAR(250) DEFAULT NULL COMMENT '企业商品品名',
+  `goods_name` VARCHAR(255) DEFAULT NULL COMMENT '商品名称',
+  `goods_model` VARCHAR(255) DEFAULT NULL COMMENT '商品规格型号：有数字和字母或者中文',
+  `origin_country` VARCHAR(30) DEFAULT NULL COMMENT '原产国（地区）：参照国别代码表(COUNTRY)',
+  `trade_curr` VARCHAR(20) DEFAULT NULL COMMENT '币制：参照币制代码表(CURR)',
+  `trade_total` DOUBLE(14,4) DEFAULT NULL COMMENT '成交总价：与申报总价一致',
+  `decl_price` DOUBLE(14,4) DEFAULT NULL COMMENT '单价',
+  `decl_total_price` DOUBLE(14,4) DEFAULT NULL COMMENT '总价：申报数量乘以申报单价',
+  `use_to` VARCHAR(200) DEFAULT NULL COMMENT '用途',
+  `declare_count`  DOUBLE(14,4) DEFAULT NULL COMMENT '数量',
+  `goods_unit` VARCHAR(20) DEFAULT NULL COMMENT '计量单位：参照计量单位代码表(UNIT)',
+  `goods_gross_weight` DOUBLE(14,4) DEFAULT NULL COMMENT '商品毛重',
+  `first_unit` VARCHAR(15) DEFAULT NULL COMMENT '法定计量单位：填写商品HS编码对应的第一单位',
+  `first_count` DOUBLE(14,4) DEFAULT NULL COMMENT '法定数量：根据第一单位填写对应数量',
+  `second_unit` VARCHAR(15) DEFAULT NULL COMMENT '第二计量单位：填写商品HS编码对应的第二单位',
+  `second_count` DOUBLE(14,4) DEFAULT NULL COMMENT '第二数量：根据第二单位填写对应数量',
+  `product_record_no` VARCHAR(18) DEFAULT NULL COMMENT '产品国检备案编号：通过向国检备案获取',
+  `web_site` VARCHAR(100) DEFAULT NULL COMMENT '商品网址',
+  `bar_code` VARCHAR(50) DEFAULT NULL COMMENT '条形码',
+  `note` VARCHAR(1000) DEFAULT NULL COMMENT '备注',
+  `creator` VARCHAR(32) DEFAULT 'system' COMMENT '创建者',
+  `modifier` VARCHAR(32) DEFAULT 'system' COMMENT '修改者',
+  `gmt_modify` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_del` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '软删除',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
@@ -43,7 +244,7 @@ CREATE TABLE `shengpay_pay` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 # 退款单表
 DROP TABLE IF EXISTS `shengpay_refund`;
@@ -65,7 +266,7 @@ CREATE TABLE `shengpay_refund` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 # 分账单表
 DROP TABLE IF EXISTS `shengpay_sharing`;
@@ -83,7 +284,7 @@ CREATE TABLE `shengpay_sharing` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 # 分账单子项表
 DROP TABLE IF EXISTS `shengpay_sharing_item`;
@@ -104,21 +305,21 @@ CREATE TABLE `shengpay_sharing_item` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 
 CREATE TABLE `id_card`  (
   `id` bigint(19) UNSIGNED NOT NULL AUTO_INCREMENT,
   `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
   `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0,
-  `real_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '姓名',
-  `id_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '身份证',
+  `real_name` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `id_number` varchar(255) DEFAULT NULL COMMENT '身份证',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name_card_union_index`(`id_number`, `real_name`) USING BTREE COMMENT '姓名和身份证唯一性索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = Dynamic;
 
 
 DROP TABLE IF EXISTS `shengpay_pay`;
@@ -143,7 +344,7 @@ CREATE TABLE `shengpay_pay` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `shengpay_refund`;
 CREATE TABLE `shengpay_refund` (
@@ -164,7 +365,7 @@ CREATE TABLE `shengpay_refund` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `shengpay_sharing`;
 CREATE TABLE `shengpay_sharing` (
@@ -181,7 +382,7 @@ CREATE TABLE `shengpay_sharing` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `shengpay_sharing_item`;
 CREATE TABLE `shengpay_sharing_item` (
@@ -201,73 +402,73 @@ CREATE TABLE `shengpay_sharing_item` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `commission_sumary_detail`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司id',
   `status` int(4) DEFAULT NULL COMMENT '1待结算2可结算3已结算',
   `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
   `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `settlement_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '结算单号',
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
+  `settlement_no` varchar(64) DEFAULT NULL COMMENT '结算单号',
   `is_del` tinyint(1) NOT NULL DEFAULT 0,
-  `share_user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `share_user_id` varchar(255) DEFAULT NULL,
   `settlement` decimal(16, 2) DEFAULT NULL,
-  `sub_order_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '绑定订单信息',
+  `sub_order_no` varchar(64) DEFAULT NULL COMMENT '绑定订单信息',
   `sale_price` decimal(16, 2) DEFAULT NULL COMMENT '销售额',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1   ROW_FORMAT = Dynamic;
 
 CREATE TABLE `commission_sumary_settlement`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司id',
   `status` int(4) DEFAULT NULL,
   `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
   `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0,
-  `settlement_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '结算单号',
-  `share_user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `share_user_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '代理名字',
+  `settlement_no` varchar(64) DEFAULT NULL COMMENT '结算单号',
+  `share_user_id` varchar(64) DEFAULT NULL,
+  `share_user_name` varchar(64) DEFAULT NULL COMMENT '代理名字',
   `total_price` decimal(16, 2) DEFAULT NULL COMMENT '实付总计',
   `settlement` decimal(16, 2) DEFAULT NULL COMMENT '实际结算',
   `detail_count` int(10) DEFAULT NULL COMMENT '结算订单数',
   `settlement_time` datetime(0) DEFAULT NULL COMMENT '结算时间',
-  `remark` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '结算备注',
-  `pay_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '支付方式',
+  `remark` varchar(1024) DEFAULT NULL COMMENT '结算备注',
+  `pay_type` varchar(255) DEFAULT NULL COMMENT '支付方式',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1   ROW_FORMAT = Dynamic;
 
 CREATE TABLE `commission_sumary`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司id',
   `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
   `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0,
-  `order_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `sub_order_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `item_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `item_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `sku_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `sku_pic` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `upc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `scale` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `order_no` varchar(64) DEFAULT NULL,
+  `sub_order_no` varchar(64) DEFAULT NULL,
+  `item_code` varchar(255) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `sku_code` varchar(255) DEFAULT NULL,
+  `sku_pic` varchar(255) DEFAULT NULL,
+  `upc` varchar(255) DEFAULT NULL,
+  `scale` varchar(255) DEFAULT NULL,
   `sale_price` decimal(16, 2) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL COMMENT '商品数量',
   `total_settlement` decimal(16, 2) DEFAULT NULL,
-  `receiver_info` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '收件信息',
+  `receiver_info` varchar(1024) DEFAULT NULL COMMENT '收件信息',
   `order_time` datetime(0) DEFAULT NULL COMMENT '销售时间，下单时间',
-  `order_status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `order_desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `order_status` varchar(255) DEFAULT NULL,
+  `order_desc` varchar(255) DEFAULT NULL,
   `status` int(4) DEFAULT NULL COMMENT '0待结算1可结算2已结算',
   `receive_date` datetime(0) DEFAULT NULL COMMENT '签收时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1   ROW_FORMAT = Dynamic;
 
 
 CREATE TABLE IF NOT EXISTS `mall_commision_apply` (
@@ -317,19 +518,19 @@ CREATE TABLE `item_qrcode_share`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `gmt_modify` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '操作时间',
   `gmt_create` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `modifier` varchar(32) NOT NULL,
+  `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0,
-  `share_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `company_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属公司id',
-  `item_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `user_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `pic_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '二维码地址',
-  `ext` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `share_no` varchar(64) NOT NULL,
+  `company_no` varchar(64) NOT NULL COMMENT '所属公司id',
+  `item_code` varchar(255) DEFAULT NULL,
+  `user_no` varchar(255) DEFAULT NULL,
+  `pic_url` varchar(255) DEFAULT NULL COMMENT '二维码地址',
+  `ext` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unique_index`(`share_no`) USING BTREE COMMENT '唯一性性索引',
   UNIQUE INDEX `search_index`(`item_code`, `user_no`, `company_no`) USING BTREE COMMENT '加快查询'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1   ROW_FORMAT = Dynamic;
 
 
 
@@ -341,7 +542,7 @@ CREATE TABLE `mall_sale_agent` (
   `parent_agent` varchar(64) DEFAULT NULL COMMENT '上级代理的userNo，如已是一级代理该值为null',
   `open_id` varchar(64) DEFAULT NULL COMMENT '微信open_id',
   `union_id` varchar(128) DEFAULT NULL COMMENT '微信union_id',
-  `agent_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '代理人的微信号/昵称',
+  `agent_name` varchar(64) DEFAULT NULL COMMENT '代理人的微信号/昵称',
   `real_name` varchar(32) DEFAULT NULL COMMENT '真实姓名',
   `id_card` varchar(32) DEFAULT NULL COMMENT '身份证号号码',
   `head_protrait_url` varchar(256) DEFAULT NULL COMMENT '头像',
@@ -362,7 +563,7 @@ CREATE TABLE `mall_sale_agent` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `USER_NO_IDX` (`user_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='销售代理';
+) ENGINE=InnoDB AUTO_INCREMENT=9 COMMENT='销售代理';
 
 
 CREATE TABLE `monitor_record`(
@@ -479,7 +680,7 @@ CREATE TABLE `db_migrate_receive_record` (
 CREATE TABLE `db_migrate_send_record` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT,
   `token` varchar(64) DEFAULT NULL,
-  `db_script` varchar(6144)  CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `db_script` varchar(6144)  DEFAULT NULL,
   `retry_times` int(2) DEFAULT '0',
   `status` varchar(2) DEFAULT '0' COMMENT '0 新增 1 成功 2 失败',
   `gmt_modify` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
@@ -512,7 +713,7 @@ CREATE TABLE `item_brand` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `brand_no` (`brand_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=385 DEFAULT CHARSET=utf8 COMMENT='品牌';
+) ENGINE=InnoDB AUTO_INCREMENT=385 COMMENT='品牌';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,7 +758,7 @@ CREATE TABLE `mall_order` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ORDERNO` (`order_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8 COMMENT='顾客的订单（在微信小程序或者第三方销售平台）';
+) ENGINE=InnoDB AUTO_INCREMENT=165 COMMENT='顾客的订单（在微信小程序或者第三方销售平台）';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -584,7 +785,7 @@ CREATE TABLE `channel_listing_item` (
   PRIMARY KEY (`id`),
   KEY `OUTERID` (`channel_item_code`),
   KEY `ITEMID` (`item_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8 COMMENT='渠道上的商品信息';
+) ENGINE=InnoDB AUTO_INCREMENT=130 COMMENT='渠道上的商品信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -608,7 +809,7 @@ CREATE TABLE `mall_wx_item_snapshot` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序商品快照';
+) ENGINE=InnoDB COMMENT='微信小程序商品快照';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -674,7 +875,7 @@ CREATE TABLE `mall_shopping_cart` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `OPENID` (`open_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8 COMMENT='顾客在商城的购物车（仅限微信小程序）';
+) ENGINE=InnoDB AUTO_INCREMENT=61 COMMENT='顾客在商城的购物车（仅限微信小程序）';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -729,7 +930,7 @@ CREATE TABLE `buyer_receipt` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `receipt_no` (`receipt_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购的发票，一个发票可以对应好几种的商品';
+) ENGINE=InnoDB COMMENT='采购的发票，一个发票可以对应好几种的商品';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -752,7 +953,7 @@ CREATE TABLE `site_msg_read` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `site_msg_read_id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='用户站内信';
+) ENGINE=InnoDB AUTO_INCREMENT=25 COMMENT='用户站内信';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -777,7 +978,7 @@ CREATE TABLE `channel_sale_price` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='每个公司的每个商品在每个渠道的每个店铺的销售价格';
+) ENGINE=InnoDB COMMENT='每个公司的每个商品在每个渠道的每个店铺的销售价格';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -819,7 +1020,7 @@ CREATE TABLE `buyer_task_detail` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `TASKID` (`buyer_task_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='采购任务的详情，一种商品对应一条记录';
+) ENGINE=InnoDB AUTO_INCREMENT=10 COMMENT='采购任务的详情，一种商品对应一条记录';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -842,7 +1043,7 @@ CREATE TABLE `logistic_category_mapping` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='平台的类目与转运公司类目的对应';
+) ENGINE=InnoDB COMMENT='平台的类目与转运公司类目的对应';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -867,7 +1068,7 @@ CREATE TABLE `site_msg` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='站内信';
+) ENGINE=InnoDB AUTO_INCREMENT=10 COMMENT='站内信';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -879,17 +1080,17 @@ DROP TABLE IF EXISTS `shipping_track_polling_4px`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `shipping_track_polling_4px` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `delivery_no` varchar(64) CHARACTER SET utf8mb4 NOT NULL COMMENT '物流单号',
-  `shipping_no` varchar(64) CHARACTER SET utf8mb4 NOT NULL COMMENT '商家订单号',
+  `delivery_no` varchar(64) NOT NULL COMMENT '物流单号',
+  `shipping_no` varchar(64) NOT NULL COMMENT '商家订单号',
   `is_normal` int(1) DEFAULT NULL COMMENT '包裹是否正常',
-  `track_info` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '轨迹详情',
+  `track_info` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '轨迹详情',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='四方物流记录';
+) ENGINE=InnoDB AUTO_INCREMENT=12 COMMENT='四方物流记录';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -920,7 +1121,7 @@ CREATE TABLE `buyer_entry_manifest` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `purchase_storage_no` (`purchase_storage_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购入库单详情原始备份表';
+) ENGINE=InnoDB COMMENT='采购入库单详情原始备份表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -934,7 +1135,7 @@ CREATE TABLE `company` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `company_no` varchar(64) NOT NULL COMMENT '索引唯一',
   `company_group` VARCHAR(64) NULL COMMENT '归属公司。如与companyNo相同，则表示当前为一个公司，如不同，表示当前的companyNo对应company为companyGroup下面的一个商户',
-  `company_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '公司名称',
+  `company_name` varchar(64) DEFAULT NULL COMMENT '公司名称',
   `admin_no` varchar(64) NOT NULL COMMENT '管理员ID',
   `status` int(4) DEFAULT '0' COMMENT '状态 0:正常，1:关闭',
   `shop_name` varchar(45) DEFAULT NULL COMMENT '公司的店铺名称',
@@ -961,7 +1162,7 @@ CREATE TABLE `company` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `company_no` (`company_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='买手公司';
+) ENGINE=InnoDB AUTO_INCREMENT=5 COMMENT='买手公司';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1012,7 +1213,7 @@ CREATE TABLE `shipping_packing_pattern` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `method_no` (`pattern_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='打包规格';
+) ENGINE=InnoDB AUTO_INCREMENT=40 COMMENT='打包规格';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1079,7 +1280,7 @@ CREATE TABLE `mall_sub_order` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `SUBORDERNO` (`sub_order_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8 COMMENT='商城子订单';
+) ENGINE=InnoDB AUTO_INCREMENT=166 COMMENT='商城子订单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1103,7 +1304,7 @@ CREATE TABLE `inventory_out_manifest` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='出库单';
+) ENGINE=InnoDB COMMENT='出库单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1118,7 +1319,7 @@ CREATE TABLE `buyer` (
   `company_no` varchar(64) NOT NULL COMMENT '所属公司id',
   `open_id` varchar(64) DEFAULT NULL COMMENT '微信open_id',
   `union_id` varchar(128) DEFAULT NULL COMMENT '微信union_id',
-  `nick_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nick_name` varchar(64) DEFAULT NULL,
   `head_protrait_url` varchar(256) DEFAULT NULL COMMENT '头像',
   `gender` int(3) DEFAULT NULL COMMENT '0未知,1男,2女',
   `city` varchar(64) DEFAULT NULL,
@@ -1136,7 +1337,7 @@ CREATE TABLE `buyer` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `OPENID`(`open_id`, `union_id`, `is_del`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='买手';
+) ENGINE=InnoDB AUTO_INCREMENT=9 COMMENT='买手';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1199,7 +1400,7 @@ CREATE TABLE `shipping_order` (
   `address` varchar(500) DEFAULT NULL COMMENT '详细地址',
   `telephone` varchar(32) DEFAULT NULL COMMENT '联系电话',
   `postcode` varchar(18) DEFAULT NULL COMMENT '邮编',
-  `memo` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
+  `memo` varchar(1024) DEFAULT NULL COMMENT '备注',
   `id_card` varchar(32) DEFAULT NULL COMMENT '身份证号码',
   `id_card_back` varchar(256) DEFAULT NULL COMMENT '身份证背面url',
   `id_card_front` varchar(256) DEFAULT NULL COMMENT '身份证正面url',
@@ -1210,7 +1411,7 @@ CREATE TABLE `shipping_order` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `SHIPPINGNO` (`shipping_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='物流订单';
+) ENGINE=InnoDB COMMENT='物流订单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1237,7 +1438,7 @@ CREATE TABLE `item_category` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `category_code` (`category_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=419 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='平台的商品类目';
+) ENGINE=InnoDB AUTO_INCREMENT=419 ROW_FORMAT=DYNAMIC COMMENT='平台的商品类目';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1275,7 +1476,7 @@ CREATE TABLE `mall_return_order` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8 COMMENT='顾客在商城的退货单';
+) ENGINE=InnoDB AUTO_INCREMENT=133 COMMENT='顾客在商城的退货单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1300,7 +1501,7 @@ CREATE TABLE `auth_role` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_id` (`role_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COMMENT='角色';
+) ENGINE=InnoDB AUTO_INCREMENT=42 COMMENT='角色';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1331,7 +1532,7 @@ CREATE TABLE `inventory_booking_record` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='库存备货记录表';
+) ENGINE=InnoDB COMMENT='库存备货记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1381,7 +1582,7 @@ CREATE TABLE IF NOT EXISTS `item_sku` (
   UNIQUE KEY `SKUCODE` (`sku_code`),
   KEY `ITEMCODE` (`item_code`),
   KEY `GMTCREATE` (`gmt_create`)
-) ENGINE=InnoDB AUTO_INCREMENT=4877 DEFAULT CHARSET=utf8 COMMENT='商品sku';
+) ENGINE=InnoDB AUTO_INCREMENT=4877 COMMENT='商品sku';
 
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1464,7 +1665,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `category_code` varchar(10) NOT NULL COMMENT '所属类目code',
   `qr_code_url` varchar(2000) DEFAULT NULL COMMENT '商品在小程序中的二维码',
   `remark` text COMMENT '商品描述信息',
-  `video` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品展示视频',
+  `video` varchar(1024) DEFAULT NULL COMMENT '商品展示视频',
   `subtitle` varchar(45) DEFAULT '',
   `item_name` varchar(128) NOT NULL COMMENT '商品名称',
   `en_name` varchar(128) DEFAULT NULL COMMENT '英文名称',
@@ -1510,7 +1711,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ITEMCODE` (`item_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=10311 DEFAULT CHARSET=utf8 COMMENT='商品';
+) ENGINE=InnoDB AUTO_INCREMENT=10311 COMMENT='商品';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1565,7 +1766,7 @@ CREATE TABLE `channel` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `channel_no` (`channel_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='渠道';
+) ENGINE=InnoDB AUTO_INCREMENT=13 COLLATE=utf8_unicode_ci COMMENT='渠道';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1589,7 +1790,7 @@ CREATE TABLE `item_sku_scale` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   INDEX `skucode_index` (`sku_code`) USING BTREE COMMENT 'skucode查询比较频繁'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品对应的规格';
+) ENGINE=InnoDB AUTO_INCREMENT=3 COMMENT='商品对应的规格';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1618,7 +1819,7 @@ CREATE TABLE `mall_wx_pay_bill` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `WXPAYTRADENO` (`wx_pay_trade_no`),
   KEY `OPENID` (`wx_open_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='顾客在微信小程序商城的付款单';
+) ENGINE=InnoDB COMMENT='顾客在微信小程序商城的付款单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1633,7 +1834,7 @@ CREATE TABLE `mall_customer` (
   `customer_no` varchar(64) NOT NULL,
   `open_id` varchar(64) DEFAULT NULL COMMENT '微信open_id',
   `union_id` varchar(128) DEFAULT NULL COMMENT '微信union_id',
-  `nick_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nick_name` varchar(64) DEFAULT NULL,
   `gender` int(3) DEFAULT NULL COMMENT '0未知,1男,2女',
   `city` varchar(64) DEFAULT NULL,
   `province` varchar(64) DEFAULT NULL,
@@ -1655,7 +1856,7 @@ CREATE TABLE `mall_customer` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `CUSTOMER_NO` (`customer_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='商城的顾客（包括微信小程序和第三方销售平台）';
+) ENGINE=InnoDB AUTO_INCREMENT=8 COMMENT='商城的顾客（包括微信小程序和第三方销售平台）';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1677,7 +1878,7 @@ CREATE TABLE `auth_role_resource` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_id` (`role_id`,`resource_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2742 DEFAULT CHARSET=utf8 COMMENT='角色资源';
+) ENGINE=InnoDB AUTO_INCREMENT=2742 COMMENT='角色资源';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1766,7 +1967,7 @@ CREATE TABLE `react_version` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='react版本信息';
+) ENGINE=InnoDB COMMENT='react版本信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1789,7 +1990,7 @@ CREATE TABLE `dealer` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `CODE` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COMMENT='经销商';
+) ENGINE=InnoDB AUTO_INCREMENT=57 COMMENT='经销商';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1805,7 +2006,7 @@ CREATE TABLE `scale` (
   `type_id` varchar(64) NOT NULL COMMENT 'type名称',
   `seq` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=450 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='尺寸';
+) ENGINE=InnoDB AUTO_INCREMENT=450 ROW_FORMAT=DYNAMIC COMMENT='尺寸';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1833,7 +2034,7 @@ CREATE TABLE `inventory_inout` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8 COMMENT='库存出入库流水';
+) ENGINE=InnoDB AUTO_INCREMENT=137 COMMENT='库存出入库流水';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1857,7 +2058,7 @@ CREATE TABLE `mall_wx_customer_track` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1093 DEFAULT CHARSET=utf8 COMMENT='商城顾客的分享情况';
+) ENGINE=InnoDB AUTO_INCREMENT=1093 COMMENT='商城顾客的分享情况';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1882,7 +2083,7 @@ CREATE TABLE `channel_listing_item_sku` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ITEM_SKU_ID` (`item_code`),
   KEY `SKUCODE` (`sku_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='渠道商品的SKU信息';
+) ENGINE=InnoDB COMMENT='渠道商品的SKU信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1913,7 +2114,7 @@ CREATE TABLE `inventory` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `SKUCODE` (`sku_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='总的库存记录';
+) ENGINE=InnoDB AUTO_INCREMENT=12 COMMENT='总的库存记录';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1963,7 +2164,7 @@ CREATE TABLE `warehouse` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `warehouse_no` (`warehouse_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8 COMMENT='仓库';
+) ENGINE=InnoDB AUTO_INCREMENT=139 COMMENT='仓库';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1990,7 +2191,7 @@ CREATE TABLE `mall_wx_special_page` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`special_page_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='商城的活动页面信息';
+) ENGINE=InnoDB AUTO_INCREMENT=2 COLLATE=utf8_unicode_ci COMMENT='商城的活动页面信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2029,7 +2230,7 @@ CREATE TABLE `buyer_storage_detail` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='买手采购入库详情表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 COMMENT='买手采购入库详情表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2059,7 +2260,7 @@ CREATE TABLE `logistic_company` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='转运公司';
+) ENGINE=InnoDB AUTO_INCREMENT=10 COMMENT='转运公司';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2079,8 +2280,8 @@ CREATE TABLE `item_comment` (
   `customer_no` varchar(64) NOT NULL,
   `item_code` varchar(64) NOT NULL,
   `sku_code` varchar(64) NOT NULL,
-  `comment_pic` varchar(1024) CHARACTER SET utf8 DEFAULT NULL COMMENT '评价的图片',
-  `content` varchar(500) CHARACTER SET utf8 NOT NULL COMMENT '评价内容',
+  `comment_pic` varchar(1024) DEFAULT NULL COMMENT '评价的图片',
+  `content` varchar(500) NOT NULL COMMENT '评价内容',
   `status` tinyint(2) DEFAULT NULL,
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -2089,7 +2290,7 @@ CREATE TABLE `item_comment` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='对商品的评价';
+) ENGINE=InnoDB COMMENT='对商品的评价';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2111,7 +2312,7 @@ CREATE TABLE `auth_user_role` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `com_user_role` (`company_no`,`user_id`,`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=538 DEFAULT CHARSET=utf8 COMMENT='用户角色';
+) ENGINE=InnoDB AUTO_INCREMENT=538 COMMENT='用户角色';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2139,7 +2340,7 @@ CREATE TABLE `inventory_out_manifest_detail` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='出库单详情';
+) ENGINE=InnoDB COMMENT='出库单详情';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2166,7 +2367,7 @@ CREATE TABLE `auth_organization` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `org_id` (`org_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COMMENT='组织机构';
+) ENGINE=InnoDB AUTO_INCREMENT=50 COMMENT='组织机构';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2201,7 +2402,7 @@ CREATE TABLE `inventory_on_warehouse` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `POSITIONNO` (`item_code`,`inventory_on_warehouse_no`,`warehouse_no`,`shelf_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8 COMMENT='仓库库存';
+) ENGINE=InnoDB AUTO_INCREMENT=136 COMMENT='仓库库存';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2253,7 +2454,7 @@ CREATE TABLE `item_find` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ITEMCODE` (`item_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='商品';
+) ENGINE=InnoDB AUTO_INCREMENT=4 COMMENT='商品';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2282,7 +2483,7 @@ CREATE TABLE `auth_resource` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `resource_id` (`resource_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=329 DEFAULT CHARSET=utf8 COMMENT='资源';
+) ENGINE=InnoDB AUTO_INCREMENT=329 COMMENT='资源';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2312,7 +2513,7 @@ CREATE TABLE `buyer_receipt_detail` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购发票详情，发票里面的每一种商品对应一条记录';
+) ENGINE=InnoDB COMMENT='采购发票详情，发票里面的每一种商品对应一条记录';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2326,7 +2527,7 @@ CREATE TABLE `scale_type` (
   `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `type` varchar(64) NOT NULL COMMENT '名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=355 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='尺寸类型';
+) ENGINE=InnoDB AUTO_INCREMENT=355 ROW_FORMAT=DYNAMIC COMMENT='尺寸类型';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2359,7 +2560,7 @@ CREATE TABLE `mall_shipping_address` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `OPENID` (`open_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='顾客收件地址';
+) ENGINE=InnoDB AUTO_INCREMENT=14 COMMENT='顾客收件地址';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2382,7 +2583,7 @@ CREATE TABLE `dealer_type` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `CODE` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8 COMMENT='经销商类型';
+) ENGINE=InnoDB AUTO_INCREMENT=136 COMMENT='经销商类型';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2409,7 +2610,7 @@ CREATE TABLE `country` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `country_code` (`country_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=380 DEFAULT CHARSET=utf8 COMMENT='国家';
+) ENGINE=InnoDB AUTO_INCREMENT=380 COMMENT='国家';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2432,7 +2633,7 @@ CREATE TABLE `item_category_scale` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='规格和类目的映射表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 COMMENT='规格和类目的映射表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2447,26 +2648,26 @@ CREATE TABLE `channel_account` (
   `channel_id` bigint(20) NOT NULL,
   `channel_no` varchar(64) NOT NULL,
   `type` int(4) DEFAULT NULL COMMENT '渠道类型；1：有赞，2：海狐，3：淘宝',
-  `channel_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '渠道名称',
+  `channel_name` varchar(16) DEFAULT NULL COMMENT '渠道名称',
   `company_no` varchar(64) NOT NULL COMMENT '渠道账号所属买手公司id',
   `shop_code` varchar(255) NOT NULL COMMENT '迁移数据的时候，把appvalue1迁移过来',
   `shop_name` varchar(1024) DEFAULT NULL,
   `status` int(4) NOT NULL DEFAULT '0' COMMENT '状态 0:正常，1:关闭',
-  `app_key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '渠道品台分配给买手公司的账号appkey/clientId等',
-  `app_secret` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '渠道品台分配给买手公司的账号secret',
-  `access_token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '授权后，获取到的token',
+  `app_key` varchar(64) DEFAULT NULL COMMENT '渠道品台分配给买手公司的账号appkey/clientId等',
+  `app_secret` varchar(64) DEFAULT NULL COMMENT '渠道品台分配给买手公司的账号secret',
+  `access_token` varchar(64) DEFAULT NULL COMMENT '授权后，获取到的token',
   `refresh_token` varchar(255) DEFAULT NULL COMMENT '刷新access_token的token',
   `server_url` varchar(255) DEFAULT NULL COMMENT '平台地址',
   `token_url` varchar(255) DEFAULT NULL COMMENT '获取token的URL',
   `access_key` varchar(255) DEFAULT NULL COMMENT '接入码',
   `secrete_key` varchar(255) DEFAULT NULL COMMENT '授权密码',
   `cookie` varchar(4096) DEFAULT NULL COMMENT '淘宝cookie，较长',
-  `app_value1` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '渠道品台分配给买手公司的其他值value1',
-  `value1_desc` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'app_value1描述',
-  `app_value2` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '渠道品台分配给买手公司的其他值value1',
-  `value2_desc` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'app_value2描述',
-  `app_value3` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '渠道品台分配给买手公司的其他值value1',
-  `value3_desc` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'app_value3描述',
+  `app_value1` varchar(64) DEFAULT NULL COMMENT '渠道品台分配给买手公司的其他值value1',
+  `value1_desc` varchar(128) DEFAULT NULL COMMENT 'app_value1描述',
+  `app_value2` varchar(64) DEFAULT NULL COMMENT '渠道品台分配给买手公司的其他值value1',
+  `value2_desc` varchar(128) DEFAULT NULL COMMENT 'app_value2描述',
+  `app_value3` varchar(64) DEFAULT NULL COMMENT '渠道品台分配给买手公司的其他值value1',
+  `value3_desc` varchar(128) DEFAULT NULL COMMENT 'app_value3描述',
   `gmt_modify` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modifier` varchar(32) NOT NULL,
@@ -2474,7 +2675,7 @@ CREATE TABLE `channel_account` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `company_n` (`company_no`,`channel_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='买手公司渠道账号';
+) ENGINE=InnoDB AUTO_INCREMENT=25 COMMENT='买手公司渠道账号';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2498,7 +2699,7 @@ CREATE TABLE `shipping_packing_scale` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `scale_no` (`packaging_scale_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='打包尺寸';
+) ENGINE=InnoDB AUTO_INCREMENT=40 COMMENT='打包尺寸';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2554,7 +2755,7 @@ CREATE TABLE `buyer_task` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `buyer_task_no` (`buyer_task_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购任务，一个任务可以含有多种商品';
+) ENGINE=InnoDB COMMENT='采购任务，一个任务可以含有多种商品';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2590,7 +2791,7 @@ CREATE TABLE `auth_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_name` (`login_name`),
   UNIQUE KEY `user_no` (`user_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='用户';
+) ENGINE=InnoDB AUTO_INCREMENT=20 COMMENT='用户';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2617,7 +2818,7 @@ CREATE TABLE `channel_shop` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=6 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2648,7 +2849,7 @@ CREATE TABLE `buyer_storage` (
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `storage_no` (`storage_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='买手采购入库表';
+) ENGINE=InnoDB COMMENT='买手采购入库表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2670,12 +2871,10 @@ CREATE TABLE `sys_log` (
   `creator` varchar(32) NOT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2606 DEFAULT CHARSET=utf8 COMMENT='系统日志';
+) ENGINE=InnoDB AUTO_INCREMENT=2606 COMMENT='系统日志';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping routines for database 'haidb2new'
---
+
 /*!50003 DROP FUNCTION IF EXISTS `currval` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
