@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.CustomsDeclareDetailMapper" >
-  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetail" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapper.CustomsDeclareDetailDOMapper" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetailDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
     <result column="goods_order" property="goodsOrder" jdbcType="INTEGER" />
@@ -47,7 +47,7 @@
     delete from customs_declare_detail
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetail" >
+  <insert id="insert" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetailDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -72,7 +72,7 @@
       #{note,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetail" >
+  <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetailDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -244,7 +244,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetail" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetailDO" >
     update customs_declare_detail
     <set >
       <if test="businessNo != null" >
@@ -331,7 +331,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetail" >
+  <update id="updateByPrimaryKey" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsDeclareDetailDO" >
     update customs_declare_detail
     set business_no = #{businessNo,jdbcType=VARCHAR},
       goods_order = #{goodsOrder,jdbcType=INTEGER},
