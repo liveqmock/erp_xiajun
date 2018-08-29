@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
 
 @Component
 public class AutoCloseExpiredOrderTask {
@@ -34,10 +32,18 @@ public class AutoCloseExpiredOrderTask {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void autoCloseExpiredOrder() {
         log.info("轮询关闭订单开始");
-        /**十分钟*/
+        /**超时时间十分钟*/
         timeOut = timeOut == null ? DEFAULT_TIME_OUT_IN_MINUTE : timeOut;
+        long beginTimeMillis = System.currentTimeMillis();
+        /**接近1分钟的时候关闭轮询任务*/
+        long runTimeMillis = 55 * 1000;
         List<MallOrderDO> mallOrderlist = mallOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode(), timeOut);
+
         for (MallOrderDO mallOrder : mallOrderlist) {
+            long currentTimeMillis = System.currentTimeMillis();
+            if (currentTimeMillis >= beginTimeMillis + runTimeMillis) {
+                return;
+            }
             try {
                 mallOrderService.closeOrder(mallOrder);
             } catch (ErpCommonException e) {
@@ -46,8 +52,31 @@ public class AutoCloseExpiredOrderTask {
 
         }
         log.info("轮询关闭订单结束");
-
     }
 
+
+//    public void autoCloseExpiredOrder() {
+//        log.info("轮询关闭订单开始");
+//        /**超时时间十分钟*/
+//        timeOut = timeOut == null ? DEFAULT_TIME_OUT_IN_MINUTE : timeOut;
+//        long beginTimeMillis = System.currentTimeMillis();
+//        /**接近1分钟的时候关闭轮询任务*/
+//        long runTimeMillis = 55 * 1000;
+//        List<MallOrderDO> mallOrderlist = mallOrderService.queryExpiredSubOrders(OrderStatus.INIT.getCode(), timeOut);
+//
+//        for (MallOrderDO mallOrder : mallOrderlist) {
+//            long currentTimeMillis = System.currentTimeMillis();
+//            if (currentTimeMillis >= beginTimeMillis + runTimeMillis) {
+//                return;
+//            }
+//            try {
+//                mallOrderService.closeOrder(mallOrder);
+//            } catch (ErpCommonException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        log.info("轮询关闭订单结束");
+//    }
 
 }
