@@ -23,6 +23,8 @@ import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.base.BaseDto;
 
+import javax.xml.bind.Element;
+
 /**
  * Item 表数据服务层接口实现类
  */
@@ -32,10 +34,10 @@ public class ItemServiceImpl implements IItemService {
 	//品牌和类目的默认值
 	private static final String DEFAULT_CATE_CODE = "0101009";
 	private static final String DEFAULT_CATE_NAME = "其他";
-	private static final String BRAND_NO = "b11";
-	private static final String BRAND_NAME = "channel->其他";
+	private static final String BRAND_NO = "b3699852470";
+	private static final String BRAND_NAME = "其他";
 	private static final String USER_NO = "-1";
-	private static final String COUNTRY = "408";
+	private static final String COUNTRY = "459";
 	private static final String PRICE_RANGE = "0.00";
 
     @Autowired
@@ -56,6 +58,11 @@ public class ItemServiceImpl implements IItemService {
 
     @Autowired
 	private ItemCategoryMapperExt categoryMapperExt;
+
+
+    @Autowired
+	private ItemBrandDOMapperExt itemBrandDOMapperExt;
+
 
     //渠道商品专用：根据item_code更新商品
     @Override
@@ -180,7 +187,7 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setItemName(itemName);
     	itemDO.setCategoryName(DEFAULT_CATE_NAME);
     	itemDO.setMainPic(handlePic(item.getMainPic()));
-    	itemDO.setBrandName(BRAND_NAME);
+    	itemDO.setBrandName(item.getBrandName()+"->"+BRAND_NAME);
     	itemDO.setBrandNo(BRAND_NO);
     	itemDO.setCountry(COUNTRY);
     	itemDO.setCreator(USER_NO);
@@ -193,6 +200,27 @@ public class ItemServiceImpl implements IItemService {
 			if(itemCategoryDO != null){
 				itemDO.setCategoryCode(itemCategoryDO.getCategoryCode());
 				itemDO.setCategoryName(itemCategoryDO.getName());
+			}
+		}
+
+		//品牌处理
+		if(!EasyUtil.isStringEmpty(item.getBrandName())){
+			ItemBrandDO itemBrand = itemBrandDOMapperExt.listByName(item.getBrandName());
+			if(itemBrand != null){
+				itemDO.setBrandNo(itemBrand.getBrandNo());
+				itemDO.setBrandName(itemBrand.getName()+"->"+itemBrand.getNameChina() == null ? "" : itemBrand.getNameChina());
+			}else {
+				ItemBrandDO itemBrandOther = itemBrandDOMapperExt.listByName("other");
+				if(itemBrandOther != null){
+					itemDO.setBrandNo(itemBrandOther.getBrandNo());
+					itemDO.setBrandName("other->"+item.getBrandName());
+				}else {
+					ItemBrandDO itemBrandOther2 = itemBrandDOMapperExt.listByName("Other");
+					if(itemBrandOther2 != null){
+						itemDO.setBrandNo(itemBrandOther2.getBrandNo());
+						itemDO.setBrandName("other->"+item.getBrandName());
+					}
+				}
 			}
 		}
 
@@ -210,7 +238,7 @@ public class ItemServiceImpl implements IItemService {
     		skuDO.setCategoryCode(DEFAULT_CATE_CODE);
     		skuDO.setCategoryName(DEFAULT_CATE_NAME);
     		skuDO.setUpc(sku.getUpc());
-    		skuDO.setBrandName(BRAND_NAME);
+    		skuDO.setBrandName(itemDO.getBrandName());
     		skuDO.setWeight(sku.getWeight());
     		skuDO.setSkuPic(handlePic(sku.getSkuPic()));
     		skuDO.setSalePrice(sku.getSalePrice());
@@ -317,13 +345,34 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setItemName(item.getItemName());
     	itemDO.setMainPic(handlePic(item.getMainPic()));
     	itemDO.setStatus(item.getStatus());
-
+		itemDO.setCountry(COUNTRY);
 		//类目处理,传过来不为空，专门处理
 		if(!EasyUtil.isStringEmpty(item.getCategoryCode())){
 			ItemCategoryDO itemCategoryDO = categoryMapperExt.queryByCategoryCode(item.getCategoryCode());
 			if(itemCategoryDO != null){
 				itemDO.setCategoryCode(itemCategoryDO.getCategoryCode());
 				itemDO.setCategoryName(itemCategoryDO.getName());
+			}
+		}
+
+		//品牌处理
+		if(!EasyUtil.isStringEmpty(item.getBrandName())){
+			ItemBrandDO itemBrand = itemBrandDOMapperExt.listByName(item.getBrandName());
+			if(itemBrand != null){
+				itemDO.setBrandNo(itemBrand.getBrandNo());
+				itemDO.setBrandName(itemBrand.getName()+"->"+itemBrand.getNameChina()== null ? "" : itemBrand.getNameChina());
+			}else {
+				ItemBrandDO itemBrandOther = itemBrandDOMapperExt.listByName("other");
+				if(itemBrandOther != null){
+					itemDO.setBrandNo(itemBrandOther.getBrandNo());
+					itemDO.setBrandName("other->"+item.getBrandName());
+				}else {
+					ItemBrandDO itemBrandOther2 = itemBrandDOMapperExt.listByName("Other");
+					if(itemBrandOther2 != null){
+						itemDO.setBrandNo(itemBrandOther2.getBrandNo());
+						itemDO.setBrandName("other->"+item.getBrandName());
+					}
+				}
 			}
 		}
 

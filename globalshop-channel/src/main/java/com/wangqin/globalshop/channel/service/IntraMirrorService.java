@@ -86,159 +86,7 @@ public class IntraMirrorService {
 	private IItemSkuService itemSkuService;
 
 
-	static Map<String, String> intraMirrorCatagoryMap = new HashMap<String, String>();
 
-	// 暂时硬编码
-	// (itraMirrorCode, erpCode)
-	static {
-		intraMirrorCatagoryMap.put("1518","0602006");
-		intraMirrorCatagoryMap.put("1521","0602006");
-		intraMirrorCatagoryMap.put("1522","0602005");
-		intraMirrorCatagoryMap.put("1523","0602004");
-		intraMirrorCatagoryMap.put("1524","0602002");
-		intraMirrorCatagoryMap.put("1525","0602003");
-		intraMirrorCatagoryMap.put("1526","0602005");
-		intraMirrorCatagoryMap.put("1527","5351050691");
-		intraMirrorCatagoryMap.put("1528","5351097688");
-		intraMirrorCatagoryMap.put("1530","0602005");
-		intraMirrorCatagoryMap.put("1531","0602006");
-		intraMirrorCatagoryMap.put("1532","0604007");
-		intraMirrorCatagoryMap.put("1543","0604002");
-		intraMirrorCatagoryMap.put("1545","5351360099");
-		intraMirrorCatagoryMap.put("1546","0702003");
-		intraMirrorCatagoryMap.put("1547","0701004");
-		intraMirrorCatagoryMap.put("1549","5351472638");
-		intraMirrorCatagoryMap.put("1551","0702002");
-		intraMirrorCatagoryMap.put("1554","0702004");
-		intraMirrorCatagoryMap.put("1555","5177413271");
-		intraMirrorCatagoryMap.put("1557","0902001");
-		intraMirrorCatagoryMap.put("1558","5351725799");
-		intraMirrorCatagoryMap.put("1559","5351765094");
-		intraMirrorCatagoryMap.put("1560","0703006");
-		intraMirrorCatagoryMap.put("1563","5177435366");
-		intraMirrorCatagoryMap.put("1565","0602006");
-		intraMirrorCatagoryMap.put("1571","0601006");
-		intraMirrorCatagoryMap.put("1574","0601005");
-		intraMirrorCatagoryMap.put("1575","0601001");
-		intraMirrorCatagoryMap.put("1576","0601006");
-		intraMirrorCatagoryMap.put("1578","1531125990");
-		intraMirrorCatagoryMap.put("1579","0601006");
-		intraMirrorCatagoryMap.put("1580","0601005");
-		intraMirrorCatagoryMap.put("1582","0601006");
-		intraMirrorCatagoryMap.put("1583","0601005");
-		intraMirrorCatagoryMap.put("1586","0604007");
-		intraMirrorCatagoryMap.put("1594","0604006");
-		intraMirrorCatagoryMap.put("1595","0604002");
-		intraMirrorCatagoryMap.put("1597","0801005");
-		intraMirrorCatagoryMap.put("1599","0701003");
-		intraMirrorCatagoryMap.put("1600","0701004");
-		intraMirrorCatagoryMap.put("1601","0703006");
-		intraMirrorCatagoryMap.put("1602","0703001");
-		intraMirrorCatagoryMap.put("1604","0701002");
-		intraMirrorCatagoryMap.put("1605","0701001");
-		intraMirrorCatagoryMap.put("1609","5177413271");
-		intraMirrorCatagoryMap.put("1610","0902001");
-		intraMirrorCatagoryMap.put("1611","5351725799");
-		intraMirrorCatagoryMap.put("1613","5351765094");
-		intraMirrorCatagoryMap.put("1617","0703006");
-		intraMirrorCatagoryMap.put("1618","5177435366");
-		intraMirrorCatagoryMap.put("1620","0701006");
-		intraMirrorCatagoryMap.put("1625","0903007");
-		intraMirrorCatagoryMap.put("1629","0703006");
-		intraMirrorCatagoryMap.put("1632","0101001");
-		intraMirrorCatagoryMap.put("1634","0903007");
-		intraMirrorCatagoryMap.put("1637","0601006");
-		intraMirrorCatagoryMap.put("1640","0101001");
-		intraMirrorCatagoryMap.put("1645","0601006");
-		intraMirrorCatagoryMap.put("1646","0604001");
-		intraMirrorCatagoryMap.put("1647","0604004");
-		intraMirrorCatagoryMap.put("1648","0604002");
-		intraMirrorCatagoryMap.put("1649","5351472638");
-		intraMirrorCatagoryMap.put("1650","0903007");
-		intraMirrorCatagoryMap.put("1651","0701006");
-		intraMirrorCatagoryMap.put("1652","0901001");
-		intraMirrorCatagoryMap.put("1653","0604004");
-		intraMirrorCatagoryMap.put("1654","0604004");
-		intraMirrorCatagoryMap.put("1655","0703001");
-		intraMirrorCatagoryMap.put("1656","0903007");
-		intraMirrorCatagoryMap.put("1657","0901001");
-		intraMirrorCatagoryMap.put("1769","0403005");
-		intraMirrorCatagoryMap.put("1770","");
-		intraMirrorCatagoryMap.put("1771","0403005");
-		intraMirrorCatagoryMap.put("1772","0403005");
-		intraMirrorCatagoryMap.put("1773","0403005");
-		intraMirrorCatagoryMap.put("1774","0403005");
-		intraMirrorCatagoryMap.put("1775","");
-		intraMirrorCatagoryMap.put("1776","5355307318");
-		intraMirrorCatagoryMap.put("1777","5355323226");
-		intraMirrorCatagoryMap.put("1778","0403005");
-		intraMirrorCatagoryMap.put("1779","0403005");
-		intraMirrorCatagoryMap.put("1780","0403004");
-		intraMirrorCatagoryMap.put("1781","0403004");
-		intraMirrorCatagoryMap.put("1782","0403004");
-		intraMirrorCatagoryMap.put("1783","0403004");
-		intraMirrorCatagoryMap.put("1784","0403004");
-		intraMirrorCatagoryMap.put("1785","0403005");
-		intraMirrorCatagoryMap.put("1786","0403005");
-		intraMirrorCatagoryMap.put("1787","0403005");
-		intraMirrorCatagoryMap.put("1788","0403005");
-		intraMirrorCatagoryMap.put("1789","0403005");
-		intraMirrorCatagoryMap.put("1790","0403005");
-		intraMirrorCatagoryMap.put("1791","0403005");
-		intraMirrorCatagoryMap.put("1792","0403005");
-		intraMirrorCatagoryMap.put("1793","1531125990");
-		intraMirrorCatagoryMap.put("1794","0601006");
-		intraMirrorCatagoryMap.put("1795","0601006");
-		intraMirrorCatagoryMap.put("1796","0601006");
-		intraMirrorCatagoryMap.put("1797","0601001");
-		intraMirrorCatagoryMap.put("1798","0601005");
-		intraMirrorCatagoryMap.put("1799","0601005");
-		intraMirrorCatagoryMap.put("1800","0601005");
-		intraMirrorCatagoryMap.put("1801","0601006");
-		intraMirrorCatagoryMap.put("1802","0601006");
-		intraMirrorCatagoryMap.put("1803","0604003");
-		intraMirrorCatagoryMap.put("1804","0604007");
-		intraMirrorCatagoryMap.put("1805","0604002");
-		intraMirrorCatagoryMap.put("1806","5351360099");
-		intraMirrorCatagoryMap.put("1807","0604007");
-		intraMirrorCatagoryMap.put("1808","0701006");
-		intraMirrorCatagoryMap.put("1809","5351725799");
-		intraMirrorCatagoryMap.put("1810","5351765094");
-		intraMirrorCatagoryMap.put("1811","5177435366");
-		intraMirrorCatagoryMap.put("1812","0603003");
-		intraMirrorCatagoryMap.put("1813","0903007");
-		intraMirrorCatagoryMap.put("1814","5177413271");
-		intraMirrorCatagoryMap.put("1815","0903007");
-		intraMirrorCatagoryMap.put("1816","0902001");
-		intraMirrorCatagoryMap.put("1817","0903007");
-		intraMirrorCatagoryMap.put("1818","0602002");
-		intraMirrorCatagoryMap.put("1819","0602003");
-		intraMirrorCatagoryMap.put("1820","5351097688");
-		intraMirrorCatagoryMap.put("1821","0602006");
-		intraMirrorCatagoryMap.put("1822","0602004");
-		intraMirrorCatagoryMap.put("1823","0602006");
-		intraMirrorCatagoryMap.put("1824","0602005");
-		intraMirrorCatagoryMap.put("1825","0602005");
-		intraMirrorCatagoryMap.put("1826","0602005");
-		intraMirrorCatagoryMap.put("1827","0602006");
-		intraMirrorCatagoryMap.put("1828","0602006");
-		intraMirrorCatagoryMap.put("1829","0604003");
-		intraMirrorCatagoryMap.put("1830","0602006");
-		intraMirrorCatagoryMap.put("1831","0604002");
-		intraMirrorCatagoryMap.put("1832","5351360099");
-		intraMirrorCatagoryMap.put("1833","0604007");
-		intraMirrorCatagoryMap.put("1834","0702006");
-		intraMirrorCatagoryMap.put("1835","5351725799");
-		intraMirrorCatagoryMap.put("1836","5351765094");
-		intraMirrorCatagoryMap.put("1837","5177435366");
-		intraMirrorCatagoryMap.put("1838","0603003");
-		intraMirrorCatagoryMap.put("1839","0903007");
-		intraMirrorCatagoryMap.put("1840","5177413271");
-		intraMirrorCatagoryMap.put("1841","0902001");
-		intraMirrorCatagoryMap.put("1842","0903007");
-		intraMirrorCatagoryMap.put("1843","0603003");
-		intraMirrorCatagoryMap.put("1844","0603003");
-	}
 
 
 	public void getAllItems(JdShopOauthDO shopOauth) {
@@ -360,7 +208,12 @@ public class IntraMirrorService {
 
 		itemVo.setStatus(ItemStatus.LISTING.getCode());
 
-		itemVo.setCategoryCode(intraMirrorCatagoryMap.get(product.getCategory_l3_id()));
+		//类目处理
+		itemVo.setCategoryCode(IMCategory.intraMirrorCatagoryMap.get(product.getCategory_l3_id()+""));
+
+		//品牌处理
+		itemVo.setBrandNo(product.getBrand());
+		itemVo.setBrandName(product.getBrand());
 
 		List<ChannelListingItemSkuVo> outSkuList = new ArrayList<>();
 		List<ItemSkuVo> itemSkuVoList = new ArrayList<>();
