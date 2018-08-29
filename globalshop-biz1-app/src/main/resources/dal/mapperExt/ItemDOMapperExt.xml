@@ -600,9 +600,13 @@
         IFNULL(sum(IFNULL(T3.inv,0)),0) AS inventory,
         IFNULL(sum(IFNULL(T3.virtual_inv,0)),0) AS virtualInv
         FROM
-        item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
+        item T1 ,
+        inventory T3
         WHERE
+        T1.item_code=T3.item_code
+        and
         T1.is_del is false
+
         <if test=" companyNo != null and companyNo != '' ">
             and T1.company_no = #{companyNo}
         </if>
