@@ -568,14 +568,14 @@
         item T1 
         where
         T1.is_del is false
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
         <if test=" name != null and name != '' ">
             and T1.item_name LIKE concat('%',#{name},'%')
         </if>
         <if test=" itemCode != null and itemCode != '' ">
             and T1.item_code = #{itemCode}
-        </if>
-        <if test=" companyNo != null and companyNo != '' ">
-            and T1.company_no = #{companyNo}
         </if>
         <if test=" categoryCode != null and categoryCode != '' ">
             and T1.category_code = #{categoryCode}
@@ -603,14 +603,14 @@
         item T1 LEFT JOIN inventory T3 ON T1.item_code=T3.item_code
         WHERE
         T1.is_del is false
+        <if test=" companyNo != null and companyNo != '' ">
+            and T1.company_no = #{companyNo}
+        </if>
         <if test=" name != null and name != '' ">
             and T1.item_name LIKE concat('%',#{name},'%')
         </if>
         <if test=" itemCode != null and itemCode != '' ">
             and T1.item_code = #{itemCode}
-        </if>
-        <if test=" companyNo != null and companyNo != '' ">
-            and T1.company_no = #{companyNo}
         </if>
         <if test=" categoryCode != null and categoryCode != '' ">
             and T1.category_code = #{categoryCode}
