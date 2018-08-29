@@ -7,7 +7,7 @@ public class ShippingTrackVO {
 	
 	private String info;
 	
-	private Date gmtCreate;
+	private String gmtCreate;
 
 	public Integer getStatus() {
 		return status;
@@ -25,11 +25,11 @@ public class ShippingTrackVO {
 		this.info = info;
 	}
 
-	public Date getGmtCreate() {
+	public String getGmtCreate() {
 		return gmtCreate;
 	}
 
-	public void setGmtCreate(Date gmtCreate) {
+	public void setGmtCreate(String gmtCreate) {
 		this.gmtCreate = gmtCreate;
 	}
 	
