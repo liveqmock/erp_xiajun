@@ -1,7 +1,7 @@
-package com.wangqin.globalshop.logistic.app.bean.common;
+package com.wangqin.globalshop.logistic.app.constant;
 
 /**
- * 业务类型
+ * 海关报文业务类型
  *
  * @author angus
  * @date 2018/8/21

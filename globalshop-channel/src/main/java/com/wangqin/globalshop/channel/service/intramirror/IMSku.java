@@ -18,6 +18,7 @@ public class IMSku {
 	private BigDecimal shipping_fee;//运费
 	private BigDecimal tax;
 	private String updated_at;
+	private String shop_product_sku_id;//类似skuid，下单使用
 
 
 	public String getSkuid() {
@@ -67,5 +68,11 @@ public class IMSku {
 	}
 	public void setUpdated_at(String updated_at) {
 		this.updated_at = updated_at;
+	}
+	public String getShop_product_sku_id() {
+		return shop_product_sku_id;
+	}
+	public void setShop_product_sku_id(String shop_product_sku_id) {
+		this.shop_product_sku_id = shop_product_sku_id;
 	}
 }

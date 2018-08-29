@@ -8,12 +8,13 @@
     <result column="platform_type" property="platformType" jdbcType="INTEGER" />
     <result column="channel_item_sku_code" property="channelItemSkuCode" jdbcType="VARCHAR" />
     <result column="channel_item_code" property="channelItemCode" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="shop_product_sku_id" property="shopProductSkuId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, item_code, sku_code, platform_type, channel_item_sku_code, channel_item_code, 
-    creator, modifier
+    modifier, creator, shop_product_sku_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -30,11 +31,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into channel_listing_item_sku (item_code, sku_code, platform_type, 
-      channel_item_sku_code, channel_item_code, creator, 
-      modifier)
+      channel_item_sku_code, channel_item_code, modifier, 
+      creator, shop_product_sku_id)
     values (#{itemCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{platformType,jdbcType=INTEGER}, 
-      #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR})
+      #{channelItemSkuCode,jdbcType=VARCHAR}, #{channelItemCode,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{shopProductSkuId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -57,11 +58,14 @@
       <if test="channelItemCode != null" >
         channel_item_code,
       </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
       <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null" >
-        modifier,
+      <if test="shopProductSkuId != null" >
+        shop_product_sku_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -80,11 +84,14 @@
       <if test="channelItemCode != null" >
         #{channelItemCode,jdbcType=VARCHAR},
       </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
+      <if test="shopProductSkuId != null" >
+        #{shopProductSkuId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -106,11 +113,14 @@
       <if test="channelItemCode != null" >
         channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
       </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        modifier = #{modifier,jdbcType=VARCHAR},
+      <if test="shopProductSkuId != null" >
+        shop_product_sku_id = #{shopProductSkuId,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -122,8 +132,9 @@
       platform_type = #{platformType,jdbcType=INTEGER},
       channel_item_sku_code = #{channelItemSkuCode,jdbcType=VARCHAR},
       channel_item_code = #{channelItemCode,jdbcType=VARCHAR},
+      modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      shop_product_sku_id = #{shopProductSkuId,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

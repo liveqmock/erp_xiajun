@@ -17,9 +17,11 @@ public class ChannelListingItemDO extends BaseModel {
 
     private Integer status;
 
+    private String modifier;
+
     private String creator;
 
-    private String modifier;
+    private String categoryJson;
 
     public Long getId() {
         return id;
@@ -49,7 +51,6 @@ public class ChannelListingItemDO extends BaseModel {
         return companyNo;
     }
 
-    @Override
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo == null ? null : companyNo.trim();
     }
@@ -86,21 +87,27 @@ public class ChannelListingItemDO extends BaseModel {
         this.status = status;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public String getCategoryJson() {
+        return categoryJson;
+    }
+
+    public void setCategoryJson(String categoryJson) {
+        this.categoryJson = categoryJson == null ? null : categoryJson.trim();
     }
 }

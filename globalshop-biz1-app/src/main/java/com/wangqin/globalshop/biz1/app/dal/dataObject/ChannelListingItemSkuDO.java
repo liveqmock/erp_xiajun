@@ -13,9 +13,11 @@ public class ChannelListingItemSkuDO extends BaseModel {
 
     private String channelItemCode;
 
+    private String modifier;
+
     private String creator;
 
-    private String modifier;
+    private Integer shopProductSkuId;
 
     public Long getId() {
         return id;
@@ -65,21 +67,27 @@ public class ChannelListingItemSkuDO extends BaseModel {
         this.channelItemCode = channelItemCode == null ? null : channelItemCode.trim();
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    @Override
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
     public String getModifier() {
         return modifier;
     }
 
-    @Override
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
+
+    public Integer getShopProductSkuId() {
+        return shopProductSkuId;
+    }
+
+    public void setShopProductSkuId(Integer shopProductSkuId) {
+        this.shopProductSkuId = shopProductSkuId;
     }
 }

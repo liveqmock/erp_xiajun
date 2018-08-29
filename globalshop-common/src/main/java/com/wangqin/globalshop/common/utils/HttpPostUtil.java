@@ -1,5 +1,12 @@
 package com.wangqin.globalshop.common.utils;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +22,19 @@ import java.util.Map.Entry;
 public class HttpPostUtil {
 
 	private static final int TIMEOUT = 15000;
+
+//	public static String postRaw(String url, String jsonStr){
+//		String result = "";
+//		HttpClient httpClient = new DefaultHttpClient();
+//		HttpPost post = new HttpPost(url);
+//		StringEntity postingString = new StringEntity(json);// json传递
+//		post.setEntity(postingString);
+//		post.setHeader("Content-type", "application/json");
+//		HttpResponse response = httpClient.execute(post);
+//		String content = EntityUtils.toString(response.getEntity());
+//		return result;
+//	}
+
 
 	public static String doHttpPost(String url, Map<String, String> params){
 		String result = "";
@@ -32,6 +52,9 @@ public class HttpPostUtil {
 		OutputStream out = null;
 		String rsp = null;
 		byte[] content = spliceParams(params, encode).getBytes(encode);
+		String param = content.toString();
+		System.out.println(url);
+		System.out.println(param);
 		try {
 			URL endpoint = new URL(url);
 //			conn = getConnection(endpoint, "POST", "text/html; charset=" + encode, null);

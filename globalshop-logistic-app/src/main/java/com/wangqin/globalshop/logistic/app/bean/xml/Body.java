@@ -17,7 +17,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 报文体
+ * 海关报关报文体
  *
  * @author angus
  * @date 2018/8/21

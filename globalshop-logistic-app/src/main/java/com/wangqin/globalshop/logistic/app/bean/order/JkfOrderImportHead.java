@@ -179,7 +179,7 @@ public class JkfOrderImportHead {
      * 必填：Y <br>
      * 包裹中独立包装的物品总数，不考虑物品计量单位
      */
-    private Double totalCount;
+    private Integer totalCount;
 
     /**
      * 商品批次号
@@ -197,7 +197,9 @@ public class JkfOrderImportHead {
     /**
      * 发货方式（物流方式）
      * 必填：N <br>
-     * 见参数表
+     * 1-邮政小包
+     * 2-快件
+     * 3-EMS
      */
     private String postMode;
 

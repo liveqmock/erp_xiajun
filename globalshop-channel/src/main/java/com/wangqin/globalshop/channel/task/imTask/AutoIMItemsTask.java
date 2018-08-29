@@ -56,8 +56,8 @@ public class AutoIMItemsTask {
 
 
 	//抓商品：在售商品，抓一次，抓全部，intraMirrors只有在售有库存的商品才会抓回来
-	@Scheduled(cron = "5 5/4 * * * ?")
-	//@Scheduled(cron = "0/30 * * * * ?")
+	//@Scheduled(cron = "5 5/4 * * * ?")
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void getAllItems() {
 
 		logger.info("intraMirror get all items start");

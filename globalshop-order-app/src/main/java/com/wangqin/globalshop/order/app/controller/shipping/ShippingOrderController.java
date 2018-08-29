@@ -855,7 +855,7 @@ public class ShippingOrderController {
             shippingTrackInfos.forEach(shippingTrackInfo -> {
                 ShippingTrackVO shippingTrackVO = new ShippingTrackVO();
                 shippingTrackVO.setInfo(shippingTrackInfo.getInfo());
-                shippingTrackVO.setGmtCreate(DateUtil.parseDate(shippingTrackInfo.getDate()));
+                shippingTrackVO.setGmtCreate(shippingTrackInfo.getDate());
                 shippingTrackVOList.add(shippingTrackVO);
             });
         }
@@ -915,24 +915,6 @@ public class ShippingOrderController {
         }
     }
     */
-
-    private static void ListSort(List<ShippingTrackVO> list) {
-        Collections.sort(list, new Comparator<ShippingTrackVO>() {
-
-            @Override
-            public int compare(ShippingTrackVO o1, ShippingTrackVO o2) {
-                Date dt1 = o1.getGmtCreate();
-                Date dt2 = o2.getGmtCreate();
-                if (dt1.getTime() < dt2.getTime()) {
-                    return -1;
-                } else if (dt1.getTime() > dt2.getTime()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-    }
 
     class CustomDashedLineSeparator extends DottedLineSeparator {
 

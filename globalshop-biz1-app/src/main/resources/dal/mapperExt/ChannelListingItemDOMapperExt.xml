@@ -11,12 +11,13 @@
         <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
         <result column="channel_item_alias" property="channelItemAlias" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="INTEGER" />
-        <result column="creator" property="creator" jdbcType="VARCHAR" />
         <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+        <result column="creator" property="creator" jdbcType="VARCHAR" />
+        <result column="category_json" property="categoryJson" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
     id, item_code, channel_no, company_no, channel_item_code, shop_code, channel_item_alias,
-    status, creator, modifier
+    status, modifier, creator, category_json
   </sql>
 
 

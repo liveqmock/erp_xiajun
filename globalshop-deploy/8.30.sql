@@ -212,3 +212,12 @@ CREATE TABLE `customs_declare_detail`(
   `is_del` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '软删除',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+
+###外部item类目记录
+ALTER TABLE `haidb2new`.`channel_listing_item`
+ADD COLUMN `category_json` varchar(1024) COMMENT '类目json字符串';
+
+###新增字段，用来下单
+ALTER TABLE `haidb2new`.`channel_listing_item_sku`
+ADD COLUMN `shop_product_sku_id` int(0) COMMENT 'itraMirror用来下单';
