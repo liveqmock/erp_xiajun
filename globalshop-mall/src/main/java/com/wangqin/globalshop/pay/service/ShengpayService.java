@@ -25,7 +25,7 @@ public interface ShengpayService {
     /**
      * 商户号
      */
-    String MERCHANT_NO = "540511";
+    String MERCHANT_NO = "11869260";
 
     /**
      * 签名加密类型
@@ -35,7 +35,7 @@ public interface ShengpayService {
     /**
      * MD5 密钥（用于获取消息加密摘要）
      */
-    String MD5_KEY = "support4test";
+    String MD5_KEY = "7ebc6e2fee3ced17";
 
     /**
      * 编码

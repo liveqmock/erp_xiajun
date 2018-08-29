@@ -33,4 +33,10 @@ public class CEB711Message {
     @XStreamAsAttribute
     @XStreamAlias("version")
     private String version;
+
+    @XStreamAlias("Delivery")
+    private Delivery delivery;
+
+    @XStreamAlias("BaseTransfer")
+    private BaseTransfer baseTransfer;
 }

@@ -1,10 +1,13 @@
 package com.wangqin.globalshop.logistic.app;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.QNameMap;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.wangqin.globalshop.logistic.app.bean.bill.BillResult;
 import com.wangqin.globalshop.logistic.app.bean.cancel.ModifyCancel;
 import com.wangqin.globalshop.logistic.app.bean.cancel.ModifyCancelResult;
-import com.wangqin.globalshop.logistic.app.bean.common.BusinessType;
+import com.wangqin.globalshop.logistic.app.bean.ceb.*;
+import com.wangqin.globalshop.logistic.app.constant.BusinessType;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.declare.GoodsDeclare;
 import com.wangqin.globalshop.logistic.app.bean.declare.GoodsDeclareDetail;
@@ -33,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 拼接报文测试类
+ *
  * @author angus
  * @date 2018/8/21
  */
@@ -74,7 +79,7 @@ public class TestMo {
                 .consigneeTel("13242345433")
                 .consignee("loujianhua")
                 .consigneeAddress("浙江杭州聚龙大厦")
-                .totalCount(5D)
+                .totalCount(5)
                 .postMode("1")
                 .senderCountry("34233")
                 .senderName("yangtest")
@@ -207,7 +212,7 @@ public class TestMo {
                 .orderNo("订单编号")
                 .wayBill("分运单号")
                 .tradeCountry("贸易国别（起运地）")
-                .packNo(100D)
+                .packNo(100)
                 .grossWeight(99D)
                 .netWeight(88D)
                 .warpType("包装种类")
@@ -258,13 +263,13 @@ public class TestMo {
                 .declPrice(8888.99D)
                 .declTotalPrice(7777.77D)
                 .useTo("用途")
-                .declareCount(6666D)
+                .declareCount(6666)
                 .goodsUnit("申报计量单位")
                 .goodsGrossWeight(5555.55D)
                 .firstUnit("第一单位")
-                .firstCount(4444D)
+                .firstCount(4444)
                 .secondUnit("第二单位")
-                .secondCount(3333D)
+                .secondCount(3333)
                 .productRecordNo("产品国检备案编号")
                 .webSite("商品网址")
                 .barCode("条形码")
@@ -420,7 +425,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMoXStream(mo);
+        toXmlByXStream(mo);
     }
 
     /**
@@ -484,7 +489,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMoXStream(mo);
+        toXmlByXStream(mo);
     }
 
     /**
@@ -515,7 +520,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMoXStream(mo);
+        toXmlByXStream(mo);
     }
 
     /**
@@ -554,7 +559,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMoXStream(mo);
+        toXmlByXStream(mo);
     }
 
     /**
@@ -584,7 +589,7 @@ public class TestMo {
                 .body(body)
                 .build();
 
-        printXmlFromMoXStream(mo);
+        toXmlByXStream(mo);
     }
 
     @Test
@@ -628,7 +633,7 @@ public class TestMo {
                 "          <consigneeTel>13242345433</consigneeTel>" +
                 "          <consignee>loujianhua</consignee>" +
                 "          <consigneeAddress>浙江杭州聚龙大厦</consigneeAddress>" +
-                "          <totalCount>5.0</totalCount>" +
+                "          <totalCount>5</totalCount>" +
                 "          <batchNumbers>3434-343434</batchNumbers>" +
                 "          <consigneeDitrict>632043</consigneeDitrict>" +
                 "          <postMode>1</postMode>" +
@@ -690,19 +695,76 @@ public class TestMo {
         System.out.println(mo);
     }
 
+    /**
+     * 总署版报文样例
+     */
     @Test
     public void testCeb() {
+        DeliveryHead deliveryHead = DeliveryHead.builder()
+                .guid("5923DGGB-9940-415B-B666-C09BOO7F40B2")
+                .appType("1")
+                .appTime("20160310163311")
+                .appStatus("2")
+                .customsCode("3700")
+                .copNo("NBBH20160308005")
+                .preNo("B20160308000000005")
+                .rkdNo("010220160308000005")
+                .operatorCode("1101110326")
+                .operatorName("监管人")
+                .ieFlag("I")
+                .trafMode("1")
+                .trafNo("0")
+                .voyageNo("BJ20160308")
+                .billNo("B00024204001")
+                .logisticsCode("1105910159")
+                .logisticsName("测试物流企业")
+                .unloadLocation("")
+                .note("")
+                .build();
 
+        DeliveryList deliveryList = DeliveryList.builder()
+                .gnum("1")
+                .logisticsNo("L201603081138001")
+                .note("")
+                .build();
+
+        Delivery delivery = Delivery.builder()
+                .deliveryHead(deliveryHead)
+                .deliveryList(deliveryList)
+                .build();
+
+        BaseTransfer baseTransfer = BaseTransfer.builder()
+                .copCode("1101180326")
+                .copName("物流企业")
+                .dxpMode("DXP")
+                .dxpId("DXPLGS0000000001")
+                .note("")
+                .build();
+
+        CEB711Message ceb711Message = CEB711Message.builder()
+                .version("1.0")
+                .guid("TRF4DGGB-9940-415B-B666-C09BOO7F40B2")
+                .delivery(delivery)
+                .baseTransfer(baseTransfer)
+                .build();
+
+        QNameMap qmaps = new QNameMap();
+        qmaps.setDefaultNamespace("http://www.chinaport.gov.cn/ceb");
+        qmaps.setDefaultPrefix("ceb");
+
+        XStream xstream = new XStream(new StaxDriver(qmaps));
+        xstream.autodetectAnnotations(true);
+
+        String xml = xstream.toXML(ceb711Message);
+        System.out.println(xml);
     }
-
-
 
     /**
      * 将 MO 对象转换为为 XML 并打印（XStream 方式）
      *
      * @param mo
      */
-    private void printXmlFromMoXStream(Mo mo) {
+    private void toXmlByXStream(Mo mo) {
         XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
 
@@ -715,7 +777,7 @@ public class TestMo {
      *
      * @param mo
      */
-    public void  printXmlFromMoByJAXB(Mo mo) throws JAXBException {
+    public void toXmlByJAXB(Mo mo) throws JAXBException {
         StringWriter writer = new StringWriter();
         JAXBContext jaxbContext = JAXBContext.newInstance(Mo.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();

@@ -108,7 +108,7 @@ public class GoodsDeclareDetail {
      * 必填：Y <br>
      * 只能是数字，大于0
      */
-    private Double declareCount;
+    private Integer declareCount;
 
     /**
      * 计量单位
@@ -136,7 +136,7 @@ public class GoodsDeclareDetail {
      * 必填：Y <br>
      * 根据第一单位填写对应数量
      */
-    private Double firstCount;
+    private Integer firstCount;
 
     /**
      * 第二计量单位
@@ -150,7 +150,7 @@ public class GoodsDeclareDetail {
      * 必填：N <br>
      * 根据第二单位填写对应数量
      */
-    private Double secondCount;
+    private Integer secondCount;
 
     /**
      * 产品国检备案编号
