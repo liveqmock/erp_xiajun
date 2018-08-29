@@ -27,16 +27,16 @@ public class ItemBrandController {
 
 
 
-	// 旧方法
+    //旧的service
 //	@Autowired
 //	private IItemBrandService itemBrandService;  记住用，最小该变量ItemBrandFeignService代替即可
 
-	//新方法
+	//新的service
 	@Autowired
 	private ItemBrandFeignService itemBrandService;//feign声明式服务的高级版
 
 
-	@Autowired RestTemplate restTemplate;  //第二种方案
+
 
 
 	/**

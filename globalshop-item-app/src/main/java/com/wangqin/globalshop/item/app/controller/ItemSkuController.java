@@ -54,23 +54,29 @@ import com.wangqin.globalshop.item.app.service.IItemService;
 @Authenticated
 public class ItemSkuController  {
 
+	//旧的service
 //	@Autowired
 //	private IItemSkuService iItemSkuService;
-	
-	@Autowired
-	private ItemSkuFeignService iItemSkuService;
-	
-	@Autowired
-	private IItemService itemService;
-
-	@Autowired
-	private InventoryService inventoryService;
 	
 //	@Autowired
 //	private IItemSkuScaleService scaleService;
 	
+//	@Autowired
+//	private IItemService itemService;
+
+	@Autowired
+	private InventoryService inventoryService;
+	
+
+	//新的service
+	@Autowired
+	private ItemSkuFeignService iItemSkuService;
+	
 	@Autowired
 	private ItemSkuScaleFeignService scaleService;
+	
+	@Autowired
+	private IItemService itemService;
 
 
 	

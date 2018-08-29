@@ -40,9 +40,11 @@ public class CategoryController  {
 	//根类目的pcode
 	private static final String P_CODE_OF_ROOT_CATEGORY = "0000000";
 	
+    //旧的service	
 //	@Autowired
 //	private IItemCategoryService categoryService;
 	
+	//新的service
 	@Autowired
 	private ItemCategoryFeignService categoryService;//feign声明式服务的高级版
 

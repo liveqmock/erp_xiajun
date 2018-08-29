@@ -22,12 +22,11 @@ import com.wangqin.globalshop.item.api.util.UploadFileFeginService;
  */
 @Controller
 public class ItemUploadFileController {
-//
+    //旧的service
 //	@Autowired
 //	private IUploadFileService uploadFileService;
 	
-	//图片的调用暂时做不了
-//	
+    //新的service
 	@Autowired
 	private UploadFileFeginService uploadFileService;
 	

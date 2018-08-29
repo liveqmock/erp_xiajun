@@ -19,10 +19,12 @@ import com.wangqin.globalshop.item.api.channel.ItemChannelAccountFeignService;
 @Controller
 public class ItemChannelAccountController {
 
+    //旧的service
 //	@Autowired
 //	private IItemChannelAccountService itemChannelAccountService;
 	
 	
+	//新的service
 	@Autowired
 	private ItemChannelAccountFeignService itemChannelAccountService;
 	

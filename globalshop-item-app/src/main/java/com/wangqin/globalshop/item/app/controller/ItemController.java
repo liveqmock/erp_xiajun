@@ -88,7 +88,7 @@ import net.sf.json.JSONObject;
 @RequestMapping("/item")
 public class ItemController {
 
-	/******旧方法******/
+	  //旧的service
 //    @Autowired
 //    private IItemBrandService brandService;
 //    @Autowired
@@ -109,19 +109,19 @@ public class ItemController {
     private UploadFileService uploadFileService;
     @Autowired
     private ItemQrcodeShareDOMapperExt shareMapperExt;
-    /******旧方法******/
+
     
-    /*******新方法******/
+    //新的service
     @Autowired
     private ItemBrandFeignService brandService;
     @Autowired
     private ItemCategoryFeignService categoryService;
     @Autowired
+    private ItemFeignService itemService;
+    @Autowired
     private ItemSkuFeignService itemSkuService;
     @Autowired
-    private ItemSkuScaleFeignService scaleService;
-    @Autowired
-    private ItemFeignService itemService;
+    private ItemSkuScaleFeignService scaleService;    
     @Autowired
     private AppletConfigFeignService appletConfigService;
     

@@ -34,12 +34,14 @@ import com.wangqin.globalshop.item.api.packing.ItemPackageScaleFeignService;
 @Authenticated
 public class PackingController {
 
+	//旧的service
 //	@Autowired
 //	private IItemPackageScaleService shippingPackingScaleService;
 //	
 //	@Autowired
 //	private IItemPackagePatternService iPackageLevelService;
 	
+	//新的service
 	@Autowired
 	private ItemPackageScaleFeignService shippingPackingScaleService;
 	

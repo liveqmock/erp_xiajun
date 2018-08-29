@@ -17,9 +17,11 @@ import com.wangqin.globalshop.item.api.util.CountryFeignService;
 @RequestMapping(value = "/country")
 public class CountryController {
 
+    //旧的service
 //	@Autowired
 //	private ICountryService countryService;
 	
+	//新的service
 	@Autowired
 	private CountryFeignService countryService;
 	
