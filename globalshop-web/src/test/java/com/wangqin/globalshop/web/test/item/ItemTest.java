@@ -50,7 +50,7 @@ public class ItemTest {
     	item.setMainPic("{\"picList\":[{\"type\":\"image/jpeg\",\"uid\":\"i_0\",\"url\":\"http://img.haihu.com/22_1530669778693.jpg?x-oss-process=image/resize,w_200/auto-orient,0\"}],\"mainPicNum\":\"1\"}");
     	item.setSkuList("[{\"color\":\"宝蓝色\",\"scale\":\"6inch\",\"salePrice\":4288,\"virtualInv\":134,\"weight\":13,\"upc\":\"978723265\",\"skuPic\":\"{\\\"picList\\\":[{\\\"type\\\":\\\"image/jpeg\\\",\\\"uid\\\":\\\"i_0\\\",\\\"url\\\":\\\"http://img.haihu.com/51_1530669864795.jpg?x-oss-process=image/resize,w_200/auto-orient,0\\\"}]}\",\"packageLevelId\":\"[33,20]\"},{\"color\":\"香槟金\",\"scale\":\"6.5inch\",\"salePrice\":4488,\"virtualInv\":12,\"weight\":14,\"upc\":\"978723465\",\"skuPic\":\"{\\\"picList\\\":[{\\\"type\\\":\\\"image/jpeg\\\",\\\"uid\\\":\\\"i_0\\\",\\\"url\\\":\\\"http://img.haihu.com/47_1530669869205.jpg?x-oss-process=image/resize,w_200/auto-orient,0\\\"}]}\",\"packageLevelId\":\"[33,20]\"}]");
     	item.setDetail("%3Cp%3E%E5%8D%8E%E4%B8%BAP20%E8%AF%A6%E6%83%85%3C%2Fp%3E");
-    	itemService.addItem(item);
+    	//itemService.addItem(item);
     	System.out.println("success!");
     	System.out.println("===item add test start whole===");
     }
@@ -74,7 +74,7 @@ public class ItemTest {
     	item.setWxisSale(1);
     	item.setMainPic("{\"picList\":[{\"type\":\"image/jpeg\",\"uid\":\"i_0\",\"url\":\"http://img.haihu.com/22_1530669778693.jpg?x-oss-process=image/resize,w_200/auto-orient,0\"}],\"mainPicNum\":\"1\"}");
     	item.setSkuList("[{\"color\":\"宝蓝色\",\"scale\":\"6inch\",\"salePrice\":4288,\"virtualInv\":134,\"weight\":13,\"upc\":\"978723265\",\"skuPic\":\"{\\\"picList\\\":[{\\\"type\\\":\\\"image/jpeg\\\",\\\"uid\\\":\\\"i_0\\\",\\\"url\\\":\\\"http://img.haihu.com/51_1530669864795.jpg?x-oss-process=image/resize,w_200/auto-orient,0\\\"}]}\",\"packageLevelId\":\"[33,20]\"},{\"color\":\"香槟金\",\"scale\":\"6.5inch\",\"salePrice\":4488,\"virtualInv\":12,\"weight\":14,\"upc\":\"978723465\",\"skuPic\":\"{\\\"picList\\\":[{\\\"type\\\":\\\"image/jpeg\\\",\\\"uid\\\":\\\"i_0\\\",\\\"url\\\":\\\"http://img.haihu.com/47_1530669869205.jpg?x-oss-process=image/resize,w_200/auto-orient,0\\\"}]}\",\"packageLevelId\":\"[33,20]\"}]");
-    	itemService.addItem(item);
+    	//itemService.addItem(item);
     	System.out.println("success!");
     	System.out.println("===item add test start part===");
     }
