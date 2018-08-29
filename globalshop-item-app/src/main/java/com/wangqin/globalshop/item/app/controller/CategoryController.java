@@ -13,6 +13,8 @@ import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.common.utils.czh.Util;
+import com.wangqin.globalshop.item.api.brand.ItemBrandFeignService;
+import com.wangqin.globalshop.item.api.category.ItemCategoryFeignService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +40,11 @@ public class CategoryController  {
 	//根类目的pcode
 	private static final String P_CODE_OF_ROOT_CATEGORY = "0000000";
 	
+//	@Autowired
+//	private IItemCategoryService categoryService;
+	
 	@Autowired
-	private IItemCategoryService categoryService;
+	private ItemCategoryFeignService categoryService;//feign声明式服务的高级版
 
 	/**
 	 * 添加类目（fin)，提供name和pcode
@@ -66,7 +71,7 @@ public class CategoryController  {
 		if (category.getpCode() == null) {//添加一级类目
 			category.setpCode(P_CODE_OF_ROOT_CATEGORY);
 			category.setRootCode(P_CODE_OF_ROOT_CATEGORY);
-			category.setLevel(1);			
+			category.setLevel(1);		
 		} else {
 			ItemCategoryDO categoryP = categoryService.queryByCategoryCode(category.getpCode());
 			if (categoryP == null) {

@@ -18,23 +18,10 @@ import com.wangqin.globalshop.common.utils.JsonPageResult;
 public interface IItemPackagePatternService {
 	
 	Integer countPatternsByScaleNo(String packagingScaleNo);
-	
-    Integer queryPackageLevelsCount(ShippingPackingPatternQueryVO packageLevelQueryVO);
 
-    // Boolean updatePackageScaleByEnName(Long packageId, String newEnName);
-
-   
-
-    ItemBrandDO selectByPrimaryKey(Long id);
-
-
-    
-    List<ShippingPackingPatternDO> queryPatternsByScaleNo(String no);
-    
     JsonPageResult<List<ItemPackagePatternDTO>> queryPackageLevelList(PackageLevelQueryVO packageLevelQueryVO);
 
-    void insertPattern(ShippingPackingPatternDO shippingPackingPatternDO);
-    
+    void insertPattern(ShippingPackingPatternDO shippingPackingPatternDO);   
 
 	void deleteById(Long id);
 	

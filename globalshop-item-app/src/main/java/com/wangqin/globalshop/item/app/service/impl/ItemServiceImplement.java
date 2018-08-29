@@ -1,6 +1,5 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
@@ -43,10 +42,6 @@ public class ItemServiceImplement implements IItemService {
     private CompanyDOMapperExt companyDOMapperExt;
     @Autowired
     private ItemDOMapperExt itemDOMapperExt;
-    @Autowired
-    private IItemBrandService brandService;
-    @Autowired
-    private IItemSkuScaleService scaleService;
     @Autowired
     private InventoryService invService;
     @Autowired
@@ -107,95 +102,7 @@ public class ItemServiceImplement implements IItemService {
         return itemDOMapperExt.insertItemSelective(item);
     }
 
-    //商品管理->商品发布
-    @Transactional(rollbackFor = BizCommonException.class)
-    @Override
-    public Object addItem(ItemQueryVO item) {
-        JsonResult<ItemDO> result = new JsonResult<>();
-        if (!loginCheck()) {
-            return result.buildIsSuccess(false).buildMsg("请先登录");
-        }
-        String companyNo = AppUtil.getLoginUserCompanyNo();
-        String userNo = AppUtil.getLoginUserId();
-        ItemDO newItem = new ItemDO();
 
-        //类目处理
-        String categoryCode = item.getCategoryCode();
-        newItem.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
-        //商品必须有主图
-        if (!ItemUtil.picCheck(item.getMainPic())) {
-            return result.buildIsSuccess(false).buildMsg("商品必须有主图");
-        }
-        //系统自动生成item_code
-        String itemCode = ItemEnCodeUtil.generateItemCode(categoryCode);
-        // 解析skuList 数组对象
-        String skuList = item.getSkuList();
-        List<Double> itemSkuPriceList = new ArrayList<Double>();
-        List<ItemSkuAddVO> skus = new ArrayList<ItemSkuAddVO>();
-        try {
-            String s = skuList.replace("&quot;", "\"");
-            skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>() { });
-        } catch (Exception e) {
-            return result.buildMsg("解析SKU错误").buildIsSuccess(false);
-        }
-        int i = 0;
-        for (ItemSkuAddVO itemSku : skus) {
-        	itemSkuPriceList.add(itemSku.getSalePrice());
-        	itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i++));
-        	//sku没有图片就用商品的图片
-        	if (!ItemUtil.picCheck(itemSku.getSkuPic())) {//没图
-        		itemSku.setSkuPic(item.getMainPic());
-        	}
-        	//检测upc是否和数据库里面已有的upc重复,按公司划分
-            List<String> codeList = itemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
-            if (IsEmptyUtil.isCollectionNotEmpty(codeList)) {
-                return result.buildIsSuccess(false).buildMsg("新增失败，添加的upc和已有的upc重复");
-            }   
-        }
-        //上架处理
-        try {
-            ItemUtil.handleShelf(item, newItem);
-        } catch (Exception e) {
-            return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
-        }
-       
-        //可以直接从PageBean存在数据库的字段
-        ItemUtil.transItemVoToDO(item, newItem, companyNo, userNo, categoryCode, itemCode);
-        //对不能直接转换的字段做处理
-        detailDecoder(newItem);
-        newItem.setPriceRange(PriceUtil.calNewPriceRange(itemSkuPriceList));     
-        newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));        
-        generateQrCode(newItem, companyNo);  
-        //渠道处理
-        ItemUtil.handleThirdSale(newItem, item);        
-        //插入itemsku和库存
-        for (ItemSkuAddVO itemSku : skus) {                    
-            //插入规格信息
-            insertItemScaleInfo(itemSku, companyNo, userNo, itemCode);
-            //item_sku所需的其他信息
-            ItemUtil.genItemSku(itemSku, newItem, companyNo, userNo, itemCode);            
-        }
-        itemSkuService.insertBatch(skus);
-        List<InventoryDO> inventoryList = itemSkuService.initInventory(skus);
-        invService.outbound(inventoryList);
-        insertItemSelective(newItem);
-        return result.buildIsSuccess(true).buildMsg("添加商品成功");
-    }
-
-    /**
-     * 商品发布->插入规格信息
-     */
-    @Transactional
-    private void insertItemScaleInfo(ItemSkuAddVO itemSku, String companyNo, String userNo, String itemCode) {    	
-        if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
-            ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",itemSku.getColor(),itemSku.getSkuCode(),itemCode);
-            scaleService.insertSelective(color);
-        }
-        if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
-        	ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",itemSku.getScale(),itemSku.getSkuCode(),itemCode);
-            scaleService.insertSelective(scale);
-        }
-    }
 
     /**
      * 封装ItemSkuScala对象信息
@@ -983,20 +890,7 @@ public class ItemServiceImplement implements IItemService {
         return true;
     }
 
-    /*
-     *商品详情处理
-     */
-    private void detailDecoder(ItemDO item) {
-        if (StringUtils.isNotBlank(item.getDetail())) {
-            String detail = item.getDetail();
-            try {
-                String deStr = URLDecoder.decode(detail, "UTF-8");
-                item.setDetail(deStr);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+ 
 
 
     //一键分享商品的首页
@@ -1054,7 +948,9 @@ public class ItemServiceImplement implements IItemService {
      *
      * @return
      */
-    private void generateQrCode(ItemDO newItem, String companyNo) {
+    @Override
+    @Transactional
+    public void generateQrCode(ItemDO newItem, String companyNo) {
         CompanyDO companyDO = companyDOMapperExt.selectByCompanyNo(companyNo);
         if (null != companyDO) {
             if (IsEmptyUtil.isStringNotEmpty(companyDO.getCompanyGroup())) {

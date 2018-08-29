@@ -8,7 +8,8 @@ import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
-import com.wangqin.globalshop.item.api.itembrand.ItemBrandFeignService;
+import com.wangqin.globalshop.item.api.brand.ItemBrandFeignService;
+
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,22 +1,32 @@
 package com.wangqin.globalshop.item.app.controller;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
 
 import org.jboss.netty.util.EstimatableObjectWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -41,13 +51,20 @@ import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
 import com.wangqin.globalshop.common.utils.HaiJsonUtils;
 import com.wangqin.globalshop.common.utils.ImageUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.ItemEnCodeUtil;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.api.itembrand.ItemBrandFeignService;
+import com.wangqin.globalshop.item.api.brand.ItemBrandFeignService;
+import com.wangqin.globalshop.item.api.category.ItemCategoryFeignService;
+import com.wangqin.globalshop.item.api.item.ItemFeignService;
+import com.wangqin.globalshop.item.api.scale.ItemSkuScaleFeignService;
+import com.wangqin.globalshop.item.api.sku.ItemSkuFeignService;
+import com.wangqin.globalshop.item.api.util.AppletConfigFeignService;
+import com.wangqin.globalshop.item.api.util.UploadFileService;
 import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
@@ -72,29 +89,46 @@ import net.sf.json.JSONObject;
 public class ItemController {
 
 	/******旧方法******/
-    @Autowired
-    private IItemBrandService brandService;
-    @Autowired
-    private IItemCategoryService categoryService;
+//    @Autowired
+//    private IItemBrandService brandService;
+//    @Autowired
+//    private IItemCategoryService categoryService;
 //    @Autowired
 //    private IItemService itemService;
     @Autowired
     private InventoryService inventoryService;
-    @Autowired
-    private IItemSkuService itemSkuService;
-    @Autowired
-    private IItemSkuScaleService scaleService;
-    @Autowired
-    private IAppletConfigService appletConfigService;
+//    @Autowired
+//    private IItemSkuService itemSkuService;
+//    @Autowired
+//    private IItemSkuScaleService scaleService;
+//    @Autowired
+//    private IAppletConfigService appletConfigService;
     @Autowired
     private IItemCompanyService companyService;
+    @Autowired
+    private UploadFileService uploadFileService;
     @Autowired
     private ItemQrcodeShareDOMapperExt shareMapperExt;
     /******旧方法******/
     
-    //新方法
-  	@Autowired
-  	private ItemFeignService itemService;//feign声明式服务的高级版
+    /*******新方法******/
+    @Autowired
+    private ItemBrandFeignService brandService;
+    @Autowired
+    private ItemCategoryFeignService categoryService;
+    @Autowired
+    private ItemSkuFeignService itemSkuService;
+    @Autowired
+    private ItemSkuScaleFeignService scaleService;
+    @Autowired
+    private ItemFeignService itemService;
+    @Autowired
+    private AppletConfigFeignService appletConfigService;
+    
+    //临时，商品的导入还没有迁移过去
+    @Autowired
+    private IItemService itemTempService;
+
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     public static final String ACCESS_TOKEN_PART = "grant_type=client_credential&appid=";
@@ -109,8 +143,92 @@ public class ItemController {
     @RequestMapping("/add")
     @Transactional(rollbackFor = BizCommonException.class)
     public Object add(ItemQueryVO item) {
-        return itemService.addItem(item);
+    	 JsonResult<ItemDO> result = new JsonResult<>();
+         if (!loginCheck()) {
+             return result.buildIsSuccess(false).buildMsg("请先登录");
+         }
+         String companyNo = AppUtil.getLoginUserCompanyNo();
+         String userNo = AppUtil.getLoginUserId();
+         ItemDO newItem = new ItemDO();
+
+         //类目处理
+         String categoryCode = item.getCategoryCode();
+         newItem.setCategoryName(categoryService.queryByCategoryCode(categoryCode).getName());
+         //商品必须有主图
+         if (!ItemUtil.picCheck(item.getMainPic())) {
+             return result.buildIsSuccess(false).buildMsg("商品必须有主图");
+         }
+         //系统自动生成item_code
+         String itemCode = ItemEnCodeUtil.generateItemCode(categoryCode);
+         // 解析skuList 数组对象
+         String skuList = item.getSkuList();
+         List<Double> itemSkuPriceList = new ArrayList<Double>();
+         List<ItemSkuAddVO> skus = new ArrayList<ItemSkuAddVO>();
+         try {
+             String s = skuList.replace("&quot;", "\"");
+             skus = HaiJsonUtils.toBean(s, new TypeReference<List<ItemSkuAddVO>>() { });
+         } catch (Exception e) {
+             return result.buildMsg("解析SKU错误").buildIsSuccess(false);
+         }
+         int i = 0;
+         for (ItemSkuAddVO itemSku : skus) {
+         	itemSkuPriceList.add(itemSku.getSalePrice());
+         	itemSku.setSkuCode(ItemEnCodeUtil.generateSkuCode(itemCode, i++));
+         	//sku没有图片就用商品的图片
+         	if (!ItemUtil.picCheck(itemSku.getSkuPic())) {//没图
+         		itemSku.setSkuPic(item.getMainPic());
+         	}
+         	//检测upc是否和数据库里面已有的upc重复,按公司划分
+             List<String> codeList = itemSkuService.querySkuCodeListByUpc(companyNo, itemSku.getUpc());
+             if (IsEmptyUtil.isCollectionNotEmpty(codeList)) {
+                 return result.buildIsSuccess(false).buildMsg("新增失败，添加的upc和已有的upc重复");
+             }   
+         }
+         //上架处理
+         try {
+             ItemUtil.handleShelf(item, newItem);
+         } catch (Exception e) {
+             return result.buildIsSuccess(false).buildMsg("上架时间填写错误");
+         }
+        
+         //可以直接从PageBean存在数据库的字段
+         ItemUtil.transItemVoToDO(item, newItem, companyNo, userNo, categoryCode, itemCode);
+         //对不能直接转换的字段做处理
+         ItemUtil.detailDecoder(newItem);
+         newItem.setPriceRange(PriceUtil.calNewPriceRange(itemSkuPriceList));     
+         newItem.setBrandNo(brandService.selectBrandNoByName(item.getBrand().split("->")[0]));        
+         itemService.generateQrCode(newItem, companyNo);  
+         //渠道处理
+         ItemUtil.handleThirdSale(newItem, item);        
+         //插入itemsku和库存
+         for (ItemSkuAddVO itemSku : skus) {                    
+             //插入规格信息
+             insertItemScaleInfo(itemSku, companyNo, userNo, itemCode);
+             //item_sku所需的其他信息
+             ItemUtil.genItemSku(itemSku, newItem, companyNo, userNo, itemCode);            
+         }
+         itemSkuService.insertBatch(skus);
+         List<InventoryDO> inventoryList = itemSkuService.initInventory(skus);
+         inventoryService.outbound(inventoryList);
+         itemService.insertItemSelective(newItem);
+         return result.buildIsSuccess(true).buildMsg("添加商品成功");
     }
+    
+    /**
+     * 商品发布->插入规格信息
+     */
+    @Transactional
+    private void insertItemScaleInfo(ItemSkuAddVO itemSku, String companyNo, String userNo, String itemCode) {    	
+        if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
+            ItemSkuScaleDO color = ItemUtil.genScaleDO(companyNo,userNo,"颜色",itemSku.getColor(),itemSku.getSkuCode(),itemCode);
+            scaleService.insertSelective(color);
+        }
+        if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
+        	ItemSkuScaleDO scale = ItemUtil.genScaleDO(companyNo,userNo,"尺寸",itemSku.getScale(),itemSku.getSkuCode(),itemCode);
+            scaleService.insertSelective(scale);
+        }
+    }
+    
 
     /**
      * 商品管理->商品列表->操作->编辑->确定
@@ -448,7 +566,7 @@ public class ItemController {
             if (!file.isEmpty()) {
                 // 文件保存路径
                 List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(), file.getOriginalFilename(), 1, 0, 16);
-                itemService.importItem(list);
+                itemTempService.importItem(list);
             }
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");
@@ -460,6 +578,10 @@ public class ItemController {
         }
         return result.buildIsSuccess(true).buildMsg("上传成功");
     }
+    
+   
+
+
 
     /**
      * 工具类

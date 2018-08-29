@@ -11,14 +11,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CountryDO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.service.ICountryService;
+import com.wangqin.globalshop.item.api.util.CountryFeignService;
 
 @Controller
 @RequestMapping(value = "/country")
 public class CountryController {
 
+//	@Autowired
+//	private ICountryService countryService;
+	
 	@Autowired
-	private ICountryService countryService;
+	private CountryFeignService countryService;
 	
 	/**
 	 * 添加国家

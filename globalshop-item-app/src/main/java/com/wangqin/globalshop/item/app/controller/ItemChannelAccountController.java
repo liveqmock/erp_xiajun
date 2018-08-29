@@ -1,29 +1,30 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelAccountDO;
-import com.wangqin.globalshop.biz1.app.enums.ChannelType;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.JsonResult;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.wangqin.globalshop.item.app.service.IItemChannelAccountService;
-
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.JsonResult;
+import com.wangqin.globalshop.item.api.channel.ItemChannelAccountFeignService;
 
 @Authenticated
 @Controller
 public class ItemChannelAccountController {
 
+//	@Autowired
+//	private IItemChannelAccountService itemChannelAccountService;
+	
+	
 	@Autowired
-	private IItemChannelAccountService itemChannelAccountService;
+	private ItemChannelAccountFeignService itemChannelAccountService;
 	
 	/**
 	 * 获取当前用户所在公司可用的渠道类型

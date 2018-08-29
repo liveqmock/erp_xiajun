@@ -16,6 +16,7 @@ import com.wangqin.globalshop.item.app.service.IItemCategoryScaleService;
  * 
  * @author xiajun
  * 关于规格的所有controller层
+ * 这个没有用到
  *
  */
 @Controller

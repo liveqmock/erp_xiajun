@@ -24,9 +24,6 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 	@Autowired
 	private ItemPackagePatternMapperExt shippingPackingPatternDOMapperExt;
 	
-	//public List<ItemPackageScaleDTO> queryPackageScales() {
-		//return packageScaleMapperExt.queryPackageScales();
-	//}
 	
 	@Override
 	@Transactional(rollbackFor = ErpCommonException.class)
@@ -86,7 +83,6 @@ public class ItemPackageScaleServiceImpl implements IItemPackageScaleService{
 
 	@Override
 	public ItemPackageScaleDTO selectById(Long id) {
-		// TODO Auto-generated method stub
 		return packageScaleMapperExt.selectById(id);
 	}
 }

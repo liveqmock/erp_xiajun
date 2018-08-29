@@ -6,15 +6,13 @@ import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.app.service.IUploadFileService;
+import com.wangqin.globalshop.item.api.util.UploadFileFeginService;
 
 
 
@@ -24,9 +22,14 @@ import com.wangqin.globalshop.item.app.service.IUploadFileService;
  */
 @Controller
 public class ItemUploadFileController {
-
+//
+//	@Autowired
+//	private IUploadFileService uploadFileService;
+	
+	//图片的调用暂时做不了
+//	
 	@Autowired
-	private IUploadFileService uploadFileService;
+	private UploadFileFeginService uploadFileService;
 	
 	/**
 	 * 图片上传接口
@@ -69,8 +72,4 @@ public class ItemUploadFileController {
 	}
 	
 	
-	@GetMapping("/uploadFile/testFileUpload")
-	public String itemList(Model model) {
-		return "haierp/testFileUpload";
-	}
 }

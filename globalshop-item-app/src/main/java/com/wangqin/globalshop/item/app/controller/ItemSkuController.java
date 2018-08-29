@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
 import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,15 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.InventoryAddVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
+import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
@@ -41,9 +40,9 @@ import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.api.scale.ItemSkuScaleFeignService;
+import com.wangqin.globalshop.item.api.sku.ItemSkuFeignService;
 import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
 /**
  * 商品SKU处理器
@@ -55,8 +54,11 @@ import com.wangqin.globalshop.item.app.service.IItemSkuService;
 @Authenticated
 public class ItemSkuController  {
 
+//	@Autowired
+//	private IItemSkuService iItemSkuService;
+	
 	@Autowired
-	private IItemSkuService iItemSkuService;
+	private ItemSkuFeignService iItemSkuService;
 	
 	@Autowired
 	private IItemService itemService;
@@ -64,11 +66,13 @@ public class ItemSkuController  {
 	@Autowired
 	private InventoryService inventoryService;
 	
+//	@Autowired
+//	private IItemSkuScaleService scaleService;
+	
 	@Autowired
-	private IItemSkuScaleService scaleService;
+	private ItemSkuScaleFeignService scaleService;
 
-	@Autowired
-	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
+
 	
 	/**
 	 * 更新sku
@@ -122,7 +126,7 @@ public class ItemSkuController  {
 		
 		//更新尺寸（先删除后插入）
 		if (IsEmptyUtil.isStringNotEmpty(itemSku.getColor())) {
-			itemSkuScaleMapperExt.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
+			scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "颜色");
 			ItemSkuScaleDO colorScale = new ItemSkuScaleDO();
 			colorScale.setCompanyNo(companyNo);
 			colorScale.setCreator(user);
@@ -132,10 +136,10 @@ public class ItemSkuController  {
 			colorScale.setScaleValue(itemSku.getColor());
 			colorScale.setScaleName("颜色");
 			colorScale.setSkuCode(skuCode);
-			itemSkuScaleMapperExt.insertSelective(colorScale);
+			scaleService.insertSelective(colorScale);
 		}
 		if (IsEmptyUtil.isStringNotEmpty(itemSku.getScale())) {
-			itemSkuScaleMapperExt.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
+			scaleService.deleteItemSkuScaleBySkuCodeAndScaleName(skuCode, "尺寸");
 			ItemSkuScaleDO scale = new ItemSkuScaleDO();
 			scale.setCompanyNo(companyNo);
 			scale.setCreator(user);
@@ -145,7 +149,7 @@ public class ItemSkuController  {
 			scale.setScaleValue(itemSku.getScale());
 			scale.setScaleName("尺寸");
 			scale.setSkuCode(skuCode);
-			itemSkuScaleMapperExt.insertSelective(scale);
+			scaleService.insertSelective(scale);
 		}	
 	
 		return result.buildIsSuccess(true).buildMsg("更新成功");
@@ -165,7 +169,7 @@ public class ItemSkuController  {
 		//if haven't item id ,add item
 		if(null != skuCode) {
 			ISkuDTO itemSku = iItemSkuService.queryItemSkuBySkuCode(skuCode);
-			List<ItemSkuScaleDO> skuScaleList = itemSkuScaleMapperExt.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
+			List<ItemSkuScaleDO> skuScaleList = scaleService.selectScaleNameValueBySkuCode(itemSku.getSkuCode());
         	if(!EasyUtil.isListEmpty(skuScaleList)) {
         		for(ItemSkuScaleDO scale:skuScaleList) {
         			if("颜色".equals(scale.getScaleName())) {

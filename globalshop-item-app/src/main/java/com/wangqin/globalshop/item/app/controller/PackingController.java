@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
-import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackagePatternDTO;
-import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.PackageLevelQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ShippingPackingScaleQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackagePatternDTO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemPackageScaleDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ShippingPackingPatternDO;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
-import com.wangqin.globalshop.item.app.service.IItemPackagePatternService;
-import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
+import com.wangqin.globalshop.item.api.packing.ItemPackagePatternFeignService;
+import com.wangqin.globalshop.item.api.packing.ItemPackageScaleFeignService;
 
 
 /**
@@ -34,11 +34,17 @@ import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
 @Authenticated
 public class PackingController {
 
-	@Autowired
-	private IItemPackageScaleService shippingPackingScaleService;
+//	@Autowired
+//	private IItemPackageScaleService shippingPackingScaleService;
+//	
+//	@Autowired
+//	private IItemPackagePatternService iPackageLevelService;
 	
 	@Autowired
-	private IItemPackagePatternService iPackageLevelService;
+	private ItemPackageScaleFeignService shippingPackingScaleService;
+	
+	@Autowired
+	private ItemPackagePatternFeignService iPackageLevelService;
 	
 	@RequestMapping("/freight/getPackageScaleList")
 	@ResponseBody

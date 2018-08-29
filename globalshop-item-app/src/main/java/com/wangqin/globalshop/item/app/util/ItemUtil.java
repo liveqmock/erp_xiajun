@@ -23,7 +23,7 @@ import com.wangqin.globalshop.common.enums.ItemIsSale;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-
+import com.wangqin.globalshop.common.utils.StringUtils;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -335,5 +335,9 @@ public class ItemUtil {
     		item.setSaleOnChannels(noList);
     	} 	
     }
+    
+    
+    
+    
 
 }
