@@ -10,12 +10,13 @@
     <result column="shop_code" property="shopCode" jdbcType="VARCHAR" />
     <result column="channel_item_alias" property="channelItemAlias" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="category_json" property="categoryJson" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, item_code, channel_no, company_no, channel_item_code, shop_code, channel_item_alias, 
-    status, creator, modifier
+    status, modifier, creator, category_json
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -33,12 +34,12 @@
     </selectKey>
     insert into channel_listing_item (item_code, channel_no, company_no, 
       channel_item_code, shop_code, channel_item_alias, 
-      status, creator, modifier
-      )
+      status, modifier, creator, 
+      category_json)
     values (#{itemCode,jdbcType=VARCHAR}, #{channelNo,jdbcType=VARCHAR}, #{companyNo,jdbcType=VARCHAR}, 
       #{channelItemCode,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{channelItemAlias,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}
-      )
+      #{status,jdbcType=INTEGER}, #{modifier,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{categoryJson,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -67,11 +68,14 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
       <if test="creator != null" >
         creator,
       </if>
-      <if test="modifier != null" >
-        modifier,
+      <if test="categoryJson != null" >
+        category_json,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -96,11 +100,14 @@
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
+      <if test="categoryJson != null" >
+        #{categoryJson,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -128,11 +135,14 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null" >
-        modifier = #{modifier,jdbcType=VARCHAR},
+      <if test="categoryJson != null" >
+        category_json = #{categoryJson,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -146,8 +156,9 @@
       shop_code = #{shopCode,jdbcType=VARCHAR},
       channel_item_alias = #{channelItemAlias,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
+      modifier = #{modifier,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR}
+      category_json = #{categoryJson,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

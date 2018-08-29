@@ -3,23 +3,21 @@ package com.wangqin.globalshop.order.app.service.mall.impl;
 import com.alibaba.fastjson.JSON;
 import com.sun.tools.javac.api.ClientCodeWrapper;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.enums.OrderStatus;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.MallSubOrderMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.SequenceUtilMapperExt;
 import com.wangqin.globalshop.channelapi.dal.GlobalshopOrderVo;
 import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
+import com.wangqin.globalshop.channelapi.service.ChannelCommonService;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.*;
 import com.wangqin.globalshop.deal.app.service.IDealerService;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
 import com.wangqin.globalshop.order.app.service.item.OrderItemSkuService;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +31,10 @@ import java.util.List;
 @Service
 public class MallOrderServiceImpl implements IMallOrderService {
 
-    //in seconds
+	protected Logger logger = LogManager.getLogger("MallOrderServiceImpl");
+
+
+	//in seconds
     private static final long NEW_TASK_TIMEOUT = 600;
     @Autowired
     private MallOrderMapperExt mallOrderDOMapper;
@@ -50,6 +51,17 @@ public class MallOrderServiceImpl implements IMallOrderService {
 
     @Autowired
     private SequenceUtilMapperExt sequenceUtilMapperExt;
+
+
+	@Autowired
+	private ChannelListingItemSkuDOMapperExt outItemSkuMapper;
+
+	@Autowired
+	private ChannelShopDOMapperExt shopDOMapperExt;
+
+
+	@Autowired
+	private ChannelCommonService channelCommonService;
 
     @Override
     public MallOrderDO selectById(Long id) {
@@ -74,6 +86,10 @@ public class MallOrderServiceImpl implements IMallOrderService {
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
     public void addOuterOrder(MallOrderVO outerOrder) {
+
+
+    	addOuterOrder4IntraMirror(outerOrder);
+
         outerOrder.setOrderNo(CodeGenUtil.getOrderNo());
         CompanyDO companyDO = companyDOMapper.selectByCompanyNo(AppUtil.getLoginUserCompanyNo());
         if (companyDO == null) {
@@ -114,6 +130,50 @@ public class MallOrderServiceImpl implements IMallOrderService {
         mallOrderDOMapper.insertSelective(outerOrder);
 
     }
+
+	/**
+	 * 处理intramirror下单情况
+	 */
+	private void addOuterOrder4IntraMirror(MallOrderVO mallOrderVo){
+
+		List<MallSubOrderDO> subOrderDOList = mallOrderVo.getOuterOrderDetails();
+
+		//第一步：查询当前商户是否有intramirror店铺
+        ChannelShopDO shopSo = new ChannelShopDO();
+        shopSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+        shopSo.setChannelNo(ChannelType.IntraMirror.getValue()+"");
+        shopSo.setOpen(true);
+		ChannelShopDO channelShop = shopDOMapperExt.searchShop(shopSo);
+		if(channelShop == null){
+			return;
+		}
+
+		//第二步：判断商品是否是intramirror商品
+		for(MallSubOrderDO subOrderDO : subOrderDOList){
+			ChannelListingItemSkuDO outSkuSo = new ChannelListingItemSkuDO();
+			outSkuSo.setCompanyNo(AppUtil.getLoginUserCompanyNo());
+			outSkuSo.setItemCode(subOrderDO.getItemCode());
+			outSkuSo.setSkuCode(subOrderDO.getSkuCode());
+			ChannelListingItemSkuDO relateSku = outItemSkuMapper.queryPo(outSkuSo);
+			if(relateSku == null){
+				logger.info("商品不是intramirror商品："+subOrderDO.getItemCode()+subOrderDO.getSkuCode()+" 不进行远程下单");
+				return;
+			}
+			subOrderDO.setReceiver(mallOrderVo.getReceiver());
+			subOrderDO.setReceiverCountry(mallOrderVo.getReceiverCountry());
+			subOrderDO.setReceiverState(mallOrderVo.getReceiverState());
+			subOrderDO.setReceiverCity(mallOrderVo.getReceiverCity());
+			subOrderDO.setReceiverDistrict(mallOrderVo.getReceiverDistrict());
+			subOrderDO.setReceiverAddress(mallOrderVo.getAddressDetail());
+			subOrderDO.setTelephone(mallOrderVo.getTelephone());
+		}
+		//第三步：补充收件信息
+
+
+		//第四步：远程下单：
+		channelCommonService.createOrder(channelShop.getShopCode(),mallOrderVo,mallOrderVo.getOuterOrderDetails());
+	}
+
 
     @Override
     public void review(String orderNo) {

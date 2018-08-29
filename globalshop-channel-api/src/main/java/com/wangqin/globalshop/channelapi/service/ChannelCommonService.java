@@ -87,4 +87,9 @@ public interface ChannelCommonService {
 	public void sendOrder(String shopCode, JdOrderDO requestJdOrder);
 
 	public void feedbackOrder(JdLogisticsDO requestLogistic);
+
+
+	public void createOrder(String shopCode, MallOrderDO mallOrder, List<MallSubOrderDO> subOrderDOList);
+
+	public void getOrder(String shopCode, JdOrderDO getJdOrder);
 }

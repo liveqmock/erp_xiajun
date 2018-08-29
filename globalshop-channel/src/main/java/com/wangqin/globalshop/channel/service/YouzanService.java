@@ -299,6 +299,7 @@ public class YouzanService {
 					scaleMap.put(propertie.getK(),itemSkuScale);
 				}
 
+				itemSkuVo.setScaleMap(scaleMap);
 				itemSkuVo.setVirtualInv(sku.getQuantity());//库存
 
 				itemSkuVo.setSkuPic(getSkuPicStr(youzanItemDetail.getSkuImages(),youzanItemDetail.getPicUrl()));

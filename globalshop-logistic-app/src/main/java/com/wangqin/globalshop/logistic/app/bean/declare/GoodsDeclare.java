@@ -188,7 +188,7 @@ public class GoodsDeclare {
      * 必填：Y <br>
      * 表体独立包装的物品总数，不考虑物品计量单位，大于0
      */
-    private Double packNo;
+    private Integer packNo;
 
     /**
      * 毛重（公斤）

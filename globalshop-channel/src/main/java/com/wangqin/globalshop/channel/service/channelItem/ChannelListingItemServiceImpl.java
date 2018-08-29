@@ -93,6 +93,7 @@ public class ChannelListingItemServiceImpl implements IChannelListingItemService
 
 			channelListingItemDOMapperExt.insert(oldTbItem);
 		}else{
+			oldTbItem.setCategoryJson(channelListingItemVo.getCategoryJson());
 			oldTbItem.setIsDel(false);
 			oldTbItem.setGmtModify(new Date());
 			oldTbItem.setModifier("-1");
@@ -121,6 +122,7 @@ public class ChannelListingItemServiceImpl implements IChannelListingItemService
 				oldSku.setIsDel(false);
 				oldSku.setGmtModify(new Date());
 				oldSku.setModifier("-1");
+				oldSku.setShopProductSkuId(channelListingItemSkuVo.getShopProductSkuId());
 				skuDOMapperExt.updateByPrimaryKeySelective(oldSku);
 			}
 		}

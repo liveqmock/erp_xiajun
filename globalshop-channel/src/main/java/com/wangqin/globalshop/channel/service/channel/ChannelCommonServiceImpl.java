@@ -5,6 +5,7 @@ import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelAccountSo;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.HaihuService;
+import com.wangqin.globalshop.channel.service.IntraMirrorService;
 import com.wangqin.globalshop.channel.service.YouzanService;
 import com.wangqin.globalshop.channel.service.channelAccount.IChannelAccountService;
 import com.wangqin.globalshop.channel.service.channelItem.IChannelListingItemService;
@@ -58,6 +59,10 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 	@Autowired
 	private HaihuService haihuService;
+
+
+	@Autowired
+	private IntraMirrorService imService;
 
 	@Autowired
 	private JdOrderService jdOrderService;
@@ -374,6 +379,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 
 			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
 				youzanService.getAllItems(shopOauth);
+			}else if(Integer.valueOf(ChannelType.IntraMirror.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				imService.getAllItems(shopOauth);
 			}else{
 				throw new ErpCommonException("","暂不支持该方法");
 			}
@@ -402,6 +409,8 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 			GlobalShopItemVo globalShopItemVo = null;
 			if(Integer.valueOf(ChannelType.YouZan.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
 				 globalShopItemVo = youzanService.convertYZItem(shopOauth,jdItem);
+			}else if(Integer.valueOf(ChannelType.IntraMirror.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				globalShopItemVo = imService.convertYZItem(shopOauth,jdItem);
 			}else{
 				throw new ErpCommonException("","暂不支持该方法");
 			}
@@ -465,7 +474,73 @@ public class ChannelCommonServiceImpl implements ChannelCommonService {
 		}
 
 	}
+	/**
+	 * intraMirror 远程下单
+	 * @param shopCode
+	 * @param mallOrder
+	 * @param subOrderDOList
+	 */
+	public void createOrder(String shopCode, MallOrderDO mallOrder, List<MallSubOrderDO> subOrderDOList){
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setShopCode(shopCode);
+		shopOauthSo.setIsDel(false);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
 
+		if(shopOauth == null){
+			throw new ErpCommonException("shop_error","未找到对应店铺信息shopCode:"+shopCode);
+		}
+		//0正常，1关闭
+		if (!shopOauth.getOpen()) {
+			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+shopCode);
+		}
+
+
+		try {
+			if(Integer.valueOf(ChannelType.IntraMirror.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				imService.createOrder(shopOauth,mallOrder,subOrderDOList);
+			}else{
+				throw new ErpCommonException("","暂不支持该方法");
+			}
+		}catch (ErpCommonException e){
+			throw e;
+		}catch (Exception e){
+			throw e;
+		}
+
+	}
+
+	/**
+	 * intraMirror根据订单号获取详情
+	 * @param shopCode
+	 * @param getJdOrder
+	 */
+	public void getOrder(String shopCode, JdOrderDO getJdOrder){
+		JdShopOauthDO shopOauthSo = new JdShopOauthDO();
+		shopOauthSo.setShopCode(shopCode);
+		shopOauthSo.setIsDel(false);
+		JdShopOauthDO shopOauth = shopOauthService.searchShopOauth(shopOauthSo);
+
+		if(shopOauth == null){
+			throw new ErpCommonException("shop_error","未找到对应店铺信息shopCode:"+shopCode);
+		}
+		//0正常，1关闭
+		if (!shopOauth.getOpen()) {
+			throw new ErpCommonException("shop_error","当前店铺已停用，请重新启用shopCode:"+shopCode);
+		}
+
+
+		try {
+			if(Integer.valueOf(ChannelType.IntraMirror.getValue()).equals(Integer.valueOf(shopOauth.getChannelNo()))){
+				imService.getOrder(shopOauth,getJdOrder);
+			}else{
+				throw new ErpCommonException("","暂不支持该方法");
+			}
+		}catch (ErpCommonException e){
+			throw e;
+		}catch (Exception e){
+			throw e;
+		}
+	}
 
 
 }

@@ -7,34 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
+import com.wangqin.globalshop.common.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelSalePriceDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.channel.Exception.ErpCommonException;
 import com.wangqin.globalshop.channel.service.item.IItemService;
 import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
 import com.wangqin.globalshop.channelapi.dal.ItemVo;
 import com.wangqin.globalshop.common.base.BaseDto;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
-import com.wangqin.globalshop.common.utils.ImageUtil;
-import com.wangqin.globalshop.common.utils.ImgUtil;
-import com.wangqin.globalshop.common.utils.IsEmptyUtil;
-import com.wangqin.globalshop.common.utils.PriceUtil;
 
 /**
  * Item 表数据服务层接口实现类
@@ -65,6 +52,10 @@ public class ItemServiceImpl implements IItemService {
 
     @Autowired
 	private ChannelSalePriceDOMapperExt priceDOMapperExt;
+
+
+    @Autowired
+	private ItemCategoryMapperExt categoryMapperExt;
 
     //渠道商品专用：根据item_code更新商品
     @Override
@@ -195,7 +186,16 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setCreator(USER_NO);
     	itemDO.setModifier(USER_NO);
     	itemDO.setStatus(item.getStatus());
-    	
+
+    	//类目处理,传过来不为空，专门处理
+		if(!EasyUtil.isStringEmpty(item.getCategoryCode())){
+			ItemCategoryDO itemCategoryDO = categoryMapperExt.queryByCategoryCode(item.getCategoryCode());
+			if(itemCategoryDO != null){
+				itemDO.setCategoryCode(itemCategoryDO.getCategoryCode());
+				itemDO.setCategoryName(itemCategoryDO.getName());
+			}
+		}
+
     	//插入商品表
     	itemDOMapper.insertItemSelective(itemDO);
     	
@@ -245,13 +245,13 @@ public class ItemServiceImpl implements IItemService {
     			//插入规格表
     			itemSkuScaleDOMapper.insertSelective(color);
     		}
-    		if (IsEmptyUtil.isStringNotEmpty(sku.getScale())) {
+    		if (IsEmptyUtil.isStringNotEmpty(sku.getSize())) {
     			ItemSkuScaleDO scale = new ItemSkuScaleDO();
     			scale.setItemCode(itemCode);
     			scale.setSkuCode(skuCode);
     			scale.setScaleCode(CodeGenUtil.getScaleCode());
     			scale.setScaleName("尺寸");
-    			scale.setScaleValue(sku.getScale());
+    			scale.setScaleValue(sku.getSize());
     			scale.setCreator(USER_NO);
     			scale.setModifier(USER_NO);
     			//插入规格表
@@ -317,6 +317,16 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setItemName(item.getItemName());
     	itemDO.setMainPic(handlePic(item.getMainPic()));
     	itemDO.setStatus(item.getStatus());
+
+		//类目处理,传过来不为空，专门处理
+		if(!EasyUtil.isStringEmpty(item.getCategoryCode())){
+			ItemCategoryDO itemCategoryDO = categoryMapperExt.queryByCategoryCode(item.getCategoryCode());
+			if(itemCategoryDO != null){
+				itemDO.setCategoryCode(itemCategoryDO.getCategoryCode());
+				itemDO.setCategoryName(itemCategoryDO.getName());
+			}
+		}
+
     	itemDOMapper.updateItemByItemCode(itemDO);
     }
     
@@ -370,7 +380,40 @@ public class ItemServiceImpl implements IItemService {
     			addSku.setModifier(USER_NO);
     			itemSkuDOMapper.insertSelective(addSku);
     		}
-    	}	
+
+    		//规格处理,先删除，再更新
+			List<ItemSkuScaleDO> skuScaleDOS = itemSkuScaleDOMapper.selectScaleNameValueBySkuCode(sku.getSkuCode());
+    		for(ItemSkuScaleDO skuScaleDO : skuScaleDOS){
+				itemSkuScaleDOMapper.deleteByPrimaryKey(skuScaleDO.getId());
+			}
+
+
+			//计算规格
+			if (IsEmptyUtil.isStringNotEmpty(sku.getColor())) {
+				ItemSkuScaleDO color = new ItemSkuScaleDO();
+				color.setItemCode(itemCode);
+				color.setSkuCode(sku.getSkuCode());
+				color.setScaleCode(CodeGenUtil.getScaleCode());
+				color.setScaleName("颜色");
+				color.setScaleValue(sku.getColor());
+				color.setCreator(USER_NO);
+				color.setModifier(USER_NO);
+				//插入规格表
+				itemSkuScaleDOMapper.insertSelective(color);
+			}
+			if (IsEmptyUtil.isStringNotEmpty(sku.getSize())) {
+				ItemSkuScaleDO scale = new ItemSkuScaleDO();
+				scale.setItemCode(itemCode);
+				scale.setSkuCode(sku.getSkuCode());
+				scale.setScaleCode(CodeGenUtil.getScaleCode());
+				scale.setScaleName("尺寸");
+				scale.setScaleValue(sku.getSize());
+				scale.setCreator(USER_NO);
+				scale.setModifier(USER_NO);
+				//插入规格表
+				itemSkuScaleDOMapper.insertSelective(scale);
+			}
+		}
     }
     
     @Override

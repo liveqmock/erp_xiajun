@@ -9,6 +9,9 @@ public enum PlatformType {
 	HAIHU(2, "海狐"),
 	TAOBAO(3, "淘宝"),
 	JingDong(4,"京东"),
+
+	IntraMirror(5,"IntraMirror"),
+
 	WEIXIN(101, "微信"),
 	WEIXINXCX(102, "微信小程序");
 	
