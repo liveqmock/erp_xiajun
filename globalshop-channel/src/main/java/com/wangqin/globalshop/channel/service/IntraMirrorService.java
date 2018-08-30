@@ -206,7 +206,8 @@ public class IntraMirrorService {
 		itemVo.setMainPic(getMainPic(product.getCover_img()));//本身就是list
 		itemVo.setDetail(product.getProduct_description());
 
-		itemVo.setStatus(ItemStatus.LISTING.getCode());
+		itemVo.setStatus(ItemStatus.INIT.getCode());
+		itemVo.setCountry("459");
 
 		//类目处理
 		itemVo.setCategoryCode(IMCategory.intraMirrorCatagoryMap.get(product.getCategory_l3_id()+""));
