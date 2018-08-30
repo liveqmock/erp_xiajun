@@ -41,12 +41,12 @@ public class CategoryController  {
 	private static final String P_CODE_OF_ROOT_CATEGORY = "0000000";
 	
     //旧的service	
-//	@Autowired
-//	private IItemCategoryService categoryService;
+	@Autowired
+	private IItemCategoryService categoryService;
 	
 	//新的service
-	@Autowired
-	private ItemCategoryFeignService categoryService;//feign声明式服务的高级版
+//	@Autowired
+//	private ItemCategoryFeignService categoryService;//feign声明式服务的高级版
 
 	/**
 	 * 添加类目（fin)，提供name和pcode

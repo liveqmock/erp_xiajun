@@ -29,7 +29,6 @@ import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.CodeGenUtil;
@@ -40,9 +39,9 @@ import com.wangqin.globalshop.common.utils.PicModel;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.api.scale.ItemSkuScaleFeignService;
-import com.wangqin.globalshop.item.api.sku.ItemSkuFeignService;
 import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
 /**
  * 商品SKU处理器
@@ -55,28 +54,26 @@ import com.wangqin.globalshop.item.app.service.IItemService;
 public class ItemSkuController  {
 
 	//旧的service
-//	@Autowired
-//	private IItemSkuService iItemSkuService;
-	
-//	@Autowired
-//	private IItemSkuScaleService scaleService;
-	
-//	@Autowired
-//	private IItemService itemService;
+	@Autowired
+	private IItemSkuService iItemSkuService;
+	@Autowired
+	private IItemSkuScaleService scaleService;	
+	@Autowired
+	private IItemService itemService;
 
 	@Autowired
 	private InventoryService inventoryService;
 	
 
 	//新的service
-	@Autowired
-	private ItemSkuFeignService iItemSkuService;
-	
-	@Autowired
-	private ItemSkuScaleFeignService scaleService;
-	
-	@Autowired
-	private IItemService itemService;
+//	@Autowired
+//	private ItemSkuFeignService iItemSkuService;
+//	
+//	@Autowired
+//	private ItemSkuScaleFeignService scaleService;
+//	
+//	@Autowired
+//	private IItemService itemService;
 
 
 	

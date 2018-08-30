@@ -13,20 +13,20 @@ import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.api.channel.ItemChannelAccountFeignService;
+import com.wangqin.globalshop.item.app.service.IItemChannelAccountService;
 
 @Authenticated
 @Controller
 public class ItemChannelAccountController {
 
     //旧的service
-//	@Autowired
-//	private IItemChannelAccountService itemChannelAccountService;
+	@Autowired
+	private IItemChannelAccountService itemChannelAccountService;
 	
 	
 	//新的service
-	@Autowired
-	private ItemChannelAccountFeignService itemChannelAccountService;
+//	@Autowired
+//	private ItemChannelAccountFeignService itemChannelAccountService;
 	
 	/**
 	 * 获取当前用户所在公司可用的渠道类型

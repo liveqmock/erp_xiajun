@@ -20,8 +20,8 @@ import com.wangqin.globalshop.common.utils.JsonPageResult;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtils;
-import com.wangqin.globalshop.item.api.packing.ItemPackagePatternFeignService;
-import com.wangqin.globalshop.item.api.packing.ItemPackageScaleFeignService;
+import com.wangqin.globalshop.item.app.service.IItemPackagePatternService;
+import com.wangqin.globalshop.item.app.service.IItemPackageScaleService;
 
 
 /**
@@ -35,18 +35,18 @@ import com.wangqin.globalshop.item.api.packing.ItemPackageScaleFeignService;
 public class PackingController {
 
 	//旧的service
-//	@Autowired
-//	private IItemPackageScaleService shippingPackingScaleService;
-//	
-//	@Autowired
-//	private IItemPackagePatternService iPackageLevelService;
+	@Autowired
+	private IItemPackageScaleService shippingPackingScaleService;
+	
+	@Autowired
+	private IItemPackagePatternService iPackageLevelService;
 	
 	//新的service
-	@Autowired
-	private ItemPackageScaleFeignService shippingPackingScaleService;
-	
-	@Autowired
-	private ItemPackagePatternFeignService iPackageLevelService;
+//	@Autowired
+//	private ItemPackageScaleFeignService shippingPackingScaleService;
+//	
+//	@Autowired
+//	private ItemPackagePatternFeignService iPackageLevelService;
 	
 	@RequestMapping("/freight/getPackageScaleList")
 	@ResponseBody

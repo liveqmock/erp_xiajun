@@ -1,36 +1,21 @@
 package com.wangqin.globalshop.item.app.controller;
-
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
-
-import org.jboss.netty.util.EstimatableObjectWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
 import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
@@ -44,7 +29,6 @@ import com.wangqin.globalshop.biz1.app.enums.ItemStatus;
 import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
 import com.wangqin.globalshop.common.enums.AppletType;
 import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.CodeGenUtil;
 import com.wangqin.globalshop.common.utils.DateUtil;
 import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
 import com.wangqin.globalshop.common.utils.EasyuiJsonResult;
@@ -55,16 +39,8 @@ import com.wangqin.globalshop.common.utils.ItemEnCodeUtil;
 import com.wangqin.globalshop.common.utils.PriceUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
-import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.common.utils.excel.ReadExcel;
 import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.api.brand.ItemBrandFeignService;
-import com.wangqin.globalshop.item.api.category.ItemCategoryFeignService;
-import com.wangqin.globalshop.item.api.item.ItemFeignService;
-import com.wangqin.globalshop.item.api.scale.ItemSkuScaleFeignService;
-import com.wangqin.globalshop.item.api.sku.ItemSkuFeignService;
-import com.wangqin.globalshop.item.api.util.AppletConfigFeignService;
-import com.wangqin.globalshop.item.api.util.UploadFileService;
 import com.wangqin.globalshop.item.app.service.IAppletConfigService;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
@@ -72,7 +48,6 @@ import com.wangqin.globalshop.item.app.service.IItemCompanyService;
 import com.wangqin.globalshop.item.app.service.IItemService;
 import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-
 import com.wangqin.globalshop.item.app.util.ItemUtil;
 
 import net.sf.json.JSONObject;
@@ -89,45 +64,43 @@ import net.sf.json.JSONObject;
 public class ItemController {
 
 	  //旧的service
-//    @Autowired
-//    private IItemBrandService brandService;
-//    @Autowired
-//    private IItemCategoryService categoryService;
-//    @Autowired
-//    private IItemService itemService;
+    @Autowired
+    private IItemBrandService brandService;
+    @Autowired
+    private IItemCategoryService categoryService;
+    @Autowired
+    private IItemService itemService;
     @Autowired
     private InventoryService inventoryService;
-//    @Autowired
-//    private IItemSkuService itemSkuService;
-//    @Autowired
-//    private IItemSkuScaleService scaleService;
-//    @Autowired
-//    private IAppletConfigService appletConfigService;
+    @Autowired
+    private IItemSkuService itemSkuService;
+    @Autowired
+    private IItemSkuScaleService scaleService;
+    @Autowired
+    private IAppletConfigService appletConfigService;
     @Autowired
     private IItemCompanyService companyService;
-    @Autowired
-    private UploadFileService uploadFileService;
     @Autowired
     private ItemQrcodeShareDOMapperExt shareMapperExt;
 
     
     //新的service
-    @Autowired
-    private ItemBrandFeignService brandService;
-    @Autowired
-    private ItemCategoryFeignService categoryService;
-    @Autowired
-    private ItemFeignService itemService;
-    @Autowired
-    private ItemSkuFeignService itemSkuService;
-    @Autowired
-    private ItemSkuScaleFeignService scaleService;    
-    @Autowired
-    private AppletConfigFeignService appletConfigService;
+//    @Autowired
+//    private ItemBrandFeignService brandService;
+//    @Autowired
+//    private ItemCategoryFeignService categoryService;
+//    @Autowired
+//    private ItemFeignService itemService;
+//    @Autowired
+//    private ItemSkuFeignService itemSkuService;
+//    @Autowired
+//    private ItemSkuScaleFeignService scaleService;    
+//    @Autowired
+//    private AppletConfigFeignService appletConfigService;
+//    @Autowired
+//    private ItemCompanyFeignService companyService;
     
-    //临时，商品的导入还没有迁移过去
-    @Autowired
-    private IItemService itemTempService;
+
 
 
     public static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
@@ -566,7 +539,7 @@ public class ItemController {
             if (!file.isEmpty()) {
                 // 文件保存路径
                 List<List<Object>> list = ReadExcel.readExcel(file.getInputStream(), file.getOriginalFilename(), 1, 0, 16);
-                itemTempService.importItem(list);
+                itemService.importItem(list);
             }
         } catch (IOException e) {
             return result.buildIsSuccess(false).buildMsg("文件上传错误，请重试");

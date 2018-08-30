@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
-import com.wangqin.globalshop.item.api.util.UploadFileFeginService;
+import com.wangqin.globalshop.item.app.service.IUploadFileService;
 
 
 
@@ -22,13 +22,13 @@ import com.wangqin.globalshop.item.api.util.UploadFileFeginService;
  */
 @Controller
 public class ItemUploadFileController {
-    //旧的service
-//	@Autowired
-//	private IUploadFileService uploadFileService;
+    //旧的service，暂时不要切换
+	@Autowired
+	private IUploadFileService uploadFileService;
 	
     //新的service
-	@Autowired
-	private UploadFileFeginService uploadFileService;
+//	@Autowired
+//	private UploadFileFeginService uploadFileService;
 	
 	/**
 	 * 图片上传接口
