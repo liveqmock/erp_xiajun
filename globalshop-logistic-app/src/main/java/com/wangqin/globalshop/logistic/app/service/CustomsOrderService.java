@@ -3,17 +3,20 @@ package com.wangqin.globalshop.logistic.app.service;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
 import com.wangqin.globalshop.biz1.app.dal.mapperExt.CustomsOrderDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.CustomsOrderDetailDOMapperExt;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfGoodsPurchaser;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfOrderDetail;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfOrderImportHead;
 import com.wangqin.globalshop.logistic.app.bean.order.OrderInfo;
+import com.wangqin.globalshop.logistic.app.bean.result.JkfResult;
 import com.wangqin.globalshop.logistic.app.bean.xml.Body;
 import com.wangqin.globalshop.logistic.app.bean.xml.Head;
 import com.wangqin.globalshop.logistic.app.bean.xml.Mo;
 import com.wangqin.globalshop.logistic.app.constant.BusinessType;
 import com.wangqin.globalshop.logistic.app.constant.CustomsConst;
 import com.wangqin.globalshop.logistic.app.util.EncryptionUtil;
+import com.wangqin.globalshop.logistic.app.util.XStreamUtil;
 import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
 import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
 import org.apache.axis.client.Service;
@@ -46,9 +49,12 @@ public class CustomsOrderService {
     @Autowired
     private CustomsOrderDOMapperExt customsOrderDOMapper;
 
+    @Autowired
+    private CustomsOrderDetailDOMapperExt customsOrderDetailDOMapper;
+
 
     /**
-     * 电商平台发送商品订单数据到通关服务平台
+     * 电商平台发送商品订单数据到通关服务平台（参数待定）
      */
     public void sendOrderMessage(String orderNo) {
         // 获取主订单信息
@@ -66,13 +72,30 @@ public class CustomsOrderService {
         JkfGoodsPurchaser jkfGoodsPurchaser = buildJkfGoodsPurchaser();
         Mo mo = buildOrderMo(jkfSign, jkfOrderImportHead, jkfOrderDetailList, jkfGoodsPurchaser);
 
-        // 发送报文，接收回执
+        // 存储信息（将 Mo 中的信息存储到 customs_order、customs_order_detail 表中）
 
-        // 存储信息
+        try {
+            // 发送报文，处理回执
+            String moXml = XStreamUtil.toXml(mo, Mo.class);
+            String responseXml = callReceiveEncryptDeclareService(moXml, BusinessType.IMPORTORDER);
+            // 将回执转换为 Mo 对象，以便处理
+            Mo respMo = XStreamUtil.toBean(responseXml, Mo.class);
+            // 根据处理结果，更新 customs_order 表
+            if (respMo != null) {
+                JkfResult jkfResult = respMo.getBody().getList().get(0);
+                // 处理结果
+                Character chkMark = jkfResult.getChkMark();
+                // 第一条处理结果明细
+                String resultInfo = jkfResult.getResultList().get(0).getResultInfo();
+                // ...
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * 构建签名信息
+     * 构建签名信息（参数待定）
      *
      * @return
      */
@@ -92,9 +115,8 @@ public class CustomsOrderService {
     }
 
     /**
-     * 构建订单表头信息
+     * 构建订单表头信息（参数待定）
      *
-     * @param orderNo 订单编号（待定）
      * @return
      */
     private JkfOrderImportHead buildJkfOrderImportHead(String orderNo) {
@@ -177,7 +199,7 @@ public class CustomsOrderService {
     }
 
     /**
-     * 构建订单表体明细
+     * 构建订单表体明细（参数待定）
      *
      * @return
      */
@@ -214,7 +236,7 @@ public class CustomsOrderService {
     }
 
     /**
-     * 构建订单购买人信息
+     * 构建订单购买人信息（参数待定）
      *
      * @return
      */
@@ -241,7 +263,7 @@ public class CustomsOrderService {
 
 
     /**
-     * 构建订单报文对应的 Mo
+     * 构建订单报文对应的 Mo 实体对象
      *
      * @param jkfSign            签名信息
      * @param jkfOrderImportHead 订单表头信息
@@ -289,11 +311,12 @@ public class CustomsOrderService {
      *
      * @param originalContent 报文原文
      * @param msgType         报文业务类型
-     * @return
+     * @return 响应报文
      * @throws Exception
      */
+    @SuppressWarnings("Duplicates")
     private String callReceiveEncryptDeclareService(String originalContent, String msgType) throws Exception {
-        logger.info("发送报文：", originalContent);
+        logger.info("发送报文：{}", originalContent);
 
         byte[] inputContent = originalContent.getBytes("utf-8");
         // 报文密文
@@ -317,10 +340,10 @@ public class CustomsOrderService {
         call.addParameter("sendCode", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
         call.setReturnType(org.apache.axis.encoding.XMLType.XSD_STRING);
         // 接收回执报文
-        String result = (String) call.invoke(new Object[]{content, msgType, dataDigest, sendCode});
+        String response = (String) call.invoke(new Object[]{content, msgType, dataDigest, sendCode});
 
-        logger.info("接收回执报文：", result);
+        logger.info("接收回执报文：{}", response);
 
-        return result;
+        return response;
     }
 }

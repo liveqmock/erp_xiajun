@@ -38,8 +38,7 @@ public class CustomsController {
 
         StringBuilder builder = new StringBuilder();
         try (BufferedReader reader =
-                     new BufferedReader(
-                             new InputStreamReader(request.getInputStream()))) {
+                     new BufferedReader(new InputStreamReader(request.getInputStream()))) {
             // 获取请求体信息（回执报文）
             reader.lines().forEach(builder::append);
         } catch (IOException e) {
@@ -52,7 +51,7 @@ public class CustomsController {
         Mo mo = XStreamUtil.toBean(reqBody, Mo.class);
         logger.info("mo: {}", mo);
 
-        // 根据回执报文类型调用相应业务进行处理
+        // 根据回执报文类型调用相应 service 进行处理
         switch (mo.getHead().getBusinessType()) {
             case BusinessType.IMPORTORDER:
                 break;
@@ -62,7 +61,7 @@ public class CustomsController {
                 break;
             default:
         }
-
+        // 目前是直接返回报文
         result.buildData(mo).setSuccess(true);
         return result;
     }

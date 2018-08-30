@@ -9,7 +9,13 @@ import com.wangqin.globalshop.logistic.app.bean.xml.Head;
 import com.wangqin.globalshop.logistic.app.bean.xml.Mo;
 import com.wangqin.globalshop.logistic.app.constant.BusinessType;
 import com.wangqin.globalshop.logistic.app.constant.CustomsConst;
+import com.wangqin.globalshop.logistic.app.util.EncryptionUtil;
+import org.apache.axis.client.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.xml.namespace.QName;
+import javax.xml.rpc.Call;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +26,7 @@ import java.util.List;
  * @date 2018/8/28
  */
 public class CustomsDeclareService {
+    private Logger logger = LoggerFactory.getLogger(CustomsDeclareService.class);
 
     /**
      * 清单写入跨境电商通关服务平台
@@ -29,7 +36,7 @@ public class CustomsDeclareService {
     }
 
     /**
-     * 构建签名信息
+     * 构建签名信息（参数待定）
      *
      * @return
      */
@@ -156,6 +163,14 @@ public class CustomsDeclareService {
         return goodsDeclareDetails;
     }
 
+    /**
+     * 构建订单报文对应的 Mo 实体对象
+     *
+     * @param jkfSign             签名信息
+     * @param goodsDeclare        清单表头信息
+     * @param goodsDeclareDetails 清单表体信息
+     * @return
+     */
     private Mo buildDeclareMo(JkfSign jkfSign, GoodsDeclare goodsDeclare, List<GoodsDeclareDetail> goodsDeclareDetails) {
         Head head = Head.builder()
                 .businessType(BusinessType.PERSONAL_GOODS_DECLAR)
@@ -179,5 +194,46 @@ public class CustomsDeclareService {
                 .head(head)
                 .body(body)
                 .build();
+    }
+
+    /**
+     * 调用海关申报数据接口
+     *
+     * @param originalContent 报文原文
+     * @param msgType         报文业务类型
+     * @return 响应报文
+     * @throws Exception
+     */
+    @SuppressWarnings("Duplicates")
+    private String callReceiveEncryptDeclareService(String originalContent, String msgType) throws Exception {
+        logger.info("发送报文：{}", originalContent);
+
+        byte[] inputContent = originalContent.getBytes("utf-8");
+        // 报文密文
+        String content = EncryptionUtil.getEncContent(inputContent);
+        // 验签字串
+        String dataDigest = EncryptionUtil.getSign(inputContent);
+        // 发送方代码
+        String sendCode = CustomsConst.COMPANY_CODE;
+
+        Call call = new Service().createCall();
+        String targetNamespace = "http://ws.newyork.zjport.gov.cn/";
+        call.setTargetEndpointAddress("http://122.224.230.4:18003/newyorkWS/ws/ReceiveEncryptDeclare?wsdl");
+        call.setOperationName(new QName(targetNamespace, "receive"));
+        // 报文密文参数
+        call.addParameter("content", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        // 报文类型参数
+        call.addParameter("msgType", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        // 签名参数
+        call.addParameter("dataDigest", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        // 发送方代码参数
+        call.addParameter("sendCode", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        call.setReturnType(org.apache.axis.encoding.XMLType.XSD_STRING);
+        // 接收回执报文
+        String response = (String) call.invoke(new Object[]{content, msgType, dataDigest, sendCode});
+
+        logger.info("接收回执报文：{}", response);
+
+        return response;
     }
 }

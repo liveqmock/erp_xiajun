@@ -1,8 +1,5 @@
 package com.wangqin.globalshop.logistic.app;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.QNameMap;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.declare.GoodsDeclare;
 import com.wangqin.globalshop.logistic.app.bean.declare.GoodsDeclareDetail;
@@ -17,8 +14,8 @@ import com.wangqin.globalshop.logistic.app.bean.xml.Mo;
 import com.wangqin.globalshop.logistic.app.constant.BusinessType;
 import com.wangqin.globalshop.logistic.app.constant.CustomsConst;
 import com.wangqin.globalshop.logistic.app.util.EncryptionUtil;
+import com.wangqin.globalshop.logistic.app.util.XStreamUtil;
 import org.apache.axis.client.Service;
-import org.apache.xmlbeans.impl.xb.xsdschema.All;
 import org.junit.Test;
 
 import javax.xml.namespace.QName;
@@ -78,29 +75,46 @@ public class TestWsClient {
      */
 
     /**
-     * 测试申报数据加密
+     * 测试申报数据加密接口（电商平台发送商品订单数据到通关服务平台）
      *
      * @throws Exception
      */
     @Test
-    public void testReceiveEncryptDeclareService() throws Exception {
-//        // 待发送报文
-//        String originalContent = getOrderOriginalContent();
-//        // 回执报文
-//        String result = callReceiveEncryptDeclareService(originalContent, BusinessType.IMPORTORDER);
-
-        String originalContent = getDeclareOriginalContent();
+    public void testSendOrderMessage() throws Exception {
+        // 待发送报文
+        String originalContent = getOrderOriginalContent();
         // 回执报文
-        String result = callReceiveEncryptDeclareService(originalContent, BusinessType.PERSONAL_GOODS_DECLAR);
+        String response = callReceiveEncryptDeclareService(originalContent, BusinessType.IMPORTORDER);
 
         System.out.println("\n转换为 bean：");
-        XStream xstream = new XStream();
-        xstream.processAnnotations(Mo.class);
-        Mo mo = (Mo) xstream.fromXML(result);
+        Mo mo = XStreamUtil.toBean(response, Mo.class);
         System.out.println(mo);
         System.out.println("\n再将 bean 装换为 xml，用以校验：");
-        System.out.println(xstream.toXML(mo));
+        String moXml = XStreamUtil.toXml(mo, Mo.class);
+        System.out.println(moXml);
     }
+
+    /**
+     * 测试申报数据加密接口（清单写入跨境电商通关服务平台）
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSendDeclareMessage () throws Exception {
+        // 待发送报文
+        String originalContent = getDeclareOriginalContent();
+        // 回执报文
+        String response = callReceiveEncryptDeclareService(originalContent, BusinessType.PERSONAL_GOODS_DECLAR);
+
+        System.out.println("\n转换为 bean：");
+        Mo mo = XStreamUtil.toBean(response, Mo.class);
+        System.out.println(mo);
+        System.out.println("\n再将 bean 装换为 xml，用以校验：");
+        String moXml = XStreamUtil.toXml(mo, Mo.class);
+        System.out.println(moXml);
+    }
+
+
 
     /**
      * 订单报文明文测试样例
@@ -225,7 +239,9 @@ public class TestWsClient {
                 .body(body)
                 .build();
 
-        return toXML(mo);
+        String moXml = XStreamUtil.toXml(mo, Mo.class);
+
+        return moXml;
     }
 
     /**
@@ -356,18 +372,19 @@ public class TestWsClient {
                 .body(body)
                 .build();
 
-        return toXML(mo);
+        String moXml = XStreamUtil.toXml(mo, Mo.class);
+
+        return moXml;
     }
 
     /**
-     * 调用海关申报数据接口
+     * 调用海关申报数据加密接口
      *
      * @param originalContent 报文原文
      * @param msgType         报文业务类型
      * @return
      * @throws Exception
      */
-    @SuppressWarnings("Duplicates")
     private String callReceiveEncryptDeclareService(String originalContent, String msgType) throws Exception {
         System.out.println("发送报文：");
         System.out.println(originalContent);
@@ -394,16 +411,10 @@ public class TestWsClient {
         call.addParameter("sendCode", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
         call.setReturnType(org.apache.axis.encoding.XMLType.XSD_STRING);
         // 接收回执报文
-        String result = (String) call.invoke(new Object[]{content, msgType, dataDigest, sendCode});
+        String response = (String) call.invoke(new Object[]{content, msgType, dataDigest, sendCode});
         System.out.println("接收回执报文：");
-        System.out.println(result);
+        System.out.println(response);
 
-        return result;
-    }
-
-    private String toXML(Mo mo) {
-        XStream xstream = new XStream();
-        xstream.autodetectAnnotations(true);
-        return xstream.toXML(mo);
+        return response;
     }
 }
