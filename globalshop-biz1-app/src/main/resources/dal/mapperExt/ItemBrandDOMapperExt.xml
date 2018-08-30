@@ -79,6 +79,15 @@
 		WHERE is_del=0
 	</select>
 
+    <!--总查询 -->
+    <select id="listByName" resultType="com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO" >
+		SELECT
+        <include refid="Base_Column_List_2" />
+		FROM item_brand T1
+		WHERE is_del=0
+        and T1.name = #{name}
+	</select>
+
     <!-- 根据品牌的英文名查询品牌的编码 -->
 	<select id="selectNoByName" resultType="java.lang.String" parameterType="java.lang.String">
 		SELECT 

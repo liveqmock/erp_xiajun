@@ -214,10 +214,32 @@ CREATE TABLE `customs_declare_detail`(
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+
+###增加支付单相关字段
+ALTER TABLE `haidb2new`.`mall_wx_pay_bill`
+ADD COLUMN `appid` varchar(1024) COMMENT '网擒的公众账号';
+ALTER TABLE `haidb2new`.`mall_wx_pay_bill`
+ADD COLUMN `mch_id` varchar(1024) COMMENT '商户号';
+ALTER TABLE `haidb2new`.`mall_wx_pay_bill`
+ADD COLUMN `out_trade_no` varchar(1024) COMMENT '商户订单号';
+ALTER TABLE `haidb2new`.`mall_wx_pay_bill`
+ADD COLUMN `transaction_id` varchar(1024) COMMENT '交易单号';
+ALTER TABLE `haidb2new`.`mall_wx_pay_bill`
+ADD COLUMN `sign` varchar(1024) COMMENT '签名串，可能后续去掉';
+ALTER TABLE `haidb2new`.`mall_wx_pay_bill`
+ADD COLUMN `nonce_str` varchar(1024) COMMENT '随机串，可能后续去掉';
+
+  `appid` varchar(32) DEFAULT NULL,
+  `mch_id` varchar(32) DEFAULT NULL,
+  `out_trade_no` varchar(64) DEFAULT NULL,
+  `transaction_id` varchar(64) DEFAULT NULL,
+  `sign` varchar(64) DEFAULT NULL,
+  `nonce_str` varchar(64) DEFAULT NULL,
+
 ###外部item类目记录
 ALTER TABLE `haidb2new`.`channel_listing_item`
 ADD COLUMN `category_json` varchar(1024) COMMENT '类目json字符串';
 
 ###新增字段，用来下单
 ALTER TABLE `haidb2new`.`channel_listing_item_sku`
-ADD COLUMN `shop_product_sku_id` int(0) COMMENT 'itraMirror用来下单';
+ADD COLUMN `shop_product_sku_id` int(0) COMMENT 'intraMirror用来下单';

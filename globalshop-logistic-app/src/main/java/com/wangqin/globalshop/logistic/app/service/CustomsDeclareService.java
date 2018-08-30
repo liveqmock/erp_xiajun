@@ -25,18 +25,17 @@ public class CustomsDeclareService {
      * 清单写入跨境电商通关服务平台
      */
     public void sendDeclareMessage() {
-        String businessNo = "";
-        JkfSign jkfSign = buildJkfSign(businessNo, null);
+        JkfSign jkfSign = buildJkfSign();
     }
 
     /**
      * 构建签名信息
      *
-     * @param businessNo 业务编码
-     * @param note       备注
      * @return
      */
-    private JkfSign buildJkfSign(String businessNo, String note) {
+    private JkfSign buildJkfSign() {
+        // 生成业务编号
+        String businessNo = "";
 
         return JkfSign.builder()
                 .companyCode(CustomsConst.COMPANY_CODE)
@@ -44,97 +43,113 @@ public class CustomsDeclareService {
                 .businessType(BusinessType.PERSONAL_GOODS_DECLAR)
                 .declareType('1')
                 .cebFlag("03")
-                .note(note)
+                .note(null)
                 .build();
     }
 
-    private GoodsDeclare buildGoodsDeclare() {
+
+    private GoodsDeclare buildGoodsDeclare(String accountBookNo, String preEntryNumber, String inOutDateStr,
+                                           String iePort, String destinationPort, String trafMode, String declareCompanyType,
+                                           String declareCompanyCode, String declareCompanyName, String eCommerceCode,
+                                           String eCommerceName, String orderNo, String wayBill, String tradeCountry,
+                                           Integer packNo, Double grossWeight, Double netWeight, String declPort,
+                                           String enteringPerson, String enteringCompanyName, String customsField,
+                                           String senderName, String consignee, String senderCountry, String consigneeAddress,
+                                           String purchaserTelNumber, String buyerIdNumber, String buyerName, Double worth,
+                                           Double feeAmount, Double insureAmount, String currCode, String mainGName,
+                                           String internalAreaCompanyNo, String internalAreaCompanyName, String applicationFormNo) {
+
+
         GoodsDeclare goodsDeclare = GoodsDeclare.builder()
-                .accountBookNo("账册编号")
+                .accountBookNo(accountBookNo)
                 .ieFlag('I')
-                .preEntryNumber("预录入号码")
+                .preEntryNumber(preEntryNumber)
                 .importType('1')
-                .inOutDateStr("进出口日期")
-                .iePort("进出口岸代码")
-                .destinationPort("指运港(抵运港)")
-                .trafName("运输工具名称")
-                .voyageNo("运输工具航次(班)号")
-                .trafMode("运输方式代码")
-                .declareCompanyType("申报单位类别")
-                .declareCompanyCode("申报单位代码")
-                .declareCompanyName("申报单位名称")
-                .eCommerceCode("电商企业代码")
-                .eCommerceName("电商企业名称")
-                .orderNo("订单编号")
-                .wayBill("分运单号")
-                .tradeCountry("贸易国别（起运地）")
-                .packNo(100)
-                .grossWeight(99D)
-                .netWeight(88D)
-                .warpType("包装种类")
-                .remark("备注")
-                .declPort("申报口岸代码")
-                .enteringPerson("录入人")
-                .enteringCompanyName("录入单位名称")
-                .declarantNo("报关员代码")
-                .customsField("码头/货场代码")
-                .senderName("发件人")
-                .consignee("收件人")
-                .senderCountry("发件人国别")
-                .senderCity("发件人城市")
-                .paperType('1')
-                .paperNumber("购买人证件号")
-                .buyerName("购买人姓名")
-                .worth(77D)
-                .currCode("币制")
-                .mainGName("主要货物名称")
-                .internalAreaCompanyNo("区内企业编码")
-                .internalAreaCompanyName("区内企业名称")
-                .applicationFormNo("申请单编号")
+                .inOutDateStr(inOutDateStr)
+                .iePort(iePort)
+                .destinationPort(destinationPort)
+                .trafName(null)
+                .voyageNo(null)
+                .trafNo(null)
+                .trafMode(trafMode)
+                .declareCompanyType(declareCompanyType)
+                .declareCompanyCode(declareCompanyCode)
+                .declareCompanyName(declareCompanyName)
+                .companyName(CustomsConst.COMPANY_NAME)
+                .companyCode(CustomsConst.COMPANY_CODE)
+                .eCommerceCode(eCommerceCode)
+                .eCommerceName(eCommerceName)
+                .logisCompanyName(CustomsConst.LOGIS_COMPANY_NAME)
+                .logisCompanyCode(CustomsConst.LOGIS_COMPANY_CODE)
+                .orderNo(orderNo)
+                .wayBill(wayBill)
+                .billNo(null)
+                .tradeCountry(tradeCountry)
+                .packNo(packNo)
+                .grossWeight(grossWeight)
+                .netWeight(netWeight)
+                .warpType(null)
+                .remark(null)
+                .declPort(declPort)
+                .enteringPerson(enteringPerson)
+                .enteringCompanyName(enteringCompanyName)
+                .declarantNo(null)
+                .customsField(customsField)
+                .senderName(senderName)
+                .consignee(consignee)
+                .senderCountry(senderCountry)
+                .senderCity(null)
+                .paperType(null)
+                .paperNumber(null)
+                .consigneeAddress(consigneeAddress)
+                .purchaserTelNumber(purchaserTelNumber)
+                .buyerIdType("1")
+                .buyerIdNumber(buyerIdNumber)
+                .buyerName(buyerName)
+                .worth(worth)
+                .feeAmount(feeAmount)
+                .insureAmount(insureAmount)
+                .currCode(currCode)
+                .mainGName(mainGName)
+                .internalAreaCompanyNo(internalAreaCompanyNo)
+                .internalAreaCompanyName(internalAreaCompanyName)
+                .assureCode(CustomsConst.COMPANY_CODE)
+                .applicationFormNo(applicationFormNo)
                 .isAuthorize('1')
-                .companyName("天猫国际")
-                .companyCode("9343343343")
-                .logisCompanyName("邮政速递")
-                .logisCompanyCode("3300232323")
-                .feeAmount(5345.0D)
-                .insureAmount(4.3343D)
-                .consigneeAddress("浙江杭州聚龙大厦")
-                .purchaserTelNumber("13443224322")
-                .assureCode("")
-                .licenseNo("")
-                .trafNo("333343")
-                .billNo("33343")
+                .licenseNo(null)
                 .build();
+
         return goodsDeclare;
     }
 
     private List<GoodsDeclareDetail> buildGoodsDeclareDetails() {
+
         GoodsDeclareDetail goodsDeclareDetail = GoodsDeclareDetail.builder()
                 .goodsOrder(1)
-                .codeTs("行邮税号")
-                .goodsItemNo("商品货号")
+                .codeTs("1100111001")
+                .goodsItemNo(null)
+                .itemRecordNo("123456")
+                .itemName(null)
                 .goodsName("物品名称")
-                .itemName("商品品名")
                 .goodsModel("商品规格、型号")
                 .originCountry("产销国")
-                .tradeCurr("成交币制")
-                .tradeTotal(9999.99D)
-                .declPrice(8888.99D)
-                .declTotalPrice(7777.77D)
-                .useTo("用途")
-                .declareCount(6666)
+                .tradeCurr("142")
+                .tradeTotal(null)
+                .declPrice(80D)
+                .declTotalPrice(800D)
+                .useTo(null)
+                .declareCount(10)
                 .goodsUnit("申报计量单位")
-                .goodsGrossWeight(5555.55D)
-                .firstUnit("第一单位")
+                .goodsGrossWeight(null)
+                .firstUnit("个")
                 .firstCount(4444)
-                .secondUnit("第二单位")
-                .secondCount(3333)
+                .secondUnit(null)
+                .secondCount(null)
                 .productRecordNo("产品国检备案编号")
-                .webSite("商品网址")
-                .barCode("条形码")
-                .note("备注")
+                .webSite(null)
+                .barCode(null)
+                .note(null)
                 .build();
-
 
         List<GoodsDeclareDetail> goodsDeclareDetails = new ArrayList<>();
         goodsDeclareDetails.add(goodsDeclareDetail);

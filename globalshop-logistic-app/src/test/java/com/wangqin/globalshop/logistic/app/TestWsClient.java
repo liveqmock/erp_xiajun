@@ -18,6 +18,7 @@ import com.wangqin.globalshop.logistic.app.constant.BusinessType;
 import com.wangqin.globalshop.logistic.app.constant.CustomsConst;
 import com.wangqin.globalshop.logistic.app.util.EncryptionUtil;
 import org.apache.axis.client.Service;
+import org.apache.xmlbeans.impl.xb.xsdschema.All;
 import org.junit.Test;
 
 import javax.xml.namespace.QName;
@@ -83,9 +84,10 @@ public class TestWsClient {
      */
     @Test
     public void testReceiveEncryptDeclareService() throws Exception {
-        // 待发送报文
-//         String originalContent = getOrderOriginalContent();
-//         String result = callReceiveEncryptDeclareService(originalContent, BusinessType.IMPORTORDER);
+//        // 待发送报文
+//        String originalContent = getOrderOriginalContent();
+//        // 回执报文
+//        String result = callReceiveEncryptDeclareService(originalContent, BusinessType.IMPORTORDER);
 
         String originalContent = getDeclareOriginalContent();
         // 回执报文
@@ -108,81 +110,81 @@ public class TestWsClient {
     private String getOrderOriginalContent() {
         // 签名信息
         JkfSign jkfSign = JkfSign.builder()
-                .companyCode("3301961Q43")
+                .companyCode(CustomsConst.COMPANY_CODE)
                 .businessNo("order001")
                 .businessType(BusinessType.IMPORTORDER)
                 .declareType('1')
                 .cebFlag("03")
-                .note("进口订单备注")
+                .note(null)
                 .build();
         // 订单信息
         JkfOrderImportHead jkfOrderImportHead = JkfOrderImportHead.builder()
-                .eCommerceCode("33019688oo")
-                .eCommerceName("亚马逊")
+                .companyName(CustomsConst.COMPANY_NAME)
+                .companyCode(CustomsConst.COMPANY_CODE)
                 .ieFlag('I')
                 .payType("03")
-                .payCompanyName("支付宝")
-                .payCompanyCode("3301968pay")
+                .payCompanyCode(CustomsConst.PAY_COMPANY_CODE)
+                .payCompanyName(CustomsConst.PAY_COMPANY_NAME)
                 .payNumber("zhifu001")
                 .orderTotalAmount(100.0D)
+                .orderGoodsAmount(100.0D)
+                .discount(0D)
                 .orderNo("order00001")
                 .orderTaxAmount(10.0D)
-                .orderGoodsAmount(100.0D)
-                .feeAmount(5345.0D)
-                .insureAmount(1.5D)
-                .companyName("天猫国际")
-                .companyCode("3301961Q43")
+                .feeAmount(0D)
+                .insureAmount(0D)
+                .eCommerceCode("123456789")
+                .eCommerceName("某某公司旗下商店")
                 .tradeTime("2014-02-17 15:23:13")
-                .currCode("502")
+                .currCode("142")
                 .totalAmount(100.0D)
-                .consigneeEmail("loujh@sina.com")
+                .consigneeEmail(null)
                 .consigneeTel("13242345433")
                 .consignee("loujianhua")
                 .consigneeAddress("浙江杭州聚龙大厦")
                 .totalCount(5)
-                .postMode("1")
+                .batchNumbers(null)
+                .consigneeDitrict(null)
+                .postMode(null)
                 .senderCountry("34233")
                 .senderName("yangtest")
                 .purchaserId("2")
-                .logisCompanyName("邮政速递")
-                .logisCompanyCode("3301980101")
-                .zipCode("322001")
-                .note("备注信息")
-                .wayBills("001;002;003")
-                .rate("6.34")
-                .discount(0D)
-                .batchNumbers("3434-343434")
-                .consigneeDitrict("632043")
+                .logisCompanyName(CustomsConst.LOGIS_COMPANY_NAME)
+                .logisCompanyCode(CustomsConst.LOGIS_COMPANY_CODE)
+                .zipCode(null)
+                .note(null)
+                .wayBills(null)
+                .rate(null)
                 .userProcotol("本人承诺所购买商品系个人合理自用，现委托商家代理申报、代缴税款等通关事宜，本人保证遵守《海关法》和国家相关法律法规，保证所提供的身份信息和收货信息真实完整，无侵犯他人权益的行为，以上委托关系系如实填写，本人愿意接受海关、检验检疫机构及其他监管部门的监管，并承担相应法律责任。")
                 .build();
         // 订单表体明细
         JkfOrderDetail jkfOrderDetail1 = JkfOrderDetail.builder()
                 .goodsOrder(1)
                 .goodsName("物品名称1")
-                .goodsModel("规格型号1")
                 .codeTs("0100000001")
-                .grossWeight(34.94D)
-                .unitPrice(2D)
-                .goodsUnit("035")
-                .goodsCount(40D)
+                .goodsModel(null)
                 .originCountry("00342")
-                .barCode("66655554433")
+                .unitPrice(2D)
                 .currency("142")
-                .note("备注")
+                .goodsCount(40)
+                .goodsUnit("035")
+                .grossWeight(null)
+                .barCode(null)
+                .note(null)
                 .build();
         JkfOrderDetail jkfOrderDetail2 = JkfOrderDetail.builder()
                 .goodsOrder(2)
-                .goodsName("物品名称2")
-                .goodsModel("规格型号2")
-                .codeTs("0100000002")
-                .grossWeight(54.94D)
-                .unitPrice(2D)
-                .goodsUnit("035")
-                .goodsCount(10D)
+                .goodsName("物品名称1")
+                .codeTs("0100000001")
+                .goodsModel(null)
                 .originCountry("00342")
-                .barCode("66655554433")
+                .unitPrice(3.3D)
                 .currency("142")
-                .note("备注")
+                .goodsCount(343)
+                .goodsUnit("035")
+                .grossWeight(null)
+                .barCode(null)
+                .note(null)
                 .build();
         // 订单表体
         List<JkfOrderDetail> jkfOrderDetailList = new ArrayList<>();
@@ -192,11 +194,11 @@ public class TestWsClient {
         JkfGoodsPurchaser jkfGoodsPurchaser = JkfGoodsPurchaser.builder()
                 .id("2")
                 .name("刘安光")
-                .email("lag@gmail.com")
+                .email(null)
                 .telNumber("24233322323")
-                .address("浙江杭州杭大路9999号")
                 .paperType("01")
                 .paperNumber("130626199605271679")
+                .address(null)
                 .build();
 
         OrderInfo orderInfo = OrderInfo.builder()
@@ -305,7 +307,7 @@ public class TestWsClient {
                 .build();
 
         GoodsDeclareDetail goodsDeclareDetail = GoodsDeclareDetail.builder()
-                .goodsOrder(1)
+                .goodsOrder(0)
                 .codeTs("1100111001")
                 .goodsItemNo(null)
                 .itemRecordNo("123456")
@@ -315,16 +317,16 @@ public class TestWsClient {
                 .originCountry("产销国")
                 .tradeCurr("142")
                 .tradeTotal(null)
-                .declPrice(8888.99D)
-                .declTotalPrice(7777.77D)
+                .declPrice(80D)
+                .declTotalPrice(800D)
                 .useTo(null)
-                .declareCount(6666)
+                .declareCount(10)
                 .goodsUnit("申报计量单位")
                 .goodsGrossWeight(null)
-                .firstUnit("第一单位")
+                .firstUnit("个")
                 .firstCount(4444)
-                .secondUnit("第二单位")
-                .secondCount(3333)
+                .secondUnit(null)
+                .secondCount(null)
                 .productRecordNo("产品国检备案编号")
                 .webSite(null)
                 .barCode(null)
@@ -365,6 +367,7 @@ public class TestWsClient {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("Duplicates")
     private String callReceiveEncryptDeclareService(String originalContent, String msgType) throws Exception {
         System.out.println("发送报文：");
         System.out.println(originalContent);
@@ -398,7 +401,7 @@ public class TestWsClient {
         return result;
     }
 
-    private String toXML(Mo mo){
+    private String toXML(Mo mo) {
         XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
         return xstream.toXML(mo);

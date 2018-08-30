@@ -56,8 +56,8 @@ public class AutoIMItemsTask {
 
 
 	//抓商品：在售商品，抓一次，抓全部，intraMirrors只有在售有库存的商品才会抓回来
-	//@Scheduled(cron = "5 5/4 * * * ?")
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0 0 0/1 * * ?")
+	//@Scheduled(cron = "0/30 * * * * ?")
 	public void getAllItems() {
 
 		logger.info("intraMirror get all items start");
@@ -114,8 +114,8 @@ public class AutoIMItemsTask {
 	/**
 	 * 下发抓到的REQUEST商品至globalshop
 	 */
-	@Scheduled(cron = "0/30 * * * * ?")
-	//@Scheduled(cron = "6 6/4 * * * ?")
+	//@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0 30 0/1 * * ?")
 	public void sendRequestItem2erp() {
 
 		logger.info("intramirror send request items start");
@@ -177,7 +177,7 @@ public class AutoIMItemsTask {
 	/**
 	 * 下发抓到的FAILURE商品至globalshop
 	 */
-	@Scheduled(cron = "7 7/10 * * * ?")
+	//@Scheduled(cron = "7 7/10 * * * ?")
 	public void sendFailureItem2erp() {
 
 		logger.info("intramirror send failure items start");

@@ -65,7 +65,7 @@ public class JkfOrderDetail {
      * 成交数量
      * 必填：Y
      */
-    private Double goodsCount;
+    private Integer goodsCount;
 
     /**
      * 成交计量单位
