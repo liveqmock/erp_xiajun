@@ -193,6 +193,7 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setCreator(USER_NO);
     	itemDO.setModifier(USER_NO);
     	itemDO.setStatus(item.getStatus());
+		itemDO.setDetail(item.getDetail());
 
     	//类目处理,传过来不为空，专门处理
 		if(!EasyUtil.isStringEmpty(item.getCategoryCode())){
@@ -346,6 +347,7 @@ public class ItemServiceImpl implements IItemService {
     	itemDO.setMainPic(handlePic(item.getMainPic()));
     	itemDO.setStatus(item.getStatus());
 		itemDO.setCountry(item.getCountry() == null ? COUNTRY : item.getCountry());
+		itemDO.setDetail(item.getDetail());
 		//类目处理,传过来不为空，专门处理
 		if(!EasyUtil.isStringEmpty(item.getCategoryCode())){
 			ItemCategoryDO itemCategoryDO = categoryMapperExt.queryByCategoryCode(item.getCategoryCode());
