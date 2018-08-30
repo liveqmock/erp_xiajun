@@ -17,16 +17,9 @@ public interface CustomsConst {
     /**
      * 支付平台在跨境平台的备案信息
      */
-    String PAY_COMPANY_CODE = "";
+    String PAY_COMPANY_NAME = "财付通支付科技有限公司";
 
-    String PAY_COMPANY_NAME = "";
-
-    /**
-     * 电商平台下的商家的备案信息
-     */
-    String E_COMMERCE_NAME = "";
-
-    String E_COMMERCE_CODE = "";
+    String PAY_COMPANY_CODE = "440316T004";
 
     /**
      * 物流企业在跨境平台的备案信息

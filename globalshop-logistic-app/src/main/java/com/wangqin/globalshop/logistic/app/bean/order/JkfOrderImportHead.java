@@ -139,7 +139,7 @@ public class JkfOrderImportHead {
     /**
      * 成交币制
      * 必填：Y <br>
-     * 见参数表
+     * 人民币为 142，其余见参数表
      */
     private String currCode;
 

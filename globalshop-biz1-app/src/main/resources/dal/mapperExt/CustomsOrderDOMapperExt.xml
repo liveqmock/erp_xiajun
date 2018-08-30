@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangqin.globalshop.biz1.app.dal.mapperExt.CustomsOrderDOMapperExt" >
+  <resultMap id="BaseResultMap" type="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsOrderDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="ie_flag" property="ieFlag" jdbcType="CHAR" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="pay_company_code" property="payCompanyCode" jdbcType="VARCHAR" />
+    <result column="pay_company_name" property="payCompanyName" jdbcType="VARCHAR" />
+    <result column="pay_number" property="payNumber" jdbcType="VARCHAR" />
+    <result column="order_total_amount" property="orderTotalAmount" jdbcType="DOUBLE" />
+    <result column="order_goods_amount" property="orderGoodsAmount" jdbcType="DOUBLE" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_tax_amount" property="orderTaxAmount" jdbcType="DOUBLE" />
+    <result column="fee_amount" property="feeAmount" jdbcType="DOUBLE" />
+    <result column="insure_amount" property="insureAmount" jdbcType="DOUBLE" />
+    <result column="e_commerce_code" property="eCommerceCode" jdbcType="VARCHAR" />
+    <result column="e_commerce_name" property="eCommerceName" jdbcType="VARCHAR" />
+    <result column="trade_time" property="tradeTime" jdbcType="VARCHAR" />
+    <result column="curr_code" property="currCode" jdbcType="VARCHAR" />
+    <result column="total_amount" property="totalAmount" jdbcType="DOUBLE" />
+    <result column="consignee_email" property="consigneeEmail" jdbcType="VARCHAR" />
+    <result column="consignee_tel" property="consigneeTel" jdbcType="VARCHAR" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="consignee_address" property="consigneeAddress" jdbcType="VARCHAR" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="batch_numbers" property="batchNumbers" jdbcType="VARCHAR" />
+    <result column="consignee_ditrict" property="consigneeDitrict" jdbcType="VARCHAR" />
+    <result column="post_mode" property="postMode" jdbcType="VARCHAR" />
+    <result column="sender_country" property="senderCountry" jdbcType="VARCHAR" />
+    <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+    <result column="logis_company_name" property="logisCompanyName" jdbcType="VARCHAR" />
+    <result column="logis_company_code" property="logisCompanyCode" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="way_bills" property="wayBills" jdbcType="VARCHAR" />
+    <result column="rate" property="rate" jdbcType="VARCHAR" />
+    <result column="user_procotol" property="userProcotol" jdbcType="VARCHAR" />
+    <result column="purchaser_id" property="purchaserId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="tel_number" property="telNumber" jdbcType="VARCHAR" />
+    <result column="paper_type" property="paperType" jdbcType="VARCHAR" />
+    <result column="paper_number" property="paperNumber" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="chk_mark" property="chkMark" jdbcType="CHAR" />
+    <result column="notice_date" property="noticeDate" jdbcType="VARCHAR" />
+    <result column="result_info" property="resultInfo" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="modifier" property="modifier" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_no, company_name, company_code, ie_flag, pay_type, pay_company_code, 
+    pay_company_name, pay_number, order_total_amount, order_goods_amount, discount, order_no, 
+    order_tax_amount, fee_amount, insure_amount, e_commerce_code, e_commerce_name, trade_time, 
+    curr_code, total_amount, consignee_email, consignee_tel, consignee, consignee_address, 
+    total_count, batch_numbers, consignee_ditrict, post_mode, sender_country, sender_name, 
+    logis_company_name, logis_company_code, zip_code, note, way_bills, rate, user_procotol, 
+    purchaser_id, name, email, tel_number, paper_type, paper_number, address, chk_mark, 
+    notice_date, result_info, creator, modifier
+  </sql>
+
+  <update id="updateByBusinessNo" parameterType="com.wangqin.globalshop.biz1.app.dal.dataObject.CustomsOrderDO" >
+    update customs_order
+    <set >
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ieFlag != null" >
+        ie_flag = #{ieFlag,jdbcType=CHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="payCompanyCode != null" >
+        pay_company_code = #{payCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="payCompanyName != null" >
+        pay_company_name = #{payCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="payNumber != null" >
+        pay_number = #{payNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTotalAmount != null" >
+        order_total_amount = #{orderTotalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="orderGoodsAmount != null" >
+        order_goods_amount = #{orderGoodsAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTaxAmount != null" >
+        order_tax_amount = #{orderTaxAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="feeAmount != null" >
+        fee_amount = #{feeAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="insureAmount != null" >
+        insure_amount = #{insureAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="eCommerceCode != null" >
+        e_commerce_code = #{eCommerceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="eCommerceName != null" >
+        e_commerce_name = #{eCommerceName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null" >
+        trade_time = #{tradeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="currCode != null" >
+        curr_code = #{currCode,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="consigneeEmail != null" >
+        consignee_email = #{consigneeEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeTel != null" >
+        consignee_tel = #{consigneeTel,jdbcType=VARCHAR},
+      </if>
+      <if test="consignee != null" >
+        consignee = #{consignee,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeAddress != null" >
+        consignee_address = #{consigneeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNumbers != null" >
+        batch_numbers = #{batchNumbers,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneeDitrict != null" >
+        consignee_ditrict = #{consigneeDitrict,jdbcType=VARCHAR},
+      </if>
+      <if test="postMode != null" >
+        post_mode = #{postMode,jdbcType=VARCHAR},
+      </if>
+      <if test="senderCountry != null" >
+        sender_country = #{senderCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="senderName != null" >
+        sender_name = #{senderName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisCompanyName != null" >
+        logis_company_name = #{logisCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisCompanyCode != null" >
+        logis_company_code = #{logisCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        zip_code = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="wayBills != null" >
+        way_bills = #{wayBills,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null" >
+        rate = #{rate,jdbcType=VARCHAR},
+      </if>
+      <if test="userProcotol != null" >
+        user_procotol = #{userProcotol,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaserId != null" >
+        purchaser_id = #{purchaserId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="telNumber != null" >
+        tel_number = #{telNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="paperType != null" >
+        paper_type = #{paperType,jdbcType=VARCHAR},
+      </if>
+      <if test="paperNumber != null" >
+        paper_number = #{paperNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="chkMark != null" >
+        chk_mark = #{chkMark,jdbcType=CHAR},
+      </if>
+      <if test="noticeDate != null" >
+        notice_date = #{noticeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="resultInfo != null" >
+        result_info = #{resultInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where business_no = #{businessNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,5 +1,8 @@
 package com.wangqin.globalshop.logistic.app.service;
 
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.MallSubOrderDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.CustomsOrderDOMapperExt;
 import com.wangqin.globalshop.logistic.app.bean.common.JkfSign;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfGoodsPurchaser;
 import com.wangqin.globalshop.logistic.app.bean.order.JkfOrderDetail;
@@ -10,7 +13,16 @@ import com.wangqin.globalshop.logistic.app.bean.xml.Head;
 import com.wangqin.globalshop.logistic.app.bean.xml.Mo;
 import com.wangqin.globalshop.logistic.app.constant.BusinessType;
 import com.wangqin.globalshop.logistic.app.constant.CustomsConst;
+import com.wangqin.globalshop.logistic.app.util.EncryptionUtil;
+import com.wangqin.globalshop.order.app.service.mall.IMallOrderService;
+import com.wangqin.globalshop.order.app.service.mall.IMallSubOrderService;
+import org.apache.axis.client.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.xml.namespace.QName;
+import javax.xml.rpc.Call;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,28 +35,51 @@ import java.util.List;
  */
 public class CustomsOrderService {
 
-//    private
+    private Logger logger = LoggerFactory.getLogger(CustomsOrderService.class);
+
+    @Autowired
+    private IMallOrderService mallOrderService;
+
+    @Autowired
+    private IMallSubOrderService mallSubOrderService;
+
+    @Autowired
+    private CustomsOrderDOMapperExt customsOrderDOMapper;
+
 
     /**
      * 电商平台发送商品订单数据到通关服务平台
      */
     public void sendOrderMessage(String orderNo) {
+        // 获取主订单信息
+        MallOrderDO mallOrderDO = mallOrderService.selectByOrderNo(orderNo);
 
-        // TODO: 根据 orderNo 获取订单信息
+        // 获取子订单信息
+        List<MallSubOrderDO> mallSubOrderDOList = mallSubOrderService.selectByOrderNo(orderNo);
 
-        String businessNo = "";
-        JkfSign jkfSign = buildJkfSign(businessNo, null);
+        // 获取支付单信息
 
+        // 构建报文
+        JkfSign jkfSign = buildJkfSign();
+        JkfOrderImportHead jkfOrderImportHead = buildJkfOrderImportHead(orderNo);
+        List<JkfOrderDetail> jkfOrderDetailList = buildJkfOrderDetailList(mallSubOrderDOList);
+        JkfGoodsPurchaser jkfGoodsPurchaser = buildJkfGoodsPurchaser();
+        Mo mo = buildOrderMo(jkfSign, jkfOrderImportHead, jkfOrderDetailList, jkfGoodsPurchaser);
+
+        // 发送报文，接收回执
+
+        // 存储信息
     }
 
     /**
      * 构建签名信息
      *
-     * @param businessNo 业务编码
-     * @param note       备注
      * @return
      */
-    private JkfSign buildJkfSign(String businessNo, String note) {
+    private JkfSign buildJkfSign() {
+
+        // 生成业务编号
+        String businessNo = "";
 
         return JkfSign.builder()
                 .companyCode(CustomsConst.COMPANY_CODE)
@@ -52,23 +87,49 @@ public class CustomsOrderService {
                 .businessType(BusinessType.IMPORTORDER)
                 .declareType('1')
                 .cebFlag("03")
-                .note(note)
+                .note(null)
                 .build();
     }
 
     /**
      * 构建订单表头信息
      *
+     * @param orderNo 订单编号（待定）
      * @return
      */
-    private JkfOrderImportHead buildJkfOrderImportHead(String payNumber, Double orderGoodsAmount, String orderNo,
-                                                       Double orderTaxAmount, String tradeTime, String currCode,
-                                                       String consigneeTel, String consignee, String consigneeAddress,
-                                                       Integer totalCount, String senderCountry, String senderName,
-                                                       String purchaserId) {
+    private JkfOrderImportHead buildJkfOrderImportHead(String orderNo) {
+        // TODO: 需要从 mal_order 表获得的字段
+        // 对应 actual_amount 字段
+        double orderGoodsAmount = 0D;
+        // 对应 order_time 字段
+        String tradeTime = "";
+        // 对应 company_no 字段
+        String eCommerceCode = "";
+        String eCommerceName = "";
 
+        // TODO: 需要从 mal_sub_order 表获得的字段
+        // 对应 telephone 字段
+        String consigneeTel = "";
+        // 对应 receiver 字段
+        String consignee = "";
+        // 对应 receiver_state + receiver_city + receiver_district + receiver_address
+        String consigneeAddress = "";
+        // 对应 quantity 字段
+        int totalCount = 0;
+
+        // TODO: 需要从 mall_wx_pay_bill 表获取的字段
+        String purchaserId = "";
+        String payNumber = "";
+
+        // TODO: 需要通过计算获得
+        double orderTaxAmount = 0D;
         double orderTotalAmount = orderGoodsAmount + orderTaxAmount;
 
+        // TODO: 待添加字段
+        String senderCountry = "";
+        String senderName = "";
+
+        // 构建海关清关订单表头信息
         JkfOrderImportHead jkfOrderImportHead = JkfOrderImportHead.builder()
                 .companyName(CustomsConst.COMPANY_NAME)
                 .companyCode(CustomsConst.COMPANY_CODE)
@@ -84,10 +145,10 @@ public class CustomsOrderService {
                 .orderTaxAmount(orderTaxAmount)
                 .feeAmount(0D)
                 .insureAmount(0D)
-                .eCommerceCode(CustomsConst.E_COMMERCE_CODE)
-                .eCommerceName(CustomsConst.E_COMMERCE_NAME)
+                .eCommerceCode(eCommerceCode)
+                .eCommerceName(eCommerceName)
                 .tradeTime(tradeTime)
-                .currCode(currCode)
+                .currCode("142")
                 .totalAmount(orderGoodsAmount)
                 .consigneeEmail(null)
                 .consigneeTel(consigneeTel)
@@ -120,43 +181,34 @@ public class CustomsOrderService {
      *
      * @return
      */
-    private List<JkfOrderDetail> buildJkfOrderDetailList() {
+    private List<JkfOrderDetail> buildJkfOrderDetailList(List<MallSubOrderDO> mallSubOrderDOList) {
 
-        int goodsOrder = 1;
-
-        JkfOrderDetail jkfOrderDetail1 = JkfOrderDetail.builder()
-                .goodsOrder(1)
-                .goodsName("物品名称1")
-                .codeTs("0100000001")
-                .goodsModel(null)
-                .originCountry("00342")
-                .unitPrice(3.3D)
-                .currency("142")
-                .goodsCount(343.0D)
-                .goodsUnit("035")
-                .grossWeight(null)
-                .barCode(null)
-                .note(null)
-                .build();
-
-        JkfOrderDetail jkfOrderDetail2 = JkfOrderDetail.builder()
-                .goodsOrder(2)
-                .goodsName("物品名称2")
-                .goodsModel("规格型号2")
-                .codeTs("0100000002")
-                .grossWeight(54.94D)
-                .unitPrice(3.3D)
-                .goodsUnit("035")
-                .goodsCount(343.0D)
-                .originCountry("00342")
-                .barCode("66655554433")
-                .currency("142")
-                .note(null)
-                .build();
         // 订单表体
         List<JkfOrderDetail> jkfOrderDetailList = new ArrayList<>();
-        jkfOrderDetailList.add(jkfOrderDetail1);
-        jkfOrderDetailList.add(jkfOrderDetail2);
+
+        for (int i = 0; i < mallSubOrderDOList.size(); i++) {
+            MallSubOrderDO mallSubOrderDO = mallSubOrderDOList.get(i);
+
+            JkfOrderDetail jkfOrderDetail = JkfOrderDetail.builder()
+                    .goodsOrder(i)
+                    .goodsName(mallSubOrderDO.getItemName())
+                    // FIXME: codeTs 无法从 mall_sub_order 获取
+                    .codeTs("0100000001")
+                    .goodsModel(null)
+                    // FIXME: originCountry 无法从 mall_sub_order 获取
+                    .originCountry("00342")
+                    .unitPrice(mallSubOrderDO.getSalePrice())
+                    .currency("142")
+                    .goodsCount(mallSubOrderDO.getQuantity())
+                    // FIXME: goodsUnit 无法从 mall_sub_order 获取
+                    .goodsUnit("035")
+                    .grossWeight(null)
+                    .barCode(null)
+                    .note(null)
+                    .build();
+
+            jkfOrderDetailList.add(jkfOrderDetail);
+        }
 
         return jkfOrderDetailList;
     }
@@ -166,7 +218,13 @@ public class CustomsOrderService {
      *
      * @return
      */
-    private JkfGoodsPurchaser buildJkfGoodsPurchaser(String id, String name, String telNumber, String paperNumber) {
+    private JkfGoodsPurchaser buildJkfGoodsPurchaser() {
+
+        // TODO: 需要从 mal_sub_order 表获得的字段
+        String id = "";
+        String name = "";
+        String telNumber = "";
+        String paperNumber = "";
 
         JkfGoodsPurchaser jkfGoodsPurchaser = JkfGoodsPurchaser.builder()
                 .id(id)
@@ -185,10 +243,10 @@ public class CustomsOrderService {
     /**
      * 构建订单报文对应的 Mo
      *
-     * @param jkfSign
-     * @param jkfOrderImportHead
-     * @param jkfOrderDetailList
-     * @param jkfGoodsPurchaser
+     * @param jkfSign            签名信息
+     * @param jkfOrderImportHead 订单表头信息
+     * @param jkfOrderDetailList 订单表体信息
+     * @param jkfGoodsPurchaser  购买人信息
      * @return
      */
     private Mo buildOrderMo(JkfSign jkfSign,
@@ -224,5 +282,45 @@ public class CustomsOrderService {
                 .head(head)
                 .body(body)
                 .build();
+    }
+
+    /**
+     * 调用海关申报数据接口
+     *
+     * @param originalContent 报文原文
+     * @param msgType         报文业务类型
+     * @return
+     * @throws Exception
+     */
+    private String callReceiveEncryptDeclareService(String originalContent, String msgType) throws Exception {
+        logger.info("发送报文：", originalContent);
+
+        byte[] inputContent = originalContent.getBytes("utf-8");
+        // 报文密文
+        String content = EncryptionUtil.getEncContent(inputContent);
+        // 验签字串
+        String dataDigest = EncryptionUtil.getSign(inputContent);
+        // 发送方代码
+        String sendCode = CustomsConst.COMPANY_CODE;
+
+        Call call = new Service().createCall();
+        String targetNamespace = "http://ws.newyork.zjport.gov.cn/";
+        call.setTargetEndpointAddress("http://122.224.230.4:18003/newyorkWS/ws/ReceiveEncryptDeclare?wsdl");
+        call.setOperationName(new QName(targetNamespace, "receive"));
+        // 报文密文参数
+        call.addParameter("content", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        // 报文类型参数
+        call.addParameter("msgType", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        // 签名参数
+        call.addParameter("dataDigest", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        // 发送方代码参数
+        call.addParameter("sendCode", org.apache.axis.encoding.XMLType.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+        call.setReturnType(org.apache.axis.encoding.XMLType.XSD_STRING);
+        // 接收回执报文
+        String result = (String) call.invoke(new Object[]{content, msgType, dataDigest, sendCode});
+
+        logger.info("接收回执报文：", result);
+
+        return result;
     }
 }

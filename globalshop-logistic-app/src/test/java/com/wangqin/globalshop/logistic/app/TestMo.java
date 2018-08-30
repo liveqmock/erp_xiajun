@@ -104,7 +104,7 @@ public class TestMo {
                 .grossWeight(34.94D)
                 .unitPrice(3.3D)
                 .goodsUnit("035")
-                .goodsCount(343.0D)
+                .goodsCount(343)
                 .originCountry("00342")
                 .barCode("66655554433")
                 .currency("142")
@@ -119,7 +119,7 @@ public class TestMo {
                 .grossWeight(54.94D)
                 .unitPrice(3.3D)
                 .goodsUnit("035")
-                .goodsCount(343.0D)
+                .goodsCount(343)
                 .originCountry("00342")
                 .barCode("66655554433")
                 .currency("142")
@@ -592,109 +592,6 @@ public class TestMo {
         toXmlByXStream(mo);
     }
 
-    @Test
-    public void testXmlToBean() {
-        String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                "<mo version=\"1.0.0\">" +
-                "  <head>" +
-                "    <businessType>IMPORTORDER</businessType>" +
-                "  </head>" +
-                "  <body>" +
-                "    <orderInfoList>" +
-                "      <orderInfo>" +
-                "        <jkfSign>" +
-                "          <companyCode>3301961Q43</companyCode>" +
-                "          <businessNo>order001</businessNo>" +
-                "          <businessType>IMPORTORDER</businessType>" +
-                "          <declareType>1</declareType>" +
-                "          <cebFlag>01</cebFlag>" +
-                "          <note>进口订单备注</note>" +
-                "        </jkfSign>" +
-                "        <jkfOrderImportHead>" +
-                "          <companyName>天猫国际</companyName>" +
-                "          <companyCode>3301968833</companyCode>" +
-                "         <ieFlag>I</ieFlag>" +
-                "          <payType>支付类型</payType>" +
-                "          <payCompanyCode>3301968pay</payCompanyCode>" +
-                "          <payNumber>zhifu001</payNumber>" +
-                "          <orderTotalAmount>100.0</orderTotalAmount>" +
-                "          <orderGoodsAmount>90.0</orderGoodsAmount>" +
-                "          <discount>0.0</discount>" +
-                "          <orderNo>order00001</orderNo>" +
-                "          <orderTaxAmount>10.0</orderTaxAmount>" +
-                "          <feeAmount>5345.0</feeAmount>" +
-                "          <insureAmount>1.5</insureAmount>" +
-                "          <eCommerceCode>33019688oo</eCommerceCode>" +
-                "          <eCommerceName>亚马逊</eCommerceName>" +
-                "          <tradeTime>2014-02-17 15:23:13</tradeTime>" +
-                "          <currCode>502</currCode>" +
-                "          <totalAmount>100.0</totalAmount>" +
-                "          <consigneeEmail>loujh@sina.com</consigneeEmail>" +
-                "          <consigneeTel>13242345433</consigneeTel>" +
-                "          <consignee>loujianhua</consignee>" +
-                "          <consigneeAddress>浙江杭州聚龙大厦</consigneeAddress>" +
-                "          <totalCount>5</totalCount>" +
-                "          <batchNumbers>3434-343434</batchNumbers>" +
-                "          <consigneeDitrict>632043</consigneeDitrict>" +
-                "          <postMode>1</postMode>" +
-                "          <senderCountry>34233</senderCountry>" +
-                "          <senderName>yangtest</senderName>" +
-                "          <purchaserId>中国买家a</purchaserId>" +
-                "          <logisCompanyName>邮政速递</logisCompanyName>" +
-                "          <logisCompanyCode>3301980101</logisCompanyCode>" +
-                "          <zipCode>322001</zipCode>" +
-                "          <note>备注信息</note>" +
-                "          <wayBills>001;002;003</wayBills>" +
-                "          <rate>6.34</rate>" +
-                "          <userProcotol>本人承诺所购买商品系个人合理自用，现委托商家代理申报、代缴税款等通关事宜，本人保证遵守《海关法》和国家相关法律法规，保证所提供的身份信息和收货信息真实完整，无侵犯他人权益的行为，以上委托关系系如实填写，本人愿意接受海关、检验检疫机构及其他监管部门的监管，并承担相应法律责任。</userProcotol>" +
-                "        </jkfOrderImportHead>" +
-                "        <jkfOrderDetailList>" +
-                "          <jkfOrderDetail>" +
-                "            <goodsOrder>1</goodsOrder>" +
-                "            <goodsName>物品名称1</goodsName>" +
-                "            <codeTs>0100000001</codeTs>" +
-                "            <goodsModel>规格型号1</goodsModel>" +
-                "            <originCountry>00342</originCountry>" +
-                "            <unitPrice>3.3</unitPrice>" +
-                "            <currency>142</currency>" +
-                "            <goodsCount>343.0</goodsCount>" +
-                "            <goodsUnit>035</goodsUnit>" +
-                "            <grossWeight>34.94</grossWeight>" +
-                "            <barCode>66655554433</barCode>" +
-                "            <note>备注</note>" +
-                "          </jkfOrderDetail>" +
-                "          <jkfOrderDetail>" +
-                "            <goodsOrder>2</goodsOrder>" +
-                "            <goodsName>物品名称2</goodsName>" +
-                "            <codeTs>0100000002</codeTs>" +
-                "            <goodsModel>规格型号2</goodsModel>" +
-                "            <originCountry>00342</originCountry>" +
-                "            <unitPrice>3.3</unitPrice>" +
-                "            <currency>142</currency>" +
-                "            <goodsCount>343.0</goodsCount>" +
-                "            <goodsUnit>035</goodsUnit>" +
-                "            <grossWeight>54.94</grossWeight>" +
-                "            <barCode>66655554433</barCode>" +
-                "            <note>备注</note>" +
-                "          </jkfOrderDetail>" +
-                "        </jkfOrderDetailList>" +
-                "        <jkfGoodsPurchaser>" +
-                "          <id>中国买家a</id>" +
-                "          <name>tetsname</name>" +
-                "          <email>tetsname@sina.com</email>" +
-                "          <telNumber>24233322323</telNumber>" +
-                "          <paperType>01</paperType>" +
-                "          <paperNumber>23458-9503285382434</paperNumber>" +
-                "          <address>浙江杭州杭大路9999号</address>" +
-                "        </jkfGoodsPurchaser>" +
-                "      </orderInfo>" +
-                "    </orderInfoList>" +
-                "  </body>" +
-                "</mo>";
-        Mo mo = XStreamUtil.toBean(xml, Mo.class);
-        System.out.println(mo);
-    }
-
     /**
      * 总署版报文样例
      */
@@ -757,6 +654,116 @@ public class TestMo {
 
         String xml = xstream.toXML(ceb711Message);
         System.out.println(xml);
+    }
+
+    /**
+     * 报文转 bean 样例（测试 XStreamUtil）
+     */
+    @Test
+    public void testXmlToBean() {
+        String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                "<mo version=\"1.0.0\">" +
+                "  <head>" +
+                "    <businessType>IMPORTORDER</businessType>" +
+                "  </head>" +
+                "  <body>" +
+                "    <orderInfoList>" +
+                "      <orderInfo>" +
+                "        <jkfSign>" +
+                "          <companyCode>3301961Q43</companyCode>" +
+                "          <businessNo>order001</businessNo>" +
+                "          <businessType>IMPORTORDER</businessType>" +
+                "          <declareType>1</declareType>" +
+                "          <cebFlag>01</cebFlag>" +
+                "          <note>进口订单备注</note>" +
+                "        </jkfSign>" +
+                "        <jkfOrderImportHead>" +
+                "          <companyName>天猫国际</companyName>" +
+                "          <companyCode>3301968833</companyCode>" +
+                "         <ieFlag>I</ieFlag>" +
+                "          <payType>支付类型</payType>" +
+                "          <payCompanyCode>3301968pay</payCompanyCode>" +
+                "          <payNumber>zhifu001</payNumber>" +
+                "          <orderTotalAmount>100.0</orderTotalAmount>" +
+                "          <orderGoodsAmount>90.0</orderGoodsAmount>" +
+                "          <discount>0.0</discount>" +
+                "          <orderNo>order00001</orderNo>" +
+                "          <orderTaxAmount>10.0</orderTaxAmount>" +
+                "          <feeAmount>5345.0</feeAmount>" +
+                "          <insureAmount>1.5</insureAmount>" +
+                "          <eCommerceCode>33019688oo</eCommerceCode>" +
+                "          <eCommerceName>亚马逊</eCommerceName>" +
+                "          <tradeTime>2014-02-17 15:23:13</tradeTime>" +
+                "          <currCode>502</currCode>" +
+                "          <totalAmount>100.0</totalAmount>" +
+                "          <consigneeEmail>loujh@sina.com</consigneeEmail>" +
+                "          <consigneeTel>13242345433</consigneeTel>" +
+                "          <consignee>loujianhua</consignee>" +
+                "          <consigneeAddress>浙江杭州聚龙大厦</consigneeAddress>" +
+                "          <totalCount>5</totalCount>" +
+                "          <batchNumbers>3434-343434</batchNumbers>" +
+                "          <consigneeDitrict>632043</consigneeDitrict>" +
+                "          <postMode>1</postMode>" +
+                "          <senderCountry>34233</senderCountry>" +
+                "          <senderName>yangtest</senderName>" +
+                "          <purchaserId>中国买家a</purchaserId>" +
+                "          <logisCompanyName>邮政速递</logisCompanyName>" +
+                "          <logisCompanyCode>3301980101</logisCompanyCode>" +
+                "          <zipCode>322001</zipCode>" +
+                "          <note>备注信息</note>" +
+                "          <wayBills>001;002;003</wayBills>" +
+                "          <rate>6.34</rate>" +
+                "          <userProcotol>" +
+                "                 本人承诺所购买商品系个人合理自用，现委托商家代理申报、代缴税款等通关事宜，本人保证遵守《海关法》" +
+                "                 和国家相关法律法规，保证所提供的身份信息和收货信息真实完整，无侵犯他人权益的行为，以上委托关系系" +
+                "                 如实填写，本人愿意接受海关、检验检疫机构及其他监管部门的监管，并承担相应法律责任。" +
+                "          </userProcotol>" +
+                "        </jkfOrderImportHead>" +
+                "        <jkfOrderDetailList>" +
+                "          <jkfOrderDetail>" +
+                "            <goodsOrder>1</goodsOrder>" +
+                "            <goodsName>物品名称1</goodsName>" +
+                "            <codeTs>0100000001</codeTs>" +
+                "            <goodsModel>规格型号1</goodsModel>" +
+                "            <originCountry>00342</originCountry>" +
+                "            <unitPrice>3.3</unitPrice>" +
+                "            <currency>142</currency>" +
+                "            <goodsCount>343</goodsCount>" +
+                "            <goodsUnit>035</goodsUnit>" +
+                "            <grossWeight>34.94</grossWeight>" +
+                "            <barCode>66655554433</barCode>" +
+                "            <note>备注</note>" +
+                "          </jkfOrderDetail>" +
+                "          <jkfOrderDetail>" +
+                "            <goodsOrder>2</goodsOrder>" +
+                "            <goodsName>物品名称2</goodsName>" +
+                "            <codeTs>0100000002</codeTs>" +
+                "            <goodsModel>规格型号2</goodsModel>" +
+                "            <originCountry>00342</originCountry>" +
+                "            <unitPrice>3.3</unitPrice>" +
+                "            <currency>142</currency>" +
+                "            <goodsCount>343</goodsCount>" +
+                "            <goodsUnit>035</goodsUnit>" +
+                "            <grossWeight>54.94</grossWeight>" +
+                "            <barCode>66655554433</barCode>" +
+                "            <note>备注</note>" +
+                "          </jkfOrderDetail>" +
+                "        </jkfOrderDetailList>" +
+                "        <jkfGoodsPurchaser>" +
+                "          <id>中国买家a</id>" +
+                "          <name>tetsname</name>" +
+                "          <email>tetsname@sina.com</email>" +
+                "          <telNumber>24233322323</telNumber>" +
+                "          <paperType>01</paperType>" +
+                "          <paperNumber>23458-9503285382434</paperNumber>" +
+                "          <address>浙江杭州杭大路9999号</address>" +
+                "        </jkfGoodsPurchaser>" +
+                "      </orderInfo>" +
+                "    </orderInfoList>" +
+                "  </body>" +
+                "</mo>";
+        Mo mo = XStreamUtil.toBean(xml, Mo.class);
+        System.out.println(mo);
     }
 
     /**
