@@ -12,6 +12,7 @@ import com.wangqin.globalshop.common.utils.JsonPageResult;
 /**
  *
  * SiteMsg 控制层
+ * 这里没有用到
  *
  */
 @Controller

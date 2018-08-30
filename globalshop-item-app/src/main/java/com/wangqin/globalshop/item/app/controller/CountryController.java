@@ -13,12 +13,22 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 
+/**
+ * 国家
+ * @author xiajun
+ *
+ */
 @Controller
 @RequestMapping(value = "/country")
 public class CountryController {
 
+    //旧的service
 	@Autowired
 	private ICountryService countryService;
+	
+	//新的service
+//	@Autowired
+//	private CountryFeignService countryService;
 	
 	/**
 	 * 添加国家

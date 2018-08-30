@@ -29,12 +29,7 @@ public interface IItemService {
 	Long insertItemSelective(ItemDO item);
 		
 
-	/**
-	 * 添加商品
-	 * @param item
-	 * @param itemSkuList
-	 */
-	Object addItem(ItemQueryVO item);
+	
 
 	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
 
@@ -113,6 +108,8 @@ public interface IItemService {
 	 * @param list
 	 */
     void importItem(List<List<Object>> list) throws Exception;
+    
+    void generateQrCode(ItemDO newItem, String companyNo);
 
 
 }

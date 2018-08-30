@@ -6,8 +6,6 @@ import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,16 +15,20 @@ import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IUploadFileService;
 
 
-
 /**
- * 文件上传
- * @author zhulu
+ * 文件上传到海狐的图片服务器
+ * @author xiajun
+ *
  */
 @Controller
 public class ItemUploadFileController {
-
+    //旧的service，暂时不要切换
 	@Autowired
 	private IUploadFileService uploadFileService;
+	
+    //新的service
+//	@Autowired
+//	private UploadFileFeginService uploadFileService;
 	
 	/**
 	 * 图片上传接口
@@ -69,8 +71,4 @@ public class ItemUploadFileController {
 	}
 	
 	
-	@GetMapping("/uploadFile/testFileUpload")
-	public String itemList(Model model) {
-		return "haierp/testFileUpload";
-	}
 }

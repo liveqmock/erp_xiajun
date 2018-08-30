@@ -22,19 +22,7 @@ import com.wangqin.globalshop.item.app.service.IItemPackagePatternService;
 public class ItemPackagePatternServiceImpl implements IItemPackagePatternService {
 
     @Autowired
-    private ShippingPackingPatternDOMapperExt packageLevelMapper;
-    
-    @Autowired
     private ItemPackagePatternMapperExt itemPackagePatternMapperExt;
-    
-  
-    
-
-
-    @Override
-    public Integer queryPackageLevelsCount(ShippingPackingPatternQueryVO packageLevelQueryVO) {
-        return packageLevelMapper.queryPackageLevelsCount(packageLevelQueryVO);
-    }
 
     @Override
     @Transactional(rollbackFor = ErpCommonException.class)
@@ -55,24 +43,6 @@ public class ItemPackagePatternServiceImpl implements IItemPackagePatternService
         return packageLevelResult;
     }
 
-
-
-
-
-    
-    
-    @Override
-    public List<ShippingPackingPatternDO> queryPatternsByScaleNo(String no) {
-    	return packageLevelMapper.queryPatternsByScaleNo(no);
-    }
-
-	
-
-	@Override
-	public ItemBrandDO selectByPrimaryKey(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void insertPattern(ShippingPackingPatternDO shippingPackingPatternDO) {
@@ -96,4 +66,5 @@ public class ItemPackagePatternServiceImpl implements IItemPackagePatternService
 		// TODO Auto-generated method stub
 		return itemPackagePatternMapperExt.countPatternsByScaleNo(packagingScaleNo);
 	}
+	
 }

@@ -16,11 +16,6 @@ import java.util.List;
 
 public interface ICountryService {
 
-	/**
-	 * 根据名字查找国家
-	 * 
-	 */
-	//Country selectCountryByName(String name);
 	
 
 	//插入单个国家
@@ -34,7 +29,7 @@ public interface ICountryService {
 	//按条件查找国家
 	CountryDO queryCountrySelective(CountryDO countryDO);
 	
-	String queryCodeById(Integer id);
+	
 
 	void undeleteCountry(CountryDO countryDO);
 

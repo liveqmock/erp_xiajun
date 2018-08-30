@@ -31,8 +31,7 @@ import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
 @Service
 public class ItemSkuServiceImpl implements IItemSkuService {
 	
-	@Autowired
-	private ItemIInventoryService inventoryService;
+
 	
 	@Autowired
 	private ItemSkuMapperExt itemSkuMapperExt;
@@ -40,8 +39,6 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 	@Autowired
 	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
 
-	@Autowired
-	private IChannelSalePriceService channelSalePriceService;
 
 	@Autowired
 	private ChannelSalePriceDOMapperExt salePriceDOMapperExt;
@@ -123,7 +120,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 				List<ChannelSalePriceDO> salePriceDOList = new ArrayList<>();
 
 				if(Integer.valueOf(1).equals(itemSku.getSaleOnYouzan())){
-					List<ChannelSalePriceDO> youzanSalePriceList = channelSalePriceService.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.YouZan.getValue());
+					List<ChannelSalePriceDO> youzanSalePriceList = salePriceDOMapperExt.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.YouZan.getValue());
 					if(EasyUtil.isListEmpty(youzanSalePriceList)){
 						ChannelSalePriceDO youzanSalePrice = new ChannelSalePriceDO();
 						youzanSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
@@ -139,7 +136,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 				}
 
 				if(Integer.valueOf(1).equals(itemSku.getSaleOnXcx())){
-					List<ChannelSalePriceDO> xcxSalePriceList  = channelSalePriceService.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.WEIXINXCX.getValue());
+					List<ChannelSalePriceDO> xcxSalePriceList  = salePriceDOMapperExt.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.WEIXINXCX.getValue());
 					if(EasyUtil.isListEmpty(xcxSalePriceList)){
 						ChannelSalePriceDO xcxSalePrice = new ChannelSalePriceDO();
 						xcxSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
@@ -155,7 +152,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 				}
 
 				if(Integer.valueOf(1).equals(itemSku.getSaleOnHaihu())){
-					List<ChannelSalePriceDO> haihuSalePriceList  = channelSalePriceService.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.HaiHu.getValue());
+					List<ChannelSalePriceDO> haihuSalePriceList  = salePriceDOMapperExt.queryPriceListBySkuCodeAndChannel(itemSku.getSkuCode(),ChannelType.HaiHu.getValue());
 					if(EasyUtil.isListEmpty(haihuSalePriceList)){
 						ChannelSalePriceDO haihuSalePrice = new ChannelSalePriceDO();
 						haihuSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
@@ -211,7 +208,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 			for (ChannelSalePriceDO channelSalePrice : channelSalePriceList) {
 				if(channelSalePrice.getId() != null){
 					channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
-					channelSalePriceService.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
+					salePriceDOMapperExt.updatePriceBySkuCodeAndChannelNo(skuChannelPriceEditVO.getSkuCode(), Double.valueOf(channelSalePrice.getSalePrice()), channelSalePrice.getChannelNo());
 				}else{
 					channelSalePrice.setCompanyNo(AppUtil.getLoginUserCompanyNo());
 					channelSalePrice.init();
@@ -298,7 +295,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 //			List<SkuChannelPriceDTO> skuChannelPriceDTOList = new ArrayList<>();
 			Double salePrice=itemSkuPrice.getSalePrice();
 			Double discountPrice=discount.multiply(BigDecimal.valueOf(salePrice)).doubleValue();
-			List<ChannelSalePriceDO> channelSalePriceList = channelSalePriceService.queryPriceListBySkuCode(itemSkuPrice.getSkuCode());
+			List<ChannelSalePriceDO> channelSalePriceList = salePriceDOMapperExt.queryPriceListBySkuCode(itemSkuPrice.getSkuCode());
 			if(channelSalePriceList==null || channelSalePriceList.size()==0){
 				//没有多渠道，需加上n条
 //				List<ChannelShopDO> channels=channelShopDOMapperExt.searchShopList(null);
@@ -320,7 +317,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
-					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
+					salePriceDOMapperExt.insertChannelSalePriceSelective(channelSalePriceDO);
 				}
 				if(itemSkuPrice.getSaleOnHaihu()!=null && itemSkuPrice.getSaleOnHaihu()==1){
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
@@ -329,7 +326,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
-					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
+					salePriceDOMapperExt.insertChannelSalePriceSelective(channelSalePriceDO);
 				}
 				if(itemSkuPrice.getSaleOnXcx()!=null && itemSkuPrice.getSaleOnXcx()==1){
 					channelSalePriceDO.setSalePrice(salePrice.floatValue());
@@ -338,12 +335,12 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 						channelSalePriceDO.setChannelNo(channelNo);
 						channelSalePriceDO.setSalePrice(discountPrice.floatValue());
 					}
-					channelSalePriceService.insertChannelSalePriceSelective(channelSalePriceDO);
+					salePriceDOMapperExt.insertChannelSalePriceSelective(channelSalePriceDO);
 				}
 			}else
 			{
 				//已有多渠道，只需更新一条
-				channelSalePriceService.updatePriceBySkuCodeAndChannelNo(itemSkuPrice.getSkuCode(),discountPrice,channelNo);
+				salePriceDOMapperExt.updatePriceBySkuCodeAndChannelNo(itemSkuPrice.getSkuCode(),discountPrice,channelNo);
 
 			}
 		}
@@ -369,42 +366,11 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 		return inventoryList;
 	}
 
-	@Override
-	public void addItemSku(ItemSkuDO itemSku) {
-		itemSkuMapperExt.insertSelective(itemSku);
-		InventoryDO inventory = inventoryService.queryInventoryBySkuCode(itemSku.getSkuCode());
-		if(inventory==null){
-			List<ItemSkuDO> newInvList = Lists.newArrayList();
-			newInvList.add(itemSku);
-			//List<InventoryDO>  inventoryList = initInventory(newInvList);
-			//inventoryService.insertBatch(inventoryList);
-		}else{
-			//if(inventory.getVirtualInv()!=itemSku.getVirtualInv()){
-			//	inventory.setVirtualInv(itemSku.getVirtualInv());
-			//	inventory.setGmtModify(new Date());
-			//	inventoryService.updateById(inventory);
-			}
-		}
+
 	
 
 
-	@Override
-	public void updateItemSku(ItemSkuDO itemSku) {
-		itemSkuMapperExt.updateByPrimaryKey(itemSku);
-		InventoryDO inventory = inventoryService.queryInventoryBySkuCode(itemSku.getSkuCode());
-		if(inventory==null){
-			List<ItemSkuDO> newInvList = Lists.newArrayList();
-			newInvList.add(itemSku);
-			//List<InventoryDO>  inventoryList = initInventory(newInvList);
-			//inventoryService.insertBatch(inventoryList);
-		}else{
-			//if(inventory.getVirtualInv()!=itemSku.getVirtualInv()){
-			//	inventory.setVirtualInv(itemSku.getVirtualInv());
-			//	inventory.setGmtModify(new Date());
-			//	inventoryService.updateById(inventory);
-			//}
-		}
-	}
+	
 
 	@Override
 	public List<ItemSkuDO> queryItemSkusByItemId(Long itemId) {
