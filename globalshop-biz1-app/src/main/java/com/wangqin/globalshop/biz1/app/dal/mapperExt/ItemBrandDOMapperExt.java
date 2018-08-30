@@ -30,6 +30,8 @@ public interface ItemBrandDOMapperExt extends ItemBrandDOMapper {
 
     List<ItemBrandDO> queryAllBrand();
 
+	ItemBrandDO listByName(@Param("name") String name);
+
     Integer queryItemBrandCount(ItemBrandQueryVO brandQueryVO);
 
     //插入单个品牌

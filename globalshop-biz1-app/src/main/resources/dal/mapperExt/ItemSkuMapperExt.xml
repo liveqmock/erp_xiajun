@@ -238,9 +238,10 @@
 			 inv.inv AS inventory,<!-- 现货库存 --> 
 			 inv.locked_inv AS lockedInv<!-- 占用库存 --> 		 
         FROM
-            item_sku T1 left join inventory inv on T1.sku_code= inv.sku_code
+            item_sku T1 ,inventory inv
         where
-           T1.is_del=0
+           T1.sku_code= inv.sku_code
+           and T1.is_del=0
            AND T1.status=1
             <if test=" categoryCode != null and categoryCode != '' ">
                 and T1.category_code = #{categoryCode}

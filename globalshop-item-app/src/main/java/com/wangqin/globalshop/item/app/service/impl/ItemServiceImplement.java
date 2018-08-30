@@ -25,6 +25,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -223,7 +224,7 @@ public class ItemServiceImplement implements IItemService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = BizCommonException.class)
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED,rollbackFor = BizCommonException.class)
     public JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO) {
         JsonPageResult<List<ItemDTO>> itemResult = new JsonPageResult<>();
         // 1、查询总的记录数量
