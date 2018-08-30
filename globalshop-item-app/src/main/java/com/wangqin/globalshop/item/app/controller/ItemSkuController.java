@@ -44,8 +44,8 @@ import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
 /**
- * 商品SKU处理器
- * @author zhulu
+ * itemsku
+ * @author xiajun
  *
  */
 @Controller

@@ -30,6 +30,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+/**
+ * 类目controller层
+ * @author xiajun
+ *
+ */
 
 @Controller
 @RequestMapping("/category")
@@ -165,7 +170,7 @@ public class CategoryController  {
 		List<ItemCategoryDO> itemCategoryList = categoryService.queryItemCategoryByPcode(category.getpCode());
 		for(int i = 0; i < itemCategoryList.size(); i ++) {
 			ItemCategoryDO itemcategory = itemCategoryList.get(i);
-			if(itemcategory.getName().equals(category.getName())) {
+			if(itemcategory.getName().equals(category.getName()) && itemcategory.getId() != category.getId()) {
 				return result.buildIsSuccess(false).buildMsg("同一个级别下类目的名字不可以和已有的类目相同");
 			}
 		}

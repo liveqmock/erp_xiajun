@@ -19,7 +19,11 @@ import com.wangqin.globalshop.common.utils.AppUtil;
 import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.item.app.service.IItemBrandService;
 
-
+/**
+ * 品牌
+ * @author xiajun
+ *
+ */
 @Controller
 @RequestMapping(value = "/item/brand")
 @Authenticated

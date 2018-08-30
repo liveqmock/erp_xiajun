@@ -15,6 +15,11 @@ import com.wangqin.globalshop.common.utils.IsEmptyUtil;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IItemChannelAccountService;
 
+/**
+ * 商品发布：可用的渠道
+ * @author xiajun
+ *
+ */
 @Authenticated
 @Controller
 public class ItemChannelAccountController {

@@ -15,10 +15,10 @@ import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.IUploadFileService;
 
 
-
 /**
- * 文件上传
- * @author zhulu
+ * 文件上传到海狐的图片服务器
+ * @author xiajun
+ *
  */
 @Controller
 public class ItemUploadFileController {

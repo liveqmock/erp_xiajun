@@ -13,6 +13,11 @@ import com.wangqin.globalshop.common.exception.ErpCommonException;
 import com.wangqin.globalshop.common.utils.JsonResult;
 import com.wangqin.globalshop.item.app.service.ICountryService;
 
+/**
+ * 国家
+ * @author xiajun
+ *
+ */
 @Controller
 @RequestMapping(value = "/country")
 public class CountryController {

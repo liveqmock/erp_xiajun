@@ -53,7 +53,7 @@ import com.wangqin.globalshop.item.app.util.ItemUtil;
 import net.sf.json.JSONObject;
 
 /**
- * 商品处理器
+ * 商品
  *
  * @author xiajun
  */

@@ -41,8 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 商品SKU处理器
- * @author zhulu
+ * 渠道价格
+ * @author 
  *
  */
 @Controller
