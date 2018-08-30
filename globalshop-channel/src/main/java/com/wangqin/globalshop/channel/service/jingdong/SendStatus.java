@@ -17,6 +17,8 @@ public  class SendStatus {
 
 	public final static String GET = "GET";//需要去抓详情
 
+	public final static String UPDATE = "UPDATE";
+
 
 
 

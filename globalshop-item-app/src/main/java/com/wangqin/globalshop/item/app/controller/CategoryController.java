@@ -13,6 +13,8 @@ import com.wangqin.globalshop.common.utils.RandomUtils;
 import com.wangqin.globalshop.common.utils.StringUtil;
 import com.wangqin.globalshop.common.utils.StringUtils;
 import com.wangqin.globalshop.common.utils.czh.Util;
+import com.wangqin.globalshop.item.api.brand.ItemBrandFeignService;
+import com.wangqin.globalshop.item.api.category.ItemCategoryFeignService;
 import com.wangqin.globalshop.item.app.service.IItemCategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+/**
+ * 类目controller层
+ * @author xiajun
+ *
+ */
 
 @Controller
 @RequestMapping("/category")
@@ -38,8 +45,13 @@ public class CategoryController  {
 	//根类目的pcode
 	private static final String P_CODE_OF_ROOT_CATEGORY = "0000000";
 	
+    //旧的service	
 	@Autowired
 	private IItemCategoryService categoryService;
+	
+	//新的service
+//	@Autowired
+//	private ItemCategoryFeignService categoryService;//feign声明式服务的高级版
 
 	/**
 	 * 添加类目（fin)，提供name和pcode
@@ -66,7 +78,7 @@ public class CategoryController  {
 		if (category.getpCode() == null) {//添加一级类目
 			category.setpCode(P_CODE_OF_ROOT_CATEGORY);
 			category.setRootCode(P_CODE_OF_ROOT_CATEGORY);
-			category.setLevel(1);			
+			category.setLevel(1);		
 		} else {
 			ItemCategoryDO categoryP = categoryService.queryByCategoryCode(category.getpCode());
 			if (categoryP == null) {
@@ -158,7 +170,7 @@ public class CategoryController  {
 		List<ItemCategoryDO> itemCategoryList = categoryService.queryItemCategoryByPcode(category.getpCode());
 		for(int i = 0; i < itemCategoryList.size(); i ++) {
 			ItemCategoryDO itemcategory = itemCategoryList.get(i);
-			if(itemcategory.getName().equals(category.getName())) {
+			if(itemcategory.getName().equals(category.getName()) && itemcategory.getId() != category.getId()) {
 				return result.buildIsSuccess(false).buildMsg("同一个级别下类目的名字不可以和已有的类目相同");
 			}
 		}

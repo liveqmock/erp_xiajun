@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.item.api.itembrand;
+package com.wangqin.globalshop.item.api.brand;
 
 
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemBrandQueryVO;

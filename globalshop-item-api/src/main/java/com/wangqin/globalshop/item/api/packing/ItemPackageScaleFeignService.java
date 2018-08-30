@@ -1,4 +1,4 @@
-package com.wangqin.globalshop.item.api.itembrand;
+package com.wangqin.globalshop.item.api.packing;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 
@@ -7,6 +7,6 @@ import org.springframework.cloud.netflix.feign.FeignClient;
  */
 
 @FeignClient(name = "itemApi")
-public interface ItemBrandFeignService extends ItemBrandApi {
+public interface ItemPackageScaleFeignService extends ItemPackageScaleService {
 
 }

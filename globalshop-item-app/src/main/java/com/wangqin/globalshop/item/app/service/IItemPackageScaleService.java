@@ -9,8 +9,6 @@ import com.wangqin.globalshop.common.utils.JsonPageResult;
 
 
 public interface IItemPackageScaleService {
-
-	//List<ItemPackageScaleDTO> queryPackageScales();
 	
 	JsonPageResult<List<ItemPackageScaleDTO>>  queryPackageScaleTree();
 	
