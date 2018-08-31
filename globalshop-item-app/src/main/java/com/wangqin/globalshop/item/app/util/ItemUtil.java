@@ -30,50 +30,7 @@ import net.sf.json.JSONObject;
 
 public class ItemUtil {
 
-	 /**
-     * 工具类：处理商品的名字
-     * 
-     * 商品名称公式：品牌英文名+品牌中文名+男女款+商品名
-     */
-	@Deprecated
-    public static void setItemNewName(ItemQueryVO item) {
-    	StringBuffer nameNew = new StringBuffer();
-        String[] brandArr = item.getBrand().split("->");
-        for(String s:brandArr) { //品牌处理
-        	nameNew.append(s+" ");
-        }
-        if(IsEmptyUtil.isStringNotEmpty(item.getSexStyle())) { //男女款处理
-        	nameNew.append(item.getSexStyle() + " ");
-        }
-        nameNew.append(item.getName());   
-        item.setName(nameNew.toString());//重新设置商品名称
-    }
-    
-    /**
-     * 工具类
-     * 设置商品是否可售
-     */
-	@Deprecated
-    public static void setIsSale(ItemDO newItem) {
-        if (DateUtil.belongCalendar(new Date(), newItem.getStartDate(), newItem.getEndDate())) {
-        	newItem.setIsSale(ItemIsSale.SALABLE.getCode().byteValue());
-        } else {
-        	newItem.setIsSale(ItemIsSale.UNSALABLE.getCode().byteValue());
-        }
-    }
-    
-    /**
-     * 工具类
-     * 处理商品时间相关的字段
-     */
-	@Deprecated
-    public static void setItemDate(ItemQueryVO item,ItemDO newItem) throws ParseException{    	
-    	newItem.setStartDate(item.getStartDate());
-    	newItem.setEndDate(item.getEndDate());
-    	if(IsEmptyUtil.isStringNotEmpty(item.getBookingDate())) {
-    		newItem.setBookingDate(DateUtil.transferStringToDate(item.getBookingDate()));
-    	}
-    }   
+	
     
     
     /**
@@ -91,25 +48,6 @@ public class ItemUtil {
         return true;
     }
     
-    //处理第三方销售平台，TEMP
-    @Deprecated
-    public static void setChannel(ItemQueryVO item,ItemDO newItem) {
-    	String channelList = item.getSaleOnChannels();
-        if (IsEmptyUtil.isStringEmpty(channelList)) {
-        	newItem.setThirdSale(0);
-        	newItem.setSaleOnYouzan(0);
-        } else {
-            String[] channels = channelList.split(",");
-            for(String channel:channels) {
-            	if("chan_youzan".equals(channel) || "有赞".equals(channel)) {
-            		newItem.setSaleOnYouzan(1);
-            	}
-            	if("chan_haihu".equals(channel) || "海狐海淘".equals(channel)) {
-            		newItem.setThirdSale(1);
-            	}
-            }
-        }
-    }	
     
     public static Double divideOneHundred(String s) {
     	//构造以字符串内容为值的BigDecimal类型的变量bd 

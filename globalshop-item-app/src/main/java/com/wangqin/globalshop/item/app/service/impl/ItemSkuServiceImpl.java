@@ -4,27 +4,33 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
-import com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO;
-import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
-import com.wangqin.globalshop.biz1.app.enums.ChannelType;
-import com.wangqin.globalshop.common.enums.ChannelSaleType;
-import com.wangqin.globalshop.common.utils.AppUtil;
-import com.wangqin.globalshop.common.utils.BeanUtils;
-import com.wangqin.globalshop.common.utils.BigDecimalHelper;
-import com.wangqin.globalshop.item.app.service.IChannelSalePriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ChannelSalePriceVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuPriceVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
 import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.bean.dto.QueryItemSkuPriceListDTO;
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelSalePriceDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelSalePriceDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
 import com.wangqin.globalshop.common.exception.ErpCommonException;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
 import com.wangqin.globalshop.common.utils.EasyUtil;
 import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.ItemIInventoryService;
+
 
 
 
@@ -372,14 +378,6 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 
 	
 
-	@Override
-	public List<ItemSkuDO> queryItemSkusByItemId(Long itemId) {
-		if(itemId!=null){
-			return itemSkuMapperExt.queryItemSkusById(itemId, itemId);
-		}
-		return null;
-	}
-	
 	
 	@Override
 	public ItemSkuDO selectByPrimaryKey(Long id) {
@@ -388,39 +386,14 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 	
 	
 	
-	@Override
-	public boolean isCanDeleteSku(Long skuId) {
-		if(skuId!=null) {
-			Integer  o = itemSkuMapperExt.queryItemSkusCountInOrder(skuId);
-			if(o !=null && o>0) {
-                return false;
-            }
-			
-			Integer i = itemSkuMapperExt.queryItemSkusCountInInventoryArea(skuId);
-			if(i !=null && i>0) {
-                return false;
-            }
-			
-			Integer t =itemSkuMapperExt.queryItemSkusCountInTask(skuId);
-			if(t !=null && t>0) {
-                return false;
-            }
-			
-			Integer p = itemSkuMapperExt.queryItemSkusCountInPurchase(skuId);
-            return p == null || p <= 0;
-        }
-        return false;
-	}
+
 	
 	@Override
 	public void deleteById(Long id) {
 		 itemSkuMapperExt.deleteById(id);
 	}
 	
-	@Override
-	public List<ItemSkuDO> queryItemSkusForExcel() {
-		return itemSkuMapperExt.queryItemSkusForExcel();
-	}
+
 	
 	@Override
 	public List<ItemSkuDO> queryItemSkusByUpc(String upc) {
@@ -434,7 +407,7 @@ public class ItemSkuServiceImpl implements IItemSkuService {
 	
 	@Override
 	public void updateById(ItemSkuQueryVO itemSkuUpdateVO) {
-		System.out.println("service:"+itemSkuUpdateVO.getSkuRate());
+	
 		itemSkuMapperExt.updateById(itemSkuUpdateVO);
 	}
 	

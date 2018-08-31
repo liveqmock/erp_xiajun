@@ -1,44 +1,23 @@
 package com.wangqin.globalshop.item.app.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
-import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
-import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
-import com.wangqin.globalshop.common.base.BaseDto;
-import com.wangqin.globalshop.common.exception.ErpCommonException;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.common.utils.excel.ExcelHelper;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.IItemService;
-import com.wangqin.globalshop.item.app.service.IItemSkuScaleService;
-import com.wangqin.globalshop.item.app.service.IItemSkuService;
-import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
-import org.apache.poi.hssf.record.formula.functions.T;
-import org.eclipse.jetty.util.StringUtil;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.wangqin.globalshop.biz1.app.aop.annotation.Authenticated;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
+import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
 
 /**
  * 渠道价格
@@ -52,17 +31,7 @@ public class ItemSkuPriceController {
 	@Autowired
 	private IItemSkuService iItemSkuService;
 	
-	@Autowired
-	private IItemService itemService;
 
-	@Autowired
-	private InventoryService inventoryService;
-	
-	@Autowired
-	private IItemSkuScaleService scaleService;
-
-	@Autowired
-	private ItemSkuScaleMapperExt itemSkuScaleMapperExt;
 
 
 	/**

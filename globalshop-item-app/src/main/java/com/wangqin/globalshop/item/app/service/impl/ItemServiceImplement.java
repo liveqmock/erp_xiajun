@@ -1,23 +1,15 @@
 package com.wangqin.globalshop.item.app.service.impl;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.*;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonResult;
-import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.*;
-import com.wangqin.globalshop.biz1.app.dal.mapperExt.*;
-import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
-import com.wangqin.globalshop.channelapi.dal.*;
-import com.wangqin.globalshop.common.base.BaseDto;
-import com.wangqin.globalshop.common.enums.AppletType;
-import com.wangqin.globalshop.common.redis.Cache;
-import com.wangqin.globalshop.common.utils.*;
-import com.wangqin.globalshop.inventory.app.service.InventoryService;
-import com.wangqin.globalshop.item.app.service.*;
-import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
-import com.wangqin.globalshop.item.app.util.ItemUtil;
-import net.sf.json.JSONObject;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -30,9 +22,61 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
-import java.net.URLDecoder;
-import java.util.*;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.AppletConfigDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ChannelListingItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.CompanyDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemBrandDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemCategoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemQrcodeShareDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuScaleDO;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ChannelListingItemSkuDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.CompanyDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.InventoryMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemQrcodeShareDOMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuMapperExt;
+import com.wangqin.globalshop.biz1.app.dal.mapperExt.ItemSkuScaleMapperExt;
+import com.wangqin.globalshop.biz1.app.exception.BizCommonException;
+import com.wangqin.globalshop.channelapi.dal.ChannelListingItemSkuVo;
+import com.wangqin.globalshop.channelapi.dal.ChannelListingItemVo;
+import com.wangqin.globalshop.channelapi.dal.GlobalShopItemVo;
+import com.wangqin.globalshop.channelapi.dal.ItemSkuVo;
+import com.wangqin.globalshop.channelapi.dal.ItemVo;
+import com.wangqin.globalshop.channelapi.dal.JdCommonParam;
+import com.wangqin.globalshop.common.base.BaseDto;
+import com.wangqin.globalshop.common.enums.AppletType;
+import com.wangqin.globalshop.common.redis.Cache;
+import com.wangqin.globalshop.common.utils.AppUtil;
+import com.wangqin.globalshop.common.utils.BeanUtils;
+import com.wangqin.globalshop.common.utils.CodeGenUtil;
+import com.wangqin.globalshop.common.utils.DimensionCodeUtil;
+import com.wangqin.globalshop.common.utils.EasyUtil;
+import com.wangqin.globalshop.common.utils.ImgUtil;
+import com.wangqin.globalshop.common.utils.IsEmptyUtil;
+import com.wangqin.globalshop.common.utils.StringUtil;
+import com.wangqin.globalshop.common.utils.StringUtils;
+import com.wangqin.globalshop.inventory.app.service.InventoryService;
+import com.wangqin.globalshop.item.app.service.IAppletConfigService;
+import com.wangqin.globalshop.item.app.service.ICountryService;
+import com.wangqin.globalshop.item.app.service.IItemBrandService;
+import com.wangqin.globalshop.item.app.service.IItemCategoryService;
+import com.wangqin.globalshop.item.app.service.IItemService;
+import com.wangqin.globalshop.item.app.service.IItemSkuService;
+import com.wangqin.globalshop.item.app.service.IItemSubOrderService;
+import com.wangqin.globalshop.item.app.service.impl.entity.ShareTokenEntity;
+import com.wangqin.globalshop.item.app.util.ItemUtil;
+import com.wangqin.globalshop.item.app.util.UploadFileUtil;
+
+import net.sf.json.JSONObject;
 
 @Service
 public class ItemServiceImplement implements IItemService {
@@ -57,8 +101,6 @@ public class ItemServiceImplement implements IItemService {
     private IItemSkuService itemSkuService;
     @Autowired
     private IItemBrandService iBrandService;
-    @Autowired
-    private IUploadFileService uploadFileService;
     @Autowired
     private ItemSkuMapperExt itemSkuMapperExt;
     @Autowired
@@ -105,24 +147,7 @@ public class ItemServiceImplement implements IItemService {
 
 
 
-    /**
-     * 封装ItemSkuScala对象信息
-     *
-     * @param obj     封装的对象
-     * @param itemSku
-     * @param value   scalaValue
-     * @param name    scalaName
-     * @author ChenZiHao
-     */
-    private void setInfo(ItemSkuScaleDO obj, ItemSkuAddVO itemSku, String value, String name) {
-        obj.setSkuCode(itemSku.getSkuCode());
-        obj.setItemCode(itemSku.getItemCode());
-        obj.setScaleCode(CodeGenUtil.getScaleCode());
-        obj.setScaleName(name);
-        obj.setScaleValue(value);
-        obj.init();
-
-    }
+ 
 
     /**
      * 商品列表
@@ -193,32 +218,7 @@ public class ItemServiceImplement implements IItemService {
     }
 
 
-    /**
-     * 获取所有的 ItemCode and Id 2017-04-04,jc
-     */
-    @Override
-    public Map<String, Long> queryAllItemCodeAndIdHashMap() {
-        List<Map<String, Object>> codeAndIdMap = itemDOMapperExt.queryAllItemCodeAndIdHashMap();
-        Map<String, Long> result = new HashMap<String, Long>();
 
-        String itemCode = null;
-        Long id = null;
-        for (Map<String, Object> map : codeAndIdMap) {
-            itemCode = null;
-            id = null;
-
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                if ("id".equals(entry.getKey())) {
-                    id = ((Long) entry.getValue());
-                } else if ("itemCode".equals(entry.getKey())) {
-                    itemCode = entry.getKey();
-                }
-            }
-            result.put(itemCode, id);
-        }
-
-        return result;
-    }
 
 
     public ShareTokenEntity getTokenFromCache(String uuid) {
@@ -234,11 +234,6 @@ public class ItemServiceImplement implements IItemService {
     }
 
     public String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken) {
-
-        String key = String.format("%s-uuid-%s-%s-%s", "token", userId, companyNo, itemCode);
-
-        //String picUrl = (String) shareCache.get(key);
-
         String picUrl = qrcodeShareDOMapperExt.selectPicUrl(userId, companyNo, itemCode);
 
         if (StringUtils.isBlank(picUrl)) {
@@ -272,7 +267,7 @@ public class ItemServiceImplement implements IItemService {
             Map<String, Object> param = new HashMap<>();
             param.put("scene", sceneStr);
             param.put("page", pages);
-            // param.put("path", pages);
+
             param.put("width", 430);
             param.put("auto_color", false);
             Map<String, Object> line_color = new HashMap<>();
@@ -289,7 +284,7 @@ public class ItemServiceImplement implements IItemService {
             StringBuilder sb = new StringBuilder();
             sb.append((int) (Math.random() * 100)).append("_").append(System.currentTimeMillis()).append(".").append("jpg");
             String picKey = sb.toString();
-            picUrl = uploadFileService.uploadImg(inputStream, picKey);
+            picUrl = UploadFileUtil.uploadImg(inputStream, picKey);
             if (picUrl.isEmpty()) {
                 throw new RuntimeException("二维码生成异常！");
             }
@@ -317,40 +312,10 @@ public class ItemServiceImplement implements IItemService {
 
     }
 
-    @Override
-    @Transactional(rollbackFor = BizCommonException.class)
-    public JsonPageResult<List<ItemDO>> queryHaihuItems(ItemQueryVO itemQueryVO) {
-        JsonPageResult<List<ItemDO>> itemResult = new JsonPageResult<>();
-        // 1、查询总的记录数量
-        Integer totalCount = itemDOMapperExt.queryItemsCountByhaihu(itemQueryVO);
+ 
 
-        // 2、查询分页记录
-        if (totalCount != null && totalCount != 0) {
-            itemResult.buildPage(totalCount, itemQueryVO);
-            List<ItemDO> items = itemDOMapperExt.queryHaihuItems(itemQueryVO);
-            itemResult.setData(items);
-        } else {
-            List<ItemDO> items = new ArrayList<>();
-            itemResult.setData(items);
-        }
-        return itemResult;
-    }
 
-    @Override
-    public List<ItemDO> queryHaihuByUptime(ItemQueryVO itemQueryVO) {
-        List<ItemDO> items = itemDOMapperExt.queryHaihuByUptime(itemQueryVO);
-        return items;
-    }
 
-    @Override
-    public Integer sumNewItemNumByDate(Integer days) {
-        return itemDOMapperExt.sumNewItemNumByDate(days);
-    }
-
-    @Override
-    public Integer sumNewItemNumByMonth(Integer months) {
-        return itemDOMapperExt.sumNewItemNumByMonth(months);
-    }
 
     @Override
     public List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO) {

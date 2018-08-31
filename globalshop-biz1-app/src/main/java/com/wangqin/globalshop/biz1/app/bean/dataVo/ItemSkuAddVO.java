@@ -1,13 +1,11 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
-import com.wangqin.globalshop.common.utils.Money;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
+import com.wangqin.globalshop.common.utils.Money;
 
 
 /**

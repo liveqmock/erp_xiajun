@@ -1,16 +1,17 @@
 package com.wangqin.globalshop.biz1.app.bean.dataVo;
 
-import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
-import com.wangqin.globalshop.biz1.app.enums.ChannelType;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.wangqin.globalshop.biz1.app.dal.dataObject.BuyerDO;
+import com.wangqin.globalshop.biz1.app.enums.ChannelType;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 
 /**

@@ -1,18 +1,14 @@
 package com.wangqin.globalshop.biz1.app.dal.mapperExt;
 
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQuery2VO;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.PageQueryParam;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
-import com.alibaba.dubbo.config.support.Parameter;
-import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
-import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
-import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
-
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
+
+import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemQueryVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ItemDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemDO;
+import com.wangqin.globalshop.biz1.app.dal.mapper.ItemDOMapper;
 
 
 /**
@@ -97,20 +93,4 @@ public interface ItemDOMapperExt extends ItemDOMapper {
 
     void insertBatch(List<ItemDO> itemList);
 
-    /**
-     * 根据指定条件分页查询商品
-     *
-     * @param itemQueryVO
-     * @param pageQueryParam
-     * @return
-     */
-    List<ItemDTO> listItems(@Param("itemQueryVO") ItemQuery2VO itemQueryVO, @Param("pageQueryParam") PageQueryParam pageQueryParam);
-
-    /**
-     * 根据指定条件查询商品数目
-     *
-     * @param itemQueryVO
-     * @return
-     */
-    int countItems(@Param("itemQueryVO") ItemQuery2VO itemQueryVO);
 }

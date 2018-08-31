@@ -27,7 +27,6 @@ public class ItemSkuQueryVO extends PageQueryVO {
 
 	private List<ChannelSalePriceVO> channelSalePriceList = new ArrayList<ChannelSalePriceVO>();
 	
-	private String thirdSkuCode;
 	
 	private String companyNo;
 	
@@ -432,13 +431,6 @@ public class ItemSkuQueryVO extends PageQueryVO {
 		this.packageLevelId = packageLevelId;
 	}
 
-	public String getThirdSkuCode() {
-		return thirdSkuCode;
-	}
-
-	public void setThirdSkuCode(String thirdSkuCode) {
-		this.thirdSkuCode = thirdSkuCode;
-	}
 
 
 	public void setVirtualInv(Long virtualInv) {

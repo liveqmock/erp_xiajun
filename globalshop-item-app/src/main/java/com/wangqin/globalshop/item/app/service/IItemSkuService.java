@@ -2,16 +2,14 @@ package com.wangqin.globalshop.item.app.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
-import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
-import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
-import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
-import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuAddVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.ItemSkuQueryVO;
 import com.wangqin.globalshop.biz1.app.bean.dataVo.JsonPageResult;
+import com.wangqin.globalshop.biz1.app.bean.dataVo.SkuChannelPriceEditVO;
+import com.wangqin.globalshop.biz1.app.bean.dto.ISkuDTO;
+import com.wangqin.globalshop.biz1.app.bean.dto.SkuChannelPriceDTO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.InventoryDO;
+import com.wangqin.globalshop.biz1.app.dal.dataObject.ItemSkuDO;
 
 
 public interface IItemSkuService  {
@@ -61,31 +59,14 @@ public interface IItemSkuService  {
 	
 
 
-
-	
-
-	
-	/**
-	 * itemid 查询skulist
-	 * @param itemId
-	 * @return
-	 */
-	List<ItemSkuDO> queryItemSkusByItemId(Long itemId );
-	
 	
 	ItemSkuDO selectByPrimaryKey(Long id);
 	
-	/**
-	 * 判断sku是否可以删除
-	 * @param itemId
-	 * @return
-	 */
-	boolean isCanDeleteSku(Long skuId);
+
 
 	
 	void deleteById(Long id);
 	 
-	 List<ItemSkuDO> queryItemSkusForExcel();
 	 
 	 List<ItemSkuDO> queryItemSkusByUpc(String upc);
 	

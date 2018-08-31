@@ -26,10 +26,7 @@ public interface IItemService {
 	void updateByIdSelective(ItemDO item);
 	
 	//插入单个商品
-	Long insertItemSelective(ItemDO item);
-		
-
-	
+	Long insertItemSelective(ItemDO item);			
 
 	String generateItemShareUrl(String userId, String companyNo, String itemCode, String pages, String accessToken);
 
@@ -42,38 +39,11 @@ public interface IItemService {
 	 */
 	JsonPageResult<List<ItemDTO>> queryItems(ItemQueryVO itemQueryVO);
 	
-    ItemDTO queryItemById(Long id);
-	
-
-	/**
-	 * 2017-04-04,jc
-	 * 返回所有的 Id and ItemCode
-	 * @return
-	 */
-	Map<String, Long> queryAllItemCodeAndIdHashMap();
+    ItemDTO queryItemById(Long id);		
 	
 	String insertIntoItemDimension(String sceneStr, String pages, String accessToken);
-	
-	/**
-	 * 分页查询海狐商品
-	 * @param itemQueryVO
-	 * @return
-	 */
-	JsonPageResult<List<ItemDO>> queryHaihuItems(ItemQueryVO itemQueryVO);
-	
-	/**
-	 * 根据跟新时间提取海狐商品
-	 * @param gmtModify
-	 * @return
-	 */
-	List<ItemDO> queryHaihuByUptime(ItemQueryVO itemQueryVO);
-
-	Integer sumNewItemNumByDate(Integer days);
-	
-	Integer sumNewItemNumByMonth(Integer months);
-	
-	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);
-	
+		
+	List<ItemDTO> queryItemListSelective(ItemQueryVO itemQueryVO);	
 	
 	Long queryIdByItemCode(String itemCode);
 
@@ -101,7 +71,6 @@ public interface IItemService {
 
 	//一键分享，获取商品的图片
 	String queryItemPicByItemCodeAndCompanyNo(String itemCode, String companyNo);
-
 
 	/**
 	 * 导入商品列表

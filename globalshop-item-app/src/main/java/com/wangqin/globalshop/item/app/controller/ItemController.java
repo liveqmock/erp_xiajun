@@ -115,7 +115,7 @@ public class ItemController {
      */
     @RequestMapping("/add")
     @Transactional(rollbackFor = BizCommonException.class)
-    public Object add(ItemQueryVO item) {
+    public Object add(ItemQueryVO item) {    	
     	 JsonResult<ItemDO> result = new JsonResult<>();
          if (!loginCheck()) {
              return result.buildIsSuccess(false).buildMsg("请先登录");
@@ -371,11 +371,9 @@ public class ItemController {
     @Transactional(rollbackFor = BizCommonException.class)
     public Object query(Long id) {
         JsonResult<ItemDTO> result = new JsonResult<>();
-
         if (!loginCheck()) {
             return result.buildIsSuccess(false).buildMsg("请先登录");
         }
-
         ItemDTO item = itemService.queryItemById(id);
         
         if (item == null) {
